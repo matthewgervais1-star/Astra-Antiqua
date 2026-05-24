@@ -1,0 +1,72 @@
+import { PLANETS, type Planet } from "@/data/cultures";
+import type { Longitude } from "@/data/sampleChart";
+import type { AspectKind } from "@/data/sampleChart";
+
+export interface TransitAspect {
+  transit: Planet; // body in today's sky
+  natal: Planet; // body in the natal chart
+  kind: AspectKind;
+  exactAngle: number;
+  orb: number;
+}
+
+const ASPECT_RULES: ReadonlyArray<{ kind: AspectKind; angle: number; orb: number }> = [
+  { kind: "conjunction", angle: 0, orb: 4 },
+  { kind: "sextile", angle: 60, orb: 3 },
+  { kind: "square", angle: 90, orb: 4 },
+  { kind: "trine", angle: 120, orb: 4 },
+  { kind: "opposition", angle: 180, orb: 5 },
+];
+
+function angularDelta(a: number, b: number): number {
+  const raw = Math.abs(a - b) % 360;
+  return raw > 180 ? 360 - raw : raw;
+}
+
+/**
+ * Compute today-to-natal aspects: each transit planet against each natal
+ * planet. Uses tighter orbs than the natal-internal aspect detector because
+ * transit hits are more clinically meaningful when close.
+ */
+export function computeTransits(
+  transitChart: Readonly<Record<Planet, Longitude>>,
+  natalChart: Readonly<Record<Planet, Longitude>>,
+): readonly TransitAspect[] {
+  const hits: TransitAspect[] = [];
+  for (const transit of PLANETS) {
+    for (const natal of PLANETS) {
+      const angle = angularDelta(transitChart[transit], natalChart[natal]);
+      for (const rule of ASPECT_RULES) {
+        const delta = Math.abs(angle - rule.angle);
+        if (delta <= rule.orb) {
+          hits.push({
+            transit,
+            natal,
+            kind: rule.kind,
+            exactAngle: angle,
+            orb: delta,
+          });
+          break;
+        }
+      }
+    }
+  }
+  return hits;
+}
+
+/**
+ * The "headline transits" of the day: tightest hits, optionally excluding
+ * cross-body same-planet (transit Mars to natal Mars) which is common and
+ * less personally striking.
+ */
+export function topTransits(
+  transits: readonly TransitAspect[],
+  count = 5,
+  excludeSelfPairs = true,
+): readonly TransitAspect[] {
+  const filtered = excludeSelfPairs
+    ? transits.filter((t) => t.transit !== t.natal)
+    : [...transits];
+  filtered.sort((a, b) => a.orb - b.orb);
+  return filtered.slice(0, count);
+}

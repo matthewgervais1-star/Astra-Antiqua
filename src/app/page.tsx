@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PantheonSelector } from "@/components/pantheon/PantheonSelector";
-import { DailyReading } from "@/components/daily/DailyReading";
+import { TodayDashboard } from "@/components/daily/TodayDashboard";
+import { WeekForecastSection } from "@/components/daily/WeekForecastSection";
 import { NatalWheel } from "@/components/wheel/NatalWheel";
 import { WaitListForm } from "@/components/waitlist/WaitListForm";
 import { SectionContainer } from "@/components/ui/SectionContainer";
@@ -49,7 +50,7 @@ export default function HomePage() {
               The sky right now, narrated.
             </h2>
             <p className="text-ink-secondary font-body mt-4 max-w-2xl text-base md:text-lg">
-              The Moon&apos;s sign and the day&apos;s tightest aspects, computed for this moment and rendered in the chosen pantheon&apos;s voice. Reloads with each new day.
+              The Moon&apos;s sign, today&apos;s tightest aspects, the moon phase, and the upcoming sky events, computed live and rendered in the chosen pantheon&apos;s voice. If you have entered your birth data, your Big Three and personal transits appear above.
             </p>
           </div>
           <Link
@@ -60,14 +61,26 @@ export default function HomePage() {
             <span aria-hidden>→</span>
           </Link>
         </div>
-        <DailyReading />
+        <TodayDashboard />
+      </SectionContainer>
+
+      <SectionContainer size="default" spacing="default">
+        <div className="mb-10 md:mb-12">
+          <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
+            Section III · The coming week
+          </div>
+          <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
+            Seven days of sky.
+          </h2>
+        </div>
+        <WeekForecastSection />
       </SectionContainer>
 
       <SectionContainer size="default" spacing="default">
         <div className="mb-12 md:mb-16 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-              Section III · Demonstration
+              Section IV · Demonstration
             </div>
             <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
               How the wheel reads.
@@ -83,7 +96,7 @@ export default function HomePage() {
       <SectionContainer size="default" spacing="default">
         <div className="mb-12 md:mb-16">
           <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-            Section IV · Method
+            Section V · Method
           </div>
           <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
             How the translation works
@@ -116,7 +129,7 @@ export default function HomePage() {
           <div className="grid gap-12 md:grid-cols-12 md:gap-10">
             <div className="md:col-span-6">
               <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-                Section V · Pre-launch
+                Section VI · Pre-launch
               </div>
               <h2 className="font-display text-ink-primary mt-3 max-w-xl text-3xl md:text-5xl">
                 Be told when Astra Antiqua arrives on Android.
