@@ -24,9 +24,21 @@ interface ReadingDisplayProps {
 }
 
 const ASPECT_GROUPS = [
-  { kinds: ["conjunction"] as const, title: "Conjunctions", description: "Bodies bound at the same point of the wheel; their forces double and amplify." },
-  { kinds: ["trine", "sextile"] as const, title: "Lines that ease", description: "Aspects of harmony, support, and flow between deities." },
-  { kinds: ["square", "opposition"] as const, title: "Lines that challenge", description: "Aspects of tension, conflict, and forced choice between deities." },
+  {
+    kinds: ["conjunction"] as const,
+    title: "Conjunctions",
+    description: "Bodies bound at the same point of the wheel; their forces double and amplify.",
+  },
+  {
+    kinds: ["trine", "sextile"] as const,
+    title: "Lines that ease",
+    description: "Aspects of harmony, support, and flow between deities.",
+  },
+  {
+    kinds: ["square", "opposition"] as const,
+    title: "Lines that challenge",
+    description: "Aspects of tension, conflict, and forced choice between deities.",
+  },
 ] as const;
 
 export function ReadingDisplay({ culture, reading, birth, inputs }: ReadingDisplayProps) {
@@ -69,7 +81,7 @@ export function ReadingDisplay({ culture, reading, birth, inputs }: ReadingDispl
           {reading.placements.map((p) => (
             <li key={p.planet}>
               <GlassPanel tone="solid" className="p-5 md:p-6">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-[72px_1fr_180px] md:items-center">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-[72px_1fr_180px] md:items-start">
                   <div className="flex items-center gap-3 md:flex-col md:items-start md:gap-1">
                     <DeityGlyph culture={culture} planet={p.planet} size={48} decorative />
                     <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em] md:hidden">
@@ -87,6 +99,9 @@ export function ReadingDisplay({ culture, reading, birth, inputs }: ReadingDispl
                     </div>
                     <p className="text-ink-primary font-body mt-2 text-base leading-relaxed md:text-[17px]">
                       {p.culturalLine}
+                    </p>
+                    <p className="text-ink-tertiary font-body mt-2 text-sm leading-relaxed italic">
+                      {p.domain}
                     </p>
                   </div>
                   <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.2em] md:text-right">
@@ -138,14 +153,20 @@ export function ReadingDisplay({ culture, reading, birth, inputs }: ReadingDispl
                     None at the standard orbs.
                   </p>
                 ) : (
-                  <ul className="mt-2 flex flex-col gap-3">
+                  <ul className="mt-2 flex flex-col gap-5">
                     {items.map((a, idx) => (
-                      <li key={`${a.a}-${a.b}-${idx}`} className="border-border-hairline border-t pt-3">
+                      <li key={`${a.a}-${a.b}-${idx}`} className="border-border-hairline border-t pt-4">
                         <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
                           {a.kind} · {a.exactAngle.toFixed(1)}° (orb {a.orb.toFixed(1)}°)
                         </div>
-                        <p className="text-ink-primary font-body mt-1 text-base leading-relaxed md:text-[17px]">
-                          {a.line}
+                        <p className="font-display text-gold-leaf mt-2 text-lg leading-snug md:text-xl">
+                          {a.verbLine}
+                        </p>
+                        <p className="text-ink-secondary font-body mt-2 text-sm italic leading-relaxed md:text-base">
+                          {a.pairTheme}
+                        </p>
+                        <p className="text-ink-primary font-body mt-2 text-sm leading-relaxed md:text-[15px]">
+                          {a.culturalReflection}
                         </p>
                       </li>
                     ))}

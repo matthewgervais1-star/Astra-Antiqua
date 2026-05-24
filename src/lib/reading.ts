@@ -8,6 +8,12 @@ import {
   type Longitude,
   type ZodiacSign,
 } from "@/data/sampleChart";
+import {
+  ASPECT_REFLECTIONS,
+  PLANET_DOMAINS,
+  SIGN_REGISTERS,
+  getPairTheme,
+} from "@/data/interpretations";
 
 export interface PlanetPlacement {
   planet: Planet;
@@ -16,13 +22,16 @@ export interface PlanetPlacement {
   degreeInSign: number;
   deityName: string;
   deityEpithet: string;
+  domain: string;
   culturalLine: string;
 }
 
 export interface AspectReading extends Aspect {
   deityA: string;
   deityB: string;
-  line: string;
+  verbLine: string;
+  pairTheme: string;
+  culturalReflection: string;
 }
 
 export interface Reading {
@@ -31,21 +40,6 @@ export interface Reading {
   aspects: readonly AspectReading[];
   summary: string;
 }
-
-const SIGN_ELEMENTS: Readonly<Record<ZodiacSign, string>> = {
-  Aries: "the fields of fire",
-  Taurus: "the bull's pasture",
-  Gemini: "the wind of the twins",
-  Cancer: "the sea cave of the crab",
-  Leo: "the lion's noon",
-  Virgo: "the gleaning floor",
-  Libra: "the balanced scales",
-  Scorpio: "the desert at the scorpion's hour",
-  Sagittarius: "the archer's high road",
-  Capricorn: "the goat's ascent",
-  Aquarius: "the poured waters",
-  Pisces: "the deep tide",
-};
 
 const PLACEMENT_VERBS: Readonly<Record<Culture, string>> = {
   egypt: "stands in",
@@ -101,7 +95,7 @@ export function buildReading(
     const { sign, degree } = longitudeToSign(longitude);
     const deity = DEITY_MATRIX[culture][planet];
     const placementVerb = PLACEMENT_VERBS[culture];
-    const culturalLine = `${deity.name} ${placementVerb} ${SIGN_ELEMENTS[sign]} at ${degree.toFixed(0)}° ${sign}.`;
+    const culturalLine = `${deity.name} ${placementVerb} ${SIGN_REGISTERS[sign]}, at ${degree.toFixed(0)}° ${sign}.`;
     return {
       planet,
       longitude,
@@ -109,6 +103,7 @@ export function buildReading(
       degreeInSign: degree,
       deityName: deity.name,
       deityEpithet: deity.epithet,
+      domain: PLANET_DOMAINS[planet],
       culturalLine,
     };
   });
@@ -118,12 +113,13 @@ export function buildReading(
     const deityA = DEITY_MATRIX[culture][a.a];
     const deityB = DEITY_MATRIX[culture][a.b];
     const verb = ASPECT_VERBS[culture][a.kind];
-    const line = `${deityA.name} ${verb} ${deityB.name}.`;
     return {
       ...a,
       deityA: deityA.name,
       deityB: deityB.name,
-      line,
+      verbLine: `${deityA.name} ${verb} ${deityB.name}.`,
+      pairTheme: getPairTheme(a.a, a.b),
+      culturalReflection: ASPECT_REFLECTIONS[culture][a.kind],
     };
   });
 
