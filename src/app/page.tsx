@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PantheonSelector } from "@/components/pantheon/PantheonSelector";
-import { OracleDecree } from "@/components/oracle/OracleDecree";
+import { DailyReading } from "@/components/daily/DailyReading";
 import { NatalWheel } from "@/components/wheel/NatalWheel";
 import { WaitListForm } from "@/components/waitlist/WaitListForm";
 import { SectionContainer } from "@/components/ui/SectionContainer";
@@ -43,22 +43,39 @@ export default function HomePage() {
         <div className="mb-12 md:mb-16 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-              Section II
+              Section II · Today
             </div>
             <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
-              A live sample chart
+              The sky right now, narrated.
             </h2>
             <p className="text-ink-secondary font-body mt-4 max-w-2xl text-base md:text-lg">
-              Seven classical planets at fixed positions. Trines and sextiles render in gold. Squares and oppositions render in red. Hover any glyph for the deity reading.
+              The Moon&apos;s sign and the day&apos;s tightest aspects, computed for this moment and rendered in the chosen pantheon&apos;s voice. Reloads with each new day.
             </p>
           </div>
           <Link
             href="/reading"
             className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 inline-flex shrink-0 items-center gap-2 self-start rounded-full border px-5 py-2.5 text-xs uppercase tracking-[0.2em] transition-colors md:self-end"
           >
-            Compute your own
+            Read your own chart
             <span aria-hidden>→</span>
           </Link>
+        </div>
+        <DailyReading />
+      </SectionContainer>
+
+      <SectionContainer size="default" spacing="default">
+        <div className="mb-12 md:mb-16 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
+              Section III · Demonstration
+            </div>
+            <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
+              How the wheel reads.
+            </h2>
+            <p className="text-ink-secondary font-body mt-4 max-w-2xl text-base md:text-lg">
+              A sample chart at fixed positions. Gold lines harmonize, red lines challenge. Hover or tap any glyph to read its placement.
+            </p>
+          </div>
         </div>
         <NatalWheel />
       </SectionContainer>
@@ -66,22 +83,7 @@ export default function HomePage() {
       <SectionContainer size="default" spacing="default">
         <div className="mb-12 md:mb-16">
           <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-            Section III
-          </div>
-          <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
-            The oracle&apos;s decree
-          </h2>
-          <p className="text-ink-secondary font-body mt-4 max-w-2xl text-base md:text-lg">
-            A sample interpretation of a single transit (Sun square Mars) in the voice of the pantheon you select above.
-          </p>
-        </div>
-        <OracleDecree />
-      </SectionContainer>
-
-      <SectionContainer size="default" spacing="default">
-        <div className="mb-12 md:mb-16">
-          <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-            Section IV
+            Section IV · Method
           </div>
           <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
             How the translation works
