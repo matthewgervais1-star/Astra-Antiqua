@@ -40,16 +40,25 @@ export default function HomePage() {
       </section>
 
       <SectionContainer size="default" spacing="default">
-        <div className="mb-12 md:mb-16">
-          <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-            Section II
+        <div className="mb-12 md:mb-16 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
+              Section II
+            </div>
+            <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
+              A live sample chart
+            </h2>
+            <p className="text-ink-secondary font-body mt-4 max-w-2xl text-base md:text-lg">
+              Seven classical planets at fixed positions. Trines and sextiles render in gold. Squares and oppositions render in red. Hover any glyph for the deity reading.
+            </p>
           </div>
-          <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
-            A live sample chart
-          </h2>
-          <p className="text-ink-secondary font-body mt-4 max-w-2xl text-base md:text-lg">
-            Seven classical planets at fixed positions. Trines and sextiles render in gold. Squares and oppositions render in red. Hover any glyph for the deity reading.
-          </p>
+          <Link
+            href="/reading"
+            className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 inline-flex shrink-0 items-center gap-2 self-start rounded-full border px-5 py-2.5 text-xs uppercase tracking-[0.2em] transition-colors md:self-end"
+          >
+            Compute your own
+            <span aria-hidden>→</span>
+          </Link>
         </div>
         <NatalWheel />
       </SectionContainer>

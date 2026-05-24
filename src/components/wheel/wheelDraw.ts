@@ -1,6 +1,6 @@
 import { PLANETS, type Culture, type Planet } from "@/data/cultures";
 import { GLYPHS } from "@/components/glyphs";
-import { SAMPLE_CHART, computeAspects, type AspectKind } from "@/data/sampleChart";
+import { computeAspects, type AspectKind, type Longitude } from "@/data/sampleChart";
 import {
   longitudeToCartesian,
   makeGeometry,
@@ -12,6 +12,7 @@ export interface DrawOptions {
   cssSize: number;
   dpr: number;
   culture: Culture | null;
+  chart: Readonly<Record<Planet, Longitude>>;
   highlightPlanet?: Planet | null;
   pulsePhase?: number;
 }
@@ -35,7 +36,7 @@ function applyGoldStroke(ctx: CanvasRenderingContext2D, cx: number, cy: number, 
 }
 
 export function drawWheel(options: DrawOptions): void {
-  const { ctx, cssSize, dpr, culture, highlightPlanet = null, pulsePhase = 0 } = options;
+  const { ctx, cssSize, dpr, culture, chart, highlightPlanet = null, pulsePhase = 0 } = options;
   const geo = makeGeometry(cssSize);
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -43,9 +44,9 @@ export function drawWheel(options: DrawOptions): void {
 
   drawZodiacRing(ctx, geo);
   drawHouseDividers(ctx, geo);
-  drawAspectLines(ctx, geo);
-  drawConjunctionRings(ctx, geo, pulsePhase);
-  drawPlanetGlyphs(ctx, geo, culture, highlightPlanet);
+  drawAspectLines(ctx, geo, chart);
+  drawConjunctionRings(ctx, geo, chart, pulsePhase);
+  drawPlanetGlyphs(ctx, geo, chart, culture, highlightPlanet);
 }
 
 function drawZodiacRing(ctx: CanvasRenderingContext2D, geo: WheelGeometry): void {
@@ -65,7 +66,6 @@ function drawZodiacRing(ctx: CanvasRenderingContext2D, geo: WheelGeometry): void
   ctx.stroke();
   ctx.restore();
 
-  // Twelve zodiac sign divisions
   ctx.save();
   ctx.strokeStyle = "rgba(212, 175, 55, 0.25)";
   ctx.lineWidth = 0.4;
@@ -97,13 +97,17 @@ function drawHouseDividers(ctx: CanvasRenderingContext2D, geo: WheelGeometry): v
   ctx.restore();
 }
 
-function drawAspectLines(ctx: CanvasRenderingContext2D, geo: WheelGeometry): void {
-  const aspects = computeAspects(SAMPLE_CHART);
+function drawAspectLines(
+  ctx: CanvasRenderingContext2D,
+  geo: WheelGeometry,
+  chart: Readonly<Record<Planet, Longitude>>,
+): void {
+  const aspects = computeAspects(chart);
   for (const aspect of aspects) {
     if (aspect.kind === "conjunction") continue;
     const style = ASPECT_STYLES[aspect.kind];
-    const a = longitudeToCartesian(SAMPLE_CHART[aspect.a], geo.planetRadius - geo.glyphSize, geo.cx, geo.cy);
-    const b = longitudeToCartesian(SAMPLE_CHART[aspect.b], geo.planetRadius - geo.glyphSize, geo.cx, geo.cy);
+    const a = longitudeToCartesian(chart[aspect.a], geo.planetRadius - geo.glyphSize, geo.cx, geo.cy);
+    const b = longitudeToCartesian(chart[aspect.b], geo.planetRadius - geo.glyphSize, geo.cx, geo.cy);
     ctx.save();
     ctx.strokeStyle = style.color;
     ctx.lineWidth = style.width;
@@ -121,12 +125,13 @@ function drawAspectLines(ctx: CanvasRenderingContext2D, geo: WheelGeometry): voi
 function drawConjunctionRings(
   ctx: CanvasRenderingContext2D,
   geo: WheelGeometry,
+  chart: Readonly<Record<Planet, Longitude>>,
   pulsePhase: number,
 ): void {
-  const aspects = computeAspects(SAMPLE_CHART).filter((a) => a.kind === "conjunction");
+  const aspects = computeAspects(chart).filter((a) => a.kind === "conjunction");
   const baseAlpha = 0.4 + 0.35 * (0.5 + 0.5 * Math.sin(pulsePhase));
   for (const aspect of aspects) {
-    const mid = (SAMPLE_CHART[aspect.a] + SAMPLE_CHART[aspect.b]) / 2;
+    const mid = (chart[aspect.a] + chart[aspect.b]) / 2;
     const pos = longitudeToCartesian(mid, geo.planetRadius, geo.cx, geo.cy);
     ctx.save();
     ctx.strokeStyle = `rgba(244, 208, 63, ${baseAlpha})`;
@@ -141,14 +146,14 @@ function drawConjunctionRings(
 function drawPlanetGlyphs(
   ctx: CanvasRenderingContext2D,
   geo: WheelGeometry,
+  chart: Readonly<Record<Planet, Longitude>>,
   culture: Culture | null,
   highlightPlanet: Planet | null,
 ): void {
   for (const planet of PLANETS) {
-    const longitude = SAMPLE_CHART[planet];
+    const longitude = chart[planet];
     const pos = longitudeToCartesian(longitude, geo.planetRadius, geo.cx, geo.cy);
 
-    // Subtle background disc behind each glyph for legibility on busy aspect zones.
     ctx.save();
     ctx.fillStyle = "rgba(5, 5, 5, 0.85)";
     ctx.beginPath();
@@ -156,7 +161,6 @@ function drawPlanetGlyphs(
     ctx.fill();
     ctx.restore();
 
-    // Highlight ring on hovered planet
     if (highlightPlanet === planet) {
       ctx.save();
       ctx.strokeStyle = "rgba(244, 208, 63, 0.85)";
@@ -167,7 +171,6 @@ function drawPlanetGlyphs(
       ctx.restore();
     }
 
-    // Glyph stroke
     const glyph = culture ? GLYPHS[culture][planet] : null;
     ctx.save();
     applyGoldStroke(ctx, pos.x, pos.y, geo.glyphSize);
@@ -181,7 +184,6 @@ function drawPlanetGlyphs(
       const path = new Path2D(glyph.d);
       ctx.stroke(path);
     } else {
-      // Empty state: classical planetary symbol as text
       ctx.restore();
       ctx.save();
       applyGoldStroke(ctx, pos.x, pos.y, geo.glyphSize);

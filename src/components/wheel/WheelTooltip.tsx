@@ -3,7 +3,7 @@
 import type { Culture, Planet } from "@/data/cultures";
 import { PLANET_LABELS, PLANET_SYMBOLS } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
-import { longitudeToSign, SAMPLE_CHART } from "@/data/sampleChart";
+import { longitudeToSign, type Longitude } from "@/data/sampleChart";
 
 interface WheelTooltipProps {
   culture: Culture | null;
@@ -11,6 +11,7 @@ interface WheelTooltipProps {
   x: number;
   y: number;
   containerWidth: number;
+  chart: Readonly<Record<Planet, Longitude>>;
 }
 
 export function WheelTooltip({
@@ -19,12 +20,12 @@ export function WheelTooltip({
   x,
   y,
   containerWidth,
+  chart,
 }: WheelTooltipProps) {
   const deity = culture ? DEITY_MATRIX[culture][planet] : null;
-  const { sign, degree } = longitudeToSign(SAMPLE_CHART[planet]);
+  const { sign, degree } = longitudeToSign(chart[planet]);
 
   const tooltipWidth = 240;
-  // Flip to the left of the planet if the right edge would overflow
   const flipped = x + tooltipWidth + 16 > containerWidth;
   const left = flipped ? x - tooltipWidth - 12 : x + 12;
   const top = Math.max(8, y - 60);

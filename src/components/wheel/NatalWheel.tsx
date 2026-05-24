@@ -17,7 +17,7 @@ import {
   type Planet,
 } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
-import { longitudeToSign, SAMPLE_CHART } from "@/data/sampleChart";
+import { longitudeToSign, SAMPLE_CHART, type Longitude } from "@/data/sampleChart";
 import { drawWheel } from "@/components/wheel/wheelDraw";
 import {
   computePlanetPositions,
@@ -29,7 +29,12 @@ import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
 import { usePrefersReducedMotion } from "@/lib/reducedMotion";
 import { cn } from "@/lib/classNames";
 
-function NatalWheelImpl() {
+interface NatalWheelProps {
+  chart?: Readonly<Record<Planet, Longitude>>;
+  caption?: string;
+}
+
+function NatalWheelImpl({ chart = SAMPLE_CHART, caption }: NatalWheelProps) {
   const culture = useActivePantheon();
   const reduce = usePrefersReducedMotion();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -44,8 +49,8 @@ function NatalWheelImpl() {
 
   const positions = useMemo(() => {
     const geometry = makeGeometry(size);
-    return computePlanetPositions(geometry);
-  }, [size]);
+    return computePlanetPositions(geometry, chart);
+  }, [size, chart]);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -62,10 +67,11 @@ function NatalWheelImpl() {
       cssSize: size,
       dpr,
       culture,
+      chart,
       highlightPlanet: pinned ?? hover?.planet ?? null,
       pulsePhase: reduce ? 0 : pulsePhaseRef.current,
     });
-  }, [size, culture, hover, pinned, reduce]);
+  }, [size, culture, chart, hover, pinned, reduce]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -157,11 +163,12 @@ function NatalWheelImpl() {
               x={activePos.x}
               y={activePos.y}
               containerWidth={size}
+              chart={chart}
             />
           ) : null}
         </div>
-        <p className="text-ink-tertiary font-mono mt-6 text-[10px] uppercase tracking-[0.3em]">
-          Sample chart · Sun in Aries · gold lines harmonize, red lines challenge
+        <p className="text-ink-tertiary font-mono mt-6 max-w-md text-center text-[10px] uppercase tracking-[0.3em]">
+          {caption ?? "Sample chart · gold lines harmonize · red lines challenge"}
         </p>
       </div>
 
@@ -172,7 +179,7 @@ function NatalWheelImpl() {
         <ul className="flex flex-col gap-2">
           {PLANETS.map((planet) => {
             const deity = culture ? DEITY_MATRIX[culture][planet] : null;
-            const { sign, degree } = longitudeToSign(SAMPLE_CHART[planet]);
+            const { sign, degree } = longitudeToSign(chart[planet]);
             const isActive = activePlanet === planet;
             return (
               <li key={planet}>
@@ -237,10 +244,10 @@ function NatalWheelFallback() {
   );
 }
 
-export function NatalWheel() {
+export function NatalWheel(props: NatalWheelProps = {}) {
   return (
     <Suspense fallback={<NatalWheelFallback />}>
-      <NatalWheelImpl />
+      <NatalWheelImpl {...props} />
     </Suspense>
   );
 }

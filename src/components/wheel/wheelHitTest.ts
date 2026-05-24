@@ -39,7 +39,6 @@ export function longitudeToCartesian(
   cx: number,
   cy: number,
 ): { x: number; y: number } {
-  // Astrological convention: 0 degrees Aries at 9 o'clock, increasing counter-clockwise.
   const angleRad = ((180 - longitude) * Math.PI) / 180;
   return {
     x: cx + Math.cos(angleRad) * radius,
