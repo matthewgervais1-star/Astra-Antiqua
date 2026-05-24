@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-void: #050505;
+  --color-bg-deep: #0a0a0a;
+  --color-bg-elevated: rgba(255, 255, 255, 0.025);
+  --color-border-hairline: rgba(255, 255, 255, 0.08);
+  --color-border-gold: rgba(212, 175, 55, 0.25);
+  --color-ink-primary: rgba(255, 255, 255, 0.92);
+  --color-ink-secondary: rgba(255, 255, 255, 0.62);
+  --color-ink-tertiary: rgba(255, 255, 255, 0.38);
+  --color-gold-leaf: #d4af37;
+  --color-gold-bright: #f4d03f;
+  --color-gold-deep: #a8842c;
+  --color-conflict-red: #c44536;
+  --color-harmony-glow: rgba(244, 208, 63, 0.5);
+
+  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-body: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+@utility text-gold-leaf {
+  background: linear-gradient(
+    135deg,
+    #a8842c 0%,
+    #d4af37 35%,
+    #f4d03f 50%,
+    #d4af37 65%,
+    #a8842c 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: #d4af37;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility border-hairline {
+  border: 0.5px solid var(--color-border-hairline);
+}
+
+@utility border-gold-soft {
+  border: 0.5px solid var(--color-border-gold);
+}
+
+@utility glass-panel {
+  background: var(--color-bg-elevated);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  border: 0.5px solid var(--color-border-hairline);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--color-bg-void);
+  color: var(--color-ink-primary);
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(212, 175, 55, 0.25);
+  color: #fff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
