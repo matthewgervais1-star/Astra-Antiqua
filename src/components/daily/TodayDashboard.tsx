@@ -25,7 +25,11 @@ import { MoonPhasePanel } from "@/components/daily/MoonPhasePanel";
 import { UpcomingEvents } from "@/components/daily/UpcomingEvents";
 import { BehindForecast } from "@/components/daily/BehindForecast";
 import { DayStrip } from "@/components/daily/DayStrip";
-import { buildDailyHeadline } from "@/lib/dailyHeadline";
+import {
+  buildPersonalDailyReading,
+  buildSkyDailyReading,
+  type ComputedReading,
+} from "@/lib/personalReading";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
 import { usePrefersReducedMotion } from "@/lib/reducedMotion";
@@ -69,20 +73,29 @@ function SingleVoiceHeadline({
   culture,
   now,
   chart,
+  natalChart,
 }: {
   culture: Culture;
   now: Date;
   chart: Readonly<Record<Planet, Longitude>>;
+  natalChart: Readonly<Record<Planet, Longitude>> | null;
 }) {
   const reduce = usePrefersReducedMotion();
   const reading = useMemo(() => buildReading(culture, chart), [culture, chart]);
-  const headline = useMemo(() => moonHeadline(culture, chart), [culture, chart]);
-  const directive = useMemo(() => buildDailyHeadline(culture, chart), [culture, chart]);
+  const moonHeadlineLine = useMemo(() => moonHeadline(culture, chart), [culture, chart]);
+  const computed: ComputedReading = useMemo(
+    () =>
+      natalChart
+        ? buildPersonalDailyReading(culture, natalChart, chart)
+        : buildSkyDailyReading(culture, chart),
+    [culture, chart, natalChart],
+  );
   const aspects = useMemo(() => topAspects(reading.aspects, 2), [reading]);
+  const isPersonal = computed.source.kind === "personal";
 
   return (
     <motion.div
-      key={culture}
+      key={`${culture}-${isPersonal ? "personal" : "sky"}`}
       initial={reduce ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
@@ -94,15 +107,21 @@ function SingleVoiceHeadline({
             {formatLongDate(now).toUpperCase()} AT A GLANCE
           </div>
           <span className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
-            Voice of {CULTURE_LABELS[culture]}
+            {isPersonal ? `For your chart · ${CULTURE_LABELS[culture]}` : `Voice of ${CULTURE_LABELS[culture]}`}
           </span>
         </div>
-        <h3 className="font-display text-ink-primary mt-5 max-w-3xl text-3xl leading-[1.05] md:text-[52px]">
-          {directive.headline}
+        <h3 className="font-display text-gold-leaf mt-5 max-w-3xl text-3xl leading-[1.1] md:text-[40px]">
+          {computed.headline}
         </h3>
-        <p className="text-ink-primary font-body mt-6 max-w-2xl text-lg leading-relaxed md:text-xl">
-          {headline.line} {directive.paragraph.split(". ").slice(1).join(". ")}
+        <p className="text-ink-primary font-body mt-5 max-w-2xl text-lg leading-relaxed md:text-xl">
+          {computed.meaning}
         </p>
+        <p className="text-ink-secondary font-body mt-3 max-w-2xl text-base leading-relaxed md:text-lg">
+          {moonHeadlineLine.line}
+        </p>
+        <div className="text-ink-tertiary font-mono mt-4 text-[10px] uppercase tracking-[0.25em]">
+          Driver: {computed.toneSummary}
+        </div>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {aspects.length > 0 ? (
             aspects.map((aspect, idx) => (
@@ -135,19 +154,22 @@ function SingleVoiceHeadline({
 function FourVoiceCompact({
   now,
   chart,
+  natalChart,
 }: {
   now: Date;
   chart: Readonly<Record<Planet, Longitude>>;
+  natalChart: Readonly<Record<Planet, Longitude>> | null;
 }) {
   const reduce = usePrefersReducedMotion();
-  const headlines = useMemo(
+  const readings = useMemo(
     () =>
       CULTURES.map((culture) => ({
         culture,
-        headline: moonHeadline(culture, chart),
-        topAspect: topAspects(buildReading(culture, chart).aspects, 1)[0] ?? null,
+        reading: natalChart
+          ? buildPersonalDailyReading(culture, natalChart, chart)
+          : buildSkyDailyReading(culture, chart),
       })),
-    [chart],
+    [chart, natalChart],
   );
   return (
     <motion.div
@@ -161,10 +183,10 @@ function FourVoiceCompact({
         Today · {formatLongDate(now)} · The four voices in parallel
       </div>
       <p className="text-ink-secondary font-body mb-8 max-w-2xl text-base md:text-lg">
-        The same sky, four traditions. Select a pantheon above for the expanded reading; the panels below show how each tradition narrates the same moment.
+        The same sky, four traditions. Each card below is computed from {natalChart ? "the tightest aspect today is making to your saved chart" : "the tightest aspect happening in the sky right now"}; the four pantheons just give different names to the same gods at work.
       </p>
       <div className="grid gap-4 md:grid-cols-2 md:gap-5">
-        {headlines.map(({ culture, headline, topAspect }) => (
+        {readings.map(({ culture, reading }) => (
           <article
             key={culture}
             className="border-border-hairline bg-bg-deep hover:border-border-gold rounded-2xl border p-6 transition-colors md:p-7"
@@ -175,14 +197,12 @@ function FourVoiceCompact({
               </div>
               <DeityGlyph culture={culture} planet="moon" size={28} decorative />
             </div>
-            <p className="font-display text-ink-primary mt-3 text-lg leading-snug md:text-xl">
-              {headline.line}
+            <p className="font-display text-gold-leaf mt-3 text-lg leading-snug md:text-xl">
+              {reading.headline}
             </p>
-            {topAspect ? (
-              <p className="text-ink-secondary font-body mt-4 text-sm italic leading-relaxed md:text-base">
-                {topAspect.verbLine}
-              </p>
-            ) : null}
+            <p className="text-ink-secondary font-body mt-3 text-sm leading-relaxed md:text-base">
+              {reading.meaning}
+            </p>
             <Link
               href={`/?pantheon=${culture}#today`}
               scroll={false}
@@ -266,12 +286,14 @@ function TodayDashboardImpl() {
             culture={culture}
             now={viewDate}
             chart={chart}
+            natalChart={natal?.chart ?? null}
           />
         ) : (
           <FourVoiceCompact
             key={`four-${viewDate.toISOString().slice(0, 10)}`}
             now={viewDate}
             chart={chart}
+            natalChart={natal?.chart ?? null}
           />
         )}
       </AnimatePresence>

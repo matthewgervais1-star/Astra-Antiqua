@@ -16,6 +16,10 @@ import {
 } from "@/data/sampleChart";
 import { LIFE_DOMAINS, type LifeDomain } from "@/data/lifeDomains";
 import { SIGN_REGISTERS } from "@/data/interpretations";
+import {
+  TRANSIT_PRINCIPLE,
+  lifeDomainMeaning,
+} from "@/lib/personalReading";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { cn } from "@/lib/classNames";
 
@@ -55,67 +59,16 @@ const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>
   },
 };
 
-const DIRECTIVE_BY_KIND: Readonly<Record<LifeDomain, Readonly<Record<AspectKind, string>>>> = {
-  body: {
-    conjunction:
-      "Two appetites you have been pretending are separate are the same hunger today. You know which.",
-    sextile:
-      "Your body has an opening today and is not asking you to justify taking it.",
-    square:
-      "Your body is asking for something the schedule will not grant. You can feel the bargain coming.",
-    trine:
-      "Your instincts are accurate today. You do not have to talk yourself out of them.",
-    opposition:
-      "The body wants one thing and the day demands the other. You already know which call you are going to take.",
-  },
-  love: {
-    conjunction:
-      "What you want and the work to get it are pointing at the same person today. You know who.",
-    sextile:
-      "A small clear yes is on offer for you today, and the small ones are the ones you usually miss.",
-    square:
-      "What you want and what they want do not match today. You knew this last week.",
-    trine:
-      "The other turned warm without you having to do anything. You do not have to ask why.",
-    opposition:
-      "Pursuit and being pursued are changing hands today. You can let it happen and see what you actually want.",
-  },
-  friends: {
-    conjunction:
-      "The thing the group has been circling is the thing you are about to say. You can feel it gathering.",
-    sextile:
-      "A useful introduction or an easy crossing is on the way. You will know it when you see it.",
-    square:
-      "A misreading is brewing in the thread. You can feel the shape of it before the message lands.",
-    trine:
-      "You are the bridge in the conversation today. The group has been waiting on you without knowing it.",
-    opposition:
-      "Two friends are asking opposite things of you today. You already know which one to honor first.",
-  },
-  work: {
-    conjunction:
-      "Effort and structure are pulling in the same direction today. The thing you have been putting off is the thing that will move.",
-    sextile:
-      "The unglamorous task is available to you right now, and you have more energy for it than you think.",
-    square:
-      "There is a wall in the work and you can feel its exact shape today. You know whether you are pushing through it or sitting beside it.",
-    trine:
-      "The structure is carrying you today. You can stop checking whether it will hold.",
-    opposition:
-      "The deadline and the standard cannot both be met this time. You already know which one you are going to defend.",
-  },
-  family: {
-    conjunction:
-      "Body and structure speak with one voice in your house today. What you build will hold.",
-    sextile:
-      "The call you have been avoiding is the one that will land softly today, if you make it.",
-    square:
-      "The family room and the work room are pushing against each other today. You know which door needs to close for the hour.",
-    trine:
-      "The shelter is holding today without effort. You can stop testing whether it will.",
-    opposition:
-      "Two generations are wanting opposite things from you. You are not the translator today, and you can stop trying to be.",
-  },
+/**
+ * Where each domain's reading is "happening" in the reader's life. Used as
+ * the trailing phrase in the computed domain directive.
+ */
+const DOMAIN_PHRASE: Readonly<Record<LifeDomain, string>> = {
+  body: "in your body",
+  love: "between you and what you want",
+  friends: "in the room you share with other people",
+  work: "in the work you are sustaining",
+  family: "in the house you keep",
 };
 
 interface DomainReading {
@@ -158,7 +111,14 @@ function buildDomainReading(
   });
 
   const tightest = domainAspects[0];
-  const directive = tightest ? DIRECTIVE_BY_KIND[domain.id][tightest.kind] : null;
+  const directive = tightest
+    ? lifeDomainMeaning(
+        tightest.kind,
+        TRANSIT_PRINCIPLE[tightest.a],
+        TRANSIT_PRINCIPLE[tightest.b],
+        DOMAIN_PHRASE[domain.id],
+      )
+    : null;
 
   return { domain, placements, aspects, directive };
 }
