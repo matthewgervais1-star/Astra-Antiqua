@@ -57,39 +57,64 @@ const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>
 
 const DIRECTIVE_BY_KIND: Readonly<Record<LifeDomain, Readonly<Record<AspectKind, string>>>> = {
   body: {
-    conjunction: "Two appetites speak with one voice; trust the doubled signal.",
-    sextile: "An opening for rest or movement; take it without explaining.",
-    square: "The body asks for something the schedule will not grant; negotiate.",
-    trine: "Sleep, eat, and move on instinct today; the body is right.",
-    opposition: "The body's want and the day's demand pull apart; choose the body for one hour.",
+    conjunction:
+      "Two appetites you have been pretending are separate are the same hunger today. You know which.",
+    sextile:
+      "Your body has an opening today and is not asking you to justify taking it.",
+    square:
+      "Your body is asking for something the schedule will not grant. You can feel the bargain coming.",
+    trine:
+      "Your instincts are accurate today. You do not have to talk yourself out of them.",
+    opposition:
+      "The body wants one thing and the day demands the other. You already know which call you are going to take.",
   },
   love: {
-    conjunction: "Desire and effort align; the move you have been delaying will land.",
-    sextile: "A small clear yes is on offer; accept without ceremony.",
-    square: "What you want and what they want do not match; say it plainly.",
-    trine: "Easy attraction today; do not over-think why the other turned warm.",
-    opposition: "Pursuit and being pursued switch hands; let them.",
+    conjunction:
+      "What you want and the work to get it are pointing at the same person today. You know who.",
+    sextile:
+      "A small clear yes is on offer for you today, and the small ones are the ones you usually miss.",
+    square:
+      "What you want and what they want do not match today. You knew this last week.",
+    trine:
+      "The other turned warm without you having to do anything. You do not have to ask why.",
+    opposition:
+      "Pursuit and being pursued are changing hands today. You can let it happen and see what you actually want.",
   },
   friends: {
-    conjunction: "The message and the meaning lock; say the thing the group has been circling.",
-    sextile: "A useful introduction or an easy crossing; take the call.",
-    square: "A misreading is brewing; pick up the phone before the email lands wrong.",
-    trine: "Conversation flows where the group has been stuck; you are the bridge today.",
-    opposition: "Two friends ask opposite things of you; do not split the difference.",
+    conjunction:
+      "The thing the group has been circling is the thing you are about to say. You can feel it gathering.",
+    sextile:
+      "A useful introduction or an easy crossing is on the way. You will know it when you see it.",
+    square:
+      "A misreading is brewing in the thread. You can feel the shape of it before the message lands.",
+    trine:
+      "You are the bridge in the conversation today. The group has been waiting on you without knowing it.",
+    opposition:
+      "Two friends are asking opposite things of you today. You already know which one to honor first.",
   },
   work: {
-    conjunction: "Effort and structure pull together; the next stretch of the project will hold.",
-    sextile: "A favorable hour for the unglamorous task; do it now while you have the slack.",
-    square: "A wall in the work; push once with all your weight, or sit down beside it.",
-    trine: "Sustained progress without strain; the structure carries you today.",
-    opposition: "The deadline and the standard cannot both be met; pick which one you defend.",
+    conjunction:
+      "Effort and structure are pulling in the same direction today. The thing you have been putting off is the thing that will move.",
+    sextile:
+      "The unglamorous task is available to you right now, and you have more energy for it than you think.",
+    square:
+      "There is a wall in the work and you can feel its exact shape today. You know whether you are pushing through it or sitting beside it.",
+    trine:
+      "The structure is carrying you today. You can stop checking whether it will hold.",
+    opposition:
+      "The deadline and the standard cannot both be met this time. You already know which one you are going to defend.",
   },
   family: {
-    conjunction: "Body and structure speak with one voice; what you build today will be a shelter.",
-    sextile: "An easy opening to make the call you have been avoiding; take it.",
-    square: "The family room and the work room push against each other; close one door for the hour.",
-    trine: "The shelter holds without effort today; do not test it on principle.",
-    opposition: "Two generations want opposite things; do not pretend to translate.",
+    conjunction:
+      "Body and structure speak with one voice in your house today. What you build will hold.",
+    sextile:
+      "The call you have been avoiding is the one that will land softly today, if you make it.",
+    square:
+      "The family room and the work room are pushing against each other today. You know which door needs to close for the hour.",
+    trine:
+      "The shelter is holding today without effort. You can stop testing whether it will.",
+    opposition:
+      "Two generations are wanting opposite things from you. You are not the translator today, and you can stop trying to be.",
   },
 };
 

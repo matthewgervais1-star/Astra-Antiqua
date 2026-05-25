@@ -20,43 +20,43 @@ export interface DailyHeadline {
 const DIRECTIVE_BY_TONE: Readonly<Record<Culture, Readonly<Record<DayTone, string>>>> = {
   egypt: {
     challenging:
-      "The feather of Ma'at trembles. Move with measured weight, or do not move at all.",
+      "The feather of Ma'at trembles, and you can feel exactly which thing on your side of the scale is overweight.",
     easing:
-      "The barque moves without effort. Take the river while the current is yours.",
+      "The current is moving with you today. The thing you have been pushing alone will move if you let go of one hand.",
     doubling:
-      "Two stand in one barque. The decision is already half made; act before the wind shifts.",
+      "Two things you have been treating as separate are the same decision. You know which two.",
     balanced:
-      "The scales hold steady. Today is for honest accounting, not yet for the verdict.",
+      "Nothing on the scale today asks to be moved. You have permission to sit with the weighing.",
   },
   greece: {
     challenging:
-      "The Pythia counsels caution. Speak only what you have already decided to defend.",
+      "The Pythia knows the question you have been avoiding. So do you.",
     easing:
-      "A song that returns to its tonic. Move toward what comes easily and trust it.",
+      "Your ear is closer to the tonic than your worry suggests; the easy answer is the right one today.",
     doubling:
-      "Two gods share a single throne. Speak once, act once, mean it twice.",
+      "The voice in your head and the move in your hand are speaking one sentence today.",
     balanced:
-      "Olympus debates without verdict. Hold both arguments and let the day finish its case.",
+      "Both arguments are still yours to hold. The verdict is not yours yet.",
   },
   canaan: {
     challenging:
-      "The divine council is restless. Bring evidence of your conduct, or expect to be questioned.",
+      "The council is paying attention to your name today, and you already know which piece of conduct they are weighing.",
     easing:
-      "Baal's rain falls evenly. The ground is ready; sow now without arguing the season.",
+      "Whatever you sow today will be remembered correctly. The ground is honest with you.",
     doubling:
-      "The council holds one voice. The judgment is not contested; carry it out.",
+      "The argument you have been carrying inside is already settled. Today it can be said aloud.",
     balanced:
-      "El's silence weighs the room. Whoever speaks first to the assembly carries the day.",
+      "El's silence is room, not refusal. You have today to decide what to say first.",
   },
   carthage: {
     challenging:
-      "The Tophet asks a price. Choose the comfort you can afford to lay on the fire.",
+      "The Tophet has chosen the comfort it wants from you. You already know which one.",
     easing:
-      "Both harbor lights burn. Sail without watching for storms; the wind will not turn yet.",
+      "The lookouts have not called for hours. You can leave the port today without watching the horizon.",
     doubling:
-      "Two standards rise on the same mast. The wind takes them as one banner.",
+      "You are not flying two flags today. You only thought you were.",
     balanced:
-      "The decree has not yet been read. Walk to the Tophet with what you carry, and wait.",
+      "The decree is not coming today. What you brought to the Tophet, you can carry home.",
   },
 };
 
