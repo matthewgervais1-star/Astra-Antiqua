@@ -8,6 +8,7 @@ import { formatOffset, type ResolvedBirth } from "@/lib/birthDateTime";
 import { CULTURE_LABELS } from "@/data/cultures";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
+import { PrintButton } from "@/components/ui/PrintButton";
 import { usePrefersReducedMotion } from "@/lib/reducedMotion";
 
 interface ReadingDisplayProps {
@@ -52,12 +53,17 @@ export function ReadingDisplay({ culture, reading, birth, inputs }: ReadingDispl
       className="flex flex-col gap-12 md:gap-16"
     >
       <header>
-        <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
-          Reading in the voice of {CULTURE_LABELS[culture]}
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
+              Reading in the voice of {CULTURE_LABELS[culture]}
+            </div>
+            <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
+              {inputs.cityLabel}
+            </h2>
+          </div>
+          <PrintButton label="Save as PDF" />
         </div>
-        <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
-          {inputs.cityLabel}
-        </h2>
         <div className="text-ink-secondary font-mono mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[11px] uppercase tracking-[0.25em]">
           <span>{inputs.date} · {inputs.time}</span>
           <span>{birth.timezone} ({formatOffset(birth.offsetMinutes)})</span>
@@ -99,6 +105,9 @@ export function ReadingDisplay({ culture, reading, birth, inputs }: ReadingDispl
                     </div>
                     <p className="text-ink-primary font-body mt-2 text-base leading-relaxed md:text-[17px]">
                       {p.culturalLine}
+                    </p>
+                    <p className="text-ink-primary font-body mt-3 text-[15px] leading-relaxed md:text-base">
+                      {p.signReading}
                     </p>
                     <p className="text-ink-tertiary font-body mt-2 text-sm leading-relaxed italic">
                       {p.domain}

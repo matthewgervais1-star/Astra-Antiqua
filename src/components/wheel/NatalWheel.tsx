@@ -136,6 +136,24 @@ function NatalWheelImpl({ chart = SAMPLE_CHART, caption }: NatalWheelProps) {
     }
   }, [hover, pinned]);
 
+  const handleDownloadImage = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    try {
+      const url = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      const slug = culture ?? "wheel";
+      const stamp = new Date().toISOString().slice(0, 10);
+      link.href = url;
+      link.download = `astra-antiqua-${slug}-${stamp}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch {
+      // canvas may be tainted on certain browsers; fail silently
+    }
+  }, [culture]);
+
   const activePlanet: Planet | null = pinned ?? hover?.planet ?? null;
   const activePos = activePlanet ? positions.find((p) => p.planet === activePlanet) : null;
 
@@ -170,6 +188,14 @@ function NatalWheelImpl({ chart = SAMPLE_CHART, caption }: NatalWheelProps) {
         <p className="text-ink-tertiary font-mono mt-6 max-w-md text-center text-[10px] uppercase tracking-[0.3em]">
           {caption ?? "Sample chart · gold lines harmonize · red lines challenge"}
         </p>
+        <button
+          type="button"
+          onClick={handleDownloadImage}
+          className="border-hairline text-ink-secondary hover:text-ink-primary hover:border-gold-soft font-mono print-hide mt-4 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-colors"
+        >
+          Download wheel image
+          <span aria-hidden>↓</span>
+        </button>
       </div>
 
       <aside aria-label="Active deities" className="flex flex-col gap-2">

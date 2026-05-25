@@ -2,15 +2,20 @@ import Link from "next/link";
 
 const NAV = [
   { href: "/", label: "Home" },
-  { href: "/reading", label: "Compute Reading" },
+  { href: "/reading", label: "Reading" },
+  { href: "/charts", label: "Charts" },
+  { href: "/synastry", label: "Synastry" },
   { href: "/methodology", label: "Methodology" },
-  { href: "/translation-matrix", label: "Translation Matrix" },
+  { href: "/translation-matrix", label: "Matrix" },
   { href: "/wait-list", label: "Wait List" },
 ] as const;
 
 export function SiteHeader() {
   return (
-    <header className="bg-bg-void/80 border-border-hairline sticky top-0 z-40 w-full border-b backdrop-blur-md">
+    <header
+      data-site-header
+      className="bg-bg-void/80 border-border-hairline site-header sticky top-0 z-40 w-full border-b backdrop-blur-md print-hide"
+    >
       <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-5">
         <Link
           href="/"

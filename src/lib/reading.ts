@@ -14,6 +14,7 @@ import {
   SIGN_REGISTERS,
   getPairTheme,
 } from "@/data/interpretations";
+import { PLANET_IN_SIGN } from "@/data/planetInSign";
 
 export interface PlanetPlacement {
   planet: Planet;
@@ -24,6 +25,7 @@ export interface PlanetPlacement {
   deityEpithet: string;
   domain: string;
   culturalLine: string;
+  signReading: string;
 }
 
 export interface AspectReading extends Aspect {
@@ -105,6 +107,7 @@ export function buildReading(
       deityEpithet: deity.epithet,
       domain: PLANET_DOMAINS[planet],
       culturalLine,
+      signReading: PLANET_IN_SIGN[planet][sign],
     };
   });
 

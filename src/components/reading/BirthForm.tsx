@@ -4,8 +4,6 @@ import { useEffect, useId, useMemo, useState } from "react";
 import { CITIES, searchCities, type CityEntry } from "@/data/cities";
 import { cn } from "@/lib/classNames";
 
-const STORAGE_KEY = "astra-antiqua.birth-input.v1";
-
 export interface BirthFormValues {
   date: string; // YYYY-MM-DD
   time: string; // HH:MM (24-hour)
@@ -25,14 +23,6 @@ interface FormState {
   hydrated: boolean;
 }
 
-interface PersistedShape {
-  date?: string;
-  time?: string;
-  cityLabel?: string;
-  latitude?: number;
-  longitude?: number;
-}
-
 const DEFAULT_STATE: FormState = {
   date: "1989-08-19",
   time: "12:00",
@@ -44,45 +34,18 @@ const DEFAULT_STATE: FormState = {
   hydrated: false,
 };
 
-function loadPersisted(): PersistedShape | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as unknown;
-    if (parsed && typeof parsed === "object") {
-      return parsed as PersistedShape;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-function persist(values: BirthFormValues): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
-  } catch {
-    // localStorage may be unavailable (private mode etc); silently continue
-  }
-}
-
-function hydrateFromStorage(persisted: PersistedShape | null): FormState {
-  if (!persisted) {
-    return { ...DEFAULT_STATE, hydrated: true };
-  }
-  const matchedCity = persisted.cityLabel
-    ? (CITIES.find((c) => `${c.name}, ${c.country}` === persisted.cityLabel) ?? null)
-    : null;
+function stateFromValues(values: BirthFormValues | null): FormState {
+  if (!values) return { ...DEFAULT_STATE, hydrated: true };
+  const matchedCity =
+    CITIES.find((c) => `${c.name}, ${c.country}` === values.cityLabel) ?? null;
   const hasLatLng =
-    typeof persisted.latitude === "number" && typeof persisted.longitude === "number";
+    typeof values.latitude === "number" && typeof values.longitude === "number";
   return {
-    date: persisted.date ?? DEFAULT_STATE.date,
-    time: persisted.time ?? DEFAULT_STATE.time,
-    cityLabel: persisted.cityLabel ?? DEFAULT_STATE.cityLabel,
-    latitudeText: typeof persisted.latitude === "number" ? String(persisted.latitude) : "",
-    longitudeText: typeof persisted.longitude === "number" ? String(persisted.longitude) : "",
+    date: values.date,
+    time: values.time,
+    cityLabel: values.cityLabel,
+    latitudeText: typeof values.latitude === "number" ? String(values.latitude) : "",
+    longitudeText: typeof values.longitude === "number" ? String(values.longitude) : "",
     city: matchedCity,
     manualMode: hasLatLng && matchedCity === null,
     hydrated: true,
@@ -92,21 +55,29 @@ function hydrateFromStorage(persisted: PersistedShape | null): FormState {
 interface BirthFormProps {
   onSubmit: (values: BirthFormValues) => void;
   submitting?: boolean;
+  initialValues?: BirthFormValues | null;
+  submitLabel?: string;
 }
 
-export function BirthForm({ onSubmit, submitting = false }: BirthFormProps) {
+export function BirthForm({
+  onSubmit,
+  submitting = false,
+  initialValues = null,
+  submitLabel,
+}: BirthFormProps) {
   const formId = useId();
-  const [state, setState] = useState<FormState>(DEFAULT_STATE);
+  const [state, setState] = useState<FormState>(() =>
+    initialValues ? stateFromValues(initialValues) : DEFAULT_STATE,
+  );
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Hydrate form from localStorage after mount. Server render and the first client
-    // render both use DEFAULT_STATE to avoid hydration mismatch; this single setState
-    // then replaces the form with the persisted values. The set-state-in-effect rule
-    // does not have a clean alternative for one-shot localStorage hydration.
+    // Mark hydrated post-mount so suggestion list and "selected coords" UI can
+    // render without hydration mismatch. If initialValues changes (e.g. user
+    // navigates between saved charts), re-seed the form.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setState(hydrateFromStorage(loadPersisted()));
-  }, []);
+    setState(stateFromValues(initialValues));
+  }, [initialValues]);
 
   const patch = (partial: Partial<FormState>) => {
     setState((curr) => ({ ...curr, ...partial }));
@@ -155,15 +126,13 @@ export function BirthForm({ onSubmit, submitting = false }: BirthFormProps) {
     }
     const label = state.cityLabel.trim() || `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
 
-    const values: BirthFormValues = {
+    onSubmit({
       date: state.date,
       time: state.time,
       cityLabel: label,
       latitude: lat,
       longitude: lon,
-    };
-    persist(values);
-    onSubmit(values);
+    });
   };
 
   return (
@@ -191,7 +160,7 @@ export function BirthForm({ onSubmit, submitting = false }: BirthFormProps) {
         </Field>
       </div>
       <p className="text-ink-tertiary font-body text-xs">
-        If you do not know your birth time, use 12:00. The Sun, planets, and aspects will be accurate within a few minutes of arc. The Moon position is more sensitive and will be approximate.
+        If you do not know your birth time, use 12:00. The Sun, planets, and aspects will be accurate within a few minutes of arc. The Moon position and the Ascendant are more sensitive to time and will be approximate.
       </p>
 
       {!state.manualMode ? (
@@ -234,7 +203,7 @@ export function BirthForm({ onSubmit, submitting = false }: BirthFormProps) {
           ) : null}
           <div className="mt-3 flex items-center justify-between gap-3">
             <p className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
-              Selected: {state.city ? `${state.city.latitude.toFixed(3)}°, ${state.city.longitude.toFixed(3)}°` : "none"}
+              Selected: {state.city ? `${state.city.latitude.toFixed(3)}°, ${state.city.longitude.toFixed(3)}°` : state.latitudeText && state.longitudeText ? `${Number(state.latitudeText).toFixed(3)}°, ${Number(state.longitudeText).toFixed(3)}°` : "none"}
             </p>
             <button
               type="button"
@@ -307,7 +276,7 @@ export function BirthForm({ onSubmit, submitting = false }: BirthFormProps) {
           submitting && "cursor-not-allowed opacity-60",
         )}
       >
-        {submitting ? "Computing" : "Compute the chart"}
+        {submitting ? "Computing" : (submitLabel ?? "Compute the chart")}
         {!submitting ? <span aria-hidden>→</span> : null}
       </button>
 

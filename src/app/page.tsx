@@ -11,55 +11,56 @@ import { CULTURES, CULTURE_LABELS } from "@/data/cultures";
 export default function HomePage() {
   return (
     <>
-      <section className="relative isolate flex min-h-[88vh] flex-col items-center justify-center px-6 py-24">
+      {/* Compact hero ribbon: title + tagline + pantheon selector. */}
+      <section className="border-border-hairline relative isolate border-b">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(circle at 30% 40%, rgba(212,175,55,0.08) 0%, rgba(5,5,5,0) 60%)",
+              "radial-gradient(circle at 30% 40%, rgba(212,175,55,0.06) 0%, rgba(5,5,5,0) 60%)",
           }}
         />
-        <ZodiacWatermark />
-        <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center">
-          <p className="text-ink-tertiary font-mono mb-8 text-xs uppercase tracking-[0.4em]">
-            Astronomical · Ancient · Honest
-          </p>
-          <GoldText as="h1" className="text-center text-6xl leading-[0.95] md:text-[96px]">
-            Astra Antiqua
-          </GoldText>
-          <p className="text-ink-secondary font-body mt-6 max-w-2xl text-center text-xl italic md:text-2xl">
-            Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit.
-          </p>
-          <p className="text-ink-tertiary font-body mt-4 max-w-xl text-center text-base md:text-lg">
-            Professional ephemeris calculations. Rendered through the religious frameworks of four ancient cultures.
-          </p>
-          <div className="mt-14 w-full max-w-3xl">
+        <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-6 px-6 py-12 md:py-16">
+          <div className="text-center">
+            <GoldText as="h1" className="text-4xl leading-tight md:text-6xl">
+              Astra Antiqua
+            </GoldText>
+            <p className="text-ink-secondary font-body mt-3 text-base italic md:text-lg">
+              Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit.
+            </p>
+          </div>
+          <div className="w-full max-w-3xl">
             <PantheonSelector />
           </div>
         </div>
       </section>
 
-      <SectionContainer size="default" spacing="default">
-        <div className="mb-12 md:mb-16 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      {/* The day itself, immediately. */}
+      <SectionContainer size="default" spacing="tight">
+        <div className="mb-8 md:mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-              Section II · Today
+              Today
             </div>
-            <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
+            <h2 className="font-display text-ink-primary mt-2 text-3xl md:text-4xl">
               The sky right now, narrated.
             </h2>
-            <p className="text-ink-secondary font-body mt-4 max-w-2xl text-base md:text-lg">
-              The Moon&apos;s sign, today&apos;s tightest aspects, the moon phase, and the upcoming sky events, computed live and rendered in the chosen pantheon&apos;s voice. If you have entered your birth data, your Big Three and personal transits appear above.
-            </p>
           </div>
-          <Link
-            href="/reading"
-            className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 inline-flex shrink-0 items-center gap-2 self-start rounded-full border px-5 py-2.5 text-xs uppercase tracking-[0.2em] transition-colors md:self-end"
-          >
-            Read your own chart
-            <span aria-hidden>→</span>
-          </Link>
+          <div className="flex flex-wrap gap-3 self-start md:self-end">
+            <Link
+              href="/reading"
+              className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-colors"
+            >
+              Your chart →
+            </Link>
+            <Link
+              href="/charts"
+              className="border-hairline text-ink-secondary hover:text-ink-primary hover:border-gold-soft inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-colors"
+            >
+              Saved charts
+            </Link>
+          </div>
         </div>
         <TodayDashboard />
       </SectionContainer>
@@ -67,9 +68,9 @@ export default function HomePage() {
       <SectionContainer size="default" spacing="default">
         <div className="mb-10 md:mb-12">
           <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-            Section III · The coming week
+            The coming week
           </div>
-          <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
+          <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-4xl">
             Seven days of sky.
           </h2>
         </div>
@@ -77,28 +78,26 @@ export default function HomePage() {
       </SectionContainer>
 
       <SectionContainer size="default" spacing="default">
-        <div className="mb-12 md:mb-16 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-              Section IV · Demonstration
-            </div>
-            <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
-              How the wheel reads.
-            </h2>
-            <p className="text-ink-secondary font-body mt-4 max-w-2xl text-base md:text-lg">
-              A sample chart at fixed positions. Gold lines harmonize, red lines challenge. Hover or tap any glyph to read its placement.
-            </p>
+        <div className="mb-10 md:mb-12">
+          <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
+            The demonstration
           </div>
+          <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-4xl">
+            How the wheel reads.
+          </h2>
+          <p className="text-ink-secondary font-body mt-3 max-w-2xl text-base md:text-lg">
+            A sample chart at fixed positions. Gold lines harmonize, red lines challenge. Hover or tap any glyph to read its placement.
+          </p>
         </div>
         <NatalWheel />
       </SectionContainer>
 
       <SectionContainer size="default" spacing="default">
-        <div className="mb-12 md:mb-16">
+        <div className="mb-10 md:mb-12">
           <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-            Section V · Method
+            The method
           </div>
-          <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-5xl">
+          <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-4xl">
             How the translation works
           </h2>
         </div>
@@ -129,7 +128,7 @@ export default function HomePage() {
           <div className="grid gap-12 md:grid-cols-12 md:gap-10">
             <div className="md:col-span-6">
               <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-                Section VI · Pre-launch
+                Pre-launch
               </div>
               <h2 className="font-display text-ink-primary mt-3 max-w-xl text-3xl md:text-5xl">
                 Be told when Astra Antiqua arrives on Android.
@@ -198,37 +197,5 @@ function Column({
         {ctaLabel} →
       </Link>
     </div>
-  );
-}
-
-function ZodiacWatermark() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 1000 1000"
-      className="pointer-events-none absolute inset-0 -z-10 m-auto h-[min(80vh,800px)] w-[min(80vh,800px)] opacity-[0.04]"
-    >
-      <circle cx="500" cy="500" r="400" stroke="#d4af37" strokeWidth="1" fill="none" />
-      <circle cx="500" cy="500" r="320" stroke="#d4af37" strokeWidth="0.5" fill="none" />
-      <circle cx="500" cy="500" r="240" stroke="#d4af37" strokeWidth="0.5" fill="none" />
-      {Array.from({ length: 12 }).map((_, i) => {
-        const angle = (i * 30 - 90) * (Math.PI / 180);
-        const x1 = 500 + Math.cos(angle) * 240;
-        const y1 = 500 + Math.sin(angle) * 240;
-        const x2 = 500 + Math.cos(angle) * 400;
-        const y2 = 500 + Math.sin(angle) * 400;
-        return (
-          <line
-            key={i}
-            x1={x1}
-            y1={y1}
-            x2={x2}
-            y2={y2}
-            stroke="#d4af37"
-            strokeWidth="0.5"
-          />
-        );
-      })}
-    </svg>
   );
 }

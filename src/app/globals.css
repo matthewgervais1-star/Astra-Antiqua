@@ -116,3 +116,45 @@ samp {
     scroll-behavior: auto !important;
   }
 }
+
+/*
+ * Print stylesheet. Triggered by window.print() (Save as PDF in modern
+ * browsers). Hides interactive chrome, simplifies glassmorphism so colors
+ * print, and switches link styles for paper output. Keeps the dark theme so
+ * the saved PDF matches the on-screen appearance.
+ */
+@media print {
+  header[class*="site"],
+  footer[class*="site"],
+  nav,
+  button,
+  .print-hide {
+    display: none !important;
+  }
+  body {
+    background: #050505 !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .glass-panel,
+  [class*="backdrop-filter"],
+  [class*="backdrop-blur"] {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: rgba(10, 10, 10, 0.95) !important;
+    border-color: rgba(212, 175, 55, 0.35) !important;
+  }
+  a {
+    color: #d4af37 !important;
+    text-decoration: none !important;
+  }
+  .print-only {
+    display: revert !important;
+  }
+}
+
+/* Hide print-only elements except when actually printing. */
+.print-only {
+  display: none;
+}
