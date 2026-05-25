@@ -79,7 +79,38 @@ function drawZodiacRing(ctx: CanvasRenderingContext2D, geo: WheelGeometry): void
     ctx.stroke();
   }
   ctx.restore();
+
+  // Sign labels around the outer ring.
+  ctx.save();
+  ctx.fillStyle = "rgba(212, 175, 55, 0.78)";
+  const labelSize = Math.max(8, Math.min(11, geo.size * 0.018));
+  ctx.font = `${labelSize}px ui-monospace, "JetBrains Mono", Menlo, monospace`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  const labelRadius = (geo.outerRadius + geo.zodiacRadius) / 2;
+  for (let i = 0; i < 12; i += 1) {
+    const longitude = i * 30 + 15; // midpoint of the 30 degree arc
+    const pos = longitudeToCartesian(longitude, labelRadius, geo.cx, geo.cy);
+    const label = SIGN_ABBREVIATIONS[i];
+    if (label) ctx.fillText(label, pos.x, pos.y);
+  }
+  ctx.restore();
 }
+
+const SIGN_ABBREVIATIONS: readonly string[] = [
+  "ARI",
+  "TAU",
+  "GEM",
+  "CAN",
+  "LEO",
+  "VIR",
+  "LIB",
+  "SCO",
+  "SAG",
+  "CAP",
+  "AQU",
+  "PIS",
+];
 
 function drawHouseDividers(ctx: CanvasRenderingContext2D, geo: WheelGeometry): void {
   ctx.save();

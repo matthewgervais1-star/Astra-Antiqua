@@ -20,9 +20,12 @@ import { SIGN_REGISTERS } from "@/data/interpretations";
 import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
 import { BigThree } from "@/components/daily/BigThree";
 import { PersonalTransits } from "@/components/daily/PersonalTransits";
-import { CategoryHoroscope } from "@/components/daily/CategoryHoroscope";
+import { LifeDomainHoroscope } from "@/components/daily/LifeDomainHoroscope";
 import { MoonPhasePanel } from "@/components/daily/MoonPhasePanel";
 import { UpcomingEvents } from "@/components/daily/UpcomingEvents";
+import { BehindForecast } from "@/components/daily/BehindForecast";
+import { DayStrip } from "@/components/daily/DayStrip";
+import { buildDailyHeadline } from "@/lib/dailyHeadline";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
 import { usePrefersReducedMotion } from "@/lib/reducedMotion";
@@ -74,6 +77,7 @@ function SingleVoiceHeadline({
   const reduce = usePrefersReducedMotion();
   const reading = useMemo(() => buildReading(culture, chart), [culture, chart]);
   const headline = useMemo(() => moonHeadline(culture, chart), [culture, chart]);
+  const directive = useMemo(() => buildDailyHeadline(culture, chart), [culture, chart]);
   const aspects = useMemo(() => topAspects(reading.aspects, 2), [reading]);
 
   return (
@@ -87,15 +91,18 @@ function SingleVoiceHeadline({
       <GlassPanel tone="glass" glow className="relative p-8 md:p-12">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.35em]">
-            Today · {CULTURE_LABELS[culture]}
+            {formatLongDate(now).toUpperCase()} AT A GLANCE
           </div>
-          <time className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
-            {formatLongDate(now)}
-          </time>
+          <span className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
+            Voice of {CULTURE_LABELS[culture]}
+          </span>
         </div>
-        <h3 className="font-display text-ink-primary mt-6 max-w-3xl text-3xl leading-tight md:text-[44px]">
-          {headline.line}
+        <h3 className="font-display text-ink-primary mt-5 max-w-3xl text-3xl leading-[1.05] md:text-[52px]">
+          {directive.headline}
         </h3>
+        <p className="text-ink-primary font-body mt-6 max-w-2xl text-lg leading-relaxed md:text-xl">
+          {headline.line} {directive.paragraph.split(". ").slice(1).join(". ")}
+        </p>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {aspects.length > 0 ? (
             aspects.map((aspect, idx) => (
@@ -219,21 +226,24 @@ function NoNatalPrompt() {
 function TodayDashboardImpl() {
   const culture = useActivePantheon();
   const [now, setNow] = useState<Date | null>(null);
+  const [viewDate, setViewDate] = useState<Date | null>(null);
   const [natal, setNatal] = useState<SavedNatal | null>(null);
 
   useEffect(() => {
     // Capture today's date and any saved natal chart on mount.
+    const today = new Date();
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setNow(new Date());
+    setNow(today);
+    setViewDate(today);
     setNatal(loadSavedNatal());
   }, []);
 
   const chart = useMemo(() => {
-    if (!now) return null;
-    return computeChart(now);
-  }, [now]);
+    if (!viewDate) return null;
+    return computeChart(viewDate);
+  }, [viewDate]);
 
-  if (!now || !chart) {
+  if (!now || !viewDate || !chart) {
     return (
       <GlassPanel tone="glass" className="min-h-[260px] p-8 md:p-12">
         <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.35em]">
@@ -247,11 +257,22 @@ function TodayDashboardImpl() {
     <div id="today" className="scroll-mt-24 flex flex-col gap-8 md:gap-10">
       {natal ? <BigThree culture={culture} natal={natal} /> : <NoNatalPrompt />}
 
+      <DayStrip today={now} viewDate={viewDate} onChange={setViewDate} span={5} />
+
       <AnimatePresence mode="wait">
         {culture ? (
-          <SingleVoiceHeadline key={culture} culture={culture} now={now} chart={chart} />
+          <SingleVoiceHeadline
+            key={`${culture}-${viewDate.toISOString().slice(0, 10)}`}
+            culture={culture}
+            now={viewDate}
+            chart={chart}
+          />
         ) : (
-          <FourVoiceCompact key="four" now={now} chart={chart} />
+          <FourVoiceCompact
+            key={`four-${viewDate.toISOString().slice(0, 10)}`}
+            now={viewDate}
+            chart={chart}
+          />
         )}
       </AnimatePresence>
 
@@ -263,11 +284,13 @@ function TodayDashboardImpl() {
         />
       ) : null}
 
-      {culture ? <CategoryHoroscope culture={culture} chart={chart} /> : null}
+      {culture ? <LifeDomainHoroscope culture={culture} chart={chart} /> : null}
+
+      <BehindForecast now={viewDate} culture={culture} chart={chart} />
 
       <div className="grid gap-5 md:grid-cols-2">
-        <MoonPhasePanel now={now} />
-        <UpcomingEvents now={now} culture={culture} />
+        <MoonPhasePanel now={viewDate} />
+        <UpcomingEvents now={viewDate} culture={culture} />
       </div>
     </div>
   );
