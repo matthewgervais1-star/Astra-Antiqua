@@ -49,16 +49,22 @@ export default function HomePage() {
           </div>
           <div className="flex flex-wrap gap-3 self-start md:self-end">
             <Link
-              href="/reading"
+              href="/forecast"
               className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-colors"
             >
-              Your chart →
+              The year ahead →
+            </Link>
+            <Link
+              href="/reading"
+              className="border-hairline text-ink-secondary hover:text-ink-primary hover:border-gold-soft inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-colors"
+            >
+              Your chart
             </Link>
             <Link
               href="/charts"
               className="border-hairline text-ink-secondary hover:text-ink-primary hover:border-gold-soft inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.2em] transition-colors"
             >
-              Saved charts
+              Saved
             </Link>
           </div>
         </div>

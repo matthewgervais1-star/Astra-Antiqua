@@ -2,12 +2,12 @@ import Link from "next/link";
 
 const NAV = [
   { href: "/", label: "Home" },
+  { href: "/forecast", label: "Forecast" },
   { href: "/reading", label: "Reading" },
   { href: "/charts", label: "Charts" },
   { href: "/synastry", label: "Synastry" },
   { href: "/methodology", label: "Methodology" },
   { href: "/translation-matrix", label: "Matrix" },
-  { href: "/wait-list", label: "Wait List" },
 ] as const;
 
 export function SiteHeader() {
