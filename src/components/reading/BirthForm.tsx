@@ -419,7 +419,7 @@ export function BirthForm({
           submitting && "cursor-not-allowed opacity-60",
         )}
       >
-        {submitting ? "Computing" : (submitLabel ?? "Compute the chart")}
+        {submitting ? "Casting" : (submitLabel ?? "Cast the chart")}
         {!submitting ? <span aria-hidden>→</span> : null}
       </button>
 

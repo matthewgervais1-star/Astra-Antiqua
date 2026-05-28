@@ -55,7 +55,7 @@ function PantheonSelectorImpl() {
             className={cn(
               "group glass-panel relative flex flex-col items-center gap-3 rounded-2xl p-5 text-left transition-all duration-300 md:p-6",
               isActive
-                ? "border-gold-soft shadow-[0_0_60px_-30px_rgba(244,208,63,0.55)]"
+                ? "border-gold-soft accent-glow"
                 : "hover:border-gold-soft",
             )}
           >

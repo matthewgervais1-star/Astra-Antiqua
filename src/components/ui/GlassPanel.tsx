@@ -19,7 +19,7 @@ export function GlassPanel({
       className={cn(
         "rounded-2xl",
         tone === "glass" ? "glass-panel" : "bg-bg-deep border-hairline",
-        glow && "shadow-[0_0_60px_-30px_rgba(244,208,63,0.55)]",
+        glow && "accent-glow",
         className,
       )}
       {...rest}

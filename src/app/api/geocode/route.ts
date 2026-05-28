@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { clientIdentifier, rateLimit } from "@/lib/auth/rateLimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -106,6 +107,18 @@ function normalize(item: NominatimResult): GeocodeResult | null {
 }
 
 export async function GET(request: Request) {
+  // 60 geocode requests per IP per minute. The debounced UI sends far fewer
+  // than that under normal use; this just prevents one client from emptying
+  // Nominatim's quota.
+  const ipKey = clientIdentifier(request);
+  const limit = rateLimit(`geocode:${ipKey}`, 60, 60 * 1000);
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { ok: false, error: "Too many geocode requests. Try again in a minute.", results: [] },
+      { status: 429 },
+    );
+  }
+
   const url = new URL(request.url);
   const q = (url.searchParams.get("q") ?? "").trim();
   if (q.length < 3) {

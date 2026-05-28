@@ -240,7 +240,7 @@ function SynastryPageImpl() {
               You have {charts.length} chart{charts.length === 1 ? "" : "s"} saved.
             </p>
             <p className="text-ink-secondary font-body mt-2 max-w-xl text-base md:text-lg">
-              Compute another chart to enable synastry. Add a partner, family member, or friend on the{" "}
+              Cast another chart to enable synastry. Add a partner, family member, or friend on the{" "}
               <Link href="/reading" className="text-gold-leaf underline-offset-4 hover:underline">
                 reading page
               </Link>

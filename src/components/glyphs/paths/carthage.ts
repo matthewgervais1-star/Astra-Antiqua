@@ -3,53 +3,50 @@ import type { Planet } from "@/data/cultures";
 
 const VB: readonly [number, number] = [64, 64];
 
+/**
+ * Punic / Carthaginian glyphs from the votive stelae and Tophet record:
+ *   Semes        the winged solar disc (Egyptianized Punic form)
+ *   Tanit        the Sign of Tanit (triangle, bar, disc) -- the central Punic symbol
+ *   Sakun        the Punic caduceus (staff, disc, paired volutes)
+ *   Astarte      the eight-pointed star with crescent (the astral pair)
+ *   Melqart      the club of Melqart / Heracles
+ *   Baal Hammon  the enthroned god crowned with ram's horns
+ *   Baal Hammon  (Ancient) the betyl, his aniconic standing stone
+ */
 export const CARTHAGE_GLYPHS: Readonly<Record<Planet, Glyph>> = {
-  // Semes: solar disc with the horizontal arms of the Tanit symbol extending outward.
   sun: {
     label: "Semes",
     viewBox: VB,
-    d: "M 32 16 A 10 10 0 1 0 32 36 A 10 10 0 1 0 32 16 M 14 40 H 50 M 4 38 L 14 40 L 4 42 M 60 38 L 50 40 L 60 42",
+    d: "M 32 24 A 7 7 0 1 0 32 38 A 7 7 0 1 0 32 24 M 25 31 L 6 28 L 8 33 L 6 36 M 39 31 L 58 28 L 56 33 L 58 36",
   },
-
-  // Tanit: the canonical Tanit-sign, disc above the bar, triangle to the ground.
   moon: {
     label: "Tanit",
     viewBox: VB,
-    d: "M 32 6 A 6 6 0 1 0 32 18 A 6 6 0 1 0 32 6 M 12 22 H 52 M 12 22 L 14 18 M 52 22 L 50 18 M 18 22 L 32 58 L 46 22 Z",
+    d: "M 22 54 L 32 32 L 42 54 Z M 14 30 H 50 M 14 30 L 11 26 M 50 30 L 53 26 M 32 14 A 6 6 0 1 0 32 26 A 6 6 0 1 0 32 14",
   },
-
-  // Sakun: angular Punic caduceus, the staff of the maritime guide.
   mercury: {
     label: "Sakun",
     viewBox: VB,
-    d: "M 32 10 V 54 M 24 16 L 32 24 L 40 16 M 24 32 L 32 40 L 40 32 M 22 16 L 16 10 M 42 16 L 48 10",
+    d: "M 32 14 V 52 M 28 14 A 4 4 0 1 0 36 14 A 4 4 0 1 0 28 14 M 32 24 C 25 24 25 31 32 31 C 39 31 39 24 32 24 M 32 34 C 26 34 26 40 32 40 C 38 40 38 34 32 34",
   },
-
-  // Astarte: eight-rayed Punic star above the Tanit triangular base.
   venus: {
     label: "Astarte",
     viewBox: VB,
-    d: "M 32 16 L 36 26 L 46 26 L 38 32 L 42 42 L 32 36 L 22 42 L 26 32 L 18 26 L 28 26 Z M 22 54 H 42 L 40 50 H 24 Z",
+    d: "M 32 12 V 48 M 14 30 H 50 M 19 17 L 45 43 M 45 17 L 19 43 M 26 56 A 6 6 0 0 0 38 56",
   },
-
-  // Melqart: hero's club crossing the Tyrian murex shell of the mother city.
   mars: {
     label: "Melqart",
     viewBox: VB,
-    d: "M 22 8 L 14 14 L 44 50 L 52 50 L 46 42 Z M 12 36 A 8 8 0 1 0 12 52 A 8 8 0 1 0 12 36 M 12 36 V 28 M 6 36 L 2 30 M 18 36 L 22 30",
+    d: "M 16 50 L 42 20 M 42 20 Q 52 8 50 22 Q 47 26 42 20 M 16 50 L 20 48 M 18 46 L 22 44",
   },
-
-  // Baal Hammon (Jupiter aspect): the enthroned sky-sovereign with the solar disc above.
   jupiter: {
     label: "Baal Hammon",
     viewBox: VB,
-    d: "M 18 32 H 46 V 56 H 18 Z M 22 32 V 24 H 42 V 32 M 32 8 A 6 6 0 1 0 32 20 A 6 6 0 1 0 32 8 M 14 32 H 18 M 46 32 H 50",
+    d: "M 20 34 H 44 V 54 H 20 Z M 24 34 V 26 H 40 V 34 M 28 26 Q 21 23 25 17 Q 27 20 29 24 M 36 26 Q 43 23 39 17 Q 37 20 35 24",
   },
-
-  // Baal Hammon (Saturn aspect): the same throne under the agricultural crescent.
   saturn: {
     label: "Baal Hammon (Ancient)",
     viewBox: VB,
-    d: "M 18 32 H 46 V 56 H 18 Z M 22 32 V 24 H 42 V 32 M 38 14 A 8 8 0 1 0 26 14 A 5 5 0 1 1 38 14 M 14 32 H 18 M 46 32 H 50",
+    d: "M 24 54 L 25 26 Q 32 16 39 26 L 40 54 M 19 54 H 45 M 25 40 H 39",
   },
 };

@@ -236,7 +236,7 @@ function NoNatalPrompt() {
           href="/reading"
           className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 shrink-0 self-start rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors md:self-center"
         >
-          Compute your chart →
+          Cast your chart →
         </Link>
       </div>
     </GlassPanel>

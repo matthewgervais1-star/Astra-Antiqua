@@ -42,3 +42,9 @@ next-env.d.ts
 
 # wait-list data store (local dev only)
 /data/wait-list.json
+
+# auth + charts SQLite (local dev only; production uses Postgres)
+/data/astra-antiqua.sqlite
+/data/astra-antiqua.sqlite-journal
+/data/astra-antiqua.sqlite-shm
+/data/astra-antiqua.sqlite-wal

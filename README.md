@@ -151,14 +151,72 @@ clarity, Canaanite cuneiform-inflected angularity, Punic Tanit-based geometry).
 
 | Route                          | Type         | Notes                                                |
 | ------------------------------ | ------------ | ---------------------------------------------------- |
-| `/`                            | static       | Hero, selector, wheel, oracle, methodology teaser, CTA |
+| `/`                            | static       | Hero, selector, today dashboard, week, demo, method, wait-list |
+| `/forecast`                    | static       | Annual report + moon phases, eclipses, retrogrades, ingresses |
+| `/reading`                     | static       | Cast a natal chart, save it, read it in any pantheon |
+| `/charts`                      | static       | Saved-chart management (anonymous and signed-in)     |
+| `/synastry`                    | static       | Two-chart comparison                                 |
+| `/sign-in`, `/sign-up`         | static       | Auth                                                 |
+| `/account`                     | static       | Display name, password, data export, deletion       |
 | `/pantheon/[culture]`          | SSG (4 pages) | `generateStaticParams` over the four cultures        |
-| `/methodology`                 | static       | 5 sections, 4 interpretive notes, source bibliography |
-| `/translation-matrix`          | static       | 7x4 interactive table with planet and pantheon filters |
+| `/methodology`                 | static       | Methodology page                                     |
+| `/translation-matrix`          | static       | 7x4 interactive table                                |
 | `/wait-list`                   | static       | Long-form pitch + form                               |
-| `/api/wait-list`               | dynamic      | Node runtime, POST only                              |
+| `/api/auth/{signup,signin,signout,me}` | dynamic | Email/password auth                                  |
+| `/api/charts`, `/api/charts/[id]` | dynamic    | Authenticated chart CRUD                             |
+| `/api/me`                      | dynamic      | PATCH (name, password), DELETE (account)             |
+| `/api/me/export`               | dynamic      | JSON export of account + saved charts                |
+| `/api/geocode`                 | dynamic      | OSM Nominatim proxy with caching + rate limiting    |
+| `/api/wait-list`               | dynamic      | POST only, file-backed in dev, no-op + log on Vercel |
+
+## Environment variables
+
+| Var | Required | Purpose |
+| --- | --- | --- |
+| `AUTH_SECRET` | yes in production | JWT signing secret. Must be at least 16 characters. The app **refuses to start** in production without it. Generate with `openssl rand -base64 32`. |
+| `AUTH_DB_PATH` | no | Absolute path to the SQLite file. Defaults to `./data/astra-antiqua.sqlite`. For production, swap the DB driver (see below) and ignore this. |
+| `WAITLIST_FILE` | no | Absolute path to the wait-list JSON file. Defaults to `./data/wait-list.json`. |
+| `WAITLIST_STORE` | no | Set to `noop` to log entries only without writing anywhere. Used in environments where filesystem writes are not desired. |
+| `NODE_ENV` | usually set by host | When `production`, enforces `AUTH_SECRET` presence and enables `Secure` cookies. |
+
+## Security
+
+The app ships with defense-in-depth defaults:
+
+- **`AUTH_SECRET` hard-required in production.** The session module throws at boot if it is unset or shorter than 16 characters.
+- **HTTP security headers** set by `next.config.ts`: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` disabling camera/mic/geolocation/payment, `Strict-Transport-Security: max-age=31536000; includeSubDomains`, and a same-origin Content-Security-Policy.
+- **Origin/Referer check** on every state-changing API route (`POST`, `PATCH`, `DELETE`) in addition to the `SameSite=Lax` cookie default.
+- **Rate limiting** per IP on `/api/auth/signin` (20/min), `/api/auth/signup` (5/hour), `/api/geocode` (60/min). In-memory sliding window; swap to Redis for multi-instance production.
+- **Login throttling** per email address: 5 consecutive failures within 15 minutes triggers a 15-minute lockout. Successful sign-in clears the counter.
+- **Constant-time login.** When the email does not exist, the auth flow still runs a dummy `bcrypt.compare` so an attacker cannot probe whether an email is registered by timing.
+- **Session cookie** is `HttpOnly`, `SameSite=Lax`, and `Secure` when `NODE_ENV=production`. 30-day expiry, signed with HS256.
+- **Password hashing** via `bcryptjs`, cost factor 11.
+- **Prepared statements** everywhere SQL is run (no string concatenation), so SQL injection is not reachable.
+- **Account deletion** cascades via the foreign key from `charts(user_id) → users(id)`. The session cookie is cleared as part of the same response.
+- **Data export.** GDPR-shaped JSON dump available at `/api/me/export` for any signed-in user.
+
+Known security work still to do (not in this build):
+
+- Email verification on sign-up. Needs an email service (Resend, Postmark, etc.).
+- Password reset flow. Same dependency.
+- Server-side session revocation list. Currently a stolen JWT is usable until its 30-day expiry; rotating `AUTH_SECRET` invalidates all sessions at once.
+- 2FA / TOTP.
+- OAuth (Google, Apple, GitHub). Each provider account to be configured in their respective consoles.
+- A real database in production (the SQLite driver does not survive serverless cold starts; see below).
 
 ## Deployment
 
-Zero-config Vercel deployment. No `vercel.json` required. Push the `website/`
-directory as the project root.
+**Vercel (or any serverless host):** SQLite via `better-sqlite3` will not persist data across cold starts on serverless platforms. Before deploying:
+
+1. **Swap the DB layer.** `src/lib/auth/db.ts` and `src/lib/auth/charts.ts` (plus the relevant lines of `src/lib/auth/users.ts`) are the only files that touch SQLite directly. Replace them with a Postgres-backed implementation (Neon, Supabase, Vercel Postgres) using the same schema:
+   ```sql
+   CREATE TABLE users (id text primary key, email text unique not null, password_hash text not null, display_name text, created_at bigint not null);
+   CREATE TABLE charts (id text primary key, user_id text not null references users(id) on delete cascade, name text not null, relationship text not null, date text not null, time text not null, city_label text not null, latitude double precision not null, longitude double precision not null, is_primary integer not null default 0, created_at bigint not null);
+   CREATE INDEX charts_user_id_idx ON charts (user_id);
+   ```
+2. **Set `AUTH_SECRET`** to a strong random value (`openssl rand -base64 32`). The app will refuse to start without it.
+3. **Set the wait-list adapter.** Either leave it as the no-op (entries log to runtime logs only) or wire it to a real backend in `src/lib/waitlistStore.ts`.
+4. **Move rate-limiter state to Redis** (Upstash works well with Vercel) if you expect multi-instance traffic. The current in-memory map is process-local.
+5. Push the `website/` directory as the project root. No `vercel.json` required.
+
+**Self-hosted (single instance):** the defaults work as-is. SQLite, in-memory rate limiter, file-backed wait-list all behave correctly. Run behind a reverse proxy (Caddy, nginx) that terminates TLS so the `Secure` cookie flag has effect.

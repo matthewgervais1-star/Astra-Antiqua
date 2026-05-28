@@ -3,12 +3,10 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
-  PLANET_LABELS,
   PLANET_SYMBOLS,
   type Culture,
   type Planet,
 } from "@/data/cultures";
-import { DEITY_MATRIX } from "@/data/deities";
 import {
   PantheonSelector,
   useActivePantheon,
@@ -34,6 +32,8 @@ import { GoldText } from "@/components/ui/GoldText";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
 import { PrintButton } from "@/components/ui/PrintButton";
+import { deityWithPlanet } from "@/lib/deityLabel";
+import { AnnualReportSection } from "@/components/forecast/AnnualReportSection";
 
 const YEAR_DAYS = 365;
 const TRANSIT_PLANETS: readonly Planet[] = ["jupiter", "saturn"];
@@ -56,10 +56,6 @@ function formatLongDate(d: Date): string {
 
 function daysUntil(target: Date, now: Date): number {
   return Math.round((target.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
-}
-
-function deityName(culture: Culture | null, planet: Planet): string {
-  return culture ? DEITY_MATRIX[culture][planet].name : PLANET_LABELS[planet];
 }
 
 interface ForecastBundle {
@@ -158,6 +154,20 @@ function ForecastPageImpl() {
       </SectionContainer>
 
       {bundle.natal ? (
+        <SectionContainer size="default" spacing="default">
+          <AnnualReportSection
+            now={bundle.now}
+            natalName={bundle.natal.meta.name}
+            culture={culture}
+            majorTransits={bundle.majorTransits}
+            eclipses={bundle.eclipses}
+            retrogrades={bundle.retrogrades}
+            solarReturn={bundle.solarReturn}
+          />
+        </SectionContainer>
+      ) : null}
+
+      {bundle.natal ? (
         <SectionContainer size="default" spacing="tight">
           <SolarReturnSection
             natal={bundle.natal}
@@ -182,7 +192,7 @@ function ForecastPageImpl() {
               href="/reading"
               className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 mt-5 inline-flex items-center gap-2 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors"
             >
-              Compute your chart →
+              Cast your chart →
             </Link>
           </GlassPanel>
         </SectionContainer>
@@ -211,7 +221,6 @@ function ForecastPageImpl() {
         <RetrogradeSection
           retrogrades={bundle.retrogrades}
           culture={culture}
-          now={bundle.now}
         />
       </SectionContainer>
 
@@ -227,7 +236,6 @@ function ForecastPageImpl() {
         <MoonPhaseSection
           phases={bundle.moonPhases}
           culture={culture}
-          now={bundle.now}
         />
       </SectionContainer>
     </>
@@ -275,7 +283,7 @@ function SolarReturnSection({
   solarReturn: SolarReturnEvent | null;
   now: Date;
 }) {
-  const sunDeity = culture ? DEITY_MATRIX[culture].sun.name : "Sun";
+  const sunLabel = deityWithPlanet(culture, "sun");
   const days = solarReturn ? daysUntil(solarReturn.date, now) : null;
   return (
     <GlassPanel tone="solid" className="p-6 md:p-8">
@@ -285,13 +293,13 @@ function SolarReturnSection({
       {solarReturn ? (
         <>
           <h2 className="font-display text-ink-primary mt-3 text-2xl md:text-3xl">
-            {sunDeity} returns to your natal degree on {formatLongDate(solarReturn.date)}.
+            {sunLabel} returns to your natal degree on {formatLongDate(solarReturn.date)}.
           </h2>
           <p className="text-ink-secondary font-body mt-3 max-w-2xl text-base md:text-lg">
             The Sun comes back to exactly {solarReturn.degree.toFixed(1)}° {solarReturn.sign}, the position it held the moment you were born. It is your astrological birthday. The chart cast for this moment is what astrology calls your solar return, and it sets the tone for your year from this date to the next.
           </p>
           <p className="text-ink-tertiary font-mono mt-4 text-[10px] uppercase tracking-[0.25em]">
-            In {days} day{days === 1 ? "" : "s"} · Natal {sunDeity} at {longitudeToSign(natal.chart.sun).degree.toFixed(1)}° {longitudeToSign(natal.chart.sun).sign}
+            In {days} day{days === 1 ? "" : "s"} · Natal {sunLabel} at {longitudeToSign(natal.chart.sun).degree.toFixed(1)}° {longitudeToSign(natal.chart.sun).sign}
           </p>
         </>
       ) : (
@@ -315,8 +323,8 @@ function MajorTransitsSection({
   now: Date;
 }) {
   const NATAL_LABEL: Readonly<Record<string, string>> = {
-    sun: culture ? DEITY_MATRIX[culture].sun.name : "Sun",
-    moon: culture ? DEITY_MATRIX[culture].moon.name : "Moon",
+    sun: deityWithPlanet(culture, "sun"),
+    moon: deityWithPlanet(culture, "moon"),
     asc: "Ascendant",
     mc: "Midheaven",
   };
@@ -330,7 +338,7 @@ function MajorTransitsSection({
       <GlassPanel tone="solid" className="p-6 md:p-8">
         <ul className="flex flex-col gap-4">
           {transits.map((t, idx) => {
-            const tDeity = deityName(culture, t.transitPlanet);
+            const tDeity = deityWithPlanet(culture, t.transitPlanet);
             const days = daysUntil(t.date, now);
             return (
               <li
@@ -398,7 +406,7 @@ function EclipseSection({
             {eclipses.map((e, idx) => {
               const moonOrSun = e.scope === "lunar" ? "moon" : "sun";
               const deityKey: Planet = moonOrSun;
-              const dDeity = culture ? DEITY_MATRIX[culture][deityKey].name : moonOrSun === "moon" ? "Moon" : "Sun";
+              const dDeity = deityWithPlanet(culture, deityKey);
               const days = daysUntil(e.date, now);
               return (
                 <li
@@ -442,11 +450,9 @@ function EclipseSection({
 function RetrogradeSection({
   retrogrades,
   culture,
-  now,
 }: {
   retrogrades: readonly RetrogradeEvent[];
   culture: Culture | null;
-  now: Date;
 }) {
   // Pair retrograde + direct stations into periods for display.
   const periods = useMemo(() => {
@@ -487,7 +493,7 @@ function RetrogradeSection({
         <GlassPanel tone="solid" className="p-6 md:p-8">
           <ul className="flex flex-col gap-4">
             {periods.map((p, idx) => {
-              const dName = deityName(culture, p.planet);
+              const dName = deityWithPlanet(culture, p.planet);
               const startD = p.start;
               const endD = p.end;
               return (
@@ -552,7 +558,7 @@ function IngressSection({
         <GlassPanel tone="solid" className="p-6 md:p-8">
           <ul className="flex flex-col gap-3">
             {ingresses.slice(0, 30).map((ev, idx) => {
-              const dName = deityName(culture, ev.planet);
+              const dName = deityWithPlanet(culture, ev.planet);
               const days = daysUntil(ev.date, now);
               return (
                 <li
@@ -598,13 +604,11 @@ function IngressSection({
 function MoonPhaseSection({
   phases,
   culture,
-  now: _now,
 }: {
   phases: readonly MoonPhaseEvent[];
   culture: Culture | null;
-  now: Date;
 }) {
-  const moonDeity = culture ? DEITY_MATRIX[culture].moon.name : "Moon";
+  const moonDeity = deityWithPlanet(culture, "moon");
   // Group by month for readability.
   const byMonth = useMemo(() => {
     const map = new Map<string, MoonPhaseEvent[]>();

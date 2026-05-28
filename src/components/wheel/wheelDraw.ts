@@ -1,11 +1,14 @@
 import { PLANETS, type Culture, type Planet } from "@/data/cultures";
 import { GLYPHS } from "@/components/glyphs";
+import { metalFor } from "@/data/palettes";
 import { computeAspects, type AspectKind, type Longitude } from "@/data/sampleChart";
 import {
   longitudeToCartesian,
   makeGeometry,
   type WheelGeometry,
 } from "@/components/wheel/wheelHitTest";
+
+type MetalStops = readonly [string, string, string];
 
 export interface DrawOptions {
   ctx: CanvasRenderingContext2D;
@@ -25,13 +28,20 @@ const ASPECT_STYLES: Readonly<Record<AspectKind, { color: string; width: number;
   conjunction: { color: "rgba(244, 208, 63, 0.65)", width: 1, dash: [] },
 };
 
-function applyGoldStroke(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number): void {
+function applyGoldStroke(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  r: number,
+  stops: MetalStops,
+): void {
+  const [deep, mid, bright] = stops;
   const grad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
-  grad.addColorStop(0, "#a8842c");
-  grad.addColorStop(0.35, "#d4af37");
-  grad.addColorStop(0.5, "#f4d03f");
-  grad.addColorStop(0.65, "#d4af37");
-  grad.addColorStop(1, "#a8842c");
+  grad.addColorStop(0, deep);
+  grad.addColorStop(0.35, mid);
+  grad.addColorStop(0.5, bright);
+  grad.addColorStop(0.65, mid);
+  grad.addColorStop(1, deep);
   ctx.strokeStyle = grad;
 }
 
@@ -42,11 +52,12 @@ export function drawWheel(options: DrawOptions): void {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, cssSize, cssSize);
 
+  const stops = metalFor(culture).stops;
   drawZodiacRing(ctx, geo);
   drawHouseDividers(ctx, geo);
   drawAspectLines(ctx, geo, chart);
   drawConjunctionRings(ctx, geo, chart, pulsePhase);
-  drawPlanetGlyphs(ctx, geo, chart, culture, highlightPlanet);
+  drawPlanetGlyphs(ctx, geo, chart, culture, highlightPlanet, stops);
 }
 
 function drawZodiacRing(ctx: CanvasRenderingContext2D, geo: WheelGeometry): void {
@@ -180,6 +191,7 @@ function drawPlanetGlyphs(
   chart: Readonly<Record<Planet, Longitude>>,
   culture: Culture | null,
   highlightPlanet: Planet | null,
+  stops: MetalStops,
 ): void {
   for (const planet of PLANETS) {
     const longitude = chart[planet];
@@ -204,7 +216,7 @@ function drawPlanetGlyphs(
 
     const glyph = culture ? GLYPHS[culture][planet] : null;
     ctx.save();
-    applyGoldStroke(ctx, pos.x, pos.y, geo.glyphSize);
+    applyGoldStroke(ctx, pos.x, pos.y, geo.glyphSize, stops);
     ctx.lineWidth = 1.5;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -217,7 +229,7 @@ function drawPlanetGlyphs(
     } else {
       ctx.restore();
       ctx.save();
-      applyGoldStroke(ctx, pos.x, pos.y, geo.glyphSize);
+      applyGoldStroke(ctx, pos.x, pos.y, geo.glyphSize, stops);
       ctx.fillStyle = ctx.strokeStyle;
       ctx.font = `${geo.glyphSize * 0.85}px ui-serif, Georgia, serif`;
       ctx.textAlign = "center";

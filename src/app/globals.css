@@ -20,19 +20,120 @@
   --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
+/*
+ * Per-culture accent palette. The metal gradient (deep / mid / bright) plus a
+ * secondary accent used for borders and glows. Each scheme is historically
+ * grounded:
+ *   default  classic gold on black (no pantheon selected)
+ *   egypt    pharaoh gold + lapis lazuli (the two iconic Egyptian luxuries)
+ *   greece   pale marble champagne + Aegean cyan
+ *   canaan   bronze-age copper + verdigris patina (also Baal's storm-sea green)
+ *   carthage ember gold + fire (the Tophet furnace); text also animates
+ * Hex values are kept in sync with src/data/palettes.ts, which feeds the
+ * SVG glyph gradients and the canvas wheel.
+ */
+:root {
+  --accent-deep: #a8842c;
+  --accent-mid: #d4af37;
+  --accent-bright: #f4d03f;
+  --accent-solid: #d4af37;
+  --accent-border: rgba(212, 175, 55, 0.25);
+  --accent-glow: rgba(244, 208, 63, 0.5);
+  --accent-soft: rgba(212, 175, 55, 0.1);
+}
+
+body[data-pantheon="egypt"] {
+  --accent-deep: #a8842c;
+  --accent-mid: #e3c14e;
+  --accent-bright: #f7e294;
+  --accent-solid: #e3c14e;
+  --accent-border: rgba(58, 114, 200, 0.4);
+  --accent-glow: rgba(58, 114, 200, 0.45);
+  --accent-soft: rgba(58, 114, 200, 0.12);
+}
+
+body[data-pantheon="greece"] {
+  --accent-deep: #9a9374;
+  --accent-mid: #ddd3b0;
+  --accent-bright: #f4eed8;
+  --accent-solid: #ddd3b0;
+  --accent-border: rgba(74, 166, 200, 0.4);
+  --accent-glow: rgba(74, 166, 200, 0.45);
+  --accent-soft: rgba(74, 166, 200, 0.12);
+}
+
+body[data-pantheon="canaan"] {
+  --accent-deep: #6f4f28;
+  --accent-mid: #b07d42;
+  --accent-bright: #dcab5e;
+  --accent-solid: #b07d42;
+  --accent-border: rgba(63, 158, 140, 0.4);
+  --accent-glow: rgba(63, 158, 140, 0.45);
+  --accent-soft: rgba(63, 158, 140, 0.12);
+}
+
+body[data-pantheon="carthage"] {
+  --accent-deep: #c44518;
+  --accent-mid: #f4a02a;
+  --accent-bright: #fbe57b;
+  --accent-solid: #f4a02a;
+  --accent-border: rgba(244, 160, 42, 0.45);
+  --accent-glow: rgba(244, 120, 40, 0.5);
+  --accent-soft: rgba(244, 160, 42, 0.12);
+}
+
 @utility text-gold-leaf {
   background: linear-gradient(
     135deg,
-    #a8842c 0%,
-    #d4af37 35%,
-    #f4d03f 50%,
-    #d4af37 65%,
-    #a8842c 100%
+    var(--accent-deep) 0%,
+    var(--accent-mid) 35%,
+    var(--accent-bright) 50%,
+    var(--accent-mid) 65%,
+    var(--accent-deep) 100%
   );
   background-clip: text;
   -webkit-background-clip: text;
-  color: #d4af37;
+  color: var(--accent-solid);
   -webkit-text-fill-color: transparent;
+}
+
+/*
+ * Carthage gets a hot, animated gold. The Tophet was the ritual furnace; the
+ * city's iconography is fire-on-bronze. When data-pantheon="carthage" is set
+ * on the body, every gold-leaf text element switches to a warmer gradient
+ * that slowly sweeps across the glyphs.
+ */
+@keyframes carthage-fire {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+body[data-pantheon="carthage"] .text-gold-leaf {
+  background: linear-gradient(
+    90deg,
+    #c44518 0%,
+    #e87a1a 12%,
+    #f4a02a 28%,
+    #f4d03f 45%,
+    #fbe57b 50%,
+    #f4d03f 55%,
+    #f4a02a 72%,
+    #e87a1a 88%,
+    #c44518 100%
+  );
+  background-size: 220% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: #f4a02a;
+  -webkit-text-fill-color: transparent;
+  animation: carthage-fire 4.5s ease-in-out infinite;
 }
 
 @utility border-hairline {
@@ -40,7 +141,7 @@
 }
 
 @utility border-gold-soft {
-  border: 0.5px solid var(--color-border-gold);
+  border: 0.5px solid var(--accent-border);
 }
 
 @utility glass-panel {
@@ -48,6 +149,11 @@
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   backdrop-filter: blur(20px) saturate(140%);
   border: 0.5px solid var(--color-border-hairline);
+}
+
+/* Accent glow that follows the active culture's secondary color. */
+@utility accent-glow {
+  box-shadow: 0 0 60px -30px var(--accent-glow);
 }
 
 :root {
@@ -88,6 +194,53 @@ a {
   color: #fff;
 }
 
+/* Accent focus ring for keyboard navigation; never shown for mouse clicks.
+   Follows the active culture's accent color. */
+:focus-visible {
+  outline: 2px solid var(--accent-solid);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Themed scrollbar: near-invisible accent thumb on the void, instead of the
+   default light-gray browser scrollbar that breaks the dark composition. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-border) transparent;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-void);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-border);
+  border-radius: 999px;
+  border: 2px solid var(--color-bg-void);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-glow);
+}
+
+/*
+ * Film grain. A single fixed overlay carrying a tiled fractal-noise SVG at
+ * very low opacity. It removes the flat-digital-black feel and gives the
+ * surface the tactile quality of a printed exhibition catalogue. Static (no
+ * animation), pointer-events none so it never blocks interaction, and it sits
+ * above content the way grain sits on the surface of a print.
+ */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
 h1,
 h2,
 h3,
@@ -114,6 +267,9 @@ samp {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  body[data-pantheon="carthage"] .text-gold-leaf {
+    animation: none !important;
   }
 }
 

@@ -3,53 +3,50 @@ import type { Planet } from "@/data/cultures";
 
 const VB: readonly [number, number] = [64, 64];
 
+/**
+ * Greek glyphs, each the deity's classical attribute:
+ *   Apollo     the lyre
+ *   Artemis    the hunting bow with nocked arrow
+ *   Hermes     the caduceus (winged staff, twin serpents)
+ *   Aphrodite  the scallop shell (born of sea-foam)
+ *   Ares       the Corinthian helmet
+ *   Zeus       the keraunos (thunderbolt)
+ *   Cronus     the harpe (sickle-sword)
+ */
 export const GREECE_GLYPHS: Readonly<Record<Planet, Glyph>> = {
-  // Apollo: circle of light with eight geometric rays.
   sun: {
     label: "Apollo",
     viewBox: VB,
-    d: "M 32 18 A 14 14 0 1 0 32 46 A 14 14 0 1 0 32 18 M 32 6 V 12 M 32 52 V 58 M 6 32 H 12 M 52 32 H 58 M 13 13 L 18 18 M 46 18 L 51 13 M 13 51 L 18 46 M 46 46 L 51 51",
+    d: "M 24 44 Q 20 28 26 14 M 40 44 Q 44 28 38 14 M 24 15 H 40 M 28 17 V 42 M 32 17 V 44 M 36 17 V 42 M 24 44 Q 32 50 40 44",
   },
-
-  // Artemis: hunter's bow drawn taut, arrow nocked.
   moon: {
     label: "Artemis",
     viewBox: VB,
-    d: "M 16 14 A 26 26 0 0 0 16 50 M 16 14 L 16 50 M 32 32 H 52 M 52 32 L 46 28 M 52 32 L 46 36",
+    d: "M 22 12 Q 42 32 22 52 M 22 12 V 52 M 22 32 H 48 M 48 32 L 42 28 M 48 32 L 42 36",
   },
-
-  // Hermes: caduceus, staff with two intertwined coils and small wings.
   mercury: {
     label: "Hermes",
     viewBox: VB,
-    d: "M 32 10 V 54 M 32 14 C 26 20 38 26 32 32 C 26 38 38 44 32 50 M 22 14 L 16 10 M 22 14 L 18 18 M 42 14 L 48 10 M 42 14 L 46 18",
+    d: "M 32 14 V 54 M 32 18 Q 23 12 18 17 M 32 18 Q 41 12 46 17 M 32 22 C 25 25 39 31 32 34 C 25 37 39 43 32 46",
   },
-
-  // Aphrodite: hand mirror, circle of beauty above a handle.
   venus: {
     label: "Aphrodite",
     viewBox: VB,
-    d: "M 32 14 A 10 10 0 1 0 32 34 A 10 10 0 1 0 32 14 M 32 34 V 54 M 24 50 H 40",
+    d: "M 32 50 L 13 30 Q 32 8 51 30 Z M 32 50 L 19 31 M 32 50 L 25 27 M 32 50 L 32 25 M 32 50 L 39 27 M 32 50 L 45 31",
   },
-
-  // Ares: round hoplite shield with spear-haft set behind.
   mars: {
     label: "Ares",
     viewBox: VB,
-    d: "M 32 18 A 12 12 0 1 0 32 42 A 12 12 0 1 0 32 18 M 44 18 L 54 8 M 54 8 L 48 10 M 54 8 L 52 14",
+    d: "M 16 36 Q 16 14 36 14 Q 50 14 50 30 L 50 36 M 16 36 V 46 L 21 46 L 21 38 M 30 14 Q 30 6 46 6 Q 42 12 36 14 M 26 26 H 38",
   },
-
-  // Zeus: thunderbolt, zigzag of fire descending.
   jupiter: {
     label: "Zeus",
     viewBox: VB,
-    d: "M 24 8 L 36 24 L 28 28 L 44 52 L 30 38 L 36 34 L 22 10",
+    d: "M 32 22 V 42 M 32 22 L 25 10 M 32 22 L 32 7 M 32 22 L 39 10 M 32 42 L 25 54 M 32 42 L 32 57 M 32 42 L 39 54 M 22 32 L 32 27 M 42 32 L 32 37",
   },
-
-  // Cronus: harvest-scythe, curved blade and long handle.
   saturn: {
     label: "Cronus",
     viewBox: VB,
-    d: "M 10 18 C 26 14 44 22 54 38 M 10 18 L 6 24 M 54 38 L 26 56",
+    d: "M 12 16 Q 34 12 50 30 Q 54 36 50 42 M 12 16 L 7 23 M 50 42 Q 47 40 47 36",
   },
 };

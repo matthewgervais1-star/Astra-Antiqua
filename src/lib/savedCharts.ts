@@ -58,6 +58,14 @@ function writeRaw(charts: SavedChartInputs[]): void {
   }
 }
 
+/**
+ * Replace the entire local chart cache. Used by AuthProvider after a sign-in
+ * to overwrite the local set with the server's source-of-truth list.
+ */
+export function writeChartList(charts: SavedChartInputs[]): void {
+  writeRaw(charts);
+}
+
 interface LegacyShape {
   date?: string;
   time?: string;

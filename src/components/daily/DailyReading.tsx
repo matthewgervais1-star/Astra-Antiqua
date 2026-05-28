@@ -125,7 +125,7 @@ function SingleVoiceCard({
             href="/reading"
             className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 inline-flex items-center gap-2 rounded-full border px-5 py-2 text-[11px] uppercase tracking-[0.2em] transition-colors"
           >
-            Compute your natal reading
+            Cast your natal chart
             <span aria-hidden>→</span>
           </Link>
         </div>

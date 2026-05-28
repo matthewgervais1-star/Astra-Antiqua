@@ -1,6 +1,7 @@
 import { useId } from "react";
 import type { Culture, Planet } from "@/data/cultures";
 import { GLYPHS } from "@/components/glyphs";
+import { CULTURE_METALS } from "@/data/palettes";
 import { cn } from "@/lib/classNames";
 
 interface DeityGlyphProps {
@@ -26,6 +27,7 @@ export function DeityGlyph({
   const gradientId = `glyph-${culture}-${planet}-${reactId.replace(/:/g, "")}`;
 
   const stroke = tone === "gold" ? `url(#${gradientId})` : "currentColor";
+  const [deep, mid, bright] = CULTURE_METALS[culture].stops;
 
   return (
     <svg
@@ -41,11 +43,11 @@ export function DeityGlyph({
       {tone === "gold" ? (
         <defs>
           <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#a8842c" />
-            <stop offset="35%" stopColor="#d4af37" />
-            <stop offset="50%" stopColor="#f4d03f" />
-            <stop offset="65%" stopColor="#d4af37" />
-            <stop offset="100%" stopColor="#a8842c" />
+            <stop offset="0%" stopColor={deep} />
+            <stop offset="35%" stopColor={mid} />
+            <stop offset="50%" stopColor={bright} />
+            <stop offset="65%" stopColor={mid} />
+            <stop offset="100%" stopColor={deep} />
           </linearGradient>
         </defs>
       ) : null}

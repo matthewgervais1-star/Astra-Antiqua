@@ -43,11 +43,42 @@ export interface Reading {
   summary: string;
 }
 
-const PLACEMENT_VERBS: Readonly<Record<Culture, string>> = {
-  egypt: "stands in",
-  greece: "walks in",
-  canaan: "takes the seat of",
-  carthage: "raises the standard of",
+/**
+ * Per-culture placement-line formatter. Each pantheon gets its own
+ * inscriptional cadence: Egypt as funerary barque, Greece as Hellenistic
+ * prose, Canaan as Ugaritic-tablet council voice, Carthage as Punic stele
+ * with a fire-closing clause.
+ */
+type PlacementFormatter = (args: {
+  deityName: string;
+  registerImage: string;
+  degree: number;
+  sign: string;
+}) => string;
+
+function deg(n: number): string {
+  return `${n.toFixed(0)}°`;
+}
+
+const PLACEMENT_FORMATS: Readonly<Record<Culture, PlacementFormatter>> = {
+  // Funerary / barque register. Participial "crossing" suggests motion of
+  // the solar barque across the daily voyage.
+  egypt: ({ deityName, registerImage, degree, sign }) =>
+    `${deityName} crossing ${registerImage}, at ${deg(degree)} ${sign}.`,
+
+  // Spare Hellenistic prose: subject, position, location.
+  greece: ({ deityName, registerImage, degree, sign }) =>
+    `${deityName} at ${deg(degree)} ${sign}, in ${registerImage}.`,
+
+  // Council voice: enthroned + parallel clause, in the cadence of Ugaritic
+  // tablet poetry where each line is a stand-alone declaration.
+  canaan: ({ deityName, registerImage, degree, sign }) =>
+    `${deityName} enthroned in ${registerImage}, at ${deg(degree)} ${sign}; thus the council records it.`,
+
+  // Punic stele inscription: subject, position, then the fire-image closing
+  // that imitates votive dedications at the Tophet.
+  carthage: ({ deityName, registerImage, degree, sign }) =>
+    `${deityName} at ${deg(degree)} ${sign}, set in ${registerImage}; the fire turned toward this name.`,
 };
 
 const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>>>> = {
@@ -96,8 +127,12 @@ export function buildReading(
     const longitude = chart[planet];
     const { sign, degree } = longitudeToSign(longitude);
     const deity = DEITY_MATRIX[culture][planet];
-    const placementVerb = PLACEMENT_VERBS[culture];
-    const culturalLine = `${deity.name} ${placementVerb} ${SIGN_REGISTERS[sign]}, at ${degree.toFixed(0)}° ${sign}.`;
+    const culturalLine = PLACEMENT_FORMATS[culture]({
+      deityName: deity.name,
+      registerImage: SIGN_REGISTERS[sign],
+      degree,
+      sign,
+    });
     return {
       planet,
       longitude,

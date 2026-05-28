@@ -12,12 +12,18 @@ import {
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { GoldText } from "@/components/ui/GoldText";
 import { GlassPanel } from "@/components/ui/GlassPanel";
+import {
+  mirrorDeleteToServer,
+  mirrorPrimaryToServer,
+  useAuth,
+} from "@/components/auth/AuthProvider";
 
 function formatBirth(chart: SavedChartInputs): string {
   return `${chart.date} · ${chart.time} · ${chart.cityLabel || `${chart.latitude.toFixed(2)}, ${chart.longitude.toFixed(2)}`}`;
 }
 
 export default function ChartsPage() {
+  const { status, user } = useAuth();
   const [charts, setCharts] = useState<readonly SavedChartInputs[]>([]);
   const [hydrated, setHydrated] = useState<boolean>(false);
 
@@ -25,21 +31,23 @@ export default function ChartsPage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCharts(listCharts());
     setHydrated(true);
-  }, []);
+  }, [status]);
 
   const refresh = () => setCharts(listCharts());
 
-  const handleDelete = (id: string, name: string) => {
+  const handleDelete = async (id: string, name: string) => {
     if (typeof window === "undefined") return;
     const ok = window.confirm(`Delete the chart "${name}"? This cannot be undone.`);
     if (!ok) return;
     deleteChart(id);
     refresh();
+    await mirrorDeleteToServer(id, status);
   };
 
-  const handleSetPrimary = (id: string) => {
+  const handleSetPrimary = async (id: string) => {
     setPrimaryChart(id);
     refresh();
+    await mirrorPrimaryToServer(id, status);
   };
 
   return (
@@ -60,12 +68,31 @@ export default function ChartsPage() {
           </Link>
         </div>
         <p className="text-ink-secondary font-body mt-6 max-w-2xl text-lg leading-relaxed md:text-xl">
-          Saved charts live only in this browser. The chart marked primary drives the home page Big Three and Personal Transits. Add partner, family, or friends to compare in the{" "}
+          {status === "authenticated" && user
+            ? `Signed in as ${user.email}. Your charts sync across devices and browsers; every change you make here is mirrored to your account.`
+            : "Saved charts live only in this browser. Sign in to keep them on any device you use."}
+          {" "}The chart marked primary drives the home page Big Three and Personal Transits. Add partner, family, or friends to compare in the{" "}
           <Link href="/synastry" className="text-gold-leaf underline-offset-4 hover:underline">
             synastry view
           </Link>
           .
         </p>
+        {status === "anonymous" ? (
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link
+              href="/sign-up"
+              className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.25em] transition-colors"
+            >
+              Create an account
+            </Link>
+            <Link
+              href="/sign-in"
+              className="border-hairline text-ink-secondary hover:text-ink-primary hover:border-gold-soft rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.25em] transition-colors"
+            >
+              Sign in
+            </Link>
+          </div>
+        ) : null}
       </SectionContainer>
 
       <SectionContainer size="default" spacing="tight">
@@ -79,7 +106,7 @@ export default function ChartsPage() {
               No charts yet
             </div>
             <h2 className="font-display text-ink-primary mt-3 text-2xl md:text-3xl">
-              Compute your first chart to begin.
+              Cast your first chart to begin.
             </h2>
             <p className="text-ink-secondary font-body mt-3 max-w-xl text-base md:text-lg">
               The chart is computed in your browser from your birth date, time, and place. After it is saved here, the home page will personalize its daily reading around it.
@@ -88,7 +115,7 @@ export default function ChartsPage() {
               href="/reading"
               className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 mt-6 inline-flex items-center gap-2 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors"
             >
-              Compute a chart →
+              Cast a chart →
             </Link>
           </GlassPanel>
         ) : (

@@ -22,8 +22,26 @@ import {
   getPrimaryChart,
   type SavedChartInputs,
 } from "@/lib/savedCharts";
-import type { Planet } from "@/data/cultures";
+import type { Culture, Planet } from "@/data/cultures";
 import type { Longitude } from "@/data/sampleChart";
+
+const ORACLE_INVOCATION: Readonly<Record<Culture, string>> = {
+  egypt: "Consult the Hall of Ma'at.",
+  greece: "Consult the Pythia at Delphi.",
+  canaan: "Convene the divine council.",
+  carthage: "Bring your name to the Tophet.",
+};
+
+const ORACLE_INTRO: Readonly<Record<Culture, string>> = {
+  egypt:
+    "The feather will be weighed against your heart. The barque carries the answer across the day, but the question is set the moment you give it your hour.",
+  greece:
+    "The Pythia speaks once and the question must be exact. Set the date, the hour, the place; the answer will be cast in the names of Olympus.",
+  canaan:
+    "El's council will be convened around the moment you came into the world. Bring the hour, the day, the city; the seats will be filled and the verdict will be read in the Ugaritic register.",
+  carthage:
+    "Your sign will be cut into the stone of the Tophet for the hour of your birth. Set the date, the time, the place; the fire will turn toward the chart that is cast.",
+};
 
 interface ComputedState {
   inputs: BirthFormValues;
@@ -101,7 +119,7 @@ function ReadingPageImpl() {
       const chart = computeChart(birth.utcDate);
       setState({ inputs: values, birth, chart });
     } catch (err) {
-      setComputeError(err instanceof Error ? err.message : "Could not compute the chart.");
+      setComputeError(err instanceof Error ? err.message : "The chart could not be cast.");
       setState(null);
     } finally {
       setSubmitting(false);
@@ -120,10 +138,12 @@ function ReadingPageImpl() {
           {editingChart ? `Editing: ${editingChart.name}` : "New chart"}
         </div>
         <GoldText as="h1" className="mt-4 max-w-3xl text-5xl leading-tight md:text-6xl">
-          Compute your reading.
+          {culture ? ORACLE_INVOCATION[culture] : "Consult the oracle."}
         </GoldText>
         <p className="text-ink-secondary font-body mt-6 max-w-2xl text-lg leading-relaxed md:text-xl">
-          Enter your birth date, time, and place, then choose a pantheon. The seven classical planets are placed for the exact moment of your birth and the reading is translated into the voice of the tradition you select. Save the chart once and the home page personalizes to it on every visit.
+          {culture
+            ? ORACLE_INTRO[culture]
+            : "Set the date, the hour, and the place of your birth. The seven classical planets will be placed for the exact moment you came into the world; the answer will be rendered in the voice of whichever oracle you call on."}
         </p>
         <p className="text-ink-tertiary font-body mt-4 max-w-2xl text-sm md:text-base">
           All computation happens in your browser. Your birth data is not sent to a server. Saved charts live in this browser&apos;s localStorage. Manage them on the{" "}
@@ -140,7 +160,7 @@ function ReadingPageImpl() {
             Step one
           </div>
           <h2 className="font-display text-ink-primary mt-3 text-2xl md:text-3xl">
-            Choose the voice of your reading.
+            Choose the voice.
           </h2>
         </div>
         <PantheonSelector />
@@ -154,10 +174,10 @@ function ReadingPageImpl() {
                 Step two
               </div>
               <h2 className="font-display text-ink-primary mt-3 text-2xl md:text-3xl">
-                Enter your birth data.
+                Set the hour of your birth.
               </h2>
               <p className="text-ink-tertiary font-body mt-3 text-sm md:text-base">
-                Time and location matter most for the Moon, the Ascendant, and the exact degree the Sun occupies. If you are uncertain, use 12:00 noon.
+                The Moon, the Ascendant, and the exact degree of the Sun depend on the hour and the place. If the hour is unknown, set the form to twelve and the Sun and the outer planets remain accurate.
               </p>
             </div>
             <GlassPanel tone="solid" className="p-6 md:p-8">

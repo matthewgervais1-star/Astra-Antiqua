@@ -97,17 +97,22 @@ export const ASPECT_REFLECTIONS: Readonly<
  * (signs predate the four cultures' divergent star lore). Used to render
  * placement lines like "Ra walks in the fields of fire at 15 degrees Aries."
  */
+/**
+ * Bare sign images, written in a more lapidary register. The therapy-speak
+ * second clauses that used to live here have moved into the per-planet-and-sign
+ * interpretation text below; here we keep only the inscriptional image.
+ */
 export const SIGN_REGISTERS: Readonly<Record<ZodiacSign, string>> = {
-  Aries: "the fields of fire, where every story begins with a first strike",
-  Taurus: "the bull's pasture, where slow weight is the truest currency",
-  Gemini: "the crossing wind, where the two voices answer one another",
-  Cancer: "the sea cave of the crab, where what protects also confines",
-  Leo: "the lion's noon, where the heart insists on being seen",
-  Virgo: "the gleaning floor, where every grain is counted",
-  Libra: "the balanced scales, where no decision wants to be the only one",
-  Scorpio: "the desert at the scorpion's hour, where the unsaid pulls everything",
-  Sagittarius: "the archer's high road, where the horizon is the prize",
-  Capricorn: "the goat's ascent, where the slow climb is the discipline",
-  Aquarius: "the poured waters, where the gift refuses to be private",
-  Pisces: "the deep tide, where the edges of the self dissolve",
+  Aries: "the field of the first strike",
+  Taurus: "the bull's pasture",
+  Gemini: "the crossing wind",
+  Cancer: "the sea cave of the crab",
+  Leo: "the lion's noon",
+  Virgo: "the gleaning floor",
+  Libra: "the balanced scales",
+  Scorpio: "the desert at the scorpion's hour",
+  Sagittarius: "the archer's high road",
+  Capricorn: "the goat's ascent",
+  Aquarius: "the poured waters",
+  Pisces: "the deep tide",
 };

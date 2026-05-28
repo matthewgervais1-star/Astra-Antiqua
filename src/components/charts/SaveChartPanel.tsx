@@ -9,6 +9,7 @@ import {
 } from "@/lib/savedCharts";
 import type { BirthFormValues } from "@/components/reading/BirthForm";
 import { GlassPanel } from "@/components/ui/GlassPanel";
+import { mirrorChartToServer, useAuth } from "@/components/auth/AuthProvider";
 
 interface SaveChartPanelProps {
   values: BirthFormValues;
@@ -27,6 +28,7 @@ export function SaveChartPanel({
   initialPrimary = false,
   onSaved,
 }: SaveChartPanelProps) {
+  const { status } = useAuth();
   const [name, setName] = useState(initialName);
   const [relationship, setRelationship] =
     useState<ChartRelationship>(initialRelationship);
@@ -34,7 +36,7 @@ export function SaveChartPanel({
   const [saved, setSaved] = useState<SavedChartInputs | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
     if (!name.trim()) {
@@ -55,6 +57,7 @@ export function SaveChartPanel({
       });
       setSaved(result);
       onSaved(result);
+      await mirrorChartToServer(result, status);
     } catch {
       setError("Could not save. Local storage may be unavailable in this browser.");
     }
