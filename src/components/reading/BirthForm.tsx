@@ -267,7 +267,7 @@ export function BirthForm({
               {curatedSuggestions.length > 0 ? (
                 <>
                   <div className="text-ink-tertiary font-mono px-3 pt-3 pb-1 text-[9px] uppercase tracking-[0.3em]">
-                    Curated
+                    Cities
                   </div>
                   <ul className="p-1">
                     {curatedSuggestions.map((entry) => (
@@ -277,14 +277,7 @@ export function BirthForm({
                           onClick={() => handleSelectCurated(entry)}
                           className="text-ink-primary hover:bg-gold-leaf/10 flex w-full items-baseline justify-between gap-3 rounded-lg px-3 py-2 text-left"
                         >
-                          <span className="font-display text-base">
-                            {entry.name}
-                            {entry.thematic ? (
-                              <span className="text-gold-leaf font-mono ml-2 text-[9px] uppercase tracking-[0.25em]">
-                                source
-                              </span>
-                            ) : null}
-                          </span>
+                          <span className="font-display text-base">{entry.name}</span>
                           <span className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.2em]">
                             {entry.country}
                           </span>
