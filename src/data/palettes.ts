@@ -26,6 +26,7 @@ export const CULTURE_METALS: Readonly<Record<Culture, MetalGradient>> = {
   greece: { stops: ["#9a9374", "#ddd3b0", "#f4eed8"], solid: "#ddd3b0" },
   canaan: { stops: ["#6f4f28", "#b07d42", "#dcab5e"], solid: "#b07d42" },
   carthage: { stops: ["#c44518", "#f4a02a", "#fbe57b"], solid: "#f4a02a" },
+  rome: { stops: ["#8a6a2c", "#d9b94a", "#f3dd84"], solid: "#d9b94a" },
 };
 
 export function metalFor(culture: Culture | null): MetalGradient {

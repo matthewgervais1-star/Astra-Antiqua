@@ -35,11 +35,11 @@ export const metadata: Metadata = {
     template: "%s · Astra Antiqua",
   },
   description:
-    "Professional astronomical ephemeris rendered through the religious frameworks of ancient Egypt, Greece, Canaan, and Carthage.",
+    "Professional astronomical ephemeris rendered through the religious frameworks of ancient Egypt, Greece, Canaan, Carthage, and Rome.",
   openGraph: {
     title: "Astra Antiqua",
     description:
-      "Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit.",
+      "Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit. Or Rome.",
     type: "website",
   },
 };

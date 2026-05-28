@@ -90,11 +90,18 @@ export const ASPECT_REFLECTIONS: Readonly<
     trine: "The harbor lights both burn. The fleet enters without the lookout calling once.",
     opposition: "Two flags face each other across the strait. The decree of the Tophet is that one will be carried home and one will not.",
   },
+  rome: {
+    conjunction: "The two march under one eagle. The senate does not debate what the legions already carry together.",
+    sextile: "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open.",
+    square: "Mars raises the spear. The augurs read a forced campaign; take the omens before you commit the line.",
+    trine: "The right hands are clasped in accord. What is agreed today will stand without a contract to enforce it.",
+    opposition: "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends.",
+  },
 };
 
 /**
  * The element / register each zodiac sign carries. Universal across pantheons
- * (signs predate the four cultures' divergent star lore). Used to render
+ * (signs predate the five cultures' divergent star lore). Used to render
  * placement lines like "Ra walks in the fields of fire at 15 degrees Aries."
  */
 /**

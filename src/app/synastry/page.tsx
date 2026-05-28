@@ -55,6 +55,13 @@ const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>
     trine: "lights the fire alongside",
     opposition: "demands a price of",
   },
+  rome: {
+    conjunction: "marches under the same eagle as",
+    sextile: "treats for alliance with",
+    square: "raises the spear against",
+    trine: "clasps the right hand of",
+    opposition: "stands across the forum from",
+  },
 };
 
 interface ChartCardProps {

@@ -27,7 +27,7 @@ export default function HomePage() {
               Astra Antiqua
             </GoldText>
             <p className="text-ink-secondary font-body mt-3 text-base italic md:text-lg">
-              Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit.
+              Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit. Or Rome.
             </p>
           </div>
           <div className="w-full max-w-3xl">

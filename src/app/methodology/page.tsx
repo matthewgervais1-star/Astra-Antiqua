@@ -12,7 +12,7 @@ import {
 export const metadata: Metadata = {
   title: "Methodology",
   description:
-    "How Astra Antiqua maps the seven classical planets onto the religious frameworks of Egypt, Greece, Canaan, and Carthage. Sources, interpretive choices, and the cases where the evidence is contested.",
+    "How Astra Antiqua maps the seven classical planets onto the religious frameworks of Egypt, Greece, Canaan, Carthage, and Rome. Sources, interpretive choices, and the cases where the evidence is contested.",
 };
 
 export default function MethodologyPage() {

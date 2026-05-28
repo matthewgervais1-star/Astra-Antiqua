@@ -43,4 +43,13 @@ export const CULTURAL_ORIENTATIONS: Readonly<Record<Culture, CulturalOrientation
       "Almost no Punic literature survives. What we know about Punic religion comes from inscriptions (votive stelae, the dedications from the Tophet), from archaeology, and from accounts written by Greek and Roman authors who were often actively hostile. The result is that any reconstruction of Punic theology requires interpretive humility, and the planetary identifications in this app are flagged on the methodology page where they involve disputed evidence.",
     ],
   },
+  rome: {
+    cultureLabel: "Rome",
+    shortTagline:
+      "The Capitoline. The auspices. The names that still order the week.",
+    paragraphs: [
+      "Rome took the Greek pantheon almost wholesale through the interpretatio romana, identifying its own gods with the Olympians: Iuppiter with Zeus, Venus with Aphrodite, Mars with Ares. But the names that matter for astrology are the Roman ones. Mercury, Venus, Mars, Jupiter, and Saturn are simply these gods, and they reach every modern European language through the Roman calendar, which makes Rome the most direct ancestor of the planetary vocabulary the rest of this app translates away from.",
+      "Roman astrology was a high-stakes civic practice rather than a private comfort. Emperors employed astrologers and also feared them; the expulsions of astrologers from the city under Tiberius and others show how seriously the readings of the sky were taken. The seven-day planetary week that still orders the calendar is a Roman inheritance from the Hellenistic synthesis, each day named for one of the seven gods who name the planets.",
+    ],
+  },
 };

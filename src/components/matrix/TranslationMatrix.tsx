@@ -90,7 +90,7 @@ export function TranslationMatrix() {
       <div className="overflow-x-auto">
         <table className="w-full min-w-[840px] border-separate border-spacing-2">
           <caption className="sr-only">
-            Translation matrix of seven classical planets across four ancient pantheons.
+            Translation matrix of seven classical planets across five ancient pantheons.
           </caption>
           <thead>
             <tr>

@@ -30,6 +30,7 @@ const ORACLE_INVOCATION: Readonly<Record<Culture, string>> = {
   greece: "Consult the Pythia at Delphi.",
   canaan: "Convene the divine council.",
   carthage: "Bring your name to the Tophet.",
+  rome: "Open the Sibylline Books.",
 };
 
 const ORACLE_INTRO: Readonly<Record<Culture, string>> = {
@@ -41,6 +42,8 @@ const ORACLE_INTRO: Readonly<Record<Culture, string>> = {
     "El's council will be convened around the moment you came into the world. Bring the hour, the day, the city; the seats will be filled and the verdict will be read in the Ugaritic register.",
   carthage:
     "Your sign will be cut into the stone of the Tophet for the hour of your birth. Set the date, the time, the place; the fire will turn toward the chart that is cast.",
+  rome:
+    "The Sibylline Books are opened only in extremity, and read by the appointed college. Give the day, the hour, the place; the answer returns in the names that still order the days of your week.",
 };
 
 interface ComputedState {

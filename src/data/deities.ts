@@ -209,6 +209,59 @@ export const DEITIES: readonly Deity[] = [
     note: "The same deity in his role as agricultural time-keeper and demander of cosmic order, equated with Saturn in Roman Africa.",
     contested: true,
   },
+
+  // Rome. The cleanest mapping of the five: the planet names used in every
+  // modern European language are simply these gods, inherited through the
+  // Roman calendar and the Hellenistic seven-planet system.
+  {
+    planet: "sun",
+    culture: "rome",
+    name: "Sol",
+    epithet: "The Unconquered",
+    note: "Roman sun god whose later cult as Sol Invictus, the Unconquered Sun, became a state religion of the Empire.",
+  },
+  {
+    planet: "moon",
+    culture: "rome",
+    name: "Luna",
+    epithet: "Driver of the Night-Chariot",
+    note: "Roman goddess of the moon who drives her two-horse chariot across the night sky opposite Sol.",
+  },
+  {
+    planet: "mercury",
+    culture: "rome",
+    name: "Mercurius",
+    epithet: "Lord of Exchange",
+    note: "Roman god of commerce, travel, and messages, conductor of souls and bearer of the caduceus.",
+  },
+  {
+    planet: "venus",
+    culture: "rome",
+    name: "Venus",
+    epithet: "Genetrix, Mother of the Race",
+    note: "Roman goddess of love and beauty, claimed as divine ancestress of the Roman people through Aeneas.",
+  },
+  {
+    planet: "mars",
+    culture: "rome",
+    name: "Mars",
+    epithet: "Father of the Legions",
+    note: "Roman god of war and father of Romulus, second only to Jupiter and a guardian of the Roman state.",
+  },
+  {
+    planet: "jupiter",
+    culture: "rome",
+    name: "Iuppiter",
+    epithet: "Optimus Maximus, Best and Greatest",
+    note: "Sky-father and supreme god of the Roman state, worshipped on the Capitoline Hill as Optimus Maximus.",
+  },
+  {
+    planet: "saturn",
+    culture: "rome",
+    name: "Saturnus",
+    epithet: "King of the Golden Age",
+    note: "Ancient god of time, agriculture, and the lost Golden Age, honored at the midwinter festival of the Saturnalia.",
+  },
 ];
 
 function buildMatrix(): DeityMatrix {

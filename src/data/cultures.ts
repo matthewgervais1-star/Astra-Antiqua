@@ -1,4 +1,4 @@
-export const CULTURES = ["egypt", "greece", "canaan", "carthage"] as const;
+export const CULTURES = ["egypt", "greece", "canaan", "carthage", "rome"] as const;
 export type Culture = (typeof CULTURES)[number];
 
 export const PLANETS = [
@@ -17,6 +17,7 @@ export const CULTURE_LABELS: Readonly<Record<Culture, string>> = {
   greece: "Greece",
   canaan: "Canaan",
   carthage: "Carthage",
+  rome: "Rome",
 };
 
 export const CULTURE_TAGLINES: Readonly<Record<Culture, string>> = {
@@ -24,6 +25,7 @@ export const CULTURE_TAGLINES: Readonly<Record<Culture, string>> = {
   greece: "The Oracle of Delphi",
   canaan: "The Divine Council",
   carthage: "The Decree of the Tophet",
+  rome: "The Sibylline Books",
 };
 
 export const CULTURE_SUBTITLES: Readonly<Record<Culture, string>> = {
@@ -31,6 +33,7 @@ export const CULTURE_SUBTITLES: Readonly<Record<Culture, string>> = {
   greece: "Delphi. Alexandria. The seven planets and the four elements.",
   canaan: "Ugarit. The Baal cycle. The council at the mountain.",
   carthage: "Qart-hadasht. The Tophet. The line that ran from Tyre.",
+  rome: "The Capitoline. The auspices. The names that still order the week.",
 };
 
 export const PLANET_LABELS: Readonly<Record<Planet, string>> = {

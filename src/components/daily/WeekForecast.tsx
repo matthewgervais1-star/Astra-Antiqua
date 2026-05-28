@@ -19,6 +19,7 @@ const PLACEMENT_VERBS: Readonly<Record<Culture, string>> = {
   greece: "walks in",
   canaan: "takes the seat of",
   carthage: "raises the standard of",
+  rome: "holds the field of",
 };
 
 interface DayForecast {

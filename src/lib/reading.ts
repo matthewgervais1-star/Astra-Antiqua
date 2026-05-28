@@ -79,6 +79,10 @@ const PLACEMENT_FORMATS: Readonly<Record<Culture, PlacementFormatter>> = {
   // that imitates votive dedications at the Tophet.
   carthage: ({ deityName, registerImage, degree, sign }) =>
     `${deityName} at ${deg(degree)} ${sign}, set in ${registerImage}; the fire turned toward this name.`,
+
+  // Roman augural register: the field taken, the sign read by the college.
+  rome: ({ deityName, registerImage, degree, sign }) =>
+    `${deityName} holds the field of ${registerImage}, at ${deg(degree)} ${sign}; so the augurs read the sign.`,
 };
 
 const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>>>> = {
@@ -110,6 +114,13 @@ const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>
     trine: "lights the fire alongside",
     opposition: "demands a price of",
   },
+  rome: {
+    conjunction: "marches under the same eagle as",
+    sextile: "treats for alliance with",
+    square: "raises the spear against",
+    trine: "clasps the right hand of",
+    opposition: "stands across the forum from",
+  },
 };
 
 const SUMMARY_INTRO: Readonly<Record<Culture, string>> = {
@@ -117,6 +128,7 @@ const SUMMARY_INTRO: Readonly<Record<Culture, string>> = {
   greece: "The Hellenistic chart for the moment of your birth has been cast in the names of Olympus.",
   canaan: "The divine council convenes around the hour of your naming.",
   carthage: "The Tophet's record turns to the day you came into the city.",
+  rome: "The chart has been taken under Roman auspices for the hour of your birth.",
 };
 
 export function buildReading(

@@ -12,7 +12,7 @@ export default function NotFound() {
         That pantheon is not in this matrix.
       </h1>
       <p className="text-ink-secondary font-body mt-6 text-lg">
-        Astra Antiqua currently speaks in the voices of four ancient cultures.
+        Astra Antiqua currently speaks in the voices of five ancient cultures.
         Choose one to continue.
       </p>
       <div className="mt-10 flex flex-wrap gap-6">

@@ -82,6 +82,16 @@ body[data-pantheon="carthage"] {
   --accent-soft: rgba(244, 160, 42, 0.12);
 }
 
+body[data-pantheon="rome"] {
+  --accent-deep: #8a6a2c;
+  --accent-mid: #d9b94a;
+  --accent-bright: #f3dd84;
+  --accent-solid: #d9b94a;
+  --accent-border: rgba(126, 58, 148, 0.45);
+  --accent-glow: rgba(150, 70, 175, 0.5);
+  --accent-soft: rgba(126, 58, 148, 0.12);
+}
+
 @utility text-gold-leaf {
   background: linear-gradient(
     135deg,

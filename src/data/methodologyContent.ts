@@ -30,13 +30,13 @@ export const METHODOLOGY_SECTIONS: readonly MethodologySection[] = [
     heading: "Interpretatio Graeca and Beyond",
     paragraphs: [
       "Ancient cultures systematically identified each other's gods. The Greeks called this practice the interpretatio graeca: Egyptian Thoth was identified with Hermes, Canaanite Baal with Zeus, Phoenician Melqart with Heracles, and so on. The Romans inherited and extended this method (interpretatio romana), and the Hellenistic and Imperial periods produced a dense overlay of cross-cultural identifications that show up in inscriptions, magical papyri, and astrological literature.",
-      "These identifications were not casual. They were grounded in functional resemblance (sky-god to sky-god, war-god to war-god), iconographic overlap (the cresent, the bull, the trident), and ritual analogy. The four-pantheon translation matrix in this app stands in the same tradition. Each planetary assignment is justified either by direct ancient testimony or by a defensible functional and iconographic argument, and the cases where the evidence is weaker are flagged below.",
+      "These identifications were not casual. They were grounded in functional resemblance (sky-god to sky-god, war-god to war-god), iconographic overlap (the cresent, the bull, the trident), and ritual analogy. The five-pantheon translation matrix in this app stands in the same tradition. Each planetary assignment is justified either by direct ancient testimony or by a defensible functional and iconographic argument, and the cases where the evidence is weaker are flagged below.",
     ],
   },
   {
     heading: "Our Translation Matrix",
     paragraphs: [
-      "The seven planetary archetypes in this app are derived from the Hellenistic tradition (chiefly Ptolemy's Tetrabiblos and Vettius Valens). The four cultural pantheons are then mapped onto those archetypes using primary sources where available: Ugaritic tablets for Canaan, Hellenistic astrological literature for Greece, Punic inscriptions and Imperial syncretisms for Carthage, and Egyptian funerary and astronomical texts (with their later Greco-Egyptian recensions) for Egypt.",
+      "The seven planetary archetypes in this app are derived from the Hellenistic tradition (chiefly Ptolemy's Tetrabiblos and Vettius Valens). The five cultural pantheons are then mapped onto those archetypes using primary sources where available: Ugaritic tablets for Canaan, Hellenistic astrological literature for Greece, Punic inscriptions and Imperial syncretisms for Carthage, Egyptian funerary and astronomical texts (with their later Greco-Egyptian recensions) for Egypt, and the Roman augural tradition with its Sibylline and interpretatio romana literature for Rome.",
       "Some of these mappings are strong and well-attested. Others are reconstructive choices that prioritize legibility for a modern reader over strict philological caution. Those cases are listed in the next section.",
     ],
   },

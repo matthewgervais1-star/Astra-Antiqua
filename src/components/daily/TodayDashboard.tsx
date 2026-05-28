@@ -39,6 +39,7 @@ const MOON_HEADLINE_VERBS: Readonly<Record<Culture, string>> = {
   greece: "crosses",
   canaan: "keeps",
   carthage: "stands in",
+  rome: "rides",
 };
 
 function formatLongDate(date: Date): string {
@@ -180,10 +181,10 @@ function FourVoiceCompact({
       transition={{ duration: reduce ? 0.01 : 0.4 }}
     >
       <div className="text-ink-tertiary font-mono mb-4 text-[10px] uppercase tracking-[0.3em]">
-        Today · {formatLongDate(now)} · The four voices in parallel
+        Today · {formatLongDate(now)} · The five voices in parallel
       </div>
       <p className="text-ink-secondary font-body mb-8 max-w-2xl text-base md:text-lg">
-        The same sky, four traditions. Each card below is computed from {natalChart ? "the tightest aspect today is making to your saved chart" : "the tightest aspect happening in the sky right now"}; the four pantheons just give different names to the same gods at work.
+        The same sky, five traditions. Each card below is computed from {natalChart ? "the tightest aspect today is making to your saved chart" : "the tightest aspect happening in the sky right now"}; the five pantheons just give different names to the same gods at work.
       </p>
       <div className="grid gap-4 md:grid-cols-2 md:gap-5">
         {readings.map(({ culture, reading }) => (

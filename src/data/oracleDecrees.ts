@@ -27,4 +27,9 @@ export const ORACLE_DECREES: Readonly<Record<Culture, OracleDecree>> = {
     sampleTransit: "Sun square Mars · sample transit",
     body: "Melqart raises his hand against Semes. The protector of the mother city demands a price for the protection he offers. Walk to the Tophet today knowing what you carry. Lay down the comfort you cannot afford to keep. The fire that takes it is not punishment. It is the cost of being defended.",
   },
+  rome: {
+    oracleName: "The Sibylline Books",
+    sampleTransit: "Sun square Mars · sample transit",
+    body: "Mars Pater raises his spear against Sol Invictus. The father of the legions questions the unconquered sun, and Rome does not ask whether to fight. It asks where the line is drawn and who is left to hold it. Take the auspices before you march. The eagles, once raised, do not turn back.",
+  },
 };

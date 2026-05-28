@@ -41,7 +41,7 @@ function PantheonSelectorImpl() {
     <div
       role="radiogroup"
       aria-label="Select a pantheon"
-      className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5"
+      className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 md:gap-4"
     >
       {CULTURES.map((culture) => {
         const isActive = active === culture;
