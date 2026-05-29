@@ -177,6 +177,12 @@ export default function LearnPage() {
             <p className="text-ink-secondary font-body mt-4 text-base leading-relaxed md:text-lg">
               The hour and the place matter because they fix the horizon. The sign climbing the eastern horizon at your birth is your Ascendant, the start of your First House. The sign setting in the west sits opposite. Two people born the same day, hours apart, do not share a chart: the sky has turned beneath them.
             </p>
+            <Link
+              href="/learn/rising"
+              className="text-gold-leaf font-mono mt-5 inline-block text-[11px] uppercase tracking-[0.25em] underline-offset-4 hover:underline"
+            >
+              More on the rising sign →
+            </Link>
           </div>
           <div className="md:col-span-7">
             <GlassPanel tone="solid" className="p-6 md:p-8">
