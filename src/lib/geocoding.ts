@@ -15,9 +15,11 @@ interface ApiResponse {
 
 /**
  * Looks up a free-text place query against the server-side geocoding proxy
- * (OpenStreetMap Nominatim). Returns an empty array for short queries or on
- * error rather than throwing, so the BirthForm can render results
- * progressively without crashing.
+ * (OpenStreetMap Nominatim). Returns an empty array for genuinely empty
+ * results, but THROWS on transport/proxy errors so the caller can tell the
+ * difference between "no such place" and "the geocoder is unavailable" (e.g.
+ * a TLS or network failure) and message the user honestly. Abort errors
+ * propagate too; the caller checks signal.aborted to ignore them.
  */
 export async function geocodePlace(
   query: string,
@@ -29,17 +31,18 @@ export async function geocodePlace(
   const url = new URL("/api/geocode", window.location.origin);
   url.searchParams.set("q", trimmed);
 
-  try {
-    const res = await fetch(url.toString(), {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      signal,
-    });
-    if (!res.ok) return [];
-    const data = (await res.json()) as ApiResponse;
-    if (!data.ok || !Array.isArray(data.results)) return [];
-    return data.results;
-  } catch {
-    return [];
+  const res = await fetch(url.toString(), {
+    method: "GET",
+    headers: { Accept: "application/json" },
+    signal,
+  });
+  if (!res.ok) {
+    throw new Error(`Geocoder returned ${res.status}`);
   }
+  const data = (await res.json()) as ApiResponse;
+  if (!data.ok) {
+    throw new Error(data.error ?? "Geocoder error");
+  }
+  if (!Array.isArray(data.results)) return [];
+  return data.results;
 }

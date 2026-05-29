@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { CITIES, searchCities, type CityEntry } from "@/data/cities";
-import { geocodePlace, type GeocodeResult } from "@/lib/geocoding";
+import { CITIES, searchCities } from "@/data/cities";
+import { geocodePlace } from "@/lib/geocoding";
 import { cn } from "@/lib/classNames";
 
 export interface BirthFormValues {
@@ -19,7 +19,7 @@ interface FormState {
   cityLabel: string;
   latitudeText: string;
   longitudeText: string;
-  selectedKey: string | null; // tracks the last selected city/geocode key
+  selectedKey: string | null; // non-null once a place is chosen or hydrated
   manualMode: boolean;
   hydrated: boolean;
 }
@@ -47,10 +47,20 @@ function stateFromValues(values: BirthFormValues | null): FormState {
     cityLabel: values.cityLabel,
     latitudeText: typeof values.latitude === "number" ? String(values.latitude) : "",
     longitudeText: typeof values.longitude === "number" ? String(values.longitude) : "",
-    selectedKey: matchedCity ? `curated:${matchedCity.name}|${matchedCity.country}` : `loaded:${values.cityLabel}`,
+    selectedKey: values.cityLabel ? `loaded:${values.cityLabel}` : null,
     manualMode: hasLatLng && matchedCity === null && values.cityLabel.length === 0,
     hydrated: true,
   };
+}
+
+/** A single row in the unified place dropdown. */
+interface Suggestion {
+  id: string;
+  label: string; // primary place name, e.g. "Reykjavik"
+  sublabel: string; // "Region, Country" or just country
+  latitude: number;
+  longitude: number;
+  source: "curated" | "osm";
 }
 
 interface BirthFormProps {
@@ -63,10 +73,10 @@ interface BirthFormProps {
 type GeocodeStatus =
   | { kind: "idle" }
   | { kind: "loading" }
-  | { kind: "ready"; results: readonly GeocodeResult[] }
+  | { kind: "ready" }
   | { kind: "error"; message: string };
 
-const GEOCODE_DEBOUNCE_MS = 450;
+const GEOCODE_DEBOUNCE_MS = 350;
 
 export function BirthForm({
   onSubmit,
@@ -75,11 +85,15 @@ export function BirthForm({
   submitLabel,
 }: BirthFormProps) {
   const formId = useId();
+  const listboxId = `${formId}-places`;
   const [state, setState] = useState<FormState>(() =>
     initialValues ? stateFromValues(initialValues) : DEFAULT_STATE,
   );
   const [error, setError] = useState<string | null>(null);
   const [geocode, setGeocode] = useState<GeocodeStatus>({ kind: "idle" });
+  const [osmResults, setOsmResults] = useState<readonly Suggestion[]>([]);
+  const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   const abortRef = useRef<AbortController | null>(null);
 
@@ -89,36 +103,24 @@ export function BirthForm({
   }, [initialValues]);
 
   useEffect(() => {
-    // Cancel any in-flight geocode when query changes or component unmounts.
+    // Cancel any in-flight geocode on unmount.
     return () => {
       abortRef.current?.abort();
     };
   }, []);
 
+  // Debounced world search. Runs only while the user is actively typing an
+  // unselected query (selectedKey === null).
   useEffect(() => {
-    if (state.manualMode || !state.hydrated) return;
-    const query = state.cityLabel.trim();
-    // If the current label corresponds to a just-selected suggestion, no need
-    // to re-search.
-    if (
-      state.selectedKey &&
-      state.selectedKey.startsWith("curated:") &&
-      query.length > 0
-    ) {
-      const [, label] = state.selectedKey.split(":", 2);
-      if (label === undefined) return;
-      const matched = CITIES.find((c) => `${c.name}, ${c.country}` === label);
-      if (matched && `${matched.name}, ${matched.country}` === query) return;
-    }
-    if (
-      state.selectedKey?.startsWith("geo:") &&
-      state.selectedKey.includes(query)
-    ) {
-      return;
-    }
-    if (query.length < 3) {
+    if (state.manualMode || !state.hydrated || state.selectedKey !== null) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setGeocode({ kind: "idle" });
+      return;
+    }
+    const query = state.cityLabel.trim();
+    if (query.length < 3) {
+      setGeocode({ kind: "idle" });
+      setOsmResults([]);
       return;
     }
     const controller = new AbortController();
@@ -129,12 +131,22 @@ export function BirthForm({
       try {
         const results = await geocodePlace(query, controller.signal);
         if (controller.signal.aborted) return;
-        setGeocode({ kind: "ready", results });
+        setOsmResults(
+          results.map((g) => ({
+            id: `o:${g.latitude.toFixed(3)},${g.longitude.toFixed(3)}`,
+            label: g.name,
+            sublabel: g.context || g.country,
+            latitude: g.latitude,
+            longitude: g.longitude,
+            source: "osm" as const,
+          })),
+        );
+        setGeocode({ kind: "ready" });
       } catch {
         if (controller.signal.aborted) return;
         setGeocode({
           kind: "error",
-          message: "Could not reach the geocoder. Try again, or use manual coordinates.",
+          message: "Could not reach the map. Try again, or enter coordinates manually.",
         });
       }
     }, GEOCODE_DEBOUNCE_MS);
@@ -147,35 +159,94 @@ export function BirthForm({
     setState((curr) => ({ ...curr, ...partial }));
   };
 
-  const curatedSuggestions = useMemo(() => {
-    return searchCities(state.cityLabel);
-  }, [state.cityLabel]);
+  // One unified, deduplicated, ranked list: fast curated cities first, then the
+  // live OpenStreetMap results, with near-duplicates removed.
+  const suggestions = useMemo<Suggestion[]>(() => {
+    const query = state.cityLabel.trim();
+    if (query.length < 2 || state.selectedKey !== null) return [];
+    const out: Suggestion[] = [];
+    const seen = new Set<string>();
+    for (const c of searchCities(query)) {
+      const key = `${c.name.toLowerCase()}|${c.country.toLowerCase()}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({
+        id: `c:${key}`,
+        label: c.name,
+        sublabel: c.country,
+        latitude: c.latitude,
+        longitude: c.longitude,
+        source: "curated",
+      });
+    }
+    for (const g of osmResults) {
+      const dup = out.some(
+        (s) =>
+          s.label.toLowerCase() === g.label.toLowerCase() &&
+          Math.abs(s.latitude - g.latitude) < 0.5 &&
+          Math.abs(s.longitude - g.longitude) < 0.5,
+      );
+      if (dup || seen.has(g.id)) continue;
+      seen.add(g.id);
+      out.push(g);
+    }
+    return out.slice(0, 10);
+  }, [osmResults, state.cityLabel, state.selectedKey]);
 
-  const handleSelectCurated = (entry: CityEntry) => {
-    patch({
-      cityLabel: `${entry.name}, ${entry.country}`,
-      latitudeText: String(entry.latitude),
-      longitudeText: String(entry.longitude),
-      manualMode: false,
-      selectedKey: `curated:${entry.name}|${entry.country}`,
-    });
-    setError(null);
-    setGeocode({ kind: "idle" });
-  };
-
-  const handleSelectGeocode = (entry: GeocodeResult) => {
-    const label = entry.context
-      ? `${entry.name}, ${entry.context}`
-      : entry.name;
+  const selectSuggestion = (s: Suggestion) => {
+    const label = s.sublabel ? `${s.label}, ${s.sublabel}` : s.label;
     patch({
       cityLabel: label,
-      latitudeText: String(entry.latitude),
-      longitudeText: String(entry.longitude),
+      latitudeText: String(s.latitude),
+      longitudeText: String(s.longitude),
       manualMode: false,
-      selectedKey: `geo:${label}`,
+      selectedKey: `sel:${label}`,
     });
     setError(null);
     setGeocode({ kind: "idle" });
+    setOpen(false);
+    setActiveIndex(-1);
+  };
+
+  const query = state.cityLabel.trim();
+  const noMatch =
+    open &&
+    state.selectedKey === null &&
+    geocode.kind === "ready" &&
+    suggestions.length === 0 &&
+    query.length >= 3;
+  const showDropdown =
+    state.hydrated &&
+    !state.manualMode &&
+    open &&
+    state.selectedKey === null &&
+    (suggestions.length > 0 ||
+      geocode.kind === "loading" ||
+      geocode.kind === "error" ||
+      noMatch);
+
+  const onCityKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showDropdown || suggestions.length === 0) {
+      if (e.key === "Escape") setOpen(false);
+      return;
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => (i + 1) % suggestions.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => (i <= 0 ? suggestions.length - 1 : i - 1));
+    } else if (e.key === "Enter") {
+      if (activeIndex >= 0 && activeIndex < suggestions.length) {
+        e.preventDefault();
+        const choice = suggestions[activeIndex];
+        if (choice) selectSuggestion(choice);
+      }
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setOpen(false);
+      setActiveIndex(-1);
+    }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -194,11 +265,11 @@ export function BirthForm({
     const lat = Number(state.latitudeText);
     const lon = Number(state.longitudeText);
     if (!Number.isFinite(lat) || lat < -90 || lat > 90) {
-      setError("Latitude must be between -90 and 90.");
+      setError("Choose a birthplace from the list, or enter coordinates manually.");
       return;
     }
     if (!Number.isFinite(lon) || lon < -180 || lon > 180) {
-      setError("Longitude must be between -180 and 180.");
+      setError("Choose a birthplace from the list, or enter coordinates manually.");
       return;
     }
     const label = state.cityLabel.trim() || `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
@@ -211,15 +282,6 @@ export function BirthForm({
       longitude: lon,
     });
   };
-
-  const geocodeResults = geocode.kind === "ready" ? geocode.results : [];
-  const showDropdown =
-    state.hydrated &&
-    !state.manualMode &&
-    (curatedSuggestions.length > 0 ||
-      geocode.kind === "loading" ||
-      geocodeResults.length > 0 ||
-      geocode.kind === "error");
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
@@ -255,80 +317,102 @@ export function BirthForm({
             <input
               id={`${formId}-city`}
               type="text"
+              role="combobox"
+              aria-expanded={showDropdown}
+              aria-controls={listboxId}
+              aria-autocomplete="list"
+              aria-activedescendant={
+                showDropdown && activeIndex >= 0
+                  ? `${listboxId}-opt-${activeIndex}`
+                  : undefined
+              }
               value={state.cityLabel}
-              onChange={(e) => patch({ cityLabel: e.target.value, selectedKey: null })}
-              placeholder="Toledo, Ohio. Tbilisi. Reykjavik. Your hometown."
+              onChange={(e) => {
+                patch({ cityLabel: e.target.value, selectedKey: null });
+                setOpen(true);
+                setActiveIndex(-1);
+              }}
+              onFocus={() => {
+                if (state.selectedKey === null && state.cityLabel.trim().length >= 2) {
+                  setOpen(true);
+                }
+              }}
+              onBlur={() => setOpen(false)}
+              onKeyDown={onCityKeyDown}
+              placeholder="Start typing a city: Toledo, Tbilisi, Reykjavik..."
               autoComplete="off"
               className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
             />
           </Field>
           {showDropdown ? (
-            <div className="border-gold-soft bg-bg-deep absolute z-10 mt-2 max-h-80 w-full overflow-auto rounded-xl border shadow-2xl">
-              {curatedSuggestions.length > 0 ? (
-                <>
-                  <div className="text-ink-tertiary font-mono px-3 pt-3 pb-1 text-[9px] uppercase tracking-[0.3em]">
-                    Cities
-                  </div>
-                  <ul className="p-1">
-                    {curatedSuggestions.map((entry) => (
-                      <li key={`curated-${entry.name}-${entry.country}`}>
-                        <button
-                          type="button"
-                          onClick={() => handleSelectCurated(entry)}
-                          className="text-ink-primary hover:bg-gold-leaf/10 flex w-full items-baseline justify-between gap-3 rounded-lg px-3 py-2 text-left"
-                        >
-                          <span className="font-display text-base">{entry.name}</span>
-                          <span className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.2em]">
-                            {entry.country}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : null}
-              {geocode.kind === "loading" ? (
-                <div className="text-ink-tertiary font-mono border-border-hairline border-t px-3 py-3 text-[10px] uppercase tracking-[0.25em]">
-                  Searching the world map...
+            <div
+              id={listboxId}
+              role="listbox"
+              // Keep the input focused when an option is clicked so onBlur does
+              // not fire before onClick.
+              onMouseDown={(e) => e.preventDefault()}
+              className="border-gold-soft bg-bg-deep absolute z-10 mt-2 max-h-80 w-full overflow-auto rounded-xl border shadow-2xl"
+            >
+              {suggestions.length > 0 ? (
+                <ul className="p-1">
+                  {suggestions.map((s, idx) => (
+                    <li key={s.id}>
+                      <button
+                        id={`${listboxId}-opt-${idx}`}
+                        type="button"
+                        role="option"
+                        aria-selected={idx === activeIndex}
+                        onClick={() => selectSuggestion(s)}
+                        onMouseEnter={() => setActiveIndex(idx)}
+                        className={cn(
+                          "flex w-full items-baseline justify-between gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
+                          idx === activeIndex
+                            ? "bg-gold-leaf/10 text-ink-primary"
+                            : "text-ink-primary hover:bg-gold-leaf/5",
+                        )}
+                      >
+                        <span className="min-w-0 flex-1 truncate">
+                          <span className="font-display text-base">{s.label}</span>
+                          {s.sublabel ? (
+                            <span className="text-ink-secondary font-body ml-2 text-sm">
+                              {s.sublabel}
+                            </span>
+                          ) : null}
+                        </span>
+                        <span className="text-ink-tertiary font-mono shrink-0 text-[10px] tracking-[0.1em]">
+                          {s.latitude.toFixed(1)}°, {s.longitude.toFixed(1)}°
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                  {geocode.kind === "loading" ? (
+                    <li className="text-ink-tertiary font-mono px-3 py-2 text-[10px] uppercase tracking-[0.25em]">
+                      Searching the map...
+                    </li>
+                  ) : null}
+                </ul>
+              ) : geocode.kind === "loading" ? (
+                <div className="text-ink-tertiary font-mono px-3 py-3 text-[10px] uppercase tracking-[0.25em]">
+                  Searching the map...
                 </div>
-              ) : null}
-              {geocode.kind === "ready" && geocodeResults.length > 0 ? (
-                <>
-                  <div className="text-ink-tertiary font-mono border-border-hairline border-t px-3 pt-3 pb-1 text-[9px] uppercase tracking-[0.3em]">
-                    OpenStreetMap · {geocodeResults.length} place{geocodeResults.length === 1 ? "" : "s"}
-                  </div>
-                  <ul className="p-1">
-                    {geocodeResults.map((entry, idx) => (
-                      <li key={`geo-${entry.latitude.toFixed(3)}-${entry.longitude.toFixed(3)}-${idx}`}>
-                        <button
-                          type="button"
-                          onClick={() => handleSelectGeocode(entry)}
-                          className="text-ink-primary hover:bg-gold-leaf/10 flex w-full items-baseline justify-between gap-3 rounded-lg px-3 py-2 text-left"
-                        >
-                          <span className="min-w-0 flex-1 truncate font-display text-base">
-                            {entry.name}
-                            {entry.context ? (
-                              <span className="text-ink-secondary font-body ml-2 text-sm">
-                                {entry.context}
-                              </span>
-                            ) : null}
-                          </span>
-                          <span className="text-ink-tertiary font-mono shrink-0 text-[10px] tracking-[0.1em]">
-                            {entry.latitude.toFixed(2)}°, {entry.longitude.toFixed(2)}°
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : null}
-              {geocode.kind === "ready" && geocodeResults.length === 0 && state.cityLabel.trim().length >= 3 ? (
-                <div className="text-ink-tertiary font-mono border-border-hairline border-t px-3 py-3 text-[10px] uppercase tracking-[0.25em]">
-                  No world places matched. Try a different spelling, or enter coordinates manually.
+              ) : noMatch ? (
+                <div className="px-3 py-3">
+                  <p className="text-ink-secondary font-body text-sm">
+                    No place matched &ldquo;{query}&rdquo;.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      patch({ manualMode: true });
+                    }}
+                    className="text-gold-leaf font-mono mt-2 text-[10px] uppercase tracking-[0.25em] underline-offset-4 hover:underline"
+                  >
+                    Enter coordinates manually →
+                  </button>
                 </div>
-              ) : null}
-              {geocode.kind === "error" ? (
-                <div className="text-conflict-red font-mono border-border-hairline border-t px-3 py-3 text-[10px] uppercase tracking-[0.25em]">
+              ) : geocode.kind === "error" ? (
+                <div className="text-conflict-red font-mono px-3 py-3 text-[10px] uppercase tracking-[0.25em]">
                   {geocode.message}
                 </div>
               ) : null}
