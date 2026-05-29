@@ -19,6 +19,9 @@ export function SiteFooter() {
           <Link href="/about" className="hover:text-ink-primary">
             About
           </Link>
+          <Link href="/learn" className="hover:text-ink-primary">
+            Learn
+          </Link>
           <Link href="/methodology" className="hover:text-ink-primary">
             Methodology
           </Link>

@@ -4,6 +4,8 @@ import type { Culture, Planet } from "@/data/cultures";
 import { PLANET_LABELS, PLANET_SYMBOLS } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import { longitudeToSign, type Longitude } from "@/data/sampleChart";
+import { computeWholeSignHouses, houseOfLongitude } from "@/lib/houses";
+import { getHouseMeaning } from "@/data/houses";
 
 interface WheelTooltipProps {
   culture: Culture | null;
@@ -12,6 +14,8 @@ interface WheelTooltipProps {
   y: number;
   containerWidth: number;
   chart: Readonly<Record<Planet, Longitude>>;
+  /** When provided, the tooltip also names the planet's whole-sign house. */
+  ascendant?: number;
 }
 
 export function WheelTooltip({
@@ -21,9 +25,19 @@ export function WheelTooltip({
   y,
   containerWidth,
   chart,
+  ascendant,
 }: WheelTooltipProps) {
   const deity = culture ? DEITY_MATRIX[culture][planet] : null;
   const { sign, degree } = longitudeToSign(chart[planet]);
+  const house =
+    typeof ascendant === "number"
+      ? getHouseMeaning(
+          houseOfLongitude(
+            chart[planet],
+            computeWholeSignHouses(ascendant).ascendantSignIndex,
+          ),
+        )
+      : null;
 
   const tooltipWidth = 240;
   const flipped = x + tooltipWidth + 16 > containerWidth;
@@ -45,6 +59,11 @@ export function WheelTooltip({
           {degree.toFixed(0)}° {sign}
         </div>
       </div>
+      {house ? (
+        <div className="text-gold-leaf/70 font-mono mt-1 text-[10px] uppercase tracking-[0.2em]">
+          {house.ordinal} House · {house.title}
+        </div>
+      ) : null}
       {deity ? (
         <>
           <h4 className="font-display text-gold-leaf mt-2 text-xl">{deity.name}</h4>

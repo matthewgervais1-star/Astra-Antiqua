@@ -185,6 +185,7 @@ function NatalWheelImpl({ chart = SAMPLE_CHART, caption, ascendant }: NatalWheel
               y={activePos.y}
               containerWidth={size}
               chart={chart}
+              ascendant={ascendant}
             />
           ) : null}
         </div>
