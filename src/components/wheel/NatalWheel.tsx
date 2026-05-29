@@ -32,9 +32,11 @@ import { cn } from "@/lib/classNames";
 interface NatalWheelProps {
   chart?: Readonly<Record<Planet, Longitude>>;
   caption?: string;
+  /** Ascendant longitude; when given, the wheel draws real whole-sign houses. */
+  ascendant?: number;
 }
 
-function NatalWheelImpl({ chart = SAMPLE_CHART, caption }: NatalWheelProps) {
+function NatalWheelImpl({ chart = SAMPLE_CHART, caption, ascendant }: NatalWheelProps) {
   const culture = useActivePantheon();
   const reduce = usePrefersReducedMotion();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -68,10 +70,11 @@ function NatalWheelImpl({ chart = SAMPLE_CHART, caption }: NatalWheelProps) {
       dpr,
       culture,
       chart,
+      ascendant: ascendant ?? null,
       highlightPlanet: pinned ?? hover?.planet ?? null,
       pulsePhase: reduce ? 0 : pulsePhaseRef.current,
     });
-  }, [size, culture, chart, hover, pinned, reduce]);
+  }, [size, culture, chart, ascendant, hover, pinned, reduce]);
 
   useEffect(() => {
     const container = containerRef.current;

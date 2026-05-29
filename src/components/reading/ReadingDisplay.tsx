@@ -10,6 +10,10 @@ import { GlassPanel } from "@/components/ui/GlassPanel";
 import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
 import { PrintButton } from "@/components/ui/PrintButton";
 import { usePrefersReducedMotion } from "@/lib/reducedMotion";
+import { computeWholeSignHouses, houseOfSign } from "@/lib/houses";
+import { houseReading } from "@/lib/houseReading";
+import { getHouseMeaning } from "@/data/houses";
+import { longitudeToSign } from "@/data/sampleChart";
 
 interface ReadingDisplayProps {
   culture: Culture;
@@ -22,6 +26,8 @@ interface ReadingDisplayProps {
     latitude: number;
     longitude: number;
   };
+  ascendant: number;
+  midheaven: number;
 }
 
 const ASPECT_GROUPS = [
@@ -42,8 +48,27 @@ const ASPECT_GROUPS = [
   },
 ] as const;
 
-export function ReadingDisplay({ culture, reading, birth, inputs }: ReadingDisplayProps) {
+export function ReadingDisplay({
+  culture,
+  reading,
+  birth,
+  inputs,
+  ascendant,
+  midheaven,
+}: ReadingDisplayProps) {
   const reduce = usePrefersReducedMotion();
+
+  const { ascendantSign, ascendantSignIndex, houses } =
+    computeWholeSignHouses(ascendant);
+  const midheavenSign = longitudeToSign(midheaven).sign;
+  const housesWithOccupants = houses.map((h) => ({
+    house: h.house,
+    sign: h.sign,
+    meaning: getHouseMeaning(h.house),
+    occupants: reading.placements.filter(
+      (p) => houseOfSign(p.sign, ascendantSignIndex) === h.house,
+    ),
+  }));
 
   return (
     <motion.div
@@ -124,6 +149,60 @@ export function ReadingDisplay({ culture, reading, birth, inputs }: ReadingDispl
             </li>
           ))}
         </ul>
+      </section>
+
+      <section>
+        <div className="mb-8">
+          <h3 className="font-display text-ink-primary text-2xl md:text-3xl">
+            The twelve houses
+          </h3>
+          <p className="text-ink-tertiary font-mono mt-2 text-[11px] uppercase tracking-[0.3em]">
+            Whole-sign houses · Rising in {ascendantSign} · Midheaven in {midheavenSign}
+          </p>
+          <p className="text-ink-tertiary font-body mt-3 max-w-2xl text-sm leading-relaxed">
+            The sign rising at the hour of your birth becomes the First House; each sign after it takes the next house in order. Because the houses are anchored to the Ascendant, they depend on an accurate birth time.
+          </p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          {housesWithOccupants.map((h) => (
+            <GlassPanel key={h.house} tone="solid" className="p-5">
+              <div className="flex items-baseline justify-between gap-3">
+                <div className="font-display text-gold-leaf text-lg">
+                  {h.meaning.ordinal} House
+                  <span className="text-ink-secondary font-body ml-2 text-base italic">
+                    {h.meaning.title}
+                  </span>
+                </div>
+                <div className="text-ink-tertiary font-mono shrink-0 text-[10px] uppercase tracking-[0.2em]">
+                  {h.sign}
+                  {h.house === 1 ? " · rising" : ""}
+                </div>
+              </div>
+              {h.occupants.length > 0 ? (
+                <ul className="mt-3 flex flex-col gap-3">
+                  {h.occupants.map((p) => (
+                    <li key={p.planet} className="flex items-start gap-3">
+                      <DeityGlyph
+                        culture={culture}
+                        planet={p.planet}
+                        size={28}
+                        decorative
+                        className="mt-0.5 shrink-0"
+                      />
+                      <p className="text-ink-primary font-body text-sm leading-relaxed">
+                        {houseReading(culture, p.planet, h.house)}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-ink-tertiary font-body mt-3 text-sm leading-relaxed">
+                  {h.meaning.domain}
+                </p>
+              )}
+            </GlassPanel>
+          ))}
+        </div>
       </section>
 
       <section>

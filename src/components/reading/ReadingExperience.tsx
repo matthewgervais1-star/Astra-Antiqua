@@ -15,6 +15,7 @@ import { SectionContainer } from "@/components/ui/SectionContainer";
 import { GoldText } from "@/components/ui/GoldText";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { computeChart } from "@/lib/ephemeris";
+import { computeAngularPoints, type AngularPoints } from "@/lib/ascendant";
 import { resolveBirth, type ResolvedBirth } from "@/lib/birthDateTime";
 import { buildReading, type Reading } from "@/lib/reading";
 import {
@@ -50,6 +51,7 @@ interface ComputedState {
   inputs: BirthFormValues;
   birth: ResolvedBirth;
   chart: Readonly<Record<Planet, Longitude>>;
+  angles: AngularPoints;
 }
 
 function inputsFromChart(saved: SavedChartInputs): BirthFormValues {
@@ -129,7 +131,12 @@ function ReadingExperienceImpl({
         longitude: values.longitude,
       });
       const chart = computeChart(birth.utcDate);
-      setState({ inputs: values, birth, chart });
+      const angles = computeAngularPoints(
+        birth.utcDate,
+        values.latitude,
+        values.longitude,
+      );
+      setState({ inputs: values, birth, chart, angles });
     } catch (err) {
       setComputeError(err instanceof Error ? err.message : "The chart could not be cast.");
       setState(null);
@@ -236,6 +243,7 @@ function ReadingExperienceImpl({
               <div className="space-y-12">
                 <NatalWheel
                   chart={state.chart}
+                  ascendant={state.angles.ascendant}
                   caption={`${state.inputs.cityLabel} · ${state.inputs.date} ${state.inputs.time} (${state.birth.timezone})`}
                 />
                 {culture && reading ? (
@@ -244,6 +252,8 @@ function ReadingExperienceImpl({
                     reading={reading}
                     birth={state.birth}
                     inputs={state.inputs}
+                    ascendant={state.angles.ascendant}
+                    midheaven={state.angles.midheaven}
                   />
                 ) : (
                   <GlassPanel tone="solid" className="p-6 md:p-8">

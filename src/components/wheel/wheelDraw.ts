@@ -16,6 +16,8 @@ export interface DrawOptions {
   dpr: number;
   culture: Culture | null;
   chart: Readonly<Record<Planet, Longitude>>;
+  /** When provided, draws real whole-sign houses anchored to the Ascendant. */
+  ascendant?: Longitude | null;
   highlightPlanet?: Planet | null;
   pulsePhase?: number;
 }
@@ -46,7 +48,16 @@ function applyGoldStroke(
 }
 
 export function drawWheel(options: DrawOptions): void {
-  const { ctx, cssSize, dpr, culture, chart, highlightPlanet = null, pulsePhase = 0 } = options;
+  const {
+    ctx,
+    cssSize,
+    dpr,
+    culture,
+    chart,
+    ascendant = null,
+    highlightPlanet = null,
+    pulsePhase = 0,
+  } = options;
   const geo = makeGeometry(cssSize);
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -54,7 +65,11 @@ export function drawWheel(options: DrawOptions): void {
 
   const stops = metalFor(culture).stops;
   drawZodiacRing(ctx, geo);
-  drawHouseDividers(ctx, geo);
+  if (typeof ascendant === "number") {
+    drawHouses(ctx, geo, ascendant);
+  } else {
+    drawHouseDividers(ctx, geo);
+  }
   drawAspectLines(ctx, geo, chart);
   drawConjunctionRings(ctx, geo, chart, pulsePhase);
   drawPlanetGlyphs(ctx, geo, chart, culture, highlightPlanet, stops);
@@ -136,6 +151,79 @@ function drawHouseDividers(ctx: CanvasRenderingContext2D, geo: WheelGeometry): v
     ctx.lineTo(b.x, b.y);
     ctx.stroke();
   }
+  ctx.restore();
+}
+
+function normalizeDeg(angle: number): number {
+  const a = angle % 360;
+  return a < 0 ? a + 360 : a;
+}
+
+/**
+ * Real whole-sign houses anchored to the Ascendant. Cusps fall on the sign
+ * boundaries (whole-sign houses ARE the signs), each house is numbered 1..12
+ * starting from the Ascendant's sign, and the exact Ascendant degree is marked.
+ */
+function drawHouses(
+  ctx: CanvasRenderingContext2D,
+  geo: WheelGeometry,
+  ascendant: Longitude,
+): void {
+  const ascNorm = normalizeDeg(ascendant);
+  const ascSignStart = Math.floor(ascNorm / 30) * 30;
+
+  // Cusp lines on the whole-sign boundaries (inner ring to zodiac ring).
+  ctx.save();
+  ctx.strokeStyle = "rgba(212, 175, 55, 0.14)";
+  ctx.lineWidth = 0.5;
+  for (let k = 0; k < 12; k += 1) {
+    const longitude = k * 30;
+    const a = longitudeToCartesian(longitude, geo.innerRadius, geo.cx, geo.cy);
+    const b = longitudeToCartesian(longitude, geo.zodiacRadius, geo.cx, geo.cy);
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // House numbers at each whole-sign midpoint, 1 starting from the Asc sign.
+  ctx.save();
+  ctx.fillStyle = "rgba(255, 255, 255, 0.34)";
+  const numSize = Math.max(8, Math.min(12, geo.size * 0.02));
+  ctx.font = `${numSize}px ui-monospace, "JetBrains Mono", Menlo, monospace`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  const numRadius = geo.innerRadius + (geo.zodiacRadius - geo.innerRadius) * 0.5;
+  for (let h = 1; h <= 12; h += 1) {
+    const mid = ascSignStart + (h - 1) * 30 + 15;
+    const pos = longitudeToCartesian(mid, numRadius, geo.cx, geo.cy);
+    ctx.fillText(String(h), pos.x, pos.y);
+  }
+  ctx.restore();
+
+  // The Ascendant itself: a brighter spoke plus an ASC label.
+  ctx.save();
+  ctx.strokeStyle = "rgba(244, 208, 63, 0.7)";
+  ctx.lineWidth = 1.2;
+  const ia = longitudeToCartesian(ascNorm, geo.innerRadius, geo.cx, geo.cy);
+  const ib = longitudeToCartesian(ascNorm, geo.outerRadius, geo.cx, geo.cy);
+  ctx.beginPath();
+  ctx.moveTo(ia.x, ia.y);
+  ctx.lineTo(ib.x, ib.y);
+  ctx.stroke();
+  const labelSize = Math.max(8, Math.min(11, geo.size * 0.018));
+  ctx.fillStyle = "rgba(244, 208, 63, 0.9)";
+  ctx.font = `${labelSize}px ui-monospace, "JetBrains Mono", Menlo, monospace`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  const labelPos = longitudeToCartesian(
+    ascNorm,
+    geo.innerRadius - labelSize * 1.2,
+    geo.cx,
+    geo.cy,
+  );
+  ctx.fillText("ASC", labelPos.x, labelPos.y);
   ctx.restore();
 }
 
