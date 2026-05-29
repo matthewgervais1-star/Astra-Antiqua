@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { GoldText } from "@/components/ui/GoldText";
 import { GlassPanel } from "@/components/ui/GlassPanel";
+import { LearnTOC } from "@/components/LearnTOC";
 
 export const metadata: Metadata = {
   title: "The Rising Sign",
@@ -161,6 +162,8 @@ export default function RisingSignPage() {
           </div>
         </div>
       </SectionContainer>
+
+      <LearnTOC current="/learn/rising" />
     </>
   );
 }

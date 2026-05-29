@@ -4,6 +4,7 @@ import { ZODIAC_SIGN_INFO } from "@/data/zodiacSigns";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { GoldText } from "@/components/ui/GoldText";
 import { GlassPanel } from "@/components/ui/GlassPanel";
+import { LearnTOC } from "@/components/LearnTOC";
 
 export const metadata: Metadata = {
   title: "Zodiac Sun Signs",
@@ -95,6 +96,8 @@ export default function ZodiacSignsPage() {
           </Link>
         </div>
       </SectionContainer>
+
+      <LearnTOC current="/learn/signs" />
     </>
   );
 }

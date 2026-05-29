@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CULTURES, CULTURE_LABELS } from "@/data/cultures";
 import { NatalWheel } from "@/components/wheel/NatalWheel";
 import { LifeAreaLegend } from "@/components/LifeAreaLegend";
+import { LearnTOC } from "@/components/LearnTOC";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { GoldText } from "@/components/ui/GoldText";
 import { GlassPanel } from "@/components/ui/GlassPanel";
@@ -269,6 +270,8 @@ export default function LearnPage() {
           </div>
         </div>
       </SectionContainer>
+
+      <LearnTOC current="/learn" />
     </>
   );
 }
