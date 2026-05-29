@@ -20,10 +20,6 @@ interface PantheonPageProps {
   params: Promise<PantheonPageParams>;
 }
 
-export function generateStaticParams(): PantheonPageParams[] {
-  return CULTURES.map((culture) => ({ culture }));
-}
-
 export async function generateMetadata({ params }: PantheonPageProps): Promise<Metadata> {
   const { culture: raw } = await params;
   if (!isCulture(raw)) return { title: "Not Found" };
@@ -58,15 +54,28 @@ export default async function PantheonPage({ params }: PantheonPageProps) {
             <p className="text-ink-secondary font-body mt-4 max-w-xl text-lg italic md:text-xl">
               {orientation.shortTagline}
             </p>
-            <div className="text-ink-tertiary mt-6 flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.25em]">
-              <span>{decree.oracleName}</span>
-              <span className="text-border-gold">·</span>
+            <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href={`/?pantheon=${culture}`}
-                className="text-gold-leaf hover:opacity-80"
+                href={`/pantheon/${culture}/reading`}
+                className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 inline-flex items-center gap-2 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors"
               >
-                Open in the live wheel
+                Cast your chart →
               </Link>
+              <Link
+                href={`/pantheon/${culture}/today`}
+                className="border-hairline text-ink-secondary hover:text-ink-primary hover:border-gold-soft inline-flex items-center gap-2 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors"
+              >
+                Your day
+              </Link>
+              <Link
+                href={`/pantheon/${culture}/forecast`}
+                className="border-hairline text-ink-secondary hover:text-ink-primary hover:border-gold-soft inline-flex items-center gap-2 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors"
+              >
+                The year ahead
+              </Link>
+            </div>
+            <div className="text-ink-tertiary mt-6 font-mono text-[11px] uppercase tracking-[0.25em]">
+              {decree.oracleName}
             </div>
           </div>
           <div className="hidden text-right md:block">

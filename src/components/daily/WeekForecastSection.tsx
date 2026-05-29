@@ -4,9 +4,11 @@ import { Suspense, useEffect, useState } from "react";
 import { useActivePantheon } from "@/components/pantheon/PantheonSelector";
 import { WeekForecast } from "@/components/daily/WeekForecast";
 import { GlassPanel } from "@/components/ui/GlassPanel";
+import type { Culture } from "@/data/cultures";
 
-function Impl() {
-  const culture = useActivePantheon();
+function Impl({ explicitCulture }: { explicitCulture: Culture | null }) {
+  const ctxCulture = useActivePantheon();
+  const culture = explicitCulture ?? ctxCulture;
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -36,10 +38,10 @@ function Fallback() {
   );
 }
 
-export function WeekForecastSection() {
+export function WeekForecastSection({ culture }: { culture?: Culture }) {
   return (
     <Suspense fallback={<Fallback />}>
-      <Impl />
+      <Impl explicitCulture={culture ?? null} />
     </Suspense>
   );
 }

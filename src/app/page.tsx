@@ -31,7 +31,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="w-full max-w-3xl">
-            <PantheonSelector />
+            <PantheonSelector mode="navigate" />
           </div>
         </div>
       </section>

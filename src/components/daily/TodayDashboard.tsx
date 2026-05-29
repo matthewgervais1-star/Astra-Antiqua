@@ -244,8 +244,9 @@ function NoNatalPrompt() {
   );
 }
 
-function TodayDashboardImpl() {
-  const culture = useActivePantheon();
+function TodayDashboardImpl({ explicitCulture }: { explicitCulture: Culture | null }) {
+  const ctxCulture = useActivePantheon();
+  const culture = explicitCulture ?? ctxCulture;
   const [now, setNow] = useState<Date | null>(null);
   const [viewDate, setViewDate] = useState<Date | null>(null);
   const [natal, setNatal] = useState<SavedNatal | null>(null);
@@ -329,10 +330,10 @@ function Fallback() {
   );
 }
 
-export function TodayDashboard() {
+export function TodayDashboard({ culture }: { culture?: Culture }) {
   return (
     <Suspense fallback={<Fallback />}>
-      <TodayDashboardImpl />
+      <TodayDashboardImpl explicitCulture={culture ?? null} />
     </Suspense>
   );
 }

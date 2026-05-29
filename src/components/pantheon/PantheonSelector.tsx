@@ -12,19 +12,35 @@ import {
 import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
 import { cn } from "@/lib/classNames";
 
+// Re-exported here for back-compat: callers across the app import the active
+// pantheon hook from this module. The implementation now lives in the context.
+export { useActivePantheon } from "@/components/pantheon/PantheonContext";
+
 const SEARCH_PARAM = "pantheon";
 
-function PantheonSelectorImpl() {
+/**
+ * "filter":   toggles the ?pantheon= query param on the current page (used by
+ *             the global /reading and /forecast pages to re-skin in place).
+ * "navigate": pushes /pantheon/[culture], entering that culture's own space
+ *             (used by the home hero so picking a culture leads to its pages).
+ */
+type SelectorMode = "filter" | "navigate";
+
+function PantheonSelectorImpl({ mode }: { mode: SelectorMode }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const raw = searchParams.get(SEARCH_PARAM);
   const active: Culture | null = useMemo(
-    () => (raw && isCulture(raw) ? raw : null),
-    [raw],
+    () => (mode === "filter" && raw && isCulture(raw) ? raw : null),
+    [mode, raw],
   );
 
   const onSelect = useCallback(
     (culture: Culture) => {
+      if (mode === "navigate") {
+        router.push(`/pantheon/${culture}`);
+        return;
+      }
       const next = new URLSearchParams(searchParams.toString());
       if (active === culture) {
         next.delete(SEARCH_PARAM);
@@ -34,12 +50,12 @@ function PantheonSelectorImpl() {
       const qs = next.toString();
       router.replace(qs ? `?${qs}` : "?", { scroll: false });
     },
-    [active, router, searchParams],
+    [active, mode, router, searchParams],
   );
 
   return (
     <div
-      role="radiogroup"
+      role={mode === "filter" ? "radiogroup" : undefined}
       aria-label="Select a pantheon"
       className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 md:gap-4"
     >
@@ -49,8 +65,8 @@ function PantheonSelectorImpl() {
           <button
             key={culture}
             type="button"
-            role="radio"
-            aria-checked={isActive}
+            role={mode === "filter" ? "radio" : undefined}
+            aria-checked={mode === "filter" ? isActive : undefined}
             onClick={() => onSelect(culture)}
             className={cn(
               "group glass-panel relative flex flex-col items-center gap-3 rounded-2xl p-5 text-left transition-all duration-300 md:p-6",
@@ -80,7 +96,7 @@ function PantheonSelectorImpl() {
   );
 }
 
-export function PantheonSelector() {
+export function PantheonSelector({ mode = "filter" }: { mode?: SelectorMode }) {
   return (
     <Suspense
       fallback={
@@ -89,13 +105,7 @@ export function PantheonSelector() {
         </div>
       }
     >
-      <PantheonSelectorImpl />
+      <PantheonSelectorImpl mode={mode} />
     </Suspense>
   );
-}
-
-export function useActivePantheon(): Culture | null {
-  const searchParams = useSearchParams();
-  const raw = searchParams.get(SEARCH_PARAM);
-  return raw && isCulture(raw) ? raw : null;
 }
