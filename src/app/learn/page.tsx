@@ -71,6 +71,12 @@ export default function LearnPage() {
             <p className="text-ink-secondary font-body mt-4 text-base leading-relaxed md:text-lg">
               Those twelve arcs are the signs. A planet is &ldquo;in&rdquo; a sign when, from where you stand on Earth, it sits in front of that stretch of the ring. The signs hold still. The planets are the wanderers that cross them.
             </p>
+            <Link
+              href="/learn/signs"
+              className="text-gold-leaf font-mono mt-5 inline-block text-[11px] uppercase tracking-[0.25em] underline-offset-4 hover:underline"
+            >
+              See all twelve signs →
+            </Link>
           </div>
         </div>
       </SectionContainer>
