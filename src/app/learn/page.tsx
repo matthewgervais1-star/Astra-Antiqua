@@ -12,6 +12,32 @@ export const metadata: Metadata = {
     "A plain-language explainer of what a natal chart is: the seven classical planets seen from Earth against the zodiac, the rising horizon at your birth, the twelve houses, and how five ancient cultures read meaning into the astronomy.",
 };
 
+const PLANET_VERBS: ReadonlyArray<{ symbol: string; name: string; verb: string }> = [
+  { symbol: "☉", name: "Sun", verb: "I shine, I rule" },
+  { symbol: "☽", name: "Moon", verb: "I feel, I need" },
+  { symbol: "↑", name: "Ascendant", verb: "I appear, I begin" },
+  { symbol: "☿", name: "Mercury", verb: "I think, I speak" },
+  { symbol: "♀", name: "Venus", verb: "I love, I draw near" },
+  { symbol: "♂", name: "Mars", verb: "I act, I cut" },
+  { symbol: "♃", name: "Jupiter", verb: "I expand, I trust" },
+  { symbol: "♄", name: "Saturn", verb: "I endure, I bind" },
+];
+
+const SIGN_MANNERS: ReadonlyArray<{ sign: string; manner: string }> = [
+  { sign: "Aries", manner: "boldly, first" },
+  { sign: "Taurus", manner: "steadily, sensuously" },
+  { sign: "Gemini", manner: "restlessly, every way at once" },
+  { sign: "Cancer", manner: "tenderly, protectively" },
+  { sign: "Leo", manner: "proudly, warmly" },
+  { sign: "Virgo", manner: "carefully, precisely" },
+  { sign: "Libra", manner: "fairly, in pairs" },
+  { sign: "Scorpio", manner: "intensely, to the depths" },
+  { sign: "Sagittarius", manner: "freely, seeking meaning" },
+  { sign: "Capricorn", manner: "patiently, toward the summit" },
+  { sign: "Aquarius", manner: "differently, against the grain" },
+  { sign: "Pisces", manner: "dreamily, without edges" },
+];
+
 export default function LearnPage() {
   return (
     <>
@@ -64,10 +90,68 @@ export default function LearnPage() {
       </SectionContainer>
 
       <SectionContainer size="default" spacing="default">
+        <div className="mb-10 md:mb-12">
+          <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
+            Three · the grammar
+          </div>
+          <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-4xl">
+            The planets are verbs. The signs say how.
+          </h2>
+          <p className="text-ink-secondary font-body mt-4 max-w-2xl text-base leading-relaxed md:text-lg">
+            There is a simple grammar under all of it. A planet is the verb, the thing being done. A sign is the manner, the way it is done. The house, which you meet next, is the room it is done in. Put them together and a placement becomes a sentence.
+          </p>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2">
+          <GlassPanel tone="solid" className="p-6 md:p-7">
+            <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
+              The seven, and the rising, as verbs
+            </div>
+            <ul className="mt-4 flex flex-col">
+              {PLANET_VERBS.map((p) => (
+                <li
+                  key={p.name}
+                  className="border-border-hairline flex items-baseline justify-between gap-4 border-t py-2.5 first:border-t-0"
+                >
+                  <span className="text-ink-primary font-display text-base">
+                    <span className="text-ink-tertiary mr-2 font-mono text-sm">{p.symbol}</span>
+                    {p.name}
+                  </span>
+                  <span className="text-ink-secondary font-body text-right text-sm italic md:text-base">
+                    {p.verb}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </GlassPanel>
+          <GlassPanel tone="solid" className="p-6 md:p-7">
+            <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
+              The twelve signs, as manner
+            </div>
+            <ul className="mt-4 flex flex-col">
+              {SIGN_MANNERS.map((s) => (
+                <li
+                  key={s.sign}
+                  className="border-border-hairline flex items-baseline justify-between gap-4 border-t py-2.5 first:border-t-0"
+                >
+                  <span className="text-ink-primary font-display text-base">{s.sign}</span>
+                  <span className="text-ink-secondary font-body text-right text-sm italic md:text-base">
+                    {s.manner}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </GlassPanel>
+        </div>
+        <p className="text-ink-primary font-body mt-8 max-w-3xl text-base leading-relaxed md:text-lg">
+          So Mars in Aries reads &ldquo;I act, boldly and first.&rdquo; Add the house and you have where: in the Tenth, that drive is spent on your public standing. In Astra Antiqua the verb wears a face. Mars becomes Nergal in Canaan, Ares in Greece, Mars Pater in Rome. The grammar holds; only the names change.
+        </p>
+      </SectionContainer>
+
+      <SectionContainer size="default" spacing="default">
         <div className="grid gap-8 md:grid-cols-12 md:gap-12">
           <div className="md:col-span-5">
             <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-              Three · the turning sky
+              Four · the turning sky
             </div>
             <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-4xl">
               The rising horizon
@@ -88,7 +172,7 @@ export default function LearnPage() {
         <div className="grid gap-8 md:grid-cols-12 md:gap-12">
           <div className="md:col-span-5">
             <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-              Four · the twelve fields
+              Five · the twelve fields
             </div>
             <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-4xl">
               The houses
@@ -109,7 +193,7 @@ export default function LearnPage() {
         <div className="grid gap-8 md:grid-cols-12 md:gap-12">
           <div className="md:col-span-5">
             <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-              Five · from astronomy to meaning
+              Six · from astronomy to meaning
             </div>
             <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-4xl">
               Where astrology begins
