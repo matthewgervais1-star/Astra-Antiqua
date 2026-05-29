@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CULTURES, CULTURE_LABELS } from "@/data/cultures";
 import { NatalWheel } from "@/components/wheel/NatalWheel";
+import { LifeAreaLegend } from "@/components/LifeAreaLegend";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { GoldText } from "@/components/ui/GoldText";
 import { GlassPanel } from "@/components/ui/GlassPanel";
@@ -145,6 +146,17 @@ export default function LearnPage() {
         <p className="text-ink-primary font-body mt-8 max-w-3xl text-base leading-relaxed md:text-lg">
           So Mars in Aries reads &ldquo;I act, boldly and first.&rdquo; Add the house and you have where: in the Tenth, that drive is spent on your public standing. In Astra Antiqua the verb wears a face. Mars becomes Nergal in Canaan, Ares in Greece, Mars Pater in Rome. The grammar holds; only the names change.
         </p>
+        <div className="mt-12">
+          <div className="text-gold-leaf font-mono text-[11px] uppercase tracking-[0.3em]">
+            What each planet governs
+          </div>
+          <p className="text-ink-secondary font-body mt-2 max-w-2xl text-base leading-relaxed md:text-lg">
+            Each verb owns a department of life. This is the legend the rest of the chart is read against.
+          </p>
+          <div className="mt-6">
+            <LifeAreaLegend />
+          </div>
+        </div>
       </SectionContainer>
 
       <SectionContainer size="default" spacing="default">

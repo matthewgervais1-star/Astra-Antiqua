@@ -14,6 +14,7 @@ import { computeWholeSignHouses, houseOfSign } from "@/lib/houses";
 import { houseReading } from "@/lib/houseReading";
 import { getHouseMeaning } from "@/data/houses";
 import { longitudeToSign } from "@/data/sampleChart";
+import { LifeAreaLegend } from "@/components/LifeAreaLegend";
 
 interface ReadingDisplayProps {
   culture: Culture;
@@ -149,6 +150,18 @@ export function ReadingDisplay({
             </li>
           ))}
         </ul>
+      </section>
+
+      <section>
+        <div className="mb-8">
+          <h3 className="font-display text-ink-primary text-2xl md:text-3xl">
+            What each of the seven governs
+          </h3>
+          <p className="text-ink-tertiary font-mono mt-2 text-[11px] uppercase tracking-[0.3em]">
+            The life area each planet rules, in the names of {CULTURE_LABELS[culture]}
+          </p>
+        </div>
+        <LifeAreaLegend culture={culture} />
       </section>
 
       <section>
