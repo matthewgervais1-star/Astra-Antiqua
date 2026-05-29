@@ -127,7 +127,7 @@ const SUMMARY_INTRO: Readonly<Record<Culture, string>> = {
   egypt: "The barque of Ra has been read for the moment of your arrival in the world.",
   greece: "The Hellenistic chart for the moment of your birth has been cast in the names of Olympus.",
   canaan: "The divine council convenes around the hour of your naming.",
-  carthage: "The Tophet's record turns to the day you came into the city.",
+  carthage: "The Tophet's record turns to the day you were born into the city.",
   rome: "The chart has been taken under Roman auspices for the hour of your birth.",
 };
 
