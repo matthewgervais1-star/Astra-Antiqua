@@ -11,8 +11,8 @@ import {
 import { computeTransits, topTransits, type TransitAspect } from "@/lib/transits";
 
 /**
- * What the transiting planet is "doing in the room" today. Used as the subject
- * of the second sentence of a personal reading. Universal across pantheons.
+ * What the transiting planet is "doing in the room" today. Kept for the
+ * life-domain and annual-report copy, which consume it directly.
  */
 export const TRANSIT_PRINCIPLE: Readonly<Record<Planet, string>> = {
   sun: "the day's call for visibility",
@@ -25,24 +25,9 @@ export const TRANSIT_PRINCIPLE: Readonly<Record<Planet, string>> = {
 };
 
 /**
- * What the natal planet IS, in second-person. The thing being touched by the
- * transit. Reads as "your X."
- */
-const NATAL_TARGET: Readonly<Record<Planet, string>> = {
-  sun: "your identity",
-  moon: "your inner weather",
-  mercury: "the way you speak and think",
-  venus: "what draws you",
-  mars: "what you push against",
-  jupiter: "what you trust to grow",
-  saturn: "what you have learned to carry",
-};
-
-/**
  * The mood the day takes from the sign the Moon is travelling through. The
  * Moon is the fastest body and sets the emotional weather, so every daily
- * reading opens with it (the way a good horoscope leads with "the Capricorn
- * Moon"). One short, plain, actionable clause per sign.
+ * reading opens with it. One short, plain clause per sign.
  */
 const MOON_SIGN_MOOD: Readonly<Record<ZodiacSign, string>> = {
   Aries: "The day runs hot and quick, impatient for a first move.",
@@ -57,6 +42,47 @@ const MOON_SIGN_MOOD: Readonly<Record<ZodiacSign, string>> = {
   Capricorn: "The day asks for structure, patience, and the long view.",
   Aquarius: "The day pulls toward the new and the contrary.",
   Pisces: "The day softens and blurs, porous to everything around you.",
+};
+
+/**
+ * The plain part of a person that a transiting planet touches. Concrete and
+ * second-person, so the reading talks about confidence and feelings rather
+ * than "your inner weather". Reads as "your {area}".
+ */
+const NATAL_AREA: Readonly<Record<Planet, string>> = {
+  sun: "confidence",
+  moon: "inner feelings",
+  mercury: "thinking",
+  venus: "relationships",
+  mars: "drive",
+  jupiter: "optimism",
+  saturn: "sense of duty",
+};
+
+/**
+ * The plain force a transiting planet brings to the day. Each is a single
+ * concept (no internal "and") so the compound-subject templates stay readable.
+ */
+const TRANSIT_SOURCE: Readonly<Record<Planet, string>> = {
+  sun: "being seen",
+  moon: "a shift in mood",
+  mercury: "new information",
+  venus: "warmth",
+  mars: "pressure",
+  jupiter: "a window of opportunity",
+  saturn: "added responsibility",
+};
+
+/** A planet's bare theme, used when there is no natal chart and both bodies
+ *  are transiting (the sky-only reading). */
+const PLANET_THEME: Readonly<Record<Planet, string>> = {
+  sun: "self-expression",
+  moon: "instinct",
+  mercury: "communication",
+  venus: "connection",
+  mars: "drive",
+  jupiter: "growth",
+  saturn: "structure",
 };
 
 /** Cultural verb for each aspect (same vocabulary used elsewhere). */
@@ -104,9 +130,8 @@ export function cap(s: string): string {
 
 /**
  * Domain-context template for a life-domain reading. Names which two
- * principles are in aspect and pins the meaning to the named life domain
- * ("in your body", "in the room you are sitting in"), then closes with a
- * concrete, do-this clause rather than an abstraction.
+ * principles are in aspect and pins the meaning to the named life domain,
+ * closing with a concrete, do-this clause.
  */
 export function lifeDomainMeaning(
   kind: AspectKind,
@@ -129,51 +154,46 @@ export function lifeDomainMeaning(
 }
 
 /**
- * Sentence-2 template for a personal (transit-to-natal) reading. Names the
- * transit principle, the aspect relation, and the natal target, and closes on
- * something to actually do. Deliberately avoids re-using the principle's own
- * words in the verb so the line never reads "the friction is at friction with".
+ * The plain interpretation of a transit-to-natal hit. A compound subject
+ * ("{source} and your {area}") keeps the verb agreement correct whatever the
+ * nouns are, and the close is a concrete instruction.
  */
-function personalMeaning(
+function personalAdvice(
   kind: AspectKind,
-  transitPrinciple: string,
-  natalTarget: string,
+  transitPlanet: Planet,
+  natalPlanet: Planet,
 ): string {
+  const source = TRANSIT_SOURCE[transitPlanet];
+  const area = NATAL_AREA[natalPlanet];
   switch (kind) {
     case "conjunction":
-      return `${cap(transitPrinciple)} sits directly on ${natalTarget} today; they move as one signal, so act on the combined pull instead of trying to tell them apart.`;
+      return `${cap(source)} and your ${area} are landing on the same point, sharp and hard to ignore. Spend the charge on purpose rather than letting it spill.`;
     case "sextile":
-      return `${cap(transitPrinciple)} holds an open door for ${natalTarget}; the opening is quiet, so take the small concrete step when it comes rather than waiting for a louder sign.`;
+      return `${cap(source)} and your ${area} are quietly in step, an easy opening if you want it. It will not announce itself, so take the small step when you notice it.`;
     case "square":
-      return `${cap(transitPrinciple)} pulls hard against ${natalTarget}; something has to give, so choose the bargain on purpose and early instead of letting the day force it late.`;
+      return `${cap(source)} and your ${area} are grinding against each other. Something has to give, so make the adjustment early and on your own terms rather than letting the day force it.`;
     case "trine":
-      return `${cap(transitPrinciple)} runs with ${natalTarget} today; push the thing you have been carrying alone, and it will move further than the effort you spend.`;
+      return `${cap(source)} and your ${area} are moving together without effort. Lean on it: what usually takes work will give back more than you put in.`;
     case "opposition":
-      return `${cap(transitPrinciple)} stands opposite ${natalTarget}; you cannot satisfy both at once, so name which one matters now and let the other wait without guilt.`;
+      return `${cap(source)} and your ${area} are pulling in opposite directions, and you cannot fully serve both. Choose which one gets your weight, and let the other wait without guilt.`;
   }
 }
 
-/**
- * Sentence-2 template for a sky-only (no-natal) reading. Names the two
- * transiting principles and the aspect between them as something happening in
- * the room, closing on a plain instruction.
- */
-export function skyMeaning(
-  kind: AspectKind,
-  principleA: string,
-  principleB: string,
-): string {
+/** The plain interpretation of a sky-only aspect (no natal chart). */
+function skyAdvice(kind: AspectKind, planetA: Planet, planetB: Planet): string {
+  const a = PLANET_THEME[planetA];
+  const b = PLANET_THEME[planetB];
   switch (kind) {
     case "conjunction":
-      return `${cap(principleA)} and ${principleB} fuse into one force in the room; stop treating them as two and act on the single pull.`;
+      return `${cap(a)} and ${b} are merging in the sky; treat them as one thing today rather than two.`;
     case "sextile":
-      return `${cap(principleA)} opens a small door for ${principleB}; it comes once and without ceremony, so take it when it does.`;
+      return `${cap(a)} and ${b} are finding an easy connection; the opening is quiet, so use it before it passes.`;
     case "square":
-      return `${cap(principleA)} and ${principleB} pull against each other; the room is being asked to choose, and the choice is cheaper made early than late.`;
+      return `${cap(a)} and ${b} are grating against each other; something gives, and it goes better if you choose what.`;
     case "trine":
-      return `${cap(principleA)} moves with ${principleB} in one current; whatever you have been forcing alone will go easier today.`;
+      return `${cap(a)} and ${b} are moving together easily; whatever sits between them comes more freely than usual.`;
     case "opposition":
-      return `${cap(principleA)} stands opposite ${principleB}; you cannot hold both, and which way you lean will show you what you already prefer.`;
+      return `${cap(a)} and ${b} are pulling in opposite directions; the sky cannot hold both at full strength, so the day leans one way.`;
   }
 }
 
@@ -186,7 +206,6 @@ function personalScore(t: TransitAspect): number {
   const personalA = t.transit === "sun" || t.transit === "moon";
   const personalB = t.natal === "sun" || t.natal === "moon";
   const personalBonus = (personalA ? 1 : 0) + (personalB ? 1 : 0);
-  // Lower orb = better. Add personal bonus subtractively.
   return t.orb - personalBonus * 1.5;
 }
 
@@ -202,7 +221,7 @@ export interface ComputedReading {
   /** The lead sentence: opens with the Moon's sign, then names the deity
    *  action that gives the day its shape. */
   headline: string;
-  /** A short paragraph: the day's mood from the Moon's sign, then a felt,
+  /** A short paragraph: the day's mood from the Moon's sign, then a plain,
    *  actionable claim drawn from the tightest aspect. */
   meaning: string;
   /** Metadata about which transit/aspect produced this reading. */
@@ -235,11 +254,7 @@ export function buildPersonalDailyReading(
   const verb = ASPECT_VERBS[culture][headline.kind];
 
   const headlineSentence = `Under the ${moonSign} Moon, ${tDeity.name} ${verb} your ${nDeity.name}.`;
-  const meaning = `${mood} ${personalMeaning(
-    headline.kind,
-    TRANSIT_PRINCIPLE[headline.transit],
-    NATAL_TARGET[headline.natal],
-  )}`;
+  const meaning = `${mood} ${personalAdvice(headline.kind, headline.transit, headline.natal)}`;
 
   const toneSummary = `Transit ${headline.transit} ${headline.kind} natal ${headline.natal} (orb ${headline.orb.toFixed(1)}°)`;
 
@@ -265,7 +280,7 @@ export function buildSkyDailyReading(
     const moonDeity = DEITY_MATRIX[culture].moon;
     return {
       headline: `Under the ${moonSign} Moon, ${moonDeity.name} walks alone; no other line in the sky is tight enough to name.`,
-      meaning: `${mood} With no aspect pulling at it, the body's own signal is the only steady reading today; whatever you do, you will mostly be hearing yourself.`,
+      meaning: `${mood} With nothing else pulling at it, the Moon's own mood is the only steady reading today; whatever you do, you will mostly be hearing yourself.`,
       source: { kind: "quiet" },
       toneSummary: "No tight aspects in the transit chart",
     };
@@ -276,11 +291,7 @@ export function buildSkyDailyReading(
   const verb = ASPECT_VERBS[culture][headline.kind];
 
   const headlineSentence = `Under the ${moonSign} Moon, ${deityA.name} ${verb} ${deityB.name}.`;
-  const meaning = `${mood} ${skyMeaning(
-    headline.kind,
-    TRANSIT_PRINCIPLE[headline.a],
-    TRANSIT_PRINCIPLE[headline.b],
-  )}`;
+  const meaning = `${mood} ${skyAdvice(headline.kind, headline.a, headline.b)}`;
 
   const toneSummary = `${headline.a} ${headline.kind} ${headline.b} in transit (orb ${headline.orb.toFixed(1)}°)`;
 
