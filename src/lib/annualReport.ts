@@ -54,7 +54,7 @@ const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>
 
 const NATAL_TARGET_FULL: Readonly<Record<string, string>> = {
   sun: "your identity",
-  moon: "your inner weather",
+  moon: "your inner feelings",
   asc: "the threshold you cross into the world",
   mc: "the public face you wear",
 };
@@ -125,6 +125,14 @@ function monthLabel(date: Date): string {
 
 function cap(s: string): string {
   return s.length === 0 ? s : s[0]!.toUpperCase() + s.slice(1);
+}
+
+/** A short body for a standout event, flavoured by the aspect kind so it is a
+ *  sentence rather than a bare principle phrase. */
+function standoutBody(kind: AspectKind, principle: string): string {
+  if (isEasingKind(kind)) return `${cap(principle)} comes as support here, not as a test.`;
+  if (kind === "conjunction") return `${cap(principle)} concentrates to a single strong point.`;
+  return `${cap(principle)} is put under real pressure in this stretch.`;
 }
 
 export interface AnnualTheme {
@@ -233,13 +241,11 @@ function pickYearTheme(
 
   let bodyToneClause: string;
   if (isTenseKind(dominant.aspectKind)) {
-    bodyToneClause = `The year is colored by a long, deliberate weight on ${target}. ${cap(principle)} is the principle the year is asking you to integrate.`;
+    bodyToneClause = `The year presses ${principle} against ${target}. It will be tested, and what holds by the end will be the stronger for the testing.`;
   } else if (isEasingKind(dominant.aspectKind)) {
-    bodyToneClause = `The year offers a long, supported opening for ${target}. ${cap(principle)} is the principle the year is asking you to receive.`;
-  } else if (dominant.aspectKind === "conjunction") {
-    bodyToneClause = `The year doubles the force on ${target}. ${cap(principle)} is pressed onto it, and you will feel them as one signal where you normally feel two.`;
+    bodyToneClause = `The year keeps ${principle} flowing toward ${target}. The support is real, so you will not have to force it.`;
   } else {
-    bodyToneClause = `The year places ${cap(principle)} across the wheel from ${target}. You will see where you actually are by which side you reach for.`;
+    bodyToneClause = `The year fuses ${principle} onto ${target}. You will feel the two as one signal where you usually feel them as two, so use the concentration rather than fighting it.`;
   }
 
   return {
@@ -480,7 +486,7 @@ function pickStandouts(
     out.push({
       date: t.date,
       title: `${tLabel} ${t.aspectKind} ${nLabel}`,
-      body: TRANSIT_PRINCIPLE[t.transitPlanet],
+      body: standoutBody(t.aspectKind, TRANSIT_PRINCIPLE[t.transitPlanet]),
       significance: transitSignificance(t),
     });
   }
@@ -503,7 +509,7 @@ function pickStandouts(
     out.push({
       date: r.date,
       title: `${dLabel} turns retrograde at ${r.degree.toFixed(1)}° ${r.sign}`,
-      body: "The principle of this planet is being asked to review itself before moving forward again.",
+      body: "This planet's work slows and doubles back for a stretch; a time to review and revise rather than to launch.",
       significance: r.planet === "saturn" ? 2.5 : r.planet === "jupiter" ? 2 : 1.2,
     });
   }

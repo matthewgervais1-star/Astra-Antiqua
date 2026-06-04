@@ -15,13 +15,13 @@ import { computeTransits, topTransits, type TransitAspect } from "@/lib/transits
  * life-domain and annual-report copy, which consume it directly.
  */
 export const TRANSIT_PRINCIPLE: Readonly<Record<Planet, string>> = {
-  sun: "the day's call for visibility",
-  moon: "today's tide of feeling",
-  mercury: "the message moving through the room",
-  venus: "the pull of what is on offer",
-  mars: "the friction the day is applying",
-  jupiter: "the offer of expansion",
-  saturn: "the weight being placed",
+  sun: "the push to be seen and to lead",
+  moon: "the tide of feeling and need",
+  mercury: "the traffic of words and ideas",
+  venus: "the pull toward closeness and pleasure",
+  mars: "the drive to act and to fight",
+  jupiter: "the urge to expand and to trust",
+  saturn: "the demand for discipline and limit",
 };
 
 /**
