@@ -4,7 +4,7 @@ import type { Planet } from "@/data/cultures";
 const VB: readonly [number, number] = [64, 64];
 
 /**
- * Punic / Carthaginian glyphs from the votive stelae and Tophet record:
+ * Punic / Carthaginian glyphs from the votive stelae and Punic inscriptions:
  *   Semes        the winged solar disc (Egyptianized Punic form)
  *   Tanit        the Sign of Tanit (triangle, bar, disc) -- the central Punic symbol
  *   Sakun        the Punic caduceus (staff, disc, paired volutes)

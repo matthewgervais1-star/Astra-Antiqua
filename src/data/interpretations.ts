@@ -88,7 +88,7 @@ export const ASPECT_REFLECTIONS: Readonly<
     sextile: "Safe passage between two ports. The convoy moves while the winds hold.",
     square: "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire.",
     trine: "The harbor lights both burn. The fleet enters without the lookout calling once.",
-    opposition: "Two flags face each other across the strait. The decree of the Tophet is that one will be carried home and one will not.",
+    opposition: "Two flags face each other across the strait. The decree of the Council is that one will be carried home and one will not.",
   },
   rome: {
     conjunction: "The two march under one eagle. The senate does not debate what the legions already carry together.",

@@ -75,8 +75,8 @@ const PLACEMENT_FORMATS: Readonly<Record<Culture, PlacementFormatter>> = {
   canaan: ({ deityName, registerImage, degree, sign }) =>
     `${deityName} enthroned in ${registerImage}, at ${deg(degree)} ${sign}; thus the council records it.`,
 
-  // Punic stele inscription: subject, position, then the fire-image closing
-  // that imitates votive dedications at the Tophet.
+  // Punic stele inscription: subject, position, then a fire-image closing
+  // drawn from Melqart's pyre (the egersis) rather than the Tophet.
   carthage: ({ deityName, registerImage, degree, sign }) =>
     `${deityName} at ${deg(degree)} ${sign}, set in ${registerImage}; the fire turned toward this name.`,
 
@@ -127,7 +127,7 @@ const SUMMARY_INTRO: Readonly<Record<Culture, string>> = {
   egypt: "The barque of Ra has been read for the moment of your arrival in the world.",
   greece: "The Hellenistic chart for the moment of your birth has been cast in the names of Olympus.",
   canaan: "The divine council convenes around the hour of your naming.",
-  carthage: "The Tophet's record turns to the day you were born into the city.",
+  carthage: "The Council's roll is opened to the day you were born into the city.",
   rome: "The chart has been read under Roman auspices for the hour of your birth.",
 };
 

@@ -28,7 +28,7 @@
  *   egypt    pharaoh gold + lapis lazuli (the two iconic Egyptian luxuries)
  *   greece   pale marble champagne + Aegean cyan
  *   canaan   bronze-age copper + verdigris patina (also Baal's storm-sea green)
- *   carthage ember gold + fire (the Tophet furnace); text also animates
+ *   carthage ember gold + fire (Melqart's pyre, the egersis); text also animates
  * Hex values are kept in sync with src/data/palettes.ts, which feeds the
  * SVG glyph gradients and the canvas wheel.
  */
@@ -108,7 +108,7 @@ body[data-pantheon="rome"] {
 }
 
 /*
- * Carthage gets a hot, animated gold. The Tophet was the ritual furnace; the
+ * Carthage gets a hot, animated gold. Melqart's pyre is the ritual fire; the
  * city's iconography is fire-on-bronze. When data-pantheon="carthage" is set
  * on the body, every gold-leaf text element switches to a warmer gradient
  * that slowly sweeps across the glyphs.

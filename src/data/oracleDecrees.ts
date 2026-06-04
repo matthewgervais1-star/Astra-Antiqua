@@ -23,9 +23,9 @@ export const ORACLE_DECREES: Readonly<Record<Culture, OracleDecree>> = {
     body: "The council convenes. Resheph stands before Shapash with his bow drawn. The luminary of the deities does not flinch. A judgment is being prepared against your name. Bring evidence of your conduct to the assembly, or let El's silence be your verdict.",
   },
   carthage: {
-    oracleName: "The Decree of the Tophet",
+    oracleName: "The Decree of the Council",
     sampleTransit: "Sun square Mars · sample transit",
-    body: "Melqart raises his hand against Semes. The protector of the mother city demands a price for the protection he offers. Walk to the Tophet today knowing what you carry. Lay down the comfort you cannot afford to keep. The fire that takes it is not punishment. It is the cost of being defended.",
+    body: "Melqart raises his hand against Semes. The protector of the mother city demands a price for the protection he offers. Bring it before the Council today knowing what you carry. Lay down the comfort you cannot afford to keep. The fire of Melqart that takes it is not punishment. It is the cost of being defended.",
   },
   rome: {
     oracleName: "The Sibylline Books",

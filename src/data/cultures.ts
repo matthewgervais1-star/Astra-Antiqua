@@ -24,7 +24,7 @@ export const CULTURE_TAGLINES: Readonly<Record<Culture, string>> = {
   egypt: "The Hall of Ma'at",
   greece: "The Oracle of Delphi",
   canaan: "The Divine Council",
-  carthage: "The Decree of the Tophet",
+  carthage: "The Decree of the Council",
   rome: "The Sibylline Books",
 };
 
@@ -32,7 +32,7 @@ export const CULTURE_SUBTITLES: Readonly<Record<Culture, string>> = {
   egypt: "Memphis. Thebes. The voyage of the solar barque.",
   greece: "Delphi. Alexandria. The seven planets and the four elements.",
   canaan: "Ugarit. The Baal cycle. The council at the mountain.",
-  carthage: "Qart-hadasht. The Tophet. The line that ran from Tyre.",
+  carthage: "Qart-hadasht. The suffetes and the Council. The line that ran from Tyre.",
   rome: "The Capitoline. The auspices. The names that still order the week.",
 };
 
