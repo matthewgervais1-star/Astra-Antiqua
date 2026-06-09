@@ -42,9 +42,19 @@ function ReportContent({ report }: { report: AnnualReport }) {
         <h2 className="font-display text-gold-leaf mt-3 max-w-3xl text-3xl leading-tight md:text-[44px]">
           {report.yearTheme.headline}
         </h2>
-        <p className="text-ink-primary font-body mt-5 max-w-3xl text-lg leading-relaxed md:text-xl">
-          {report.yearTheme.body}
+        <p className="text-gold-leaf/70 font-body mt-4 max-w-3xl text-sm italic md:text-base">
+          {report.yearTheme.context}
         </p>
+        <div className="mt-5 flex max-w-3xl flex-col gap-4">
+          {report.yearTheme.body.split("\n\n").map((para, i) => (
+            <p
+              key={i}
+              className="text-ink-primary font-body text-lg leading-relaxed md:text-xl"
+            >
+              {para}
+            </p>
+          ))}
+        </div>
       </header>
 
       <section>
@@ -63,8 +73,8 @@ function ReportContent({ report }: { report: AnnualReport }) {
               <p className="text-ink-primary font-body mt-4 text-base leading-relaxed md:text-[17px]">
                 {q.narrative}
               </p>
-              <p className="text-ink-tertiary font-mono mt-3 text-[10px] uppercase tracking-[0.2em]">
-                {q.notableEventCount} notable event{q.notableEventCount === 1 ? "" : "s"}
+              <p className="text-ink-tertiary font-body mt-3 text-xs italic leading-relaxed">
+                {q.events || "No major transit or eclipse this quarter."}
               </p>
             </article>
           ))}
@@ -137,7 +147,10 @@ function ReportContent({ report }: { report: AnnualReport }) {
                 <p className="font-display text-ink-primary mt-1 text-lg leading-snug md:text-xl">
                   {s.title}
                 </p>
-                <p className="text-ink-secondary font-body mt-1 text-sm md:text-base">
+                <p className="text-ink-tertiary font-mono mt-1 text-[10px] uppercase tracking-[0.2em]">
+                  {s.tag}
+                </p>
+                <p className="text-ink-secondary font-body mt-2 text-sm md:text-base">
                   {s.body}
                 </p>
               </li>

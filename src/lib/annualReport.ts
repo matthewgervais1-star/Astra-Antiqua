@@ -4,6 +4,12 @@ import type { AspectKind } from "@/data/sampleChart";
 import {
   TRANSIT_PRINCIPLE,
 } from "@/lib/personalReading";
+import {
+  getBeat,
+  getSeason,
+  getSpecialYear,
+  getYearTheme,
+} from "@/data/yearNarrative";
 import type {
   EclipseEvent,
   NatalTransitPeak,
@@ -138,6 +144,8 @@ function standoutBody(kind: AspectKind, principle: string): string {
 export interface AnnualTheme {
   headline: string;
   body: string;
+  /** The small astro attribution under the story (e.g. "Saturn squares your Sun, exact March 14"). */
+  context: string;
   dominantTransit: NatalTransitPeak | null;
 }
 
@@ -145,7 +153,10 @@ export interface AnnualQuarter {
   label: string;
   startDate: Date;
   endDate: Date;
+  /** The season's story framing. */
   narrative: string;
+  /** The dated events in this quarter (the data the framing is built from). */
+  events: string;
   notableEventCount: number;
 }
 
@@ -159,6 +170,8 @@ export interface AnnualStretch {
 export interface AnnualStandout {
   date: Date;
   title: string;
+  /** The astro attribution for this beat (e.g. "Saturn square your Sun"). */
+  tag: string;
   body: string;
   significance: number;
 }
@@ -202,9 +215,11 @@ function pickYearTheme(
   eclipses: readonly EclipseEvent[],
 ): AnnualTheme {
   if (transits.length === 0 && eclipses.length === 0) {
+    const q = getSpecialYear("quiet");
     return {
-      headline: "A quiet year. No major outer-planet transits touch your chart, and no eclipses fall on your personal points.",
-      body: "Years like this one are the years for which the years of weight were preparation. The sky is letting you make of the time what you will. Whatever you build this year will not be argued with by the planets.",
+      headline: q.headline,
+      body: q.body,
+      context: "No major slow transit touches your chart this year, and no eclipse falls on your personal points.",
       dominantTransit: null,
     };
   }
@@ -215,9 +230,11 @@ function pickYearTheme(
   );
   const dominant = ranked[0] ?? null;
   if (!dominant) {
+    const e = getSpecialYear("eclipse-held");
     return {
-      headline: "The year is held by the eclipses.",
-      body: "Without major outer transits to your personal points, the eclipses below mark the hinges of your year. Watch for the dates where they fall in signs already strong in your chart.",
+      headline: e.headline,
+      body: e.body,
+      context: "No major slow transit, but the eclipses fall on your personal points.",
       dominantTransit: null,
     };
   }
@@ -237,8 +254,13 @@ function pickYearTheme(
     day: "numeric",
   });
 
-  const headline = `${tDeity} ${verb} your ${nDeity}, exact on ${dateStr}.`;
+  const context = `${tDeity} ${verb} your ${nDeity}, exact on ${dateStr}.`;
+  const theme = getYearTheme(dominant.transitPlanet, dominant.natalKey, dominant.aspectKind);
+  if (theme) {
+    return { headline: theme.headline, body: theme.body, context, dominantTransit: dominant };
+  }
 
+  // Fallback for any dominant pairing not yet hand-written.
   let bodyToneClause: string;
   if (isTenseKind(dominant.aspectKind)) {
     bodyToneClause = `The year presses ${principle} against ${target}. It will be tested, and what holds by the end will be the stronger for the testing.`;
@@ -247,10 +269,10 @@ function pickYearTheme(
   } else {
     bodyToneClause = `The year fuses ${principle} onto ${target}. You will feel the two as one signal where you usually feel them as two, so use the concentration rather than fighting it.`;
   }
-
   return {
-    headline,
+    headline: `${cap(principle)} shapes the year.`,
     body: `${bodyToneClause} The exact peak falls on ${dateStr}, but the influence runs for weeks on either side.`,
+    context,
     dominantTransit: dominant,
   };
 }
@@ -282,43 +304,48 @@ function buildQuarters(
     )[0];
     const dominantEclipse = eclipsesInQuarter[0];
 
-    let narrative: string;
-    if (!dominantTransit && !dominantEclipse) {
-      narrative = "A quiet stretch. No major transits to your personal points; no eclipses. What you build here is built without the sky weighing in.";
-    } else {
-      const parts: string[] = [];
-      if (dominantTransit) {
-        const tDeity = DEITY_MATRIX[culture][dominantTransit.transitPlanet].name;
-        const nDeity =
-          dominantTransit.natalKey === "asc"
-            ? "the threshold of your chart"
-            : dominantTransit.natalKey === "mc"
-              ? "the top of your chart"
-              : DEITY_MATRIX[culture][dominantTransit.natalKey as Planet].name;
-        const verb = ASPECT_VERBS[culture][dominantTransit.aspectKind];
-        const dateStr = dominantTransit.date.toLocaleDateString(undefined, {
-          month: "long",
-          day: "numeric",
-        });
-        parts.push(`${tDeity} ${verb} your ${nDeity}, exact on ${dateStr}.`);
-      }
-      if (dominantEclipse) {
-        const moonOrSun = dominantEclipse.scope === "lunar" ? "moon" : "sun";
-        const dDeity = DEITY_MATRIX[culture][moonOrSun as Planet].name;
-        const dateStr = dominantEclipse.date.toLocaleDateString(undefined, {
-          month: "long",
-          day: "numeric",
-        });
-        parts.push(`${cap(dominantEclipse.kind)} ${dominantEclipse.scope} eclipse of ${dDeity} in ${dominantEclipse.sign} on ${dateStr}.`);
-      }
-      narrative = parts.join(" ");
+    const eventParts: string[] = [];
+    if (dominantTransit) {
+      const tDeity = DEITY_MATRIX[culture][dominantTransit.transitPlanet].name;
+      const nDeity =
+        dominantTransit.natalKey === "asc"
+          ? "the threshold of your chart"
+          : dominantTransit.natalKey === "mc"
+            ? "the top of your chart"
+            : DEITY_MATRIX[culture][dominantTransit.natalKey as Planet].name;
+      const verb = ASPECT_VERBS[culture][dominantTransit.aspectKind];
+      const dateStr = dominantTransit.date.toLocaleDateString(undefined, {
+        month: "long",
+        day: "numeric",
+      });
+      eventParts.push(`${tDeity} ${verb} your ${nDeity}, exact on ${dateStr}.`);
     }
+    if (dominantEclipse) {
+      const moonOrSun = dominantEclipse.scope === "lunar" ? "moon" : "sun";
+      const dDeity = DEITY_MATRIX[culture][moonOrSun as Planet].name;
+      const dateStr = dominantEclipse.date.toLocaleDateString(undefined, {
+        month: "long",
+        day: "numeric",
+      });
+      eventParts.push(`${cap(dominantEclipse.kind)} ${dominantEclipse.scope} eclipse of ${dDeity} in ${dominantEclipse.sign} on ${dateStr}.`);
+    }
+
+    const hasTense =
+      transitsInQuarter.some(
+        (t) => isTenseKind(t.aspectKind) || (t.aspectKind === "conjunction" && t.transitPlanet === "saturn"),
+      ) || eclipsesInQuarter.length > 0;
+    const hasEasy = transitsInQuarter.some(
+      (t) => isEasingKind(t.aspectKind) || (t.aspectKind === "conjunction" && t.transitPlanet === "jupiter"),
+    );
+    const weather: "tense" | "easy" | "mixed" | "quiet" =
+      !hasTense && !hasEasy ? "quiet" : hasTense && hasEasy ? "mixed" : hasTense ? "tense" : "easy";
 
     out.push({
       label: `${startLabel} to ${endLabel}`,
       startDate,
       endDate,
-      narrative,
+      narrative: getSeason(weather).body,
+      events: eventParts.join(" "),
       notableEventCount: allEventCount,
     });
   }
@@ -483,22 +510,28 @@ function pickStandouts(
         : t.natalKey === "mc"
           ? "your Midheaven"
           : `your ${deityWithPlanet(culture, t.natalKey as Planet)}`;
+    const beat = getBeat(`${t.transitPlanet}-peak`);
+    const astro = `${tLabel} ${t.aspectKind} ${nLabel}`;
     out.push({
       date: t.date,
-      title: `${tLabel} ${t.aspectKind} ${nLabel}`,
-      body: standoutBody(t.aspectKind, TRANSIT_PRINCIPLE[t.transitPlanet]),
+      title: beat?.headline ?? astro,
+      tag: astro,
+      body: beat?.body ?? standoutBody(t.aspectKind, TRANSIT_PRINCIPLE[t.transitPlanet]),
       significance: transitSignificance(t),
     });
   }
   for (const e of eclipses) {
     const moonOrSun = e.scope === "lunar" ? "moon" : "sun";
     const dLabel = deityWithPlanet(culture, moonOrSun as Planet);
+    const beat = getBeat(`eclipse-${e.scope === "lunar" ? "lunar" : "solar"}`);
+    const astro = `${cap(e.kind)} ${e.scope} eclipse of ${dLabel} in ${e.sign}`;
     out.push({
       date: e.date,
-      title: `${cap(e.kind)} ${e.scope} eclipse of ${dLabel} in ${e.sign}`,
-      body: e.scope === "lunar"
+      title: beat?.headline ?? astro,
+      tag: astro,
+      body: beat?.body ?? (e.scope === "lunar"
         ? "The lunar eclipse pulls a feeling that was hidden into the light."
-        : "The solar eclipse asks identity itself to start again, on a new line.",
+        : "The solar eclipse asks identity itself to start again, on a new line."),
       significance: 4 + e.obscuration * 2,
     });
   }
@@ -506,19 +539,25 @@ function pickStandouts(
     if (r.kind !== "retrograde") continue;
     if (r.planet !== "saturn" && r.planet !== "jupiter" && r.planet !== "mercury") continue;
     const dLabel = deityWithPlanet(culture, r.planet);
+    const beat = getBeat(`retrograde-${r.planet}`);
+    const astro = `${dLabel} turns retrograde at ${r.degree.toFixed(1)}° ${r.sign}`;
     out.push({
       date: r.date,
-      title: `${dLabel} turns retrograde at ${r.degree.toFixed(1)}° ${r.sign}`,
-      body: "This planet's work slows and doubles back for a stretch; a time to review and revise rather than to launch.",
+      title: beat?.headline ?? astro,
+      tag: astro,
+      body: beat?.body ?? "This planet's work slows and doubles back for a stretch; a time to review and revise rather than to launch.",
       significance: r.planet === "saturn" ? 2.5 : r.planet === "jupiter" ? 2 : 1.2,
     });
   }
   if (solarReturn) {
     const sunLabel = deityWithPlanet(culture, "sun");
+    const beat = getBeat("solar-return");
+    const astro = `${sunLabel} returns to its natal degree`;
     out.push({
       date: solarReturn.date,
-      title: `${sunLabel} returns to its natal degree`,
-      body: "Your astrological birthday; the chart cast for this moment sets the tone for the year from this date forward.",
+      title: beat?.headline ?? astro,
+      tag: astro,
+      body: beat?.body ?? "Your astrological birthday; the chart cast for this moment sets the tone for the year from this date forward.",
       significance: 3,
     });
   }

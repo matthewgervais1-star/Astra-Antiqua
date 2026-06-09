@@ -207,6 +207,20 @@ function ForecastExperienceImpl({
         </SectionContainer>
       )}
 
+      <SectionContainer size="default" spacing="tight">
+        <div className="border-border-hairline border-t pt-10">
+          <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
+            The almanac
+          </div>
+          <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-4xl">
+            Every date the story was built from
+          </h2>
+          <p className="text-ink-secondary font-body mt-3 max-w-2xl text-base md:text-lg">
+            The raw events of your year in full: the transits to your chart, the eclipses, the retrogrades, the sign changes, and every moon phase. The narrative above is read from exactly these.
+          </p>
+        </div>
+      </SectionContainer>
+
       {bundle.natal && bundle.majorTransits.length > 0 ? (
         <SectionContainer size="default" spacing="default">
           <MajorTransitsSection
