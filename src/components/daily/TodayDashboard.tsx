@@ -114,7 +114,10 @@ function SingleVoiceHeadline({
         <h3 className="font-display text-gold-leaf mt-5 max-w-3xl text-3xl leading-[1.1] md:text-[40px]">
           {computed.headline}
         </h3>
-        <p className="text-ink-primary font-body mt-5 max-w-2xl text-lg leading-relaxed md:text-xl">
+        <p className="text-gold-leaf/70 font-body mt-3 max-w-2xl text-sm italic md:text-base">
+          {computed.context}
+        </p>
+        <p className="text-ink-primary font-body mt-4 max-w-2xl text-lg leading-relaxed md:text-xl">
           {computed.meaning}
         </p>
         <p className="text-ink-secondary font-body mt-3 max-w-2xl text-base leading-relaxed md:text-lg">
@@ -200,6 +203,9 @@ function FourVoiceCompact({
             </div>
             <p className="font-display text-gold-leaf mt-3 text-lg leading-snug md:text-xl">
               {reading.headline}
+            </p>
+            <p className="text-gold-leaf/70 font-body mt-1.5 text-xs italic">
+              {reading.context}
             </p>
             <p className="text-ink-secondary font-body mt-3 text-sm leading-relaxed md:text-base">
               {reading.meaning}
