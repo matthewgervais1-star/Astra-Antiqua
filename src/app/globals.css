@@ -155,10 +155,28 @@ body[data-pantheon="carthage"] .text-gold-leaf {
 }
 
 @utility glass-panel {
-  background: var(--color-bg-elevated);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.018) 45%,
+    rgba(255, 255, 255, 0.028) 100%
+  );
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   backdrop-filter: blur(20px) saturate(140%);
   border: 0.5px solid var(--color-border-hairline);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 24px 48px -32px rgba(0, 0, 0, 0.8);
+}
+
+/* The solid sibling of glass-panel: a stone-tablet surface with a faint top
+   sheen, used wherever backdrop blur would be wasted (grids of cards). */
+@utility panel-solid {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0) 32%),
+    linear-gradient(180deg, #0c0b09 0%, #090909 100%);
+  border: 0.5px solid var(--color-border-hairline);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 /* Accent glow that follows the active culture's secondary color. */
@@ -180,6 +198,13 @@ html {
   height: 100%;
 }
 
+/*
+ * The night sky behind everything. Layer one is a vault glow at the top of the
+ * page tinted by the active culture's accent (lapis for Egypt, Aegean for
+ * Greece, verdigris for Canaan, fire for Carthage, Tyrian purple for Rome).
+ * The remaining layers are a sparse repeating starfield: tiny radial dots on a
+ * large tile, far apart and dim enough to read as deep sky, not decoration.
+ */
 body {
   min-height: 100%;
   font-family: var(--font-body);
@@ -188,6 +213,24 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  background-color: var(--color-bg-void);
+  background-image:
+    radial-gradient(1100px 720px at 50% -160px, var(--accent-soft) 0%, transparent 62%),
+    radial-gradient(1px 1px at 23px 41px, rgba(255, 255, 255, 0.2), transparent 100%),
+    radial-gradient(1px 1px at 187px 133px, rgba(255, 255, 255, 0.12), transparent 100%),
+    radial-gradient(1.4px 1.4px at 311px 254px, var(--accent-glow), transparent 100%),
+    radial-gradient(1px 1px at 96px 309px, rgba(255, 255, 255, 0.09), transparent 100%),
+    radial-gradient(1px 1px at 263px 64px, rgba(255, 255, 255, 0.15), transparent 100%),
+    radial-gradient(1px 1px at 354px 178px, rgba(255, 255, 255, 0.07), transparent 100%);
+  background-repeat: no-repeat, repeat, repeat, repeat, repeat, repeat, repeat;
+  background-size:
+    100% 1400px,
+    389px 389px,
+    389px 389px,
+    389px 389px,
+    389px 389px,
+    389px 389px,
+    389px 389px;
 }
 
 * {
@@ -260,6 +303,73 @@ h6 {
   font-family: var(--font-display);
   font-weight: 400;
   letter-spacing: -0.01em;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+/*
+ * Ornamental rule: hairlines in the culture's accent flanking a small caption,
+ * the way a museum wall caption sits between two engraved lines. Apply to the
+ * mono kicker above a major heading.
+ */
+.rule-ornament {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.rule-ornament::before,
+.rule-ornament::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, var(--accent-border));
+}
+.rule-ornament::after {
+  background: linear-gradient(90deg, var(--accent-border), transparent);
+}
+
+/* Header nav links: a gold underline that draws itself in on hover. */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -5px;
+  height: 1px;
+  background: var(--accent-solid);
+  transition: right 0.28s ease;
+}
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+  right: 0;
+}
+
+/* The header's bottom edge: a gradient hairline in the culture accent instead
+   of a flat border, so the chrome itself carries the active pantheon. */
+[data-site-header] {
+  border-bottom: none;
+}
+[data-site-header]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-border) 18%,
+    var(--accent-border) 82%,
+    transparent
+  );
 }
 
 code,

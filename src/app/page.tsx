@@ -22,11 +22,14 @@ export default function HomePage() {
           }}
         />
         <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-6 px-6 py-12 md:py-16">
-          <div className="text-center">
-            <GoldText as="h1" className="text-4xl leading-tight md:text-6xl">
+          <div className="w-full max-w-3xl text-center">
+            <div className="rule-ornament text-ink-tertiary font-mono mx-auto max-w-md text-[10px] uppercase tracking-[0.45em]">
+              <span className="shrink-0">Ancient sky · modern measurement</span>
+            </div>
+            <GoldText as="h1" className="mt-5 text-5xl leading-[1.05] tracking-tight md:text-7xl">
               Astra Antiqua
             </GoldText>
-            <p className="text-ink-secondary font-body mt-3 text-base italic md:text-lg">
+            <p className="text-ink-secondary font-body mt-4 text-base italic md:text-xl">
               Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit. Or Rome.
             </p>
           </div>

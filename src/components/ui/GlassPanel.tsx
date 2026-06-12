@@ -18,7 +18,7 @@ export function GlassPanel({
     <div
       className={cn(
         "rounded-2xl",
-        tone === "glass" ? "glass-panel" : "bg-bg-deep border-hairline",
+        tone === "glass" ? "glass-panel" : "panel-solid",
         glow && "accent-glow",
         className,
       )}

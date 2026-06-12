@@ -29,7 +29,7 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-ink-secondary hover:text-ink-primary text-sm transition-colors"
+              className="nav-link text-ink-secondary hover:text-ink-primary text-sm transition-colors"
             >
               {item.label}
             </Link>
