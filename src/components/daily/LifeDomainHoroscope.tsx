@@ -16,10 +16,7 @@ import {
 } from "@/data/sampleChart";
 import { LIFE_DOMAINS, type LifeDomain } from "@/data/lifeDomains";
 import { SIGN_REGISTERS } from "@/data/interpretations";
-import {
-  TRANSIT_PRINCIPLE,
-  lifeDomainMeaning,
-} from "@/lib/personalReading";
+import { getDomainReading, type DomainReading as DomainDirective } from "@/data/domainReadings";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { cn } from "@/lib/classNames";
 
@@ -66,23 +63,11 @@ const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>
   },
 };
 
-/**
- * Where each domain's reading is "happening" in the reader's life. Used as
- * the trailing phrase in the computed domain directive.
- */
-const DOMAIN_PHRASE: Readonly<Record<LifeDomain, string>> = {
-  body: "in your body",
-  love: "between you and what you want",
-  friends: "in the room you share with other people",
-  work: "in the work you are sustaining",
-  family: "in the house you keep",
-};
-
 interface DomainReading {
   domain: (typeof LIFE_DOMAINS)[number];
   placements: { planet: Planet; sentence: string }[];
   aspects: { aspect: Aspect; sentence: string }[];
-  directive: string | null;
+  directive: DomainDirective | null;
 }
 
 function buildDomainReading(
@@ -118,14 +103,7 @@ function buildDomainReading(
   });
 
   const tightest = domainAspects[0];
-  const directive = tightest
-    ? lifeDomainMeaning(
-        tightest.kind,
-        TRANSIT_PRINCIPLE[tightest.a],
-        TRANSIT_PRINCIPLE[tightest.b],
-        DOMAIN_PHRASE[domain.id],
-      )
-    : null;
+  const directive = tightest ? getDomainReading(domain.id, tightest.kind) : null;
 
   return { domain, placements, aspects, directive };
 }
@@ -175,38 +153,48 @@ export function LifeDomainHoroscope({ culture, chart }: LifeDomainHoroscopeProps
         <p className="text-ink-secondary font-body mt-2 text-sm italic md:text-base">
           {active.domain.description}
         </p>
-        <ul className="text-ink-primary font-body mt-6 flex flex-col gap-2 text-[15px] md:text-base">
-          {active.placements.map((p) => (
-            <li key={p.planet}>
-              <span className="text-gold-leaf font-display text-lg md:text-xl">
-                {p.sentence}
-              </span>
-            </li>
-          ))}
-        </ul>
-        {active.aspects.length > 0 ? (
-          <ul className="text-ink-primary font-body border-border-hairline mt-4 flex flex-col gap-2 border-t pt-4 text-[15px] md:text-base">
-            {active.aspects.map((a, idx) => (
-              <li key={`${a.aspect.a}-${a.aspect.b}-${idx}`}>
-                <span className="font-display text-ink-primary text-lg leading-snug">
-                  {a.sentence}
-                </span>
-                <span className="text-ink-tertiary font-mono ml-2 text-[10px] uppercase tracking-[0.2em]">
-                  {a.aspect.kind} · {PLANET_LABELS[a.aspect.a]} / {PLANET_LABELS[a.aspect.b]}
+        {active.directive ? (
+          <>
+            <h4 className="font-display text-gold-leaf mt-6 text-2xl leading-snug md:text-3xl">
+              {active.directive.headline}
+            </h4>
+            <p className="text-ink-primary font-body mt-3 max-w-2xl text-base leading-relaxed md:text-lg">
+              {active.directive.body}
+            </p>
+          </>
+        ) : (
+          <p className="text-ink-secondary font-body mt-6 text-base italic">
+            Nothing in the sky is pressing on this corner of your life today. Quiet here is not neglect; it is room.
+          </p>
+        )}
+        <div className="border-border-hairline mt-7 border-t pt-5">
+          <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.3em]">
+            The sky behind it
+          </div>
+          <ul className="text-ink-primary font-body mt-3 flex flex-col gap-1.5 text-[15px] md:text-base">
+            {active.placements.map((p) => (
+              <li key={p.planet}>
+                <span className="text-gold-leaf/80 font-display text-base md:text-lg">
+                  {p.sentence}
                 </span>
               </li>
             ))}
           </ul>
-        ) : (
-          <p className="text-ink-tertiary font-body mt-4 text-sm italic">
-            No tight aspects touching this domain today.
-          </p>
-        )}
-        {active.directive ? (
-          <p className="text-ink-primary font-body border-border-hairline mt-6 border-t pt-5 text-base leading-relaxed md:text-lg">
-            {active.directive}
-          </p>
-        ) : null}
+          {active.aspects.length > 0 ? (
+            <ul className="text-ink-primary font-body mt-3 flex flex-col gap-1.5 text-[15px] md:text-base">
+              {active.aspects.map((a, idx) => (
+                <li key={`${a.aspect.a}-${a.aspect.b}-${idx}`}>
+                  <span className="font-display text-ink-secondary text-base leading-snug">
+                    {a.sentence}
+                  </span>
+                  <span className="text-ink-tertiary font-mono ml-2 text-[10px] uppercase tracking-[0.2em]">
+                    {a.aspect.kind} · {PLANET_LABELS[a.aspect.a]} / {PLANET_LABELS[a.aspect.b]}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
       </GlassPanel>
     </div>
   );

@@ -246,6 +246,108 @@ const READINGS: Readonly<Record<string, Readonly<Record<Tone, AspectReading>>>> 
       body: "Drive and restraint have fused, so your energy comes out controlled, deliberate, and a little grim. Great for the task that needs both power and patience, frustrating if you wanted to feel free. Apply steady pressure to the hard worthwhile thing. Do not pick a fight; you have the stamina to make it ugly.",
     },
   },
+
+  // Mercury pairs
+  "mercury|venus": {
+    harmony: {
+      headline: "Say the kind thing now.",
+      body: "Today the kind thing and the true thing are the same sentence, which is rare. Most days you choose between honesty and warmth; right now you get both. Send the compliment you keep meaning to send. Make the apology you have been redrafting; today it comes out right on the first try. Tell someone exactly what they mean to you, in plain words. The phrasing will take care of itself.",
+    },
+    tension: {
+      headline: "Flattery is a stall.",
+      body: "You are about to say the pleasant thing instead of the real one, and you know it. The compliment that dodges the criticism, the agreeable reply that buys you a week of peace: each one is a small loan against the relationship. The true sentence you keep softening is shorter than your edits. Say it once, plainly, and let the silence afterward do its work.",
+    },
+    union: {
+      headline: "Your words are charm today.",
+      body: "Speech and charm have fused, so everything you say today comes out persuasive, including the things you have not checked. People will believe you because of how you sound, not what you say; that is power and a liability in one mouth. Use it where you mean it: the apology, the toast, the overdue thank-you. Do not use it to win an argument you would lose in writing.",
+    },
+  },
+  "mars|mercury": {
+    harmony: {
+      headline: "Say the hard thing fast.",
+      body: "Your words have force behind them today and your aim is true. The conversation you have been circling for weeks takes four sentences right now. Make the call, send the decisive email, name the problem in the meeting while everyone else clears their throat. Sharp is not the same as cruel, and today you can be one without the other. Speak first and speak short.",
+    },
+    tension: {
+      headline: "Win the point, lose the room.",
+      body: "Your tongue is faster than your judgment today, and it is looking for a target. The cutting reply is already loaded; you have been polishing it since breakfast. Landing it will feel excellent for ten seconds and follow you for a month. Write the email and do not send it. If the fight is real, have it tomorrow, slower, in person. Today you are armed, not right.",
+    },
+    union: {
+      headline: "Every word is a weapon today.",
+      body: "Speech and force have fused, so there is no such thing as a casual remark right now. Your jokes have edges, your feedback draws blood, and you will not notice until someone flinches. Spend the sharpness where it earns something: the negotiation, the deadline, the decision nobody wants to make. With people you love, slow down and count to three before the clever line. Clever is how you wound by accident.",
+    },
+  },
+  "jupiter|mercury": {
+    harmony: {
+      headline: "Make the pitch today.",
+      body: "Your mind is running larger than usual and your words can keep up. The idea you have been sitting on becomes convincing the moment you say it out loud. Book the meeting, draft the proposal, explain the plan to the one person who can fund it or kill it. You will be understood at full size today. Just write the numbers down before the enthusiasm rounds them up.",
+    },
+    tension: {
+      headline: "Check it before you promise it.",
+      body: "The story is growing in the telling, and you are halfway to promising something you have not verified. The deadline you are quoting, the figure you are rounding, the favor you are volunteering: each gets a little bigger each time you open your mouth. Today the gap between what you said and what you checked becomes someone else's problem. Say less. Confirm first. Underpromise once and see how it feels.",
+    },
+    union: {
+      headline: "Talk the idea into existence.",
+      body: "Thought and appetite have fused, so every idea arrives already wearing its grown-up version. This is the day to sketch the whole vision: the course, the move, the business, the book. Talk it out with someone smart and let it expand; that is what today is for. But know the difference between the map and the trip. Tonight, write down the one first step small enough to start tomorrow.",
+    },
+  },
+  "mercury|saturn": {
+    harmony: {
+      headline: "Say less and mean it.",
+      body: "Your words have weight today and people can feel it. This is the day for the contract, the careful email, the conversation that needs every sentence to hold. You will not be fast, but you will be exact, and exact is what the moment is asking for. Cut the qualifiers, name the terms, put it in writing. What you commit to today, you will actually keep.",
+    },
+    tension: {
+      headline: "Speak before the doubt wins.",
+      body: "You have rewritten the message four times and said nothing. The inner editor is loud today, insisting every sentence is wrong before you finish it, and silence is starting to look like safety. It is not; it is just slower failure. The people waiting on your answer would rather have a plain imperfect sentence now than a polished one next week. Send the short version. Done beats eloquent today.",
+    },
+    union: {
+      headline: "One sentence, load-bearing.",
+      body: "Speech and weight have fused, so words come slowly today and land permanently. Whatever you say will be quoted back to you, so treat talking like signing. Good for the hard conversation you have been postponing: the terms, the boundary, the no. Say it once, without decoration, and stop. The urge to fill the silence afterward is where people give everything back. Let the sentence stand.",
+    },
+  },
+
+  // Jupiter pairs
+  "jupiter|venus": {
+    harmony: {
+      headline: "Enjoy it without the audit.",
+      body: "Pleasure and plenty are cooperating today, and for once the good thing is just good. Take the long lunch, buy the flowers, say yes to the invitation you would normally talk yourself out of. Generosity lands well now: the round you pick up, the gift that is slightly too nice. You spend so many days rationing joy; this is not one of them.",
+    },
+    tension: {
+      headline: "The yes has a price tag.",
+      body: "Everything looks worth it today: the upgrade, the third drink, the trip you would book before checking the dates. The yes feels generous and alive in the moment; the bill lands on a calmer version of you tomorrow. You are not stingy for pausing. Put the thing in the cart and leave it there until tomorrow. If it is still worth it then, it was real.",
+    },
+    union: {
+      headline: "Appetite has the wheel today.",
+      body: "Desire and excess have fused into one warm, expensive pull. Everything pleasurable presents itself in the large size: the dinner becomes a feast, the crush becomes a future, the browsing becomes a haul. Choose one indulgence and make it glorious; that is the day used well. Spread it across everything and you will wake up overfed, overdrawn, and oddly unsatisfied. One big yes. Several small nos.",
+    },
+  },
+  "jupiter|mars": {
+    harmony: {
+      headline: "Make the bold move now.",
+      body: "Nerve and luck are pulling in the same direction today, which is the rarest kind of weather. The ask you have been saving for the right moment: this is the moment. Apply for the thing, raise the price, start the project that scared you in February. You will not get a cleaner runway than this. One bold move, fully committed, beats five brave gestures. Pick it and go.",
+    },
+    tension: {
+      headline: "You are not ten people.",
+      body: "Confidence is outrunning capacity today. You are starting fights, projects, and promises faster than any version of you can finish them, and momentum is doing the math your judgment skipped. The bet feels safe because you feel large; that feeling is the whole danger. Finish one thing before you start a second. Drop one commitment publicly. The strongest move available today is subtraction, and nobody will applaud it. Do it anyway.",
+    },
+    union: {
+      headline: "Aim before you accelerate.",
+      body: "Drive and appetite have fused into one oversized push. You want to go, and you want to go everywhere, and the only difference between courage and recklessness today is aim. Pick the single target that matters most and pour all of it there: the launch, the race, the hard conversation that opens a door. Scattered, this much force just breaks furniture. Focused, it moves your whole year.",
+    },
+  },
+  "jupiter|saturn": {
+    harmony: {
+      headline: "Build the dream in brick.",
+      body: "Ambition and discipline are cooperating today, which is the combination that actually builds things. The big plan can finally meet the calendar without one of them flinching. Take the vision you keep talking about and give it a budget, a date, and a first deliverable. This is not the day for either dreaming or grinding alone; it is the day to bolt them together. What you structure now will still be standing next year.",
+    },
+    tension: {
+      headline: "Audit the dream today.",
+      body: "Half of you wants to leap and half of you wants to wait for the numbers, and today they are openly at war. Neither side is wrong; the trap is letting them take turns running your life, sabotaging each other. Audit the dream like an accountant for one hour: what it costs, what it pays, what you would cut. If it survives the spreadsheet, it deserves the leap. If it does not, you just saved years.",
+    },
+    union: {
+      headline: "Grow slow, on purpose.",
+      body: "Expansion and limit have fused, so growth today comes with conditions attached, and the conditions are the gift. The opportunity in front of you is real but it arrives shaped like work: a long timeline, a real cost, a structure you have to maintain. Take it on those terms or not at all. Sign up for the slow version of the big thing. Compounding is boring right up until it is everything.",
+    },
+  },
 };
 
 /**

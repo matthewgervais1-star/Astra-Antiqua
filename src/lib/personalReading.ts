@@ -64,35 +64,6 @@ const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>
   },
 };
 
-export function cap(s: string): string {
-  return s.length === 0 ? s : s[0]!.toUpperCase() + s.slice(1);
-}
-
-/**
- * Domain-context template for a life-domain reading. Names which two
- * principles are in aspect and pins the meaning to the named life domain,
- * closing with a concrete, do-this clause.
- */
-export function lifeDomainMeaning(
-  kind: AspectKind,
-  principleA: string,
-  principleB: string,
-  domainPhrase: string,
-): string {
-  switch (kind) {
-    case "conjunction":
-      return `${cap(principleA)} and ${principleB} are one force ${domainPhrase} today. Stop holding them apart and act on the single pull.`;
-    case "sextile":
-      return `${cap(principleA)} opens a quiet door for ${principleB} ${domainPhrase}. It is offered once, so take the small concrete step instead of engineering a bigger one.`;
-    case "square":
-      return `${cap(principleA)} grinds against ${principleB} ${domainPhrase}. A bargain is due; you spend less choosing it early than letting the day choose for you.`;
-    case "trine":
-      return `${cap(principleA)} is aligned with ${principleB} ${domainPhrase} today. The thing you have worked at alone is not alone, so lean your weight on it.`;
-    case "opposition":
-      return `${cap(principleA)} stands across from ${principleB} ${domainPhrase}. You cannot have both, so reach for the one that matters and let the reach show you which you chose.`;
-  }
-}
-
 /**
  * Score for ranking which transit-to-natal hit is the "headline." Tight orbs
  * score higher, and aspects involving personal points (Sun, Moon) on either

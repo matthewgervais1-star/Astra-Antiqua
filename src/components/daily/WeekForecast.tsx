@@ -4,8 +4,9 @@ import { useMemo } from "react";
 import type { Culture } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import { computeChart } from "@/lib/ephemeris";
-import { longitudeToSign, computeAspects } from "@/data/sampleChart";
+import { longitudeToSign, computeAspects, type ZodiacSign } from "@/data/sampleChart";
 import { SIGN_REGISTERS } from "@/data/interpretations";
+import { WEEK_READINGS, type WeekReading } from "@/data/weekReadings";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 
 interface WeekForecastProps {
@@ -24,24 +25,24 @@ const PLACEMENT_VERBS: Readonly<Record<Culture, string>> = {
 
 interface DayForecast {
   date: Date;
-  moonSign: string;
-  moonDeityName: string | null;
-  moonHeadline: string;
+  moonSign: ZodiacSign;
+  reading: WeekReading;
+  /** The ancient sourcing: deity placement plus the day's tightest aspect. */
+  contextLine: string;
   tightestAspectLine: string | null;
 }
 
 function buildDay(date: Date, culture: Culture | null): DayForecast {
   const chart = computeChart(date);
-  const moonInfo = longitudeToSign(chart.moon);
-  const moonSign = moonInfo.sign;
+  const moonSign = longitudeToSign(chart.moon).sign;
   const moonDeity = culture ? DEITY_MATRIX[culture].moon : null;
   const verb = culture ? PLACEMENT_VERBS[culture] : null;
-  const moonHeadline = culture && moonDeity && verb
-    ? `${moonDeity.name} ${verb} ${SIGN_REGISTERS[moonSign]}.`
-    : `The Moon enters ${moonSign}, ${SIGN_REGISTERS[moonSign]}.`;
+  const contextLine =
+    culture && moonDeity && verb
+      ? `${moonDeity.name} ${verb} ${SIGN_REGISTERS[moonSign]}.`
+      : `The Moon in ${moonSign}, ${SIGN_REGISTERS[moonSign]}.`;
   const aspects = computeAspects(chart);
-  const sortedAspects = [...aspects].sort((a, b) => a.orb - b.orb);
-  const tightest = sortedAspects[0];
+  const tightest = [...aspects].sort((a, b) => a.orb - b.orb)[0];
   let tightestAspectLine: string | null = null;
   if (tightest) {
     if (culture) {
@@ -55,8 +56,8 @@ function buildDay(date: Date, culture: Culture | null): DayForecast {
   return {
     date,
     moonSign,
-    moonDeityName: moonDeity?.name ?? null,
-    moonHeadline,
+    reading: WEEK_READINGS[moonSign],
+    contextLine,
     tightestAspectLine,
   };
 }
@@ -79,7 +80,7 @@ export function WeekForecast({ now, culture, days = 7 }: WeekForecastProps) {
             The coming week
           </h3>
           <p className="text-ink-tertiary font-mono mt-2 text-[11px] uppercase tracking-[0.3em]">
-            Moon headline + tightest aspect, day by day
+            What each day is for, set by the Moon
           </p>
         </div>
       </div>
@@ -88,21 +89,29 @@ export function WeekForecast({ now, culture, days = 7 }: WeekForecastProps) {
           <GlassPanel
             key={day.date.toISOString()}
             tone="solid"
-            className="flex h-full flex-col gap-2 p-4 md:p-5"
+            className="flex h-full flex-col gap-1.5 p-4 md:p-5"
           >
-            <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
-              {idx === 0
-                ? "Today"
-                : day.date.toLocaleDateString(undefined, { weekday: "short" })}
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
+                {idx === 0
+                  ? "Today"
+                  : day.date.toLocaleDateString(undefined, { weekday: "short" })}
+              </span>
+              <span className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.2em]">
+                {day.date.toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+              </span>
             </div>
-            <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.2em]">
-              {day.date.toLocaleDateString(undefined, { month: "short", day: "numeric" })}
-            </div>
-            <p className="font-display text-ink-primary mt-2 text-sm leading-snug md:text-base">
-              {day.moonHeadline}
+            <p className="font-display text-gold-leaf mt-2 text-base leading-snug md:text-lg">
+              {day.reading.headline}
+            </p>
+            <p className="text-ink-secondary font-body text-[13px] leading-relaxed">
+              {day.reading.body}
+            </p>
+            <p className="text-gold-leaf/60 font-body mt-auto pt-3 text-xs italic leading-relaxed">
+              {day.contextLine}
             </p>
             {day.tightestAspectLine ? (
-              <p className="text-ink-secondary font-body mt-auto pt-2 text-xs italic leading-relaxed">
+              <p className="text-ink-tertiary font-mono text-[9px] uppercase tracking-[0.2em]">
                 {day.tightestAspectLine}
               </p>
             ) : null}

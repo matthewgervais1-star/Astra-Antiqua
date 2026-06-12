@@ -11,12 +11,10 @@ import {
   type Culture,
   type Planet,
 } from "@/data/cultures";
-import { DEITY_MATRIX } from "@/data/deities";
 import { useActivePantheon } from "@/components/pantheon/PantheonSelector";
 import { computeChart } from "@/lib/ephemeris";
 import { buildReading, type AspectReading } from "@/lib/reading";
-import { longitudeToSign, type Longitude, type ZodiacSign } from "@/data/sampleChart";
-import { SIGN_REGISTERS } from "@/data/interpretations";
+import type { Longitude } from "@/data/sampleChart";
 import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
 import { BigThree } from "@/components/daily/BigThree";
 import { PersonalTransits } from "@/components/daily/PersonalTransits";
@@ -34,14 +32,6 @@ import { GlassPanel } from "@/components/ui/GlassPanel";
 import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
 import { usePrefersReducedMotion } from "@/lib/reducedMotion";
 
-const MOON_HEADLINE_VERBS: Readonly<Record<Culture, string>> = {
-  egypt: "walks",
-  greece: "crosses",
-  canaan: "keeps",
-  carthage: "stands in",
-  rome: "rides",
-};
-
 function formatLongDate(date: Date): string {
   return new Intl.DateTimeFormat(undefined, {
     weekday: "long",
@@ -49,18 +39,6 @@ function formatLongDate(date: Date): string {
     month: "long",
     day: "numeric",
   }).format(date);
-}
-
-function moonHeadline(
-  culture: Culture,
-  chart: Readonly<Record<Planet, Longitude>>,
-): { sign: ZodiacSign; line: string } {
-  const deity = DEITY_MATRIX[culture].moon;
-  const { sign } = longitudeToSign(chart.moon);
-  return {
-    sign,
-    line: `${deity.name} ${MOON_HEADLINE_VERBS[culture]} ${SIGN_REGISTERS[sign]}.`,
-  };
 }
 
 function topAspects(
@@ -83,7 +61,6 @@ function SingleVoiceHeadline({
 }) {
   const reduce = usePrefersReducedMotion();
   const reading = useMemo(() => buildReading(culture, chart), [culture, chart]);
-  const moonHeadlineLine = useMemo(() => moonHeadline(culture, chart), [culture, chart]);
   const computed: ComputedReading = useMemo(
     () =>
       natalChart
@@ -120,10 +97,7 @@ function SingleVoiceHeadline({
         <p className="text-ink-primary font-body mt-4 max-w-2xl text-lg leading-relaxed md:text-xl">
           {computed.meaning}
         </p>
-        <p className="text-ink-secondary font-body mt-3 max-w-2xl text-base leading-relaxed md:text-lg">
-          {moonHeadlineLine.line}
-        </p>
-        <div className="text-ink-tertiary font-mono mt-4 text-[10px] uppercase tracking-[0.25em]">
+        <div className="text-ink-tertiary font-mono mt-5 text-[10px] uppercase tracking-[0.25em]">
           Driver: {computed.toneSummary}
         </div>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
