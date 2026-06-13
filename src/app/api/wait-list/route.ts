@@ -36,7 +36,11 @@ export async function POST(request: Request) {
   try {
     const store = getWaitListStore();
     const result = await store.append(entry);
-    return NextResponse.json({ ok: true, persisted: result.persisted });
+    return NextResponse.json({
+      ok: true,
+      persisted: result.persisted,
+      duplicate: result.duplicate,
+    });
   } catch (err) {
     console.error("[waitlist] storage error", err);
     return NextResponse.json(

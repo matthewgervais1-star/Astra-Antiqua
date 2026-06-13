@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -85,6 +85,7 @@ function ReadingExperienceImpl({
   const [state, setState] = useState<ComputedState | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [computeError, setComputeError] = useState<string | null>(null);
+  const resultRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // Load initial form values from the URL-specified chart or the primary saved chart.
@@ -94,6 +95,7 @@ function ReadingExperienceImpl({
       editingChart: meta,
       initialValues: meta ? inputsFromChart(meta) : null,
     });
+    if (chartId) setState(null);
   }, [chartId]);
 
   const editingChart = hydrated.editingChart;
@@ -144,6 +146,24 @@ function ReadingExperienceImpl({
       setSubmitting(false);
     }
   };
+
+  // Opening a specific saved chart (?chartId=...) should draw the reading at
+  // once, not leave the user staring at a pre-filled form to press Cast again.
+  useEffect(() => {
+    if (chartId && initialValues && !state && !submitting) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      handleSubmit(initialValues);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chartId, initialValues]);
+
+  // On a phone the result renders far below the form; scroll to it after a cast
+  // so it does not look like nothing happened.
+  useEffect(() => {
+    if (state && resultRef.current && window.innerWidth < 768) {
+      resultRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [state]);
 
   const reading: Reading | null = useMemo(
     () => (state && culture ? buildReading(culture, state.chart) : null),
@@ -230,7 +250,7 @@ function ReadingExperienceImpl({
             ) : null}
           </div>
 
-          <div className="md:col-span-7">
+          <div className="md:col-span-7" ref={resultRef}>
             <div className="mb-6">
               <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
                 {wheelStep}

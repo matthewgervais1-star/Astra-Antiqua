@@ -21,7 +21,7 @@ interface WaitListFormProps {
 type SubmitState =
   | { kind: "idle" }
   | { kind: "submitting" }
-  | { kind: "success"; persisted: boolean }
+  | { kind: "success"; persisted: boolean; duplicate: boolean }
   | { kind: "error"; message: string };
 
 export function WaitListForm({ compact = false }: WaitListFormProps) {
@@ -48,14 +48,14 @@ export function WaitListForm({ compact = false }: WaitListFormProps) {
         body: JSON.stringify(values),
       });
       const data = (await res.json()) as
-        | { ok: true; persisted: boolean }
+        | { ok: true; persisted: boolean; duplicate?: boolean }
         | { ok: false; error: string };
       if (!res.ok || !data.ok) {
         const message = data && "error" in data && data.error ? data.error : "Submission failed.";
         setState({ kind: "error", message });
         return;
       }
-      setState({ kind: "success", persisted: data.persisted });
+      setState({ kind: "success", persisted: data.persisted, duplicate: data.duplicate ?? false });
       reset();
     } catch {
       setState({ kind: "error", message: "Network error. Please try again." });
@@ -76,10 +76,12 @@ export function WaitListForm({ compact = false }: WaitListFormProps) {
             transition={{ duration: reduce ? 0.01 : 0.4 }}
           >
             <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
-              You are on the list
+              {state.kind === "success" && state.duplicate ? "Already on the list" : "You are on the list"}
             </div>
             <h3 className="font-display text-ink-primary mt-3 text-2xl md:text-3xl">
-              The signal will reach you when the build is ready.
+              {state.kind === "success" && state.duplicate
+                ? "You were already here. Nothing more to do."
+                : "The signal will reach you when the build is ready."}
             </h3>
             <p className="text-ink-secondary font-body mt-4 text-base leading-relaxed">
               One short email at launch. No newsletter. No drip sequence.

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { safeNextPath } from "@/lib/auth/nextPath";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { GoldText } from "@/components/ui/GoldText";
 import { GlassPanel } from "@/components/ui/GlassPanel";
@@ -17,6 +18,10 @@ export default function SignUpPage() {
   const [confirm, setConfirm] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (status === "authenticated") router.replace(safeNextPath());
+  }, [status, router]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,7 +37,7 @@ export default function SignUpPage() {
       setError(result.error ?? "Sign up failed.");
       return;
     }
-    router.push("/");
+    router.push(safeNextPath());
   };
 
   return (

@@ -4,6 +4,8 @@ import type { WaitListEntry } from "@/lib/waitlistSchema";
 
 export interface AppendResult {
   persisted: boolean;
+  /** True when this email was already on the list (no new record written). */
+  duplicate: boolean;
 }
 
 interface WaitListStore {
@@ -22,7 +24,7 @@ function loggedNoOpStore(reason: string): WaitListStore {
         warned = true;
       }
       console.info("[waitlist] entry", entry);
-      return { persisted: false };
+      return { persisted: false, duplicate: false };
     },
   };
 }
@@ -43,16 +45,20 @@ function fileBackedStore(absoluteFilePath: string): WaitListStore {
             throw err;
           }
         }
+        const email = entry.email.trim().toLowerCase();
+        if (current.some((e) => e.email.trim().toLowerCase() === email)) {
+          return { persisted: true, duplicate: true };
+        }
         current.push(entry);
         await fs.writeFile(absoluteFilePath, JSON.stringify(current, null, 2), "utf8");
+        return { persisted: true, duplicate: false };
       };
       const next = tail.then(work, work);
       tail = next.then(
         () => undefined,
         () => undefined,
       );
-      await next;
-      return { persisted: true };
+      return await next;
     },
   };
 }

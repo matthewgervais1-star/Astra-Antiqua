@@ -12,10 +12,10 @@ export default function AccountPage() {
   const router = useRouter();
   const { status, user, refresh, signOut } = useAuth();
 
-  // Redirect anonymous visitors to sign-in.
+  // Redirect anonymous visitors to sign-in, returning them here afterward.
   useEffect(() => {
     if (status === "anonymous") {
-      router.replace("/sign-in");
+      router.replace("/sign-in?next=/account");
     }
   }, [status, router]);
 

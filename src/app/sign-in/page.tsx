@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { safeNextPath } from "@/lib/auth/nextPath";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { GoldText } from "@/components/ui/GoldText";
 import { GlassPanel } from "@/components/ui/GlassPanel";
@@ -16,6 +17,12 @@ export default function SignInPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // An already-signed-in user landing here (history, stale link) is sent on
+  // rather than parked at a disabled button.
+  useEffect(() => {
+    if (status === "authenticated") router.replace(safeNextPath());
+  }, [status, router]);
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
@@ -26,7 +33,7 @@ export default function SignInPage() {
       setError(result.error ?? "Sign in failed.");
       return;
     }
-    router.push("/");
+    router.push(safeNextPath());
   };
 
   return (
