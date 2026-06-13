@@ -43,44 +43,70 @@ export interface Reading {
   summary: string;
 }
 
-/**
- * Per-culture placement-line formatter. Each pantheon gets its own
- * inscriptional cadence: Egypt as funerary barque, Greece as Hellenistic
- * prose, Canaan as Ugaritic-tablet council voice, Carthage as Punic stele
- * with a fire-closing clause.
- */
-type PlacementFormatter = (args: {
-  deityName: string;
-  registerImage: string;
-  degree: number;
-  sign: string;
-}) => string;
-
 function deg(n: number): string {
   return `${n.toFixed(0)}°`;
 }
 
-const PLACEMENT_FORMATS: Readonly<Record<Culture, PlacementFormatter>> = {
-  // Funerary / barque register: the deity carried across its place in the sky.
-  egypt: ({ deityName, registerImage, degree, sign }) =>
-    `${deityName} crosses ${registerImage}, at ${deg(degree)} ${sign}.`,
-
-  // Spare Hellenistic prose: subject, place, position.
-  greece: ({ deityName, registerImage, degree, sign }) =>
-    `${deityName} stands in ${registerImage}, at ${deg(degree)} ${sign}.`,
-
-  // Council voice, in the cadence of Ugaritic tablet poetry: a seated god,
-  // declared by the assembly.
-  canaan: ({ deityName, registerImage, degree, sign }) =>
-    `${deityName} is seated in ${registerImage}, at ${deg(degree)} ${sign}, and the council marks it so.`,
-
-  // Punic stele register, closing with the fire of Melqart's pyre.
-  carthage: ({ deityName, registerImage, degree, sign }) =>
-    `${deityName} burns in ${registerImage}, at ${deg(degree)} ${sign}.`,
-
-  // Roman augural register: the god holds its quarter, the college reads it.
-  rome: ({ deityName, registerImage, degree, sign }) =>
-    `${deityName} holds ${registerImage}, at ${deg(degree)} ${sign}, and the augurs read it true.`,
+/**
+ * Per-culture, per-planet placement verb. The verb carries both the pantheon's
+ * register (Egypt voyages the sky-river, Rome commands and reads omens) and the
+ * nature of the planet, so the seven placement lines of a chart each read
+ * differently instead of repeating one cadence seven times over. Every phrase
+ * ends in a preposition so it composes cleanly with any sign register:
+ *   `${deity} ${verb} ${register}, at ${degree} ${sign}.`
+ */
+const PLACEMENT_VERBS: Readonly<Record<Culture, Readonly<Record<Planet, string>>>> = {
+  // The gods voyage the river of the sky; the dead king's barque, the scribe's
+  // crossing, the king-god's reign.
+  egypt: {
+    sun: "sails through",
+    moon: "drifts through",
+    mercury: "crosses through",
+    venus: "is adorned in",
+    mars: "does battle in",
+    jupiter: "reigns over",
+    saturn: "endures in",
+  },
+  // Spare Hellenistic prose, each god in its own clear motion.
+  greece: {
+    sun: "shines over",
+    moon: "moves through",
+    mercury: "runs through",
+    venus: "rests in",
+    mars: "takes arms in",
+    jupiter: "presides over",
+    saturn: "keeps to",
+  },
+  // The voice of the divine council, in the cadence of Ugaritic tablet poetry.
+  canaan: {
+    sun: "rises over",
+    moon: "wanders through",
+    mercury: "carries word through",
+    venus: "is enthroned in",
+    mars: "draws the bow in",
+    jupiter: "rules over",
+    saturn: "keeps the long watch in",
+  },
+  // Punic register: fire, harbor, the standard raised at sea.
+  carthage: {
+    sun: "burns over",
+    moon: "rides over",
+    mercury: "ferries word through",
+    venus: "is honored in",
+    mars: "raises the standard in",
+    jupiter: "reigns over",
+    saturn: "keeps the fire in",
+  },
+  // Roman augural register: the field commanded, the omen read.
+  rome: {
+    sun: "commands from",
+    moon: "rides through",
+    mercury: "carries word through",
+    venus: "is courted in",
+    mars: "holds the line in",
+    jupiter: "presides over",
+    saturn: "keeps the long watch over",
+  },
 };
 
 const SUMMARY_INTRO: Readonly<Record<Culture, string>> = {
@@ -99,12 +125,7 @@ export function buildReading(
     const longitude = chart[planet];
     const { sign, degree } = longitudeToSign(longitude);
     const deity = DEITY_MATRIX[culture][planet];
-    const culturalLine = PLACEMENT_FORMATS[culture]({
-      deityName: deity.name,
-      registerImage: SIGN_REGISTERS[sign],
-      degree,
-      sign,
-    });
+    const culturalLine = `${deity.name} ${PLACEMENT_VERBS[culture][planet]} ${SIGN_REGISTERS[sign]}, at ${deg(degree)} ${sign}.`;
     return {
       planet,
       longitude,
