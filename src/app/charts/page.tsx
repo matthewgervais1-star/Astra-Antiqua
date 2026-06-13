@@ -71,7 +71,7 @@ export default function ChartsPage() {
           {status === "authenticated" && user
             ? `Signed in as ${user.email}. Your charts sync across devices and browsers; every change you make here is mirrored to your account.`
             : "Saved charts live only in this browser. Sign in to keep them on any device you use."}
-          {" "}The chart marked primary drives the home page Big Three and Personal Transits. Add partner, family, or friends to compare in the{" "}
+          {" "}The chart marked primary sets the Big Three and Personal Transits on the home page. Add a partner, a parent, or a friend to compare in the{" "}
           <Link href="/synastry" className="text-gold-leaf underline-offset-4 hover:underline">
             synastry view
           </Link>
@@ -109,7 +109,7 @@ export default function ChartsPage() {
               Cast your first chart to begin.
             </h2>
             <p className="text-ink-secondary font-body mt-3 max-w-xl text-base md:text-lg">
-              The chart is computed in your browser from your birth date, time, and place. After it is saved here, the home page will personalize its daily reading around it.
+              Your birth date, time, and place become a chart, computed in your browser. Save it and the home page reads each day against it.
             </p>
             <Link
               href="/reading"

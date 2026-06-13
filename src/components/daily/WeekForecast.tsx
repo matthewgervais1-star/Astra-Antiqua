@@ -7,6 +7,7 @@ import { computeChart } from "@/lib/ephemeris";
 import { longitudeToSign, computeAspects, type ZodiacSign } from "@/data/sampleChart";
 import { SIGN_REGISTERS } from "@/data/interpretations";
 import { WEEK_READINGS, type WeekReading } from "@/data/weekReadings";
+import { PLACEMENT_VERBS } from "@/data/aspectVerbs";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 
 interface WeekForecastProps {
@@ -14,14 +15,6 @@ interface WeekForecastProps {
   culture: Culture | null;
   days?: number;
 }
-
-const PLACEMENT_VERBS: Readonly<Record<Culture, string>> = {
-  egypt: "stands in",
-  greece: "walks in",
-  canaan: "takes the seat of",
-  carthage: "raises the standard of",
-  rome: "holds the field of",
-};
 
 interface DayForecast {
   date: Date;
@@ -80,7 +73,7 @@ export function WeekForecast({ now, culture, days = 7 }: WeekForecastProps) {
             The coming week
           </h3>
           <p className="text-ink-tertiary font-mono mt-2 text-[11px] uppercase tracking-[0.3em]">
-            What each day is for, set by the Moon
+            Seven days, read by the Moon
           </p>
         </div>
       </div>

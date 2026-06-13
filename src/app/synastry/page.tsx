@@ -8,8 +8,9 @@ import {
   type Culture,
 } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
-import { longitudeToSign, type AspectKind } from "@/data/sampleChart";
+import { longitudeToSign } from "@/data/sampleChart";
 import { ASPECT_REFLECTIONS } from "@/data/interpretations";
+import { ASPECT_VERBS } from "@/data/aspectVerbs";
 import {
   RELATIONSHIP_LABELS,
   listCharts,
@@ -25,44 +26,6 @@ import { SectionContainer } from "@/components/ui/SectionContainer";
 import { GoldText } from "@/components/ui/GoldText";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { PrintButton } from "@/components/ui/PrintButton";
-
-const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>>>> = {
-  egypt: {
-    conjunction: "joins the barque of",
-    sextile: "extends a steady hand to",
-    square: "weighs against the heart of",
-    trine: "lifts the gaze of",
-    opposition: "faces across the river from",
-  },
-  greece: {
-    conjunction: "stands shoulder to shoulder with",
-    sextile: "offers fair counsel to",
-    square: "challenges",
-    trine: "harmonizes with",
-    opposition: "stands across the agora from",
-  },
-  canaan: {
-    conjunction: "shares the throne of the council with",
-    sextile: "exchanges tribute with",
-    square: "draws the bow against",
-    trine: "speaks favor over",
-    opposition: "convenes the council against",
-  },
-  carthage: {
-    conjunction: "raises the standard alongside",
-    sextile: "trades safe passage with",
-    square: "raises the hand against",
-    trine: "lights the fire alongside",
-    opposition: "demands a price of",
-  },
-  rome: {
-    conjunction: "marches under the same eagle as",
-    sextile: "treats for alliance with",
-    square: "raises the spear against",
-    trine: "clasps the right hand of",
-    opposition: "stands across the forum from",
-  },
-};
 
 interface ChartCardProps {
   natal: SavedNatal;
@@ -199,7 +162,7 @@ function SynastryPageImpl() {
           How two skies meet.
         </GoldText>
         <p className="text-ink-secondary font-body mt-6 max-w-2xl text-lg leading-relaxed md:text-xl">
-          Synastry compares two natal charts and reports the tightest aspects between the two sets of planets. The reading is rendered in the voice of the pantheon you select; each line uses both people&apos;s names, so &quot;Sarah&apos;s Resheph weighs against your Shapash&quot; rather than abstract astrological notation.
+          Synastry sets two natal charts against each other and reports the tightest aspects between them. Each line is written in the voice of the pantheon you choose, with both names in it: Sarah&apos;s Resheph weighs against your Shapash, not Mars square Sun.
         </p>
       </SectionContainer>
 
@@ -228,7 +191,7 @@ function SynastryPageImpl() {
             <Link href="/charts" className="text-gold-leaf underline-offset-4 hover:underline">
               charts page
             </Link>
-            . If you only have one, compute a second via the{" "}
+            . If you only have one, cast a second on the{" "}
             <Link href="/reading" className="text-gold-leaf underline-offset-4 hover:underline">
               reading page
             </Link>
@@ -247,7 +210,7 @@ function SynastryPageImpl() {
               You have {charts.length} chart{charts.length === 1 ? "" : "s"} saved.
             </p>
             <p className="text-ink-secondary font-body mt-2 max-w-xl text-base md:text-lg">
-              Cast another chart to enable synastry. Add a partner, family member, or friend on the{" "}
+              Synastry needs two. Cast a chart for a partner, a parent, or a friend on the{" "}
               <Link href="/reading" className="text-gold-leaf underline-offset-4 hover:underline">
                 reading page
               </Link>
@@ -290,7 +253,7 @@ function SynastryPageImpl() {
                   How {natalA.meta.name} and {natalB.meta.name} meet
                 </h2>
                 <p className="text-ink-tertiary font-mono mt-3 text-[11px] uppercase tracking-[0.3em]">
-                  {aspects.length} tightest cross-aspects · {harmonyCount} easing · {tensionCount} challenging · {conjunctionCount} doubling
+                  {aspects.length} tightest cross-aspects · {harmonyCount} easing · {tensionCount} challenging · {conjunctionCount} fusing
                 </p>
               </div>
               <PrintButton label="Save as PDF" />
@@ -298,7 +261,7 @@ function SynastryPageImpl() {
             {aspects.length === 0 ? (
               <GlassPanel tone="solid" className="p-6 md:p-8">
                 <p className="text-ink-secondary font-body text-base italic">
-                  No tight cross-aspects between these two charts. The two skies pass each other quietly; the relationship is built from ground that the planets do not heavily mark.
+                  No tight cross-aspects between these two charts. The two skies pass each other quietly. Whatever holds these two together is built on ground the planets leave unmarked.
                 </p>
               </GlassPanel>
             ) : (

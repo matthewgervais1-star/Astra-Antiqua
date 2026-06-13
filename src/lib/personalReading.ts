@@ -4,11 +4,16 @@ import {
   computeAspects,
   longitudeToSign,
   type Aspect,
-  type AspectKind,
   type Longitude,
 } from "@/data/sampleChart";
 import { computeTransits, topTransits, type TransitAspect } from "@/lib/transits";
 import { getAspectReading } from "@/data/aspectReadings";
+import { ASPECT_VERBS } from "@/data/aspectVerbs";
+
+/** Capitalize a planet key for a plain-language provenance line. */
+function capWord(s: string): string {
+  return s.length === 0 ? s : s[0]!.toUpperCase() + s.slice(1);
+}
 
 /**
  * What the transiting planet is "doing in the room". Kept for the life-domain
@@ -23,45 +28,6 @@ export const TRANSIT_PRINCIPLE: Readonly<Record<Planet, string>> = {
   mars: "the drive to act and to fight",
   jupiter: "the urge to expand and to trust",
   saturn: "the demand for discipline and limit",
-};
-
-/** Cultural verb for each aspect, used only for the small deity context line. */
-const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>>>> = {
-  egypt: {
-    conjunction: "joins the barque of",
-    sextile: "extends a steady hand to",
-    square: "weighs against the heart of",
-    trine: "lifts the gaze of",
-    opposition: "faces across the river from",
-  },
-  greece: {
-    conjunction: "stands shoulder to shoulder with",
-    sextile: "offers fair counsel to",
-    square: "challenges",
-    trine: "harmonizes with",
-    opposition: "stands across the agora from",
-  },
-  canaan: {
-    conjunction: "shares the throne of the council with",
-    sextile: "exchanges tribute with",
-    square: "draws the bow against",
-    trine: "speaks favor over",
-    opposition: "convenes the council against",
-  },
-  carthage: {
-    conjunction: "raises the standard alongside",
-    sextile: "trades safe passage with",
-    square: "raises the hand against",
-    trine: "lights the fire alongside",
-    opposition: "demands a price of",
-  },
-  rome: {
-    conjunction: "marches under the same eagle as",
-    sextile: "treats for alliance with",
-    square: "raises the spear against",
-    trine: "clasps the right hand of",
-    opposition: "stands across the forum from",
-  },
 };
 
 /**
@@ -126,7 +92,7 @@ export function buildPersonalDailyReading(
     meaning: directive.body,
     context: `${tDeity.name} ${verb} your ${nDeity.name}, under the ${moonSign} Moon.`,
     source: { kind: "personal", transit: headline },
-    toneSummary: `Transit ${headline.transit} ${headline.kind} natal ${headline.natal} (orb ${headline.orb.toFixed(1)}°)`,
+    toneSummary: `Today's ${capWord(headline.transit)} ${headline.kind} your natal ${capWord(headline.natal)}, ${headline.orb.toFixed(1)}° from exact`,
   };
 }
 
@@ -147,7 +113,7 @@ export function buildSkyDailyReading(
         "Nothing in the sky is pulling hard enough to name today. That is not nothing; it is a clear channel. With no transit telling you how to feel, what you do today is mostly you, so use the quiet to hear what you actually want before the noise comes back.",
       context: `${moonDeity.name} walks alone through ${moonSign} today.`,
       source: { kind: "quiet" },
-      toneSummary: "No tight aspects in the transit chart",
+      toneSummary: "No close aspects overhead today",
     };
   }
 
@@ -161,6 +127,6 @@ export function buildSkyDailyReading(
     meaning: directive.body,
     context: `${deityA.name} ${verb} ${deityB.name} in the sky, under the ${moonSign} Moon.`,
     source: { kind: "sky", aspect: headline },
-    toneSummary: `${headline.a} ${headline.kind} ${headline.b} in transit (orb ${headline.orb.toFixed(1)}°)`,
+    toneSummary: `${capWord(headline.a)} ${headline.kind} ${capWord(headline.b)} overhead, ${headline.orb.toFixed(1)}° from exact`,
   };
 }

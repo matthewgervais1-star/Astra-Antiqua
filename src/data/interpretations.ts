@@ -110,16 +110,16 @@ export const ASPECT_REFLECTIONS: Readonly<
  * interpretation text below; here we keep only the inscriptional image.
  */
 export const SIGN_REGISTERS: Readonly<Record<ZodiacSign, string>> = {
-  Aries: "the field of the first strike",
-  Taurus: "the bull's pasture",
-  Gemini: "the crossing wind",
-  Cancer: "the sea cave of the crab",
-  Leo: "the lion's noon",
-  Virgo: "the gleaning floor",
-  Libra: "the balanced scales",
-  Scorpio: "the desert at the scorpion's hour",
-  Sagittarius: "the archer's high road",
-  Capricorn: "the goat's ascent",
+  Aries: "the ram's first fire",
+  Taurus: "the bull's deep pasture",
+  Gemini: "the twins' restless wind",
+  Cancer: "the crab's sheltered shore",
+  Leo: "the lion's high noon",
+  Virgo: "the maiden's harvest floor",
+  Libra: "the even scales",
+  Scorpio: "the scorpion's dark water",
+  Sagittarius: "the archer's far road",
+  Capricorn: "the goat's steep climb",
   Aquarius: "the poured waters",
   Pisces: "the deep tide",
 };

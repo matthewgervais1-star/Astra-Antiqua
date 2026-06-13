@@ -88,7 +88,7 @@ export default function AboutPage() {
               </li>
               <li className="border-border-hairline border-t pt-5">
                 <p className="text-ink-primary font-body text-base leading-relaxed md:text-lg">
-                  We do not send your birth data to a server. It is computed on your device. If you sign in, it is stored only so you need not enter it again, and you can export or delete it whenever you like.
+                  We do not send your birth data to a server. It is computed on your device. If you sign in, it is stored only so you do not have to enter it again, and you can export or delete it whenever you like.
                 </p>
               </li>
             </ul>
@@ -132,7 +132,7 @@ export default function AboutPage() {
             Cast the chart of your birth.
           </h2>
           <p className="text-ink-secondary font-body mt-4 max-w-xl text-base md:text-lg">
-            Set the date, the hour, and the place. The seven planets will be placed for the exact moment you arrived, and the reading rendered in whichever ancient voice you call on.
+            Set the date, the hour, and the place. The seven planets are placed for the exact moment you arrived, and the reading is given in whichever ancient voice you call on.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link

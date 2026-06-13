@@ -7,7 +7,7 @@ import { WaitListForm } from "@/components/waitlist/WaitListForm";
 export const metadata: Metadata = {
   title: "Wait List",
   description:
-    "Be told when Astra Antiqua arrives on Android. One email. No marketing copy.",
+    "Be told when Astra Antiqua lands on Android. One email at launch. Nothing else.",
 };
 
 export default function WaitListPage() {
@@ -26,17 +26,17 @@ export default function WaitListPage() {
         <div className="grid gap-12 md:grid-cols-12 md:gap-10">
           <div className="space-y-6 md:col-span-7">
             <p className="text-ink-primary font-body text-lg leading-relaxed md:text-xl">
-              Astra Antiqua is an Android application in active development. The astronomical engine performs ephemeris calculations to the precision of established Swiss Ephemeris derivatives. The translation layer renders the output through the religious vocabulary of five ancient cultures, selected at first launch and editable thereafter.
+              Astra Antiqua is an Android app in active development. The engine computes the sky to the precision of the Swiss Ephemeris family. The translation layer speaks the result in the religious vocabulary of five ancient cultures. You choose one at first launch and can change it whenever you want.
             </p>
             <p className="text-ink-secondary font-body text-lg leading-relaxed md:text-xl">
-              The wait list exists so the people who care about the project can be told when the first build is ready to install, and what changed between the closed beta and public release. One short email at launch. No newsletter. No drip sequence.
+              The wait list does one thing: it tells you when the first build is ready to install, and what changed between the closed beta and the public release. One short email at launch. No newsletter. No drip sequence.
             </p>
             <p className="text-ink-secondary font-body text-base leading-relaxed md:text-lg">
               If you have a classics or religious-studies background and an interest in the interpretive choices on the{" "}
               <Link href="/methodology" className="text-gold-leaf underline-offset-4 hover:underline">
                 methodology page
               </Link>
-              , say so in the form. Pre-release builds will be sent to a small group of readers with that background first.
+              , say so in the form. Pre-release builds go first to a small group of readers who know the material.
             </p>
           </div>
 

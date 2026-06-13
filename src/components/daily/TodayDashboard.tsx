@@ -82,7 +82,7 @@ function SingleVoiceHeadline({
       <GlassPanel tone="glass" glow className="relative p-8 md:p-12">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.35em]">
-            {formatLongDate(now).toUpperCase()} AT A GLANCE
+            THE SKY FOR {formatLongDate(now).toUpperCase()}
           </div>
           <span className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
             {isPersonal ? `For your chart · ${CULTURE_LABELS[culture]}` : `Voice of ${CULTURE_LABELS[culture]}`}
@@ -98,29 +98,36 @@ function SingleVoiceHeadline({
           {computed.meaning}
         </p>
         <div className="text-ink-tertiary font-mono mt-5 text-[10px] uppercase tracking-[0.25em]">
-          Driver: {computed.toneSummary}
+          {computed.toneSummary}
         </div>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {aspects.length > 0 ? (
-            aspects.map((aspect, idx) => (
-              <article
-                key={`${aspect.a}-${aspect.b}-${idx}`}
-                className="border-border-hairline border-t pt-5"
-              >
-                <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
-                  {aspect.kind} · {PLANET_SYMBOLS[aspect.a]} {PLANET_LABELS[aspect.a]} / {PLANET_SYMBOLS[aspect.b]} {PLANET_LABELS[aspect.b]} · orb {aspect.orb.toFixed(1)}°
-                </div>
-                <p className="font-display text-gold-leaf mt-2 text-xl leading-snug md:text-2xl">
-                  {aspect.verbLine}
-                </p>
-                <p className="text-ink-primary font-body mt-3 text-[15px] leading-relaxed md:text-base">
-                  {aspect.culturalReflection}
-                </p>
-              </article>
-            ))
+            aspects.map((aspect, idx) => {
+              // Two cards can share an aspect kind; the per-kind cultural line
+              // would then repeat verbatim. Show it only on the first card of
+              // its kind, and the unique per-pair theme on any repeat.
+              const firstOfKind =
+                aspects.findIndex((x) => x.kind === aspect.kind) === idx;
+              return (
+                <article
+                  key={`${aspect.a}-${aspect.b}-${idx}`}
+                  className="border-border-hairline border-t pt-5"
+                >
+                  <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
+                    {aspect.kind} · {PLANET_SYMBOLS[aspect.a]} {PLANET_LABELS[aspect.a]} and {PLANET_SYMBOLS[aspect.b]} {PLANET_LABELS[aspect.b]} · {aspect.orb.toFixed(1)}° off
+                  </div>
+                  <p className="font-display text-gold-leaf mt-2 text-xl leading-snug md:text-2xl">
+                    {aspect.verbLine}
+                  </p>
+                  <p className="text-ink-primary font-body mt-3 text-[15px] leading-relaxed md:text-base">
+                    {firstOfKind ? aspect.culturalReflection : aspect.pairTheme}
+                  </p>
+                </article>
+              );
+            })
           ) : (
             <p className="text-ink-secondary font-body text-base italic">
-              No tight aspects today. The seven walk separately; whatever you build today, you build alone.
+              No tight aspects today. The seven walk separately; whatever you build, you build alone.
             </p>
           )}
         </div>
@@ -158,10 +165,10 @@ function FourVoiceCompact({
       transition={{ duration: reduce ? 0.01 : 0.4 }}
     >
       <div className="text-ink-tertiary font-mono mb-4 text-[10px] uppercase tracking-[0.3em]">
-        Today · {formatLongDate(now)} · The five voices in parallel
+        {formatLongDate(now)} · Five voices, one sky
       </div>
       <p className="text-ink-secondary font-body mb-8 max-w-2xl text-base md:text-lg">
-        The same sky, five traditions. Each card below is computed from {natalChart ? "the tightest aspect today is making to your saved chart" : "the tightest aspect happening in the sky right now"}; the five pantheons just give different names to the same gods at work.
+        Five traditions, one sky. Each card reads {natalChart ? "the tightest aspect today's sky makes to your saved chart" : "the tightest aspect overhead right now"}; only the names of the gods change.
       </p>
       <div className="grid gap-4 md:grid-cols-2 md:gap-5">
         {readings.map(({ culture, reading }) => (
@@ -204,13 +211,13 @@ function NoNatalPrompt() {
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-8">
         <div>
           <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
-            Personalize the reading
+            For your own chart
           </div>
           <h4 className="font-display text-ink-primary mt-2 text-xl md:text-2xl">
             Enter your birth date, time, and place once.
           </h4>
           <p className="text-ink-secondary font-body mt-2 text-sm md:text-base">
-            Your Big Three (Sun, Moon, Rising) and the day&apos;s transits against your natal chart will then appear here on every visit. All computation runs in your browser.
+            Your Big Three (Sun, Moon, Rising) and the day&apos;s transits to your own chart will be here on every visit. All of it is computed in your browser.
           </p>
         </div>
         <Link

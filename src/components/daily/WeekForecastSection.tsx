@@ -20,7 +20,7 @@ function Impl({ explicitCulture }: { explicitCulture: Culture | null }) {
     return (
       <GlassPanel tone="glass" className="min-h-[200px] p-6">
         <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.35em]">
-          Loading week
+          Casting the week ahead
         </div>
       </GlassPanel>
     );

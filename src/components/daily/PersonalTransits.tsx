@@ -6,6 +6,7 @@ import { PLANET_LABELS, PLANET_SYMBOLS } from "@/data/cultures";
 import type { Longitude } from "@/data/sampleChart";
 import { computeTransits, topTransits } from "@/lib/transits";
 import { buildTransitLine } from "@/lib/transitReading";
+import { getPairTheme } from "@/data/interpretations";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 
 interface PersonalTransitsProps {
@@ -59,8 +60,7 @@ export function PersonalTransits({
               className="border-border-hairline border-t pt-4"
             >
               <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
-                Transit {PLANET_SYMBOLS[hit.transit]} {PLANET_LABELS[hit.transit]} {hit.kind} natal{" "}
-                {PLANET_SYMBOLS[hit.natal]} {PLANET_LABELS[hit.natal]} · orb {hit.orb.toFixed(1)}°
+                {PLANET_SYMBOLS[hit.transit]} {PLANET_LABELS[hit.transit]} {hit.kind} your {PLANET_SYMBOLS[hit.natal]} {PLANET_LABELS[hit.natal]} · {hit.orb.toFixed(1)}° off
               </div>
               {line ? (
                 <>
@@ -68,7 +68,7 @@ export function PersonalTransits({
                     {line.verbLine}
                   </p>
                   <p className="text-ink-primary font-body mt-2 text-[15px] leading-relaxed md:text-base">
-                    {line.reflection}
+                    {getPairTheme(hit.transit, hit.natal)}
                   </p>
                 </>
               ) : (

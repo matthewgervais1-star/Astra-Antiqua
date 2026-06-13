@@ -4,7 +4,6 @@ import {
   computeAspects,
   longitudeToSign,
   type Aspect,
-  type AspectKind,
   type Longitude,
   type ZodiacSign,
 } from "@/data/sampleChart";
@@ -15,6 +14,7 @@ import {
   getPairTheme,
 } from "@/data/interpretations";
 import { PLANET_IN_SIGN } from "@/data/planetInSign";
+import { ASPECT_VERBS } from "@/data/aspectVerbs";
 
 export interface PlanetPlacement {
   planet: Planet;
@@ -61,66 +61,26 @@ function deg(n: number): string {
 }
 
 const PLACEMENT_FORMATS: Readonly<Record<Culture, PlacementFormatter>> = {
-  // Funerary / barque register. Participial "crossing" suggests motion of
-  // the solar barque across the daily voyage.
+  // Funerary / barque register: the deity carried across its place in the sky.
   egypt: ({ deityName, registerImage, degree, sign }) =>
-    `${deityName} crossing ${registerImage}, at ${deg(degree)} ${sign}.`,
+    `${deityName} crosses ${registerImage}, at ${deg(degree)} ${sign}.`,
 
-  // Spare Hellenistic prose: subject, position, location.
+  // Spare Hellenistic prose: subject, place, position.
   greece: ({ deityName, registerImage, degree, sign }) =>
-    `${deityName} at ${deg(degree)} ${sign}, in ${registerImage}.`,
+    `${deityName} stands in ${registerImage}, at ${deg(degree)} ${sign}.`,
 
-  // Council voice: enthroned + parallel clause, in the cadence of Ugaritic
-  // tablet poetry where each line is a stand-alone declaration.
+  // Council voice, in the cadence of Ugaritic tablet poetry: a seated god,
+  // declared by the assembly.
   canaan: ({ deityName, registerImage, degree, sign }) =>
-    `${deityName} enthroned in ${registerImage}, at ${deg(degree)} ${sign}; thus the council records it.`,
+    `${deityName} is seated in ${registerImage}, at ${deg(degree)} ${sign}, and the council marks it so.`,
 
-  // Punic stele inscription: subject, position, then a fire-image closing
-  // drawn from Melqart's pyre (the egersis) rather than the Tophet.
+  // Punic stele register, closing with the fire of Melqart's pyre.
   carthage: ({ deityName, registerImage, degree, sign }) =>
-    `${deityName} at ${deg(degree)} ${sign}, set in ${registerImage}; the fire turned toward this name.`,
+    `${deityName} burns in ${registerImage}, at ${deg(degree)} ${sign}.`,
 
-  // Roman augural register: the field taken, the sign read by the college.
+  // Roman augural register: the god holds its quarter, the college reads it.
   rome: ({ deityName, registerImage, degree, sign }) =>
-    `${deityName} holds the field of ${registerImage}, at ${deg(degree)} ${sign}; so the augurs read the sign.`,
-};
-
-const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, string>>>> = {
-  egypt: {
-    conjunction: "joins the barque of",
-    sextile: "extends a steady hand to",
-    square: "weighs against the heart of",
-    trine: "lifts the gaze of",
-    opposition: "faces across the river from",
-  },
-  greece: {
-    conjunction: "stands shoulder to shoulder with",
-    sextile: "offers fair counsel to",
-    square: "challenges",
-    trine: "harmonizes with",
-    opposition: "stands across the agora from",
-  },
-  canaan: {
-    conjunction: "shares the throne of the council with",
-    sextile: "exchanges tribute with",
-    square: "draws the bow against",
-    trine: "speaks favor over",
-    opposition: "convenes the council against",
-  },
-  carthage: {
-    conjunction: "raises the standard alongside",
-    sextile: "trades safe passage with",
-    square: "raises the hand against",
-    trine: "lights the fire alongside",
-    opposition: "demands a price of",
-  },
-  rome: {
-    conjunction: "marches under the same eagle as",
-    sextile: "treats for alliance with",
-    square: "raises the spear against",
-    trine: "clasps the right hand of",
-    opposition: "stands across the forum from",
-  },
+    `${deityName} holds ${registerImage}, at ${deg(degree)} ${sign}, and the augurs read it true.`,
 };
 
 const SUMMARY_INTRO: Readonly<Record<Culture, string>> = {
@@ -178,13 +138,17 @@ export function buildReading(
   const conjunctionCount = aspects.filter((a) => a.kind === "conjunction").length;
   const tone =
     tensionCount > harmonyCount
-      ? "the lines that challenge outnumber the lines that ease"
+      ? "The hard angles outweigh the soft ones. This is a chart read as effort: what it gives, you earn."
       : harmonyCount > tensionCount
-        ? "the lines that ease outnumber the lines that challenge"
-        : "the lines that challenge and the lines that ease stand in balance";
-  const summary = `${SUMMARY_INTRO[culture]} ${aspects.length} principal aspects are recorded; ${tone}.${
-    conjunctionCount > 0 ? ` ${conjunctionCount} conjunction${conjunctionCount === 1 ? "" : "s"} mark${conjunctionCount === 1 ? "s" : ""} a doubling of force.` : ""
-  }`;
+        ? "The soft angles outweigh the hard ones. Much of what this chart promises comes without a fight."
+        : "Hard angles and soft fall in even number. The chart neither spares you nor blocks you; it leaves the work to you.";
+  const conjunctionLine =
+    conjunctionCount === 0
+      ? ""
+      : conjunctionCount === 1
+        ? " One pair of powers sits fused, a single doubled force."
+        : ` ${conjunctionCount} pairs of powers sit fused, each a single doubled force.`;
+  const summary = `${SUMMARY_INTRO[culture]} ${tone}${conjunctionLine}`;
 
   return {
     culture,

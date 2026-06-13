@@ -47,7 +47,7 @@ export default function HomePage() {
               Today
             </div>
             <h2 className="font-display text-ink-primary mt-2 text-3xl md:text-4xl">
-              The sky right now, narrated.
+              What the sky is doing right now.
             </h2>
           </div>
           <div className="flex flex-wrap gap-3 self-start md:self-end">
@@ -80,7 +80,7 @@ export default function HomePage() {
             The coming week
           </div>
           <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-4xl">
-            Seven days of sky.
+            The shape of the week.
           </h2>
         </div>
         <WeekForecastSection />
@@ -92,10 +92,10 @@ export default function HomePage() {
             The demonstration
           </div>
           <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-4xl">
-            How the wheel reads.
+            A chart you can read by eye.
           </h2>
           <p className="text-ink-secondary font-body mt-3 max-w-2xl text-base md:text-lg">
-            A sample chart at fixed positions. Gold lines harmonize, red lines challenge. Hover or tap any glyph to read its placement.
+            A sample chart, fixed in place. Gold lines ease, red lines challenge. Hover or tap any glyph to read its placement.
           </p>
         </div>
         <NatalWheel />
@@ -107,25 +107,25 @@ export default function HomePage() {
             The method
           </div>
           <h2 className="font-display text-ink-primary mt-3 text-3xl md:text-4xl">
-            How the translation works
+            How the translation works.
           </h2>
         </div>
         <div className="grid gap-8 md:grid-cols-3 md:gap-10">
           <Column
             title="Real ephemeris"
-            body="The astronomical engine computes planetary positions to the precision required for professional natal chart and transit work. No approximations of convenience."
+            body="The engine computes planetary positions to the arcminute, the precision professional natal and transit work demands. No approximations of convenience."
             ctaHref="/methodology"
             ctaLabel="Methodology"
           />
           <Column
             title="Historical syncretism"
-            body="The mapping from planet to deity is grounded in primary sources: Ugaritic tablets, Hellenistic astrological literature, Punic inscriptions, Egyptian funerary texts. Contested choices are flagged."
+            body="Every planet-to-deity mapping rests on primary sources: Ugaritic tablets, Hellenistic astrological literature, Punic inscriptions, Egyptian funerary texts. Where the evidence is contested, the app says so."
             ctaHref="/translation-matrix"
             ctaLabel="Translation matrix"
           />
           <Column
             title="Cultural voice"
-            body="Once a pantheon is chosen, the interface stops speaking in modern terminology and begins speaking in the chosen tradition's ritual register. Real math, ancient voice."
+            body="Choose a pantheon and the app drops the modern names: Mars becomes Resheph, the Sun becomes Shapash. Real math underneath, an ancient voice on top."
             ctaHref="/pantheon/canaan"
             ctaLabel="Sample a pantheon"
           />
@@ -140,7 +140,7 @@ export default function HomePage() {
                 Pre-launch
               </div>
               <h2 className="font-display text-ink-primary mt-3 max-w-xl text-3xl md:text-5xl">
-                Be told when Astra Antiqua arrives on Android.
+                Be told when Astra Antiqua lands on Android.
               </h2>
               <p className="text-ink-secondary font-body mt-4 max-w-md text-base md:text-lg">
                 One short email at launch. No newsletter. No drip sequence. If you have a classics or religious-studies background, the form below has a field to say so.
@@ -163,7 +163,7 @@ export default function HomePage() {
       <SectionContainer size="default" spacing="tight">
         <div className="border-border-hairline border-t pt-10">
           <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-            Browse the pantheons
+            The five pantheons
           </div>
           <div className="text-ink-secondary mt-4 flex flex-wrap gap-x-6 gap-y-3 text-base">
             {CULTURES.map((c) => (
