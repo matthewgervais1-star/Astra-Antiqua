@@ -7,12 +7,12 @@
   --color-border-hairline: rgba(255, 255, 255, 0.08);
   --color-border-gold: rgba(212, 175, 55, 0.25);
   --color-ink-primary: rgba(255, 255, 255, 0.92);
-  --color-ink-secondary: rgba(255, 255, 255, 0.62);
-  --color-ink-tertiary: rgba(255, 255, 255, 0.38);
+  --color-ink-secondary: rgba(255, 255, 255, 0.66);
+  --color-ink-tertiary: rgba(255, 255, 255, 0.55);
   --color-gold-leaf: #d4af37;
   --color-gold-bright: #f4d03f;
   --color-gold-deep: #a8842c;
-  --color-conflict-red: #c44536;
+  --color-conflict-red: #e0604f;
   --color-harmony-glow: rgba(244, 208, 63, 0.5);
 
   --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;

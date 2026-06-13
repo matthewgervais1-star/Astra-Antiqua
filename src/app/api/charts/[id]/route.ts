@@ -5,6 +5,7 @@ import {
   getChartForUser,
   setPrimaryChartForUser,
 } from "@/lib/auth/charts";
+import { assertSameOrigin } from "@/lib/auth/origin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,7 +27,11 @@ export async function GET(_request: Request, { params }: Params) {
   return NextResponse.json({ ok: true, chart });
 }
 
-export async function DELETE(_request: Request, { params }: Params) {
+export async function DELETE(request: Request, { params }: Params) {
+  const origin = assertSameOrigin(request);
+  if (!origin.ok) {
+    return NextResponse.json({ ok: false, error: origin.reason }, { status: 403 });
+  }
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ ok: false, error: "Not signed in." }, { status: 401 });
@@ -42,6 +47,10 @@ export async function DELETE(_request: Request, { params }: Params) {
 export async function POST(request: Request, { params }: Params) {
   // Used by /api/charts/[id]/primary endpoint shape; this POST sets primary
   // when the body includes { action: "setPrimary" }.
+  const origin = assertSameOrigin(request);
+  if (!origin.ok) {
+    return NextResponse.json({ ok: false, error: origin.reason }, { status: 403 });
+  }
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ ok: false, error: "Not signed in." }, { status: 401 });

@@ -97,6 +97,10 @@ export function BirthForm({
 
   const abortRef = useRef<AbortController | null>(null);
 
+  // Stable bounds for the date input and year validation.
+  const todayIso = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const currentYear = useMemo(() => new Date().getFullYear(), []);
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setState(stateFromValues(initialValues));
@@ -257,13 +261,35 @@ export function BirthForm({
       setError("Please enter a birth date.");
       return;
     }
+    const year = Number(state.date.slice(0, 4));
+    if (!Number.isFinite(year) || year < 1800 || year > currentYear) {
+      setError(`Enter a four-digit birth year between 1800 and ${currentYear}.`);
+      return;
+    }
     if (!state.time) {
-      setError("Please enter a birth time (use 12:00 if unknown).");
+      setError("Please enter a birth time, or use the “I don't know my time” link.");
       return;
     }
 
-    const lat = Number(state.latitudeText);
-    const lon = Number(state.longitudeText);
+    // Resolve coordinates. If the user typed a place but never picked from the
+    // list, adopt the top suggestion so the name and the coordinates agree.
+    let latText = state.latitudeText;
+    let lonText = state.longitudeText;
+    let label = state.cityLabel.trim();
+    if (!state.manualMode && state.selectedKey === null) {
+      const top = suggestions[0];
+      if (top) {
+        latText = String(top.latitude);
+        lonText = String(top.longitude);
+        label = top.sublabel ? `${top.label}, ${top.sublabel}` : top.label;
+      } else {
+        setError("Pick a birthplace from the list so its coordinates are set, or enter coordinates manually.");
+        return;
+      }
+    }
+
+    const lat = Number(latText);
+    const lon = Number(lonText);
     if (!Number.isFinite(lat) || lat < -90 || lat > 90) {
       setError("Choose a birthplace from the list, or enter coordinates manually.");
       return;
@@ -272,12 +298,12 @@ export function BirthForm({
       setError("Choose a birthplace from the list, or enter coordinates manually.");
       return;
     }
-    const label = state.cityLabel.trim() || `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
+    const finalLabel = label || `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
 
     onSubmit({
       date: state.date,
       time: state.time,
-      cityLabel: label,
+      cityLabel: finalLabel,
       latitude: lat,
       longitude: lon,
     });
@@ -291,6 +317,8 @@ export function BirthForm({
             id={`${formId}-date`}
             type="date"
             value={state.date}
+            min="1800-01-01"
+            max={todayIso}
             onChange={(e) => patch({ date: e.target.value })}
             className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
             required
@@ -307,9 +335,18 @@ export function BirthForm({
           />
         </Field>
       </div>
-      <p className="text-ink-tertiary font-body text-xs">
-        If you do not know your birth time, use 12:00. The Sun, planets, and aspects will be accurate within a few minutes of arc. The Moon position and the Ascendant are more sensitive to time and will be approximate.
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-ink-tertiary font-body max-w-md text-xs">
+          The Sun, planets, and aspects are accurate to the minute of arc. The Moon and the Ascendant depend on the birth time; without it they are approximate.
+        </p>
+        <button
+          type="button"
+          onClick={() => patch({ time: "12:00" })}
+          className="text-gold-leaf font-mono shrink-0 text-[10px] uppercase tracking-[0.2em] underline-offset-4 hover:underline"
+        >
+          I don&apos;t know my time
+        </button>
+      </div>
 
       {!state.manualMode ? (
         <div className="relative">
@@ -328,7 +365,15 @@ export function BirthForm({
               }
               value={state.cityLabel}
               onChange={(e) => {
-                patch({ cityLabel: e.target.value, selectedKey: null });
+                // Clear the coordinates as soon as the text diverges from the
+                // chosen place, so a typed name can never carry the previous
+                // place's lat/lon into the chart.
+                patch({
+                  cityLabel: e.target.value,
+                  selectedKey: null,
+                  latitudeText: "",
+                  longitudeText: "",
+                });
                 setOpen(true);
                 setActiveIndex(-1);
               }}

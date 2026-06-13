@@ -22,6 +22,7 @@ import {
   PantheonSelector,
   useActivePantheon,
 } from "@/components/pantheon/PantheonSelector";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { GoldText } from "@/components/ui/GoldText";
 import { GlassPanel } from "@/components/ui/GlassPanel";
@@ -108,21 +109,23 @@ function SynastryLine({ aspect, culture, nameA, nameB }: SynastryLineProps) {
 
 function SynastryPageImpl() {
   const culture = useActivePantheon();
+  const { status } = useAuth();
   const [charts, setCharts] = useState<readonly SavedChartInputs[]>([]);
   const [hydrated, setHydrated] = useState<boolean>(false);
   const [idA, setIdA] = useState<string>("");
   const [idB, setIdB] = useState<string>("");
 
   useEffect(() => {
+    // Re-read whenever auth resolves: a signed-in user's charts land in
+    // localStorage only after the session loads. Existing picks are preserved.
     const list = listCharts();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCharts(list);
     setHydrated(true);
     const primary = list.find((c) => c.primary) ?? list[0];
-    if (primary) setIdA(primary.id);
-    const other = list.find((c) => c.id !== primary?.id);
-    if (other) setIdB(other.id);
-  }, []);
+    setIdA((curr) => curr || (primary?.id ?? ""));
+    setIdB((curr) => curr || (list.find((c) => c.id !== primary?.id)?.id ?? ""));
+  }, [status]);
 
   const natalA = useMemo<SavedNatal | null>(() => {
     const meta = charts.find((c) => c.id === idA);
@@ -199,8 +202,8 @@ function SynastryPageImpl() {
           </p>
         </div>
 
-        {!hydrated ? (
-          <p className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">Loading</p>
+        {!hydrated || status === "loading" ? (
+          <p className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">Loading your charts</p>
         ) : charts.length < 2 ? (
           <GlassPanel tone="glass" className="p-8 md:p-10">
             <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
@@ -281,6 +284,19 @@ function SynastryPageImpl() {
             )}
           </SectionContainer>
         </>
+      ) : idA && idB ? (
+        <SectionContainer size="default" spacing="tight">
+          <GlassPanel tone="solid" className="p-6 md:p-8">
+            <p className="text-ink-secondary font-body text-base italic">
+              One of these charts could not be read. It may be missing its birth
+              time or place. Re-cast it from the{" "}
+              <Link href="/charts" className="text-gold-leaf underline-offset-4 hover:underline">
+                charts page
+              </Link>
+              .
+            </p>
+          </GlassPanel>
+        </SectionContainer>
       ) : null}
     </>
   );

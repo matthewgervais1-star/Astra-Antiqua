@@ -153,7 +153,7 @@ export function TranslationMatrix() {
                           ) : null}
                         </div>
                       </div>
-                      <p className="text-ink-tertiary font-body mt-3 text-[13px] leading-relaxed opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100">
+                      <p className="text-ink-tertiary font-body mt-3 text-[13px] leading-relaxed">
                         {deity.note}
                       </p>
                     </td>

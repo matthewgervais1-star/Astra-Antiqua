@@ -39,8 +39,7 @@ export default function AccountPage() {
           Your record.
         </GoldText>
         <p className="text-ink-secondary font-body mt-6 text-base leading-relaxed md:text-lg">
-          Signed in as <span className="text-ink-primary">{user.email}</span>. Member since{" "}
-          {new Date().toLocaleDateString()}.
+          Signed in as <span className="text-ink-primary">{user.email}</span>. Your charts sync to this account across every device you sign in on.
         </p>
       </SectionContainer>
 

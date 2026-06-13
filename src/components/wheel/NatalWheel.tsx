@@ -45,7 +45,9 @@ function NatalWheelImpl({ chart = SAMPLE_CHART, caption, ascendant }: NatalWheel
   const pulsePhaseRef = useRef<number>(0);
   const lastFrameTime = useRef<number>(0);
 
-  const [size, setSize] = useState<number>(480);
+  // Start small so the first paint never exceeds a phone viewport; the
+  // ResizeObserver grows it to the container on the next frame.
+  const [size, setSize] = useState<number>(320);
   const [hover, setHover] = useState<{ planet: Planet; x: number; y: number } | null>(null);
   const [pinned, setPinned] = useState<Planet | null>(null);
 
@@ -161,8 +163,8 @@ function NatalWheelImpl({ chart = SAMPLE_CHART, caption, ascendant }: NatalWheel
   const activePos = activePlanet ? positions.find((p) => p.planet === activePlanet) : null;
 
   return (
-    <div className="grid gap-10 md:grid-cols-[1fr_320px] md:gap-12">
-      <div className="flex flex-col items-center">
+    <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_320px] md:gap-12">
+      <div className="flex min-w-0 flex-col items-center">
         <div ref={containerRef} className="relative w-full max-w-[560px]">
           <canvas
             ref={canvasRef}

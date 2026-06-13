@@ -57,8 +57,14 @@ export default function RootLayout({
         <AuthProvider>
           <PantheonProvider>
             <PantheonBodyAttribute />
+            <a
+              href="#main-content"
+              className="border-gold-soft bg-bg-deep text-gold-leaf focus:ring-gold-soft sr-only z-50 rounded-full border px-4 py-2 text-sm focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+            >
+              Skip to content
+            </a>
             <SiteHeader />
-            <main className="flex-1">{children}</main>
+            <main id="main-content" className="flex-1">{children}</main>
             <SiteFooter />
           </PantheonProvider>
         </AuthProvider>

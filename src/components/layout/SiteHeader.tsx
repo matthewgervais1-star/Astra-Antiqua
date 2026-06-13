@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AccountChip } from "@/components/auth/AccountChip";
+import { MobileMenu } from "@/components/layout/MobileMenu";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -7,8 +8,10 @@ const NAV = [
   { href: "/reading", label: "Reading" },
   { href: "/charts", label: "Charts" },
   { href: "/synastry", label: "Synastry" },
+  { href: "/learn", label: "Learn" },
   { href: "/methodology", label: "Methodology" },
   { href: "/translation-matrix", label: "Matrix" },
+  { href: "/about", label: "About" },
 ] as const;
 
 export function SiteHeader() {
@@ -24,7 +27,7 @@ export function SiteHeader() {
         >
           Astra Antiqua
         </Link>
-        <nav className="hidden gap-6 md:flex">
+        <nav className="hidden gap-5 lg:flex">
           {NAV.slice(1).map((item) => (
             <Link
               key={item.href}
@@ -37,6 +40,7 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-3">
           <AccountChip />
+          <MobileMenu items={NAV} />
         </div>
       </div>
     </header>

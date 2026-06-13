@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCurrentUser } from "@/lib/auth/users";
 import { listChartsForUser, upsertChartForUser } from "@/lib/auth/charts";
+import { assertSameOrigin } from "@/lib/auth/origin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,6 +31,10 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const origin = assertSameOrigin(request);
+  if (!origin.ok) {
+    return NextResponse.json({ ok: false, error: origin.reason }, { status: 403 });
+  }
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ ok: false, error: "Not signed in." }, { status: 401 });

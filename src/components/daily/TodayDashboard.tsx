@@ -12,6 +12,7 @@ import {
   type Planet,
 } from "@/data/cultures";
 import { useActivePantheon } from "@/components/pantheon/PantheonSelector";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { computeChart } from "@/lib/ephemeris";
 import { buildReading, type AspectReading } from "@/lib/reading";
 import type { Longitude } from "@/data/sampleChart";
@@ -234,18 +235,26 @@ function NoNatalPrompt() {
 function TodayDashboardImpl({ explicitCulture }: { explicitCulture: Culture | null }) {
   const ctxCulture = useActivePantheon();
   const culture = explicitCulture ?? ctxCulture;
+  const { status } = useAuth();
   const [now, setNow] = useState<Date | null>(null);
   const [viewDate, setViewDate] = useState<Date | null>(null);
   const [natal, setNatal] = useState<SavedNatal | null>(null);
 
   useEffect(() => {
-    // Capture today's date and any saved natal chart on mount.
+    // Capture today's date on mount.
     const today = new Date();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setNow(today);
     setViewDate(today);
-    setNatal(loadSavedNatal());
   }, []);
+
+  useEffect(() => {
+    // Re-read the saved natal whenever auth resolves: a signed-in user's
+    // charts are written to localStorage only after the session loads, so a
+    // mount-only read would miss them and show the no-chart state.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setNatal(loadSavedNatal());
+  }, [status]);
 
   const chart = useMemo(() => {
     if (!viewDate) return null;
