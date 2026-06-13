@@ -10,11 +10,11 @@ import {
 import {
   ASPECT_REFLECTIONS,
   PLANET_DOMAINS,
-  SIGN_REGISTERS,
   getPairTheme,
 } from "@/data/interpretations";
 import { PLANET_IN_SIGN } from "@/data/planetInSign";
 import { ASPECT_VERBS } from "@/data/aspectVerbs";
+import { getDeityInscription } from "@/data/deityInscriptions";
 
 export interface PlanetPlacement {
   planet: Planet;
@@ -43,71 +43,6 @@ export interface Reading {
   summary: string;
 }
 
-function deg(n: number): string {
-  return `${n.toFixed(0)}°`;
-}
-
-/**
- * Per-culture, per-planet placement verb. The verb carries both the pantheon's
- * register (Egypt voyages the sky-river, Rome commands and reads omens) and the
- * nature of the planet, so the seven placement lines of a chart each read
- * differently instead of repeating one cadence seven times over. Every phrase
- * ends in a preposition so it composes cleanly with any sign register:
- *   `${deity} ${verb} ${register}, at ${degree} ${sign}.`
- */
-const PLACEMENT_VERBS: Readonly<Record<Culture, Readonly<Record<Planet, string>>>> = {
-  // The gods voyage the river of the sky; the dead king's barque, the scribe's
-  // crossing, the king-god's reign.
-  egypt: {
-    sun: "sails through",
-    moon: "drifts through",
-    mercury: "crosses through",
-    venus: "is adorned in",
-    mars: "does battle in",
-    jupiter: "reigns over",
-    saturn: "endures in",
-  },
-  // Spare Hellenistic prose, each god in its own clear motion.
-  greece: {
-    sun: "shines over",
-    moon: "moves through",
-    mercury: "runs through",
-    venus: "rests in",
-    mars: "takes arms in",
-    jupiter: "presides over",
-    saturn: "keeps to",
-  },
-  // The voice of the divine council, in the cadence of Ugaritic tablet poetry.
-  canaan: {
-    sun: "rises over",
-    moon: "wanders through",
-    mercury: "carries word through",
-    venus: "is enthroned in",
-    mars: "draws the bow in",
-    jupiter: "rules over",
-    saturn: "keeps the long watch in",
-  },
-  // Punic register: fire, harbor, the standard raised at sea.
-  carthage: {
-    sun: "burns over",
-    moon: "rides over",
-    mercury: "ferries word through",
-    venus: "is honored in",
-    mars: "raises the standard in",
-    jupiter: "reigns over",
-    saturn: "keeps the fire in",
-  },
-  // Roman augural register: the field commanded, the omen read.
-  rome: {
-    sun: "commands from",
-    moon: "rides through",
-    mercury: "carries word through",
-    venus: "is courted in",
-    mars: "holds the line in",
-    jupiter: "presides over",
-    saturn: "keeps the long watch over",
-  },
-};
 
 const SUMMARY_INTRO: Readonly<Record<Culture, string>> = {
   egypt: "The barque of Ra has been read for the moment of your arrival in the world.",
@@ -125,7 +60,7 @@ export function buildReading(
     const longitude = chart[planet];
     const { sign, degree } = longitudeToSign(longitude);
     const deity = DEITY_MATRIX[culture][planet];
-    const culturalLine = `${deity.name} ${PLACEMENT_VERBS[culture][planet]} ${SIGN_REGISTERS[sign]}, at ${deg(degree)} ${sign}.`;
+    const culturalLine = getDeityInscription(culture, planet);
     return {
       planet,
       longitude,
