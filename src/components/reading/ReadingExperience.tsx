@@ -40,7 +40,7 @@ const ORACLE_INTRO: Readonly<Record<Culture, string>> = {
   greece:
     "The Pythia speaks once and the question must be exact. Set the date, the hour, the place; the answer will be cast in the names of Olympus.",
   canaan:
-    "El's council will be convened around the moment you came into the world. Bring the hour, the day, the city; the seats will be filled and the verdict will be read in the Ugaritic register.",
+    "El's council will be convened around the moment you came into the world. Bring the hour, the day, the city; the seats will be filled and the verdict spoken in the voice of Ugarit.",
   carthage:
     "Your name will be cut into the bronze of the Council for the hour of your birth. Set the date, the time, the place; the fire of Melqart will turn toward the chart that is cast.",
   rome:
