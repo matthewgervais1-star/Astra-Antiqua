@@ -1,11 +1,25 @@
 import { NextResponse } from "next/server";
 import { waitListSchema, type WaitListEntry } from "@/lib/waitlistSchema";
 import { getWaitListStore } from "@/lib/waitlistStore";
+import { assertSameOrigin } from "@/lib/auth/origin";
+import { clientIdentifier, rateLimit } from "@/lib/auth/rateLimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  const origin = assertSameOrigin(request);
+  if (!origin.ok) {
+    return NextResponse.json({ ok: false, error: origin.reason }, { status: 403 });
+  }
+  const limit = rateLimit(`waitlist:${clientIdentifier(request)}`, 5, 60 * 60 * 1000);
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { ok: false, error: "Too many sign-ups from here. Try again later." },
+      { status: 429 },
+    );
+  }
+
   let raw: unknown;
   try {
     raw = await request.json();

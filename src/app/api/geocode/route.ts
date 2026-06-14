@@ -154,6 +154,9 @@ export async function GET(request: Request) {
       // because individual user queries are well below that. Add a queue here
       // if traffic ramps up.
       cache: "no-store",
+      // Cap the upstream wait so a slow/stalled Nominatim cannot hold the
+      // serverless invocation open; the catch below returns the 502 path.
+      signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) {
       return NextResponse.json(

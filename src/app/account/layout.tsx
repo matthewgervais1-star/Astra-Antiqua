@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 export const metadata: Metadata = {
   title: "Account",
   description: "Manage your account: display name, password, data export, deletion.",
+  robots: { index: false, follow: false },
 };
 
 export default function AccountLayout({ children }: { children: ReactNode }) {

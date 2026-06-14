@@ -1,8 +1,23 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CULTURE_LABELS, isCulture, type Culture } from "@/data/cultures";
 import { TodayDashboard } from "@/components/daily/TodayDashboard";
 import { WeekForecastSection } from "@/components/daily/WeekForecastSection";
 import { SectionContainer } from "@/components/ui/SectionContainer";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ culture: string }>;
+}): Promise<Metadata> {
+  const { culture: raw } = await params;
+  if (!isCulture(raw)) return {};
+  const label = CULTURE_LABELS[raw];
+  return {
+    title: `Today · ${label}`,
+    description: `Today's sky and the week ahead, read in the names of ${label}.`,
+  };
+}
 
 export default async function CultureTodayPage({
   params,

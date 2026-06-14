@@ -1,4 +1,4 @@
-import { PLANETS, PLANET_LABELS, type Culture, type Planet } from "@/data/cultures";
+import { PLANETS, type Culture, type Planet } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import {
   computeAspects,
@@ -112,8 +112,4 @@ export function buildReading(
     aspects,
     summary,
   };
-}
-
-export function describePlanet(planet: Planet): string {
-  return PLANET_LABELS[planet];
 }

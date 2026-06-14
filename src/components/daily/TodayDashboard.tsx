@@ -261,6 +261,10 @@ function TodayDashboardImpl({ explicitCulture }: { explicitCulture: Culture | nu
     return computeChart(viewDate);
   }, [viewDate]);
 
+  // Today's sky, stable across day-strip navigation, for the "where the planets
+  // are right now" panel.
+  const todayChart = useMemo(() => (now ? computeChart(now) : null), [now]);
+
   if (!now || !viewDate || !chart) {
     return (
       <GlassPanel tone="glass" className="min-h-[260px] p-8 md:p-12">
@@ -306,7 +310,10 @@ function TodayDashboardImpl({ explicitCulture }: { explicitCulture: Culture | nu
 
       {culture ? <LifeDomainHoroscope culture={culture} chart={chart} /> : null}
 
-      <BehindForecast now={viewDate} culture={culture} chart={chart} />
+      {/* "Where the planets are right now" is about today, not the selected
+          day; anchoring to `now` also avoids re-running the multi-year ingress
+          scan on every day-strip click. */}
+      <BehindForecast now={now} culture={culture} chart={todayChart ?? chart} />
 
       <div className="grid gap-5 md:grid-cols-2">
         <MoonPhasePanel now={viewDate} />

@@ -1,11 +1,22 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth/users";
 import { listChartsForUser } from "@/lib/auth/charts";
+import { assertSameOrigin } from "@/lib/auth/origin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
+  // This GET returns the full account dump. The session cookie is SameSite=Lax,
+  // so a cross-site top-level navigation would otherwise carry it; block any
+  // cross-site trigger and require a same-origin Origin/Referer.
+  if (request.headers.get("sec-fetch-site") === "cross-site") {
+    return NextResponse.json({ ok: false, error: "Cross-site request blocked." }, { status: 403 });
+  }
+  const origin = assertSameOrigin(request);
+  if (!origin.ok) {
+    return NextResponse.json({ ok: false, error: origin.reason }, { status: 403 });
+  }
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ ok: false, error: "Not signed in." }, { status: 401 });

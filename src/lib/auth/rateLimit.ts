@@ -119,13 +119,21 @@ export function recordLoginAttempt(email: string, success: boolean): void {
  * available (e.g. local dev without proxy headers).
  */
 export function clientIdentifier(request: Request): string {
+  // Prefer platform-set client-IP headers, which a hosting layer (e.g. Vercel)
+  // sets itself and the client cannot override, over the raw x-forwarded-for
+  // first hop, which any client can spoof to mint a fresh rate-limit bucket.
+  const vercel = request.headers.get("x-vercel-forwarded-for");
+  if (vercel) {
+    const first = vercel.split(",")[0]?.trim();
+    if (first) return first;
+  }
+  const realIp = request.headers.get("x-real-ip");
+  if (realIp) return realIp;
   const fwd = request.headers.get("x-forwarded-for");
   if (fwd) {
     const first = fwd.split(",")[0]?.trim();
     if (first) return first;
   }
-  const realIp = request.headers.get("x-real-ip");
-  if (realIp) return realIp;
   const ua = request.headers.get("user-agent") ?? "";
   const lang = request.headers.get("accept-language") ?? "";
   return `local:${ua.slice(0, 32)}:${lang.slice(0, 16)}`;

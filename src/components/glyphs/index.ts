@@ -16,8 +16,4 @@ export const GLYPHS: Readonly<Record<Culture, Readonly<Record<Planet, Glyph>>>> 
   rome: ROME_GLYPHS,
 };
 
-export function getGlyph(culture: Culture, planet: Planet): Glyph {
-  return GLYPHS[culture][planet];
-}
-
 export { DeityGlyph } from "@/components/glyphs/DeityGlyph";

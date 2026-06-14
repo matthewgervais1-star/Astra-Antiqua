@@ -224,8 +224,14 @@ function PasswordSection() {
           autoComplete="new-password"
           required
           minLength={8}
+          aria-invalid={confirm.length > 0 && next !== confirm}
           className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
         />
+        {confirm.length > 0 && next !== confirm ? (
+          <p className="text-conflict-red font-mono text-[11px] uppercase tracking-[0.2em]">
+            The new passwords do not match yet.
+          </p>
+        ) : null}
         <button
           type="submit"
           disabled={status === "saving"}

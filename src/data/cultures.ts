@@ -59,7 +59,3 @@ export const PLANET_SYMBOLS: Readonly<Record<Planet, string>> = {
 export function isCulture(value: string): value is Culture {
   return (CULTURES as readonly string[]).includes(value);
 }
-
-export function isPlanet(value: string): value is Planet {
-  return (PLANETS as readonly string[]).includes(value);
-}

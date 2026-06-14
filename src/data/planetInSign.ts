@@ -196,7 +196,3 @@ export const PLANET_IN_SIGN: Readonly<
       "Limit shows up as the line you finally have to draw. You learn that compassion needs containment; the gift is the help that actually helps.",
   },
 };
-
-export function getPlanetInSign(planet: Planet, sign: ZodiacSign): string {
-  return PLANET_IN_SIGN[planet][sign];
-}

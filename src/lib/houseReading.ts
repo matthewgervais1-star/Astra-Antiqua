@@ -33,17 +33,3 @@ export function houseReading(
   const h = getHouseMeaning(house);
   return `${deity.name} turns ${PLANET_CONCERN[planet]} toward ${h.arena}.`;
 }
-
-/**
- * A fuller, self-contained version that names the house. For use where the
- * house is not already labelled in the surrounding UI.
- */
-export function houseReadingWithHouse(
-  culture: Culture,
-  planet: Planet,
-  house: number,
-): string {
-  const deity = DEITY_MATRIX[culture][planet];
-  const h = getHouseMeaning(house);
-  return `${deity.name} holds the ${h.ordinal} House, ${h.title}: ${PLANET_CONCERN[planet]} turned toward ${h.arena}.`;
-}

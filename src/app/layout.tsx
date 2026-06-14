@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { PantheonBodyAttribute } from "@/components/layout/PantheonBodyAttribute";
 import { PantheonProvider } from "@/components/pantheon/PantheonContext";
 import { AuthProvider } from "@/components/auth/AuthProvider";
+import { SITE_URL } from "@/lib/siteUrl";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -29,19 +30,28 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
+const SITE_DESCRIPTION =
+  "Professional astronomical ephemeris rendered through the religious frameworks of ancient Egypt, Greece, Canaan, Carthage, and Rome.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://astra-antiqua.example"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Astra Antiqua",
     template: "%s · Astra Antiqua",
   },
-  description:
-    "Professional astronomical ephemeris rendered through the religious frameworks of ancient Egypt, Greece, Canaan, Carthage, and Rome.",
+  description: SITE_DESCRIPTION,
   openGraph: {
     title: "Astra Antiqua",
     description:
       "Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit. Or Rome.",
     type: "website",
+    siteName: "Astra Antiqua",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Astra Antiqua",
+    description:
+      "Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit. Or Rome.",
   },
 };
 

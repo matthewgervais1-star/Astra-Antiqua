@@ -1,4 +1,3 @@
-import type { Planet } from "@/data/cultures";
 import {
   ZODIAC_SIGNS,
   longitudeToSign,
@@ -60,16 +59,4 @@ export function houseOfLongitude(
 ): number {
   const { sign } = longitudeToSign(longitude);
   return houseOfSign(sign, ascendantSignIndex);
-}
-
-/** Map every planet in a chart to its whole-sign house. */
-export function planetHouses(
-  chart: Readonly<Record<Planet, Longitude>>,
-  ascendantSignIndex: number,
-): Record<Planet, number> {
-  const out = {} as Record<Planet, number>;
-  for (const planet of Object.keys(chart) as Planet[]) {
-    out[planet] = houseOfLongitude(chart[planet], ascendantSignIndex);
-  }
-  return out;
 }

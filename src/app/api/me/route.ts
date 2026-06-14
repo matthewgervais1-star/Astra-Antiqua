@@ -4,6 +4,12 @@ import { z } from "zod";
 import { getCurrentUser, AuthError } from "@/lib/auth/users";
 import { getDb } from "@/lib/auth/db";
 import { assertSameOrigin } from "@/lib/auth/origin";
+import {
+  clientIdentifier,
+  rateLimit,
+  loginThrottleCheck,
+  recordLoginAttempt,
+} from "@/lib/auth/rateLimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,6 +36,16 @@ export async function PATCH(request: Request) {
   if (!user) {
     return NextResponse.json({ ok: false, error: "Not signed in." }, { status: 401 });
   }
+  // Cap account mutations per session to blunt brute-forcing currentPassword
+  // through the change-password path (the bcrypt compare here is otherwise
+  // unthrottled, unlike sign-in).
+  const limit = rateLimit(`me-patch:${user.id}:${clientIdentifier(request)}`, 10, 60 * 1000);
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { ok: false, error: "Too many account changes. Try again in a minute." },
+      { status: 429 },
+    );
+  }
   let body: unknown;
   try {
     body = await request.json();
@@ -53,7 +69,14 @@ export async function PATCH(request: Request) {
       if (!row) {
         throw new AuthError("Account not found.");
       }
+      // Apply the same per-account lockout that protects sign-in, so the
+      // change-password form cannot be used as an unthrottled password oracle.
+      const throttle = loginThrottleCheck(user.email);
+      if (throttle.locked) {
+        throw new AuthError("Too many incorrect attempts. Try again later.");
+      }
       const ok = await bcrypt.compare(parsed.data.currentPassword, row.password_hash);
+      recordLoginAttempt(user.email, ok);
       if (!ok) {
         throw new AuthError("Current password is incorrect.");
       }

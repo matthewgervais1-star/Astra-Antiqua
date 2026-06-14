@@ -284,14 +284,6 @@ function buildMatrix(): DeityMatrix {
 
 export const DEITY_MATRIX: DeityMatrix = buildMatrix();
 
-export function getDeity(culture: Culture, planet: Planet): Deity {
-  return DEITY_MATRIX[culture][planet];
-}
-
 export function getCultureDeities(culture: Culture): readonly Deity[] {
   return PLANETS.map((planet) => DEITY_MATRIX[culture][planet]);
-}
-
-export function getPlanetDeities(planet: Planet): readonly Deity[] {
-  return CULTURES.map((culture) => DEITY_MATRIX[culture][planet]);
 }

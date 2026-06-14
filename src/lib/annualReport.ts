@@ -349,17 +349,17 @@ function scoreMonths(
     const m = get(t.date);
     m.transits.push(t);
     const w = transitSignificance(t);
-    if (isTenseKind(t.aspectKind)) m.tension += w;
-    else if (isEasingKind(t.aspectKind)) m.ease += w;
+    // Opposition is weighty but a touch less than a hard square; check it first
+    // since isTenseKind() also matches opposition.
+    if (t.aspectKind === "opposition") m.tension += w * 0.8;
+    else if (isTenseKind(t.aspectKind)) m.tension += w; // square
+    else if (isEasingKind(t.aspectKind)) m.ease += w; // trine, sextile
     else if (t.aspectKind === "conjunction") {
       // Conjunctions add weight to both registers; the kind of contact decides.
       // Treat conjunction of Jupiter as easing, conjunction of Saturn as weighting.
       if (t.transitPlanet === "saturn") m.tension += w;
       else if (t.transitPlanet === "jupiter") m.ease += w;
       else m.tension += w * 0.5;
-    } else {
-      // opposition is weighty
-      m.tension += w * 0.8;
     }
   }
   for (const e of eclipses) {

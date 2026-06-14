@@ -17,7 +17,7 @@ import {
   type Planet,
 } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
-import { longitudeToSign, SAMPLE_CHART, type Longitude } from "@/data/sampleChart";
+import { longitudeToSign, computeAspects, SAMPLE_CHART, type Longitude } from "@/data/sampleChart";
 import { drawWheel } from "@/components/wheel/wheelDraw";
 import {
   computePlanetPositions,
@@ -55,6 +55,14 @@ function NatalWheelImpl({ chart = SAMPLE_CHART, caption, ascendant }: NatalWheel
     const geometry = makeGeometry(size);
     return computePlanetPositions(geometry, chart);
   }, [size, chart]);
+
+  // The pulse animation only matters when a conjunction is on the wheel. With
+  // none, skip the continuous draw loop entirely so the canvas is not repainted
+  // every frame for nothing (battery/CPU on idle pages).
+  const hasConjunction = useMemo(
+    () => computeAspects(chart).some((a) => a.kind === "conjunction"),
+    [chart],
+  );
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -96,7 +104,7 @@ function NatalWheelImpl({ chart = SAMPLE_CHART, caption, ascendant }: NatalWheel
   }, [draw]);
 
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || !hasConjunction) return;
     let active = true;
     const step = (t: number) => {
       if (!active) return;
@@ -112,7 +120,7 @@ function NatalWheelImpl({ chart = SAMPLE_CHART, caption, ascendant }: NatalWheel
       lastFrameTime.current = 0;
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
-  }, [draw, reduce]);
+  }, [draw, reduce, hasConjunction]);
 
   const handlePointerMove = useCallback(
     (event: React.PointerEvent<HTMLCanvasElement>) => {

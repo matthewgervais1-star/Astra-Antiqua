@@ -29,6 +29,10 @@ export const ZODIAC_SIGNS = [
 export type ZodiacSign = (typeof ZODIAC_SIGNS)[number];
 
 export function longitudeToSign(longitude: Longitude): { sign: ZodiacSign; degree: number } {
+  if (!Number.isFinite(longitude)) {
+    // Fail loudly rather than fabricating an Aries placement with a NaN degree.
+    throw new Error(`longitudeToSign received a non-finite longitude: ${longitude}`);
+  }
   const normalized = ((longitude % 360) + 360) % 360;
   const signIndex = Math.floor(normalized / 30);
   const sign = ZODIAC_SIGNS[signIndex] ?? "Aries";
