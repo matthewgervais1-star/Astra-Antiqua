@@ -6,6 +6,9 @@ import {
 } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import { PLANET_AREAS, ASCENDANT_AREA } from "@/data/planetAreas";
+import { PLANET_IN_SIGN } from "@/data/planetInSign";
+import { longitudeToSign } from "@/data/sampleChart";
+import type { SavedNatal } from "@/lib/savedNatal";
 import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 
@@ -13,17 +16,26 @@ interface LifeAreaLegendProps {
   /** When set, rows show the culture's deity glyph and name; otherwise the
    *  classical planet symbol and label. */
   culture?: Culture | null;
+  /** When provided, each card is tailored to this chart: the planet's actual
+   *  sign and the hand-written influence for that exact placement, instead of
+   *  the universal description of what the planet governs. */
+  natal?: SavedNatal | null;
 }
 
-export function LifeAreaLegend({ culture = null }: LifeAreaLegendProps) {
+export function LifeAreaLegend({ culture = null, natal = null }: LifeAreaLegendProps) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {PLANETS.map((planet) => {
         const area = PLANET_AREAS[planet];
         const deity = culture ? DEITY_MATRIX[culture][planet] : null;
-        const sub = deity
-          ? `${deity.name} · ${PLANET_LABELS[planet]}`
-          : PLANET_LABELS[planet];
+        const name = deity?.name ?? PLANET_LABELS[planet];
+        const placement = natal ? longitudeToSign(natal.chart[planet]) : null;
+        const sub = placement
+          ? `${name} in ${placement.sign} · ${placement.degree.toFixed(0)}°`
+          : deity
+            ? `${deity.name} · ${PLANET_LABELS[planet]}`
+            : PLANET_LABELS[planet];
+        const blurb = placement ? PLANET_IN_SIGN[planet][placement.sign] : area.blurb;
         return (
           <GlassPanel
             key={planet}
@@ -49,7 +61,7 @@ export function LifeAreaLegend({ culture = null }: LifeAreaLegendProps) {
                 {sub}
               </div>
               <p className="text-ink-secondary font-body mt-1.5 text-sm leading-relaxed">
-                {area.blurb}
+                {blurb}
               </p>
             </div>
           </GlassPanel>
@@ -64,7 +76,9 @@ export function LifeAreaLegend({ culture = null }: LifeAreaLegendProps) {
             {ASCENDANT_AREA.area}
           </div>
           <div className="text-ink-tertiary font-mono mt-0.5 text-[10px] uppercase tracking-[0.2em]">
-            Ascendant · Rising
+            {natal
+              ? `Rising in ${longitudeToSign(natal.angles.ascendant).sign}`
+              : "Ascendant · Rising"}
           </div>
           <p className="text-ink-secondary font-body mt-1.5 text-sm leading-relaxed">
             {ASCENDANT_AREA.blurb}

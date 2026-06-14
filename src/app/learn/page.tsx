@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CULTURES, CULTURE_LABELS } from "@/data/cultures";
 import { NatalWheel } from "@/components/wheel/NatalWheel";
-import { LifeAreaLegend } from "@/components/LifeAreaLegend";
+import { PersonalLifeAreaLegend } from "@/components/PersonalLifeAreaLegend";
 import { LearnTOC } from "@/components/LearnTOC";
 import { SectionContainer } from "@/components/ui/SectionContainer";
 import { GoldText } from "@/components/ui/GoldText";
@@ -157,12 +157,10 @@ export default function LearnPage() {
           <div className="text-gold-leaf font-mono text-[11px] uppercase tracking-[0.3em]">
             What each planet governs
           </div>
-          <p className="text-ink-secondary font-body mt-2 max-w-2xl text-base leading-relaxed md:text-lg">
-            Each verb owns a department of life. This is the legend the rest of the chart is read against.
-          </p>
-          <div className="mt-6">
-            <LifeAreaLegend />
-          </div>
+          <h2 className="font-display text-ink-primary mt-3 mb-5 text-3xl md:text-4xl">
+            Each of the seven owns a department of life.
+          </h2>
+          <PersonalLifeAreaLegend />
         </div>
       </SectionContainer>
 
