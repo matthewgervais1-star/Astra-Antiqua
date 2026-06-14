@@ -32,9 +32,65 @@ function formatDate(d: Date): string {
   });
 }
 
-function ReportContent({ report }: { report: AnnualReport }) {
+function yearLean(report: AnnualReport): string {
+  const h = report.hardestStretch?.score ?? 0;
+  const e = report.easiestStretch?.score ?? 0;
+  if (h === 0 && e === 0) return "An open year";
+  if (h > e * 1.25) return "A demanding year";
+  if (e > h * 1.25) return "A supported year";
+  return "A year of mixed weather";
+}
+
+function GlanceStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
+        {label}
+      </dt>
+      <dd className="font-display text-ink-primary mt-1.5 text-lg leading-snug md:text-xl">
+        {value}
+      </dd>
+    </div>
+  );
+}
+
+function ReportContent({
+  report,
+  eclipseCount,
+  retrogradeCount,
+}: {
+  report: AnnualReport;
+  eclipseCount: number;
+  retrogradeCount: number;
+}) {
   return (
     <div className="flex flex-col gap-10">
+      <section className="border-border-hairline border-b pb-8">
+        <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.35em]">
+          The year at a glance
+        </div>
+        <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-4">
+          <GlanceStat label="Overall" value={yearLean(report)} />
+          <GlanceStat
+            label="Heaviest stretch"
+            value={report.hardestStretch?.monthLabel ?? "No single peak"}
+          />
+          <GlanceStat
+            label="Lightest stretch"
+            value={report.easiestStretch?.monthLabel ?? "No single peak"}
+          />
+          <GlanceStat
+            label="Solar return"
+            value={report.solarReturn ? formatDate(report.solarReturn.date) : "Not this year"}
+          />
+        </dl>
+        <p className="text-ink-tertiary font-body mt-5 text-sm italic">
+          {report.standouts.length} standout {report.standouts.length === 1 ? "date" : "dates"}, {eclipseCount}{" "}
+          {eclipseCount === 1 ? "eclipse" : "eclipses"}, and {retrogradeCount} retrograde{" "}
+          {retrogradeCount === 1 ? "station" : "stations"} across the next twelve months.
+        </p>
+      </section>
+
       <header>
         <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.35em]">
           The year for {report.natalName}
@@ -195,7 +251,11 @@ export function AnnualReportSection(props: AnnualReportSectionProps) {
 
   return (
     <GlassPanel tone="glass" glow className="p-6 md:p-10">
-      <ReportContent report={report} />
+      <ReportContent
+        report={report}
+        eclipseCount={eclipses.length}
+        retrogradeCount={retrogrades.length}
+      />
     </GlassPanel>
   );
 }
