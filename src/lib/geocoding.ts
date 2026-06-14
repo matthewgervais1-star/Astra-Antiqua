@@ -14,6 +14,20 @@ interface ApiResponse {
 }
 
 /**
+ * Geocoder failure carrying an optional user-facing message. When set (e.g. on
+ * a rate limit), the caller should show it verbatim instead of the generic
+ * "map unreachable" fallback that nudges toward manual coordinates.
+ */
+export class GeocodeError extends Error {
+  readonly userMessage?: string;
+  constructor(message: string, userMessage?: string) {
+    super(message);
+    this.name = "GeocodeError";
+    this.userMessage = userMessage;
+  }
+}
+
+/**
  * Looks up a free-text place query against the server-side geocoding proxy
  * (OpenStreetMap Nominatim). Returns an empty array for genuinely empty
  * results, but THROWS on transport/proxy errors so the caller can tell the
@@ -37,11 +51,21 @@ export async function geocodePlace(
     signal,
   });
   if (!res.ok) {
-    throw new Error(`Geocoder returned ${res.status}`);
+    if (res.status === 429) {
+      let msg = "Too many place lookups. Wait a minute, then try again.";
+      try {
+        const body = (await res.json()) as ApiResponse;
+        if (body.error) msg = body.error;
+      } catch {
+        // keep the default rate-limit message
+      }
+      throw new GeocodeError(`Geocoder returned 429`, msg);
+    }
+    throw new GeocodeError(`Geocoder returned ${res.status}`);
   }
   const data = (await res.json()) as ApiResponse;
   if (!data.ok) {
-    throw new Error(data.error ?? "Geocoder error");
+    throw new GeocodeError(data.error ?? "Geocoder error");
   }
   if (!Array.isArray(data.results)) return [];
   return data.results;

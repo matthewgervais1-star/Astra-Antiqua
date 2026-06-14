@@ -41,7 +41,10 @@ export function WheelTooltip({
 
   const tooltipWidth = 240;
   const flipped = x + tooltipWidth + 16 > containerWidth;
-  const left = flipped ? x - tooltipWidth - 12 : x + 12;
+  const rawLeft = flipped ? x - tooltipWidth - 12 : x + 12;
+  // Keep the tooltip on-canvas: on a narrow phone wheel a flipped tooltip would
+  // otherwise land at a negative left and clip off the edge.
+  const left = Math.max(8, Math.min(rawLeft, containerWidth - tooltipWidth - 8));
   const top = Math.max(8, y - 60);
 
   return (

@@ -244,6 +244,39 @@ function PasswordSection() {
 }
 
 function DataExportSection({ email }: { email: string }) {
+  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
+
+  const onExport = async () => {
+    setStatus("loading");
+    setError(null);
+    try {
+      const res = await fetch("/api/me/export", { headers: { Accept: "application/json" } });
+      if (!res.ok) {
+        setError(
+          res.status === 401
+            ? "Your session has expired. Sign in again to export your data."
+            : "The export could not be prepared. Please try again.",
+        );
+        setStatus("error");
+        return;
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "astra-antiqua-data.json";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      setStatus("idle");
+    } catch {
+      setError("Could not reach the server. Please try again.");
+      setStatus("error");
+    }
+  };
+
   return (
     <GlassPanel tone="solid" className="p-6 md:p-7">
       <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
@@ -252,13 +285,19 @@ function DataExportSection({ email }: { email: string }) {
       <p className="text-ink-secondary font-body mt-2 text-sm">
         Download a JSON file containing your account record and every saved chart attached to it. Useful as a backup or as the source for an import into another tool.
       </p>
-      <a
-        href="/api/me/export"
-        download
-        className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 mt-4 inline-flex items-center gap-2 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors"
+      <button
+        type="button"
+        onClick={onExport}
+        disabled={status === "loading"}
+        className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 mt-4 inline-flex items-center gap-2 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Download {email}&apos;s data ↓
-      </a>
+        {status === "loading" ? "Preparing download" : `Download ${email}'s data ↓`}
+      </button>
+      {error ? (
+        <p role="alert" className="text-conflict-red font-mono mt-3 text-[11px] uppercase tracking-[0.2em]">
+          {error}
+        </p>
+      ) : null}
     </GlassPanel>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { CITIES, searchCities } from "@/data/cities";
-import { geocodePlace } from "@/lib/geocoding";
+import { geocodePlace, GeocodeError } from "@/lib/geocoding";
 import { cn } from "@/lib/classNames";
 
 export interface BirthFormValues {
@@ -146,12 +146,13 @@ export function BirthForm({
           })),
         );
         setGeocode({ kind: "ready" });
-      } catch {
+      } catch (err) {
         if (controller.signal.aborted) return;
-        setGeocode({
-          kind: "error",
-          message: "Could not reach the map. Try again, or enter coordinates manually.",
-        });
+        const message =
+          err instanceof GeocodeError && err.userMessage
+            ? err.userMessage
+            : "Could not reach the map. Try again, or enter coordinates manually.";
+        setGeocode({ kind: "error", message });
       }
     }, GEOCODE_DEBOUNCE_MS);
     return () => {
@@ -219,6 +220,14 @@ export function BirthForm({
     geocode.kind === "ready" &&
     suggestions.length === 0 &&
     query.length >= 3;
+  // 1-2 chars with no curated hit: the world search needs 3, so tell the user
+  // to keep typing instead of showing an empty / closed dropdown.
+  const typingHint =
+    open &&
+    state.selectedKey === null &&
+    suggestions.length === 0 &&
+    query.length > 0 &&
+    query.length < 3;
   const showDropdown =
     state.hydrated &&
     !state.manualMode &&
@@ -227,7 +236,8 @@ export function BirthForm({
     (suggestions.length > 0 ||
       geocode.kind === "loading" ||
       geocode.kind === "error" ||
-      noMatch);
+      noMatch ||
+      typingHint);
 
   const onCityKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!showDropdown || suggestions.length === 0) {
@@ -459,6 +469,10 @@ export function BirthForm({
               ) : geocode.kind === "error" ? (
                 <div className="text-conflict-red font-mono px-3 py-3 text-[10px] uppercase tracking-[0.25em]">
                   {geocode.message}
+                </div>
+              ) : typingHint ? (
+                <div className="text-ink-tertiary font-mono px-3 py-3 text-[10px] uppercase tracking-[0.25em]">
+                  Keep typing to search the world map...
                 </div>
               ) : null}
             </div>

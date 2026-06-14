@@ -100,9 +100,15 @@ export default function SignUpPage() {
               minLength={8}
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
+              aria-invalid={confirm.length > 0 && password !== confirm}
               className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
             />
           </Field>
+          {confirm.length > 0 && password !== confirm ? (
+            <p className="text-conflict-red font-mono -mt-2 text-[11px] uppercase tracking-[0.2em]">
+              The two passwords do not match yet.
+            </p>
+          ) : null}
           <button
             type="submit"
             disabled={submitting || status === "authenticated"}
