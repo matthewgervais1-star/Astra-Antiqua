@@ -1,0 +1,5 @@
+# Monorepo root — OS / editor junk and stray dumps.
+# Per-surface ignores live in web/.gitignore and android/.gitignore.
+.DS_Store
+Thumbs.db
+*.hprof

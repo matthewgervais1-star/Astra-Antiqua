@@ -1,0 +1,38 @@
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+*.dex
+*.class
+
+# Generated / build output
+bin/
+gen/
+out/
+release/
+build/
+.gradle/
+.kotlin/
+
+# Local configuration (machine-specific SDK path — must NOT be committed)
+local.properties
+
+# IDE
+*.iml
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Logs & heap dumps
+*.log
+*.hprof
+
+# Keystores / signing
+*.jks
+*.keystore
+
+# OS
+.DS_Store
+Thumbs.db
