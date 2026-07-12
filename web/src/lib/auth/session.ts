@@ -4,6 +4,13 @@ import { SignJWT, jwtVerify } from "jose";
 const SESSION_COOKIE = "astra_session";
 const SESSION_TTL_DAYS = 30;
 
+// Home-LAN installs (PWA on a phone pointed at this PC) serve the production
+// build over plain HTTP, where Secure cookies are silently dropped and sign-in
+// breaks with no error. ASTRA_ALLOW_HTTP=1 opts out of Secure for that case
+// only — never set it on an internet-facing deploy.
+const SECURE_COOKIES =
+  process.env.NODE_ENV === "production" && process.env.ASTRA_ALLOW_HTTP !== "1";
+
 function getSecret(): Uint8Array {
   const raw = process.env.AUTH_SECRET;
   if (!raw || raw.length < 16) {
@@ -47,7 +54,7 @@ export async function setSessionCookie(token: string): Promise<void> {
   jar.set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: SECURE_COOKIES,
     path: "/",
     maxAge: SESSION_TTL_DAYS * 24 * 60 * 60,
   });
@@ -58,7 +65,7 @@ export async function clearSessionCookie(): Promise<void> {
   jar.set(SESSION_COOKIE, "", {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: SECURE_COOKIES,
     path: "/",
     maxAge: 0,
   });

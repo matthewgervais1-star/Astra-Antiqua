@@ -6,6 +6,7 @@
     "dev": "cross-env NODE_OPTIONS=--use-system-ca next dev",
     "build": "next build",
     "start": "cross-env NODE_OPTIONS=--use-system-ca next start",
+    "start:lan": "cross-env NODE_OPTIONS=--use-system-ca ASTRA_ALLOW_HTTP=1 next start -H 0.0.0.0",
     "lint": "eslint --max-warnings 0",
     "typecheck": "tsc --noEmit"
   },
@@ -34,6 +35,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "postcss": "^8.4.49",
+    "sharp": "^0.35.3",
     "tailwindcss": "^4.0.0",
     "typescript": "^5"
   }

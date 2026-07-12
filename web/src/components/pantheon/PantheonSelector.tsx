@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useMemo } from "react";
+import { Suspense, useCallback, useEffect, useMemo } from "react";
 import {
   CULTURES,
   CULTURE_LABELS,
@@ -11,6 +11,7 @@ import {
 } from "@/data/cultures";
 import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
 import { cn } from "@/lib/classNames";
+import { readPersistedPantheon, writePersistedPantheon } from "@/lib/pantheonPreference";
 
 // Re-exported here for back-compat: callers across the app import the active
 // pantheon hook from this module. The implementation now lives in the context.
@@ -35,15 +36,30 @@ function PantheonSelectorImpl({ mode }: { mode: SelectorMode }) {
     [mode, raw],
   );
 
+  useEffect(() => {
+    if (mode !== "filter") return;
+    const persisted = readPersistedPantheon();
+    if (!persisted) return;
+    const next = new URLSearchParams(searchParams.toString());
+    if (!next.get(SEARCH_PARAM) && persisted) {
+      next.set(SEARCH_PARAM, persisted);
+      router.replace(next.toString() ? `?${next.toString()}` : "?", { scroll: false });
+    }
+  }, [mode, router, searchParams]);
+
   const onSelect = useCallback(
     (culture: Culture) => {
       if (mode === "navigate") {
+        // Navigating to a culture's journey page is browsing, not choosing a
+        // global filter — only explicit filter selections persist.
         router.push(`/pantheon/${culture}`);
         return;
       }
+      writePersistedPantheon(culture);
       const next = new URLSearchParams(searchParams.toString());
       if (active === culture) {
         next.delete(SEARCH_PARAM);
+        writePersistedPantheon(null);
       } else {
         next.set(SEARCH_PARAM, culture);
       }

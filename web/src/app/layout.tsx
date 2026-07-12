@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { PantheonBodyAttribute } from "@/components/layout/PantheonBodyAttribute";
 import { PantheonProvider } from "@/components/pantheon/PantheonContext";
 import { AuthProvider } from "@/components/auth/AuthProvider";
+import { AuthGate } from "@/components/auth/AuthGate";
 import { SITE_URL } from "@/lib/siteUrl";
 import "./globals.css";
 
@@ -53,6 +54,19 @@ export const metadata: Metadata = {
     description:
       "Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit. Or Rome.",
   },
+  icons: {
+    apple: "/icons/apple-touch-icon.png",
+  },
+  appleWebApp: {
+    capable: true,
+    title: "Astra Antiqua",
+    statusBarStyle: "black-translucent",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#050505",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -74,7 +88,9 @@ export default function RootLayout({
               Skip to content
             </a>
             <SiteHeader />
-            <main id="main-content" className="flex-1">{children}</main>
+            <main id="main-content" className="flex-1">
+              <AuthGate>{children}</AuthGate>
+            </main>
             <SiteFooter />
           </PantheonProvider>
         </AuthProvider>
