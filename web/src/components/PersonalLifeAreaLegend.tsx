@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useActivePantheon } from "@/components/pantheon/PantheonSelector";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -14,7 +14,7 @@ import { LifeAreaLegend } from "@/components/LifeAreaLegend";
  * plus a prompt to cast one. Reads the primary saved chart and re-reads when
  * auth resolves (a signed-in user's charts land after the session loads).
  */
-export function PersonalLifeAreaLegend() {
+function PersonalLifeAreaLegendImpl() {
   const culture = useActivePantheon();
   const { status } = useAuth();
   const [natal, setNatal] = useState<SavedNatal | null>(null);
@@ -43,5 +43,15 @@ export function PersonalLifeAreaLegend() {
       )}
       <LifeAreaLegend culture={culture} natal={natal} />
     </div>
+  );
+}
+
+// useActivePantheon reads useSearchParams, so the impl must sit inside a
+// Suspense boundary or prerendering the pages that mount it fails.
+export function PersonalLifeAreaLegend() {
+  return (
+    <Suspense fallback={null}>
+      <PersonalLifeAreaLegendImpl />
+    </Suspense>
   );
 }
