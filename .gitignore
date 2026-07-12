@@ -3,3 +3,12 @@
 .DS_Store
 Thumbs.db
 *.hprof
+
+# Machine-local Claude permissions (not shared)
+.claude/settings.local.json
+
+# Next/tsc artifacts that land at the root when tooling runs from the
+# wrong directory — the real ones live under web/.
+/next-env.d.ts
+/tsconfig.tsbuildinfo
+/.next/

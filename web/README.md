@@ -1,13 +1,18 @@
 # Astra Antiqua Website
 
-Marketing and preview website for **Astra Antiqua**, an ancient-astrology mobile app
-in development for Android. The astronomical engine renders standard ephemeris
-calculations through the religious frameworks of four ancient cultures: Egypt,
-Greece, Canaan, and Carthage.
+Web surface of **Astra Antiqua**, an ancient-astrology product. The astronomical
+engine renders a real computed ephemeris through the religious frameworks of
+five ancient cultures: Egypt, Greece, Canaan, Carthage, and Rome. A native
+Android app (`android/`, Kotlin + Jetpack Compose) reimplements the same domain
+independently — the two surfaces share a domain but no code; see the repo-root
+`CLAUDE.md`.
 
-The website ships before the app and serves as the wait-list capture mechanism,
-the methodology explainer for a scholarly-skeptical audience, and the visual
-demonstration of the four-pantheon translation matrix.
+This is the product itself, not a marketing preview: anonymous and signed-in
+visitors can cast and save natal charts, read synastry between two charts, pull
+an annual forecast, and browse the methodology and translation matrix. It ships
+a web app manifest and icon set for install-to-home-screen (`src/app/manifest.ts`,
+`public/icons/`). It still carries `/wait-list`, a holdover page for visitors who
+want to be told when the Android app ships.
 
 ---
 
@@ -35,6 +40,7 @@ pnpm install
 pnpm dev          # http://localhost:3000
 pnpm build        # production build, Turbopack
 pnpm start        # serve the production build
+pnpm start:lan    # serve the production build on the LAN over plain HTTP (sets ASTRA_ALLOW_HTTP=1)
 pnpm typecheck    # tsc --noEmit
 pnpm lint         # eslint with --max-warnings 0
 ```
@@ -44,32 +50,52 @@ The project requires Node 24+. See `.nvmrc`.
 ## Project layout
 
 ```
-website/
+web/
   src/
     app/                              Routes (App Router)
-      layout.tsx                      Font loaders, SiteHeader, SiteFooter
+      layout.tsx                      Font loaders, SiteHeader, SiteFooter, AuthProvider, AuthGate
       globals.css                     Tailwind v4 @theme tokens + @utility text-gold-leaf
-      page.tsx                        Home: hero, selector, wheel, oracle, CTA
-      pantheon/[culture]/page.tsx     Dynamic pantheon page (4 SSG)
+      manifest.ts                     PWA manifest -> /manifest.webmanifest (icons, standalone display)
+      page.tsx                        Home: hero, selector, today dashboard, week, demo, method, wait-list
+      about/page.tsx
+      pantheon/[culture]/             Overview + /today, /reading, /forecast (SSG, 5 cultures)
+      learn/                          Overview + signs, houses, house-systems, aspects, transits, rising
+      reading/page.tsx                Cast a chart
+      forecast/page.tsx               Annual report
+      charts/page.tsx                 Saved-chart management (anonymous and signed-in)
+      synastry/page.tsx               Two-chart comparison
+      onboarding/, onboarding/success/  First-visit funnel for anonymous visitors
+      sign-in/, sign-up/, account/    Auth
       methodology/page.tsx
       translation-matrix/page.tsx
       wait-list/page.tsx
-      api/wait-list/route.ts          POST, Node runtime, dynamic
+      api/                             auth/{signup,signin,signout,me}, charts, charts/[id], me, me/export,
+                                       geocode, wait-list
     components/
-      layout/                         SiteHeader, SiteFooter
-      pantheon/                       PantheonSelector, DeityCard, InterpretiveNote
+      layout/                         SiteHeader, SiteFooter, MobileMenu, PantheonBodyAttribute
+      auth/                           AuthProvider, AuthGate, AccountChip, AuthOnboardingLayout
+      onboarding/                     OnboardingFlow, SuccessState
+      pantheon/                       PantheonSelector, PantheonContext, PantheonJourney, DeityCard, InterpretiveNote
       wheel/                          NatalWheel (client), wheelDraw (pure), wheelHitTest (pure), WheelTooltip
       oracle/                         OracleDecree
+      daily/                          TodayDashboard, WeekForecastSection, BigThree, MoonPhasePanel, and related
+      forecast/                       ForecastExperience, AnnualReportSection
+      reading/                        ReadingExperience, ReadingDisplay, BirthForm
+      charts/                         SaveChartPanel
       matrix/                         TranslationMatrix
       waitlist/                       WaitListForm
-      glyphs/                         DeityGlyph + 4 culture path modules (28 glyphs total)
-      ui/                             GoldText, GlassPanel, SectionContainer
-    data/                             cultures, deities (28), oracleDecrees, culturalOrientations,
-                                      methodologyContent (5 sections + 4 interpretive notes + sources),
-                                      sampleChart (SAMPLE_CHART + aspect computation)
-    lib/                              waitlistSchema (Zod), waitlistStore (adapter), classNames, reducedMotion
+      glyphs/                         DeityGlyph + 5 culture path modules (35 glyphs total)
+      ui/                             GoldText, GlassPanel, SectionContainer, PrintButton
+    data/                             cultures, deities (35), oracleDecrees, culturalOrientations,
+                                      methodologyContent (3 sections + 4 interpretive notes + sources),
+                                      sampleChart (SAMPLE_CHART + aspect computation), plus zodiacSigns,
+                                      houses, lifeDomains, and other per-domain content tables
+    lib/                              ephemeris, houses, transits, reading, savedCharts, onboarding,
+                                      pantheonPreference, waitlistSchema/waitlistStore, siteUrl, classNames,
+                                      reducedMotion
+    lib/auth/                         session, db, users, charts, rateLimit, origin, nextPath
     types/                            deity (Deity, DeityMatrix)
-  data/                               Wait-list JSON output (local dev only, gitignored)
+  data/                               Wait-list JSON + SQLite auth db (local dev only, gitignored)
 ```
 
 ## Where things live
@@ -81,9 +107,10 @@ website/
 | Add or edit a glyph                | `src/components/glyphs/paths/<culture>.ts`                    |
 | Change the mock chart positions    | `src/data/sampleChart.ts` (`SAMPLE_CHART`)                    |
 | Tune design tokens                 | `src/app/globals.css` (`@theme` block)                        |
-| Wait-list file (local dev)         | `website/data/wait-list.json` (gitignored)                    |
+| Wait-list file (local dev)         | `data/wait-list.json` (gitignored)                             |
 | Wait-list adapter                  | `src/lib/waitlistStore.ts`                                    |
 | Validation schema                  | `src/lib/waitlistSchema.ts`                                   |
+| Regenerate PWA icons                | `node scripts/generate-icons.mjs` (writes `public/icons/`)    |
 
 ## Wait-list persistence
 
@@ -95,7 +122,7 @@ adapter. It selects at request time:
 3. `VERCEL=1` -> no-op with a one-time `console.warn`. The entry is still logged
    via `console.info` so submissions are visible in Vercel runtime logs.
    `persisted: false` is returned to the client.
-4. Otherwise (local dev) -> append to `website/data/wait-list.json`.
+4. Otherwise (local dev) -> append to `data/wait-list.json`.
 
 The form UI is identical in all environments. A clear note appears in the
 success state when `persisted: false`.
@@ -134,34 +161,43 @@ Two layers, both active:
 ## Style gates (CI-friendly)
 
 ```bash
-rg "—" website/src/                                                          # no em dashes
-rg -i "\b(inter|roboto|harness|unlock your|discover your)\b" website/src/   # no banned terms
-rg "framer-motion" website/src/                                              # must use motion/react instead
+rg "—" src/                                                          # no em dashes
+rg -i "\b(inter|roboto|harness|unlock your|discover your)\b" src/   # no banned terms
+rg "framer-motion" src/                                              # must use motion/react instead
 ```
 
 All three return zero matches on a clean tree.
 
 ## Known shortcuts
 
-None. The 28 deity glyphs are all hand-authored geometric line-art per the
+None. The 35 deity glyphs are all hand-authored geometric line-art per the
 culture vocabulary brief (Egyptian hieroglyph-style strokes, Greek geometric
-clarity, Canaanite cuneiform-inflected angularity, Punic Tanit-based geometry).
+clarity, Canaanite cuneiform-inflected angularity, Punic Tanit-based geometry,
+Roman legionary/augural motifs).
 
 ## Routes
 
 | Route                          | Type         | Notes                                                |
 | ------------------------------ | ------------ | ---------------------------------------------------- |
 | `/`                            | static       | Hero, selector, today dashboard, week, demo, method, wait-list |
+| `/about`                       | static       | "Why real astronomy" pitch for a skeptical reader     |
 | `/forecast`                    | static       | Annual report + moon phases, eclipses, retrogrades, ingresses |
 | `/reading`                     | static       | Cast a natal chart, save it, read it in any pantheon |
 | `/charts`                      | static       | Saved-chart management (anonymous and signed-in)     |
 | `/synastry`                    | static       | Two-chart comparison                                 |
+| `/learn`                       | static       | Plain-language explainer: planets, signs, houses, cultures |
+| `/learn/{signs,houses,house-systems,aspects,transits,rising}` | static | One topic explainer per route |
+| `/onboarding`, `/onboarding/success` | static | First-visit funnel shown once to anonymous visitors entering `/reading`, `/charts`, `/forecast`, or `/synastry` |
 | `/sign-in`, `/sign-up`         | static       | Auth                                                 |
 | `/account`                     | static       | Display name, password, data export, deletion       |
-| `/pantheon/[culture]`          | SSG (4 pages) | `generateStaticParams` over the four cultures        |
+| `/pantheon/[culture]`          | SSG (5 pages) | Overview: deities, oracle decree, interpretive notes. `generateStaticParams` (culture layout) over the five cultures |
+| `/pantheon/[culture]/today`    | SSG (5 pages) | Today + week, read in that pantheon's voice          |
+| `/pantheon/[culture]/reading`  | SSG (5 pages) | Cast/read a chart with the pantheon fixed (no selector) |
+| `/pantheon/[culture]/forecast` | SSG (5 pages) | Annual forecast with the pantheon fixed (no selector) |
 | `/methodology`                 | static       | Methodology page                                     |
-| `/translation-matrix`          | static       | 7x4 interactive table                                |
-| `/wait-list`                   | static       | Long-form pitch + form                               |
+| `/translation-matrix`          | static       | 7x5 interactive table                                |
+| `/wait-list`                   | static       | Long-form pitch + form for the Android launch        |
+| `/manifest.webmanifest`        | generated    | PWA manifest from `src/app/manifest.ts`; icons in `public/icons/` |
 | `/api/auth/{signup,signin,signout,me}` | dynamic | Email/password auth                                  |
 | `/api/charts`, `/api/charts/[id]` | dynamic    | Authenticated chart CRUD                             |
 | `/api/me`                      | dynamic      | PATCH (name, password), DELETE (account)             |
@@ -178,6 +214,7 @@ clarity, Canaanite cuneiform-inflected angularity, Punic Tanit-based geometry).
 | `WAITLIST_FILE` | no | Absolute path to the wait-list JSON file. Defaults to `./data/wait-list.json`. |
 | `WAITLIST_STORE` | no | Set to `noop` to log entries only without writing anywhere. Used in environments where filesystem writes are not desired. |
 | `NODE_ENV` | usually set by host | When `production`, enforces `AUTH_SECRET` presence and enables `Secure` cookies. |
+| `ASTRA_ALLOW_HTTP` | no | Set to `1` **only for home-LAN installs served over plain HTTP** (the `start:lan` script sets it). Disables the `Secure` flag on session cookies so sign-in works without TLS. **Never set this on an internet-facing deploy** — it downgrades session cookies to plaintext-transmittable. |
 
 ## Security
 
@@ -189,7 +226,7 @@ The app ships with defense-in-depth defaults:
 - **Rate limiting** per IP on `/api/auth/signin` (20/min), `/api/auth/signup` (5/hour), `/api/geocode` (60/min). In-memory sliding window; swap to Redis for multi-instance production.
 - **Login throttling** per email address: 5 consecutive failures within 15 minutes triggers a 15-minute lockout. Successful sign-in clears the counter.
 - **Constant-time login.** When the email does not exist, the auth flow still runs a dummy `bcrypt.compare` so an attacker cannot probe whether an email is registered by timing.
-- **Session cookie** is `HttpOnly`, `SameSite=Lax`, and `Secure` when `NODE_ENV=production`. 30-day expiry, signed with HS256.
+- **Session cookie** is `HttpOnly`, `SameSite=Lax`, and `Secure` when `NODE_ENV=production` (unless `ASTRA_ALLOW_HTTP=1`, the documented home-LAN escape hatch — see Environment variables). 30-day expiry, signed with HS256.
 - **Password hashing** via `bcryptjs`, cost factor 11.
 - **Prepared statements** everywhere SQL is run (no string concatenation), so SQL injection is not reachable.
 - **Account deletion** cascades via the foreign key from `charts(user_id) → users(id)`. The session cookie is cleared as part of the same response.
@@ -217,6 +254,6 @@ Known security work still to do (not in this build):
 2. **Set `AUTH_SECRET`** to a strong random value (`openssl rand -base64 32`). The app will refuse to start without it.
 3. **Set the wait-list adapter.** Either leave it as the no-op (entries log to runtime logs only) or wire it to a real backend in `src/lib/waitlistStore.ts`.
 4. **Move rate-limiter state to Redis** (Upstash works well with Vercel) if you expect multi-instance traffic. The current in-memory map is process-local.
-5. Push the `website/` directory as the project root. No `vercel.json` required.
+5. Push the `web/` directory as the project root. No `vercel.json` required.
 
 **Self-hosted (single instance):** the defaults work as-is. SQLite, in-memory rate limiter, file-backed wait-list all behave correctly. Run behind a reverse proxy (Caddy, nginx) that terminates TLS so the `Secure` cookie flag has effect.
