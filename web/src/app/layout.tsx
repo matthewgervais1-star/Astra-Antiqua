@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { PantheonBodyAttribute } from "@/components/layout/PantheonBodyAttribute";
@@ -9,26 +9,32 @@ import { AuthGate } from "@/components/auth/AuthGate";
 import { SITE_URL } from "@/lib/siteUrl";
 import "./globals.css";
 
-const playfair = Playfair_Display({
+// Self-hosted (fetched once by scripts/fetch-fonts.mjs, committed to
+// src/fonts/) so `next build` never depends on Google Fonts being reachable.
+const playfair = localFont({
   variable: "--font-playfair",
-  weight: ["400", "700"],
-  subsets: ["latin"],
   display: "swap",
+  src: [
+    { path: "../fonts/playfair-display-latin-400.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/playfair-display-latin-700.woff2", weight: "700", style: "normal" },
+  ],
 });
 
-const cormorant = Cormorant_Garamond({
+const cormorant = localFont({
   variable: "--font-cormorant",
-  weight: ["400", "500"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
   display: "swap",
+  src: [
+    { path: "../fonts/cormorant-garamond-latin-400.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/cormorant-garamond-latin-500.woff2", weight: "500", style: "normal" },
+    { path: "../fonts/cormorant-garamond-latin-400-italic.woff2", weight: "400", style: "italic" },
+    { path: "../fonts/cormorant-garamond-latin-500-italic.woff2", weight: "500", style: "italic" },
+  ],
 });
 
-const jetbrains = JetBrains_Mono({
+const jetbrains = localFont({
   variable: "--font-jetbrains",
-  weight: ["400"],
-  subsets: ["latin"],
   display: "swap",
+  src: [{ path: "../fonts/jetbrains-mono-latin-400.woff2", weight: "400", style: "normal" }],
 });
 
 const SITE_DESCRIPTION =

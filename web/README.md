@@ -24,7 +24,7 @@ want to be told when the Android app ships.
 - **Tailwind CSS 4** with CSS-first `@theme` configuration
 - **motion** (the official rewrite of framer-motion)
 - **Zod** + **react-hook-form** + **@hookform/resolvers** for the wait-list
-- **next/font/google** self-hosting Playfair Display, Cormorant Garamond, and JetBrains Mono
+- **next/font/local** serving committed woff2 files (Playfair Display, Cormorant Garamond, JetBrains Mono) from `src/fonts/`; refetch with `node scripts/fetch-fonts.mjs` only when families/weights change. Not next/font/google: its parallel build-time fetch burst gets connection-reset on some networks and breaks the build.
 
 No CSS-in-JS. No UI library. No shadcn/ui. No Radix.
 
