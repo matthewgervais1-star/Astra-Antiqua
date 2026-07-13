@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import type { Culture } from "@/data/cultures";
+import { CULTURES, CULTURE_LABELS, type Culture } from "@/data/cultures";
 import {
   PantheonSelector,
   useActivePantheon,
@@ -169,6 +169,42 @@ function SeasonExperienceImpl({
           </p>
         </GlassPanel>
       </SectionContainer>
+
+      {!culture ? (
+        <SectionContainer size="default" spacing="tight">
+          <div className="mb-6">
+            <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
+              Five voices, one season
+            </div>
+            <p className="text-ink-secondary font-body mt-3 max-w-2xl text-base leading-relaxed">
+              The same Sun crosses the same sign; only the names of the gods change.
+              Choose whose eyes to read the month through.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+            {CULTURES.map((c) => (
+              <GlassPanel key={c} tone="solid" className="flex h-full flex-col p-5">
+                <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
+                  {CULTURE_LABELS[c]}
+                </div>
+                <p className="font-display text-ink-primary mt-3 text-lg leading-snug">
+                  {DEITY_MATRIX[c].sun.name} {PLACEMENT_VERBS[c]}{" "}
+                  {SIGN_REGISTERS[window.sign]}.
+                </p>
+                <p className="text-ink-secondary font-body mt-2 text-xs italic leading-relaxed">
+                  {DEITY_MATRIX[c].sun.epithet}
+                </p>
+                <Link
+                  href={`/pantheon/${c}/season`}
+                  className="text-gold-leaf font-mono mt-auto pt-4 text-[10px] uppercase tracking-[0.25em] underline-offset-4 hover:underline"
+                >
+                  Read in this voice →
+                </Link>
+              </GlassPanel>
+            ))}
+          </div>
+        </SectionContainer>
+      ) : null}
 
       <SectionContainer size="default" spacing="tight">
         {natal && house ? (
