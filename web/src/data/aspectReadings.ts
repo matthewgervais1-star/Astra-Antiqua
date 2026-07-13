@@ -1,5 +1,6 @@
 import type { Planet } from "@/data/cultures";
 import type { AspectKind } from "@/data/sampleChart";
+import { toneOf, type Tone } from "@/lib/tone";
 
 /**
  * Hand-written daily directives, one per planet-pair per tone, in the blunt
@@ -19,14 +20,6 @@ import type { AspectKind } from "@/data/sampleChart";
 export interface AspectReading {
   headline: string;
   body: string;
-}
-
-type Tone = "harmony" | "tension" | "union";
-
-function toneOf(kind: AspectKind): Tone {
-  if (kind === "trine" || kind === "sextile") return "harmony";
-  if (kind === "square" || kind === "opposition") return "tension";
-  return "union";
 }
 
 const FALLBACK: Readonly<Record<Tone, AspectReading>> = {

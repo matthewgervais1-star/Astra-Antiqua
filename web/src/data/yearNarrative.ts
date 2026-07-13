@@ -1,4 +1,5 @@
 import type { AspectKind } from "@/data/sampleChart";
+import { toneOf } from "@/lib/tone";
 
 /**
  * Hand-written year-ahead narrative, in the blunt diagnostic register of the
@@ -13,14 +14,6 @@ import type { AspectKind } from "@/data/sampleChart";
 export interface YearNarrative {
   headline: string;
   body: string;
-}
-
-type Tone = "harmony" | "tension" | "union";
-
-function toneOf(kind: AspectKind): Tone {
-  if (kind === "trine" || kind === "sextile") return "harmony";
-  if (kind === "square" || kind === "opposition") return "tension";
-  return "union";
 }
 
 const ENTRIES: Readonly<Record<string, YearNarrative>> = {

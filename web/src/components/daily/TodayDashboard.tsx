@@ -31,6 +31,7 @@ import {
 } from "@/lib/personalReading";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
+import { HorizonLinks } from "@/components/HorizonLinks";
 import { usePrefersReducedMotion } from "@/lib/reducedMotion";
 
 function formatLongDate(date: Date): string {
@@ -277,6 +278,9 @@ function TodayDashboardImpl({ explicitCulture }: { explicitCulture: Culture | nu
 
   return (
     <div id="today" className="scroll-mt-24 flex flex-col gap-8 md:gap-10">
+      <div className="flex justify-end">
+        <HorizonLinks active="day" culture={explicitCulture} />
+      </div>
       {natal ? <BigThree culture={culture} natal={natal} /> : <NoNatalPrompt />}
 
       <DayStrip today={now} viewDate={viewDate} onChange={setViewDate} span={5} />

@@ -68,6 +68,12 @@ export default async function PantheonPage({ params }: PantheonPageProps) {
                 Your day
               </Link>
               <Link
+                href={`/pantheon/${culture}/season`}
+                className="border-hairline text-ink-secondary hover:text-ink-primary hover:border-gold-soft inline-flex items-center gap-2 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors"
+              >
+                The season
+              </Link>
+              <Link
                 href={`/pantheon/${culture}/forecast`}
                 className="border-hairline text-ink-secondary hover:text-ink-primary hover:border-gold-soft inline-flex items-center gap-2 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors"
               >

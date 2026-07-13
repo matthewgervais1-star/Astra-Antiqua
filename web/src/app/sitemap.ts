@@ -24,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/methodology",
     "/translation-matrix",
     "/reading",
+    "/season",
     "/forecast",
     "/synastry",
     "/charts",
@@ -34,6 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `/pantheon/${c}`,
     `/pantheon/${c}/today`,
     `/pantheon/${c}/reading`,
+    `/pantheon/${c}/season`,
     `/pantheon/${c}/forecast`,
   ]);
 

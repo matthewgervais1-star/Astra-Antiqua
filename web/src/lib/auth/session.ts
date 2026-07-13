@@ -7,7 +7,7 @@ const SESSION_TTL_DAYS = 30;
 // Home-LAN installs (PWA on a phone pointed at this PC) serve the production
 // build over plain HTTP, where Secure cookies are silently dropped and sign-in
 // breaks with no error. ASTRA_ALLOW_HTTP=1 opts out of Secure for that case
-// only — never set it on an internet-facing deploy.
+// only; never set it on an internet-facing deploy.
 const SECURE_COOKIES =
   process.env.NODE_ENV === "production" && process.env.ASTRA_ALLOW_HTTP !== "1";
 

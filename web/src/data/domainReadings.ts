@@ -1,5 +1,6 @@
 import type { AspectKind } from "@/data/sampleChart";
 import type { LifeDomain } from "@/data/lifeDomains";
+import { toneOf, type Tone } from "@/lib/tone";
 
 /**
  * Hand-written life-domain directives, one per domain per tone, in the blunt
@@ -10,14 +11,6 @@ import type { LifeDomain } from "@/data/lifeDomains";
 export interface DomainReading {
   headline: string;
   body: string;
-}
-
-type Tone = "harmony" | "tension" | "union";
-
-function toneOf(kind: AspectKind): Tone {
-  if (kind === "trine" || kind === "sextile") return "harmony";
-  if (kind === "square" || kind === "opposition") return "tension";
-  return "union";
 }
 
 const READINGS: Readonly<Record<LifeDomain, Readonly<Record<Tone, DomainReading>>>> = {

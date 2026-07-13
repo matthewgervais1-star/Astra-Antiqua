@@ -34,6 +34,7 @@ import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
 import { PrintButton } from "@/components/ui/PrintButton";
 import { deityWithPlanet } from "@/lib/deityLabel";
 import { AnnualReportSection } from "@/components/forecast/AnnualReportSection";
+import { HorizonLinks } from "@/components/HorizonLinks";
 
 const YEAR_DAYS = 365;
 const TRANSIT_PLANETS: readonly Planet[] = ["jupiter", "saturn"];
@@ -140,7 +141,10 @@ function ForecastExperienceImpl({
           <div className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">
             Year ahead · from {formatLongDate(bundle.now)}
           </div>
-          <PrintButton label="Save as PDF" />
+          <div className="flex flex-wrap items-center gap-4">
+            <HorizonLinks active="year" culture={explicitCulture} />
+            <PrintButton label="Save as PDF" />
+          </div>
         </div>
         <GoldText as="h1" className="mt-4 max-w-3xl text-5xl leading-tight md:text-6xl">
           The next twelve months of sky.

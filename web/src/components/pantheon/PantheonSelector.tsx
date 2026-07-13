@@ -51,7 +51,7 @@ function PantheonSelectorImpl({ mode }: { mode: SelectorMode }) {
     (culture: Culture) => {
       if (mode === "navigate") {
         // Navigating to a culture's journey page is browsing, not choosing a
-        // global filter — only explicit filter selections persist.
+        // global filter; only explicit filter selections persist.
         router.push(`/pantheon/${culture}`);
         return;
       }

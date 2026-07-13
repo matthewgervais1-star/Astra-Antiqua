@@ -115,7 +115,7 @@ function ReportContent({
 
       <section>
         <div className="text-ink-tertiary font-mono mb-5 text-[10px] uppercase tracking-[0.3em]">
-          Four seasons of the year
+          The four quarters ahead
         </div>
         <div className="grid gap-5 md:grid-cols-2">
           {report.quarters.map((q, idx) => (

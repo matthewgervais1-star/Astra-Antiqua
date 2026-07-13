@@ -4,6 +4,7 @@ import { MobileMenu } from "@/components/layout/MobileMenu";
 
 const NAV = [
   { href: "/", label: "Home" },
+  { href: "/season", label: "Season" },
   { href: "/forecast", label: "Forecast" },
   { href: "/reading", label: "Reading" },
   { href: "/charts", label: "Charts" },

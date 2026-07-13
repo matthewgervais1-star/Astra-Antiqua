@@ -25,7 +25,7 @@ function Impl({ explicitCulture }: { explicitCulture: Culture | null }) {
       </GlassPanel>
     );
   }
-  return <WeekForecast now={now} culture={culture} />;
+  return <WeekForecast now={now} culture={culture} linkCulture={explicitCulture} />;
 }
 
 function Fallback() {
