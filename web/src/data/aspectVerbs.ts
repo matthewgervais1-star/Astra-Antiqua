@@ -47,6 +47,19 @@ export const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, 
 };
 
 /**
+ * The culture-neutral aspect verbs, for surfaces rendered before any pantheon
+ * is chosen. Same composition contract as ASPECT_VERBS: "{name} {verb} {name}"
+ * must read as a sentence a person wrote.
+ */
+export const PLAIN_ASPECT_VERBS: Readonly<Record<AspectKind, string>> = {
+  conjunction: "joins",
+  sextile: "steadies",
+  square: "grinds against",
+  trine: "flows with",
+  opposition: "pulls against",
+};
+
+/**
  * The verb that places the Moon's deity in a sign for the week strip:
  * "{deity} {verb} {sign image}". Must compose cleanly with every entry in
  * SIGN_REGISTERS.

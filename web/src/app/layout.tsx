@@ -11,12 +11,13 @@ import "./globals.css";
 
 // Self-hosted (fetched once by scripts/fetch-fonts.mjs, committed to
 // src/fonts/) so `next build` never depends on Google Fonts being reachable.
+// Playfair and Cormorant ship as VARIABLE fonts: one file per style carries
+// the whole weight range, declared as a range so no bytes are duplicated.
 const playfair = localFont({
   variable: "--font-playfair",
   display: "swap",
   src: [
-    { path: "../fonts/playfair-display-latin-400.woff2", weight: "400", style: "normal" },
-    { path: "../fonts/playfair-display-latin-700.woff2", weight: "700", style: "normal" },
+    { path: "../fonts/playfair-display-latin-var.woff2", weight: "400 700", style: "normal" },
   ],
 });
 
@@ -24,10 +25,12 @@ const cormorant = localFont({
   variable: "--font-cormorant",
   display: "swap",
   src: [
-    { path: "../fonts/cormorant-garamond-latin-400.woff2", weight: "400", style: "normal" },
-    { path: "../fonts/cormorant-garamond-latin-500.woff2", weight: "500", style: "normal" },
-    { path: "../fonts/cormorant-garamond-latin-400-italic.woff2", weight: "400", style: "italic" },
-    { path: "../fonts/cormorant-garamond-latin-500-italic.woff2", weight: "500", style: "italic" },
+    { path: "../fonts/cormorant-garamond-latin-var.woff2", weight: "400 500", style: "normal" },
+    {
+      path: "../fonts/cormorant-garamond-latin-var-italic.woff2",
+      weight: "400 500",
+      style: "italic",
+    },
   ],
 });
 

@@ -25,8 +25,9 @@ import type { SavedNatal } from "@/lib/savedNatal";
 import { getBeat } from "@/data/yearNarrative";
 import { TRANSIT_PRINCIPLE } from "@/lib/personalReading";
 import { DEITY_MATRIX } from "@/data/deities";
-import { ASPECT_VERBS } from "@/data/aspectVerbs";
+import { ASPECT_VERBS, PLAIN_ASPECT_VERBS } from "@/data/aspectVerbs";
 import { deityWithPlanet } from "@/lib/deityLabel";
+import { transitPlanetWeight } from "@/lib/transits";
 import { toneOf, type Tone } from "@/lib/tone";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -67,11 +68,16 @@ export function getCurrentSeason(date: Date): SeasonWindow {
   const start = startHit ? startHit.date : new Date(date.getTime() - 15 * MS_PER_DAY);
   const end = endHit ? endHit.date : new Date(date.getTime() + 15 * MS_PER_DAY);
 
-  const totalDays = Math.max(1, Math.round((end.getTime() - start.getTime()) / MS_PER_DAY));
-  const dayOfSeason = Math.min(
-    totalDays,
-    Math.max(1, Math.floor((date.getTime() - start.getTime()) / MS_PER_DAY) + 1),
-  );
+  // Day counting uses LOCAL calendar days, because the page shows the counter
+  // beside locale-formatted dates: "day 1" must be the calendar day the
+  // ingress date renders as, not the first 24 hours after the UTC instant.
+  const localDayIndex = (from: Date, to: Date): number => {
+    const a = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+    const b = new Date(to.getFullYear(), to.getMonth(), to.getDate());
+    return Math.round((b.getTime() - a.getTime()) / MS_PER_DAY);
+  };
+  const totalDays = Math.max(1, localDayIndex(start, end) + 1);
+  const dayOfSeason = Math.min(totalDays, Math.max(1, localDayIndex(start, date) + 1));
   return {
     sign,
     start,
@@ -86,39 +92,70 @@ export function getCurrentSeason(date: Date): SeasonWindow {
 const SEASON_INGRESS_PLANETS: readonly Planet[] = ["mercury", "venus", "mars"];
 const SEASON_TRANSIT_PLANETS: readonly Planet[] = ["venus", "mars", "jupiter", "saturn"];
 
-export interface SeasonEvents {
+export interface SeasonSkyEvents {
   moonPhases: readonly MoonPhaseEvent[];
   eclipses: readonly EclipseEvent[];
   retrogrades: readonly RetrogradeEvent[];
   ingresses: readonly YearIngressEvent[];
+}
+
+export interface SeasonEvents extends SeasonSkyEvents {
   /** Personal transit peaks inside the window; empty without a saved chart. */
   transits: readonly NatalTransitPeak[];
 }
 
-export function getSeasonEvents(window: SeasonWindow, natal: SavedNatal | null): SeasonEvents {
-  const days = Math.ceil((window.end.getTime() - window.start.getTime()) / MS_PER_DAY) + 1;
+// The coarsest finder sampling step is 5 days (Mars ingresses); scanning this
+// many days past the window guarantees every finder's last sample lands
+// beyond the ingress boundary, so no in-window event in the season's tail is
+// missed. inWindow() then trims the overshoot.
+const SAMPLING_PAD_DAYS = 6;
+
+function windowDays(window: SeasonWindow): number {
+  return (
+    Math.ceil((window.end.getTime() - window.start.getTime()) / MS_PER_DAY) + SAMPLING_PAD_DAYS
+  );
+}
+
+function inWindow<T extends { date: Date }>(
+  events: readonly T[],
+  end: Date,
+): readonly T[] {
+  return events.filter((e) => e.date <= end);
+}
+
+/** The culture- and chart-independent beats of the window: one ephemeris scan. */
+export function getSeasonSkyEvents(window: SeasonWindow): SeasonSkyEvents {
+  const days = windowDays(window);
   const { start, end } = window;
-  // The finders sample in whole days past the window, so clamp every list to
-  // the actual ingress boundary; a beat one day into the next season is not
-  // this season's beat.
-  const inWindow = <T extends { date: Date }>(events: readonly T[]): readonly T[] =>
-    events.filter((e) => e.date <= end);
-  let transits: readonly NatalTransitPeak[] = [];
-  if (natal) {
-    const natalPoints = [
-      { key: "sun", longitude: natal.chart.sun },
-      { key: "moon", longitude: natal.chart.moon },
-      { key: "asc", longitude: natal.angles.ascendant },
-      { key: "mc", longitude: natal.angles.midheaven },
-    ];
-    transits = inWindow(findMajorTransits(natalPoints, SEASON_TRANSIT_PLANETS, start, days));
-  }
   return {
-    moonPhases: inWindow(findMoonPhases(start, days)),
-    eclipses: inWindow(findEclipses(start, days)),
-    retrogrades: inWindow(findRetrogradeStations(start, days)),
-    ingresses: inWindow(findYearIngresses(start, days, SEASON_INGRESS_PLANETS)),
-    transits,
+    moonPhases: inWindow(findMoonPhases(start, days), end),
+    eclipses: inWindow(findEclipses(start, days), end),
+    retrogrades: inWindow(findRetrogradeStations(start, days), end),
+    ingresses: inWindow(findYearIngresses(start, days, SEASON_INGRESS_PLANETS), end),
+  };
+}
+
+/** The moments the moving sky touches the visitor's chart inside the window. */
+export function getSeasonPersonalTransits(
+  window: SeasonWindow,
+  natal: SavedNatal,
+): readonly NatalTransitPeak[] {
+  const natalPoints = [
+    { key: "sun", longitude: natal.chart.sun },
+    { key: "moon", longitude: natal.chart.moon },
+    { key: "asc", longitude: natal.angles.ascendant },
+    { key: "mc", longitude: natal.angles.midheaven },
+  ];
+  return inWindow(
+    findMajorTransits(natalPoints, SEASON_TRANSIT_PLANETS, window.start, windowDays(window)),
+    window.end,
+  );
+}
+
+export function getSeasonEvents(window: SeasonWindow, natal: SavedNatal | null): SeasonEvents {
+  return {
+    ...getSeasonSkyEvents(window),
+    transits: natal ? getSeasonPersonalTransits(window, natal) : [],
   };
 }
 
@@ -173,24 +210,6 @@ function cap(s: string): string {
   return s.length === 0 ? s : s[0]!.toUpperCase() + s.slice(1);
 }
 
-/** How much a moving planet's touch matters, slowest heaviest. */
-export function transitPlanetWeight(planet: Planet): number {
-  switch (planet) {
-    case "saturn":
-      return 4;
-    case "jupiter":
-      return 3;
-    case "mars":
-      return 2;
-    case "venus":
-    case "mercury":
-      return 1.5;
-    case "sun":
-    case "moon":
-      return 1;
-  }
-}
-
 /**
  * The dated beats of the season, scored and trimmed: personal transit peaks,
  * eclipses, New and Full Moons, retrograde stations, and inner-planet
@@ -211,7 +230,7 @@ export function buildSeasonStandouts(
         : t.natalKey === "mc"
           ? "your Midheaven"
           : `your ${deityWithPlanet(culture, t.natalKey as Planet)}`;
-    const verb = culture ? ASPECT_VERBS[culture][t.aspectKind] : t.aspectKind;
+    const verb = culture ? ASPECT_VERBS[culture][t.aspectKind] : PLAIN_ASPECT_VERBS[t.aspectKind];
     const tone = toneOf(t.aspectKind);
     const principle = TRANSIT_PRINCIPLE[t.transitPlanet];
     const body =

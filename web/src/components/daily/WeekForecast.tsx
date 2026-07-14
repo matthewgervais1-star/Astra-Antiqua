@@ -8,11 +8,16 @@ import { longitudeToSign, computeAspects, type ZodiacSign } from "@/data/sampleC
 import { SIGN_REGISTERS } from "@/data/interpretations";
 import { WEEK_READINGS, type WeekReading } from "@/data/weekReadings";
 import { getAspectReading } from "@/data/aspectReadings";
-import { PLACEMENT_VERBS } from "@/data/aspectVerbs";
+import { PLACEMENT_VERBS, PLAIN_ASPECT_VERBS } from "@/data/aspectVerbs";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
-import { computeTransits, topTransits, type TransitAspect } from "@/lib/transits";
+import {
+  computeTransits,
+  topTransits,
+  transitPlanetWeight,
+  type TransitAspect,
+} from "@/lib/transits";
 import { buildTransitLine } from "@/lib/transitReading";
-import { transitPlanetWeight } from "@/lib/season";
 import { TONE_LABELS, toneOf, type Tone } from "@/lib/tone";
 import { HorizonLinks } from "@/components/HorizonLinks";
 import { GlassPanel } from "@/components/ui/GlassPanel";
@@ -41,6 +46,8 @@ interface DayForecast {
   tightestAspectLine: string | null;
   /** The day's strongest touch on the visitor's own chart, when one exists. */
   personal: PersonalDayHit | null;
+  /** Every non-self transit hit of the day, for the week-level synthesis. */
+  personalPool: readonly TransitAspect[];
 }
 
 interface WeekSynthesis {
@@ -52,7 +59,7 @@ interface WeekSynthesis {
 
 function personalLine(culture: Culture | null, t: TransitAspect): string {
   if (culture) return buildTransitLine(culture, t).verbLine;
-  return `${PLANET_LABELS[t.transit]} ${t.kind} your natal ${PLANET_LABELS[t.natal]}.`;
+  return `${PLANET_LABELS[t.transit]} ${PLAIN_ASPECT_VERBS[t.kind]} your natal ${PLANET_LABELS[t.natal]}.`;
 }
 
 function buildDay(date: Date, culture: Culture | null, natal: SavedNatal | null): DayForecast {
@@ -77,8 +84,13 @@ function buildDay(date: Date, culture: Culture | null, natal: SavedNatal | null)
     }
   }
   let personal: PersonalDayHit | null = null;
+  let personalPool: readonly TransitAspect[] = [];
   if (natal) {
-    const hit = topTransits(computeTransits(chart, natal.chart), 1)[0];
+    // The card chip shows the tightest hit; the synthesis needs the whole
+    // pool, or slow heavy transits would be shadowed by whatever fast-moving
+    // body happens to be tighter that day.
+    personalPool = topTransits(computeTransits(chart, natal.chart), Number.POSITIVE_INFINITY);
+    const hit = personalPool[0];
     if (hit) {
       personal = {
         aspect: hit,
@@ -94,46 +106,50 @@ function buildDay(date: Date, culture: Culture | null, natal: SavedNatal | null)
     contextLine,
     tightestAspectLine,
     personal,
+    personalPool,
   };
 }
 
 /**
- * The week's dominant personal transit: across all seven days, the touch with
- * the heaviest planet at the tightest orb. This is the "shape of the week",
- * one reading instead of seven disconnected days.
+ * The week's dominant personal transit: across every hit of all seven days,
+ * the touch with the heaviest planet at the tightest orb. Scoring the full
+ * pool (not just each day's tightest) is what lets a Saturn that shadows the
+ * whole week outrank a Moon that happens to be exact for an afternoon.
  */
 function buildWeekSynthesis(
   culture: Culture | null,
   forecast: readonly DayForecast[],
 ): WeekSynthesis | null {
-  let best: { day: DayForecast; hit: PersonalDayHit; score: number } | null = null;
+  let best: { day: DayForecast; aspect: TransitAspect; score: number } | null = null;
   for (const day of forecast) {
-    if (!day.personal) continue;
-    const t = day.personal.aspect;
-    const score = transitPlanetWeight(t.transit) * (1 - t.orb / 6);
-    if (!best || score > best.score) best = { day, hit: day.personal, score };
+    for (const t of day.personalPool) {
+      const score = transitPlanetWeight(t.transit) * (1 - t.orb / 6);
+      if (!best || score > best.score) best = { day, aspect: t, score };
+    }
   }
   if (!best) return null;
-  const t = best.hit.aspect;
+  const t = best.aspect;
   const reading = getAspectReading(t.transit, t.natal, t.kind);
   const weekday = best.day.date.toLocaleDateString(undefined, { weekday: "long" });
   return {
     headline: reading.headline,
     body: reading.body,
-    contextLine: `${best.hit.line} Tightest on ${weekday}.`,
-    tone: best.hit.tone,
+    contextLine: `${personalLine(culture, t)} Tightest on ${weekday}.`,
+    tone: toneOf(t.kind),
   };
 }
 
 export function WeekForecast({ now, culture, linkCulture = null, days = 7 }: WeekForecastProps) {
+  const { status } = useAuth();
   const [natal, setNatal] = useState<SavedNatal | null>(null);
 
   useEffect(() => {
-    // The saved chart lives in localStorage, so it can only be read on the
-    // client after mount.
+    // Re-read the saved natal whenever auth resolves: a signed-in user's
+    // charts land in localStorage only after the session loads, so a
+    // mount-only read would leave the week unpersonalized until a reload.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setNatal(loadSavedNatal());
-  }, []);
+  }, [status]);
 
   const forecast = useMemo<readonly DayForecast[]>(() => {
     const out: DayForecast[] = [];
@@ -150,7 +166,7 @@ export function WeekForecast({ now, culture, linkCulture = null, days = 7 }: Wee
   );
 
   return (
-    <div id="week" className="scroll-mt-24">
+    <div>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h3 className="font-display text-ink-primary text-2xl md:text-3xl">

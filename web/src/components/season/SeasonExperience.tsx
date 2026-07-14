@@ -1,22 +1,25 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { CULTURES, CULTURE_LABELS, type Culture } from "@/data/cultures";
 import {
   PantheonSelector,
   useActivePantheon,
 } from "@/components/pantheon/PantheonSelector";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
 import {
   buildSeasonStandouts,
   getCurrentSeason,
-  getSeasonEvents,
   getSeasonHouse,
+  getSeasonPersonalTransits,
+  getSeasonSkyEvents,
   seasonAspectToNatalSun,
-  type SeasonStandout,
+  type SeasonSkyEvents,
   type SeasonWindow,
 } from "@/lib/season";
+import type { NatalTransitPeak } from "@/lib/yearForecast";
 import { SEASON_READINGS } from "@/data/seasonReadings";
 import { ZODIAC_SIGN_INFO } from "@/data/zodiacSigns";
 import { SIGN_REGISTERS } from "@/data/interpretations";
@@ -40,12 +43,15 @@ const SUN_TONE_BODIES: Readonly<Record<Tone, string>> = {
     "This is your own season: the year's light and your nature run on the same track for a month. You are more visible than usual, so aim the visibility.",
 };
 
-interface SeasonBundle {
-  now: Date;
-  natal: SavedNatal | null;
+interface SeasonSky {
   window: SeasonWindow;
-  standouts: readonly SeasonStandout[];
-  house: HouseMeaning | null;
+  events: SeasonSkyEvents;
+}
+
+interface SeasonPersonal {
+  natal: SavedNatal;
+  transits: readonly NatalTransitPeak[];
+  house: HouseMeaning;
   sunAspect: AspectKind | null;
 }
 
@@ -77,23 +83,51 @@ function SeasonExperienceImpl({
 }) {
   const ctxCulture = useActivePantheon();
   const culture = explicitCulture ?? ctxCulture;
-  const [bundle, setBundle] = useState<SeasonBundle | null>(null);
+  const { status } = useAuth();
+  const [sky, setSky] = useState<SeasonSky | null>(null);
+  const [personal, setPersonal] = useState<SeasonPersonal | null>(null);
 
   useEffect(() => {
-    // Season boundaries and the in-window event scan sample the ephemeris many
-    // times; compute once on mount rather than on every render.
-    const now = new Date();
-    const natal = loadSavedNatal();
-    const window = getCurrentSeason(now);
-    const events = getSeasonEvents(window, natal);
-    const standouts = buildSeasonStandouts(culture, events, 6);
-    const house = natal ? getSeasonHouse(natal, window.sign) : null;
-    const sunAspect = natal ? seasonAspectToNatalSun(natal, window.sign) : null;
+    // One ephemeris scan per visit: the season's boundaries and sky beats are
+    // the same in every culture and for every chart, so this never re-runs on
+    // pantheon changes.
+    const window = getCurrentSeason(new Date());
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setBundle({ now, natal, window, standouts, house, sunAspect });
-  }, [culture]);
+    setSky({ window, events: getSeasonSkyEvents(window) });
+  }, []);
 
-  if (!bundle) {
+  useEffect(() => {
+    // Re-read the saved natal whenever auth resolves: a signed-in user's
+    // charts land in localStorage only after the session loads, so a
+    // mount-only read would leave the season unpersonalized until a reload.
+    if (!sky) return;
+    const natal = loadSavedNatal();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPersonal(
+      natal
+        ? {
+            natal,
+            transits: getSeasonPersonalTransits(sky.window, natal),
+            house: getSeasonHouse(natal, sky.window.sign),
+            sunAspect: seasonAspectToNatalSun(natal, sky.window.sign),
+          }
+        : null,
+    );
+  }, [sky, status]);
+
+  const standouts = useMemo(
+    () =>
+      sky
+        ? buildSeasonStandouts(
+            culture,
+            { ...sky.events, transits: personal?.transits ?? [] },
+            6,
+          )
+        : [],
+    [culture, sky, personal],
+  );
+
+  if (!sky) {
     return (
       <SectionContainer size="default" spacing="default">
         <div className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">
@@ -103,7 +137,10 @@ function SeasonExperienceImpl({
     );
   }
 
-  const { window, natal, standouts, house, sunAspect } = bundle;
+  const { window } = sky;
+  const natal = personal?.natal ?? null;
+  const house = personal?.house ?? null;
+  const sunAspect = personal?.sunAspect ?? null;
   const reading = SEASON_READINGS[window.sign];
   const info = ZODIAC_SIGN_INFO.find((s) => s.sign === window.sign);
   const sunDeity = culture ? DEITY_MATRIX[culture].sun : null;

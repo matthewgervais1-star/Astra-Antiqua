@@ -39,9 +39,14 @@ function Fallback() {
 }
 
 export function WeekForecastSection({ culture }: { culture?: Culture }) {
+  // The #week anchor lives on this always-rendered wrapper (not inside the
+  // client component) so /#week navigations land on the strip even before
+  // the week's effects have resolved.
   return (
-    <Suspense fallback={<Fallback />}>
-      <Impl explicitCulture={culture ?? null} />
-    </Suspense>
+    <div id="week" className="scroll-mt-24">
+      <Suspense fallback={<Fallback />}>
+        <Impl explicitCulture={culture ?? null} />
+      </Suspense>
+    </div>
   );
 }

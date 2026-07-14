@@ -54,6 +54,24 @@ export function computeTransits(
   return hits;
 }
 
+/** How much a moving planet's touch matters, slowest heaviest. */
+export function transitPlanetWeight(planet: Planet): number {
+  switch (planet) {
+    case "saturn":
+      return 4;
+    case "jupiter":
+      return 3;
+    case "mars":
+      return 2;
+    case "venus":
+    case "mercury":
+      return 1.5;
+    case "sun":
+    case "moon":
+      return 1;
+  }
+}
+
 /**
  * The "headline transits" of the day: tightest hits, optionally excluding
  * cross-body same-planet (transit Mars to natal Mars) which is common and
