@@ -6,6 +6,7 @@
 |-----------|--------|
 | Web reading flow (Milestone 1) | **Done.** Reading, forecast, synastry, learn, and pantheon journeys shipped; production build green. |
 | Android reading flow (Milestone 1) | **Done.** Kotlin/Compose app in `android/` compiles (`compileDebugSources`); core reading experience implemented. |
+| Android content + chart-math parity (Milestone 1/2) | **Done.** All five cultures including Rome (enum, deity registry, lexicon, theme, 84 Roman decrees), whole-sign houses, and the canonical aspect-orb table now match the web per [shared-content-model.md](shared-content-model.md). |
 | Shared content model agreed (Milestone 1) | **Done.** Documented in [shared-content-model.md](shared-content-model.md); both surfaces stay in sync by hand against that document until a shared module exists. |
 | Auth flow on web (Milestone 2) | **Done.** Email/password accounts (`jose` + `bcryptjs`), sign-up/sign-in/success onboarding funnel, account page with export and deletion. |
 | Saved charts on web (Milestone 2) | **Done.** Anonymous charts live in localStorage; on sign-up they upload and thereafter mirror to the server (SQLite in dev). |

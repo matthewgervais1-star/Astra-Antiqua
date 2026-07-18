@@ -161,7 +161,7 @@ fun CanaanDashboardPreview() {
                 houseCusps = DoubleArray(13) { it * 30.0 },
                 julianDay = 2451545.0
             )
-            
+
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
@@ -170,6 +170,44 @@ fun CanaanDashboardPreview() {
                         epitheton = "Lord of the Arrow",
                         decree = "The fortress is strong, but the pestilence of doubt creeps through the stones.",
                         planetPosition = sampleChart.planets[ClassicalPlanet.MARS]
+                    )
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF000000, name = "Rome - Auspices of the Capitoline")
+@Composable
+fun RomeDashboardPreview() {
+    AstraAntiquaTheme(selectedCulture = AncientCulture.ROME) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            val sampleChart = NatalChartData(
+                planets = mapOf(
+                    ClassicalPlanet.JUPITER to AccuratePlanetPosition(
+                        planet = ClassicalPlanet.JUPITER,
+                        longitude = 95.0,
+                        velocity = 0.2,
+                        isRetrograde = false,
+                        zodiacSign = ZodiacSign.CANCER,
+                        degreeInSign = 5,
+                        minuteInSign = 0,
+                        secondInSign = 0,
+                        house = 4
+                    )
+                ),
+                houseCusps = DoubleArray(13) { it * 30.0 },
+                julianDay = 2451545.0
+            )
+
+            Column {
+                NatalWheel(chartData = sampleChart)
+                OracleDecreeCard(
+                    content = OracleContent(
+                        deity_name = "Iuppiter",
+                        epitheton = "Optimus Maximus, Best and Greatest",
+                        decree = "The Capitoline stands firm; the augur reads favor in the flight of the eagle.",
+                        planetPosition = sampleChart.planets[ClassicalPlanet.JUPITER]
                     )
                 )
             }

@@ -31,6 +31,7 @@ class OracleRepository(
             "EGYPT" -> "EGYPTIAN"
             "CANAAN" -> "CANAANITE"
             "CARTHAGE" -> "CARTHAGINIAN"
+            "ROME" -> "ROMAN"
             else -> "GREEK"
         }
 
@@ -46,6 +47,7 @@ class OracleRepository(
                 "EGYPTIAN" -> syncretism?.EGYPTIAN
                 "CANAANITE" -> syncretism?.CANAANITE
                 "CARTHAGINIAN" -> syncretism?.CARTHAGINIAN
+                "ROMAN" -> syncretism?.ROMAN
                 else -> syncretism?.GREEK
             }
         } catch (_: Exception) {

@@ -44,15 +44,41 @@ class AstronomyEngine {
         return time.ut + 2451545.0
     }
 
+    /**
+     * Ascendant-only calculation for whole-sign houses, the product's house system
+     * (docs/shared-content-model.md, mirrors web/src/lib/houses.ts): only the rising
+     * degree is needed to place all twelve whole-sign cusps, unlike the quadrant
+     * cusps below.
+     */
+    fun getAscendant(julianDay: Double, lat: Double, lon: Double): Double {
+        val time = Time(julianDay - 2451545.0)
+        val gmstHours = siderealTime(time)
+        val ramcDeg = ((gmstHours * 15.0 + lon) % 360.0 + 360.0) % 360.0
+
+        // Approximate obliquity of the ecliptic
+        val t = (julianDay - 2451545.0) / 36525.0
+        val epsDeg = 23.4392911 - 0.013004167 * t
+
+        val ramc = Math.toRadians(ramcDeg)
+        val eps = Math.toRadians(epsDeg)
+        val latRad = Math.toRadians(lat)
+
+        val asc = Math.toDegrees(atan2(cos(ramc), -(sin(eps) * tan(latRad) + cos(eps) * sin(ramc))))
+        return normDeg(asc)
+    }
+
+    // Whole-sign houses are the product's house system (docs/shared-content-model.md);
+    // the Placidus quadrant-cusp routines below are retained for reference/future use
+    // but are no longer called by CalculateNatalChartUseCase.
     fun getHouseCusp(julianDay: Double, lat: Double, lon: Double, @Suppress("UNUSED_PARAMETER") hsys: Char): DoubleArray {
         val time = Time(julianDay - 2451545.0)
         val gmstHours = siderealTime(time)
         val ramcDeg = ((gmstHours * 15.0 + lon) % 360.0 + 360.0) % 360.0
-        
+
         // Approximate obliquity of the ecliptic
         val t = (julianDay - 2451545.0) / 36525.0
         val epsDeg = 23.4392911 - 0.013004167 * t
-        
+
         return computePlacidusHouseCusps(ramcDeg, epsDeg, lat)
     }
 

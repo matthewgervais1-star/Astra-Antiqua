@@ -1,6 +1,12 @@
 package com.astra.antiqua.domain
 
+import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.DeityRegistry
+
+/** The deity's proper name for a culture/planet, read from the single source of truth. */
+private fun deityName(culture: AncientCulture, planet: ClassicalPlanet): String =
+    DeityRegistry.getDeity(culture, planet).name
 
 object LexiconDictionary {
     val Greek = CulturalLexicon(
@@ -31,11 +37,11 @@ object LexiconDictionary {
         culturalVoices = mapOf(
             ClassicalPlanet.SUN to "The Lord",
             ClassicalPlanet.MOON to "The Lunar Traveler",
-            ClassicalPlanet.MERCURY to "Sebegu (Set)",
+            ClassicalPlanet.MERCURY to "${deityName(AncientCulture.EGYPT, ClassicalPlanet.MERCURY)} (Set)",
             ClassicalPlanet.VENUS to "The Mistress of Life",
-            ClassicalPlanet.MARS to "Horus the Red",
-            ClassicalPlanet.JUPITER to "Amun",
-            ClassicalPlanet.SATURN to "Geb"
+            ClassicalPlanet.MARS to deityName(AncientCulture.EGYPT, ClassicalPlanet.MARS),
+            ClassicalPlanet.JUPITER to deityName(AncientCulture.EGYPT, ClassicalPlanet.JUPITER),
+            ClassicalPlanet.SATURN to deityName(AncientCulture.EGYPT, ClassicalPlanet.SATURN)
         ),
         highPriestSummaryTitle = "The Weighing of the Heart",
         officerRole = "The Lector Priest",
@@ -53,9 +59,9 @@ object LexiconDictionary {
             ClassicalPlanet.MOON to "The Crescent Lord",
             ClassicalPlanet.MERCURY to "The Divine Architect",
             ClassicalPlanet.VENUS to "The Morning Star",
-            ClassicalPlanet.MARS to "Resheph",
-            ClassicalPlanet.JUPITER to "Baal Hadad",
-            ClassicalPlanet.SATURN to "El"
+            ClassicalPlanet.MARS to deityName(AncientCulture.CANAAN, ClassicalPlanet.MARS),
+            ClassicalPlanet.JUPITER to deityName(AncientCulture.CANAAN, ClassicalPlanet.JUPITER),
+            ClassicalPlanet.SATURN to deityName(AncientCulture.CANAAN, ClassicalPlanet.SATURN)
         ),
         highPriestSummaryTitle = "The Seer's Judgment",
         officerRole = "The Diviner",
@@ -73,13 +79,33 @@ object LexiconDictionary {
             ClassicalPlanet.MOON to "The Face of Baal",
             ClassicalPlanet.MERCURY to "The Herald",
             ClassicalPlanet.VENUS to "The Phoenician Queen",
-            ClassicalPlanet.MARS to "Melqart",
-            ClassicalPlanet.JUPITER to "Baal Hammon",
-            ClassicalPlanet.SATURN to "Baal Hammon"
+            ClassicalPlanet.MARS to deityName(AncientCulture.CARTHAGE, ClassicalPlanet.MARS),
+            ClassicalPlanet.JUPITER to deityName(AncientCulture.CARTHAGE, ClassicalPlanet.JUPITER),
+            ClassicalPlanet.SATURN to deityName(AncientCulture.CARTHAGE, ClassicalPlanet.SATURN)
         ),
         highPriestSummaryTitle = "The Ba'al Priest's Command",
         officerRole = "The Ba'al Priest",
         harmoniousAspectLabel = "Sacrificial Demand",
         conflictingAspectLabel = "Sacrificial Demand"
+    )
+
+    val Roman = CulturalLexicon(
+        dashboardTitle = "The Auspices of the Capitoline",
+        birthChartMenu = "The Augur's Templum",
+        ephemerisMenu = "The Fasti",
+        settingsTitle = "The Forum",
+        culturalVoices = mapOf(
+            ClassicalPlanet.SUN to deityName(AncientCulture.ROME, ClassicalPlanet.SUN),
+            ClassicalPlanet.MOON to deityName(AncientCulture.ROME, ClassicalPlanet.MOON),
+            ClassicalPlanet.MERCURY to deityName(AncientCulture.ROME, ClassicalPlanet.MERCURY),
+            ClassicalPlanet.VENUS to deityName(AncientCulture.ROME, ClassicalPlanet.VENUS),
+            ClassicalPlanet.MARS to deityName(AncientCulture.ROME, ClassicalPlanet.MARS),
+            ClassicalPlanet.JUPITER to deityName(AncientCulture.ROME, ClassicalPlanet.JUPITER),
+            ClassicalPlanet.SATURN to deityName(AncientCulture.ROME, ClassicalPlanet.SATURN)
+        ),
+        highPriestSummaryTitle = "The Pontifex Maximus's Judgment",
+        officerRole = "The Augur",
+        harmoniousAspectLabel = "Favorable Auspices",
+        conflictingAspectLabel = "Unfavorable Auspices"
     )
 }

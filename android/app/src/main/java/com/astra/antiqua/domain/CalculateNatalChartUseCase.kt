@@ -15,9 +15,13 @@ class CalculateNatalChartUseCase(private val astronomyEngine: AstronomyEngine) {
         calendar.time = Date(userProfile.birthDateUtc)
         
         val jd = astronomyEngine.getJulianDay(calendar)
-        
-        val houseCusps = astronomyEngine.getHouseCusp(jd, userProfile.latitude, userProfile.longitude, 'P') // Placidus
-        
+
+        // Whole-sign houses are the product's house system (docs/shared-content-model.md),
+        // mirroring web/src/lib/houses.ts: the Ascendant's whole sign is the 1st house and
+        // each following sign is the next house, so cusps land on 0 degrees of each sign.
+        val ascendant = astronomyEngine.getAscendant(jd, userProfile.latitude, userProfile.longitude)
+        val houseCusps = wholeSignHouseCusps(ascendant)
+
         val planets = mutableMapOf<ClassicalPlanet, AccuratePlanetPosition>()
         
         ClassicalPlanet.values().forEach { planet ->
@@ -87,6 +91,23 @@ class CalculateNatalChartUseCase(private val astronomyEngine: AstronomyEngine) {
     private fun calculateDistance(d1: Double, d2: Double): Double {
         val diff = Math.abs(d1 - d2)
         return if (diff > 180) 360 - diff else diff
+    }
+
+    /**
+     * Builds whole-sign house cusps (index 0 unused, 1..12 hold each house's cusp
+     * degree) from the Ascendant longitude: the Ascendant's whole sign is the 1st
+     * house, and each following sign is the next house in zodiacal order. Cusp i
+     * sits at ((ascendantSignIndex + i - 1) % 12) * 30 degrees, so a planet's house
+     * depends only on its sign relative to the Ascendant's sign.
+     */
+    private fun wholeSignHouseCusps(ascendantLongitude: Double): DoubleArray {
+        val ascendantSignIndex = ZodiacUtils.getZodiacSign(ascendantLongitude).ordinal
+        val cusps = DoubleArray(13)
+        for (house in 1..12) {
+            val signIndex = (ascendantSignIndex + house - 1) % 12
+            cusps[house] = signIndex * 30.0
+        }
+        return cusps
     }
 
     private fun calculateHouse(longitude: Double, cusps: DoubleArray): Int {

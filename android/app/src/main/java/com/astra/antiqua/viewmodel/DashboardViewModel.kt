@@ -80,6 +80,7 @@ class DashboardViewModel : ViewModel() {
                         "CARTHAGE" -> "The Decree is absolute. With the Sun in $sunSign, your life is a territory claimed by the Suffete. The Moon in $moonSign demands the sacrifice of your hesitation. Bow to the cosmic authority of the Ba'al Priest; power is the reward for the disciplined soul."
                         "EGYPT" -> "The scales of Ma'at find balance in your alignment. The Sun in $sunSign manifest the creative spark, while the Moon in $moonSign flows through the fertile banks of your fate. You are the architect of divine order against the rising chaos."
                         "CANAAN" -> "The Divine Council has spoken. With the Sun in $sunSign, El the Father of Years has marked your path with sovereign fire. The Moon in $moonSign binds you to Yarikh's silent tide. You walk between storm and stillness, chosen of the assembly."
+                        "ROME" -> "Roma Aeterna records your fate in her annals. With the Sun in $sunSign, Jupiter Optimus Maximus grants you the auctoritas to command. The Moon in $moonSign binds you to Juno's watchful counsel. You stand in the Forum of destiny, heir to an empire of will."
                         else -> "The threads of history converge in your alignment. With the Sun in $sunSign, you carry the ancestral fire of command. Yet, the Moon in $moonSign whispers of a fate bound to the deep, silent waters of power. You are a bridge between the old world and the coming storm."
                     }
                     

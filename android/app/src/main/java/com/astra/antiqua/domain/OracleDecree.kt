@@ -23,7 +23,8 @@ data class CultureSyncretism(
     val GREEK: OracleContent? = null,
     val EGYPTIAN: OracleContent? = null,
     val CANAANITE: OracleContent? = null,
-    val CARTHAGINIAN: OracleContent? = null
+    val CARTHAGINIAN: OracleContent? = null,
+    val ROMAN: OracleContent? = null
 )
 
 /**

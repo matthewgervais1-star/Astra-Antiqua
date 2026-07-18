@@ -28,17 +28,39 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = White
 )
 
+// Rome: imperial purple (Tyrian purple, deepened for dark backgrounds/surfaces) and gold,
+// visually distinct from Carthage's black-and-gold field.
+private val RomanColorScheme = darkColorScheme(
+    primary = Gold,
+    secondary = TyrianPurple,
+    tertiary = Gold,
+    background = TyrianPurpleDeep,
+    surface = TyrianPurpleDeep,
+    onPrimary = Black,
+    onSecondary = White,
+    onTertiary = Black,
+    onBackground = White,
+    onSurface = White
+)
+
 @Composable
 fun AstraAntiquaTheme(
     selectedCulture: AncientCulture = AncientCulture.GREECE,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = DarkColorScheme
+    val colorScheme = when (selectedCulture) {
+        AncientCulture.ROME -> RomanColorScheme
+        AncientCulture.GREECE,
+        AncientCulture.EGYPT,
+        AncientCulture.CANAAN,
+        AncientCulture.CARTHAGE -> DarkColorScheme
+    }
     val lexicon = when (selectedCulture) {
         AncientCulture.GREECE -> LexiconDictionary.Greek
         AncientCulture.EGYPT -> LexiconDictionary.Egyptian
         AncientCulture.CANAAN -> LexiconDictionary.Canaanite
         AncientCulture.CARTHAGE -> LexiconDictionary.Carthaginian
+        AncientCulture.ROME -> LexiconDictionary.Roman
     }
 
     val view = LocalView.current

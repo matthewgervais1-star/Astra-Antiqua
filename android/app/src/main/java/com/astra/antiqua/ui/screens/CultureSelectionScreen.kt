@@ -21,7 +21,7 @@ import com.astra.antiqua.ui.components.GlassCard
 fun CultureSelectionScreen(
     onCultureSelected: (String) -> Unit
 ) {
-    val cultures = listOf("Egypt", "Greece", "Canaan", "Carthage")
+    val cultures = listOf("Egypt", "Greece", "Canaan", "Carthage", "Rome")
 
     Column(
         modifier = Modifier

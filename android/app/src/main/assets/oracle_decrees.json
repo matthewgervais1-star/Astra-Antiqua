@@ -1,10 +1,10 @@
 {
   "SUN_ARIES": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Radiant King",
       "decree": "I ignite the first fire. You are born of the primal spark, a soul forged at the origin of the celestial wheel.",
-      "interpretation": "Helios declares a soul of initiative and untamed will."
+      "interpretation": "Apollo declares a soul of initiative and untamed will."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -23,14 +23,20 @@
       "epitheton": "The Solar Disk",
       "decree": "The Tophet glows with the first fire. The soul is branded with command.",
       "interpretation": "Semes decrees a nature of absolute authority and primal drive."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Unconquered Vanguard",
+      "decree": "I ride before the eagle standards at first light, and the gates of Janus stand open behind me. The soul I brand strikes while the augurs are still reading the sky.",
+      "interpretation": "Sol decrees a soul of first assault, acting where others still deliberate."
     }
   },
   "SUN_TAURUS": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Golden Herdsman",
       "decree": "I pour my radiance upon the fertile pasture. The soul that endures shall inherit the abundance of the earth.",
-      "interpretation": "Helios bestows an identity rooted in steadfast patience and material mastery."
+      "interpretation": "Apollo bestows an identity rooted in steadfast patience and material mastery."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -49,14 +55,20 @@
       "epitheton": "The Disk of Abundance",
       "decree": "The granaries of Carthage fill under my gaze. I decree a soul whose worth is measured in what it builds.",
       "interpretation": "Semes proclaims a nature of unwavering determination and earthly dominion."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Sun of the Latin Fields",
+      "decree": "I warm the stones of the aqueduct, which outlast the hands that raised them. What this soul takes hold of it keeps, as Rome keeps the land: without haste and without release.",
+      "interpretation": "Sol marks a nature of patient endurance that possesses deeply and does not let go."
     }
   },
   "SUN_GEMINI": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Twin-Eyed Sun",
       "decree": "I cast two shadows where there should be one. The soul I mark sees all roads and speaks in every tongue.",
-      "interpretation": "Helios reveals a dual nature, brilliant in thought and restless in purpose."
+      "interpretation": "Apollo reveals a dual nature, brilliant in thought and restless in purpose."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -75,14 +87,20 @@
       "epitheton": "The Disk of Two Faces",
       "decree": "The merchants of Tyre and Sidon trade beneath my double gaze. I grant the cunning of the crossroads.",
       "interpretation": "Semes endows a soul with the merchant's wit and the orator's versatility."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Light of the Twin Brothers",
+      "decree": "I shine upon the temple of Castor and Pollux, where the Forum trades its thousand tongues. The soul I quicken becomes itself in the telling, and must not mistake the speech for the deed.",
+      "interpretation": "Sol declares a doubled spirit whose identity lives in words and swift exchange."
     }
   },
   "SUN_CANCER": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Hearthbound Sun",
       "decree": "I descend from my zenith to warm the threshold of home. The shell of the crab guards a heart of molten gold.",
-      "interpretation": "Helios reveals a soul whose strength radiates from the bonds of family and memory."
+      "interpretation": "Apollo reveals a soul whose strength radiates from the bonds of family and memory."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -101,14 +119,20 @@
       "epitheton": "The Disk of the Hearth",
       "decree": "The temple fires burn low but never die. I decree a soul that protects what is sacred and near.",
       "interpretation": "Semes marks a nature of fierce protectiveness and emotional depth."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Warden of Vesta's Fire",
+      "decree": "I bank my flame upon the hearth of Vesta, which must not go out while Rome stands. The soul I shelter draws its strength from guarded walls and the gods of the household.",
+      "interpretation": "Sol marks a soul whose power rises from the kept hearth and the remembered ancestors."
     }
   },
   "SUN_LEO": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Unconquered Sun",
       "decree": "I blaze at the summit of heaven. The Lion is my throne, and sovereignty is my gift to those who dare to shine.",
-      "interpretation": "Helios at his apex crowns a soul born to radiate and rule."
+      "interpretation": "Apollo at his apex crowns a soul born to radiate and rule."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -127,14 +151,20 @@
       "epitheton": "The Sovereign Disk",
       "decree": "The throne of Carthage burns bright beneath my gaze. I anoint with gold those born to command the stage of life.",
       "interpretation": "Semes proclaims a nature of regal authority and boundless creative fire."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Unconquered in Triumph",
+      "decree": "I ascend the Sacred Way in the gilded chariot, and the whole city turns its face toward me. The soul I crown is made to be witnessed, and dims when no eye attends it.",
+      "interpretation": "Sol crowns a sovereign nature that grows radiant when seen and restless when unseen."
     }
   },
   "SUN_VIRGO": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Discerning Light",
       "decree": "I separate the wheat from the chaff with a single ray. The soul I illumine finds its power in precision.",
-      "interpretation": "Helios declares a soul whose identity is forged through service and meticulous craft."
+      "interpretation": "Apollo declares a soul whose identity is forged through service and meticulous craft."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -153,14 +183,20 @@
       "epitheton": "The Disk of Measure",
       "decree": "Every plank of the trireme is cut to my standard. I decree a soul that finds greatness in the mastery of detail.",
       "interpretation": "Semes marks a nature of disciplined excellence and practical wisdom."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Censor's Lamp",
+      "decree": "I light the censor's tablet where every holding of Rome is weighed and entered. The soul I temper perfects the work in hand, and must not mistake correction for love.",
+      "interpretation": "Sol declares an identity refined through exact service and the mastery of what works."
     }
   },
   "SUN_LIBRA": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Balanced Ray",
       "decree": "I stand at the equinox where day and night hold equal court. The soul I touch seeks harmony in all things.",
-      "interpretation": "Helios reveals an identity defined by the pursuit of justice and aesthetic balance."
+      "interpretation": "Apollo reveals an identity defined by the pursuit of justice and aesthetic balance."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -179,14 +215,20 @@
       "epitheton": "The Disk of the Treaty",
       "decree": "The treaties of nations are sealed beneath my light. I grant the soul the grace of the diplomat and the eye of the judge.",
       "interpretation": "Semes decrees a nature of refined judgment and the art of partnership."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Sun at Even Height",
+      "decree": "I stand at equal measure above the Forum where two advocates contend. The soul I balance knows itself through the other's case, yet the verdict must at last be its own.",
+      "interpretation": "Sol marks a spirit formed in partnership that must still learn to pronounce alone."
     }
   },
   "SUN_SCORPIO": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Veiled Sun",
       "decree": "I descend into the cavern where the scorpion guards its treasure. My light burns brightest in the deepest dark.",
-      "interpretation": "Helios marks a soul whose identity is forged through transformation and hidden power."
+      "interpretation": "Apollo marks a soul whose identity is forged through transformation and hidden power."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -205,14 +247,20 @@
       "epitheton": "The Disk of Shadows",
       "decree": "In the catacombs beneath the Tophet, my light reveals what all others conceal. I decree a soul of penetrating will.",
       "interpretation": "Semes proclaims a nature of obsessive focus and the power of rebirth."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Fire in the Vault",
+      "decree": "I go down as the torch carried into the vault beneath the temple, hidden but never extinguished. The soul I temper wakes when the stakes are siege and survival, and makes power of what it conceals.",
+      "interpretation": "Sol decrees a nature of buried intensity that commands more than it reveals."
     }
   },
   "SUN_SAGITTARIUS": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Archer's Sun",
       "decree": "I ride the arc of the heavens with the centaur's aim. My arrow of light reaches beyond the known horizon.",
-      "interpretation": "Helios declares a soul born to seek truth and explore the farthest frontiers."
+      "interpretation": "Apollo declares a soul born to seek truth and explore the farthest frontiers."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -231,14 +279,20 @@
       "epitheton": "The Disk of Exploration",
       "decree": "The ships of Carthage sail toward my setting point. I decree a soul that finds its throne in the freedom of the open road.",
       "interpretation": "Semes reveals a nature of unquenchable optimism and expansive vision."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Sun of the Far Roads",
+      "decree": "I set my light at the end of every road the legions cut through foreign hills. The soul I send forth is truest in the march toward a frontier not yet crossed.",
+      "interpretation": "Sol declares a spirit that finds itself in the going out, not in the arrival."
     }
   },
   "SUN_CAPRICORN": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Winter Sun",
       "decree": "I hang low upon the solstice sky, yet my light endures. The soul I mark builds empires from stone and silence.",
-      "interpretation": "Helios reveals an identity tempered by discipline and destined for enduring achievement."
+      "interpretation": "Apollo reveals an identity tempered by discipline and destined for enduring achievement."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -257,14 +311,20 @@
       "epitheton": "The Disk of the Citadel",
       "decree": "The walls of Byrsa stand because I watched over their foundation. I decree a soul that commands through structure and endurance.",
       "interpretation": "Semes proclaims a nature of austere authority and monumental perseverance."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Crown of the Capitoline",
+      "decree": "I crest the Capitoline, where stone was raised upon stone through the labor of centuries. The soul I harden climbs by discipline, and must remember the life for which the building was begun.",
+      "interpretation": "Sol marks an identity built by long ascent toward the summit it has chosen."
     }
   },
   "SUN_AQUARIUS": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Rebel Sun",
       "decree": "I shatter the mold of heaven and pour new light upon the world. The soul I mark answers to no law but the future.",
-      "interpretation": "Helios reveals an identity forged in rebellion and devoted to the liberation of all."
+      "interpretation": "Apollo reveals an identity forged in rebellion and devoted to the liberation of all."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -283,14 +343,20 @@
       "epitheton": "The Disk of the People",
       "decree": "The agora of Carthage echoes with the voices I embolden. I decree a soul that builds the future from the dreams of the many.",
       "interpretation": "Semes marks a nature of radical innovation and humanitarian will."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Light of the Secession",
+      "decree": "I lit the plebs upon the Sacred Mount when they withdrew rather than be misnamed. The soul I claim stands apart from the crowd so that the crowd may hear the truth.",
+      "interpretation": "Sol declares a spirit that serves the many by refusing to dissolve into them."
     }
   },
   "SUN_PISCES": {
     "GREEK": {
-      "deity_name": "Helios",
+      "deity_name": "Apollo",
       "epitheton": "The Drowning Sun",
       "decree": "I dissolve into the cosmic sea at the end of the wheel. My light becomes all light, and the soul I touch knows no boundary.",
-      "interpretation": "Helios reveals an identity that transcends the self and merges with the infinite."
+      "interpretation": "Apollo reveals an identity that transcends the self and merges with the infinite."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -309,14 +375,20 @@
       "epitheton": "The Disk beneath the Waves",
       "decree": "The harbors of Carthage open to the endless sea. I decree a soul that dissolves its edges and becomes the ocean.",
       "interpretation": "Semes proclaims a nature of spiritual depth and the surrender of ego to the divine."
+    },
+    "ROMAN": {
+      "deity_name": "Sol",
+      "epitheton": "The Gold upon the Tiber",
+      "decree": "I scatter my gold across the Tiber where it forgets its banks and gives itself to the sea. The soul I soften pours itself out in service, and must keep watch upon its own shore.",
+      "interpretation": "Sol marks a soul that becomes itself by dissolving, and must guard the line where it ends."
     }
   },
   "MOON_ARIES": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Warring Moon",
       "decree": "My silver light falls upon the battlefield of the heart. I stir the blood and set fire to the still waters of feeling.",
-      "interpretation": "Selene reveals emotions that burn with urgency and demand immediate expression."
+      "interpretation": "Artemis reveals emotions that burn with urgency and demand immediate expression."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -335,14 +407,20 @@
       "epitheton": "The Shield Mother",
       "decree": "I guard my children with the fierceness of the lioness. The emotions I govern are swift swords, not gentle streams.",
       "interpretation": "Tanit decrees an emotional nature of protective ferocity and instinctive courage."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Charioteer at Full Gallop",
+      "decree": "I whip my horses through the dark before the augurs can read a single bird. The heart I govern strikes as the legion strikes, first with the blow and only afterward with the word.",
+      "interpretation": "Luna decrees a heart that moves before it deliberates, swift in feeling and unashamed of the first strike."
     }
   },
   "MOON_TAURUS": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Verdant Moon",
       "decree": "I bathe the meadow in silver and the soul drinks deeply. Comfort is the altar at which the faithful heart worships.",
-      "interpretation": "Selene bestows emotions of serene steadfastness and sensory delight."
+      "interpretation": "Artemis bestows emotions of serene steadfastness and sensory delight."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -361,14 +439,20 @@
       "epitheton": "The Fertile Mother",
       "decree": "I am the moon above the orchard, ripening the fruit. The heart I govern holds fast to what it loves.",
       "interpretation": "Tanit proclaims an emotional nature of devoted constancy and material generosity."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Lamp of the Full Granary",
+      "decree": "I halt my chariot above the laden storehouses and let my horses graze. The heart I govern roots like the sacred fig of the forum, slow to change and slower still to leave what it has loved.",
+      "interpretation": "Luna marks an emotional nature of deep-rooted constancy that must guard against remaining past its season."
     }
   },
   "MOON_GEMINI": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Restless Moon",
       "decree": "I wax and wane between two faces, never settling. The heart I govern speaks before it feels and feels before it knows.",
-      "interpretation": "Selene reveals an emotional nature of quicksilver changeability and verbal processing."
+      "interpretation": "Artemis reveals an emotional nature of quicksilver changeability and verbal processing."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -387,14 +471,20 @@
       "epitheton": "The Whispering Mother",
       "decree": "I sing two lullabies at once and the child of my heart can never choose which to follow. Motion is my comfort.",
       "interpretation": "Tanit decrees an emotional nature of lively duality and the need for mental stimulation."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Silver Herald of the Forum",
+      "decree": "I carry the night's dispatches from rooftop to rooftop, and every feeling I bear becomes a message. Let the heart speak its case in the forum, but let it not mistake the speech for the settling.",
+      "interpretation": "Luna declares a heart that discovers its feelings by speaking them, yet must not confuse the telling with the resolution."
     }
   },
   "MOON_CANCER": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Great Mother Moon",
       "decree": "I am enthroned in my own house. Here, every tide answers my call and every heart finds its sanctuary.",
-      "interpretation": "Selene at her most powerful reveals emotions of profound depth and nurturing instinct."
+      "interpretation": "Artemis at her most powerful reveals emotions of profound depth and nurturing instinct."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -413,14 +503,20 @@
       "epitheton": "The Queen of Tides",
       "decree": "I am the sea-mother whose waters hold all memory. The soul born beneath my fullest light carries the feelings of generations.",
       "interpretation": "Tanit proclaims an emotional nature of unmatched sensitivity and clannish devotion."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Guardian of the Household Gods",
+      "decree": "Mine is the hearth of Vesta, whose flame no legion may extinguish; here I unyoke my horses and am home. The heart I govern keeps every room it has ever entered, and I bid it read those memories as the augur reads the sky, as signs and not as sentences.",
+      "interpretation": "Luna decrees a soul of profound memory and sheltering devotion, strongest when it treats the past as guidance rather than verdict."
     }
   },
   "MOON_LEO": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Proud Moon",
       "decree": "I shine not to reflect but to rival the sun itself. The heart I govern demands to be seen and adored.",
-      "interpretation": "Selene reveals emotions that crave recognition and burn with dramatic warmth."
+      "interpretation": "Artemis reveals emotions that crave recognition and burn with dramatic warmth."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -439,14 +535,20 @@
       "epitheton": "The Regal Mother",
       "decree": "I sit upon the lion-throne of the night and demand that love be offered with ceremony. My heart is a court, not a cottage.",
       "interpretation": "Tanit decrees an emotional nature of dignified warmth and the need for heartfelt admiration."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Torch of the Triumph",
+      "decree": "I drive my chariot down the Sacred Way as though every night were a triumph. The heart I govern feels in processions and longs for the roar of the crowd, yet must learn to shine when the forum stands empty.",
+      "interpretation": "Luna marks an emotional nature of radiant theatricality that craves witness for its warmth."
     }
   },
   "MOON_VIRGO": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Careful Moon",
       "decree": "I sort the tides into ordered channels. The heart I govern serves best when it has a task to complete.",
-      "interpretation": "Selene reveals emotions that are processed through analysis and devoted service."
+      "interpretation": "Artemis reveals emotions that are processed through analysis and devoted service."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -465,14 +567,20 @@
       "epitheton": "The Modest Mother",
       "decree": "I tend the sacred garden in silence, asking for no praise. The heart I shape finds its comfort in order and purpose.",
       "interpretation": "Tanit proclaims an emotional nature of humble devotion and meticulous nurturing."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Censor's Lamp",
+      "decree": "I take the census of the night, numbering every lamp and every worry in its proper column. The heart I govern tends its feelings as the engineer tends the aqueduct, by keeping the channels clean, yet it must sometimes set down the tools and drink.",
+      "interpretation": "Luna declares a heart that tends its feelings through order and useful labor, and must not let the task replace the feeling."
     }
   },
   "MOON_LIBRA": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Harmonious Moon",
       "decree": "I hang in perfect balance between the darkened halves of heaven. The heart I govern aches when beauty is absent.",
-      "interpretation": "Selene reveals emotions that seek equilibrium, grace, and the comfort of partnership."
+      "interpretation": "Artemis reveals emotions that seek equilibrium, grace, and the comfort of partnership."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -491,14 +599,20 @@
       "epitheton": "The Mother of Accord",
       "decree": "I preside over the treaty table of the heart. Where conflict dwells, I pour my silver light until peace is found.",
       "interpretation": "Tanit decrees an emotional nature of diplomatic grace and an aversion to discord."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Weigher of the Evening Scales",
+      "decree": "I balance my chariot upon the meridian and take my light's measure from the faces below. The heart I govern steadies itself by treaty, yet a peace that lives in another's mood is a peace held hostage.",
+      "interpretation": "Luna decrees an emotional nature that finds calm through accord, yet must not let its peace depend upon another's mood."
     }
   },
   "MOON_SCORPIO": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Dark Moon",
       "decree": "I plunge into the abyss where no light dares follow. The heart I govern holds oceans of untold depth.",
-      "interpretation": "Selene reveals emotions of volcanic intensity and relentless depth."
+      "interpretation": "Artemis reveals emotions of volcanic intensity and relentless depth."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -517,14 +631,20 @@
       "epitheton": "The Veiled Mother",
       "decree": "Beneath my veil, the sacred and the terrible are one. I shape a heart that loves with the ferocity of a funeral rite.",
       "interpretation": "Tanit proclaims an emotional nature of obsessive loyalty and the power to regenerate from ruin."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Augur of Dark Waters",
+      "decree": "I drive without torches through the low districts of the night, where nothing shallow survives my gaze. The heart I govern reads omens in every face, and I warn it that some entrails hold no secret at all.",
+      "interpretation": "Luna marks a heart of penetrating depth that searches for hidden motives everywhere, even where none exist."
     }
   },
   "MOON_SAGITTARIUS": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Wandering Moon",
       "decree": "I gallop across the heavens with the centaur beneath me. The heart I govern is a pilgrim that worships at every altar.",
-      "interpretation": "Selene reveals emotions that are expansive, restless, and fueled by faith."
+      "interpretation": "Artemis reveals emotions that are expansive, restless, and fueled by faith."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -543,14 +663,20 @@
       "epitheton": "The Mother of Journeys",
       "decree": "I bless the sails of those who voyage beyond the pillars. The heart I shape is a temple built on the open road.",
       "interpretation": "Tanit decrees an emotional nature of adventurous faith and irrepressible hope."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Rider Past the Last Milestone",
+      "decree": "I do not turn my chariot at the city gate; I follow the paved road beyond the farthest milestone of the empire. The heart I govern hungers for the wider province and grows restless in the room it already holds.",
+      "interpretation": "Luna declares an emotional nature that expands toward distant horizons and chafes within narrow walls."
     }
   },
   "MOON_CAPRICORN": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Austere Moon",
       "decree": "I cast cold silver upon the mountain's peak. The heart I govern is a fortress built of duty and quiet endurance.",
-      "interpretation": "Selene reveals emotions that are controlled, reserved, and strengthened by solitude."
+      "interpretation": "Artemis reveals emotions that are controlled, reserved, and strengthened by solitude."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -569,14 +695,20 @@
       "epitheton": "The Elder Mother",
       "decree": "I withheld my embrace so the child might learn to stand. The heart I shape values honor above comfort.",
       "interpretation": "Tanit proclaims an emotional nature of dignified restraint and deep, unspoken loyalty."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Sentinel of the Winter Wall",
+      "decree": "I keep the night watch without complaint, from tower to tower until the trumpets of morning. The heart I govern buries its grief beneath its duties like a coin beneath the paving stones, and I decree that even the road must one day be lifted.",
+      "interpretation": "Luna decrees a heart that carries feeling as duty, and must at last permit itself the grief it has postponed."
     }
   },
   "MOON_AQUARIUS": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Eccentric Moon",
       "decree": "I tilt my orbit and the tides obey no familiar rhythm. The heart I govern beats for the future, not for the self.",
-      "interpretation": "Selene reveals emotions that are detached, humanitarian, and fiercely independent."
+      "interpretation": "Artemis reveals emotions that are detached, humanitarian, and fiercely independent."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -595,14 +727,20 @@
       "epitheton": "The Mother of the Many",
       "decree": "I am not one mother but the mother of all. The heart I govern cannot be owned; it must be shared with the world.",
       "interpretation": "Tanit decrees an emotional nature of progressive detachment and universal compassion."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Watcher from the High Colonnade",
+      "decree": "I survey the sleeping city from a height no ladder reaches, mapping its fires like a surveyor charting provinces. The heart I govern watches its own weather from the high colonnade and must remember to come down among the crowd.",
+      "interpretation": "Luna marks an emotional nature that observes its own moods from a distance, wise in survey yet slow to descend into the body."
     }
   },
   "MOON_PISCES": {
     "GREEK": {
-      "deity_name": "Selene",
+      "deity_name": "Artemis",
       "epitheton": "The Dreaming Moon",
       "decree": "I dissolve into the ocean of night and become all feeling. The heart I govern has no walls; it is the sea itself.",
-      "interpretation": "Selene reveals emotions of oceanic depth, mystical sensitivity, and boundless compassion."
+      "interpretation": "Artemis reveals emotions of oceanic depth, mystical sensitivity, and boundless compassion."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -621,6 +759,12 @@
       "epitheton": "The Sea Mother",
       "decree": "I rock the world in my arms as the tide rocks the shore. The heart I shape feels all sorrow and all joy as its own.",
       "interpretation": "Tanit proclaims an emotional nature of selfless devotion and mystical absorption."
+    },
+    "ROMAN": {
+      "deity_name": "Luna",
+      "epitheton": "The Lamp in the River Mist",
+      "decree": "I dissolve into the mist upon the Tiber until no eye can say where my light ends and the water begins. The heart I govern takes on the mood of every hearth it passes, and I bid it remember which flame was first its own.",
+      "interpretation": "Luna declares a permeable heart that absorbs the feelings of every room, and must remember which currents are its own."
     }
   },
   "MERCURY_ARIES": {
@@ -647,6 +791,12 @@
       "epitheton": "The Blade Messenger",
       "decree": "My dispatches are written on the edge of a sword. The mind I govern trades courtesy for clarity.",
       "interpretation": "Sakun decrees a mental nature of combative wit and pioneering thought."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Spear-Swift Courier",
+      "decree": "I ride ahead of the legion, and my dispatch arrives still hot from the forge of thought. The mind I govern renders its verdict before the augurs have finished reading the sky.",
+      "interpretation": "Mercurius decrees a mind of headlong candor that strikes first and revises after."
     }
   },
   "MERCURY_TAURUS": {
@@ -673,6 +823,12 @@
       "epitheton": "The Merchant's Voice",
       "decree": "My ledgers are precise and my contracts unbreakable. I grant a mind that speaks in the language of value.",
       "interpretation": "Sakun decrees a mental nature of commercial acumen and stubborn common sense."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Engraver of Milestones",
+      "decree": "I carve my dispatches into milestones, and no flood of the Tiber can wash them away. The mind I shape signs its contract once and keeps it.",
+      "interpretation": "Mercurius declares a deliberate mind whose word, once weighed like coin, is not withdrawn."
     }
   },
   "MERCURY_GEMINI": {
@@ -699,6 +855,12 @@
       "epitheton": "The Tongue of the Agora",
       "decree": "In the great market of Carthage, my voice carries above all others. I grant the gift of persuasion and the joy of knowing.",
       "interpretation": "Sakun decrees a mental nature of mercurial brilliance and insatiable intellectual hunger."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Master of All Roads",
+      "decree": "Every road of the empire begins beneath my feet, and I speak in every tongue the forum trades in. The mind I govern is a crossroads where a hundred messages meet and none agrees to arrive last.",
+      "interpretation": "Mercurius, enthroned in his own house, marks a mind of restless versatility that thinks in many directions at once."
     }
   },
   "MERCURY_CANCER": {
@@ -725,6 +887,12 @@
       "epitheton": "The Voice of the Clan",
       "decree": "My scrolls carry the genealogies of the great houses. The mind I shape remembers what others forget.",
       "interpretation": "Sakun decrees a mental nature of tenacious memory and emotional intelligence."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Messenger of the Hearth",
+      "decree": "I carry my letters home to the hearth of Vesta and read them by remembered fire. The mind I shape thinks backward from the wound and forward from the household's memory.",
+      "interpretation": "Mercurius decrees a remembering mind that reasons through feeling and guards what it has learned."
     }
   },
   "MERCURY_LEO": {
@@ -751,6 +919,12 @@
       "epitheton": "The Herald of the King",
       "decree": "My proclamations fill the great hall of Carthage. I grant a mind that refuses to be ignored or overlooked.",
       "interpretation": "Sakun decrees a mental nature of proud eloquence and theatrical intelligence."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Herald of Triumphs",
+      "decree": "I do not merely deliver the news; I proclaim it from the rostra as a triumph is proclaimed. The mind I govern thinks aloud before the assembled city and asks the city to cheer.",
+      "interpretation": "Mercurius declares a commanding voice whose thought performs for the crowd it means to persuade."
     }
   },
   "MERCURY_VIRGO": {
@@ -777,6 +951,12 @@
       "epitheton": "The Keeper of the Ledgers",
       "decree": "Not a single coin passes unrecorded through my counting house. I grant a mind that finds error where all others see order.",
       "interpretation": "Sakun decrees a mental nature of critical acuity and the devotion to useful knowledge."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Clerk of the Census",
+      "decree": "I take the census of every thought and enter each in its proper column. The mind I shape sifts the grain of speech as the granary clerk sifts the harvest, keeping only what will feed the city.",
+      "interpretation": "Mercurius, at the height of his power, marks an exacting mind that refines the word until it serves."
     }
   },
   "MERCURY_LIBRA": {
@@ -803,6 +983,12 @@
       "epitheton": "The Voice of the Treaty",
       "decree": "My words bind nations in accord. I grant a mind that speaks with fairness and persuades through grace.",
       "interpretation": "Sakun decrees a mental nature of charming diplomacy and the love of intellectual partnership."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Advocate of Both Benches",
+      "decree": "I argue each side of the case in the basilica and bow to both in turn. The mind I govern weighs every word on the merchant's scales and hesitates to purchase its own opinion.",
+      "interpretation": "Mercurius decrees a balancing mind that hears every argument yet struggles to name which one is its own."
     }
   },
   "MERCURY_SCORPIO": {
@@ -829,6 +1015,12 @@
       "epitheton": "The Shadow Messenger",
       "decree": "My dispatches travel in sealed containers through tunnels beneath the earth. I grant a mind that extracts confessions from silence.",
       "interpretation": "Sakun decrees a mental nature of obsessive investigation and the power to see through deception."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Bearer of Sealed Letters",
+      "decree": "I carry sealed letters through the streets beneath the streets, and I read what the seal was meant to hide. The mind I shape follows the coin back to the hand that first debased it.",
+      "interpretation": "Mercurius marks an investigating mind that will not rest until the hidden thing is named."
     }
   },
   "MERCURY_SAGITTARIUS": {
@@ -855,6 +1047,12 @@
       "epitheton": "The Voice of the Explorer",
       "decree": "My maps chart waters no other messenger has sailed. I grant a mind that speaks with the authority of experience and the fire of belief.",
       "interpretation": "Sakun decrees a mental nature of enthusiastic prophecy and blunt, far-reaching speech."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Courier Beyond the Last Milestone",
+      "decree": "I bear the eagle standard past the edge of the map, where the road ends and the principle begins. The mind I govern reads a whole province at a glance and forgets the name of the village.",
+      "interpretation": "Mercurius declares a far-ranging mind that grasps the great design and pays for it in overlooked detail."
     }
   },
   "MERCURY_CAPRICORN": {
@@ -881,6 +1079,12 @@
       "epitheton": "The Voice of Authority",
       "decree": "My contracts are carved in stone and sealed with the blood of oaths. I grant a mind that values competence above cleverness.",
       "interpretation": "Sakun decrees a mental nature of sober ambition and the power of structured, purposeful communication."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Surveyor of Aqueducts",
+      "decree": "I set my words as the engineers set the arches of an aqueduct, each stone bearing the next across the valley. The mind I shape builds its argument to carry weight for a hundred years.",
+      "interpretation": "Mercurius decrees a structured mind that thinks in foundations and trusts only what stands."
     }
   },
   "MERCURY_AQUARIUS": {
@@ -907,6 +1111,12 @@
       "epitheton": "The Voice of the Revolution",
       "decree": "My proclamations overthrow the old orders of thought. I grant a mind that speaks for the collective and thinks beyond the horizon.",
       "interpretation": "Sakun decrees a mental nature of progressive idealism and electric, unpredictable brilliance."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Codifier of the Tables",
+      "decree": "I post the law in bronze for the whole city at once, as the Twelve Tables were set before every citizen. The mind I govern sees the pattern of the multitude and must be reminded of the single face within it.",
+      "interpretation": "Mercurius marks a systematizing mind that designs for all and forgets the one who fits no table."
     }
   },
   "MERCURY_PISCES": {
@@ -933,6 +1143,12 @@
       "epitheton": "The Voice of the Oracle",
       "decree": "My messages dissolve into mist and reform as omens. I grant a mind that communes with the invisible and translates the ineffable.",
       "interpretation": "Sakun decrees a mental nature of visionary confusion and sacred, transcendent knowing."
+    },
+    "ROMAN": {
+      "deity_name": "Mercurius",
+      "epitheton": "The Reader of River Omens",
+      "decree": "I read my dispatches through the mist that rises from the Tiber, and the birds of augury fly across the page. The mind I shape thinks in omen and image, and lets the plain fact drift past like a lantern on the water.",
+      "interpretation": "Mercurius declares a dreaming mind rich in vision and careless of the letter."
     }
   },
   "VENUS_ARIES": {
@@ -959,6 +1175,12 @@
       "epitheton": "The Flame of the Harbor",
       "decree": "I set fire to the ships of those who hesitate in love. My passion demands immediate surrender.",
       "interpretation": "Astarte of Carthage decrees a love nature of blazing initiative and fearless pursuit."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "Victrix, First Through the Gate",
+      "decree": "I go before the legions with the eagle raised, and what I desire I take at the first charge. Yet mark it well: the triumph lasts one day, and love is the province you must govern after the procession ends.",
+      "interpretation": "Venus decrees a desire that conquers at the first charge and must learn to govern what it wins."
     }
   },
   "VENUS_TAURUS": {
@@ -985,6 +1207,12 @@
       "epitheton": "The Jewel of Carthage",
       "decree": "The purple dye of Tyre adorns my robes. I decree a love that values beauty, comfort, and the pleasures of the lasting bond.",
       "interpretation": "Astarte of Carthage proclaims a love nature of luxurious devotion and possessive tenderness."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "Obsequens, Mistress of the Walled Garden",
+      "decree": "My love comes as the aqueduct comes, stone arch upon stone arch, unhurried and unfailing across the miles. Only see that the comfort of the villa does not stand in place of the one who shares it.",
+      "interpretation": "Venus marks a love that arrives slowly and holds fast, wary of mistaking comfort for the beloved."
     }
   },
   "VENUS_GEMINI": {
@@ -1011,6 +1239,12 @@
       "epitheton": "The Silver Tongue of the Port",
       "decree": "Love in Carthage speaks every language of the Middle Sea. I grant the charm that captivates through wit and words.",
       "interpretation": "Astarte of Carthage decrees a love nature of social brilliance and mercurial enchantment."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "The Voice upon the Rostra",
+      "decree": "I keep to the forum where orators trade words like bright coin, and the mind that moves well moves me. But when the rostra falls silent, do not mistake the end of the speech for the end of the love.",
+      "interpretation": "Venus declares a desire courted through wit and quick speech, tested when the conversation ends."
     }
   },
   "VENUS_CANCER": {
@@ -1037,6 +1271,12 @@
       "epitheton": "The Mother of the Household",
       "decree": "The walls of the home are my temple. I decree a love that protects, nourishes, and remembers every kindness.",
       "interpretation": "Astarte of Carthage proclaims a love nature of sentimental depth and clannish warmth."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "Mater, Keeper of the Household Gods",
+      "decree": "I tend my flame as the Vestals tend theirs, and I set bread and salt before all who come under my roof. Remember that the fire must warm freely; the hearth that demands to be needed smokes the whole house.",
+      "interpretation": "Venus decrees a love that feeds and shelters, cautioned against needing to be needed in return."
     }
   },
   "VENUS_LEO": {
@@ -1063,6 +1303,12 @@
       "epitheton": "The Star of the Festival",
       "decree": "The great festivals of Carthage are my stage. I decree a love that shines in public and burns bright in private.",
       "interpretation": "Astarte of Carthage decrees a love nature of theatrical romance and loyal, lavish devotion."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "Aurea, Queen of the Triumph",
+      "decree": "I ride the gilded car up the Sacred Way and crown my beloved with laurel before all of Rome. Ask only whether you would still place the crown on a street where no crowd has gathered.",
+      "interpretation": "Venus proclaims a love generous and magnificent, which must learn to shine without an audience."
     }
   },
   "VENUS_VIRGO": {
@@ -1089,6 +1335,12 @@
       "epitheton": "The Keeper of the Sacred Loom",
       "decree": "Each thread I weave is a silent prayer for the one I love. I decree a love that improves, refines, and never wastes.",
       "interpretation": "Astarte of Carthage proclaims a love nature of dutiful affection and critical, caring precision."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "Verticordia, Turner of Hearts",
+      "decree": "As the censor reads the rolls, I review what I love, and I mend every flaw my eye can find. Yet write this in the ledger: the beloved is not a road to be repaired, and correction is not a caress.",
+      "interpretation": "Venus marks a love of devoted refinement, warned that critique is not a caress."
     }
   },
   "VENUS_LIBRA": {
@@ -1115,6 +1367,12 @@
       "epitheton": "The Star of the Betrothal",
       "decree": "The marriage contracts of Carthage bear my seal. I decree a love of elegance, reciprocity, and enduring alliance.",
       "interpretation": "Astarte of Carthage decrees a love nature of refined charm and the highest art of companionship."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "The Lady of the Bronze Treaty",
+      "decree": "I seal love as Rome seals a treaty, two names cut into a single tablet of bronze. Keep your own seal nonetheless, for an alliance in which one party vanishes is not concord but surrender.",
+      "interpretation": "Venus decrees a love that seeks the perfect alliance without surrendering its own appetite."
     }
   },
   "VENUS_SCORPIO": {
@@ -1141,6 +1399,12 @@
       "epitheton": "The Veiled Star",
       "decree": "In the hidden chambers of Carthage, my rites are performed in shadow. I decree a love that possesses utterly and forgives nothing.",
       "interpretation": "Astarte of Carthage proclaims a love nature of magnetic obsession and devastating loyalty."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "Libitina, Keeper of the Deep Vow",
+      "decree": "My oath is sworn at the altar, not traded at the banquet, and I love to the floor of the grave and past it. Know that the beloved is a free citizen, not a province to be held by garrison.",
+      "interpretation": "Venus declares a love total and unyielding, whose depth must not become an occupation."
     }
   },
   "VENUS_SAGITTARIUS": {
@@ -1167,6 +1431,12 @@
       "epitheton": "The Star beyond the Pillars",
       "decree": "Beyond the Pillars of Melqart, my love calls from undiscovered shores. I decree a love that values freedom and the thrill of the unknown.",
       "interpretation": "Astarte of Carthage decrees a love nature of optimistic wanderlust and philosophical romance."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "Erycina, Lady Beyond the Walls",
+      "decree": "Every road runs out from my milestone, and I love best on the march, where each new province teaches me another tongue. Do not strike camp simply because the lesson has ended; some loves are the homeland and not the campaign.",
+      "interpretation": "Venus marks a love that seeks teachers and horizons, restless when the road stands still."
     }
   },
   "VENUS_CAPRICORN": {
@@ -1193,6 +1463,12 @@
       "epitheton": "The Star of the Dynasty",
       "decree": "The great families of Carthage unite beneath my blessing. I decree a love that serves ambition and endures through generations.",
       "interpretation": "Astarte of Carthage proclaims a love nature of strategic devotion and unyielding fidelity."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "Felix, Builder of the Lasting Arch",
+      "decree": "I build as Rome builds, on footings cut for a thousand years, and my love is the arch that bears its weight without complaint. See that a fire is lit among the stones, for a house that merely stands is not yet a home.",
+      "interpretation": "Venus decrees a love built to endure, reminded that endurance alone is not warmth."
     }
   },
   "VENUS_AQUARIUS": {
@@ -1219,6 +1495,12 @@
       "epitheton": "The Free Star",
       "decree": "No chain may hold the evening star in place. I decree a love that honors friendship above possession and vision above tradition.",
       "interpretation": "Astarte of Carthage decrees a love nature of eccentric devotion and the freedom to love without convention."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "Lady of the Campus Martius",
+      "decree": "I give my love as the citizen gives the vote on the Campus Martius, freely and under no man's compulsion. Yet a ballot cast from across the field touches no hand; come near enough to be counted.",
+      "interpretation": "Venus declares a love given by free election, cautioned that the distance preserving choice can forbid touch."
     }
   },
   "VENUS_PISCES": {
@@ -1245,6 +1527,12 @@
       "epitheton": "The Pearl of the Deep",
       "decree": "In the deepest waters of the harbor, my light still shines. I decree a love that heals, forgives, and transcends the mortal frame.",
       "interpretation": "Astarte of Carthage proclaims a love nature of boundless tenderness and spiritual union."
+    },
+    "ROMAN": {
+      "deity_name": "Venus",
+      "epitheton": "The Mist upon the Tiber",
+      "decree": "Romulus cut the pomerium so the city would know where it ends and the world begins; in love I let the furrow fill with rain. Pour yourself into the beloved if you must, but carry your own name across the water, lest the census find no one left to record.",
+      "interpretation": "Venus marks a love that dissolves every boundary, warned to keep the self the union requires."
     }
   },
   "MARS_ARIES": {
@@ -1271,6 +1559,12 @@
       "epitheton": "The Conqueror",
       "decree": "I march at the head of the host and no wall stands against my fury. I decree a soul born for the vanguard.",
       "interpretation": "Melqart proclaims a nature of dominating physical will and the instinct to lead the charge."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "Gradivus, First Through the Breach",
+      "decree": "I am the strider who is through the gate before the trumpet finishes its call, and my legions follow the dust I raise. Yet the door I splintered with the ram would have opened to a knock.",
+      "interpretation": "Mars decrees a spirit that charges before orders arrive, breaking what patience might have opened."
     }
   },
   "MARS_TAURUS": {
@@ -1297,6 +1591,12 @@
       "epitheton": "The Guardian of the Walls",
       "decree": "The walls of Carthage are my body. I decree a soul that builds its strength in stone and defends what it has taken.",
       "interpretation": "Melqart proclaims a nature of territorial power and the stamina to hold ground forever."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "The Rampart That Does Not Yield",
+      "decree": "I do not charge; I raise the siege wall stone by stone and let the seasons fight for me. Rome was not built in a day, and my strength answers no man's haste.",
+      "interpretation": "Mars marks a force that conquers by sheer endurance, while the work that begged for speed stands waiting."
     }
   },
   "MARS_GEMINI": {
@@ -1323,6 +1623,12 @@
       "epitheton": "The Tactician of the Sea",
       "decree": "My fleets change formation faster than the wind changes. I decree a soul whose strength is in speed of thought and the cunning of the maneuver.",
       "interpretation": "Melqart proclaims a nature of tactical brilliance and restless, scattered martial energy."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "Lord of the Skirmishers",
+      "decree": "I send my light troops down three roads at once, and the forum rings with every rumor of my coming. But the eagle standard is never planted where the column never halts.",
+      "interpretation": "Mars declares an energy that fights on many fronts and pays with the one deep victory never won."
     }
   },
   "MARS_CANCER": {
@@ -1349,6 +1655,12 @@
       "epitheton": "The Shield of the Household",
       "decree": "The gates of the home are sacred. I decree a soul that fights with the ferocity of a parent defending its young.",
       "interpretation": "Melqart proclaims a nature of emotional combativeness and the warrior instinct to shelter."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "The Spear Before the Hearth",
+      "decree": "I set my spear at the door of Vesta and no enemy passes while the flame burns. Yet mark this: I have stood guard over ashes long after the fire moved to another altar.",
+      "interpretation": "Mars marks a fighter whose force turns sideways into protection, sometimes defending what no longer asks for it."
     }
   },
   "MARS_LEO": {
@@ -1375,6 +1687,12 @@
       "epitheton": "The Hero of the Arena",
       "decree": "In the arena of Carthage, my champions fight with the pride of lions. I decree a soul that craves glory and will not accept defeat.",
       "interpretation": "Melqart proclaims a nature of proud, dramatic willpower and the instinct to dominate."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "The Triumphator",
+      "decree": "Grant me the triumph: the white bulls, the roar of the forum, my chariot climbing the Capitoline in the sight of all Rome. What I do unwitnessed, I scarcely believe I have done.",
+      "interpretation": "Mars decrees a strength that blazes before the crowd, while the labor done in private goes unrecorded in the annals."
     }
   },
   "MARS_VIRGO": {
@@ -1401,6 +1719,12 @@
       "epitheton": "The Master of the Supply Line",
       "decree": "Wars are won by those who count their grain before they count their swords. I decree a soul that defeats its enemies through preparation.",
       "interpretation": "Melqart proclaims a nature of strategic efficiency and the disciplined warrior's advantage."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "The Centurion of the Drill",
+      "decree": "Before the legion marches I count every nail in every sandal, for wars are lost in the workshop before they are lost in the field. Yet while I perfected the drill, a whole province waited on my advance.",
+      "interpretation": "Mars declares an exacting force that wins by discipline and defers the great campaign for the small correction."
     }
   },
   "MARS_LIBRA": {
@@ -1427,6 +1751,12 @@
       "epitheton": "The Champion of the Accord",
       "decree": "Before the armies clash, I offer the treaty. I decree a soul that prefers the alliance to the ambush.",
       "interpretation": "Melqart proclaims a nature of strategic cooperation and the indecision of the just warrior."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "The Spear of Treaties",
+      "decree": "I have taken more cities by parley than by ram, and my legions stand sharpest when they need not strike. But ask me alone in my tent what I myself would fight for, and I must make war to learn the answer.",
+      "interpretation": "Mars marks a will that moves through alliance and negotiation, and must struggle to find the ground it holds alone."
     }
   },
   "MARS_SCORPIO": {
@@ -1453,6 +1783,12 @@
       "epitheton": "The Undying Warrior",
       "decree": "I have walked through fire and returned from death. I decree a soul that cannot be defeated, only delayed.",
       "interpretation": "Melqart proclaims a nature of indomitable willpower and the capacity for total resurrection."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "Ultor, the Sworn Avenger",
+      "decree": "I waited years in silence for the assassins of Caesar, and my temple was vowed long before my blow fell. But a blade held too long at the whetstone cuts the hand that hones it.",
+      "interpretation": "Mars decrees a power banked like coals for the perfect strike, whose long containment can wound its own keeper."
     }
   },
   "MARS_SAGITTARIUS": {
@@ -1479,6 +1815,12 @@
       "epitheton": "The Voyager-Warrior",
       "decree": "I sailed beyond the Pillars and planted my standard on unknown shores. I decree a soul that wages war as an act of discovery.",
       "interpretation": "Melqart proclaims a nature of adventurous aggression and the crusading warrior's optimistic fire."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "Lord of the Far Frontier",
+      "decree": "My roads run straight from the golden milestone to the edge of the map, and my eagles fly beyond the last province. Yet many a bridge of mine crossed a river my soldiers never learned to name.",
+      "interpretation": "Mars declares a driving force aimed at the horizon, spending its strength on distance and skimming the ground it wins."
     }
   },
   "MARS_CAPRICORN": {
@@ -1505,6 +1847,12 @@
       "epitheton": "The Architect of Conquest",
       "decree": "My campaigns are planned a decade before the first soldier marches. I decree a soul that masters the art of war through patience and rank.",
       "interpretation": "Melqart proclaims a nature of commanding authority and the supreme warrior's disciplined ambition."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "The Old Campaigner",
+      "decree": "I raise the aqueduct arch by arch across the dry years, and my legions dig the winter camp before they sleep. I have outlasted every enemy but the flesh that carried me.",
+      "interpretation": "Mars marks an effort sustained like the aqueduct's long descent, enduring past every rival except the body itself."
     }
   },
   "MARS_AQUARIUS": {
@@ -1531,6 +1879,12 @@
       "epitheton": "The Breaker of Chains",
       "decree": "The old alliances crumble and new ones are forged in the heat of rebellion. I decree a soul that fights for a future no one else can see.",
       "interpretation": "Melqart proclaims a nature of detached, visionary aggression and the warrior's humanitarian impulse."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "The Sword of the Republic",
+      "decree": "I do not fight for plunder but for the res publica, for the census, the law, and the order of the camp. Yet in defending the Republic I have marched past the very citizen it was built to shelter.",
+      "interpretation": "Mars decrees a force enlisted to principle and system, which can overlook the single soul the system was made for."
     }
   },
   "MARS_PISCES": {
@@ -1557,6 +1911,12 @@
       "epitheton": "The Lost Voyager",
       "decree": "Beyond the last harbor, my war becomes a pilgrimage. I decree a soul that fights by surrendering and conquers by yielding.",
       "interpretation": "Melqart proclaims a nature of gentle, self-sacrificing strength and the warrior who serves the unseen."
+    },
+    "ROMAN": {
+      "deity_name": "Mars",
+      "epitheton": "The Mist Before the Legion",
+      "decree": "Some wars I win as the river wins, wearing the stone thin and drowning the ford by night. But the augurs watch my birds and ask when I will meet my enemy in the open field I owe him.",
+      "interpretation": "Mars marks a strength that works unseen, like water under walls, while the open deed remains unpaid."
     }
   },
   "JUPITER_ARIES": {
@@ -1583,6 +1943,12 @@
       "epitheton": "The Lord of the New Campaign",
       "decree": "I bless the first ships of the season as they leave the harbor. Fortune favors the one who acts without hesitation.",
       "interpretation": "Baal Hammon decrees a fortune that grows through decisive, fearless action."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The First Auspice",
+      "decree": "I granted Romulus twelve vultures above the Palatine before a single wall was raised. March out at first light and I will consecrate the ground you take; only do not leave your walls half built.",
+      "interpretation": "Iuppiter decrees expansion through bold beginnings, warning that fortune crowns only the campaign carried through."
     }
   },
   "JUPITER_TAURUS": {
@@ -1609,6 +1975,12 @@
       "epitheton": "The Lord of the Granary",
       "decree": "The wealth of Carthage is built upon the fullness of the land. I decree abundance for those who build with slow, steady hands.",
       "interpretation": "Baal Hammon proclaims a fortune of enduring material security and generous plenty."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The Lord of the White Oxen",
+      "decree": "The white oxen that climb the Capitoline are fattened through long seasons, not in a single day. I swell your holdings as the aqueduct fills the cistern, drop by patient drop; but weigh your worth in more than what the scales can hold.",
+      "interpretation": "Iuppiter decrees a slow and lasting abundance, cautioning that accumulation is not the same as worth."
     }
   },
   "JUPITER_GEMINI": {
@@ -1635,6 +2007,12 @@
       "epitheton": "The Lord of the Trade Routes",
       "decree": "The merchants of Carthage grow rich by speaking every tongue. I decree fortune for those who trade in knowledge and words.",
       "interpretation": "Baal Hammon proclaims a fortune built on networking, commerce, and intellectual enterprise."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The Master of the Golden Milestone",
+      "decree": "My favor rides every road that runs out from the milestone at the heart of the forum. Gather tongues, trades, and tidings from every province; yet enter one gate deeply, lest you own a map and no city.",
+      "interpretation": "Iuppiter declares growth through many roads and many voices, warning against breadth that never deepens."
     }
   },
   "JUPITER_CANCER": {
@@ -1661,6 +2039,12 @@
       "epitheton": "The Father of the City",
       "decree": "The hearths of Carthage burn bright under my blessing. I decree abundance for those who honor their roots and nourish their kin.",
       "interpretation": "Baal Hammon proclaims a fortune of familial prosperity and the expansion of the protective heart."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The Shelterer of the Household Gods",
+      "decree": "As Aeneas bore his father and his gods out of burning Troy, so I enlarge whoever carries kin upon their shoulders. But know which household gods still live and which you carry only out of habit.",
+      "interpretation": "Iuppiter marks an expansion won through care and kinship, counseling the release of bonds already outgrown."
     }
   },
   "JUPITER_LEO": {
@@ -1687,6 +2071,12 @@
       "epitheton": "The Supreme Lord",
       "decree": "The processions of Carthage honor my name with gold. I decree fortune for the bold, the generous, and the magnificent.",
       "interpretation": "Baal Hammon proclaims a fortune of radiant success and the expansion of one's personal kingdom."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The Giver of Triumphs",
+      "decree": "The triumphator wears my purple and paints his face in my likeness while the whole city cheers. Pour out your warmth like a public feast; but beware the day the giving becomes the show.",
+      "interpretation": "Iuppiter decrees generous magnificence, warning that warmth performed for applause ceases to warm."
     }
   },
   "JUPITER_VIRGO": {
@@ -1713,6 +2103,12 @@
       "epitheton": "The Lord of the Counting House",
       "decree": "Carthage prospers by the careful accounting of its stewards. I decree fortune for those who grow wealth through discipline and detail.",
       "interpretation": "Baal Hammon proclaims a fortune of methodical growth and the quiet prosperity of the expert."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The Keeper of the Perfect Rite",
+      "decree": "When one word of the prayer falters, my priests begin the whole rite again until it is flawless. Refine your work as the engineer trues the arch of the aqueduct; yet see that the water reaches the city, for polish that carries nothing is no offering.",
+      "interpretation": "Iuppiter declares growth through diligent refinement, marking the difference between polish and true progress."
     }
   },
   "JUPITER_LIBRA": {
@@ -1739,6 +2135,12 @@
       "epitheton": "The Lord of the Alliance",
       "decree": "The alliances of Carthage multiply its power. I decree fortune for those who build bridges between nations and hearts.",
       "interpretation": "Baal Hammon proclaims a fortune of diplomatic success and the prosperity of just partnership."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The Witness of Oaths",
+      "decree": "Every treaty struck at my altar binds two peoples into one strength, and the fetial priest casts the flint in my name. Grow through the pact and the partner; but do not sign away the name you were born with.",
+      "interpretation": "Iuppiter decrees enlargement through alliance and union, cautioning that the self must not be forfeited in the bargain."
     }
   },
   "JUPITER_SCORPIO": {
@@ -1765,6 +2167,12 @@
       "epitheton": "The Lord of the Tophet",
       "decree": "What is sacrificed in my name returns a hundredfold from the shadows. I decree fortune for those who invest in the depths.",
       "interpretation": "Baal Hammon proclaims a fortune of powerful regeneration and wealth born from upheaval."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The Striker of Sacred Ground",
+      "decree": "Where my bolt falls, the earth is fenced and holy, and no plow may ever touch it again. Let what must die be buried with honors; only be certain it was your choice to yield it, not merely your loss.",
+      "interpretation": "Iuppiter marks growth through deliberate endings, warning against losses dressed up as decisions."
     }
   },
   "JUPITER_SAGITTARIUS": {
@@ -1791,6 +2199,12 @@
       "epitheton": "The Lord of the Far Horizons",
       "decree": "The ships of Carthage sail beyond all maps under my blessing. I decree a fortune as vast as the world itself for those who believe.",
       "interpretation": "Baal Hammon proclaims a fortune of unbounded growth, sacred adventure, and universal wisdom."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The Eagle Beyond the Frontier",
+      "decree": "My eagle standards have crossed the Alps, the Rhine, and the grey edge of the sea. Reach past every boundary stone I have set; but stoop sometimes from the height, for the eagle that never lands rules only air.",
+      "interpretation": "Iuppiter declares a fortune of far horizons, counseling attention to the near things flown over."
     }
   },
   "JUPITER_CAPRICORN": {
@@ -1817,6 +2231,12 @@
       "epitheton": "The Lord of the Long Plan",
       "decree": "The empire of Carthage was not built in a season. I decree fortune for those who sacrifice the present for the permanence of their legacy.",
       "interpretation": "Baal Hammon proclaims a fortune of structured, hard-won greatness and the expansion of lasting authority."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The Architect of the Capitoline",
+      "decree": "My temple on the Capitoline rose course by course upon foundations older than the Republic. Build your fortune as the censors build roads, stone set upon stone; and call your pace deliberation only while the work in truth advances.",
+      "interpretation": "Iuppiter decrees an estate raised by patient construction, distinguishing steady building from mere delay."
     }
   },
   "JUPITER_AQUARIUS": {
@@ -1843,6 +2263,12 @@
       "epitheton": "The Lord of the New Republic",
       "decree": "The council of Carthage prospers when new voices are heard. I decree fortune for the inventor, the rebel, and the servant of the people.",
       "interpretation": "Baal Hammon proclaims a fortune of progressive expansion and the rewards of communal vision."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The Father of the Common Good",
+      "decree": "I made Rome not a bloodline but an idea, and I have given the citizenship to strangers from every shore. Enlarge yourself by serving what outlives you; yet do not love mankind in the census rolls and forget the neighbor at your door.",
+      "interpretation": "Iuppiter marks growth through devotion to the wider commonwealth, remembering the single soul within the multitude."
     }
   },
   "JUPITER_PISCES": {
@@ -1869,6 +2295,12 @@
       "epitheton": "The Lord of the Infinite Harbor",
       "decree": "All vessels find shelter in the harbor of my mercy. I decree fortune for those who give without counting and love without limit.",
       "interpretation": "Baal Hammon proclaims a fortune of spiritual riches and the boundless grace of the universal heart."
+    },
+    "ROMAN": {
+      "deity_name": "Iuppiter",
+      "epitheton": "The Sender of the Dissolving Rain",
+      "decree": "As Pluvius I send the rain that swells the Tiber past its banks, until field and boundary stone lie under one bright water. Widen by surrender and let the edges of the self go soft; but keep one granary above the flood.",
+      "interpretation": "Iuppiter decrees expansion through surrender and dissolution, advising that something practical be kept dry above the waters."
     }
   },
   "SATURN_ARIES": {
@@ -1895,6 +2327,12 @@
       "epitheton": "The Lord of the First Trial",
       "decree": "The fire of youth is tested in my crucible. I decree that authority must be earned through the mastery of one's own impatience.",
       "interpretation": "Baal Hammon proclaims a discipline of delayed gratification and the slow forging of true leadership."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Wall Before the Legion",
+      "decree": "The raw recruit charges before the eagle is raised, and I hold him at the rampart until the drill is learned. The triumph belongs to the soldier who kept formation.",
+      "interpretation": "Saturnus decrees that impulse must be drilled into discipline before the first strike can truly land."
     }
   },
   "SATURN_TAURUS": {
@@ -1921,6 +2359,12 @@
       "epitheton": "The Lord of the Lean Year",
       "decree": "The granaries of Carthage know both feast and famine. I decree that only the one who survives scarcity may be trusted with plenty.",
       "interpretation": "Baal Hammon proclaims a discipline of material endurance and the wisdom born of deprivation."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Keeper of the Lean Treasury",
+      "decree": "My temple at the foot of the Capitoline guards the treasury of Rome, and I open its doors slowly. What is stored through the lean winter outlasts the feast of a single season.",
+      "interpretation": "Saturnus marks a soul whose patient husbandry of the body and its goods builds wealth that endures."
     }
   },
   "SATURN_GEMINI": {
@@ -1947,6 +2391,12 @@
       "epitheton": "The Lord of the Sealed Scroll",
       "decree": "The archives of Carthage admit only what is proven. I decree that the mind must earn its authority through rigor and patience.",
       "interpretation": "Baal Hammon proclaims a discipline of intellectual austerity and the hard labor of true learning."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Censor of the Forum",
+      "decree": "A hundred orators fill the forum and I strike their idle words from the record. I permit only the sentence weighed like coin, and that sentence carries the force of law.",
+      "interpretation": "Saturnus imposes silence upon a scattered tongue until one measured word arrives with the weight of an edict."
     }
   },
   "SATURN_CANCER": {
@@ -1973,6 +2423,12 @@
       "epitheton": "The Lord of the Orphan's Trial",
       "decree": "The child of Carthage learns early that the world is hard. I decree that only through mastering grief does one earn the right to nurture.",
       "interpretation": "Baal Hammon proclaims a discipline of emotional fortitude and the wisdom gained from early hardship."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Warden of the Hearth",
+      "decree": "Not every kinsman may warm himself at the hearth of Vesta. I teach the keeper of the flame to close the door, lest the fire within be scattered by every wind of the household.",
+      "interpretation": "Saturnus decrees that the home is preserved through boundaries drawn in grief, and the room so guarded stays warm."
     }
   },
   "SATURN_LEO": {
@@ -1999,6 +2455,12 @@
       "epitheton": "The Lord of the Heavy Crown",
       "decree": "The crown of Carthage is forged from iron, not gold. I decree that leadership is a burden before it is a glory.",
       "interpretation": "Baal Hammon proclaims a discipline of austere dignity and the lesson that power demands sacrifice."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Denier of the Triumph",
+      "decree": "The general returns victorious and I withhold his procession; no crowd lines the Sacred Way. Let him learn that the worth of the deed does not wait upon the roar of the Circus.",
+      "interpretation": "Saturnus declares that true honor is the kind that stands unshaken without the crowd's acclaim."
     }
   },
   "SATURN_VIRGO": {
@@ -2025,6 +2487,12 @@
       "epitheton": "The Lord of the Artisan's Oath",
       "decree": "Every craftsman of Carthage swears an oath to my standard. I decree that only through ceaseless refinement does one prove worthy.",
       "interpretation": "Baal Hammon proclaims a discipline of tireless craft and the austere joy of work perfected."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Overseer of the Aqueducts",
+      "decree": "The aqueduct does not stand because it was built; it stands because it is mended. I set the soul to the endless inspection of the arches, and the water keeps flowing to the city.",
+      "interpretation": "Saturnus marks a soul whose faithful maintenance, not its dream of perfection, keeps the great work standing."
     }
   },
   "SATURN_LIBRA": {
@@ -2051,6 +2519,12 @@
       "epitheton": "The Lord of the Binding Oath",
       "decree": "The treaties of Carthage are sealed in my name and none may break them. I decree that justice is the foundation of all lasting power.",
       "interpretation": "Baal Hammon proclaims a discipline of formal integrity and the mastery of law and alliance."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Weigher of Treaties",
+      "decree": "Rome signs no treaty that unmakes Rome. I teach the envoy that a pact sealed by self-surrender is no peace, and that the refusal spoken plainly in the Senate makes the alliance true.",
+      "interpretation": "Saturnus decrees that a just bond is possible only for the soul strong enough to refuse it."
     }
   },
   "SATURN_SCORPIO": {
@@ -2077,6 +2551,12 @@
       "epitheton": "The Lord of Sacred Sacrifice",
       "decree": "What is given to the Tophet does not return as it was. I decree that the soul must burn away its weakness to become imperishable.",
       "interpretation": "Baal Hammon proclaims a discipline of extreme purification and the forging of indestructible will."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Auditor of Hidden Accounts",
+      "decree": "The census spares no household, and every ledger buried beneath the floor is opened before my clerks. What is confessed in daylight weighs less than what is carried in the dark.",
+      "interpretation": "Saturnus imposes the surfacing of secrets, for their disclosure costs less than their keeping."
     }
   },
   "SATURN_SAGITTARIUS": {
@@ -2103,6 +2583,12 @@
       "epitheton": "The Lord of the Pilgrim's Trial",
       "decree": "The road to my temple is long and paved with hardship. I decree that only the journey tested by adversity produces true wisdom.",
       "interpretation": "Baal Hammon proclaims a discipline of philosophical endurance and the sobering of unbridled optimism."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Milestone at the Empire's Edge",
+      "decree": "Every road of Rome ends at a stone that reads: thus far. I halt the rider who chases the horizon and set him to govern the province already beneath his feet.",
+      "interpretation": "Saturnus declares that wisdom waits not at the far frontier but in the near ground finally allowed to teach."
     }
   },
   "SATURN_CAPRICORN": {
@@ -2129,6 +2615,12 @@
       "epitheton": "The Lord of the Eternal City",
       "decree": "The walls of Carthage are my bones and the law is my blood. I decree a soul that commands through absolute discipline and the weight of ages.",
       "interpretation": "Baal Hammon proclaims the ultimate discipline: the forging of an unshakable legacy through lifelong devotion to duty."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Founder Upon the Capitoline",
+      "decree": "Stone by stone the Capitoline rose, and no builder lived to see it whole. Here I set my own hand to the work, for this hill is my house, and what I raise outlasts every name carved upon it.",
+      "interpretation": "Saturnus marks a soul at home in the long labor, raising structures that outlive their maker."
     }
   },
   "SATURN_AQUARIUS": {
@@ -2155,6 +2647,12 @@
       "epitheton": "The Lord of the Reformed Council",
       "decree": "The council of Carthage adapts its laws to the demands of the age. I decree that the architect of the future must honor the foundations of the past.",
       "interpretation": "Baal Hammon proclaims a discipline of progressive governance and the responsibility to build for the many."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Lord of the Saturnalia",
+      "decree": "For one feast each year I overturn the order of Rome: the master serves and the slave commands. A law that cannot bear its own inversion was never just, and I write the honester law in its place.",
+      "interpretation": "Saturnus declares that a principle proves itself only when it can survive its exception."
     }
   },
   "SATURN_PISCES": {
@@ -2181,6 +2679,12 @@
       "epitheton": "The Lord of the Last Harbor",
       "decree": "The final harbor of Carthage receives all souls. I decree that the dissolution of the self must serve a greater order, or it is mere escape.",
       "interpretation": "Baal Hammon proclaims a discipline of spiritual accountability and the mastery of bringing the unseen into the world."
+    },
+    "ROMAN": {
+      "deity_name": "Saturnus",
+      "epitheton": "The Embanker of the Tiber",
+      "decree": "The Tiber in flood drowns the very fields it means to feed. I raise the embankment and cut the channel, so that mercy may irrigate the city and not dissolve it.",
+      "interpretation": "Saturnus decrees that compassion serves only when it is given banks, for help without limit helps no one."
     }
   }
 }
