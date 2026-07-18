@@ -10,13 +10,27 @@ import kotlin.math.*
  */
 class AstronomyEngine {
 
+    /**
+     * Geocentric apparent ecliptic longitude, mirroring the web ephemeris
+     * (web/src/lib/ephemeris.ts) per docs/shared-content-model.md: the Sun via
+     * sunPosition, the Moon via eclipticGeoMoon, the five classical planets via
+     * an aberration-corrected geocentric vector. The library's
+     * eclipticLongitude() must NOT be used here: it is HELIOcentric, which is
+     * the wrong frame for astrology and throws InvalidBodyException for the Sun.
+     */
+    private fun geocentricLongitude(body: Body, time: Time): Double = when (body) {
+        Body.Sun -> sunPosition(time).elon
+        Body.Moon -> eclipticGeoMoon(time).lon
+        else -> equatorialToEcliptic(geoVector(body, time, Aberration.Corrected)).elon
+    }
+
     fun getPlanetPosition(julianDay: Double, body: Body): PlanetData {
         val time = Time(julianDay - 2451545.0)
-        val longitude = eclipticLongitude(body, time)
+        val longitude = normDeg(geocentricLongitude(body, time))
 
         // Velocity via finite difference (~1.44 minutes)
         val dt = 0.001
-        val longitude2 = eclipticLongitude(body, Time(time.ut + dt))
+        val longitude2 = normDeg(geocentricLongitude(body, Time(time.ut + dt)))
         var dLon = longitude2 - longitude
         if (dLon > 180.0) dLon -= 360.0
         if (dLon < -180.0) dLon += 360.0
