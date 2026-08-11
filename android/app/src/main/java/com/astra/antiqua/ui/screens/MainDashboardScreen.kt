@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.astra.antiqua.domain.HouseMeanings
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.OracleContent
 import com.astra.antiqua.model.ClassicalPlanet
@@ -228,6 +229,28 @@ fun OracleDecreeCard(content: OracleContent) {
                             color = Color.White.copy(alpha = 0.85f)
                         )
                     }
+
+                    content.planetPosition?.let { pos ->
+                        val houseMeaning = HouseMeanings.get(pos.house)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "IN THE ${houseMeaning.ordinal.uppercase()} HOUSE · ${houseMeaning.title.uppercase()}",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontSize = 9.sp,
+                                letterSpacing = 1.5.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = Gold.copy(alpha = 0.5f)
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = houseMeaning.domain,
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                lineHeight = 20.sp
+                            ),
+                            color = Color.White.copy(alpha = 0.7f)
+                        )
+                    }
                 }
 
                 content.planetPosition?.let { pos ->
@@ -257,7 +280,18 @@ fun ScribeMargin(planetData: com.astra.antiqua.domain.AccuratePlanetPosition) {
             val d = planetData.degreeInSign.toString().padStart(2, '0')
             val m = planetData.minuteInSign.toString().padStart(2, '0')
             val s = planetData.secondInSign.toString().padStart(2, '0')
-            
+
+            Text(
+                text = planetData.zodiacSign.signName.uppercase(),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    fontFamily = FontFamily.Monospace,
+                    fontSize = 9.sp,
+                    letterSpacing = 1.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                color = Gold.copy(alpha = 0.8f),
+                textAlign = TextAlign.End
+            )
             Text(
                 text = "$d°$m'$s\"",
                 style = MaterialTheme.typography.bodySmall.copy(

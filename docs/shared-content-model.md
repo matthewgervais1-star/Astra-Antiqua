@@ -14,7 +14,7 @@ implementation (`web/src/data/*.ts`) is the source of truth for content**, and
 | Cultures | **5**: egypt, greece, canaan, carthage, rome | `CULTURES` in `cultures.ts` | `AncientCulture` enum ✓ |
 | Classical planets | **7**: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn | `PLANETS` in `cultures.ts` | `ClassicalPlanet` enum ✓ |
 | Zodiac signs | **12**, with element, modality, traits, date range | `ZODIAC_SIGN_INFO` in `zodiacSigns.ts` | `ZodiacSign` enum (names only) |
-| Houses | **12**, whole-sign, each with title/domain/arena | `HOUSE_MEANINGS` in `houses.ts` | none |
+| Houses | **12**, whole-sign, each with title/domain/arena | `HOUSE_MEANINGS` in `houses.ts` | `HouseMeanings` in `domain/HouseMeanings.kt` ✓ (ported verbatim) |
 | Aspect kinds | **5**: conjunction, sextile, square, trine, opposition | `AspectKind` in `sampleChart.ts` | `AspectType` enum ✓ (orbs match) |
 | Life domains | **5**: self, bonds, work, fortune, spirit | `LIFE_DOMAINS` in `lifeDomains.ts` | none |
 
@@ -99,8 +99,9 @@ as product commitments (whole-sign houses are named on `/learn`).
    duplicating names. `assets/oracle_decrees.json` still bakes in its own
    copies of all five pantheons' names and prose — that collapses into one
    place only when it migrates to the universal model.
-5. **Android lacks** houses/meanings, transits, synastry, forecast, and the
-   whole reading-composition layer; web lacks Android's per-culture UI lexicon.
+5. **Android lacks** transits, synastry, forecast, and the whole
+   reading-composition layer; web lacks Android's per-culture UI lexicon.
+   (House meanings are ported and rendered on the decree cards.)
 
 ## Sync protocol
 
