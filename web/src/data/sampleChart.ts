@@ -50,13 +50,23 @@ export interface Aspect {
   orb: number;
 }
 
-const ASPECT_RULES: ReadonlyArray<{ kind: AspectKind; angle: number; orb: number }> = [
+/**
+ * The one documented orb table (docs/design/handoff, method page). Every
+ * aspect detector on this surface (natal, transits, synastry) reads THIS
+ * table, so the numbers the method page publishes are the numbers the code
+ * runs. When nothing is in orb, the day is quiet; we do not invent weather.
+ */
+export const ASPECT_RULES: ReadonlyArray<{ kind: AspectKind; angle: number; orb: number }> = [
   { kind: "conjunction", angle: 0, orb: 8 },
-  { kind: "sextile", angle: 60, orb: 4 },
-  { kind: "square", angle: 90, orb: 6 },
-  { kind: "trine", angle: 120, orb: 6 },
+  { kind: "sextile", angle: 60, orb: 5 },
+  { kind: "square", angle: 90, orb: 7 },
+  { kind: "trine", angle: 120, orb: 7 },
   { kind: "opposition", angle: 180, orb: 8 },
 ];
+
+export function orbFor(kind: AspectKind): number {
+  return ASPECT_RULES.find((rule) => rule.kind === kind)?.orb ?? 8;
+}
 
 export function computeAspects(chart: Readonly<Record<Planet, Longitude>>): readonly Aspect[] {
   const planets = Object.keys(chart) as Planet[];

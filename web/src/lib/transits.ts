@@ -1,6 +1,6 @@
 import { PLANETS, type Planet } from "@/data/cultures";
-import type { Longitude } from "@/data/sampleChart";
-import type { AspectKind } from "@/data/sampleChart";
+import { ASPECT_RULES } from "@/data/sampleChart";
+import type { AspectKind, Longitude } from "@/data/sampleChart";
 
 export interface TransitAspect {
   transit: Planet; // body in today's sky
@@ -9,14 +9,6 @@ export interface TransitAspect {
   exactAngle: number;
   orb: number;
 }
-
-const ASPECT_RULES: ReadonlyArray<{ kind: AspectKind; angle: number; orb: number }> = [
-  { kind: "conjunction", angle: 0, orb: 4 },
-  { kind: "sextile", angle: 60, orb: 3 },
-  { kind: "square", angle: 90, orb: 4 },
-  { kind: "trine", angle: 120, orb: 4 },
-  { kind: "opposition", angle: 180, orb: 5 },
-];
 
 function angularDelta(a: number, b: number): number {
   const raw = Math.abs(a - b) % 360;
