@@ -1,0 +1,41 @@
+/* Astra Antiqua rebrand — Tailwind CSS 4 theme starter.
+   Lift into web/src/app/globals.css @theme. Fonts self-host via next/font/local. */
+@theme {
+  /* grounds (page background per culture; neutral where no culture is presumed) */
+  --color-ground-neutral: #171310;
+  --color-ground-egypt: #1a1712;
+  --color-ground-greece: #171a1c;
+  --color-ground-canaan: #1a1813;
+  --color-ground-carthage: #191218; /* Tyrian-tinted */
+  --color-ground-rome: #1b1410;     /* terracotta-tinted */
+
+  /* culture accents (muted metals) */
+  --color-accent-egypt: #b59a55;    /* gold */
+  --color-accent-greece: #7c93a6;   /* aegean */
+  --color-accent-canaan: #8a9268;   /* cedar */
+  --color-accent-carthage: #94648c; /* Tyrian purple */
+  --color-accent-rome: #a5544a;     /* Pompeian red */
+
+  /* inks */
+  --color-bone: #e6decc;
+  --color-prose: #d9d1bf;
+  --color-dim: #9a917d;
+  --color-faint-ink: #6f6b60;
+
+  /* signals */
+  --color-harmony: #b59a55;
+  --color-conflict: #b56b71; /* also retrograde + destructive actions */
+
+  /* rules (1px only; no shadows, no radius, no glass) */
+  --color-rule: rgb(230 222 204 / 0.16);
+  --color-rule-row: rgb(230 222 204 / 0.11);
+
+  /* type */
+  --font-display: "Cinzel", serif;        /* 400-600, caps, ls .06-.3em */
+  --font-prose: "Spectral", serif;        /* 300-400 + italic, 1.65-1.75 lh */
+  --font-data: "IBM Plex Mono", monospace;/* 400-500, ls .06-.22em, min 11px */
+
+  --radius: 0px;
+}
+/* per-culture application: body[data-pantheon="egypt"] { --ground: var(--color-ground-egypt); --accent: var(--color-accent-egypt); } etc.
+   accent-tinted borders: color-mix(in srgb, var(--accent) 48%, transparent) */
