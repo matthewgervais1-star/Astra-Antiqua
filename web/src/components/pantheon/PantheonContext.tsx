@@ -35,8 +35,8 @@ export function PantheonProvider({ children }: { children: React.ReactNode }) {
 /**
  * The active pantheon. On a per-culture route the route segment wins (pushed
  * into context by useSetRoutePantheon from the [culture] layout). Everywhere
- * else it falls back to the ?pantheon= query param, so the global pages
- * (/reading, /forecast, the home dashboard) keep working unchanged.
+ * else it falls back to the ?culture= query param (the rebrand's name),
+ * still honoring the legacy ?pantheon= param so old links keep working.
  *
  * Reads useSearchParams, so callers must sit inside a <Suspense> boundary
  * during prerender. Every existing caller already does.
@@ -44,7 +44,7 @@ export function PantheonProvider({ children }: { children: React.ReactNode }) {
 export function useActivePantheon(): Culture | null {
   const ctx = useContext(PantheonCtx);
   const searchParams = useSearchParams();
-  const raw = searchParams.get("pantheon");
+  const raw = searchParams.get("culture") ?? searchParams.get("pantheon");
   const queryCulture = raw && isCulture(raw) ? raw : null;
   return ctx?.routeCulture ?? queryCulture;
 }
