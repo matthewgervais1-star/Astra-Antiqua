@@ -132,6 +132,31 @@ answer). Do not begin Phase 2 without an explicit pick.
 6. Docs synced: README design-token section, shared-content-model touchpoints,
    plan doc status row for the rebrand (plus an Android follow-up row).
 
+## References (docs/design/references/)
+
+Co-Star long-transit reading screens, supplied by the product owner
+(`costar-transit-reading-1.jpg`, `costar-transit-reading-2.jpg`,
+`costar-pluto-transit-header.jpg`). Study them for:
+
+- **Presentation density**: a reading as a quiet single-column prose page,
+  generous line-height, one austere image, functional footer. Nothing
+  competes with the text.
+- **Reading anatomy**: a fixed narrative spine per reading: what is
+  changing, where it begins, what it touches, what it leaves behind, then
+  one direct instruction. The structure repeats; the content varies.
+- **Duration-scoped readings**: the reading is scoped to the transit's real
+  span ("Through 2028"), not a calendar unit. Astra Antiqua's classical
+  equivalent is the slow Jupiter/Saturn transits already computed for the
+  annual report.
+- **A feedback affordance** (accurate / not accurate) as a lightweight
+  engagement pattern, if the chosen direction wants one.
+
+What NOT to absorb: the voice. These readings are deliberately cultureless,
+generic-therapeutic second person. Astra Antiqua's differentiator is the
+opposite: five culturally substantive voices reading the same sky (see
+Inviolable core). Learn the typography and the spine; keep the gods. Also:
+no outer planets; the seven classical planets remain the system.
+
 ## Working agreements
 
 - Direct commits to master, conventional messages, present-tense summaries
