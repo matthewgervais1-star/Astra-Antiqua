@@ -58,6 +58,14 @@ legacy shape to reach five-culture parity now (grounded in the web's
 to universal text + cultural mask is still the plan, and collapses all five
 baked pantheons at once.
 
+**Product principle, either way:** the universal layer carries the
+placement's core astrological meaning, and the cultural layer must be
+culturally substantive: each culture's own theology, institutions, imagery,
+and register, not merely a different deity name on the same sentence.
+Whether that is achieved by masking rich per-culture fragments (web) or by
+fully authored per-culture prose (the decree corpus), the five readings must
+feel native to their cultures while agreeing on what the placement means.
+
 Web-only interpretive banks (no Android counterpart yet; they become shared
 content when Android gains those features): aspect readings (21 pairs × 3
 tones), domain readings (15), week readings (12), year narrative (41), planet

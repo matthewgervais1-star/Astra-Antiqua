@@ -18,9 +18,14 @@ the human.
 
 1. **The concept.** One professionally computed sky, read through the
    religious frameworks of five ancient cultures: Egypt, Greece, Canaan,
-   Carthage, Rome. The five-voice idea is the product. A visitor must still
-   be able to read the same placement in different voices and feel that only
-   the names of the gods change.
+   Carthage, Rome. The five-voice idea is the product. The same placement
+   keeps the same core astrological meaning in every voice, but each
+   culture's interpretation must be culturally substantive: its own
+   theology, institutions, imagery, and concerns, not a name swap on shared
+   prose. The current site's "only the names of the gods change" framing
+   undersells this; the rebrand should retire that copy and let the five
+   readings feel genuinely native to their cultures while agreeing on what
+   the placement means.
 2. **The content corpus.** Deity records, decrees, aspect verbs, sign
    registers, house meanings, season/week/year readings, methodology and
    learn material. Copy REGISTER may change (see Open to change); the
