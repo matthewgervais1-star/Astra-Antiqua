@@ -1,6 +1,42 @@
 @import "tailwindcss";
 
 @theme {
+  /*
+   * "The Instrument in the Temple" tokens (docs/design/handoff/tokens.css).
+   * Legacy relic tokens below them survive only until the route sweep
+   * finishes; they are deleted in the teardown slice.
+   */
+
+  /* grounds (page background per culture; neutral where no culture is presumed) */
+  --color-ground-neutral: #171310;
+  --color-ground-egypt: #1a1712;
+  --color-ground-greece: #171a1c;
+  --color-ground-canaan: #1a1813;
+  --color-ground-carthage: #191218;
+  --color-ground-rome: #1b1410;
+
+  /* culture accents (muted metals) */
+  --color-accent-egypt: #b59a55;
+  --color-accent-greece: #7c93a6;
+  --color-accent-canaan: #8a9268;
+  --color-accent-carthage: #94648c;
+  --color-accent-rome: #a5544a;
+
+  /* inks */
+  --color-bone: #e6decc;
+  --color-prose: #d9d1bf;
+  --color-dim: #9a917d;
+  --color-faint-ink: #6f6b60;
+
+  /* signals */
+  --color-harmony: #b59a55;
+  --color-conflict: #b56b71;
+
+  /* rules (1px only; no shadows, no radius, no glass) */
+  --color-rule: rgb(230 222 204 / 0.16);
+  --color-rule-row: rgb(230 222 204 / 0.11);
+
+  /* legacy relic tokens (teardown slice deletes these) */
   --color-bg-void: #050505;
   --color-bg-deep: #0a0a0a;
   --color-bg-elevated: rgba(255, 255, 255, 0.025);
@@ -15,9 +51,55 @@
   --color-conflict-red: #e0604f;
   --color-harmony-glow: rgba(244, 208, 63, 0.5);
 
-  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
-  --font-body: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
-  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display: var(--font-cinzel), "Cinzel", Georgia, serif;
+  --font-body: var(--font-spectral), "Spectral", Georgia, serif;
+  --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --radius: 0px;
+}
+
+/*
+ * Culture ground + accent. The whole scheme shifts per culture: the page
+ * ground and the single muted accent. Neutral ground appears only where no
+ * culture is presumed (welcome, signin, account, waitlist, error).
+ */
+:root {
+  --ground: var(--color-ground-neutral);
+  --accent: var(--color-harmony);
+}
+
+/*
+ * Derived on body (not :root): var() inside a custom property resolves on
+ * the element that declares it, so this must sit at or below the element
+ * where the per-culture --accent override lands.
+ */
+body {
+  --accent-strong-border: color-mix(in srgb, var(--accent) 48%, transparent);
+}
+
+body[data-pantheon="egypt"] {
+  --ground: var(--color-ground-egypt);
+  --accent: var(--color-accent-egypt);
+}
+
+body[data-pantheon="greece"] {
+  --ground: var(--color-ground-greece);
+  --accent: var(--color-accent-greece);
+}
+
+body[data-pantheon="canaan"] {
+  --ground: var(--color-ground-canaan);
+  --accent: var(--color-accent-canaan);
+}
+
+body[data-pantheon="carthage"] {
+  --ground: var(--color-ground-carthage);
+  --accent: var(--color-accent-carthage);
+}
+
+body[data-pantheon="rome"] {
+  --ground: var(--color-ground-rome);
+  --accent: var(--color-accent-rome);
 }
 
 /*
@@ -107,45 +189,6 @@ body[data-pantheon="rome"] {
   -webkit-text-fill-color: transparent;
 }
 
-/*
- * Carthage gets a hot, animated gold. Melqart's pyre is the ritual fire; the
- * city's iconography is fire-on-bronze. When data-pantheon="carthage" is set
- * on the body, every gold-leaf text element switches to a warmer gradient
- * that slowly sweeps across the glyphs.
- */
-@keyframes carthage-fire {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-body[data-pantheon="carthage"] .text-gold-leaf {
-  background: linear-gradient(
-    90deg,
-    #c44518 0%,
-    #e87a1a 12%,
-    #f4a02a 28%,
-    #f4d03f 45%,
-    #fbe57b 50%,
-    #f4d03f 55%,
-    #f4a02a 72%,
-    #e87a1a 88%,
-    #c44518 100%
-  );
-  background-size: 220% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: #f4a02a;
-  -webkit-text-fill-color: transparent;
-  animation: carthage-fire 4.5s ease-in-out infinite;
-}
-
 @utility border-hairline {
   border: 0.5px solid var(--color-border-hairline);
 }
@@ -190,8 +233,8 @@ body[data-pantheon="carthage"] .text-gold-leaf {
 
 html,
 body {
-  background: var(--color-bg-void);
-  color: var(--color-ink-primary);
+  background: var(--ground);
+  color: var(--color-bone);
 }
 
 html {
@@ -199,38 +242,18 @@ html {
 }
 
 /*
- * The night sky behind everything. Layer one is a vault glow at the top of the
- * page tinted by the active culture's accent (lapis for Egypt, Aegean for
- * Greece, verdigris for Canaan, fire for Carthage, Tyrian purple for Rome).
- * The remaining layers are a sparse repeating starfield: tiny radial dots on a
- * large tile, far apart and dim enough to read as deep sky, not decoration.
+ * The ground is a flat, muted, culture-tinted dark. No starfield, no vault
+ * glow, no gradients: the incised 1px rule is the only ornament this
+ * identity allows.
  */
 body {
   min-height: 100%;
   font-family: var(--font-body);
   font-size: 17px;
-  line-height: 1.55;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  background-color: var(--color-bg-void);
-  background-image:
-    radial-gradient(1100px 720px at 50% -160px, var(--accent-soft) 0%, transparent 62%),
-    radial-gradient(1px 1px at 23px 41px, rgba(255, 255, 255, 0.2), transparent 100%),
-    radial-gradient(1px 1px at 187px 133px, rgba(255, 255, 255, 0.12), transparent 100%),
-    radial-gradient(1.4px 1.4px at 311px 254px, var(--accent-glow), transparent 100%),
-    radial-gradient(1px 1px at 96px 309px, rgba(255, 255, 255, 0.09), transparent 100%),
-    radial-gradient(1px 1px at 263px 64px, rgba(255, 255, 255, 0.15), transparent 100%),
-    radial-gradient(1px 1px at 354px 178px, rgba(255, 255, 255, 0.07), transparent 100%);
-  background-repeat: no-repeat, repeat, repeat, repeat, repeat, repeat, repeat;
-  background-size:
-    100% 1400px,
-    389px 389px,
-    389px 389px,
-    389px 389px,
-    389px 389px,
-    389px 389px,
-    389px 389px;
 }
 
 * {
@@ -243,55 +266,32 @@ a {
 }
 
 ::selection {
-  background: rgba(212, 175, 55, 0.25);
-  color: #fff;
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  color: var(--color-bone);
 }
 
-/* Accent focus ring for keyboard navigation; never shown for mouse clicks.
-   Follows the active culture's accent color. */
+/* Accent focus outline for keyboard navigation; never shown for mouse
+   clicks. 1px in the active culture's accent, offset 2, square. */
 :focus-visible {
-  outline: 2px solid var(--accent-solid);
+  outline: 1px solid var(--accent);
   outline-offset: 2px;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
-/* Themed scrollbar: near-invisible accent thumb on the void, instead of the
-   default light-gray browser scrollbar that breaks the dark composition. */
+/* Quiet scrollbar: a dim square thumb on the ground. */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--accent-border) transparent;
+  scrollbar-color: var(--color-faint-ink) transparent;
 }
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-void);
+  background: var(--ground);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-border);
-  border-radius: 999px;
-  border: 2px solid var(--color-bg-void);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-glow);
-}
-
-/*
- * Film grain. A single fixed overlay carrying a tiled fractal-noise SVG at
- * very low opacity. It removes the flat-digital-black feel and gives the
- * surface the tactile quality of a printed exhibition catalogue. Static (no
- * animation), pointer-events none so it never blocks interaction, and it sits
- * above content the way grain sits on the surface of a print.
- */
-.film-grain {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
+  background: var(--color-faint-ink);
 }
 
 h1,
@@ -301,8 +301,7 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-weight: 500;
 }
 
 h1,
@@ -387,9 +386,6 @@ samp {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  body[data-pantheon="carthage"] .text-gold-leaf {
-    animation: none !important;
   }
 }
 

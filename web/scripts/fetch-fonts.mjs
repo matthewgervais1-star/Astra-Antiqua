@@ -18,36 +18,43 @@ const OUT_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "s
 const UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36";
 
-// Playfair Display and Cormorant Garamond are VARIABLE fonts: the css2 API
-// returns the same woff2 URL for every requested weight, so one file per
-// style covers the whole weight range (layout.tsx declares it as a range).
+// Cinzel is a VARIABLE font: the css2 API returns the same woff2 URL for
+// every requested weight, so one file covers the whole range (layout.tsx
+// declares it as a range). Spectral and IBM Plex Mono are STATIC families:
+// one file per weight/style, so each pick names its weight.
 const FAMILIES = [
   {
-    family: "Playfair Display",
-    css: "family=Playfair+Display:wght@400;700",
-    picks: [{ style: "normal", file: "playfair-display-latin-var.woff2" }],
+    family: "Cinzel",
+    css: "family=Cinzel:wght@400;500;600",
+    picks: [{ style: "normal", file: "cinzel-latin-var.woff2" }],
   },
   {
-    family: "Cormorant Garamond",
-    css: "family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500",
+    family: "Spectral",
+    css: "family=Spectral:ital,wght@0,300;0,400;1,300;1,400",
     picks: [
-      { style: "normal", file: "cormorant-garamond-latin-var.woff2" },
-      { style: "italic", file: "cormorant-garamond-latin-var-italic.woff2" },
+      { style: "normal", weight: "300", file: "spectral-latin-300.woff2" },
+      { style: "normal", weight: "400", file: "spectral-latin-400.woff2" },
+      { style: "italic", weight: "300", file: "spectral-latin-300-italic.woff2" },
+      { style: "italic", weight: "400", file: "spectral-latin-400-italic.woff2" },
     ],
   },
   {
-    family: "JetBrains Mono",
-    css: "family=JetBrains+Mono:wght@400",
-    picks: [{ style: "normal", file: "jetbrains-mono-latin-400.woff2" }],
+    family: "IBM Plex Mono",
+    css: "family=IBM+Plex+Mono:wght@400;500",
+    picks: [
+      { style: "normal", weight: "400", file: "ibm-plex-mono-latin-400.woff2" },
+      { style: "normal", weight: "500", file: "ibm-plex-mono-latin-500.woff2" },
+    ],
   },
 ];
 
 /**
- * Parse @font-face blocks; return the latin-subset woff2 URL for a style.
- * Errors if the requested weights resolve to more than one URL, which would
- * mean the family is no longer served as a single variable file.
+ * Parse @font-face blocks; return the latin-subset woff2 URL for a style
+ * (and, for static families, a specific weight). Errors if the request
+ * resolves to more than one URL, which for a weight-less pick would mean
+ * the family is no longer served as a single variable file.
  */
-function pickUrl(cssText, style) {
+function pickUrl(cssText, style, weight) {
   const urls = new Set();
   const blocks = cssText.split("@font-face").slice(1);
   for (let i = 0; i < blocks.length; i += 1) {
@@ -58,10 +65,11 @@ function pickUrl(cssText, style) {
     const subset = before.slice(lastComment + 2, before.indexOf("*/", lastComment)).trim();
     if (subset !== "latin") continue;
     if (!block.includes(`font-style: ${style}`)) continue;
+    if (weight && !block.includes(`font-weight: ${weight}`)) continue;
     const m = block.match(/url\((https:[^)]+\.woff2)\)/);
     if (m) urls.add(m[1]);
   }
-  if (urls.size === 0) throw new Error(`No latin woff2 for style ${style}`);
+  if (urls.size === 0) throw new Error(`No latin woff2 for style ${style} weight ${weight ?? "any"}`);
   if (urls.size > 1) {
     throw new Error(
       `Multiple woff2 URLs for style ${style}; the family is not a single variable file anymore. Update the picks to per-weight files.`,
@@ -78,7 +86,7 @@ for (const fam of FAMILIES) {
   if (!res.ok) throw new Error(`CSS fetch failed for ${fam.family}: ${res.status}`);
   const cssText = await res.text();
   for (const pick of fam.picks) {
-    const url = pickUrl(cssText, pick.style);
+    const url = pickUrl(cssText, pick.style, pick.weight);
     // Sequential on purpose: parallel bursts are exactly what breaks here.
     const fontRes = await fetch(url);
     if (!fontRes.ok) throw new Error(`Font fetch failed: ${url} (${fontRes.status})`);

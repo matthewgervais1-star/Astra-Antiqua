@@ -11,33 +11,33 @@ import "./globals.css";
 
 // Self-hosted (fetched once by scripts/fetch-fonts.mjs, committed to
 // src/fonts/) so `next build` never depends on Google Fonts being reachable.
-// Playfair and Cormorant ship as VARIABLE fonts: one file per style carries
-// the whole weight range, declared as a range so no bytes are duplicated.
-const playfair = localFont({
-  variable: "--font-playfair",
+// Cinzel ships as a VARIABLE font: one file carries the whole weight range,
+// declared as a range so no bytes are duplicated. Spectral and IBM Plex Mono
+// are static families: one file per weight/style.
+const cinzel = localFont({
+  variable: "--font-cinzel",
+  display: "swap",
+  src: [{ path: "../fonts/cinzel-latin-var.woff2", weight: "400 600", style: "normal" }],
+});
+
+const spectral = localFont({
+  variable: "--font-spectral",
   display: "swap",
   src: [
-    { path: "../fonts/playfair-display-latin-var.woff2", weight: "400 700", style: "normal" },
+    { path: "../fonts/spectral-latin-300.woff2", weight: "300", style: "normal" },
+    { path: "../fonts/spectral-latin-400.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/spectral-latin-300-italic.woff2", weight: "300", style: "italic" },
+    { path: "../fonts/spectral-latin-400-italic.woff2", weight: "400", style: "italic" },
   ],
 });
 
-const cormorant = localFont({
-  variable: "--font-cormorant",
+const plexMono = localFont({
+  variable: "--font-plex-mono",
   display: "swap",
   src: [
-    { path: "../fonts/cormorant-garamond-latin-var.woff2", weight: "400 500", style: "normal" },
-    {
-      path: "../fonts/cormorant-garamond-latin-var-italic.woff2",
-      weight: "400 500",
-      style: "italic",
-    },
+    { path: "../fonts/ibm-plex-mono-latin-400.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/ibm-plex-mono-latin-500.woff2", weight: "500", style: "normal" },
   ],
-});
-
-const jetbrains = localFont({
-  variable: "--font-jetbrains",
-  display: "swap",
-  src: [{ path: "../fonts/jetbrains-mono-latin-400.woff2", weight: "400", style: "normal" }],
 });
 
 const SITE_DESCRIPTION =
@@ -84,7 +84,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${cormorant.variable} ${jetbrains.variable}`}
+      className={`${cinzel.variable} ${spectral.variable} ${plexMono.variable}`}
     >
       <body className="bg-bg-void text-ink-primary flex min-h-screen flex-col">
         <AuthProvider>
@@ -103,7 +103,6 @@ export default function RootLayout({
             <SiteFooter />
           </PantheonProvider>
         </AuthProvider>
-        <div className="film-grain print-hide" aria-hidden />
       </body>
     </html>
   );
