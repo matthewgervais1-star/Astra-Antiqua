@@ -15,6 +15,12 @@ execute a full rebrand of the Astra Antiqua web surface.
    human picks (remixes allowed), then build.
 5. Delivery: one-shot build of the winner after the pick, browser-verified
    against an explicit bar.
+6. Voices are substantive interpretation: same core astrological meaning,
+   culturally native readings; "only the names change" framing retired.
+7. Phase 2 completes missing surfaces: long-transit reading pages,
+   voice-depth uplift, reading feedback, finished empty/error states.
+8. All planets: Uranus, Neptune, Pluto join as designed cultural
+   receptions, transparent in the methodology; web first, Android follows.
 
 ## Shape (approach A of three considered)
 

@@ -117,13 +117,52 @@ answer). Do not begin Phase 2 without an explicit pick.
 - Commit in reviewable slices (tokens/system, then route groups), each
   compiling and gate-clean.
 
+## Phase 2 also completes what is missing
+
+The rebrand ships the product's missing surfaces, not just new skin on the
+existing ones:
+
+1. **Long-transit readings.** Duration-scoped reading pages for the slow
+   transits (Jupiter and Saturn against the natal points), each presented
+   as its own quiet prose page in the chosen direction's identity: what is
+   changing, where it begins, what it touches, what it leaves behind, one
+   instruction, with the transit's real span named ("through next spring"),
+   read in the active culture's voice. The math already exists
+   (`web/src/lib/yearForecast.ts` findMajorTransits, `yearNarrative`
+   themes/beats); the surface does not. Reachable from the horizons and the
+   forecast.
+2. **Substantive voice depth.** Wherever the five voices appear, the
+   per-culture layer is brought up to the decree corpus's quality bar
+   (culturally native imagery and concerns), replacing name-mask rendering.
+   This is authored content work; budget for it.
+3. **Reading feedback.** A lightweight accurate/not-accurate affordance on
+   personal readings (local storage is enough; no backend). The chosen
+   direction decides its form, not whether it exists.
+4. **All planets.** Uranus, Neptune, and Pluto join the system as
+   first-class bodies: computed in charts, drawn on wheels, and driving the
+   long-transit readings (they are the slowest, most defining transits).
+   Because no ancient culture knew them, each culture's treatment must be a
+   designed act of reception, the way Rome absorbed foreign gods: every
+   culture names and characterizes the three through its own theology, and
+   the methodology page states plainly that the outer planets are a modern
+   extension made in the ancient manner. The content expansion this implies
+   (deity mappings 5x3, placement readings, transit principles, glyphs) is
+   part of Phase 2's authored-content budget, and
+   `docs/shared-content-model.md` must be updated as the counts change.
+5. **The unfinished edges.** Empty states, error states, and loading states
+   on every route get the same design attention as the happy paths.
+
+Explicitly still out of scope: social features (the "add friends" pattern
+needs a backend social graph; record it in the plan doc as future work).
+
 ## Verification bar (Phase 2 is done only when all of this holds)
 
 1. Typecheck, lint, production build green; style gates zero matches.
 2. Browser walkthrough with evidence (screenshots): home, reading flow
-   (cast + save a chart), all four horizons, one full pantheon journey,
-   onboarding funnel from a cleared profile, sign-up/sign-in, charts,
-   synastry, account.
+   (cast + save a chart), all four horizons, a long-transit reading page,
+   one full pantheon journey, onboarding funnel from a cleared profile,
+   sign-up/sign-in, charts, synastry, account, and a sampled empty/error
+   state.
 3. The five-voice check: the same day read in all five cultures, visually
    distinct, correctly themed, no leftover old-brand tokens.
 4. Responsive check at mobile (375w), tablet, desktop on the key pages; no
@@ -149,13 +188,12 @@ Co-Star long-transit reading screens, supplied by the product owner
   equivalent is the slow Jupiter/Saturn transits already computed for the
   annual report.
 - **A feedback affordance** (accurate / not accurate) as a lightweight
-  engagement pattern, if the chosen direction wants one.
+  engagement pattern; required by "Phase 2 also completes what is missing".
 
 What NOT to absorb: the voice. These readings are deliberately cultureless,
 generic-therapeutic second person. Astra Antiqua's differentiator is the
 opposite: five culturally substantive voices reading the same sky (see
-Inviolable core). Learn the typography and the spine; keep the gods. Also:
-no outer planets; the seven classical planets remain the system.
+Inviolable core). Learn the typography and the spine; keep the gods.
 
 ## Working agreements
 

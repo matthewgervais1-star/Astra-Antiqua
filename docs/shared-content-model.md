@@ -110,6 +110,10 @@ as product commitments (whole-sign houses are named on `/learn`).
 5. **Android lacks** transits, synastry, forecast, and the whole
    reading-composition layer; web lacks Android's per-culture UI lexicon.
    (House meanings are ported and rendered on the decree cards.)
+6. **Planned (rebrand brief):** the system expands from 7 to 10 bodies —
+   Uranus, Neptune, and Pluto as designed cultural receptions — on web
+   first, per docs/design/rebrand-brief.md. The canonical-planets row above
+   changes when that ships; Android follows after the rebrand.
 
 ## Sync protocol
 
