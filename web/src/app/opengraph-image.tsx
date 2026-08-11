@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 export const alt = "Astra Antiqua: the ancient sky, measured exactly";
 export const size = { width: 1200, height: 630 };
@@ -6,10 +8,13 @@ export const contentType = "image/png";
 
 /**
  * Default social-share card for every route that does not supply its own.
- * Gold-on-void wordmark to match the site's Relic aesthetic. Uses a serif
- * fallback stack so it renders without bundling a font file.
+ * The Instrument in the Temple identity: wordmark and incised rules on the
+ * neutral ground, per the 6a share-card mock. Satori cannot read woff2, so
+ * the card ships its own Cinzel 500 TTF from src/fonts.
  */
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
+  const cinzel = await readFile(join(process.cwd(), "src/fonts/cinzel-og-500.ttf"));
+
   return new ImageResponse(
     (
       <div
@@ -17,48 +22,76 @@ export default function OpengraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          background:
-            "radial-gradient(1200px 600px at 50% -10%, rgba(212,175,55,0.16), transparent 60%), #050505",
-          fontFamily: "Georgia, 'Times New Roman', serif",
+          background: "#171310",
+          padding: 14,
         }}
       >
         <div
           style={{
+            flex: 1,
             display: "flex",
-            fontSize: 40,
-            letterSpacing: 12,
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.45)",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "1px solid rgba(230,222,204,0.35)",
+            fontFamily: "Cinzel",
           }}
         >
-          Ancient sky · modern measurement
-        </div>
-        <div
-          style={{
-            display: "flex",
-            marginTop: 28,
-            fontSize: 132,
-            color: "#d4af37",
-          }}
-        >
-          Astra Antiqua
-        </div>
-        <div
-          style={{
-            display: "flex",
-            marginTop: 28,
-            fontSize: 34,
-            fontStyle: "italic",
-            color: "rgba(255,255,255,0.7)",
-          }}
-        >
-          Read the sky as Carthage did. Or Memphis, Delphi, Ugarit, or Rome.
+          <div
+            style={{
+              display: "flex",
+              fontSize: 20,
+              letterSpacing: 3,
+              color: "#9A917D",
+            }}
+          >
+            ONE SKY · FIVE ANCIENT VOICES
+          </div>
+          <div
+            style={{
+              width: 64,
+              height: 1,
+              background: "#B59A55",
+              marginTop: 30,
+            }}
+          />
+          <div
+            style={{
+              display: "flex",
+              marginTop: 30,
+              fontSize: 86,
+              fontWeight: 500,
+              letterSpacing: 14,
+              color: "#E6DECC",
+            }}
+          >
+            ASTRA ANTIQVA
+          </div>
+          <div
+            style={{
+              width: 64,
+              height: 1,
+              background: "#B59A55",
+              marginTop: 30,
+            }}
+          />
+          <div
+            style={{
+              display: "flex",
+              marginTop: 30,
+              fontSize: 18,
+              letterSpacing: 4,
+              color: "#9A917D",
+            }}
+          >
+            EGYPT · GREECE · CANAAN · CARTHAGE · ROME
+          </div>
         </div>
       </div>
     ),
-    size,
+    {
+      ...size,
+      fonts: [{ name: "Cinzel", data: cinzel, weight: 500, style: "normal" }],
+    },
   );
 }

@@ -17,7 +17,7 @@ const GATES = [
   { name: "framer-motion", pattern: /framer-motion/ },
 ];
 
-const SKIP_EXT = new Set([".woff2", ".png", ".ico", ".jpg", ".svg"]);
+const SKIP_EXT = new Set([".woff2", ".ttf", ".png", ".ico", ".jpg", ".svg"]);
 
 function* walk(dir) {
   for (const entry of readdirSync(dir)) {
