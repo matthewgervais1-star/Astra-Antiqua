@@ -67,9 +67,14 @@ export function composeWhatIsChanging(culture: Culture, standouts: readonly Seas
   const primary = standouts[0];
   if (!primary) return QUIET_SKY_LINE[culture];
   const secondary = standouts[1];
-  const parts = [primary.title, primary.body];
-  if (secondary && secondary.title !== primary.title) parts.push(secondary.title);
-  return parts.join(" ");
+  // The secondary standout is a separate event with its own headline voice.
+  // Appending it raw reads as a collage, so it is introduced as the thing
+  // standing behind the primary rather than dropped in as a new assertion.
+  const behind =
+    secondary && secondary.title !== primary.title
+      ? ` Behind it: ${secondary.title.charAt(0).toLowerCase()}${secondary.title.slice(1)}`
+      : "";
+  return `${primary.title} ${primary.body}${behind}`;
 }
 
 export function seasonVotiveTone(standouts: readonly SeasonStandout[]): SeasonTone {
@@ -79,8 +84,9 @@ export function seasonVotiveTone(standouts: readonly SeasonStandout[]): SeasonTo
 }
 
 export function composeWhatItTouchesNatal(culture: Culture, house: HouseMeaning): string {
-  const group = houseGroupName(culture, house.house);
-  return `The season falls in your ${house.ordinal} House, ${house.title}: what this culture counts among ${group}. It touches ${house.arena}.`;
+  const group = houseGroupName(culture, house.house).toLowerCase();
+  const arena = house.arena.charAt(0).toLowerCase() + house.arena.slice(1);
+  return `The season sits in your ${house.ordinal.toLowerCase()} house, which this culture keeps under ${group}. It works on ${arena}.`;
 }
 
 export function composeWhatItTouchesSky(culture: Culture, ingresses: readonly YearIngressEvent[]): string {

@@ -243,10 +243,10 @@ export function buildSeasonStandouts(
     const principle = TRANSIT_PRINCIPLE[t.transitPlanet];
     const body =
       tone === "harmony"
-        ? `${cap(principle)} arrives as support here. Take the opening while it is open.`
+        ? `${cap(principle)} runs with the current on this date. Nothing is asked in return.`
         : tone === "tension"
-          ? `${cap(principle)} is put under real pressure on this date. Decide what gives before the day decides for you.`
-          : `${cap(principle)} concentrates to a single strong point. Spend it deliberately.`;
+          ? `${cap(principle)} is contested on this date. Decide what gives before the date decides it.`
+          : `${cap(principle)} gathers to one point on this date. Spend it on one thing.`;
     out.push({
       date: t.date,
       title: `${tLabel} ${verb} ${nLabel}.`,

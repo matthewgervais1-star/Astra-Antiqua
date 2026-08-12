@@ -1,6 +1,5 @@
 import type { Culture } from "@/data/cultures";
 import type { Tone } from "@/lib/tone";
-import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { PERMISSIONS_REGISTER } from "@/data/permissionsRegister";
 
 /**
@@ -83,30 +82,88 @@ export function dayPermissions(culture: Culture, date: Date, tone: Tone): DayPer
   };
 }
 
-// Draws a small handful of deterministic candidates and keeps the shortest,
-// so the two-line Votive stays two lines more often without breaking
-// determinism (no live randomness, just more of the same seeded stream).
-function shortestOf(rng: () => number, list: readonly string[], attempts = 5): string {
-  let best: string | null = null;
-  for (let i = 0; i < attempts; i += 1) {
-    const candidate = list[Math.floor(rng() * list.length)]!;
-    if (best === null || candidate.length < best.length) best = candidate;
-  }
-  return best ?? list[0] ?? "";
-}
-
 /**
- * The day's two-line votive imperative: one proceed item and one refrain
- * item from the register, seeded by date + tone, shaped
- * "LET {proceed line};\n{refrain verb} {refrain line}" and uppercased in the
- * culture's own permission pair (PROCEED/REFRAIN, OFFER/WITHHOLD, ...).
+ * The day's votive instruction: two authored imperative lines per culture and
+ * tone. These are written, not assembled. An earlier version slotted items
+ * from the permissions bank into a fixed frame and produced lines like
+ * "LET COUNT ANYTHING", which is the template-seam failure that
+ * docs/design/reading-voice.md exists to forbid.
  */
+const DAY_VOTIVES: Readonly<Record<Culture, Readonly<Record<Tone, readonly string[]>>>> = {
+  egypt: {
+    harmony: [
+      "LET WHAT IS TRUE BE\nWEIGHED WHERE OTHERS CAN SEE IT",
+      "MAKE THE OFFERING YOU HAVE POSTPONED;\nLET THE RECORD BE EXACT",
+    ],
+    tension: [
+      "BRING THE EXACT NUMBER TO THE SCALE;\nTHE ROUND ONE IS AN OFFERING TO ISFET",
+      "SET DOWN WHAT YOU CANNOT CARRY LEVEL;\nTHE FEATHER DOES NOT NEGOTIATE",
+    ],
+    union: [
+      "DECLARE THE TWO AS ONE;\nLET THE SCRIBES ENTER IT IN ONE LINE",
+      "LET THE JOINED THING BE NAMED ALOUD;\nAN UNRECORDED UNION IS NO UNION",
+    ],
+  },
+  greece: {
+    harmony: [
+      "ASK THE LARGER QUESTION TODAY;\nTHE GOD IS IN A MOOD TO ANSWER",
+      "TAKE THE ANSWER THAT IS OFFERED;\nDO NOT HAGGLE WITH A GIFT",
+    ],
+    tension: [
+      "NAME THE PRICE BEFORE YOU AGREE TO IT;\nEVERY ANSWER COSTS SOMETHING",
+      "CHANGE THE QUESTION, NOT THE GOD;\nTHE SHRINE IS NOT THE PROBLEM",
+    ],
+    union: [
+      "ASK ONE QUESTION, NOT THREE;\nTHE ORACLE ANSWERS A SINGLE VOICE",
+      "PUT THE TWO MATTERS TO ONE HEARING;\nTHEY WILL NOT BE HEARD APART",
+    ],
+  },
+  canaan: {
+    harmony: [
+      "MAKE THE VOW WHILE THE RAINS HOLD;\nIT WILL BE HEARD TODAY",
+      "WORK THE FIELD BEFORE YOU PRAY OVER IT;\nBAAL HAS ALREADY ANSWERED",
+    ],
+    tension: [
+      "LET THE WITNESS FINISH SPEAKING;\nAN OBJECTION SILENCED IS AN OBJECTION KEPT",
+      "BRING THE OLD VOW TO TERM;\nTHEN COME BACK FOR THE NEW ONE",
+    ],
+    union: [
+      "PUT IT TO THE COUNCIL AS ONE MATTER;\nEL WILL NOT RULE ON TWO",
+      "SEAL THE TWO NAMES IN ONE COVENANT;\nCALL THE WITNESSES BEFORE DUSK",
+    ],
+  },
+  carthage: {
+    harmony: [
+      "LOAD THE CARGO WHILE THE WIND IS FAIR;\nIT WILL NOT STAY FAIR FOREVER",
+      "SET OUT TODAY;\nNOTHING IS CALLED IN FIRST",
+    ],
+    tension: [
+      "LEAVE THE BOOKS OPEN\nUNTIL THE ACCOUNT IS TRUE",
+      "PAY THE OLD VOW BEFORE YOU SAIL;\nTHE PRECINCT TAKES NO INSTALLMENTS",
+    ],
+    union: [
+      "ENTER IT UNDER ONE NAME;\nDO NOT SPLIT WHAT THE SKY HAS JOINED",
+      "BRING THE CARGO TO THE SCALE,\nAND THE VOW TO THE PRECINCT",
+    ],
+  },
+  rome: {
+    harmony: [
+      "LET WHAT HAS RIPENED BE\nCOUNTED BEFORE WITNESSES",
+      "ASK THE FAVOR OWED YOU;\nTHE AUSPICES ARE TAKEN ON THE RIGHT",
+    ],
+    tension: [
+      "PROCEED, BUT PREPARE THE DEFENSE;\nTHE OBJECTION HAS STANDING",
+      "SIGN NOTHING IN ANGER;\nTHE CENSOR READS EVERY CLAUSE TWICE",
+    ],
+    union: [
+      "ACT AS ONE POWER, NOT TWO;\nDIVIDED COMMAND LOSES THE FIELD",
+      "SWEAR THE TREATY BEFORE WITNESSES;\nAN UNWITNESSED OATH BINDS NO ONE",
+    ],
+  },
+};
+
 export function composeDayVotive(culture: Culture, tone: Tone, date: Date): string {
-  const register = PERMISSIONS_REGISTER[culture];
-  const [, refrainVerb] = CULTURE_VOICES[culture].permissionPair;
-  const proceedRng = mulberry32(seedFor(culture, date, tone, "votive-proceed"));
-  const refrainRng = mulberry32(seedFor(culture, date, tone, "votive-refrain"));
-  const proceed = shortestOf(proceedRng, register.proceed);
-  const refrain = shortestOf(refrainRng, register.refrain);
-  return `LET ${proceed.toUpperCase()};\n${refrainVerb.toUpperCase()} ${refrain.toUpperCase()}`;
+  const bank = DAY_VOTIVES[culture][tone];
+  const rng = mulberry32(seedFor(culture, date, tone, "votive"));
+  return bank[Math.floor(rng() * bank.length)] ?? bank[0] ?? "";
 }
