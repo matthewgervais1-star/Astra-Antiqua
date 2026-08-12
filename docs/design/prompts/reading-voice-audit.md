@@ -86,9 +86,8 @@ DELIVER:
 ## Why this and not a crawl
 
 The reference screens exposed Co-Star's long-transit engine completely: two
-unrelated readings share byte-identical sentences ("This part of yourself will
-transform into something else"), which means the pages are four template frames
-with keyword fills. The structure is fully captured in
+unrelated readings share sentences word for word, which means the pages are
+four template frames with keyword fills. The structure is fully captured in
 `docs/design/reading-voice.md`; more samples would return the same four frames.
 The only thing volume would add is copyrighted prose in the register the brief
 tells us to retire.

@@ -27,27 +27,23 @@ gods.
 ## What the reference gets wrong (beat it)
 
 Read the two long-transit references side by side and the engine shows through.
-These sentences appear **verbatim in both**, for unrelated transits:
-
-- "This part of yourself will transform into something else."
-- "As a result of this situation, part of your personality will change and be
-  replaced with something new."
-
-And these are frames with a slot:
-
-- "You will have to deal with ___ replacing your natural ___."
-- "This transformative situation will see its beginnings in ___."
-- "These changes might be related to ___."
+Two of its sentences appear **word for word in both** readings, for unrelated
+transits: one asserting that a part of the self will become something else,
+and one closing that a part of the personality is replaced with something new.
+Three more are frames with a blank: a cause slot, a beginnings slot, and a
+hedged relation slot. Quoting them here is neither necessary nor ours to do;
+the finding is what matters, and it is reproducible from the reference screens
+in one reading.
 
 That is a template with keyword fills. It produces four failures we must not
 reproduce:
 
-| Failure | Reference example | Our rule |
+| Failure | What it looks like | Our rule |
 |---|---|---|
-| **Template seams** | The same closing sentence on every transit | No sentence may repeat across two readings. The spine repeats; the sentences do not. |
-| **Hedging** | "may feel a bit", "might be related to", "Try not to" | Declare. If the sky does not say it, say nothing. |
-| **Abstraction** | "this transformative situation", "large-scale change" | Concrete nouns from the culture's own world: the scale, the harbor, the sickle, the docket, the censor's list. |
-| **Therapy register** | "It may be painful, but this is how you grow." | The gods do not counsel. They weigh, question, convene, audit, and rule. |
+| **Template seams** | The same closing sentence under every transit | No sentence may repeat across two readings. The spine repeats; the sentences do not. |
+| **Hedging** | may, might, tends to, try not to, a bit | Declare. If the sky does not say it, say nothing. |
+| **Abstraction** | situation, transformation, growth, energy | Concrete nouns from the culture's own world: the scale, the harbor, the sickle, the docket, the censor's list. |
+| **Therapy register** | Reassurance about pain being growth | The gods do not counsel. They weigh, question, convene, audit, and rule. |
 
 ## The constant and the variable
 
@@ -74,17 +70,18 @@ the same placement, read five ways, sharing **no sentence and no image**. If two
 cultures could swap a sentence without anyone noticing, that sentence is a
 template fill and must be rewritten native.
 
-## The bar, stated as a diff
+## The bar, stated in our own prose
 
-The reference says:
+The test is not a comparison against anyone else's page. It is whether a
+passage could only have been written for this body, in this theology.
 
-> This part of yourself will transform into something else. It may be painful,
-> but this is how you grow.
-
-The same sky, in the Greek voice, must instead sound like:
+Our Greek Saturn passage:
 
 > Kronos has settled against this point, and he does not visit briefly. He
 > carries the sickle, and the sickle has one question: what here is ripe, and
 > what is only tall?
 
-Same structural slot. Same directness. A theology instead of a mood.
+Read it against the four failures above. It declares rather than hedges. Its
+nouns are a sickle and a stalk, not a situation. It issues no comfort. And it
+could not be moved to another culture or another planet without rewriting every
+clause, which is the property a template can never have.
