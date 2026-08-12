@@ -20,7 +20,7 @@ import {
 } from "@/data/sampleChart";
 import { findRetrogradeStations, findYearIngresses, SLOW_BODIES } from "@/lib/yearForecast";
 import { computeTransitSpans, type TransitSpan } from "@/lib/transitSpans";
-import { buildPersonalDailyReading, buildSkyDailyReading, type ComputedReading } from "@/lib/personalReading";
+import { composeDecree, type DayDecree } from "@/lib/decree";
 import { toneOf, type Tone } from "@/lib/tone";
 import { dayPermissions, composeDayVotive, type DayPermissions } from "@/lib/permissions";
 import { dayPressure, type PressureGroup } from "@/lib/dayPressure";
@@ -102,7 +102,7 @@ export interface HomeBundle {
   dateLong: string;
   todayChart: Readonly<Record<Planet, Longitude>>;
   natal: SavedNatal | null;
-  reading: ComputedReading;
+  reading: DayDecree;
   ephemerisRows: readonly EphemerisRow[];
   compactSkyRows: readonly EphemerisRow[];
   stationsAndIngresses: readonly StationOrIngressRow[];
@@ -290,9 +290,7 @@ export function buildHomeBundle(culture: Culture, now: Date, natal: SavedNatal |
   const todayChart = computeChart(todayStart);
   const tomorrowChart = computeChart(new Date(todayStart.getTime() + DAY_MS));
 
-  const reading = natal
-    ? buildPersonalDailyReading(culture, natal.chart, todayChart)
-    : buildSkyDailyReading(culture, todayChart);
+  const reading = composeDecree(culture, todayChart);
 
   const ephemerisRows = buildEphemerisRows(culture, todayChart, tomorrowChart);
   const aspectRows = buildAspectRows(culture, todayChart);

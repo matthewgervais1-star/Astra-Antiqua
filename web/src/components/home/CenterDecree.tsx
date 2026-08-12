@@ -2,7 +2,7 @@ import Link from "next/link";
 import { NaveHead } from "@/components/chrome/NaveHead";
 import { Votive } from "@/components/chrome/Votive";
 import { FeedbackRow } from "@/components/chrome/FeedbackRow";
-import type { ComputedReading } from "@/lib/personalReading";
+import type { DayDecree } from "@/lib/decree";
 import { isoDateUtc } from "@/components/home/format";
 import { cn } from "@/lib/classNames";
 
@@ -11,7 +11,7 @@ export interface CenterDecreeProps {
   institution: string;
   weekday: string;
   dateLong: string;
-  reading: ComputedReading;
+  reading: DayDecree;
   votive: string;
   now: Date;
 }
@@ -36,12 +36,14 @@ export function CenterDecree({
       </NaveHead>
 
       <div className="mx-auto max-w-[560px] text-left">
-        <p className="mb-[15px] font-body text-[17.5px] font-light leading-[1.72] text-prose text-pretty">
-          {reading.meaning}
-        </p>
-        <p className="font-body text-[17.5px] font-light leading-[1.72] text-prose text-pretty">
-          {reading.context}
-        </p>
+        {reading.paragraphs.map((paragraph, i) => (
+          <p
+            key={i}
+            className="font-body text-[17.5px] font-light leading-[1.72] text-prose text-pretty [&:not(:last-child)]:mb-[15px]"
+          >
+            {paragraph}
+          </p>
+        ))}
       </div>
 
       <div className="mt-[30px] w-full max-w-[560px]">

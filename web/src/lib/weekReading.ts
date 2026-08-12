@@ -30,6 +30,15 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const EVENT_ORB = 1.2;
 const EXACT_ORB = 0.35;
 
+/**
+ * Only aspects touching a fast mover count as a DAY's event. Slow-slow
+ * pairs (Jupiter through Pluto against each other) hold their orb for
+ * months or years; treating one as daily weather prints the same line
+ * seven times over. They belong to the season, the year, and the long
+ * transits, not to the week's ledger.
+ */
+const FAST_BODIES: ReadonlySet<Planet> = new Set(["sun", "moon", "mercury", "venus", "mars"]);
+
 const ASPECT_GLYPH: Readonly<Record<AspectKind, string>> = {
   conjunction: "☌",
   sextile: "⚹",
@@ -62,7 +71,7 @@ function toneForKind(kind: AspectKind): "harmony" | "tension" {
  * aspect day's line, in the culture's institutional register. Egypt weighs,
  * Greece questions, Canaan convenes, Carthage audits, Rome rules.
  */
-const ASPECT_IMPERATIVES: Readonly<Record<Culture, Readonly<Record<AspectKind, string>>>> = {
+export const ASPECT_IMPERATIVES: Readonly<Record<Culture, Readonly<Record<AspectKind, string>>>> = {
   egypt: {
     conjunction: "Declare the union. Let the scribes enter it in one line.",
     sextile: "Take the offered hand. The current does the rest.",
@@ -118,7 +127,7 @@ const INGRESS_IMPERATIVE: Readonly<Record<Culture, string>> = {
 };
 
 /** One honest quiet-day line per culture (5 variants, one per culture, not per day). */
-const QUIET_LINE: Readonly<Record<Culture, string>> = {
+export const QUIET_LINE: Readonly<Record<Culture, string>> = {
   egypt: "No exact aspect. A day of ordinary work. Ma'at counts it no lower than a feast.",
   greece: "No shrine answers today. The oracle keeps its own counsel, and so should you.",
   canaan: "No matter reaches the council today. An ordinary day still stands under El's tent.",
@@ -126,7 +135,7 @@ const QUIET_LINE: Readonly<Record<Culture, string>> = {
   rome: "No omen stands out today. An ordinary day is still taken under auspices.",
 };
 
-function composeAspectSentence(
+export function composeAspectSentence(
   culture: Culture,
   a: Planet,
   b: Planet,
@@ -166,15 +175,26 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
   const weekIngresses = findYearIngresses(weekStart, 9, PLANETS);
 
   const days: WeekDay[] = [];
+  const usedPairs = new Set<string>();
   for (let i = 0; i < 7; i += 1) {
     const date = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + i);
     const chart = computeChart(noonUTCFor(date));
     const aspects = computeAspects(chart);
 
+    // Tightest fast-mover aspect wins, but a pair that already headlined an
+    // earlier day this week only repeats when it is exact today; otherwise
+    // the next distinct candidate speaks. Moon aspects change daily, so the
+    // dedupe mostly guards Sun and inner-planet contacts to slow bodies.
+    const candidates = aspects
+      .filter((a) => a.orb < EVENT_ORB && (FAST_BODIES.has(a.a) || FAST_BODIES.has(a.b)))
+      .sort((a, b) => a.orb - b.orb);
     let tightest: (typeof aspects)[number] | null = null;
-    for (const aspect of aspects) {
-      if (aspect.orb >= EVENT_ORB) continue;
-      if (!tightest || aspect.orb < tightest.orb) tightest = aspect;
+    for (const aspect of candidates) {
+      const pair = `${aspect.a}|${aspect.b}`;
+      if (usedPairs.has(pair) && aspect.orb >= EXACT_ORB) continue;
+      tightest = aspect;
+      usedPairs.add(pair);
+      break;
     }
 
     const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());

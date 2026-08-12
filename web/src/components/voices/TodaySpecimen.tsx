@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import type { Culture } from "@/data/cultures";
 import { computeChart } from "@/lib/ephemeris";
-import { buildSkyDailyReading } from "@/lib/personalReading";
+import { composeDecree } from "@/lib/decree";
 
 export interface TodaySpecimenProps {
   culture: Culture;
@@ -23,10 +23,10 @@ export function TodaySpecimen({ culture }: TodaySpecimenProps) {
   const specimen = useMemo(() => {
     const now = new Date();
     const chart = computeChart(now);
-    const reading = buildSkyDailyReading(culture, chart);
+    const reading = composeDecree(culture, chart);
     return {
       headline: reading.headline,
-      sentence: firstSentence(reading.meaning),
+      sentence: firstSentence(reading.paragraphs[0] ?? ""),
       dateLine: now
         .toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
         .toUpperCase(),
