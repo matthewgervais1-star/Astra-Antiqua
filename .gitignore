@@ -12,3 +12,8 @@ Thumbs.db
 /next-env.d.ts
 /tsconfig.tsbuildinfo
 /.next/
+
+# Design handoff deliveries arrive as zips at the repo root. Their contents
+# are extracted and committed under docs/design/handoff/, so the archive
+# itself is redundant history.
+/*.zip
