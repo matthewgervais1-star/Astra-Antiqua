@@ -13,7 +13,7 @@ const VB: readonly [number, number] = [64, 64];
  *   Baal Hadad         the storm-god's triple thunderbolt
  *   El                 the bull-head of "Bull El"
  */
-export const CANAAN_GLYPHS: Readonly<Record<Planet, Glyph>> = {
+export const CANAAN_GLYPHS: Readonly<Partial<Record<Planet, Glyph>>> = {
   sun: {
     label: "Shapash",
     viewBox: VB,

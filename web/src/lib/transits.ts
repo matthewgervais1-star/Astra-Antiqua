@@ -49,6 +49,11 @@ export function computeTransits(
 /** How much a moving planet's touch matters, slowest heaviest. */
 export function transitPlanetWeight(planet: Planet): number {
   switch (planet) {
+    case "pluto":
+      return 5;
+    case "uranus":
+    case "neptune":
+      return 4.5;
     case "saturn":
       return 4;
     case "jupiter":

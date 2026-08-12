@@ -22,6 +22,9 @@ const PLANET_ARCHETYPES: Readonly<Record<Planet, string>> = {
   mars: "Force, conflict, the work of cutting away",
   jupiter: "Growth, blessing, the law that expands",
   saturn: "Limit, time, the cost of holding form",
+  uranus: "Rupture, sudden change, the received body of freedom",
+  neptune: "Dissolution, longing, the received body of the ideal",
+  pluto: "Buried power, forced transformation, the received body of the dead",
 };
 
 export function TranslationMatrix() {

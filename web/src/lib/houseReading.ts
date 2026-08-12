@@ -17,6 +17,9 @@ const PLANET_CONCERN: Readonly<Record<Planet, string>> = {
   mars: "the push to act, to cut, and to contend",
   jupiter: "the urge to widen, to bless, and to trust the world to grow",
   saturn: "the meeting with limit, weight, and the long discipline",
+  uranus: "the sudden break, the shock that frees what was stuck",
+  neptune: "the dissolve, the longing, the boundary that goes soft",
+  pluto: "the pressure that strips a thing down to what is real",
 };
 
 /**

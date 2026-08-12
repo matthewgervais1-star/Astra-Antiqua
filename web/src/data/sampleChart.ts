@@ -10,6 +10,9 @@ export const SAMPLE_CHART: Readonly<Record<Planet, Longitude>> = {
   mars: 195, // 15 degrees Libra (opposition to sun)
   jupiter: 255, // 15 degrees Sagittarius (trine to sun)
   saturn: 75, // 15 degrees Gemini (sextile to sun)
+  uranus: 52.4, // 22.4 degrees Taurus
+  neptune: 1.2, // 1.2 degrees Aries
+  pluto: 303.7, // 3.7 degrees Aquarius
 };
 
 export const ZODIAC_SIGNS = [

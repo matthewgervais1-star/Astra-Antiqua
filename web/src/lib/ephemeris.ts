@@ -13,6 +13,9 @@ const BODY_FOR_PLANET: Readonly<Record<Exclude<Planet, "sun" | "moon">, Body>> =
   mars: Body.Mars,
   jupiter: Body.Jupiter,
   saturn: Body.Saturn,
+  uranus: Body.Uranus,
+  neptune: Body.Neptune,
+  pluto: Body.Pluto,
 };
 
 function normalize(longitude: number): number {

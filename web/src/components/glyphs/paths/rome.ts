@@ -14,7 +14,7 @@ const VB: readonly [number, number] = [64, 64];
  *   Iuppiter    the aquila, the eagle of the legions
  *   Saturnus    the harvest sickle and a tied sheaf of grain
  */
-export const ROME_GLYPHS: Readonly<Record<Planet, Glyph>> = {
+export const ROME_GLYPHS: Readonly<Partial<Record<Planet, Glyph>>> = {
   sun: {
     label: "Sol",
     viewBox: VB,

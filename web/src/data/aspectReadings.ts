@@ -341,6 +341,344 @@ const READINGS: Readonly<Record<string, Readonly<Record<Tone, AspectReading>>>> 
       body: "Expansion and limit have fused, so growth today comes with conditions attached, and the conditions are the gift. The opportunity in front of you is real but it arrives shaped like work: a long timeline, a real cost, a structure you have to maintain. Take it on those terms or not at all. Sign up for the slow version of the big thing. Compounding is boring right up until it is everything.",
     },
   },
+
+  // Pairs involving the three received bodies: Uranus, Neptune, Pluto.
+  "mercury|uranus": {
+    harmony: {
+      headline: "Trust the sideways idea.",
+      body: "The best thought today will not arrive in order. It will cut in from the side, mid-shower, mid-walk, in the wrong meeting. That is the one to keep. Write it down before it evaporates, then test it in daylight. The solution you have been grinding toward on rails is sitting one lane over. Look sideways.",
+    },
+    tension: {
+      headline: "Sudden is not the same as true.",
+      body: "Your mind is sparking today, and every flash feels like a revelation. Most are just speed. The reply you want to fire off, the plan you want to tear up at once: hold both for three hours. If the insight is real, it will survive the wait. If it was static, you will be glad you did not send it.",
+    },
+    union: {
+      headline: "Your mind is lightning today.",
+      body: "Thought and rupture have fused, so ideas arrive fast, strange, and certain. Some are brilliant. Some only feel brilliant because of the voltage. Capture everything, commit to nothing before evening. Talk the wild one through with a person who is not electrified. The keepers will still be strange tomorrow, just quieter.",
+    },
+  },
+  "sun|uranus": {
+    harmony: {
+      headline: "Break one small rule.",
+      body: "There is room today to step out of a shape you did not choose: the title, the schedule, the role you have played so long it looks like your face. You do not have to blow anything up. Change one fixed thing on purpose, the route, the routine, the answer you always give. The self underneath is more current than the costume. Let it show a little.",
+    },
+    tension: {
+      headline: "Freedom is not demolition.",
+      body: "Something in you wants out today, and it is willing to break furniture to prove it. The restlessness is honest; the wrecking plan is not. Before you quit, cut off, or walk, name the one specific constraint that actually chafes. Change that piece and see how much of the cage was real. Most of it will come off without an explosion.",
+    },
+    union: {
+      headline: "You have outgrown the old shape.",
+      body: "Identity and rupture have fused, so the life that fit last year is pinching everywhere today. The urge to shed it is real and worth respecting. But molt, do not detonate. Pick the one commitment that is truly finished and end it cleanly, in words, in daylight. Keep the rest until you know what you are becoming.",
+    },
+  },
+  "moon|uranus": {
+    harmony: {
+      headline: "Change the scenery, keep the life.",
+      body: "Your feelings want something new today, and for once you can give it to them cheaply. Take the different road home. Rearrange the room. Call the friend who makes you unpredictable again. The restlessness is not a crisis; it is an appetite. Feed it something small and strange, and the itch to overturn your whole life goes quiet.",
+    },
+    tension: {
+      headline: "The urge to bolt is weather.",
+      body: "Everything stable feels like a trap today, and the exit signs are glowing. Do not trust them yet. Your mood is jumping tracks every hour, and the life you want to flee at noon may fit fine by dark. Take the walk, not the leap. If the same door still calls in three days, open it then, calm and packed.",
+    },
+    union: {
+      headline: "Your feelings come as jolts today.",
+      body: "Mood and rupture have fused, so emotion arrives sudden and sharp, gone before you can name it. You will crave distance from the people closest to you. The need for room is real; ask for it in plain words instead of vanishing. One honest sentence about needing air spares everyone the slammed door, and spares you the repair.",
+    },
+  },
+  "uranus|venus": {
+    harmony: {
+      headline: "Make the familiar strange again.",
+      body: "What you love has gone invisible through habit, and today you can see it fresh. Take the old relationship somewhere it has never been. Wear the thing you never wear. Say yes to the odd invitation with the person you thought you knew completely. Novelty inside a commitment is renewal. Nothing has to break for this to feel new.",
+    },
+    tension: {
+      headline: "The spark is not a sign.",
+      body: "Someone or something new is glittering today, and next to it the standing arrangement looks gray. That contrast is manufactured. The thrill comes from newness itself, not from the new thing being better. Do not trade a built life for a bright surface before the shine has aged a week. Enjoy the flicker, tell no lies, decide nothing today.",
+    },
+    union: {
+      headline: "You want the new because it is new.",
+      body: "Desire and rupture have fused, so attraction today points at whatever breaks the pattern: the stranger, the impulse buy, the sudden exit. The wanting is real; its judgment is not. Let yourself be moved without letting yourself be steered. Spend the electricity on refreshing something you already chose. What you wreck in a thrilled hour takes a sober year to rebuild.",
+    },
+  },
+  "mercury|neptune": {
+    harmony: {
+      headline: "Write the dream down.",
+      body: "Your imagination and your words are on speaking terms today, which is rare. The image you could never explain will come out right if you try now. Draft the story, sketch the pitch, tell someone the vision in full. Just keep it away from spreadsheets. Today is for the poetry, not the terms. Do the math on a drier day.",
+    },
+    tension: {
+      headline: "The fog is in the message.",
+      body: "Words are slippery today. What you say will be heard otherwise; what you read will mean less than you think. The offer sounds better than it is, and the silence sounds worse. Do not sign, promise, or conclude on today's reading of things. Ask the clarifying question twice, in writing. If the answer stays cloudy, that cloud is the answer.",
+    },
+    union: {
+      headline: "Thought moves like tide today.",
+      body: "Mind and sea have fused, so thinking drifts, associates, dissolves its own edges. Useless for contracts, superb for creating. Give the morning to the imaginative work: the draft, the melody, the impossible sketch. Then verify everything factual before you act on it, twice, with sources. Today you can hear things that are not there and miss things that are.",
+    },
+  },
+  "neptune|sun": {
+    harmony: {
+      headline: "Serve something without vanishing.",
+      body: "The edges of yourself soften today in the good way. You can put your ego down and pick up something larger: the cause, the craft, the person who needs an hour. Giving will not feel like loss. Let yourself be a means for once, generous and uncounted. Just keep one appointment with your own life on the books.",
+    },
+    tension: {
+      headline: "Do not become the fantasy.",
+      body: "Someone is looking at you and seeing what they need to see, and part of you wants to play the part. It is a slow trade of self for applause. Every scene you perform writes a script you will have to keep. Correct the flattering error today, out loud, while it is cheap. Being seen accurately is colder at first, and the only version that lasts.",
+    },
+    union: {
+      headline: "Your edges are thin today.",
+      body: "Self and sea have fused, so it is hard to say where you stop and the room begins. You will absorb the moods around you and mistake them for your own weather. Choose your company like it is medicine, because today it is. Anchor to one concrete task, done start to finish. Drift on purpose or the day drifts you.",
+    },
+  },
+  "moon|neptune": {
+    harmony: {
+      headline: "Let the soft thing in.",
+      body: "Your feelings are tender and permeable today, and for once that is safe. The music will land deeper, the apology will actually reach you, the small kindness will not bounce off. Take in the beautiful thing on purpose. Forgive one small debt without a ceremony. Days this porous are rare; spend it near what you want to be shaped by.",
+    },
+    tension: {
+      headline: "Not every sadness is yours.",
+      body: "You are a sponge today, and the room's mood is soaking in unlabeled. Before you sink into the heaviness, check its source. The gloom you have carried since lunch may belong to the person you sat beside. Name what is actually yours, one item, and tend that. Wring the rest out; you were never asked to carry it.",
+    },
+    union: {
+      headline: "Feeling has no edges today.",
+      body: "Mood and sea have fused, so emotion comes in like tide: vast, unnamed, from nowhere in particular. Do not demand a reason from every wave. Cut the inputs that stir the water, the feeds, the sad songs, the third coffee. Decide nothing important. Float where the floating is safe, near people who do not need you to explain.",
+    },
+  },
+  "neptune|venus": {
+    harmony: {
+      headline: "Love what is actually there.",
+      body: "The light is flattering today, and everything you care for looks its best. Enjoy it honestly. Make the beautiful thing, set the table too well, tell the person the poetic version of what they are to you. Today the idealizing does no damage, because your feet know the floor. Romance the real; it can hold the weight.",
+    },
+    tension: {
+      headline: "You love the picture.",
+      body: "Some of what you feel today is projection: the person as you have painted them, not as they arrive. The disappointment you keep tasting is the gap between the two. Do not punish anyone for failing to be your painting. Look again with plain eyes and ask what is actually in front of you. Whatever survives the plain look is the part worth keeping.",
+    },
+    union: {
+      headline: "The dream and the face are merging.",
+      body: "Longing and fog have fused, so whoever you want today wears a halo you supplied. It feels like fate. It is mostly lighting. Enjoy the shimmer, write the poem, but sign nothing and vow nothing while the glow holds. In a week the light goes ordinary. Love that is still standing there in ordinary light is the real kind.",
+    },
+  },
+  "mercury|pluto": {
+    harmony: {
+      headline: "Ask the real question.",
+      body: "Your mind can reach the bottom today. The surface answer will not satisfy you, and it should not. Read the footnotes, pull the thread, ask the one question everyone has been stepping around. You will find the true fact, and it will be usable. Depth is available without wreckage today. Go down while the shaft is lit.",
+    },
+    tension: {
+      headline: "Stop digging the same hole.",
+      body: "Your mind has its teeth in something today and will not drop it: the search you keep rerunning, the message you keep rereading, the motive you keep assigning. The loop feels like diligence. It is not; it stopped producing facts hours ago. Write down what you actually know in three lines. Act on that or shelve it, and take your head outside.",
+    },
+    union: {
+      headline: "Every word goes deep today.",
+      body: "Speech and pressure have fused, so there is no small talk in you right now. You will see through the polite answer and want to say so. Choose the room for it. The same force that makes you piercing in a negotiation makes you invasive at a dinner. Use the depth where it was invited. Where it was not, let people keep their surfaces.",
+    },
+  },
+  "pluto|sun": {
+    harmony: {
+      headline: "End what is already over.",
+      body: "You have the strength today to close the thing that has been finished for months: the role you have outgrown, the arrangement that only runs on habit. Ending it is not failure; carrying it was the failure. Do it cleanly, in plain words, without a villain. What that dead weight has been costing you comes back as power the moment you set it down.",
+    },
+    tension: {
+      headline: "Loosen the grip.",
+      body: "A contest over control is running today, and you are in it even if you have not named it. Someone is leaning on you, or you are gripping something that is trying to change. Ask the only question that matters: do you want this, or do you just refuse to lose it? Fight for the first kind. Open your hand on the second. Half of power is knowing which throne you never wanted.",
+    },
+    union: {
+      headline: "Something in you is being stripped.",
+      body: "Identity and pressure have fused, and the day bears down on whatever in you is done. It will feel like loss because it is loss. It is also the making of room. Let the old version go without a eulogy: the persona, the title, the story about yourself that stopped being true. What survives this kind of weather is the part of you that was never a costume.",
+    },
+  },
+  "moon|pluto": {
+    harmony: {
+      headline: "Say the buried thing.",
+      body: "The deep water is calm enough to enter today. The feeling you keep filed under later, the grief, the resentment, the want you have never said aloud, can be brought up now without capsizing you. Tell it to one person who has earned it, or to a page. What you name today stops running your nights. That is the whole trade, and it is a good one.",
+    },
+    tension: {
+      headline: "The old wound is talking.",
+      body: "Today's reaction is bigger than today's event, which means it is not about today. Something old got touched: the jealousy, the dread of being left, the need to control the room to feel safe in it. Do not act on it and call that instinct. Feel it, date it, and answer the present on the present's terms. The person in front of you is not the one who caused it.",
+    },
+    union: {
+      headline: "Your feelings have an undertow.",
+      body: "Mood and pressure have fused, so emotion pulls downward today: obsessive, total, sure of itself. In this state you will want to manage people so the feeling quiets. Do not. Take the feeling somewhere private, let it be as big as it is, and give it an hour of your full attention. Faced straight, it turns to fuel. Managed sideways, it runs the week.",
+    },
+  },
+  "pluto|venus": {
+    harmony: {
+      headline: "Go past the polite layer.",
+      body: "The bond in front of you can hold more weight than you have been giving it. Today you can say the deeper thing without breaking anything: what you actually want, what you are actually afraid of, what this actually is. Closeness is on offer at a fair price. Take the conversation one honest layer down. The relationship that meets you there is the one you keep.",
+    },
+    tension: {
+      headline: "Love is not leverage.",
+      body: "Something in how you are loving today has a grip in it: the test you keep running, the silence used as a lever, the score kept to the decimal. Control feels like safety, and it buys the opposite. Nobody stays where they are held. Name the fear under the grip, to yourself first. Ask for the reassurance in plain words. It is cheaper than the test and it actually works.",
+    },
+    union: {
+      headline: "All or nothing is a mood, not a rule.",
+      body: "Desire and pressure have fused, so wanting comes total today: this person, this thing, entirely, now. The pull is magnetic and it flattens every middle option. Remember the middle exists. Point the force at a bond that can bear it, one that wants you at full weight. Aimed at the unwilling or the unready, it does not deepen anything; it just leaves marks.",
+    },
+  },
+  "mars|uranus": {
+    harmony: {
+      headline: "Break the pattern while it is cheap.",
+      body: "Your drive and your itch for freedom are pulling the same direction today. The routine you have been tolerating can be broken now at half the usual cost. Change the method, take the odd route, drop the small obligation nobody will miss. Acting on the impulse is safe today, which is rare. Move before the window shuts.",
+    },
+    tension: {
+      headline: "The urge to quit is not a plan.",
+      body: "Something in you wants out today: of the job, the plan, the lane you are in. The restlessness is real, but it wants a detonation, not an exit. Anything you break now breaks messy. Write down what you would leave and why. If it still reads true in three days, leave properly. Today, keep your hands off the switch.",
+    },
+    union: {
+      headline: "Lightning in hand today.",
+      body: "Drive and rupture have fused, so you are fast, abrupt, and done waiting. The break you have been planning for months can be made cleanly today, in one stroke. The break you invent at 2pm out of boredom cannot. Move quickly on the decided thing only. And slow down at doorways, on stairs, in traffic. Haste is the tax on this much voltage.",
+    },
+  },
+  "jupiter|uranus": {
+    harmony: {
+      headline: "Say yes to the strange door.",
+      body: "Luck comes in sideways today: the odd invitation, the offer from nowhere, the stranger with the right question. The break you get now will not look like the one you planned for. Take the meeting that seems off-topic. Open the door you did not know was there. The unplanned thing is the point.",
+    },
+    tension: {
+      headline: "Restless is not the same as ready.",
+      body: "Everything stable looks like a cage today, and some oversized escape is offering itself: the impulsive bet, the dramatic exit, the reinvention announced before it is planned. The wanting is real. The move, made today, is a coin flip with your own money. Scratch the itch small: change one thing, cheaply, and let the big leap wait for a sober week.",
+    },
+    union: {
+      headline: "The window opens once.",
+      body: "Growth and surprise have fused, so the real opportunity today arrives without an appointment and does not wait long. Keep slack in the schedule. Answer the unknown number, read the odd email twice, take the detour. Most days you should be suspicious of things that look too sudden. Today, sudden is how the good thing looks.",
+    },
+  },
+  "saturn|uranus": {
+    harmony: {
+      headline: "Renovate, do not demolish.",
+      body: "The old structure and the new idea can work together today, which is rare. The rule that no longer fits can be rewritten without burning the rulebook. Update the routine, renegotiate the arrangement, modernize one piece of what already works. Keep the foundation, change the fixtures. Change made this way holds.",
+    },
+    tension: {
+      headline: "Bend the frame before it snaps.",
+      body: "Duty and freedom are grinding against each other today. The structure that holds your life up feels like the thing pinning you down, and part of you wants to kick it over just to breathe. Do not. Structures rarely need demolition; they need one hinge. Find the single rule causing most of the chafe and change that one. Keep the rest standing until the replacement exists.",
+    },
+    union: {
+      headline: "Old form, new pressure.",
+      body: "Limit and rupture have fused, so everything rigid in your life is under stress today. What can flex will hold. What refuses to flex is asking to crack. Go through your commitments and sort them: which are load-bearing, and which are only habit wearing a uniform. Reinforce the first kind. Let one of the second kind go, deliberately, before something breaks it for you.",
+    },
+  },
+  "mars|neptune": {
+    harmony: {
+      headline: "Work by feel today.",
+      body: "Force is not the tool today; touch is. Your drive is running soft and accurate, good for the work that cannot be muscled: the creative draft, the delicate conversation, the problem that needs feel instead of push. Follow the pull rather than the plan for a few hours. What you make in that mode will be better than anything you could force.",
+    },
+    tension: {
+      headline: "You may be rowing in fog.",
+      body: "Your effort is leaking today and the target keeps moving. Some of what you are pushing against is not real: a fear dressed as a fact, a promise that was never solid, a plan built on someone else's story. Before you spend more force, verify. Ask the direct question, read the small print, test the ground. And if you are simply tired, be tired. Do not mistake fog for a wall.",
+    },
+    union: {
+      headline: "Chase the dream with your eyes open.",
+      body: "Drive and dream have fused, so what you want today is partly real and partly invented, and you cannot fully tell which. Spend the pull on things that are allowed to be imaginary: the artwork, the rehearsal, the long swim. Do not spend it on a person you have half-invented or a deal you have not checked. Tonight, write down what you wanted. Read it in daylight.",
+    },
+  },
+  "jupiter|neptune": {
+    harmony: {
+      headline: "Imagine it at full size.",
+      body: "Hope and imagination are cooperating today, and for once the big soft vision is not a trap. Let yourself picture the whole thing: the life, the work, the version of you it requires. Be generous while you are at it; kindness lands unusually well now. Then take one note the practical you can use tomorrow. A vision with one written step survives the week.",
+    },
+    tension: {
+      headline: "The halo is doing the selling.",
+      body: "Something looks luminous today: an opportunity, a person, a cause that promises to redeem the effort of your whole life. The glow is real to you, and it is still not evidence. Anything that cannot survive a boring question does not deserve your money or your devotion. Ask the boring question. If the shine holds, fine. Most halos today are lighting.",
+    },
+    union: {
+      headline: "Believe wide, sign nothing.",
+      body: "Faith and dream have fused, so belief arrives oversized today, and it feels like truth rather than mood. Use it where belief belongs: the creative work, the reconciliation, the long unpayable kindness. Keep it away from your wallet and your signature. What convinces you completely today should be reread on an ordinary Tuesday. If it is real, it will still be true then.",
+    },
+  },
+  "neptune|saturn": {
+    harmony: {
+      headline: "Pour the dream into a mold.",
+      body: "The dream and the deadline can cooperate today, which is rare weather. The vague thing you keep meaning to do can take a shape now without losing what made it worth wanting. Give it a container: a date, an hour, a first small deliverable. Ideals do not die from structure; they die from staying vapor. Build one small solid piece of the imagined thing.",
+    },
+    tension: {
+      headline: "The ground is softer than it looks.",
+      body: "Something you counted on shows a soft spot today: the plan, the role, the belief that has been holding your weight. The disappointment is loud, and it wants you to call the whole floor rotten. It is not. Probe the actual spot. Sort what failed from what still holds, repair the one plank, and stand on the rest. Doubt is information, not a demolition order.",
+    },
+    union: {
+      headline: "Test the beam before you hang from it.",
+      body: "Structure and dream have fused, so today you can see exactly which of your hopes can bear weight and which are decoration. That clarity is uncomfortable and useful. Put a little load on the thing you have been counting on: ask the direct question, run the numbers, request the commitment in writing. What holds, build on. What sags, grieve briefly and stop storing your future in it.",
+    },
+  },
+  "mars|pluto": {
+    harmony: {
+      headline: "Dig where the root is.",
+      body: "You have more force available today than the surface shows, the kind that moves what has been stuck for years. Spend it on the buried thing: the debt, the backlog, the conversation underneath all the other conversations. Shallow tasks will waste it. Pick the one heavy object in your life and put your whole weight under it. Today it moves.",
+    },
+    tension: {
+      headline: "Do not make it a war.",
+      body: "Someone is pushing, and everything in you wants to push back twice as hard, to settle not just the point but the person. That appetite is the trap. A contest of wills today has no small version; it escalates until something you value is collateral. State your line once, hold it without theater, and walk. Power that has to be demonstrated is already leaking. Yours can afford silence.",
+    },
+    union: {
+      headline: "Controlled burn only.",
+      body: "Drive and depth have fused, so what you want today, you want with your whole spine, and stopping halfway is not on offer. This is ending weather: the habit, the arrangement, the version of the thing that has been dying for a year. Choose the ending on purpose, in daylight, with plain words. Do not let it happen in a flash of fury at 11pm. Same fire, different ruins.",
+    },
+  },
+  "jupiter|pluto": {
+    harmony: {
+      headline: "Claim the share you earned.",
+      body: "Your ambition and your staying power are cooperating today. This is the day to consolidate: call in the favor that is due, ask for the scope you have already been carrying, turn the quiet influence into named authority. You are not grabbing; you are collecting. The claim will hold because the work under it is real. Make it plainly, in the open, once.",
+    },
+    tension: {
+      headline: "More will not fill it.",
+      body: "The appetite for more is running hot today: more control, more scale, more proof that you cannot be made small again. Notice that last clause; it is the real motor. Doubling down now buys size, not safety, and the price is usually someone's trust. Before you reach further, name what the hunger is actually for. Feed that instead. It eats less.",
+    },
+    union: {
+      headline: "Go deep, not wide.",
+      body: "Growth and depth have fused, so the pull today is toward the one big consuming thing: the project, the cause, the position that would change your standing for good. Taken deliberately, this is the day to commit to it fully. Just keep two guardrails: a person allowed to tell you no, and a line you write down now that you will not cross to win. Obsession does its best work supervised.",
+    },
+  },
+  "pluto|saturn": {
+    harmony: {
+      headline: "Tear out the rot, keep the frame.",
+      body: "You have the stomach today for the repair you have been avoiding: the one that means opening the wall and seeing how far the rot goes. Do it now, while your nerve and your patience are in the same room. Cut out what is dead, all of it, and keep the frame that is still sound. It will be ugly for an afternoon and solid for years.",
+    },
+    tension: {
+      headline: "Stop propping the condemned thing.",
+      body: "Something load-bearing in your life is failing, and you have been paying rising costs to postpone admitting it: the role, the arrangement, the plan that stopped working a while ago. Today the pressure gets specific. Stop shoring up the condemned thing. Take your weight off it, on your own schedule, and put it on what still holds. Losses accepted early are the cheap kind.",
+    },
+    union: {
+      headline: "Keep only what can carry weight.",
+      body: "Limit and pressure have fused, so today runs an audit you did not schedule. Everything you are committed to gets weighed, and the padding does not count, only what can bear load. Cooperate with it. Cut one obligation that exists out of guilt. Pay one debt, even partially, on purpose. What survives a day like this is the actual structure of your life. Build on that and nothing else.",
+    },
+  },
+  "neptune|uranus": {
+    harmony: {
+      headline: "The old map is dissolving. Good.",
+      body: "This is slow weather, the kind that moves whole generations: certainties handed down for decades dissolving while stranger, freer forms arrive to replace them. Today it touches you personally. Some rule you absorbed young, about what a life must look like, quietly loses its grip. Notice which one. You do not have to rebuild everything by Friday. Just stop obeying the rule that already stopped being true.",
+    },
+    tension: {
+      headline: "Unmoored is not the same as free.",
+      body: "The pressure of this era is that everything is up for revision at once: work, belief, belonging, what a future is for. On days like this the vertigo gets personal, and the temptation is to trade the collapsing certainty for a shinier one that somebody is selling. Do not swap one trance for another. Anchor low instead: the body, the schedule, the few people who know you offline. Solid is built, not bought.",
+    },
+    union: {
+      headline: "You live between two maps.",
+      body: "Dissolution and rupture have fused, an alignment that marks eras more than afternoons. Your generation is crossing from one map of the world to another, and the crossing is longer than anyone said it would be. Today you feel the gap under your own feet. So travel like a crosser: plans held loosely, daily practices held tight, possessions light, companions chosen well. The far shore is real. The schedule is not.",
+    },
+  },
+  "pluto|uranus": {
+    harmony: {
+      headline: "The stuck thing is finally movable.",
+      body: "This is the alignment of eras that break open: entrenched power cracking, old arrangements losing their grip at last. On the scale of one life, it means the immovable thing has a seam today. The old firm, the family pattern, the ten-year habit: somewhere, one of them gives. Look for the seam and put your effort exactly there. What would not budge for years moves an inch. Take the inch.",
+    },
+    tension: {
+      headline: "History is loud. Hold your ground.",
+      body: "Rupture and collapse are grinding at a scale no one person controls, and on days like this you feel it as private dread: the sense that the floor of the world is being renegotiated without you. True, and old news; this pressure shapes decades. Your counter is small and real. Keep your word to the people in reach. Fix one thing you actually govern. Eras are survived house by house.",
+    },
+    union: {
+      headline: "Demolition and foundation, same day.",
+      body: "Rupture and regeneration have fused, the signature of generations that tear down what they were handed and must build what comes next. That double duty runs through single days too. Today, do both on purpose. End one thing cleanly: resign the committee, retire the dead ritual, cancel the drifted plan. Start one thing meant to outlast you: the account, the apprenticeship, the tree. Wreckers who never build become the next thing wrecked.",
+    },
+  },
+  "neptune|pluto": {
+    harmony: {
+      headline: "The deep current is with you.",
+      body: "This is the slowest alignment there is, background weather for whole civilizations: old stories composting down while new ones form underneath. No one feels it daily. Today, unusually, you do. Something ancient in your line, family or culture, offers itself to be kept or released. You are the one standing at the gate. Keep what still feeds people. Release what only feeds on them.",
+    },
+    tension: {
+      headline: "The old story is failing. Do not follow it down.",
+      body: "The pressure of this alignment is generational: the stories that organized your grandparents' lives are losing their power, and their replacements are not finished. In one life that arrives as a cold question at 3am: what is any of it for. Do not answer with nothing. Answer small. Meaning right now lives in the concrete: the meal cooked, the friend kept, the work done well for its own sake. Tend those until the new story grows in.",
+    },
+    union: {
+      headline: "Endings are feeding something.",
+      body: "Dissolution and regeneration have fused at the deepest layer, the alignment under whole ages rather than single years. Its law is simple: nothing ends without feeding what comes next. Today that law wants your cooperation. Grieve one loss properly, all the way through, instead of managing it. Then plant one small thing in the cleared ground: a habit, a promise, a first page. You will not see the harvest soon. Plant anyway.",
+    },
+  },
 };
 
 /**

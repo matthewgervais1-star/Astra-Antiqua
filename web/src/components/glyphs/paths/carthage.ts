@@ -13,7 +13,7 @@ const VB: readonly [number, number] = [64, 64];
  *   Baal Hammon  the enthroned god crowned with ram's horns
  *   Baal Hammon  (Ancient) the betyl, his aniconic standing stone
  */
-export const CARTHAGE_GLYPHS: Readonly<Record<Planet, Glyph>> = {
+export const CARTHAGE_GLYPHS: Readonly<Partial<Record<Planet, Glyph>>> = {
   sun: {
     label: "Semes",
     viewBox: VB,

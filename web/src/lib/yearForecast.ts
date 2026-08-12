@@ -1,5 +1,4 @@
 import {
-  Body,
   EclipseKind,
   NextGlobalSolarEclipse,
   NextLunarEclipse,
@@ -11,7 +10,7 @@ import {
 } from "astronomy-engine";
 import { computeGeocentricLongitude } from "@/lib/ephemeris";
 import { longitudeToSign, type ZodiacSign } from "@/data/sampleChart";
-import type { Planet } from "@/data/cultures";
+import { PLANETS, type Planet } from "@/data/cultures";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -22,16 +21,18 @@ function normalize360(angle: number): number {
 
 // =============== Moon phases ===============
 
-export type MoonPhaseName = "New Moon" | "First Quarter" | "Full Moon" | "Last Quarter";
+/** The four lunar quarters (distinct from lib/moonPhase.ts's eight-phase
+ *  MoonPhaseName, which also names the four in-between phases). */
+export type QuarterPhaseName = "New Moon" | "First Quarter" | "Full Moon" | "Last Quarter";
 
 export interface MoonPhaseEvent {
   date: Date;
-  name: MoonPhaseName;
+  name: QuarterPhaseName;
   sign: ZodiacSign;
   degree: number;
 }
 
-const QUARTER_NAMES: readonly MoonPhaseName[] = [
+const QUARTER_NAMES: readonly QuarterPhaseName[] = [
   "New Moon",
   "First Quarter",
   "Full Moon",
@@ -143,6 +144,9 @@ const RETROGRADE_PLANETS: readonly Planet[] = [
   "mars",
   "jupiter",
   "saturn",
+  "uranus",
+  "neptune",
+  "pluto",
 ];
 
 function planetVelocity(planet: Planet, date: Date): number {
@@ -185,7 +189,12 @@ export function findRetrogradeStations(start: Date, days: number): readonly Retr
   const out: RetrogradeEvent[] = [];
   for (const planet of RETROGRADE_PLANETS) {
     // Sample weekly for slow planets; daily for Mercury would also work but is slower.
-    const stepDays = planet === "saturn" || planet === "jupiter" ? 3 : 1;
+    const stepDays =
+      planet === "uranus" || planet === "neptune" || planet === "pluto"
+        ? 5
+        : planet === "saturn" || planet === "jupiter"
+          ? 3
+          : 1;
     let prevDate = start;
     let prevVel = planetVelocity(planet, prevDate);
     for (let d = stepDays; d <= days; d += stepDays) {
@@ -238,15 +247,13 @@ export function findSolarReturn(
 
 // =============== Sign ingresses ===============
 
-const ALL_BODIES: ReadonlyArray<{ planet: Planet; body: Body | "sun" | "moon" }> = [
-  { planet: "sun", body: "sun" },
-  { planet: "moon", body: "moon" },
-  { planet: "mercury", body: Body.Mercury },
-  { planet: "venus", body: Body.Venus },
-  { planet: "mars", body: Body.Mars },
-  { planet: "jupiter", body: Body.Jupiter },
-  { planet: "saturn", body: Body.Saturn },
-];
+/** All bodies this surface computes, derived from the single source of truth
+ *  in data/cultures.ts so a widened PLANETS list never drifts out of sync. */
+const ALL_BODIES: readonly Planet[] = PLANETS;
+
+/** The five bodies slow enough that their transits read as long spans rather
+ *  than single days: Jupiter, Saturn, and the three received outers. */
+export const SLOW_BODIES: readonly Planet[] = ["jupiter", "saturn", "uranus", "neptune", "pluto"];
 
 export interface YearIngressEvent {
   planet: Planet;
@@ -278,18 +285,28 @@ function findIngressBetween(planet: Planet, lo: Date, hi: Date): Date {
 
 /**
  * Year-long ingress finder. Same idea as the existing skyEvents.ts version
- * but configured for longer windows and works for all seven classical
- * planets. (Mercury, Venus, Mars cross signs frequently; Jupiter and Saturn
- * cross only a handful of times in a year.)
+ * but configured for longer windows and works for all ten bodies. (Mercury,
+ * Venus, Mars cross signs frequently; Jupiter and Saturn cross only a
+ * handful of times in a year; Uranus, Neptune, and Pluto cross even less
+ * often, so they sample more coarsely still.)
  */
 export function findYearIngresses(
   start: Date,
   days: number,
-  planets: readonly Planet[] = ALL_BODIES.map((b) => b.planet),
+  planets: readonly Planet[] = ALL_BODIES,
 ): readonly YearIngressEvent[] {
   const out: YearIngressEvent[] = [];
   for (const planet of planets) {
-    const sampleDays = planet === "moon" ? 1 : planet === "sun" || planet === "mercury" || planet === "venus" ? 2 : planet === "mars" ? 5 : 14;
+    const sampleDays =
+      planet === "moon"
+        ? 1
+        : planet === "sun" || planet === "mercury" || planet === "venus"
+          ? 2
+          : planet === "mars"
+            ? 5
+            : planet === "uranus" || planet === "neptune" || planet === "pluto"
+              ? 20
+              : 14;
     let prevDate = start;
     let prevIdx = signIndex(computeGeocentricLongitude(planet, prevDate));
     for (let d = sampleDays; d <= days; d += sampleDays) {
@@ -354,8 +371,10 @@ export function findMajorTransits(
   days: number,
 ): readonly NatalTransitPeak[] {
   const out: NatalTransitPeak[] = [];
-  const sampleDays = 2;
   for (const planet of transitPlanets) {
+    // Slower bodies move less per day; the outers can be sampled far more
+    // coarsely than Jupiter/Saturn without risking a missed exact hit.
+    const sampleDays = planet === "uranus" || planet === "neptune" || planet === "pluto" ? 8 : 2;
     for (const point of natalPoints) {
       for (const rule of ASPECT_ANGLES) {
         // For each target angle, the transit planet's longitude should equal

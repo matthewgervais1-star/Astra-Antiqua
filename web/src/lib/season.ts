@@ -90,7 +90,15 @@ export function getCurrentSeason(date: Date): SeasonWindow {
 
 /** Planets whose season-window movements are worth naming. */
 const SEASON_INGRESS_PLANETS: readonly Planet[] = ["mercury", "venus", "mars"];
-const SEASON_TRANSIT_PLANETS: readonly Planet[] = ["venus", "mars", "jupiter", "saturn"];
+const SEASON_TRANSIT_PLANETS: readonly Planet[] = [
+  "venus",
+  "mars",
+  "jupiter",
+  "saturn",
+  "uranus",
+  "neptune",
+  "pluto",
+];
 
 export interface SeasonSkyEvents {
   moonPhases: readonly MoonPhaseEvent[];

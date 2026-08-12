@@ -38,10 +38,10 @@ function findIngressBetween(planet: Planet, lo: Date, hi: Date): Date {
 }
 
 /**
- * Detect zodiac sign ingresses for the seven classical planets in the next
- * `days` days from `start`. Samples each planet daily and detects sign-index
- * changes between adjacent samples. Exact moment binary-searched to within
- * half an hour.
+ * Detect zodiac sign ingresses for all ten bodies in the next `days` days
+ * from `start`. Samples each planet daily and detects sign-index changes
+ * between adjacent samples. Exact moment binary-searched to within half an
+ * hour.
  */
 export function computeUpcomingIngresses(start: Date, days: number): readonly SkyEvent[] {
   const events: SkyEvent[] = [];

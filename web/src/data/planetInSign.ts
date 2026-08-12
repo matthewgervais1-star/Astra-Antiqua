@@ -2,7 +2,7 @@ import type { Planet } from "@/data/cultures";
 import type { ZodiacSign } from "@/data/sampleChart";
 
 /**
- * Short interpretive paragraph for each of the 7 x 12 = 84 planet-in-sign
+ * Short interpretive paragraph for each of the 10 x 12 = 120 planet-in-sign
  * placements. Universal across pantheons (the planet's principle and the
  * sign's register are the same regardless of the cultural mask). The deity
  * name is layered on at render time via the pantheon vocabulary.
@@ -194,5 +194,83 @@ export const PLANET_IN_SIGN: Readonly<
       "Limit shows up as the system that fails its principle. You learn that the rule needs the exception; the gift is the more honest principle.",
     Pisces:
       "Limit shows up as the line you finally have to draw. You learn that compassion needs containment; the gift is the help that actually helps.",
+  },
+  uranus: {
+    Aries:
+      "Rupture is instant. You break from the inherited form before anyone finishes the sentence; the cost is the bridge burned while it still held weight, the gift is the exit nobody else saw.",
+    Taurus:
+      "Rupture works slowly, then all at once. You hold your form long past comfort, then overturn it whole; the cost is the quake nobody saw building, the gift is ground worth standing on.",
+    Gemini:
+      "Rupture arrives mid-sentence. You change the subject and the subject changes the room; the cost is the thread cut before it finished, the gift is the question nobody thought to ask.",
+    Cancer:
+      "Rupture strikes the shelter. You leave the inherited home to build one that fits; the cost is grief carried out the door, the gift is walls you chose yourself.",
+    Leo:
+      "Rupture is performed in the open. You break from the script mid-scene; the cost is the audience that came for the old show, the gift is a self no one assigned you.",
+    Virgo:
+      "Rupture enters through the flaw. You liberate by rebuilding the routine; the cost is the working thing dismantled too early, the gift is the fix nobody believed possible.",
+    Libra:
+      "Rupture strikes the contract. You break the peace that required your silence; the cost is the partnership that only ran on that silence, the gift is one that survives honesty.",
+    Scorpio:
+      "Rupture works underground. You bury the pressure until it chooses its moment; the cost is the reversal that takes more than it aimed at, the gift is living with nothing left to guard.",
+    Sagittarius:
+      "Rupture tears the horizon open. You break from the doctrine you were raised inside; the cost is a map you can no longer use, the gift is seeing with your own eyes.",
+    Capricorn:
+      "Rupture strikes the structure. You break the ladder you spent years climbing; the cost is the rank you surrender, the gift is a building whose rules you wrote.",
+    Aquarius:
+      "Rupture is your native register. You break inherited forms on principle; the cost is revolt that outlives its reason, the gift is the future arriving early through you.",
+    Pisces:
+      "Rupture dissolves the cage instead of breaking it. You slip inherited forms without a fight; the cost is that no one sees you leave, the gift is an exit without wreckage.",
+  },
+  neptune: {
+    Aries:
+      "Dissolution takes the fighter. You charge at causes larger than yourself; the cost is battles fought for a dream that never named you, the gift is courage without a self to protect.",
+    Taurus:
+      "Dissolution seeps into the solid. You idealize what can be held, and the held thing blurs; the cost is ground and savings that slip like water, the gift is finding the sacred in plain matter.",
+    Gemini:
+      "Dissolution enters through language. You speak in tides, and words blur into music; the cost is the fact that drowned in the telling, the gift is saying what plain speech cannot carry.",
+    Cancer:
+      "Dissolution floods the home. The line between your feelings and the family's disappears; the cost is carrying tides that began in other people, the gift is shelter that turns no one away.",
+    Leo:
+      "Dissolution takes the stage. You perform an ideal self and begin to believe it; the cost is applause for someone not quite you, the gift is art that outgrows its maker.",
+    Virgo:
+      "Dissolution undoes the sorting. You give service until the giver goes missing; the cost is work that empties you, the gift is help so exact it passes for love.",
+    Libra:
+      "Dissolution enters the pairing. You see the partner as they could be; the cost is loving the picture past the person, the gift is devotion the real person can grow into.",
+    Scorpio:
+      "Dissolution reaches the sealed room. You merge where others keep a floor; the cost is depths that do not give back what sinks, the gift is intimacy that survives the whole truth.",
+    Sagittarius:
+      "Dissolution takes the doctrine. You believe wider than any single creed; the cost is a faith too large to act on, the gift is meaning waiting in every port.",
+    Capricorn:
+      "Dissolution seeps into the foundations. You climb toward a summit that keeps receding into fog; the cost is ambition that forgets its reason, the gift is building for something larger than the record.",
+    Aquarius:
+      "Dissolution takes the blueprint. You dream the collective before it exists; the cost is neighbors traded for humanity at large, the gift is a vision wide enough to hold strangers.",
+    Pisces:
+      "Dissolution is your native water. The boundaries were never firm to begin with; the cost is forgetting which longings are yours, the gift is compassion that takes the shape of whatever it holds.",
+  },
+  pluto: {
+    Aries:
+      "Power arrives as the urge to break through. You are rebuilt by the fights you could not walk away from; the cost is the war you started just to feel alive, the gift is the self that survives its own demolition.",
+    Taurus:
+      "Power lives in what you hold. What you grip hardest is what gets taken; the cost is learning worth through loss, the gift is the value nothing can repossess.",
+    Gemini:
+      "Power moves through the word that names the buried thing. You dig with questions until something opens; the cost is the thought you cannot put down, the gift is the sentence that frees what silence kept.",
+    Cancer:
+      "Power rises from the root. The house you came from gets torn open so you can see its foundations; the cost is grief you did not choose, the gift is a home built on ground you have actually seen.",
+    Leo:
+      "Power wants the throne. The performed self burns down so the real one can be witnessed; the cost is pride taken from you in public, the gift is a presence that no longer needs the crown.",
+    Virgo:
+      "Power works through the small correct thing. You purge by fixing, sorting, cutting away; the cost is the flaw you cannot stop seeing, the gift is the practice that remakes you one repaired piece at a time.",
+    Libra:
+      "Power hides inside the pairing. The other person carries what you buried, and the bond drags it up; the cost is the contract that must break to be seen, the gift is a bond made with both eyes open.",
+    Scorpio:
+      "Power is at home here and does not pretend otherwise. You go to the bottom of things because the bottom is where you live; the cost is depth demanded of everyone you touch, the gift is having nothing left that can be used against you.",
+    Sagittarius:
+      "Power moves through conviction. The creed gets razed so the truth under it can stand; the cost is the faith you had to watch burn, the gift is a belief that survived its own trial.",
+    Capricorn:
+      "Power tests the structure. What you built gets stripped to bedrock; the cost is ambition losing its costume, the gift is the one wall left standing, which was the real one.",
+    Aquarius:
+      "Power runs through the group and hides in its systems. You see the machinery others call natural; the cost is standing outside what everyone still believes, the gift is the order rebuilt after the false one falls.",
+    Pisces:
+      "Power strips away what the self was clinging to. The deepest losses here have no edges and no name; the cost is surrender you did not consent to, the gift is what remains when everything removable is gone.",
   },
 };

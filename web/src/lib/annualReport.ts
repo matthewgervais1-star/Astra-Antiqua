@@ -30,7 +30,11 @@ const NATAL_TARGET_FULL: Readonly<Record<string, string>> = {
 
 function planetWeight(planet: Planet): number {
   switch (planet) {
+    case "pluto":
+      return 5;
     case "saturn":
+    case "uranus":
+    case "neptune":
       return 4;
     case "jupiter":
       return 3;
@@ -295,10 +299,15 @@ function buildQuarters(
 
     const hasTense =
       transitsInQuarter.some(
-        (t) => isTenseKind(t.aspectKind) || (t.aspectKind === "conjunction" && t.transitPlanet === "saturn"),
+        (t) =>
+          isTenseKind(t.aspectKind) ||
+          (t.aspectKind === "conjunction" &&
+            (t.transitPlanet === "saturn" || t.transitPlanet === "pluto" || t.transitPlanet === "uranus" || t.transitPlanet === "neptune")),
       ) || eclipsesInQuarter.length > 0;
     const hasEasy = transitsInQuarter.some(
-      (t) => isEasingKind(t.aspectKind) || (t.aspectKind === "conjunction" && t.transitPlanet === "jupiter"),
+      (t) =>
+        isEasingKind(t.aspectKind) ||
+        (t.aspectKind === "conjunction" && (t.transitPlanet === "jupiter" || t.transitPlanet === "neptune")),
     );
     const weather: "tense" | "easy" | "mixed" | "quiet" =
       !hasTense && !hasEasy ? "quiet" : hasTense && hasEasy ? "mixed" : hasTense ? "tense" : "easy";
@@ -356,10 +365,20 @@ function scoreMonths(
     else if (isEasingKind(t.aspectKind)) m.ease += w; // trine, sextile
     else if (t.aspectKind === "conjunction") {
       // Conjunctions add weight to both registers; the kind of contact decides.
-      // Treat conjunction of Jupiter as easing, conjunction of Saturn as weighting.
-      if (t.transitPlanet === "saturn") m.tension += w;
-      else if (t.transitPlanet === "jupiter") m.ease += w;
-      else m.tension += w * 0.5;
+      // Treat conjunction of Jupiter as easing, conjunction of Saturn as
+      // weighting. Pluto and Uranus conjunctions read the same as Saturn's
+      // (tension); Neptune's conjunction is genuinely mixed, part gift and
+      // part fog, so it adds to both registers at half weight each.
+      if (t.transitPlanet === "saturn" || t.transitPlanet === "pluto" || t.transitPlanet === "uranus") {
+        m.tension += w;
+      } else if (t.transitPlanet === "jupiter") {
+        m.ease += w;
+      } else if (t.transitPlanet === "neptune") {
+        m.tension += w * 0.5;
+        m.ease += w * 0.5;
+      } else {
+        m.tension += w * 0.5;
+      }
     }
   }
   for (const e of eclipses) {
@@ -498,9 +517,17 @@ function pickStandouts(
       significance: 4 + e.obscuration * 2,
     });
   }
+  const STANDOUT_RETROGRADE_PLANETS: readonly Planet[] = [
+    "mercury",
+    "jupiter",
+    "saturn",
+    "uranus",
+    "neptune",
+    "pluto",
+  ];
   for (const r of retrogrades) {
     if (r.kind !== "retrograde") continue;
-    if (r.planet !== "saturn" && r.planet !== "jupiter" && r.planet !== "mercury") continue;
+    if (!STANDOUT_RETROGRADE_PLANETS.includes(r.planet)) continue;
     const dLabel = deityWithPlanet(culture, r.planet);
     const beat = getBeat(`retrograde-${r.planet}`);
     const astro = `${dLabel} turns retrograde at ${r.degree.toFixed(1)}° ${r.sign}`;
@@ -509,7 +536,14 @@ function pickStandouts(
       title: beat?.headline ?? astro,
       tag: astro,
       body: beat?.body ?? "This planet's work slows and doubles back for a stretch; a time to review and revise rather than to launch.",
-      significance: r.planet === "saturn" ? 2.5 : r.planet === "jupiter" ? 2 : 1.2,
+      significance:
+        r.planet === "saturn"
+          ? 2.5
+          : r.planet === "jupiter"
+            ? 2
+            : r.planet === "uranus" || r.planet === "neptune" || r.planet === "pluto"
+              ? 1.8
+              : 1.2,
     });
   }
   if (solarReturn) {

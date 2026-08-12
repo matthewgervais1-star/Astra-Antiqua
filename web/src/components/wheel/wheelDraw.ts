@@ -330,6 +330,9 @@ function drawPlanetGlyphs(
         mars: "♂",
         jupiter: "♃",
         saturn: "♄",
+        uranus: "♅",
+        neptune: "♆",
+        pluto: "♇",
       };
       ctx.fillText(symbols[planet], pos.x, pos.y + 1);
     }

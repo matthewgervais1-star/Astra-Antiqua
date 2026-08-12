@@ -21,7 +21,7 @@ export const PLANET_AREAS: Readonly<Record<Planet, PlanetArea>> = {
   moon: {
     area: "Moods & Emotions",
     blurb:
-      "Your inner life: feeling, instinct, memory, and what you need in order to feel safe. The fastest-moving of the seven, the Moon governs how you comfort yourself and the emotional weather you carry under the face you show the world.",
+      "Your inner life: feeling, instinct, memory, and what you need in order to feel safe. The fastest-moving of the ten, the Moon governs how you comfort yourself and the emotional weather you carry under the face you show the world.",
   },
   mercury: {
     area: "Mind & Communication",
@@ -47,6 +47,21 @@ export const PLANET_AREAS: Readonly<Record<Planet, PlanetArea>> = {
     area: "Duty & Limits",
     blurb:
       "The planet of structure and time: discipline, responsibility, limits, and the slow work that lasts. Saturn shows where life asks you to grow up, where mastery has to be earned rather than handed over, and the foundations you build that actually hold.",
+  },
+  uranus: {
+    area: "Rupture & Liberation",
+    blurb:
+      "A modern body, received rather than named by any ancient pantheon. Uranus governs sudden change: the break from inherited form, the rule overturned without warning, the freedom that arrives faster than you asked for it. Its placement shows where you disrupt the pattern first and explain yourself after.",
+  },
+  neptune: {
+    area: "Dissolution & Longing",
+    blurb:
+      "A modern body, received rather than named by any ancient pantheon. Neptune governs dissolving edges: imagination, longing, the ideal that blurs into the real. Its placement shows where you give yourself away to something larger than yourself, for better and for illusion.",
+  },
+  pluto: {
+    area: "Power & Renewal",
+    blurb:
+      "A modern body, received rather than named by any ancient pantheon. Pluto governs what must be broken down before it can be rebuilt: buried power, forced honesty, the death that feeds what comes after. Its placement shows where you go to the root of a thing instead of settling for its surface.",
   },
 };
 

@@ -1,4 +1,4 @@
-import type { Culture, Planet } from "@/data/cultures";
+import { isReceived, type Culture, type Planet } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import {
   computeAspects,
@@ -28,6 +28,9 @@ export const TRANSIT_PRINCIPLE: Readonly<Record<Planet, string>> = {
   mars: "the drive to act and to fight",
   jupiter: "the urge to expand and to trust",
   saturn: "the demand for discipline and limit",
+  uranus: "the shock of sudden change and the break for freedom",
+  neptune: "the pull to dissolve, to dream, to blur the edges",
+  pluto: "the demand that what is buried be brought up and counted",
 };
 
 /**
@@ -39,7 +42,11 @@ function personalScore(t: TransitAspect): number {
   const personalA = t.transit === "sun" || t.transit === "moon";
   const personalB = t.natal === "sun" || t.natal === "moon";
   const personalBonus = (personalA ? 1 : 0) + (personalB ? 1 : 0);
-  return t.orb - personalBonus * 1.5;
+  // Outer-planet transits are rare enough that an exact one is genuinely
+  // significant; a 1.25x boost on tightness lets a slow-mover at close orb
+  // still outrank a wider sun/moon hit, without touching the sun/moon bonus.
+  const outerMultiplier = isReceived(t.transit) || isReceived(t.natal) ? 1.25 : 1;
+  return t.orb / outerMultiplier - personalBonus * 1.5;
 }
 
 /** Score for ranking today's in-sky aspects when there is no natal chart. */

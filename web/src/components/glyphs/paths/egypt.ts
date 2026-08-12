@@ -13,7 +13,7 @@ const VB: readonly [number, number] = [64, 64];
  *   Amun      the twin-plume crown
  *   Geb       the goose, his name-hieroglyph
  */
-export const EGYPT_GLYPHS: Readonly<Record<Planet, Glyph>> = {
+export const EGYPT_GLYPHS: Readonly<Partial<Record<Planet, Glyph>>> = {
   sun: {
     label: "Ra",
     viewBox: VB,

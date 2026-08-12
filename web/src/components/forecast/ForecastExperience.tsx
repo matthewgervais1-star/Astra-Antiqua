@@ -19,6 +19,7 @@ import {
   findRetrogradeStations,
   findSolarReturn,
   findYearIngresses,
+  SLOW_BODIES,
   type EclipseEvent,
   type MoonPhaseEvent,
   type NatalTransitPeak,
@@ -37,13 +38,16 @@ import { AnnualReportSection } from "@/components/forecast/AnnualReportSection";
 import { HorizonLinks } from "@/components/HorizonLinks";
 
 const YEAR_DAYS = 365;
-const TRANSIT_PLANETS: readonly Planet[] = ["jupiter", "saturn"];
+const TRANSIT_PLANETS: readonly Planet[] = SLOW_BODIES;
 const OUTER_INGRESS_PLANETS: readonly Planet[] = [
   "mercury",
   "venus",
   "mars",
   "jupiter",
   "saturn",
+  "uranus",
+  "neptune",
+  "pluto",
 ];
 
 function formatLongDate(d: Date): string {

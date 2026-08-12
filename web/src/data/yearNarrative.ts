@@ -114,6 +114,154 @@ const ENTRIES: Readonly<Record<string, YearNarrative>> = {
     body: "This year resets what you are known for. A fresh cycle begins in your working life: a new role, a new field, a new claim on the work you want your name attached to. It comes on strong and asks you to step up into a bigger version of your professional self, ready or not.\n\nStart what you have been too cautious to start. Launch the thing, take the visible role, plant your flag in the work that actually matters to you instead of the safe work that pays. This is a beginning, so build it to last past the first burst of momentum. Keep your numbers honest and your promises sized to what you can deliver. What you set in motion now is the reputation you live with for the next decade.",
   },
 
+  // The three received bodies: Uranus, Neptune, Pluto. Slower still than
+  // Jupiter and Saturn, so their year-themes read as generational weather
+  // landing on one personal point rather than a single season's demand.
+  "theme:uranus:sun:harmony": {
+    headline: "This is the year you get to leave without wreckage.",
+    body: "A long current of change runs under your identity this year, and it runs with you. The role that stopped fitting can be set down cleanly. The version of you built to satisfy someone else can be retired without a fight. Openings arrive suddenly: an offer, an exit, a stranger who names what you actually want. The trap is clinging to the familiar because it is familiar. Take the clean break when it shows itself. Change one real structural thing, the work, the place, the arrangement, and let the rest reorganize around it. Freedom is cheap this year. Next year it costs more.",
+  },
+  "theme:uranus:sun:tension": {
+    headline: "This is the year the life you settled for stops cooperating.",
+    body: "Something in you demands out this year, and it stops asking politely. The steady job wobbles. The fixed plan breaks. You surprise yourself with what you suddenly cannot tolerate. The disruption is not random; it lands exactly on what you kept out of habit, the role you drifted into, the self built to someone else's spec. The trap is a false choice: torch everything, or grip the old shape until it shatters anyway. Do neither. Find the one arrangement that is actually a cage and open it yourself, deliberately, before the year opens it for you. What you free on purpose you keep. What breaks out on its own takes a wall with it.",
+  },
+  "theme:uranus:sun:union": {
+    headline: "The self you inherited expires this year.",
+    body: "This year starts a new cycle in who you are, and it starts with a break. The identity you have carried, assembled from family expectation and old decisions, reaches its end date. What replaces it arrives in flashes: a sudden certainty, an impulse that will not fade, a door you cannot stop looking at. You will feel restless, wired, allergic to your own routines. That is the new self getting born. Do not sedate it with more routine. Give the restlessness one real outlet, the move, the change of work, the true thing said out loud. Choose your own break before an accidental one chooses for you. A reset this deep comes once or twice in a life. Spend it awake.",
+  },
+  "theme:uranus:moon:harmony": {
+    headline: "This is the year your private life gets room to breathe.",
+    body: "Your inner life loosens this year, and the loosening helps. The household pattern that pinched, the family role you performed on schedule, the moods you assumed were permanent: all of it turns out to be movable. Change comes easily at home now, so make the changes on purpose. Rearrange the rooms. Renegotiate the visit, the chore, the standing obligation that drains you. Let in a friendship that does not resemble your family. You need more freedom in your private life than you have been admitting. This year the people around you can actually hear that. Say it plainly, once, and watch how little resistance you meet.",
+  },
+  "theme:uranus:moon:tension": {
+    headline: "This is the year your moods stop taking orders.",
+    body: "Your inner weather turns sudden this year. Feelings arrive without warning and leave the same way: a flash of fury at the dinner table, a need to get out of the house right now, a coldness toward someone you love that frightens you. Home may lurch too, a move, a family rupture, a routine that collapses. None of it means you are broken. It means a private arrangement got too tight, and the pressure is finding the seams. Make no permanent decisions inside a spike. But read the spikes; they all point at the same door. Name the need underneath, more room, more honesty, less duty, and change the arrangement before it changes itself.",
+  },
+  "theme:uranus:moon:union": {
+    headline: "A new inner life begins, and it begins mid-air.",
+    body: "This year resets what you need to feel safe, and the reset is abrupt. The old comforts stop comforting. The home, the routine, the familiar role in the family: one of them breaks open, by your hand or without it. It feels like free fall. It is the start of a private life built on your real needs instead of your assigned ones. Do not rush to rebuild the old arrangement out of fear. Camp in the uncertainty and notice what you actually miss versus what you only thought you needed. Keep one anchor, a person, a habit, a room, and let everything else stay negotiable. What you settle into next fits better than what fell.",
+  },
+  "theme:uranus:asc:harmony": {
+    headline: "This is the year you stop matching the wallpaper.",
+    body: "The way you come across breaks open this year, in your favor. People who had you filed under one label lose the file. You can change the look, the manner, the whole first impression, and the room adjusts instead of objecting. This is the season for the visible experiment: the style you privately wanted, the blunter way of speaking, the version of you that stops apologizing at the door. Novelty works for you now; strangers respond to it, and doors open off the back of it. The only mistake is staying camouflaged out of habit. Update the outside to match the inside. You have been someone new for a while. This year you get to look like it.",
+  },
+  "theme:uranus:asc:tension": {
+    headline: "This is the year the familiar version of you malfunctions.",
+    body: "The self you present stops behaving this year. You say the unplanned thing in the meeting. You cancel on people you always show up for. You look in the mirror and want to change everything at once. Others call you erratic; really you are shedding a skin in public. The friction comes from holding a fixed image over a self that has already moved. Expect pushback from people invested in the old version, and expect the pushback to tempt you back into costume. Do not go back. Do not swing into shock for its own sake either. Change the presentation in real steps you mean: the appearance, the manner, the plain refusal. Let them be surprised. They adjust.",
+  },
+  "theme:uranus:asc:union": {
+    headline: "You break out of your own package this year.",
+    body: "This year starts a new cycle in how you meet the world, and it starts with a jolt. The presentation you have worn for years, the reliable manner, the predictable yes, cracks open, and what steps out is rawer and more direct. It does not go back in the box. People notice fast. Some lean in, some flinch, and both reactions confirm the change is real. Do not manage their comfort by shrinking. This is a rare chance to rebuild the outside from the actual inside. Change the look, the bearing, the way you enter a room, and do it deliberately, in daylight. The new face sets quickly. Make sure it is yours.",
+  },
+  "theme:uranus:mc:harmony": {
+    headline: "This is the year the career detour is the road.",
+    body: "Your working life gets flexible this year, and flexibility pays. The field shifts, the org chart shakes, a role appears that did not exist last year, and you are placed to benefit if you move. The lucky break looks like disruption at first: the reorg, the canceled plan, the sudden opening nobody senior wanted. Take the strange opportunity over the safe one. Pitch the unconventional idea; this is the year it lands. If you have been split between the respectable path and the one that actually excites you, this is the cleanest exit you will get for years. Leave the ladder. The thing you would do anyway is hiring.",
+  },
+  "theme:uranus:mc:tension": {
+    headline: "This is the year the ladder moves while you are on it.",
+    body: "Your career refuses to hold still this year. The stable role turns unstable, the plan gets rewritten above your head, the field you bet on changes its mind. It feels like sabotage. It is exposure: ambitions kept out of obligation cannot survive shaking, and the shaking has arrived. You will be tempted to quit everything in one dramatic gesture, or to cling to a structure that is visibly coming apart. Split the difference on purpose. Keep your income while you build the exit. Let go of the title you only wanted because someone taught you to want it. The disruption is not wrecking your path. It is showing you the path was never yours.",
+  },
+  "theme:uranus:mc:union": {
+    headline: "Your public life starts over this year, midstream.",
+    body: "This year begins a new cycle in what you are known for, and it begins with a hard turn. The career line you have followed, the profession, the employer, the ten-year plan, breaks: a departure, a reinvention, a public change of course you did not fully schedule. It looks reckless from outside. Inside, it has been coming for years. Commit to the turn instead of half-taking it. Announce the new direction plainly, take the hit to your reputation, and let it rebuild around the truth. The people who matter follow the honest version. What you start now runs unconventional and runs long. Better strange and yours than approved and borrowed.",
+  },
+  "theme:neptune:sun:harmony": {
+    headline: "This is the year the edges soften in your favor.",
+    body: "Something in you dissolves gently this year: the rigid self-definition, the armor of competence, the need to be one fixed thing. What replaces it is porousness that works for you. Imagination runs high. Compassion runs high. People sense the softening and open up around you; strangers tell you true things. This is the season for the creative work you shelved as impractical: the music, the paint, the pages. It will feed you now. One caution: keep your bank account and your calendar solid while your self gets fluid. Dream on purpose, with a notebook. The visions that arrive this year are usable later, if you write them down.",
+  },
+  "theme:neptune:sun:tension": {
+    headline: "This is the year you stop recognizing yourself.",
+    body: "Your sense of who you are blurs this year. Goals that organized your life go vague. Effort feels like rowing in fog. You may drift toward escapes, the extra drink, the endless scroll, the fantasy person, the fantasy job, because solid ground keeps not appearing. Understand what is happening: an identity built partly on illusion is being dissolved, and the fog is the dissolving. Make no major commitments inside it. Trust no person or project that looks like rescue. Keep the body honest, sleep, food, movement, no numbing, and let the false certainties go without replacing them on the spot. When the fog thins, and it will, what is still standing is actually you.",
+  },
+  "theme:neptune:sun:union": {
+    headline: "The outline of you goes underwater this year.",
+    body: "This year begins a long dissolve in your identity. The defined self, the titles, the plans, the story you tell about yourself, loses its hard edges, and something wider moves in underneath. You will feel less like a fixed person and more like weather: porous, impressionable, strangely tender. This is not decline. It is the start of a self organized around meaning instead of achievement. But a dissolving self attracts leeches and causes, so choose your influences like food. No gurus. No saviors. Keep one daily discipline, the work, the training, the morning page, as a mast to hold. Let the rest blur. What condenses out of this, over years, is the truest version yet.",
+  },
+  "theme:neptune:moon:harmony": {
+    headline: "This is the year your inner life turns tidal and kind.",
+    body: "Your feelings deepen and widen this year, and the deepening is gentle. You sense what people need before they say it. Dreams get vivid and start telling you things worth hearing. Home wants softness now: water, music, low light, fewer sharp voices. This is a strong year for tending and being tended, and a poor one for hard emotional bargaining, so postpone the confrontations that can wait. The caution is absorbing everyone else's weather until you cannot find your own. Check whose sadness you are carrying before you carry it home. Keep one thing firm, your sleep, your door, your Sunday, and let the tide move everything else.",
+  },
+  "theme:neptune:moon:tension": {
+    headline: "This is the year your feelings lie beautifully.",
+    body: "Your inner life fogs over this year. Moods arrive from nowhere and refuse to explain themselves. You long for something you cannot name, and the longing attaches to whatever is nearby: a person, a place, a past that was never as good as it looks from here. Home can feel unreal, or leaky, or haunted by what it was supposed to be. The dangers are specific: idealizing someone who is plainly showing you what they are, numbing the ache instead of hearing it, letting the household drift on unspoken things. Say the unspoken thing. Check the fantasy against one sober friend. The longing is real; its current address is usually wrong.",
+  },
+  "theme:neptune:moon:union": {
+    headline: "A tide moves into your private life this year.",
+    body: "This year begins a long softening in what you feel and need. The walls you built, the self-sufficiency, the not-needing-anyone act, start to dissolve, and the feelings behind them come through in swells. You cry at odd things. You miss people you decided you were done missing. Home starts wanting to be a sanctuary instead of a station. Let it happen; this is the start of a richer inner life, not a breakdown. But keep your feet. Name what you feel out loud so it cannot run the house from underwater. Choose one person who gets the unedited version. Guard your sleep like money. The heart is being enlarged. It aches while it stretches.",
+  },
+  "theme:neptune:asc:harmony": {
+    headline: "This is the year you become hard to describe and easy to like.",
+    body: "Your presence softens this year, and the softening draws people. There is suddenly more suggestion on you, more shimmer; strangers project their best hopes onto your blank spaces and treat you accordingly. Doors open on charm you did not consciously spend. Use it in the right rooms: the audition, the pitch, the first meeting, anywhere a little glamour compounds. The caution is letting the projections write your script. Being adored as a screen is not being known. Correct the flattering misreadings early, especially the romantic ones. Keep the look and the story a little fluid on purpose; this year rewards the unfinished. Just make sure one or two people still see the plain version.",
+  },
+  "theme:neptune:asc:tension": {
+    headline: "This is the year people see a version of you that is not there.",
+    body: "The face you present blurs this year. People misread you constantly: they see a rescuer, a fraud, a fantasy, whatever their own fog requires, and no correction quite sticks. You may not help matters, because your own sense of how to appear goes soft too. You leave rooms unsure of what you agreed to. The dangers: playing someone's illusion because being adored feels like being loved, and vagueness in rooms that demand hard edges, contracts, money, first impressions with stakes. Get everything important in writing. Let a blunt friend read the rooms you cannot. Stop performing clarity you do not have; say plainly when you do not know. Honest fog beats fake daylight.",
+  },
+  "theme:neptune:asc:union": {
+    headline: "Your face goes soft at the edges this year.",
+    body: "This year begins a long blur in how you appear. The defined image, the sharp presentation, the practiced entrance dissolve, and you start reading as something more diffuse: artist, mystic, open question. People sense a change they cannot name. You may barely recognize photos of yourself, or feel like you are wearing a costume that stopped being yours. Do not panic and rebuild the old front. This dissolve is the start of a presence with less performance in it. Care for the body while it happens, food, sleep, movement; the drift gets physical if you let it. Be honest early with new people about who you actually are. Let the mask soak off. Keep the face.",
+  },
+  "theme:neptune:mc:harmony": {
+    headline: "This is the year your work is allowed to mean something.",
+    body: "A current of meaning moves through your career this year, and it moves your way. The imaginative project gets its opening. The compassionate work, the teaching, the art, the healing trades, gains ground and pays better than cynicism promised. Your public image picks up a shine you did not engineer; people want to believe in you, and mostly they are right to. Follow the pull toward work you do not have to explain to your own conscience. Pitch the vision while the audience is soft to visions. Two anchors: keep the invoices exact, and keep one colleague who gives you the unvarnished version. Inspiration is the asset this year. Bookkeeping keeps it.",
+  },
+  "theme:neptune:mc:tension": {
+    headline: "This is the year the career map dissolves in your hands.",
+    body: "Your professional direction fogs over this year. The path that looked solid goes vague: the role loses its point, the company loses its story, the ambition you organized a decade around stops meaning anything when you hold it up. You may be tempted by a glorious mirage, the dream gig that is mostly dream, the leader who is mostly performance. Check every shining thing against paper: numbers, references, contracts. Do not torch the day job because it stopped sparkling; fog is not a forwarding address. Let the false ambition drain out quietly and notice what work you still do when nobody assigns it. That remainder is the real career. The fog lifts on it eventually.",
+  },
+  "theme:neptune:mc:union": {
+    headline: "What the work is for starts changing this year.",
+    body: "This year begins a slow dissolve at the top of your life: what you are known for, what you are working toward, what the work is for. The concrete ambitions stop holding water, and a vaguer, larger pull moves in, toward service, toward craft, toward something you would do unpaid. Outsiders may read it as losing your edge. It is your calling changing hands, from ego to meaning. Do not force a new five-year plan; you are between maps. Take the small assignments that feel strangely significant. Keep your finances boring and your claims modest while the new direction condenses. In a few years the work will have a name. This year, follow the water.",
+  },
+  "theme:pluto:sun:harmony": {
+    headline: "This is the year your strength stops being theoretical.",
+    body: "Power concentrates in you this year, and it concentrates quietly. Obstacles that ate years of effort give way to steady pressure. People sense a new weight in you and make room without being asked. This is the season for the deep renovation: the ambition you buried as too big, the truth about yourself you were saving for later. Bring them up now; you have the strength to hold them. What burns off in the process, old images, small comforts, an easier self, was already dead weight. The caution is subtlety curdling into scheming. Use the influence in the open. Take the real seat, name the real goal, and let the people who preferred the smaller you adjust.",
+  },
+  "theme:pluto:sun:tension": {
+    headline: "This is the year the pressure finds what is false in you.",
+    body: "Something presses on your identity from below this year, and it does not negotiate. Control struggles find you: the boss who wants you smaller, the rival, the institution, or your own compulsions wearing a stranger's face. What is actually under pressure is every part of the self built for protection instead of truth. The year strips it. It feels like being ground down; it is closer to being smelted. Do not spend the force on power games you cannot win. Refuse the manipulation, including your own. Let the false thing die on schedule, the image, the title, the armored version of you. What survives this year cannot be taken from you afterward. That is the point.",
+  },
+  "theme:pluto:sun:union": {
+    headline: "You do not upgrade this year. You molt.",
+    body: "This year begins the deepest remake of who you are that you will get. Something goes into the ground, a role, a relationship, a self-image that has been you for years, and it does not come back. Grief is appropriate. So is relief; part of you has waited a long time for this. Power comes up from underneath to fill the space, raw at first, and everything shallow starts tasting like ash. Do not cling to the corpse of the old identity, and do not rush to cast a new one. Let the stripping finish. Keep only what stays true under pressure. The person who walks out of this year runs deeper than the one who walked in. Permanently.",
+  },
+  "theme:pluto:moon:harmony": {
+    headline: "This is the year the family basement gets cleaned in daylight.",
+    body: "Your inner life gains depth this year without demanding wreckage first. Old sediment, the family pattern, the ancient grievance, the fear you have carried since childhood, comes loose and can finally be moved. Conversations that were impossible for decades turn merely hard. Closeness deepens with anyone willing to go there, and you find out who is. Use the year deliberately. Ask the mother, the brother, the oldest friend the real question. Clear the actual basement and the kept boxes while you are at it; the house and the inner life move together now. What you compost this year, resentment, secrecy, the role of the wounded one, turns into ground you can build on. Dig while the digging is easy.",
+  },
+  "theme:pluto:moon:tension": {
+    headline: "This is the year the buried feelings hold their own hearing.",
+    body: "Pressure builds under your private life this year. Feelings you sealed off, rage, grief, an old fear of being left, force their way up, often disguised as someone else's fault. Home and family can turn into a courtroom: control struggles with a parent, a partner, a child, that are really about a much older case. Do not litigate the decoy. Name the actual feeling, out loud, to one person you trust, before it names itself through your behavior. Watch the compulsions that spike when you avoid this: the checking, the jealousy, the midnight accounting. Nothing here wants to destroy you. It wants to be admitted. Feelings this old do not die untended. They run the house from below.",
+  },
+  "theme:pluto:moon:union": {
+    headline: "Your inner life goes down to the studs this year.",
+    body: "This year begins a gutting of your emotional life, and gutting is renovation. What you need, who feels like home, what safety even means: all of it goes under pressure and comes out changed. An old bond may end or transform past recognition. A version of home dies, and grieving it is not weakness, it is accuracy. Depth becomes the new normal inside you, and shallow comfort stops working at all. Go with the depth instead of fighting for the old shallows. Say the unsayable thing to the person it belongs to. Bury what is dead with honor, the pattern, the role, the house if it comes to that. What roots afterward feeds you for decades.",
+  },
+  "theme:pluto:asc:harmony": {
+    headline: "This is the year you walk in heavier, in the good way.",
+    body: "Your presence gains gravity this year without you forcing it. People take you seriously at the door: the same words land harder, the same look holds longer. Whatever you have survived has started reading as authority instead of damage. Use the new weight deliberately. Have the loaded conversations you used to schedule around. Ask for what was previously unaskable. Retire the harmless persona, the joker, the pleaser, the wallpaper, because it no longer fools anyone and never protected much. The body may want its own overhaul, training, appearance, a stripped-down style; follow it. Intensity attracts intensity now, so mind who you magnetize. You set the temperature in the room this year. You do not match it.",
+  },
+  "theme:pluto:asc:tension": {
+    headline: "This is the year you cannot do harmless anymore.",
+    body: "The way you come across turns intense this year whether you consent or not. People react to you strongly: some defer, some bristle, some pick fights you did not start. The mild presentation you relied on stops working; the force underneath shows through the paint. Expect power struggles at the surface of life, the neighbor, the coworker, the stranger with a badge, each one a mirror of the fight inside between the safe image and the real one. Do not answer force with scheming, and do not shrink to reassure anyone. Drop the paint yourself. Present the direct version on purpose, with manners. What is showing through anyway lands better when you are the one showing it.",
+  },
+  "theme:pluto:asc:union": {
+    headline: "The old face burns off this year.",
+    body: "This year begins a permanent change in how you meet the world. The presentation you built for safety, the accommodating smile, the manageable size, the edited self, breaks down at the door and cannot be repaired. Something starker comes through: more direct, more felt, harder to dismiss and harder to fake. Old acquaintances say you have changed like it is an accusation. It is a diagnosis, and it is correct. Help it along instead of hiding it. Cut the wardrobe, the habits, the greetings that belong to the discarded version. Let people meet the current one without apology. First impressions run deep for years after this. Make them of the real thing.",
+  },
+  "theme:pluto:mc:harmony": {
+    headline: "This is the year your ambition gets teeth that fit.",
+    body: "Real power becomes available in your working life this year, the structural kind: the mandate, the budget line, the room where it is decided. Doors open toward depth, research, crisis work, turnarounds, whatever most people flinch from, because you have stopped flinching. Your influence compounds quietly; people start asking what you think before they decide. Take the promotion with actual authority over the title with none. Kill your weakest project yourself before the year does it for you; pruning is the strategy now. Keep the power clean, no hoarding, no quiet sabotage, because this year sets your reputation for a decade. Aim to be known as formidable and fair. The pair is what lasts.",
+  },
+  "theme:pluto:mc:tension": {
+    headline: "This is the year the career gets an autopsy while still alive.",
+    body: "Power struggles find your working life this year. The boss who needs you small, the institution that eats its own, the rival with patience, or your own ambition turned compulsive: some version of the fight arrives, and it is never about the surface issue. What is actually under pressure is every part of the career built on something false, borrowed goals, prestige hunger, a role you secretly despise. The false parts get stripped, by you or for you. Choose by you. Quit the dead ambition before it is amputated. Refuse the tactic that would work but stain you; what you win dirty this year you repay double later. If a public structure falls, salvage the skill and the allies. Leave the rubble.",
+  },
+  "theme:pluto:mc:union": {
+    headline: "What you are known for dies and pays out this year.",
+    body: "This year begins the death and probate of your public life. A career, a title, a long ambition reaches its end, and what it was really worth gets counted: the skills, the allies, the hard-earned name, the parts of the estate that transfer. Something in you already knows which it is. The descent is not optional; the way you take it is. Wind down the finished thing deliberately instead of making the year seize it. Then follow the pull toward work with actual power in it, the kind you would defend under pressure. The rebuild takes years and does not care. What you raise on the cleared ground becomes the real legacy. The old name was scaffolding.",
+  },
+
   // Dated beats
   "beat:eclipse-lunar": {
     headline: "What you buried comes up now.",
@@ -150,6 +298,30 @@ const ENTRIES: Readonly<Record<string, YearNarrative>> = {
   "beat:retrograde-mercury": {
     headline: "Double-check, do not launch.",
     body: "Plans, messages, and machines go sideways for a few weeks. Read the contract twice before you sign. Say the thing you left unsaid to the person who took your last message wrong. Back up the files and confirm the times. This is a window for finishing, fixing, and clearing the backlog, not for launching the product or making the big commitment. Tie off loose ends now; start the new thing when the noise clears.",
+  },
+  "beat:uranus-peak": {
+    headline: "The break happens now. Steer it.",
+    body: "The year's sharpest reversal hits its exact point now. Something flips fast: the plan, the arrangement, the thing you were sure of yesterday. Do not spend today gripping the old shape. The break is not the disaster; staying welded to what already snapped is. Take the exit that just appeared. Say the thing that ends the stalemate. Fast is fine. Frozen is not.",
+  },
+  "beat:neptune-peak": {
+    headline: "The fog is thickest today. Drop anchor.",
+    body: "The year's deepest blur peaks now. Whatever has felt vague, the person, the plan, the promise, is at its least trustworthy today. Sign nothing. Believe no rescue. If it glitters, get it in writing and read it twice. Use the day for what fog is good for: rest, art, the dream you keep having. Decisions keep. Make them next week, on dry ground.",
+  },
+  "beat:pluto-peak": {
+    headline: "The pressure bottoms out now. Open your hand.",
+    body: "The heaviest force of your year reaches its exact point now. Whatever has been dying all year, the role, the bond, the old version of you, finishes dying around this date. Stop administering life support. Bury it properly: say the ending out loud, return what should be returned, close the account. The power you spent holding on comes back the moment you let go.",
+  },
+  "beat:retrograde-uranus": {
+    headline: "The revolution turns inward for a stretch.",
+    body: "The urge to break free goes underground for months. Outside, things look stable again; do not call the change canceled. This stretch is for rebellion with a plan: work out which cage is real and which is furniture, save the money, learn the skill the exit requires. Do not blow anything up right now. Draw the map. The next opening is coming, and this time you leave packed.",
+  },
+  "beat:retrograde-neptune": {
+    headline: "The water clears for a while. Look down.",
+    body: "The fog pulls back for a few months, and what it covered sits in plain view: the promise that was never going to be kept, the dream that was mostly avoidance, the person you painted over. Do not look away; this clarity is the window. Cancel the illusion while you can see it. Keep the dream that survives sober daylight. That one is real, and it is worth the work.",
+  },
+  "beat:retrograde-pluto": {
+    headline: "The excavation pauses. Sort what came up.",
+    body: "The deep pressure eases for a few months, and the digging turns inward. This stretch is for sorting what the year has already unearthed: the motive you finally saw, the pattern you caught in the act, the power you did not know you had. Name them plainly, at least to yourself. Do not restart the buried habit just because the weight lifted. The pressure comes back. It checks your work.",
   },
 
   // Special years

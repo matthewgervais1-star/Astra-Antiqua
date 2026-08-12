@@ -13,7 +13,7 @@ const VB: readonly [number, number] = [64, 64];
  *   Zeus       the keraunos (thunderbolt)
  *   Cronus     the harpe (sickle-sword)
  */
-export const GREECE_GLYPHS: Readonly<Record<Planet, Glyph>> = {
+export const GREECE_GLYPHS: Readonly<Partial<Record<Planet, Glyph>>> = {
   sun: {
     label: "Apollo",
     viewBox: VB,

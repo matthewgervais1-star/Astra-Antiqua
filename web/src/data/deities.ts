@@ -262,6 +262,119 @@ export const DEITIES: readonly Deity[] = [
     epithet: "King of the Golden Age",
     note: "Ancient god of time, agriculture, and the lost Golden Age, honored at the midwinter festival of the Saturnalia.",
   },
+
+  // The three received bodies: Uranus, Neptune, and Pluto were invisible to
+  // the naked eye, so no ancient pantheon ever assigned them a planet. Each
+  // culture below receives them into a native deity already carrying the
+  // right register (sudden sky, dissolving sea, the swallower of the dead),
+  // the way the culture would in fact have to if handed the discovery. Every
+  // note begins "Received:" so the reception reads honestly beside the other
+  // seven, which were the ancients' own assignments.
+  {
+    planet: "uranus",
+    culture: "egypt",
+    name: "Nut",
+    epithet: "the vault of stars, whose five stolen days stand outside the year",
+    note: "Received: Nut is Egypt's own sky, the star-covered goddess arched over Geb; her children were born on five days outside the year. The scribes named no planet for her, so this seat is modern work: sudden Uranus goes to the vault where the uncounted days live.",
+  },
+  {
+    planet: "neptune",
+    culture: "egypt",
+    name: "Nun",
+    epithet: "the water before the world, still standing beneath every river",
+    note: "Received: Nun is the boundless water before creation, the deep the first mound rose from. No scribe ever tallied a planet for him; the moderns give dissolving Neptune to Nun because he is the flood with no far bank, older than the scale itself.",
+  },
+  {
+    planet: "pluto",
+    culture: "egypt",
+    name: "Osiris",
+    epithet: "the murdered king enthroned below, green with returning grain",
+    note: "Received: Osiris is Egypt's own lord of the dead, the killed and remade king before whom every heart is weighed. Egypt hung no planet on him; deep Pluto is set in his hall by modern hands, because what goes down with Osiris comes back as grain.",
+  },
+  {
+    planet: "uranus",
+    culture: "greece",
+    name: "Ouranos",
+    epithet: "the first sky, unthroned by his own son's sickle",
+    note: "Received: Ouranos is Hesiod's primordial sky, first king of everything, cut down in ambush by his son Kronos. No oracle assigned him a wanderer; the moderns named the new planet for him, and the name fits, for his overthrow came in one unannounced stroke.",
+  },
+  {
+    planet: "neptune",
+    culture: "greece",
+    name: "Poseidon",
+    epithet: "earth-shaker, the sea that sets its own price for every crossing",
+    note: "Received: Poseidon is the Olympian sea and the earthquake under the city walls, paid by every sailor before the crossing. No oracle gave him a planet; the moderns named the dissolving one for his Roman name, and the god takes it as a debt long owed.",
+  },
+  {
+    planet: "pluto",
+    culture: "greece",
+    name: "Plouton",
+    epithet: "the host below, called Wealth because none dared say Death",
+    note: "Received: Plouton is the careful name Greece gave the lord of the dead, Wealth-giver spoken so as not to say Hades aloud. The moderns kept that caution when they named the far planet; the reception grants him only what he always held, the one house every mortal enters.",
+  },
+  {
+    planet: "uranus",
+    culture: "canaan",
+    name: "Shamem",
+    epithet: "the heavens themselves, sudden as weather off the sea",
+    note: "Received: Shamem is the deified Heavens of Ugarit's offering lists, the sky honored as a power in its own right. The council seated no planet; sudden Uranus is given to the heavens by modern hands, because weather off the sea asks no vow before it breaks.",
+  },
+  {
+    planet: "neptune",
+    culture: "canaan",
+    name: "Yammu",
+    epithet: "Prince Sea, the dissolving flood that tests every shore",
+    note: "Received: Yammu is Prince Sea and Judge River of the Baal cycle, the water that claimed the kingship until Baal broke him with Kothar's two maces. Ugarit named no planets; dissolving Neptune goes to Yammu by modern assignment, because his whole office is the flood that unmakes boundaries.",
+  },
+  {
+    planet: "pluto",
+    culture: "canaan",
+    name: "Motu",
+    epithet: "Death the swallower, before whom even Baal goes down and returns",
+    note: "Received: Motu is Death in the Ugaritic texts, the wide-throated son of El into whose gullet even Baal descends. No planet was ever his; deep Pluto is sent down to Motu as modern work, because the year of the rains runs through his swallowing and Baal's return.",
+  },
+  {
+    planet: "uranus",
+    culture: "carthage",
+    name: "Baal Shamem",
+    epithet: "Lord of the Heavens, first witness named when the city swears",
+    note: "Received: Baal Shamem is the Phoenician Lord of the Heavens, sworn at the head of Tyre's treaties and carried west along the sea-lanes. Carthage kept no planet in his name; sudden Uranus is posted to his sky as modern work, because squalls and windfalls both arrive off the ledger.",
+  },
+  {
+    planet: "neptune",
+    culture: "carthage",
+    name: "Yam",
+    epithet: "the sea itself, the partner every voyage out of Carthage signs with",
+    note: "Received: Yam is the old Phoenician sea, the power under every hull out of Tyre and its daughter cities. Carthage logged no planet for him; dissolving Neptune is entered to his account as modern work, because the sea takes ships, cargoes, and whole seasons without appeal.",
+  },
+  {
+    planet: "pluto",
+    culture: "carthage",
+    name: "Mot",
+    epithet: "Death the creditor, in whose ledger every living name is entered",
+    note: "Received: Mot is Phoenician Death, remembered from Ugarit's tablets to the western colonies as the power that closes every account. Carthage cut no planet into his precinct; deep Pluto is filed under his name as modern work, because his is the one debt no ledger in the city disputes.",
+  },
+  {
+    planet: "uranus",
+    culture: "rome",
+    name: "Caelus",
+    epithet: "father of Saturn, the canopy under which every auspice is taken",
+    note: "Received: Caelus is the Roman sky made a god, father of Saturnus in the old genealogies. The augurs took the auspices under him but gave him no planet; sudden Uranus is assigned to Caelus as modern work, because lightning from a clear sky was the one omen no magistrate could schedule.",
+  },
+  {
+    planet: "neptune",
+    culture: "rome",
+    name: "Neptunus",
+    epithet: "lord of all waters, from the field-spring to the open sea",
+    note: "Received: Neptunus began as Rome's god of fresh water and took the whole sea when Rome took to fleets. The moderns found the planet in 1846 and named it for him; we keep their ruling and enter it in the record as theirs, not the pontiffs'.",
+  },
+  {
+    planet: "pluto",
+    culture: "rome",
+    name: "Dis Pater",
+    epithet: "the Rich Father below, to whom the last census always reports",
+    note: "Received: Dis Pater is Rome's wealthy lord of the dead, his altar at the Tarentum kept buried between the Secular Games. Rome drew no planet for him; deep Pluto is added to his rolls as modern work, ruled fit because his is the one register every Roman name reaches.",
+  },
 ];
 
 function buildMatrix(): DeityMatrix {

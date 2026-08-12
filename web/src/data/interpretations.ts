@@ -2,7 +2,7 @@ import type { Culture, Planet } from "@/data/cultures";
 import type { AspectKind, ZodiacSign } from "@/data/sampleChart";
 
 /**
- * What each of the seven planets represents, in plain language. Universal across
+ * What each of the ten planets represents, in plain language. Universal across
  * pantheons; the deity name is the cultural mask, the domain is the underlying
  * principle.
  */
@@ -14,6 +14,9 @@ export const PLANET_DOMAINS: Readonly<Record<Planet, string>> = {
   mars: "Effort, friction, what you have to push against.",
   jupiter: "Expansion, blessing, what you trust to grow.",
   saturn: "Limit, weight, what asks for endurance.",
+  uranus: "Rupture, sudden change, the pattern broken without warning.",
+  neptune: "Dissolution, longing, the boundary that blurs into the ideal.",
+  pluto: "Buried power, forced transformation, what returns changed.",
 };
 
 /**
@@ -43,6 +46,32 @@ const PAIR_THEMES: Readonly<Record<string, string>> = {
   "jupiter|mars": "Effort and expansion, the push toward the bigger story.",
   "mars|saturn": "Effort and limit, the push against the wall that wants you stopped.",
   "jupiter|saturn": "Expansion and limit, the law that grows and the law that holds.",
+
+  // Pairs involving the three received bodies.
+  "jupiter|neptune": "Growth and dissolution, the expanding hope and the fog that surrounds it.",
+  "jupiter|pluto": "Expansion and depth, the growing claim and the power that backs it.",
+  "jupiter|uranus": "Growth and rupture, the lucky break and the sudden door.",
+  "mars|neptune": "Force and dissolution, the push and the fog it pushes through.",
+  "mars|pluto": "Force and depth, the fight on the surface and the power underneath.",
+  "mars|uranus": "Force and rupture, the push and the sudden break it triggers.",
+  "mercury|neptune": "Speech and dissolution, the word and the tide it cannot quite hold.",
+  "mercury|pluto": "Speech and depth, the sentence and the buried thing it names.",
+  "mercury|uranus": "Speech and rupture, the thought that arrives sideways and changes the sentence.",
+  "moon|neptune": "Feeling and dissolution, the tide and the wider tide it merges with.",
+  "moon|pluto": "Feeling and depth, the surface mood and the old current underneath.",
+  "moon|uranus": "Feeling and rupture, the mood and the sudden break in its weather.",
+  "neptune|saturn": "Dissolution and limit, the dream and the structure it must survive.",
+  "neptune|sun": "Identity and dissolution, the self and the tide that softens its edges.",
+  "neptune|venus": "Desire and dissolution, what you love and the halo you have put on it.",
+  "pluto|saturn": "Depth and limit, the buried pressure and the structure it tests.",
+  "pluto|sun": "Identity and depth, sovereignty and the power that remakes it from below.",
+  "pluto|venus": "Desire and depth, what you love and how far down you will go for it.",
+  "saturn|uranus": "Limit and rupture, the structure and the break it was built to resist.",
+  "sun|uranus": "Identity and rupture, who you are and the version that is already leaving.",
+  "uranus|venus": "Desire and rupture, what you love and the sudden thing that unsettles it.",
+  "neptune|pluto": "Dissolution and depth, the slowest tide and the deepest pressure, moving together.",
+  "neptune|uranus": "Dissolution and rupture, the long fog and the sudden break inside it.",
+  "pluto|uranus": "Depth and rupture, what has been building for years and the moment it breaks open.",
 };
 
 function pairKey(a: Planet, b: Planet): string {
