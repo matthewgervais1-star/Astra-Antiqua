@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect } from "react";
-import { useActivePantheon } from "@/components/pantheon/PantheonSelector";
+import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 
 function Impl() {
   const culture = useActivePantheon();

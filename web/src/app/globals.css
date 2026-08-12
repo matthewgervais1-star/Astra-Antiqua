@@ -1,11 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /*
-   * "The Instrument in the Temple" tokens (docs/design/handoff/tokens.css).
-   * Legacy relic tokens below them survive only until the route sweep
-   * finishes; they are deleted in the teardown slice.
-   */
+  /* "The Instrument in the Temple" tokens (docs/design/handoff/tokens.css). */
 
   /* grounds (page background per culture; neutral where no culture is presumed) */
   --color-ground-neutral: #171310;
@@ -35,21 +31,6 @@
   /* rules (1px only; no shadows, no radius, no glass) */
   --color-rule: rgb(230 222 204 / 0.16);
   --color-rule-row: rgb(230 222 204 / 0.11);
-
-  /* legacy relic tokens (teardown slice deletes these) */
-  --color-bg-void: #050505;
-  --color-bg-deep: #0a0a0a;
-  --color-bg-elevated: rgba(255, 255, 255, 0.025);
-  --color-border-hairline: rgba(255, 255, 255, 0.08);
-  --color-border-gold: rgba(212, 175, 55, 0.25);
-  --color-ink-primary: rgba(255, 255, 255, 0.92);
-  --color-ink-secondary: rgba(255, 255, 255, 0.66);
-  --color-ink-tertiary: rgba(255, 255, 255, 0.55);
-  --color-gold-leaf: #d4af37;
-  --color-gold-bright: #f4d03f;
-  --color-gold-deep: #a8842c;
-  --color-conflict-red: #e0604f;
-  --color-harmony-glow: rgba(244, 208, 63, 0.5);
 
   --font-display: var(--font-cinzel), "Cinzel", Georgia, serif;
   --font-body: var(--font-spectral), "Spectral", Georgia, serif;
@@ -100,131 +81,6 @@ body[data-pantheon="carthage"] {
 body[data-pantheon="rome"] {
   --ground: var(--color-ground-rome);
   --accent: var(--color-accent-rome);
-}
-
-/*
- * Per-culture accent palette. The metal gradient (deep / mid / bright) plus a
- * secondary accent used for borders and glows. Each scheme is historically
- * grounded:
- *   default  classic gold on black (no pantheon selected)
- *   egypt    pharaoh gold + lapis lazuli (the two iconic Egyptian luxuries)
- *   greece   pale marble champagne + Aegean cyan
- *   canaan   bronze-age copper + verdigris patina (also Baal's storm-sea green)
- *   carthage ember gold + fire (Melqart's pyre, the egersis); text also animates
- * Hex values are kept in sync with src/data/palettes.ts, which feeds the
- * SVG glyph gradients and the canvas wheel.
- */
-:root {
-  --accent-deep: #a8842c;
-  --accent-mid: #d4af37;
-  --accent-bright: #f4d03f;
-  --accent-solid: #d4af37;
-  --accent-border: rgba(212, 175, 55, 0.25);
-  --accent-glow: rgba(244, 208, 63, 0.5);
-  --accent-soft: rgba(212, 175, 55, 0.1);
-}
-
-body[data-pantheon="egypt"] {
-  --accent-deep: #a8842c;
-  --accent-mid: #e3c14e;
-  --accent-bright: #f7e294;
-  --accent-solid: #e3c14e;
-  --accent-border: rgba(58, 114, 200, 0.4);
-  --accent-glow: rgba(58, 114, 200, 0.45);
-  --accent-soft: rgba(58, 114, 200, 0.12);
-}
-
-body[data-pantheon="greece"] {
-  --accent-deep: #9a9374;
-  --accent-mid: #ddd3b0;
-  --accent-bright: #f4eed8;
-  --accent-solid: #ddd3b0;
-  --accent-border: rgba(74, 166, 200, 0.4);
-  --accent-glow: rgba(74, 166, 200, 0.45);
-  --accent-soft: rgba(74, 166, 200, 0.12);
-}
-
-body[data-pantheon="canaan"] {
-  --accent-deep: #6f4f28;
-  --accent-mid: #b07d42;
-  --accent-bright: #dcab5e;
-  --accent-solid: #b07d42;
-  --accent-border: rgba(63, 158, 140, 0.4);
-  --accent-glow: rgba(63, 158, 140, 0.45);
-  --accent-soft: rgba(63, 158, 140, 0.12);
-}
-
-body[data-pantheon="carthage"] {
-  --accent-deep: #c44518;
-  --accent-mid: #f4a02a;
-  --accent-bright: #fbe57b;
-  --accent-solid: #f4a02a;
-  --accent-border: rgba(244, 160, 42, 0.45);
-  --accent-glow: rgba(244, 120, 40, 0.5);
-  --accent-soft: rgba(244, 160, 42, 0.12);
-}
-
-body[data-pantheon="rome"] {
-  --accent-deep: #8a6a2c;
-  --accent-mid: #d9b94a;
-  --accent-bright: #f3dd84;
-  --accent-solid: #d9b94a;
-  --accent-border: rgba(126, 58, 148, 0.45);
-  --accent-glow: rgba(150, 70, 175, 0.5);
-  --accent-soft: rgba(126, 58, 148, 0.12);
-}
-
-@utility text-gold-leaf {
-  background: linear-gradient(
-    135deg,
-    var(--accent-deep) 0%,
-    var(--accent-mid) 35%,
-    var(--accent-bright) 50%,
-    var(--accent-mid) 65%,
-    var(--accent-deep) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: var(--accent-solid);
-  -webkit-text-fill-color: transparent;
-}
-
-@utility border-hairline {
-  border: 0.5px solid var(--color-border-hairline);
-}
-
-@utility border-gold-soft {
-  border: 0.5px solid var(--accent-border);
-}
-
-@utility glass-panel {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.018) 45%,
-    rgba(255, 255, 255, 0.028) 100%
-  );
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  backdrop-filter: blur(20px) saturate(140%);
-  border: 0.5px solid var(--color-border-hairline);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.07),
-    0 24px 48px -32px rgba(0, 0, 0, 0.8);
-}
-
-/* The solid sibling of glass-panel: a stone-tablet surface with a faint top
-   sheen, used wherever backdrop blur would be wasted (grids of cards). */
-@utility panel-solid {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0) 32%),
-    linear-gradient(180deg, #0c0b09 0%, #090909 100%);
-  border: 0.5px solid var(--color-border-hairline);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-/* Accent glow that follows the active culture's secondary color. */
-@utility accent-glow {
-  box-shadow: 0 0 60px -30px var(--accent-glow);
 }
 
 :root {
@@ -310,67 +166,6 @@ h3 {
   text-wrap: balance;
 }
 
-/*
- * Ornamental rule: hairlines in the culture's accent flanking a small caption,
- * the way a museum wall caption sits between two engraved lines. Apply to the
- * mono kicker above a major heading.
- */
-.rule-ornament {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.rule-ornament::before,
-.rule-ornament::after {
-  content: "";
-  height: 1px;
-  flex: 1;
-  background: linear-gradient(90deg, transparent, var(--accent-border));
-}
-.rule-ornament::after {
-  background: linear-gradient(90deg, var(--accent-border), transparent);
-}
-
-/* Header nav links: a gold underline that draws itself in on hover. */
-.nav-link {
-  position: relative;
-}
-.nav-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 100%;
-  bottom: -5px;
-  height: 1px;
-  background: var(--accent-solid);
-  transition: right 0.28s ease;
-}
-.nav-link:hover::after,
-.nav-link:focus-visible::after {
-  right: 0;
-}
-
-/* The header's bottom edge: a gradient hairline in the culture accent instead
-   of a flat border, so the chrome itself carries the active pantheon. */
-[data-site-header] {
-  border-bottom: none;
-}
-[data-site-header]::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--accent-border) 18%,
-    var(--accent-border) 82%,
-    transparent
-  );
-}
-
 code,
 pre,
 kbd,
@@ -390,43 +185,22 @@ samp {
 }
 
 /*
- * Print stylesheet. Triggered by window.print() (Save as PDF in modern
- * browsers). Hides interactive chrome, simplifies glassmorphism so colors
- * print, and switches link styles for paper output. Keeps the dark theme so
- * the saved PDF matches the on-screen appearance.
+ * Print stylesheet. Triggered by window.print(). Hides interactive chrome
+ * and keeps the ground so a saved PDF matches the screen.
  */
 @media print {
-  header[class*="site"],
-  footer[class*="site"],
   nav,
-  button,
-  .print-hide {
+  button {
     display: none !important;
   }
   body {
-    background: #050505 !important;
-    color: rgba(255, 255, 255, 0.92) !important;
+    background: #171310 !important;
+    color: #e6decc !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  .glass-panel,
-  [class*="backdrop-filter"],
-  [class*="backdrop-blur"] {
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    background: rgba(10, 10, 10, 0.95) !important;
-    border-color: rgba(212, 175, 55, 0.35) !important;
-  }
   a {
-    color: #d4af37 !important;
+    color: inherit !important;
     text-decoration: none !important;
   }
-  .print-only {
-    display: revert !important;
-  }
-}
-
-/* Hide print-only elements except when actually printing. */
-.print-only {
-  display: none;
 }

@@ -18,7 +18,7 @@ function CultureChipImpl() {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
-  // Dismiss on outside click or Escape, matching auth/AccountChip.tsx.
+  // Dismiss on outside click or Escape.
   useEffect(() => {
     if (!open) return;
     const onPointer = (e: PointerEvent) => {
