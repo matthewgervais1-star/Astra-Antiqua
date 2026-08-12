@@ -1,7 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { PantheonBodyAttribute } from "@/components/layout/PantheonBodyAttribute";
 import { PantheonProvider } from "@/components/pantheon/PantheonContext";
 import { AuthProvider } from "@/components/auth/AuthProvider";
@@ -41,7 +39,10 @@ const plexMono = localFont({
 });
 
 const SITE_DESCRIPTION =
-  "Professional astronomical ephemeris rendered through the religious frameworks of ancient Egypt, Greece, Canaan, Carthage, and Rome.";
+  "One computed sky, read through the theologies of ancient Egypt, Greece, Canaan, Carthage, and Rome.";
+
+const SITE_TAGLINE =
+  "Every culture reads the same computed sky. What changes is the theology it must pass through.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -53,7 +54,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Astra Antiqua",
     description:
-      "Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit. Or Rome.",
+      SITE_TAGLINE,
     type: "website",
     siteName: "Astra Antiqua",
   },
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Astra Antiqua",
     description:
-      "Read the sky as Carthage did. Or Memphis. Or Delphi. Or Ugarit. Or Rome.",
+      SITE_TAGLINE,
   },
   icons: {
     apple: "/icons/apple-touch-icon.png",
@@ -86,21 +87,19 @@ export default function RootLayout({
       lang="en"
       className={`${cinzel.variable} ${spectral.variable} ${plexMono.variable}`}
     >
-      <body className="bg-bg-void text-ink-primary flex min-h-screen flex-col">
+      <body className="flex min-h-screen flex-col text-bone">
         <AuthProvider>
           <PantheonProvider>
             <PantheonBodyAttribute />
             <a
               href="#main-content"
-              className="border-gold-soft bg-bg-deep text-gold-leaf focus:ring-gold-soft sr-only z-50 rounded-full border px-4 py-2 text-sm focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+              className="sr-only z-50 border border-[var(--accent)] bg-[var(--ground)] px-4 py-2 font-mono text-[11px] tracking-[0.14em] text-[var(--accent)] focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
             >
-              Skip to content
+              SKIP TO CONTENT
             </a>
-            <SiteHeader />
-            <main id="main-content" className="flex-1">
+            <div id="main-content" className="flex flex-1 flex-col">
               <AuthGate>{children}</AuthGate>
-            </main>
-            <SiteFooter />
+            </div>
           </PantheonProvider>
         </AuthProvider>
       </body>

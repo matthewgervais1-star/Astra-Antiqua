@@ -1,123 +1,51 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import {
-  PLANET_LABELS,
-  PLANET_SYMBOLS,
-  type Culture,
-} from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
-import { longitudeToSign } from "@/data/sampleChart";
-import { ASPECT_REFLECTIONS } from "@/data/interpretations";
+import { isReceived } from "@/data/cultures";
+import { orbFor, type AspectKind } from "@/data/sampleChart";
+import { getAspectReading } from "@/data/aspectReadings";
 import { ASPECT_VERBS } from "@/data/aspectVerbs";
-import {
-  RELATIONSHIP_LABELS,
-  listCharts,
-  type SavedChartInputs,
-} from "@/lib/savedCharts";
+import { CULTURE_VOICES } from "@/data/cultureVoice";
+import { listCharts, type SavedChartInputs } from "@/lib/savedCharts";
 import { resolveSavedChart, type SavedNatal } from "@/lib/savedNatal";
 import { computeSynastry, topSynastry, type SynastryAspect } from "@/lib/synastry";
-import {
-  PantheonSelector,
-  useActivePantheon,
-} from "@/components/pantheon/PantheonSelector";
-import { useAuth } from "@/components/auth/AuthProvider";
-import { SectionContainer } from "@/components/ui/SectionContainer";
-import { GoldText } from "@/components/ui/GoldText";
-import { GlassPanel } from "@/components/ui/GlassPanel";
-import { PrintButton } from "@/components/ui/PrintButton";
+import { useActivePantheon } from "@/components/pantheon/PantheonContext";
+import { InstrumentShell, type InstrumentSibling } from "@/components/chrome/InstrumentShell";
+import { CultureGate } from "@/components/chrome/CultureGate";
+import { OrbBar } from "@/components/chrome/OrbBar";
+import { Votive } from "@/components/chrome/Votive";
+import { FeedbackRow } from "@/components/chrome/FeedbackRow";
+import { Skeleton } from "@/components/chrome/Skeleton";
+import { PartyPicker } from "@/components/synastry/PartyPicker";
+import { ASPECT_GLYPHS, BOND_LABELS, orbToneFor } from "@/components/synastry/bondLabels";
+import { SYNASTRY_HEADLINES, SYNASTRY_VOTIVES, labelToSentence } from "@/components/synastry/synastryCopy";
 
-interface ChartCardProps {
-  natal: SavedNatal;
-  culture: Culture | null;
-  label: string;
+const SIBLINGS: readonly InstrumentSibling[] = [
+  { label: "CHARTS", href: "/charts" },
+  { label: "FORECAST", href: "/forecast" },
+];
+
+function formatOrb(orb: number): string {
+  const totalMinutes = Math.round(orb * 60);
+  const deg = Math.floor(totalMinutes / 60);
+  const min = totalMinutes % 60;
+  return `${deg}°${String(min).padStart(2, "0")}′`;
 }
 
-function ChartCard({ natal, culture, label }: ChartCardProps) {
-  const sunInfo = longitudeToSign(natal.chart.sun);
-  const moonInfo = longitudeToSign(natal.chart.moon);
-  const ascInfo = longitudeToSign(natal.angles.ascendant);
-  const sun = culture ? DEITY_MATRIX[culture].sun : null;
-  const moon = culture ? DEITY_MATRIX[culture].moon : null;
-  return (
-    <GlassPanel tone="solid" className="p-6 md:p-7">
-      <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.3em]">
-        {label}
-      </div>
-      <h3 className="font-display text-gold-leaf mt-2 text-2xl md:text-3xl">
-        {natal.meta.name}
-      </h3>
-      <p className="text-ink-secondary font-mono mt-1 text-[10px] uppercase tracking-[0.2em]">
-        {RELATIONSHIP_LABELS[natal.meta.relationship]} · {natal.meta.date} · {natal.meta.cityLabel}
-      </p>
-      <ul className="text-ink-primary font-body mt-5 space-y-2 text-sm md:text-base">
-        <li>
-          <strong className="text-gold-leaf">{sun?.name ?? "Sun"}:</strong>{" "}
-          {sunInfo.degree.toFixed(0)}° {sunInfo.sign}
-        </li>
-        <li>
-          <strong className="text-gold-leaf">{moon?.name ?? "Moon"}:</strong>{" "}
-          {moonInfo.degree.toFixed(0)}° {moonInfo.sign}
-        </li>
-        <li>
-          <strong className="text-gold-leaf">Rising:</strong>{" "}
-          {ascInfo.degree.toFixed(0)}° {ascInfo.sign}
-        </li>
-      </ul>
-    </GlassPanel>
-  );
+function stripLeadingThe(title: string): string {
+  return title.replace(/^THE\s+/, "");
 }
 
-interface SynastryLineProps {
-  aspect: SynastryAspect;
-  culture: Culture | null;
-  nameA: string;
-  nameB: string;
-}
-
-function SynastryLine({ aspect, culture, nameA, nameB }: SynastryLineProps) {
-  const deityA = culture ? DEITY_MATRIX[culture][aspect.planetA] : null;
-  const deityB = culture ? DEITY_MATRIX[culture][aspect.planetB] : null;
-  const verb = culture ? ASPECT_VERBS[culture][aspect.kind] : null;
-  const reflection = culture ? ASPECT_REFLECTIONS[culture][aspect.kind] : null;
-  return (
-    <li className="border-border-hairline border-t pt-4">
-      <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
-        {nameA}&apos;s {PLANET_SYMBOLS[aspect.planetA]} {PLANET_LABELS[aspect.planetA]} {aspect.kind}{" "}
-        {nameB}&apos;s {PLANET_SYMBOLS[aspect.planetB]} {PLANET_LABELS[aspect.planetB]} · orb {aspect.orb.toFixed(1)}°
-      </div>
-      {culture && deityA && deityB && verb ? (
-        <>
-          <p className="font-display text-gold-leaf mt-2 text-lg leading-snug md:text-xl">
-            {nameA}&apos;s {deityA.name} {verb} {nameB}&apos;s {deityB.name}.
-          </p>
-          {reflection ? (
-            <p className="text-ink-primary font-body mt-2 text-sm leading-relaxed md:text-[15px]">
-              {reflection}
-            </p>
-          ) : null}
-        </>
-      ) : (
-        <p className="text-ink-secondary font-body mt-2 text-sm italic">
-          Select a pantheon to read this in its voice.
-        </p>
-      )}
-    </li>
-  );
-}
-
-function SynastryPageImpl() {
+function SynastryInstrument() {
   const culture = useActivePantheon();
-  const { status } = useAuth();
   const [charts, setCharts] = useState<readonly SavedChartInputs[]>([]);
-  const [hydrated, setHydrated] = useState<boolean>(false);
-  const [idA, setIdA] = useState<string>("");
-  const [idB, setIdB] = useState<string>("");
+  const [hydrated, setHydrated] = useState(false);
+  const [idA, setIdA] = useState("");
+  const [idB, setIdB] = useState("");
 
   useEffect(() => {
-    // Re-read whenever auth resolves: a signed-in user's charts land in
-    // localStorage only after the session loads. Existing picks are preserved.
     const list = listCharts();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCharts(list);
@@ -125,229 +53,236 @@ function SynastryPageImpl() {
     const primary = list.find((c) => c.primary) ?? list[0];
     setIdA((curr) => curr || (primary?.id ?? ""));
     setIdB((curr) => curr || (list.find((c) => c.id !== primary?.id)?.id ?? ""));
-  }, [status]);
+  }, []);
 
-  const natalA = useMemo<SavedNatal | null>(() => {
-    const meta = charts.find((c) => c.id === idA);
-    return meta ? resolveSavedChart(meta) : null;
-  }, [charts, idA]);
+  const chartA = charts.find((c) => c.id === idA) ?? null;
+  const chartB = charts.find((c) => c.id === idB) ?? null;
 
-  const natalB = useMemo<SavedNatal | null>(() => {
-    const meta = charts.find((c) => c.id === idB);
-    return meta ? resolveSavedChart(meta) : null;
-  }, [charts, idB]);
+  const natalA = useMemo<SavedNatal | null>(() => (chartA ? resolveSavedChart(chartA) : null), [chartA]);
+  const natalB = useMemo<SavedNatal | null>(() => (chartB ? resolveSavedChart(chartB) : null), [chartB]);
 
-  const aspects = useMemo<readonly SynastryAspect[]>(() => {
+  const allAspects = useMemo<readonly SynastryAspect[]>(() => {
     if (!natalA || !natalB) return [];
-    return topSynastry(computeSynastry(natalA.chart, natalB.chart), 8);
+    return computeSynastry(natalA.chart, natalB.chart);
   }, [natalA, natalB]);
 
-  const harmonyCount = useMemo(
-    () => aspects.filter((a) => a.kind === "trine" || a.kind === "sextile").length,
-    [aspects],
-  );
-  const tensionCount = useMemo(
-    () => aspects.filter((a) => a.kind === "square" || a.kind === "opposition").length,
-    [aspects],
-  );
-  const conjunctionCount = useMemo(
-    () => aspects.filter((a) => a.kind === "conjunction").length,
-    [aspects],
-  );
+  if (!culture) return null;
+
+  const voice = CULTURE_VOICES[culture];
+  const ready = Boolean(natalA && natalB);
+  const twoCharts = charts.length > 1;
+
+  const topBonds = topSynastry(allAspects, 8);
+  const harmonyCount = allAspects.filter((a) => a.kind === "trine" || a.kind === "sextile").length;
+  const conflictCount = allAspects.filter((a) => a.kind === "square" || a.kind === "opposition").length;
+  const altarCount = allAspects.filter((a) => a.kind === "conjunction").length;
+
+  const receivedBond = topBonds.find((b) => isReceived(b.planetA) || isReceived(b.planetB));
+  const receivedDeityName = receivedBond
+    ? DEITY_MATRIX[culture][isReceived(receivedBond.planetA) ? receivedBond.planetA : receivedBond.planetB].name
+    : null;
+
+  const topHarmonyOrAltar = topBonds.find((b) => b.kind !== "square" && b.kind !== "opposition") ?? null;
+  const topTension = topBonds.find((b) => b.kind === "square" || b.kind === "opposition") ?? null;
+
+  let headline = stripLeadingThe(voice.synastryTitle);
+  let para1 = "The two skies pass each other quietly. Nothing in orb yet names a shared altar.";
+  let para2 = "No bond in orb pulls tight enough to call a debt. Whatever holds between you is unforced.";
+  let votiveKind: AspectKind = "trine";
+
+  if (ready && natalA && natalB) {
+    if (topHarmonyOrAltar) {
+      headline = SYNASTRY_HEADLINES[culture][topHarmonyOrAltar.kind as "conjunction" | "trine" | "sextile"];
+      const dA = DEITY_MATRIX[culture][topHarmonyOrAltar.planetA].name;
+      const dB = DEITY_MATRIX[culture][topHarmonyOrAltar.planetB].name;
+      const verb = ASPECT_VERBS[culture][topHarmonyOrAltar.kind];
+      const body = getAspectReading(
+        topHarmonyOrAltar.planetA,
+        topHarmonyOrAltar.planetB,
+        topHarmonyOrAltar.kind,
+      ).body;
+      para1 = `${natalA.meta.name}'s ${dA} ${verb} ${natalB.meta.name}'s ${dB}. ${body}`;
+      votiveKind = topHarmonyOrAltar.kind;
+    }
+    if (topTension) {
+      const opener = labelToSentence(BOND_LABELS[culture][topTension.kind]);
+      const dA = DEITY_MATRIX[culture][topTension.planetA].name;
+      const dB = DEITY_MATRIX[culture][topTension.planetB].name;
+      const verb = ASPECT_VERBS[culture][topTension.kind];
+      const body = getAspectReading(topTension.planetA, topTension.planetB, topTension.kind).body;
+      para2 = `${opener} ${natalB.meta.name}'s ${dB} ${verb} ${natalA.meta.name}'s ${dA}. ${body}`;
+      votiveKind = topTension.kind;
+    }
+  }
+
+  const votiveText = SYNASTRY_VOTIVES[culture][votiveKind];
+
+  if (!hydrated) {
+    return (
+      <InstrumentShell context="SYNASTRY · TWO CHARTS WEIGHED" siblings={SIBLINGS}>
+        <div style={{ gridColumn: "1 / -1" }} className="px-8 py-10">
+          <Skeleton />
+        </div>
+      </InstrumentShell>
+    );
+  }
 
   return (
-    <>
-      <SectionContainer size="default" spacing="tight">
-        <div className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">
-          Synastry · two charts
+    <InstrumentShell context="SYNASTRY · TWO CHARTS WEIGHED" siblings={SIBLINGS}>
+      <aside className="flex flex-col gap-6 border-r border-rule px-7 py-6">
+        <div>
+          <div className="mb-3 font-mono text-[11px] tracking-[0.16em] text-dim">THE TWO PARTIES</div>
+          {charts.length === 0 ? (
+            <p className="font-mono text-[11px] leading-[1.6] text-dim">NO CHARTS ARE SAVED YET.</p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              <PartyPicker chart={chartA} charts={charts} excludeId={idB} onSelect={setIdA} />
+              {twoCharts ? (
+                <PartyPicker chart={chartB} charts={charts} excludeId={idA} onSelect={setIdB} />
+              ) : (
+                <Link
+                  href="/reading"
+                  className="border border-rule px-[15px] py-3 text-center font-mono text-[11px] tracking-[0.1em] text-dim hover:text-bone"
+                >
+                  CAST THE SECOND CHART →
+                </Link>
+              )}
+            </div>
+          )}
         </div>
-        <GoldText as="h1" className="mt-4 max-w-3xl text-5xl leading-tight md:text-6xl">
-          How two skies meet.
-        </GoldText>
-        <p className="text-ink-secondary font-body mt-6 max-w-2xl text-lg leading-relaxed md:text-xl">
-          Synastry sets two natal charts against each other and reports the tightest aspects between them. Each line is written in the voice of the pantheon you choose, with both names in it: Sarah&apos;s Resheph weighs against your Shapash, not Mars square Sun.
-        </p>
-      </SectionContainer>
-
-      <SectionContainer size="default" spacing="tight">
-        <div className="mb-10">
-          <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-            Step one
+        {ready ? (
+          <div>
+            <div className="mb-3 font-mono text-[11px] tracking-[0.16em] text-dim">THE WEIGHING</div>
+            <div className="flex flex-col gap-2.5 font-mono text-[11.5px] leading-[1.5]">
+              <div className="flex items-baseline justify-between">
+                <span className="text-harmony">HARMONIES</span>
+                <span className="font-mono text-xl tabular-nums text-bone">{harmonyCount}</span>
+              </div>
+              <div className="flex items-baseline justify-between">
+                <span className="text-conflict">CONFLICTS</span>
+                <span className="font-mono text-xl tabular-nums text-bone">{conflictCount}</span>
+              </div>
+              <div className="flex items-baseline justify-between">
+                <span className="text-prose">SHARED ALTARS (☌)</span>
+                <span className="font-mono text-xl tabular-nums text-bone">{altarCount}</span>
+              </div>
+            </div>
+            <div className="mt-[22px] border border-rule px-[15px] py-[13px] font-mono text-[11px] leading-[1.7] text-dim">
+              THE COUNT IS NOT THE VERDICT; READ THE BONDS →
+            </div>
           </div>
-          <h2 className="font-display text-ink-primary mt-3 text-2xl md:text-3xl">
-            Choose the voice.
-          </h2>
+        ) : null}
+      </aside>
+
+      <div className="flex flex-col gap-3 px-8 py-6">
+        <div className="font-mono text-[11px] tracking-[0.16em] text-dim">BONDS IN ORB · STRONGEST FIRST</div>
+        {!ready || !natalA || !natalB ? (
+          <p className="mt-3 max-w-md font-body text-[15px] italic leading-[1.68] text-prose">
+            {charts.length === 0
+              ? "No charts are saved yet. Cast the first to begin weighing a pair."
+              : charts.length === 1
+                ? "One chart is saved. Cast a second to weigh the bonds between two skies."
+                : "One of these charts could not be read. Recast it on the charts page."}
+          </p>
+        ) : (
+          <>
+            <div className="flex flex-col font-mono text-[11.5px]">
+              {topBonds.map((bond, idx) => {
+                const deityA = DEITY_MATRIX[culture][bond.planetA];
+                const deityB = DEITY_MATRIX[culture][bond.planetB];
+                const tone = orbToneFor(bond.kind);
+                return (
+                  <div
+                    key={`${bond.planetA}-${bond.planetB}-${bond.kind}-${idx}`}
+                    className="grid grid-cols-[minmax(0,1fr)_90px_54px] items-center gap-3 border-t border-rule-row py-[11px] last:border-b sm:grid-cols-[minmax(0,1fr)_100px_140px_64px]"
+                  >
+                    <span className="truncate text-bone">
+                      {natalA.meta.name.toUpperCase()}&apos;S {deityA.name.toUpperCase()} {ASPECT_GLYPHS[bond.kind]}{" "}
+                      {natalB.meta.name.toUpperCase()}&apos;S {deityB.name.toUpperCase()}
+                    </span>
+                    <span className="hidden sm:block">
+                      <OrbBar orb={bond.orb} maxOrb={orbFor(bond.kind)} tone={tone} />
+                    </span>
+                    <span className={tone === "harmony" ? "text-harmony" : "text-conflict"}>
+                      {BOND_LABELS[culture][bond.kind]}
+                    </span>
+                    <span className="text-right text-dim sm:text-left">{formatOrb(bond.orb)}</span>
+                  </div>
+                );
+              })}
+            </div>
+            {receivedDeityName ? (
+              <div className="mt-2 font-mono text-[11px] leading-[1.7] text-dim">
+                {receivedDeityName.toUpperCase()} IS A RECEIVED BODY; THE PAIR&apos;S SLOWEST BONDS ARE THE
+                CONTRACT&apos;S FOUNDATIONS →{" "}
+                <Link href="/method" className="text-[var(--accent)]">
+                  METHOD
+                </Link>
+              </div>
+            ) : null}
+          </>
+        )}
+      </div>
+
+      <aside className="flex flex-col gap-5 border-l border-rule px-[30px] py-6">
+        <div className="font-mono text-[11px] tracking-[0.16em] text-[var(--accent)]">
+          READING · {voice.synastryTitle}
         </div>
-        <PantheonSelector />
-      </SectionContainer>
-
-      <SectionContainer size="default" spacing="tight">
-        <div className="mb-10">
-          <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-            Step two
-          </div>
-          <h2 className="font-display text-ink-primary mt-3 text-2xl md:text-3xl">
-            Pick two charts.
-          </h2>
-          <p className="text-ink-tertiary font-body mt-3 text-sm md:text-base">
-            Both must be saved on the{" "}
-            <Link href="/charts" className="text-gold-leaf underline-offset-4 hover:underline">
-              charts page
+        {ready && natalA && natalB ? (
+          <>
+            <h2 className="font-display text-[22px] leading-[1.45] tracking-[0.06em] text-bone">{headline}</h2>
+            <div className="h-px w-11 bg-[var(--accent)]" />
+            <p className="font-body text-[15px] leading-[1.68] text-prose">{para1}</p>
+            <p className="font-body text-[15px] leading-[1.68] text-prose">{para2}</p>
+            <Votive>{votiveText}</Votive>
+            <FeedbackRow readingId={`synastry-${idA}-${idB}`} noun="READING" />
+          </>
+        ) : charts.length === 0 ? (
+          <>
+            <h2 className="font-display text-[20px] leading-[1.4] tracking-[0.06em] text-bone">
+              THE {stripLeadingThe(voice.synastryTitle)} NEEDS TWO CHARTS
+            </h2>
+            <Link
+              href="/reading"
+              className="mt-1 inline-flex w-fit border border-[var(--accent-strong-border)] px-5 py-3 font-mono text-[11px] tracking-[0.14em] text-[var(--accent)]"
+            >
+              CAST →
             </Link>
-            . If you only have one, cast a second on the{" "}
-            <Link href="/reading" className="text-gold-leaf underline-offset-4 hover:underline">
-              reading page
+          </>
+        ) : charts.length === 1 ? (
+          <>
+            <h2 className="font-display text-[20px] leading-[1.4] tracking-[0.06em] text-bone">
+              ONE PARTY IS SET. CAST THE SECOND.
+            </h2>
+            <p className="font-body text-[15px] leading-[1.68] text-prose">
+              {stripLeadingThe(voice.synastryTitle)} needs two charts in orb of each other before a bond can be
+              weighed.
+            </p>
+            <Link
+              href="/reading"
+              className="mt-1 inline-flex w-fit border border-[var(--accent-strong-border)] px-5 py-3 font-mono text-[11px] tracking-[0.14em] text-[var(--accent)]"
+            >
+              CAST THE SECOND CHART →
+            </Link>
+          </>
+        ) : (
+          <p className="font-body text-[15px] italic leading-[1.68] text-prose">
+            One of these charts could not be read. Recast it on the{" "}
+            <Link href="/charts" className="text-[var(--accent)]">
+              charts page
             </Link>
             .
           </p>
-        </div>
-
-        {!hydrated || status === "loading" ? (
-          <p className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">Loading your charts</p>
-        ) : charts.length < 2 ? (
-          <GlassPanel tone="glass" className="p-8 md:p-10">
-            <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
-              Need at least two saved charts
-            </div>
-            <p className="font-display text-ink-primary mt-3 text-xl md:text-2xl">
-              You have {charts.length} chart{charts.length === 1 ? "" : "s"} saved.
-            </p>
-            <p className="text-ink-secondary font-body mt-2 max-w-xl text-base md:text-lg">
-              Synastry needs two. Cast a chart for a partner, a parent, or a friend on the{" "}
-              <Link href="/reading" className="text-gold-leaf underline-offset-4 hover:underline">
-                reading page
-              </Link>
-              .
-            </p>
-          </GlassPanel>
-        ) : (
-          <div className="grid gap-5 md:grid-cols-2">
-            <ChartPicker
-              label="Chart A (you)"
-              charts={charts}
-              value={idA}
-              onChange={setIdA}
-              excludeId={idB}
-            />
-            <ChartPicker
-              label="Chart B (other)"
-              charts={charts}
-              value={idB}
-              onChange={setIdB}
-              excludeId={idA}
-            />
-          </div>
         )}
-      </SectionContainer>
-
-      {natalA && natalB ? (
-        <>
-          <SectionContainer size="default" spacing="tight">
-            <div className="grid gap-5 md:grid-cols-2">
-              <ChartCard natal={natalA} culture={culture} label="Chart A" />
-              <ChartCard natal={natalB} culture={culture} label="Chart B" />
-            </div>
-          </SectionContainer>
-
-          <SectionContainer size="default" spacing="default">
-            <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <h2 className="font-display text-ink-primary text-3xl md:text-4xl">
-                  How {natalA.meta.name} and {natalB.meta.name} meet
-                </h2>
-                <p className="text-ink-tertiary font-mono mt-3 text-[11px] uppercase tracking-[0.3em]">
-                  {aspects.length} tightest cross-aspects · {harmonyCount} easing · {tensionCount} challenging · {conjunctionCount} fusing
-                </p>
-              </div>
-              <PrintButton label="Save as PDF" />
-            </div>
-            {aspects.length === 0 ? (
-              <GlassPanel tone="solid" className="p-6 md:p-8">
-                <p className="text-ink-secondary font-body text-base italic">
-                  No tight cross-aspects between these two charts. The two skies pass each other quietly. Whatever holds these two together is built on ground the planets leave unmarked.
-                </p>
-              </GlassPanel>
-            ) : (
-              <GlassPanel tone="solid" className="p-6 md:p-8">
-                <ul className="flex flex-col gap-5">
-                  {aspects.map((aspect, idx) => (
-                    <SynastryLine
-                      key={`${aspect.planetA}-${aspect.planetB}-${idx}`}
-                      aspect={aspect}
-                      culture={culture}
-                      nameA={natalA.meta.name}
-                      nameB={natalB.meta.name}
-                    />
-                  ))}
-                </ul>
-              </GlassPanel>
-            )}
-          </SectionContainer>
-        </>
-      ) : idA && idB ? (
-        <SectionContainer size="default" spacing="tight">
-          <GlassPanel tone="solid" className="p-6 md:p-8">
-            <p className="text-ink-secondary font-body text-base italic">
-              One of these charts could not be read. It may be missing its birth
-              time or place. Re-cast it from the{" "}
-              <Link href="/charts" className="text-gold-leaf underline-offset-4 hover:underline">
-                charts page
-              </Link>
-              .
-            </p>
-          </GlassPanel>
-        </SectionContainer>
-      ) : null}
-    </>
-  );
-}
-
-interface ChartPickerProps {
-  label: string;
-  charts: readonly SavedChartInputs[];
-  value: string;
-  onChange: (id: string) => void;
-  excludeId?: string;
-}
-
-function ChartPicker({ label, charts, value, onChange, excludeId }: ChartPickerProps) {
-  return (
-    <GlassPanel tone="solid" className="p-5 md:p-6">
-      <label className="text-ink-tertiary font-mono mb-2 block text-[10px] uppercase tracking-[0.25em]">
-        {label}
-      </label>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
-      >
-        <option value="">Choose a saved chart</option>
-        {charts
-          .filter((c) => c.id !== excludeId)
-          .map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name} ({RELATIONSHIP_LABELS[c.relationship]}) · {c.date}
-            </option>
-          ))}
-      </select>
-    </GlassPanel>
-  );
-}
-
-function Fallback() {
-  return (
-    <SectionContainer size="default" spacing="default">
-      <div className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">
-        Loading
-      </div>
-    </SectionContainer>
+      </aside>
+    </InstrumentShell>
   );
 }
 
 export default function SynastryPage() {
   return (
-    <Suspense fallback={<Fallback />}>
-      <SynastryPageImpl />
-    </Suspense>
+    <CultureGate>
+      <SynastryInstrument />
+    </CultureGate>
   );
 }

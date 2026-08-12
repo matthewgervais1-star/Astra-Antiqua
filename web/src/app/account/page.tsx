@@ -4,77 +4,234 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { SectionContainer } from "@/components/ui/SectionContainer";
-import { GoldText } from "@/components/ui/GoldText";
-import { GlassPanel } from "@/components/ui/GlassPanel";
+import { SyncFlag } from "@/components/chrome/SyncFlag";
+import { CULTURE_LABELS } from "@/data/cultures";
+import { readPersistedPantheon } from "@/lib/pantheonPreference";
+import { listCharts } from "@/lib/savedCharts";
+import { feedbackCount } from "@/lib/feedback";
+import { cn } from "@/lib/classNames";
+
+const INPUT_CLASS =
+  "w-full border border-rule bg-transparent px-4 py-3 font-mono text-[12px] text-bone placeholder:text-faint-ink outline-none focus:border-[var(--accent)]";
+const LABEL_CLASS = "mb-2 block font-mono text-[11px] tracking-[0.14em] text-dim";
 
 export default function AccountPage() {
   const router = useRouter();
   const { status, user, refresh, signOut } = useAuth();
 
-  // Redirect anonymous visitors to sign-in, returning them here afterward.
+  // Anonymous visitors are sent to sign in, returning them here afterward.
   useEffect(() => {
     if (status === "anonymous") {
-      router.replace("/sign-in?next=/account");
+      router.replace("/signin?next=/account");
     }
   }, [status, router]);
 
   if (status !== "authenticated" || !user) {
     return (
-      <SectionContainer size="default" spacing="default">
-        <p className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">
-          {status === "loading" ? "Loading" : "Redirecting"}
+      <main className="mx-auto max-w-[560px] px-5 py-16 text-center">
+        <p className="font-mono text-[11px] tracking-[0.2em] text-dim">
+          {status === "loading" ? "READING THE RECORD…" : "REDIRECTING…"}
         </p>
-      </SectionContainer>
+      </main>
     );
   }
 
   return (
-    <>
-      <SectionContainer size="narrow" spacing="tight">
-        <div className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">
-          Account
-        </div>
-        <GoldText as="h1" className="mt-4 text-4xl leading-tight md:text-5xl">
-          Your record.
-        </GoldText>
-        <p className="text-ink-secondary font-body mt-6 text-base leading-relaxed md:text-lg">
-          Signed in as <span className="text-ink-primary">{user.email}</span>. Your charts sync to this account across every device you sign in on.
-        </p>
-      </SectionContainer>
-
-      <SectionContainer size="narrow" spacing="tight">
-        <DisplayNameSection currentName={user.displayName ?? ""} onSaved={refresh} />
-      </SectionContainer>
-
-      <SectionContainer size="narrow" spacing="tight">
-        <PasswordSection />
-      </SectionContainer>
-
-      <SectionContainer size="narrow" spacing="tight">
-        <DataExportSection email={user.email} />
-      </SectionContainer>
-
-      <SectionContainer size="narrow" spacing="tight">
-        <DeleteSection email={user.email} onDeleted={() => router.push("/")} signOut={signOut} />
-      </SectionContainer>
-
-      <SectionContainer size="narrow" spacing="tight">
-        <div className="border-border-hairline border-t pt-8">
-          <p className="text-ink-tertiary font-body text-sm">
-            Your saved charts are managed on the{" "}
-            <Link href="/charts" className="text-gold-leaf underline-offset-4 hover:underline">
-              charts page
-            </Link>
-            .
-          </p>
-        </div>
-      </SectionContainer>
-    </>
+    <AccountLedger
+      email={user.email}
+      displayName={user.displayName}
+      refresh={refresh}
+      signOut={signOut}
+    />
   );
 }
 
-function DisplayNameSection({
+function AccountLedger({
+  email,
+  displayName,
+  refresh,
+  signOut,
+}: {
+  email: string;
+  displayName: string | null;
+  refresh: () => Promise<void>;
+  signOut: () => Promise<void>;
+}) {
+  const router = useRouter();
+  // This component only ever mounts once /account has already confirmed an
+  // authenticated status client-side, so there is no SSR pass to mismatch:
+  // reading localStorage directly here (rather than deferring to an effect)
+  // is safe.
+  const persisted = readPersistedPantheon();
+  const cultureLabel = persisted ? CULTURE_LABELS[persisted].toUpperCase() : "NONE CHOSEN";
+  const chartsCount = listCharts().length;
+  const entries = feedbackCount();
+
+  const onSignOut = async () => {
+    await signOut();
+    router.push("/");
+  };
+
+  return (
+    <main className="mx-auto max-w-[560px] px-5 py-14 md:py-16">
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <span className="font-mono text-[11px] tracking-[0.18em] text-dim">
+          THE RECORD · {email.toUpperCase()}
+        </span>
+        <SyncFlag />
+      </div>
+      <div className="mt-5 h-px w-11 bg-[var(--accent)]" />
+
+      <div className="flex flex-col font-mono text-[11.5px]">
+        <LedgerRow label="CULTURE">
+          <span className="flex items-baseline gap-3">
+            {cultureLabel}
+            <Link href="/welcome" className="text-[var(--accent)]">
+              CHANGE →
+            </Link>
+          </span>
+        </LedgerRow>
+        <LedgerRow label="CHARTS SYNCED">{chartsCount}</LedgerRow>
+        <LedgerRow label="FEEDBACK ENTRIES">{entries} · THIS DEVICE</LedgerRow>
+        <LedgerRow label="DEVICES" last>
+          THIS ONE
+        </LedgerRow>
+      </div>
+
+      <div className="mt-5 flex gap-3">
+        <button
+          type="button"
+          onClick={onSignOut}
+          className="flex-1 border border-rule py-3 text-center font-mono text-[10.5px] tracking-[0.12em] text-bone hover:border-bone/50"
+        >
+          SIGN OUT
+        </button>
+        <StrikeAction email={email} />
+      </div>
+      <p className="mt-3 font-mono text-[11px] leading-[1.6] tracking-[0.06em] text-dim">
+        STRIKING DELETES THE SERVER COPY; THIS DEVICE KEEPS ITS OWN.
+      </p>
+
+      <div className="mt-10 flex flex-col gap-4">
+        <DisplayNameDisclosure currentName={displayName ?? ""} onSaved={refresh} />
+        <PasswordDisclosure />
+        <ExportDisclosure email={email} />
+      </div>
+    </main>
+  );
+}
+
+function LedgerRow({
+  label,
+  children,
+  last,
+}: {
+  label: string;
+  children: React.ReactNode;
+  last?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex items-baseline justify-between gap-4 border-t border-rule-row py-[11px]",
+        last && "border-b",
+      )}
+    >
+      <span className="text-dim">{label}</span>
+      <span className="text-bone">{children}</span>
+    </div>
+  );
+}
+
+function StrikeAction({ email }: { email: string }) {
+  const router = useRouter();
+  const { signOut } = useAuth();
+  const [open, setOpen] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
+  const [status, setStatus] = useState<"idle" | "deleting" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
+  const canDelete = confirmText.trim().toLowerCase() === email.toLowerCase();
+
+  const onDelete = async () => {
+    if (!canDelete) return;
+    setStatus("deleting");
+    setError(null);
+    try {
+      const res = await fetch("/api/me", { method: "DELETE", credentials: "include" });
+      const data = (await res.json()) as { ok: boolean; error?: string };
+      if (!res.ok || !data.ok) {
+        setStatus("error");
+        setError(data.error ?? "COULD NOT STRIKE THE RECORD.");
+        return;
+      }
+      await signOut();
+      router.push("/");
+    } catch {
+      setStatus("error");
+      setError("NETWORK ERROR.");
+    }
+  };
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="flex-1 border border-conflict py-3 text-center font-mono text-[10.5px] tracking-[0.12em] text-conflict hover:bg-conflict/10"
+      >
+        STRIKE THE RECORD
+      </button>
+    );
+  }
+
+  return (
+    <div className="flex-1 border border-conflict px-4 py-3">
+      <p className="font-mono text-[10.5px] tracking-[0.08em] text-conflict">
+        TYPE {email.toUpperCase()} TO CONFIRM
+      </p>
+      <input
+        type="text"
+        value={confirmText}
+        onChange={(e) => setConfirmText(e.target.value)}
+        placeholder={email}
+        className="mt-2 w-full border border-rule bg-transparent px-3 py-2 font-mono text-[11px] text-bone placeholder:text-faint-ink outline-none focus:border-conflict"
+      />
+      <button
+        type="button"
+        onClick={onDelete}
+        disabled={!canDelete || status === "deleting"}
+        className="mt-2 w-full border border-conflict py-2 text-center font-mono text-[10.5px] tracking-[0.12em] text-conflict disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        {status === "deleting" ? "STRIKING…" : "STRIKE THE RECORD PERMANENTLY"}
+      </button>
+      {error ? (
+        <p role="alert" className="mt-2 font-mono text-[10.5px] tracking-[0.06em] text-conflict">
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function DisclosureShell({ title, children }: { title: string; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border border-rule">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between px-4 py-3 text-left font-mono text-[11px] tracking-[0.14em] text-dim hover:text-bone"
+      >
+        <span>{title}</span>
+        <span aria-hidden>{open ? "▴" : "▾"}</span>
+      </button>
+      {open ? <div className="border-t border-rule-row px-4 py-4">{children}</div> : null}
+    </div>
+  );
+}
+
+function DisplayNameDisclosure({
   currentName,
   onSaved,
 }: {
@@ -112,40 +269,40 @@ function DisplayNameSection({
   };
 
   return (
-    <GlassPanel tone="solid" className="p-6 md:p-7">
-      <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
-        Display name
-      </div>
-      <p className="text-ink-secondary font-body mt-2 text-sm">
-        Shown in the nav and on saved-chart cards. Optional.
-      </p>
-      <form onSubmit={onSubmit} className="mt-4 flex flex-col gap-3 md:flex-row md:items-end">
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          maxLength={120}
-          className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary flex-1 rounded-xl border px-4 py-3 text-base outline-none transition-colors"
-          placeholder="Your display name"
-        />
+    <DisclosureShell title="CHANGE THE NAME">
+      <form onSubmit={onSubmit} className="flex flex-col gap-3">
+        <div>
+          <label htmlFor="account-name" className={LABEL_CLASS}>
+            DISPLAY NAME
+          </label>
+          <input
+            id="account-name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={120}
+            placeholder="Your display name"
+            className={INPUT_CLASS}
+          />
+        </div>
         <button
           type="submit"
           disabled={status === "saving"}
-          className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors disabled:opacity-60"
+          className="self-start border border-rule px-5 py-2 font-mono text-[10.5px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
         >
-          {status === "saving" ? "Saving" : status === "saved" ? "Saved" : "Save"}
+          {status === "saving" ? "SAVING…" : status === "saved" ? "SAVED" : "SAVE"}
         </button>
+        {error ? (
+          <p role="alert" className="font-mono text-[11px] text-conflict">
+            {error.toUpperCase()}
+          </p>
+        ) : null}
       </form>
-      {error ? (
-        <p className="text-conflict-red font-mono mt-2 text-[11px] uppercase tracking-[0.2em]">
-          {error}
-        </p>
-      ) : null}
-    </GlassPanel>
+    </DisclosureShell>
   );
 }
 
-function PasswordSection() {
+function PasswordDisclosure() {
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -189,67 +346,70 @@ function PasswordSection() {
   };
 
   return (
-    <GlassPanel tone="solid" className="p-6 md:p-7">
-      <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
-        Password
-      </div>
-      <p className="text-ink-secondary font-body mt-2 text-sm">
-        Change the password used to sign in. Requires your current password.
-      </p>
-      <form onSubmit={onSubmit} className="mt-4 flex flex-col gap-3">
-        <input
-          type="password"
-          value={current}
-          onChange={(e) => setCurrent(e.target.value)}
-          placeholder="Current password"
-          autoComplete="current-password"
-          required
-          className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
-        />
-        <input
-          type="password"
-          value={next}
-          onChange={(e) => setNext(e.target.value)}
-          placeholder="New password (at least 8)"
-          autoComplete="new-password"
-          required
-          minLength={8}
-          className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
-        />
-        <input
-          type="password"
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-          placeholder="Confirm new password"
-          autoComplete="new-password"
-          required
-          minLength={8}
-          aria-invalid={confirm.length > 0 && next !== confirm}
-          className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
-        />
-        {confirm.length > 0 && next !== confirm ? (
-          <p className="text-conflict-red font-mono text-[11px] uppercase tracking-[0.2em]">
-            The new passwords do not match yet.
-          </p>
-        ) : null}
+    <DisclosureShell title="CHANGE THE PASSWORD">
+      <form onSubmit={onSubmit} className="flex flex-col gap-3">
+        <div>
+          <label htmlFor="account-current-pw" className={LABEL_CLASS}>
+            CURRENT PASSWORD
+          </label>
+          <input
+            id="account-current-pw"
+            type="password"
+            autoComplete="current-password"
+            required
+            value={current}
+            onChange={(e) => setCurrent(e.target.value)}
+            className={INPUT_CLASS}
+          />
+        </div>
+        <div>
+          <label htmlFor="account-next-pw" className={LABEL_CLASS}>
+            NEW PASSWORD (AT LEAST 8)
+          </label>
+          <input
+            id="account-next-pw"
+            type="password"
+            autoComplete="new-password"
+            required
+            minLength={8}
+            value={next}
+            onChange={(e) => setNext(e.target.value)}
+            className={INPUT_CLASS}
+          />
+        </div>
+        <div>
+          <label htmlFor="account-confirm-pw" className={LABEL_CLASS}>
+            CONFIRM NEW PASSWORD
+          </label>
+          <input
+            id="account-confirm-pw"
+            type="password"
+            autoComplete="new-password"
+            required
+            minLength={8}
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            className={INPUT_CLASS}
+          />
+        </div>
         <button
           type="submit"
           disabled={status === "saving"}
-          className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 mt-2 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors disabled:opacity-60"
+          className="self-start border border-rule px-5 py-2 font-mono text-[10.5px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
         >
-          {status === "saving" ? "Updating" : status === "saved" ? "Password updated" : "Change password"}
+          {status === "saving" ? "UPDATING…" : status === "saved" ? "UPDATED" : "CHANGE PASSWORD"}
         </button>
         {error ? (
-          <p className="text-conflict-red font-mono text-[11px] uppercase tracking-[0.2em]">
-            {error}
+          <p role="alert" className="font-mono text-[11px] text-conflict">
+            {error.toUpperCase()}
           </p>
         ) : null}
       </form>
-    </GlassPanel>
+    </DisclosureShell>
   );
 }
 
-function DataExportSection({ email }: { email: string }) {
+function ExportDisclosure({ email }: { email: string }) {
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -284,100 +444,20 @@ function DataExportSection({ email }: { email: string }) {
   };
 
   return (
-    <GlassPanel tone="solid" className="p-6 md:p-7">
-      <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
-        Data export
-      </div>
-      <p className="text-ink-secondary font-body mt-2 text-sm">
-        Download a JSON file containing your account record and every saved chart attached to it. Useful as a backup or as the source for an import into another tool.
-      </p>
+    <DisclosureShell title="EXPORT THE RECORD">
       <button
         type="button"
         onClick={onExport}
         disabled={status === "loading"}
-        className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 mt-4 inline-flex items-center gap-2 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+        className="border border-rule px-5 py-2 font-mono text-[10.5px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
       >
-        {status === "loading" ? "Preparing download" : `Download ${email}'s data ↓`}
+        {status === "loading" ? "PREPARING…" : `DOWNLOAD ${email.toUpperCase()}'S DATA ↓`}
       </button>
       {error ? (
-        <p role="alert" className="text-conflict-red font-mono mt-3 text-[11px] uppercase tracking-[0.2em]">
-          {error}
+        <p role="alert" className="mt-2 font-mono text-[11px] text-conflict">
+          {error.toUpperCase()}
         </p>
       ) : null}
-    </GlassPanel>
-  );
-}
-
-function DeleteSection({
-  email,
-  onDeleted,
-  signOut,
-}: {
-  email: string;
-  onDeleted: () => void;
-  signOut: () => Promise<void>;
-}) {
-  const [confirmText, setConfirmText] = useState("");
-  const [status, setStatus] = useState<"idle" | "deleting" | "error">("idle");
-  const [error, setError] = useState<string | null>(null);
-  const canDelete = confirmText.trim().toLowerCase() === email.toLowerCase();
-
-  const onDelete = async () => {
-    if (!canDelete) return;
-    if (
-      typeof window !== "undefined" &&
-      !window.confirm("This permanently deletes your account and all saved charts. Continue?")
-    ) {
-      return;
-    }
-    setStatus("deleting");
-    try {
-      const res = await fetch("/api/me", { method: "DELETE", credentials: "include" });
-      const data = (await res.json()) as { ok: boolean; error?: string };
-      if (!res.ok || !data.ok) {
-        setStatus("error");
-        setError(data.error ?? "Could not delete account.");
-        return;
-      }
-      await signOut();
-      onDeleted();
-    } catch {
-      setStatus("error");
-      setError("Network error.");
-    }
-  };
-
-  return (
-    <GlassPanel tone="solid" className="border-conflict-red/40 border p-6 md:p-7">
-      <div className="text-conflict-red font-mono text-[10px] uppercase tracking-[0.3em]">
-        Delete account
-      </div>
-      <p className="text-ink-secondary font-body mt-2 text-sm">
-        Removes your account and every saved chart attached to it. Local-only charts in this browser are not affected and remain available to anonymous use. This action cannot be undone.
-      </p>
-      <p className="text-ink-tertiary font-mono mt-4 text-[11px] uppercase tracking-[0.2em]">
-        Type your email ({email}) to confirm:
-      </p>
-      <input
-        type="text"
-        value={confirmText}
-        onChange={(e) => setConfirmText(e.target.value)}
-        placeholder={email}
-        className="border-hairline focus:border-conflict-red bg-bg-void font-body text-ink-primary mt-2 w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
-      />
-      <button
-        type="button"
-        onClick={onDelete}
-        disabled={!canDelete || status === "deleting"}
-        className="border-conflict-red text-conflict-red hover:bg-conflict-red/10 mt-4 rounded-full border px-5 py-3 text-xs uppercase tracking-[0.2em] transition-colors disabled:opacity-30"
-      >
-        {status === "deleting" ? "Deleting" : "Delete account permanently"}
-      </button>
-      {error ? (
-        <p className="text-conflict-red font-mono mt-3 text-[11px] uppercase tracking-[0.2em]">
-          {error}
-        </p>
-      ) : null}
-    </GlassPanel>
+    </DisclosureShell>
   );
 }

@@ -1,195 +1,80 @@
-"use client";
-
-import { useMemo, useState } from "react";
+import Link from "next/link";
 import {
   CULTURES,
   CULTURE_LABELS,
   PLANETS,
-  PLANET_LABELS,
   PLANET_SYMBOLS,
-  type Culture,
-  type Planet,
+  RECEIVED_BODIES,
 } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
-import { DeityGlyph } from "@/components/glyphs/DeityGlyph";
+import { CULTURE_ACCENTS } from "@/data/palettes";
 import { cn } from "@/lib/classNames";
 
-const PLANET_ARCHETYPES: Readonly<Record<Planet, string>> = {
-  sun: "Identity, sovereignty, the conscious self",
-  moon: "Feeling, memory, the rhythms of the body",
-  mercury: "Mind, message, exchange across boundaries",
-  venus: "Attraction, beauty, the binding of pairs",
-  mars: "Force, conflict, the work of cutting away",
-  jupiter: "Growth, blessing, the law that expands",
-  saturn: "Limit, time, the cost of holding form",
-  uranus: "Rupture, sudden change, the received body of freedom",
-  neptune: "Dissolution, longing, the received body of the ideal",
-  pluto: "Buried power, forced transformation, the received body of the dead",
-};
-
+/**
+ * The ten-by-five reference table: every body this almanac tracks, seated
+ * beside its name in every culture's own theology. Mono, bordered, no
+ * ornament beyond the one gold rule that marks where the ancient lists end.
+ * The table wrapper scrolls horizontally on its own at small widths; the
+ * page around it never does.
+ */
 export function TranslationMatrix() {
-  const [cultureFilter, setCultureFilter] = useState<Culture | null>(null);
-  const [planetFilter, setPlanetFilter] = useState<Planet | null>(null);
-
-  const visibleCultures = useMemo(
-    () => (cultureFilter ? [cultureFilter] : [...CULTURES]),
-    [cultureFilter],
-  );
-  const visiblePlanets = useMemo(
-    () => (planetFilter ? [planetFilter] : [...PLANETS]),
-    [planetFilter],
-  );
+  const firstReceived = RECEIVED_BODIES[0];
 
   return (
     <div>
-      <div className="mb-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <div>
-          <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-            Filter by pantheon
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <FilterChip
-              active={cultureFilter === null}
-              onClick={() => setCultureFilter(null)}
-            >
-              All
-            </FilterChip>
-            {CULTURES.map((c) => (
-              <FilterChip
-                key={c}
-                active={cultureFilter === c}
-                onClick={() => setCultureFilter(c)}
-              >
-                {CULTURE_LABELS[c]}
-              </FilterChip>
-            ))}
-          </div>
-        </div>
-        <div>
-          <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-            Filter by planet
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <FilterChip
-              active={planetFilter === null}
-              onClick={() => setPlanetFilter(null)}
-            >
-              All
-            </FilterChip>
-            {PLANETS.map((p) => (
-              <FilterChip
-                key={p}
-                active={planetFilter === p}
-                onClick={() => setPlanetFilter(p)}
-              >
-                <span className="mr-1">{PLANET_SYMBOLS[p]}</span>
-                {PLANET_LABELS[p]}
-              </FilterChip>
-            ))}
-          </div>
-        </div>
-      </div>
-
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[840px] border-separate border-spacing-2">
+        <table className="w-full min-w-[640px] border-collapse font-mono text-[11px]">
           <caption className="sr-only">
-            Translation matrix of seven classical planets across five ancient pantheons.
+            Ten bodies across five ancient theologies: the seven each culture named, and the
+            three every culture received.
           </caption>
           <thead>
             <tr>
-              <th scope="col" className="text-ink-tertiary font-mono p-3 text-left text-[11px] uppercase tracking-[0.3em]">
-                Planet
+              <th
+                scope="col"
+                className="px-2 py-2 text-left text-[11px] tracking-[0.2em] text-faint-ink"
+              >
+                BODY
               </th>
-              {visibleCultures.map((c) => (
+              {CULTURES.map((culture) => (
                 <th
-                  key={c}
+                  key={culture}
                   scope="col"
-                  className="text-gold-leaf font-display p-3 text-left text-lg md:text-xl"
+                  className="px-2 py-2 text-left text-[11px] tracking-[0.1em]"
+                  style={{ color: CULTURE_ACCENTS[culture] }}
                 >
-                  {CULTURE_LABELS[c]}
+                  {CULTURE_LABELS[culture].toUpperCase()}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {visiblePlanets.map((planet) => (
-              <tr key={planet}>
-                <th
-                  scope="row"
-                  className="bg-bg-deep border-hairline rounded-2xl p-4 text-left align-top"
-                >
-                  <div className="text-ink-secondary text-2xl">
-                    {PLANET_SYMBOLS[planet]}
-                  </div>
-                  <div className="font-display text-ink-primary mt-1 text-xl">
-                    {PLANET_LABELS[planet]}
-                  </div>
-                  <div className="text-ink-tertiary font-body mt-2 text-sm leading-relaxed">
-                    {PLANET_ARCHETYPES[planet]}
-                  </div>
-                </th>
-                {visibleCultures.map((culture) => {
-                  const deity = DEITY_MATRIX[culture][planet];
-                  return (
-                    <td
-                      key={`${culture}-${planet}`}
-                      className="bg-bg-deep border-hairline hover:border-gold-soft group relative rounded-2xl p-4 align-top transition-colors"
-                    >
-                      <div className="flex items-start gap-3">
-                        <DeityGlyph
-                          culture={culture}
-                          planet={planet}
-                          size={40}
-                          decorative
-                        />
-                        <div className="min-w-0 flex-1">
-                          <div className="font-display text-ink-primary text-lg leading-tight">
-                            {deity.name}
-                          </div>
-                          <div className="text-ink-secondary font-body mt-1 text-sm italic">
-                            {deity.epithet}
-                          </div>
-                          {deity.contested ? (
-                            <div className="text-conflict-red font-mono mt-2 text-[9px] uppercase tracking-[0.3em]">
-                              contested
-                            </div>
-                          ) : null}
-                        </div>
-                      </div>
-                      <p className="text-ink-tertiary font-body mt-3 text-[13px] leading-relaxed">
-                        {deity.note}
-                      </p>
-                    </td>
-                  );
-                })}
+            {PLANETS.map((planet) => (
+              <tr
+                key={planet}
+                className={cn(
+                  "border-t last:border-b",
+                  planet === firstReceived ? "border-harmony/35" : "border-rule-row",
+                )}
+              >
+                <td className="px-2 py-[9px] text-dim">{PLANET_SYMBOLS[planet]}</td>
+                {CULTURES.map((culture) => (
+                  <td key={culture} className="px-2 py-[9px] text-bone">
+                    {DEITY_MATRIX[culture][planet].name}
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <div className="mt-3 font-mono text-[11px] leading-[1.7] tracking-[0.04em] text-dim">
+        GOLD RULE MARKS WHERE THE ANCIENT LISTS END. THE LAST THREE ROWS ARE RECEPTIONS, MADE IN
+        THE ANCIENT MANNER AND SAID SO →{" "}
+        <Link href="/method" className="text-[var(--accent)]">
+          METHOD
+        </Link>
+      </div>
     </div>
-  );
-}
-
-interface FilterChipProps {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}
-
-function FilterChip({ active, onClick, children }: FilterChipProps) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "border-hairline font-mono rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.2em] transition-colors",
-        active
-          ? "border-gold-soft text-gold-leaf bg-gold-leaf/10"
-          : "text-ink-secondary hover:text-ink-primary",
-      )}
-    >
-      {children}
-    </button>
   );
 }

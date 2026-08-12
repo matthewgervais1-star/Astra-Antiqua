@@ -3,35 +3,34 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import {
-  PantheonSelector,
-  useActivePantheon,
-} from "@/components/pantheon/PantheonSelector";
+import { useActivePantheon } from "@/components/pantheon/PantheonContext";
+import { CultureGate } from "@/components/chrome/CultureGate";
+import { NaveShell } from "@/components/chrome/NaveShell";
+import { NaveHead } from "@/components/chrome/NaveHead";
+import { SectionDivider } from "@/components/chrome/SectionDivider";
+import { WheelSvg } from "@/components/chrome/WheelSvg";
+import { Skeleton } from "@/components/chrome/Skeleton";
 import { BirthForm, type BirthFormValues } from "@/components/reading/BirthForm";
 import { ReadingDisplay } from "@/components/reading/ReadingDisplay";
 import { SaveChartPanel } from "@/components/charts/SaveChartPanel";
-import { NatalWheel } from "@/components/wheel/NatalWheel";
-import { SectionContainer } from "@/components/ui/SectionContainer";
-import { GoldText } from "@/components/ui/GoldText";
-import { GlassPanel } from "@/components/ui/GlassPanel";
 import { computeChart } from "@/lib/ephemeris";
 import { computeAngularPoints, type AngularPoints } from "@/lib/ascendant";
 import { resolveBirth, type ResolvedBirth } from "@/lib/birthDateTime";
 import { buildReading, type Reading } from "@/lib/reading";
+import { computeAspects, type Longitude } from "@/data/sampleChart";
+import { RECEIVED_BODIES, type Culture, type Planet } from "@/data/cultures";
 import {
   getChart,
   getPrimaryChart,
   type SavedChartInputs,
 } from "@/lib/savedCharts";
-import type { Culture, Planet } from "@/data/cultures";
-import type { Longitude } from "@/data/sampleChart";
 
 const ORACLE_INVOCATION: Readonly<Record<Culture, string>> = {
-  egypt: "Consult the Hall of Ma'at.",
-  greece: "Consult the Pythia at Delphi.",
-  canaan: "Convene the divine council.",
-  carthage: "Bring your name before the Council.",
-  rome: "Open the Sibylline Books.",
+  egypt: "Consult the Hall of Ma'at",
+  greece: "Consult the Pythia at Delphi",
+  canaan: "Convene the divine council",
+  carthage: "Bring your name before the Council",
+  rome: "Open the Sibylline Books",
 };
 
 const ORACLE_INTRO: Readonly<Record<Culture, string>> = {
@@ -46,6 +45,11 @@ const ORACLE_INTRO: Readonly<Record<Culture, string>> = {
   rome:
     "The Sibylline Books are opened only in extremity, and read by the appointed college. Give the day, the hour, the place; the answer returns in the names that still order the days of your week.",
 };
+
+function headlineFrom(culture: Culture | null): string {
+  if (!culture) return "CAST YOUR CHART";
+  return ORACLE_INVOCATION[culture].toUpperCase();
+}
 
 interface ComputedState {
   inputs: BirthFormValues;
@@ -66,13 +70,9 @@ function inputsFromChart(saved: SavedChartInputs): BirthFormValues {
 
 interface ReadingExperienceImplProps {
   explicitCulture: Culture | null;
-  showSelector: boolean;
 }
 
-function ReadingExperienceImpl({
-  explicitCulture,
-  showSelector,
-}: ReadingExperienceImplProps) {
+function ReadingExperienceImpl({ explicitCulture }: ReadingExperienceImplProps) {
   const ctxCulture = useActivePantheon();
   const culture = explicitCulture ?? ctxCulture;
   const searchParams = useSearchParams();
@@ -170,171 +170,108 @@ function ReadingExperienceImpl({
     [culture, state],
   );
 
-  const birthStep = showSelector ? "Step two" : "Step one";
-  const wheelStep = showSelector ? "Step three" : "Step two";
+  const wheelAspects = useMemo(
+    () =>
+      state
+        ? computeAspects(state.chart).map((a) => ({
+            planetA: a.a,
+            planetB: a.b,
+            kind: a.kind,
+          }))
+        : [],
+    [state],
+  );
 
   return (
-    <>
-      <SectionContainer size="default" spacing="tight">
-        <div className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">
-          {editingChart ? `Editing: ${editingChart.name}` : "New chart"}
-        </div>
-        <GoldText as="h1" className="mt-4 max-w-3xl text-5xl leading-tight md:text-6xl">
-          {culture ? ORACLE_INVOCATION[culture] : "Consult the oracle."}
-        </GoldText>
-        <p className="text-ink-secondary font-body mt-6 max-w-2xl text-lg leading-relaxed md:text-xl">
-          {culture
-            ? ORACLE_INTRO[culture]
-            : "Set the date, the hour, and the place of your birth. The seven classical planets will be placed for the exact moment you came into the world; the answer will be rendered in the voice of whichever oracle you call on."}
-        </p>
-        <p className="text-ink-tertiary font-body mt-4 max-w-2xl text-sm md:text-base">
-          All computation happens in your browser. Your birth data is not sent to a server. Saved charts live in this browser&apos;s localStorage. Manage them on the{" "}
-          <Link href="/charts" className="text-gold-leaf underline-offset-4 hover:underline">
-            charts page
-          </Link>
-          .
-        </p>
-      </SectionContainer>
+    <NaveShell context="CAST · THE NATAL RECORD">
+      <NaveHead kicker={editingChart ? `EDITING · ${editingChart.name.toUpperCase()}` : "ENTER YOUR HOUR OF BIRTH"}>
+        {headlineFrom(culture)}
+      </NaveHead>
 
-      {showSelector ? (
-        <SectionContainer size="default" spacing="tight">
-          <div className="mb-10">
-            <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-              Step one
-            </div>
-            <h2 className="font-display text-ink-primary mt-3 text-2xl md:text-3xl">
-              Choose the voice.
-            </h2>
-          </div>
-          <PantheonSelector />
-        </SectionContainer>
-      ) : null}
+      <p className="mx-auto max-w-[560px] text-center font-body text-[16px] leading-[1.7] text-prose">
+        {culture
+          ? ORACLE_INTRO[culture]
+          : "Set the date, the hour, and the place of your birth. The ten bodies will be placed for the exact moment you came into the world; the answer will be rendered in the voice of whichever culture you call on."}
+      </p>
+      <p className="mx-auto mt-4 max-w-[560px] text-center font-mono text-[11px] uppercase leading-[1.7] tracking-[0.1em] text-dim">
+        ALL COMPUTATION RUNS IN YOUR BROWSER · SAVED CHARTS LIVE ON THIS DEVICE →{" "}
+        <Link href="/charts" className="text-[var(--accent)]">
+          YOUR CHARTS
+        </Link>
+      </p>
 
-      <SectionContainer size="default" spacing="tight">
-        <div className="grid gap-10 md:grid-cols-12 md:gap-12">
-          <div className="md:col-span-5">
-            <div className="mb-6">
-              <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-                {birthStep}
-              </div>
-              <h2 className="font-display text-ink-primary mt-3 text-2xl md:text-3xl">
-                Set the hour of your birth.
-              </h2>
-              <p className="text-ink-tertiary font-body mt-3 text-sm md:text-base">
-                The Moon, the Ascendant, and the exact degree of the Sun depend on the hour and the place. If the hour is unknown, set the form to twelve and the Sun and the outer planets remain accurate.
-              </p>
-            </div>
-            <GlassPanel tone="solid" className="p-6 md:p-8">
-              <BirthForm
-                onSubmit={handleSubmit}
-                submitting={submitting}
-                initialValues={initialValues}
-              />
-              {computeError ? (
-                <p className="text-conflict-red font-mono mt-4 text-xs uppercase tracking-[0.2em]">
-                  {computeError}
-                </p>
-              ) : null}
-            </GlassPanel>
-            {state ? (
-              <div className="mt-6">
-                <SaveChartPanel
-                  values={state.inputs}
-                  existingId={editingChart?.id}
-                  initialName={editingChart?.name ?? ""}
-                  initialRelationship={editingChart?.relationship ?? "self"}
-                  initialPrimary={editingChart?.primary ?? false}
-                  onSaved={(saved) => setEditingChart(saved)}
-                />
-              </div>
-            ) : null}
-          </div>
-
-          <div className="md:col-span-7" ref={resultRef}>
-            <div className="mb-6">
-              <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-                {wheelStep}
-              </div>
-              <h2 className="font-display text-ink-primary mt-3 text-2xl md:text-3xl">
-                Read the wheel.
-              </h2>
-            </div>
-            {state ? (
-              <div className="space-y-12">
-                <NatalWheel
-                  chart={state.chart}
-                  ascendant={state.angles.ascendant}
-                  caption={`${state.inputs.cityLabel} · ${state.inputs.date} ${state.inputs.time} (${state.birth.timezone})`}
-                />
-                {culture && reading ? (
-                  <ReadingDisplay
-                    culture={culture}
-                    reading={reading}
-                    birth={state.birth}
-                    inputs={state.inputs}
-                    ascendant={state.angles.ascendant}
-                    midheaven={state.angles.midheaven}
-                  />
-                ) : (
-                  <GlassPanel tone="solid" className="p-6 md:p-8">
-                    <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
-                      Almost there
-                    </div>
-                    <p className="font-display text-ink-primary mt-3 text-xl md:text-2xl">
-                      Select a pantheon above to render the reading in its voice.
-                    </p>
-                  </GlassPanel>
-                )}
-              </div>
-            ) : (
-              <GlassPanel tone="glass" className="flex min-h-[320px] items-center justify-center p-8">
-                <div className="text-center">
-                  <div className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.3em]">
-                    Awaiting your birth data
-                  </div>
-                  <p className="font-display text-ink-secondary mt-4 max-w-md text-xl md:text-2xl">
-                    The wheel will draw itself once you submit the form.
-                  </p>
-                </div>
-              </GlassPanel>
-            )}
-          </div>
-        </div>
-      </SectionContainer>
-
-      <SectionContainer size="default" spacing="tight">
-        <div className="border-border-hairline border-t pt-10">
-          <p className="text-ink-tertiary font-body text-sm md:text-base">
-            For background on how the planetary archetypes map to each pantheon, see{" "}
-            <Link href="/methodology" className="text-gold-leaf underline-offset-4 hover:underline">
-              the methodology page
-            </Link>
-            . For the full deity matrix, see{" "}
-            <Link href="/translation-matrix" className="text-gold-leaf underline-offset-4 hover:underline">
-              the translation matrix
-            </Link>
-            .
+      <div className="mt-14 flex flex-col gap-6">
+        <SectionDivider label="YOUR BIRTH" />
+        <BirthForm
+          onSubmit={handleSubmit}
+          submitting={submitting}
+          initialValues={initialValues}
+        />
+        {computeError ? (
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-conflict">
+            {computeError}
           </p>
-        </div>
-      </SectionContainer>
-    </>
+        ) : null}
+        {state ? (
+          <SaveChartPanel
+            values={state.inputs}
+            existingId={editingChart?.id}
+            initialName={editingChart?.name ?? ""}
+            initialRelationship={editingChart?.relationship ?? "self"}
+            initialPrimary={editingChart?.primary ?? false}
+            onSaved={(saved) => setEditingChart(saved)}
+          />
+        ) : null}
+      </div>
+
+      <div ref={resultRef} className="mt-16 flex flex-col gap-10">
+        {state ? (
+          <>
+            <SectionDivider label="THE WHEEL" />
+            <div className="flex justify-center">
+              <WheelSvg
+                chart={state.chart}
+                ascendant={state.angles.ascendant}
+                aspects={wheelAspects}
+                accentPlanets={[...RECEIVED_BODIES]}
+              />
+            </div>
+            {culture && reading ? (
+              <ReadingDisplay
+                culture={culture}
+                reading={reading}
+                birth={state.birth}
+                inputs={state.inputs}
+                ascendant={state.angles.ascendant}
+                midheaven={state.angles.midheaven}
+                chartId={editingChart?.id ?? null}
+              />
+            ) : null}
+          </>
+        ) : (
+          <div className="border border-rule px-6 py-10 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
+            THE WHEEL DRAWS ITSELF ONCE YOU CAST
+          </div>
+        )}
+      </div>
+    </NaveShell>
   );
 }
 
 function ReadingFallback() {
   return (
-    <SectionContainer size="default" spacing="default">
-      <div className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">
-        Loading
-      </div>
-    </SectionContainer>
+    <NaveShell context="CAST · THE NATAL RECORD">
+      <Skeleton />
+    </NaveShell>
   );
 }
 
 interface ReadingExperienceProps {
-  /** When set, locks the reading to this culture and hides the voice selector. */
+  /** When set, locks the reading to this culture and skips the culture gate
+   *  (used by the legacy per-culture route while it still exists). */
   culture?: Culture;
-  /** Whether to show the "choose the voice" pantheon selector (global page). */
+  /** Whether an unset culture should show the five-doorway gate. Has no
+   *  effect when `culture` is provided. */
   showSelector?: boolean;
 }
 
@@ -342,12 +279,11 @@ export function ReadingExperience({
   culture,
   showSelector = true,
 }: ReadingExperienceProps) {
-  return (
+  const body = (
     <Suspense fallback={<ReadingFallback />}>
-      <ReadingExperienceImpl
-        explicitCulture={culture ?? null}
-        showSelector={showSelector}
-      />
+      <ReadingExperienceImpl explicitCulture={culture ?? null} />
     </Suspense>
   );
+  if (culture || !showSelector) return body;
+  return <CultureGate>{body}</CultureGate>;
 }

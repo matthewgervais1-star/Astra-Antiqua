@@ -59,16 +59,16 @@ export const DEITIES: readonly Deity[] = [
   {
     planet: "sun",
     culture: "greece",
-    name: "Apollo",
-    epithet: "God of Light",
-    note: "Olympian deity of truth, music, and prophecy, syncretized with the older Titan Helios.",
+    name: "Helios",
+    epithet: "Who Sees All Things",
+    note: "The sun itself, driving his chariot across the sky and reporting to the gods what he has seen. Apollo absorbed his light in later cult; the planet keeps the older name.",
   },
   {
     planet: "moon",
     culture: "greece",
-    name: "Artemis",
-    epithet: "The Huntress",
-    note: "Virgin goddess of the wild, the hunt, and the lunar cycle.",
+    name: "Selene",
+    epithet: "The Moon Herself",
+    note: "Titan of the moon, sister of Helios, who drives the night chariot. Artemis took her rites later; the body keeps the elder name.",
   },
   {
     planet: "mercury",
@@ -101,7 +101,7 @@ export const DEITIES: readonly Deity[] = [
   {
     planet: "saturn",
     culture: "greece",
-    name: "Cronus",
+    name: "Kronos",
     epithet: "Father of Time",
     note: "Deposed king of the Titans, devourer of his own children, lord of agriculture and limit.",
   },
@@ -124,16 +124,16 @@ export const DEITIES: readonly Deity[] = [
   {
     planet: "mercury",
     culture: "canaan",
-    name: "Kothar-wa-Khasis",
-    epithet: "The Skilled Craftsman",
-    note: "Smith-god, architect, and master of magical incantation in the Ugaritic texts.",
+    name: "Kothar",
+    epithet: "Skilled and Wise",
+    note: "Kothar-wa-Khasis in full, the smith-god, architect, and master of incantation in the Ugaritic texts.",
   },
   {
     planet: "venus",
     culture: "canaan",
-    name: "Astarte",
+    name: "Attart",
     epithet: "Queen of Heaven",
-    note: "Goddess of love, fertility, and war, the Phoenician evening and morning star.",
+    note: "Goddess of love and war, the evening and morning star. The Ugaritic form of the name Carthage carries as Astarte.",
   },
   {
     planet: "mars",

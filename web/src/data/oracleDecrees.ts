@@ -15,7 +15,7 @@ export const ORACLE_DECREES: Readonly<Record<Culture, OracleDecree>> = {
   greece: {
     oracleName: "The Oracle of Delphi",
     sampleTransit: "Sun square Mars · sample transit",
-    body: "Ares strikes against the throne of Apollo. The god of light is questioned today by the god of slaughter. The Pythia sees a forced choice: speak the truth that costs you, or hold the comfort that diminishes you. Both gods are watching. Neither is patient.",
+    body: "Ares strikes against the chariot of Helios. The god who sees everything is questioned today by the god of slaughter. The Pythia sees a forced choice: speak the truth that costs you, or hold the comfort that diminishes you. Both gods are watching. Neither is patient.",
   },
   canaan: {
     oracleName: "The Divine Council",

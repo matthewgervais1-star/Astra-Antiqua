@@ -1,0 +1,186 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { NaveShell } from "@/components/chrome/NaveShell";
+import { CultureGate } from "@/components/chrome/CultureGate";
+import { NaveHead } from "@/components/chrome/NaveHead";
+import { Votive } from "@/components/chrome/Votive";
+import { FeedbackRow } from "@/components/chrome/FeedbackRow";
+import { Skeleton } from "@/components/chrome/Skeleton";
+import { useActivePantheon } from "@/components/pantheon/PantheonContext";
+import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
+import { buildWeekDays, type WeekDay, type WeekTone } from "@/lib/weekReading";
+import { CULTURE_VOICES } from "@/data/cultureVoice";
+import type { Culture } from "@/data/cultures";
+import { cn } from "@/lib/classNames";
+import { formatDayMonth, isoWeek, mondayOf, monthAbbr } from "@/components/horizons/format";
+
+function weekContextLine(weekStart: Date): string {
+  const { week } = isoWeek(weekStart);
+  const sunday = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 6);
+  const sameMonth =
+    weekStart.getMonth() === sunday.getMonth() && weekStart.getFullYear() === sunday.getFullYear();
+  const range = sameMonth
+    ? `${weekStart.getDate()}–${sunday.getDate()} ${monthAbbr(sunday)} ${sunday.getFullYear()}`
+    : `${formatDayMonth(weekStart)} – ${formatDayMonth(sunday)} ${sunday.getFullYear()}`;
+  return `WEEK ${String(week).padStart(2, "0")} · ${range}`;
+}
+
+function weekReadingId(weekStart: Date): string {
+  const { year, week } = isoWeek(weekStart);
+  return `week-${year}-W${String(week).padStart(2, "0")}`;
+}
+
+function pickHardestDay(days: readonly WeekDay[]): WeekDay | null {
+  return days.find((d) => d.tone === "tension") ?? days.find((d) => d.tone === "harmony") ?? days[0] ?? null;
+}
+
+/** Two-line votive per culture, keyed by the tone of the week's hardest day. */
+const WEEK_VOTIVE: Readonly<Record<Culture, Readonly<Record<WeekTone, string>>>> = {
+  egypt: {
+    tension: "WEIGH WHAT IS HEAVY BEFORE\nYOU CARRY IT INTO FRIDAY",
+    harmony: "TAKE THE CURRENT WHILE\nIT RUNS WITH YOU",
+    quiet: "ORDINARY DAYS ARE NOT\nEMPTY DAYS",
+  },
+  greece: {
+    tension: "ASK THE HARD QUESTION\nBEFORE THE WEEK ASKS IT FOR YOU",
+    harmony: "TAKE THE ANSWER GIVEN FREELY,\nWITHOUT A SECOND ASKING",
+    quiet: "SILENCE FROM THE SHRINE\nIS ALSO AN ANSWER",
+  },
+  canaan: {
+    tension: "LET THE WITNESS SPEAK\nBEFORE THE COUNCIL CLOSES",
+    harmony: "SEAL THE VOW WHILE\nTHE RAINS STILL FAVOR IT",
+    quiet: "THE TENT STANDS EVEN ON\nA DAY WITH NO MATTER BEFORE IT",
+  },
+  carthage: {
+    tension: "LEAVE THE BOOKS OPEN\nUNTIL THE ACCOUNT IS TRUE",
+    harmony: "LOAD WHILE THE HARBOR\nIS STILL OPEN TO YOU",
+    quiet: "A STEADY LEDGER IS\nSTILL A PROFITABLE ONE",
+  },
+  rome: {
+    tension: "PROCEED, BUT KEEP\nTHE DEFENSE READY",
+    harmony: "TAKE THE RIGHT HAND OFFERED\nWITHOUT A SECOND READING",
+    quiet: "AN ORDINARY DAY IS STILL\nTAKEN UNDER AUSPICES",
+  },
+};
+
+function WeekRow({ day }: { day: WeekDay }) {
+  return (
+    <div
+      className={cn(
+        "grid grid-cols-[104px_1fr_auto] items-baseline gap-4 border-t border-rule px-3 py-3.5 last:border-b",
+        day.isToday && "bg-[color-mix(in_srgb,var(--accent)_7%,transparent)]",
+      )}
+    >
+      <span
+        className={cn(
+          "font-mono text-[11px] leading-[1.5]",
+          day.isToday ? "text-[var(--accent)]" : "text-dim",
+        )}
+      >
+        {day.label}
+        {day.flag ? ` ${day.flag}` : ""}
+        {day.isToday ? (
+          <>
+            <br />
+            TODAY
+          </>
+        ) : null}
+      </span>
+      <span className="font-body text-[14.5px] leading-[1.55] text-bone">{day.line}</span>
+      <span
+        className={cn(
+          "whitespace-nowrap font-mono text-[11px]",
+          day.tone === "tension" ? "text-conflict" : "text-dim",
+        )}
+      >
+        {day.shorthand}
+      </span>
+    </div>
+  );
+}
+
+function WeekContent({
+  weekStart,
+  natal,
+}: {
+  weekStart: Date | null;
+  natal: SavedNatal | null;
+}) {
+  const culture = useActivePantheon();
+  const days = useMemo(
+    () => (culture && weekStart ? buildWeekDays(culture, weekStart, natal) : null),
+    [culture, weekStart, natal],
+  );
+
+  if (!culture || !days || !weekStart) {
+    return <Skeleton />;
+  }
+
+  const voice = CULTURE_VOICES[culture];
+  const hardest = pickHardestDay(days);
+
+  return (
+    <div className="mx-auto max-w-[640px]">
+      <NaveHead kicker={`${voice.institution} · THE WEEK`}>{voice.weekTitle}</NaveHead>
+      <p className="mx-auto max-w-[560px] text-left font-body text-[17px] leading-[1.7] text-prose">
+        {voice.weekThesis}
+      </p>
+      <div className="mt-8 flex flex-col">
+        {days.map((day) => (
+          <WeekRow key={day.date.toISOString()} day={day} />
+        ))}
+      </div>
+      <div className="mx-auto mt-6 max-w-[560px] text-center font-mono text-[11px] tracking-[0.14em] text-dim">
+        {voice.weekNote}
+        {voice.dayFlags ? " · F LAWFUL · N UNLAWFUL · C MIXED" : ""}
+      </div>
+      <div className="mt-8">
+        <Votive>{WEEK_VOTIVE[culture][hardest?.tone ?? "quiet"]}</Votive>
+      </div>
+      <div className="mt-6 flex justify-center">
+        <FeedbackRow readingId={weekReadingId(weekStart)} noun="WEEK" />
+      </div>
+      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-display text-[11.5px] tracking-[0.2em]">
+        <Link href="/" className="text-bone/65 hover:text-bone">
+          ← THE DAY
+        </Link>
+        <Link href="/season" className="text-bone/65 hover:text-bone">
+          THE SEASON →
+        </Link>
+        <Link href="/transits" className="text-[var(--accent)] hover:text-[var(--accent)]">
+          THE LONG TRANSITS →
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The full `/week` client experience: chassis, seven day-rows composed by
+ * lib/weekReading.ts, votive, feedback, and the horizon nav. Owns its own
+ * "today" state (client-only, matching the rest of the reading surfaces)
+ * so the sub-bar context line and the day rows never disagree on the date.
+ */
+export function WeekNave() {
+  const [today, setToday] = useState<Date | null>(null);
+  const [natal, setNatal] = useState<SavedNatal | null>(null);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setToday(new Date());
+    setNatal(loadSavedNatal());
+  }, []);
+
+  const weekStart = today ? mondayOf(today) : null;
+  const context = weekStart ? weekContextLine(weekStart) : "THE WEEK";
+
+  return (
+    <NaveShell context={context} horizon="week" active="today">
+      <CultureGate>
+        <WeekContent weekStart={weekStart} natal={natal} />
+      </CultureGate>
+    </NaveShell>
+  );
+}

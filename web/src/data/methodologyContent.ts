@@ -23,7 +23,7 @@ export const METHODOLOGY_SECTIONS: readonly MethodologySection[] = [
     heading: "The Seven Classical Planets",
     paragraphs: [
       "Ancient astrology is limited to the seven visible planetary bodies: the Sun, the Moon, Mercury, Venus, Mars, Jupiter, and Saturn. These are the naked-eye wanderers. They are the only objects that a pre-telescopic observer could see moving against the fixed stars across human-scale timeframes, and they form the bedrock of every astrological tradition from Babylon onward.",
-      "Modern astrology added Uranus, Neptune, and Pluto after their telescopic discovery. Astra Antiqua does not include them. The intent is to render the sky as it was known to the cultures whose voice the app speaks in, not to retrofit later additions into a historically scoped system.",
+      "Modern astrology added Uranus, Neptune, and Pluto after their telescopic discovery. Astra Antiqua receives them the way Rome received a foreign god: formally, under a native name, and on the record as an admission rather than a birthright. Every culture's deity table marks each of the three a received body and says in its own note that no ancient scribe ever tallied a planet for it. The reception is modern interpretive work, built by the same functional and iconographic method described below, and it is never presented as the ancients' own.",
     ],
   },
   {
@@ -36,7 +36,7 @@ export const METHODOLOGY_SECTIONS: readonly MethodologySection[] = [
   {
     heading: "Our Translation Matrix",
     paragraphs: [
-      "The seven planetary archetypes in this app are derived from the Hellenistic tradition (chiefly Ptolemy's Tetrabiblos and Vettius Valens). The five cultural pantheons are then mapped onto those archetypes using primary sources where available: Ugaritic tablets for Canaan, Hellenistic astrological literature for Greece, Punic inscriptions and Imperial syncretisms for Carthage, Egyptian funerary and astronomical texts (with their later Greco-Egyptian recensions) for Egypt, and the Roman augural tradition with its Sibylline and interpretatio romana literature for Rome.",
+      "The ten planetary bodies in this app split into two groups. Seven archetypes are drawn from the Hellenistic tradition (chiefly Ptolemy's Tetrabiblos and Vettius Valens); three (Uranus, Neptune, Pluto) are modern receptions built by the same method and marked as such wherever they appear. The five cultural pantheons are then mapped onto all ten using primary sources where available for the seven: Ugaritic tablets for Canaan, Hellenistic astrological literature for Greece, Punic inscriptions and Imperial syncretisms for Carthage, Egyptian funerary and astronomical texts (with their later Greco-Egyptian recensions) for Egypt, and the Roman augural tradition with its Sibylline and interpretatio romana literature for Rome. For the three received bodies, no primary source exists by definition; the mapping is original interpretive work, done in the ancient manner and disclosed as such rather than dressed up as antiquity.",
       "Some of these mappings are strong and well-attested. Others are reconstructive choices that prioritize legibility for a modern reader over strict philological caution. Those cases are listed in the next section.",
     ],
   },
@@ -104,5 +104,10 @@ export const SOURCES: readonly SourceReference[] = [
     author: "Roger Beck",
     title: "A Brief History of Ancient Astrology",
     detail: "Blackwell, 2007. Accessible scholarly overview of the Hellenistic synthesis and its sources.",
+  },
+  {
+    author: "Astra Antiqua editorial",
+    title: "The reception of Uranus, Neptune, and Pluto",
+    detail: "Not sourced from any ancient text, because none exists. The three modern bodies are seated by the same functional and iconographic method described above (interpretatio romana), applied by this project's editors to bodies unknown before the eighteenth and twentieth centuries. Every placement carries a note beginning 'Received' rather than being presented as ancient testimony.",
   },
 ];

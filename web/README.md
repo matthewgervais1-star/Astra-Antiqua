@@ -8,11 +8,15 @@ independently — the two surfaces share a domain but no code; see the repo-root
 `CLAUDE.md`.
 
 This is the product itself, not a marketing preview: anonymous and signed-in
-visitors can cast and save natal charts, read synastry between two charts, pull
-an annual forecast, and browse the methodology and translation matrix. It ships
-a web app manifest and icon set for install-to-home-screen (`src/app/manifest.ts`,
-`public/icons/`). It still carries `/wait-list`, a holdover page for visitors who
-want to be told when the Android app ships.
+visitors read the day, the week, the season, and the year in their chosen
+culture's voice, cast and save natal charts, read one placement at length, weigh
+two charts against each other, follow a long transit across its whole span, and
+browse the method and the translation matrix. It ships a web app manifest and
+icon set for install-to-home-screen (`src/app/manifest.ts`, `public/icons/`).
+`/waitlist` collects names for the Android launch.
+
+The visual identity is documented under **Design tokens** below; the design
+contract it was built from lives in `docs/design/handoff/`.
 
 ---
 
@@ -24,7 +28,7 @@ want to be told when the Android app ships.
 - **Tailwind CSS 4** with CSS-first `@theme` configuration
 - **motion** (the official rewrite of framer-motion)
 - **Zod** + **react-hook-form** + **@hookform/resolvers** for the wait-list
-- **next/font/local** serving committed woff2 files (Playfair Display, Cormorant Garamond, JetBrains Mono) from `src/fonts/`; refetch with `node scripts/fetch-fonts.mjs` only when families/weights change. Not next/font/google: its parallel build-time fetch burst gets connection-reset on some networks and breaks the build.
+- **next/font/local** serving committed woff2 files (Cinzel, Spectral, IBM Plex Mono) from `src/fonts/`; refetch with `node scripts/fetch-fonts.mjs` only when families/weights change. Not next/font/google: its parallel build-time fetch burst gets connection-reset on some networks and breaks the build. A Cinzel TTF also ships for the OG card, since Satori cannot read woff2.
 
 No CSS-in-JS. No UI library. No shadcn/ui. No Radix.
 
@@ -53,48 +57,49 @@ The project requires Node 24+. See `.nvmrc`.
 web/
   src/
     app/                              Routes (App Router)
-      layout.tsx                      Font loaders, SiteHeader, SiteFooter, AuthProvider, AuthGate
-      globals.css                     Tailwind v4 @theme tokens + @utility text-gold-leaf
-      manifest.ts                     PWA manifest -> /manifest.webmanifest (icons, standalone display)
-      page.tsx                        Home: hero, selector, today dashboard, week, demo, method, wait-list
-      about/page.tsx
-      pantheon/[culture]/             Overview + /today, /reading, /forecast (SSG, 5 cultures)
-      learn/                          Overview + signs, houses, house-systems, aspects, transits, rising
-      reading/page.tsx                Cast a chart
-      forecast/page.tsx               Annual report
-      charts/page.tsx                 Saved-chart management (anonymous and signed-in)
-      synastry/page.tsx               Two-chart comparison
-      onboarding/, onboarding/success/  First-visit funnel for anonymous visitors
-      sign-in/, sign-up/, account/    Auth
-      methodology/page.tsx
-      translation-matrix/page.tsx
-      wait-list/page.tsx
-      api/                             auth/{signup,signin,signout,me}, charts, charts/[id], me, me/export,
-                                       geocode, wait-list
+      layout.tsx                      Font loaders, AuthProvider, PantheonProvider, AuthGate
+      globals.css                     Tailwind v4 @theme tokens + per-culture ground/accent
+      manifest.ts                     PWA manifest -> /manifest.webmanifest
+      opengraph-image.tsx             The share card (Satori, Cinzel TTF)
+      page.tsx                        The day
+      week/, season/, year/           The other three horizons
+      transits/, transits/[id]/       Long-transit readings
+      reading/                        Cast a chart
+      charts/, charts/[id]/[body]/    The natal instrument and placement readings
+      synastry/, forecast/            The other two instruments
+      voices/, voices/[culture]/      The five doorways and journeys (SSG)
+      matrix/, method/, learn/        Reference surfaces
+      welcome/, signin/, account/     Funnel and the record (neutral ground)
+      waitlist/                       The roll
+      error.tsx, not-found.tsx        The illegible omen and the unmapped sky
+      api/                            auth/{signup,signin,signout,me}, charts, charts/[id], me,
+                                      me/export, geocode, wait-list
     components/
-      layout/                         SiteHeader, SiteFooter, MobileMenu, PantheonBodyAttribute
-      auth/                           AuthProvider, AuthGate, AccountChip, AuthOnboardingLayout
-      onboarding/                     OnboardingFlow, SuccessState
-      pantheon/                       PantheonSelector, PantheonContext, PantheonJourney, DeityCard, InterpretiveNote
-      wheel/                          NatalWheel (client), wheelDraw (pure), wheelHitTest (pure), WheelTooltip
-      oracle/                         OracleDecree
-      daily/                          TodayDashboard, WeekForecastSection, BigThree, MoonPhasePanel, and related
-      forecast/                       ForecastExperience, AnnualReportSection
-      reading/                        ReadingExperience, ReadingDisplay, BirthForm
-      charts/                         SaveChartPanel
-      matrix/                         TranslationMatrix
-      waitlist/                       WaitListForm
-      glyphs/                         DeityGlyph + 5 culture path modules (35 glyphs total)
-      ui/                             GoldText, GlassPanel, SectionContainer, PrintButton
-    data/                             cultures, deities (35), oracleDecrees, culturalOrientations,
-                                      methodologyContent (3 sections + 4 interpretive notes + sources),
-                                      sampleChart (SAMPLE_CHART + aspect computation), plus zodiacSigns,
-                                      houses, lifeDomains, and other per-domain content tables
-    lib/                              ephemeris, houses, transits, reading, savedCharts, onboarding,
-                                      pantheonPreference, waitlistSchema/waitlistStore, siteUrl, classNames,
-                                      reducedMotion
+      chrome/                         The two chassis: Lintel, SubBar, CultureChip, CultureGate,
+                                      HorizonControl, NaveShell, NaveHead, InstrumentShell,
+                                      SectionDivider, Votive, FeedbackRow, MethodFooter, OrbBar,
+                                      SpanBar, Skeleton, WheelSvg, ReceptionNote
+      home/                           The day's grid, rails, and the two natal modules
+      horizons/                       Week, season, and year naves
+      transits/                       Long-transit index, detail, and spine templates
+      charts/, reading/               Instrument, placements, cast flow
+      synastry/, forecast/            Instruments
+      voices/                         Journey islands
+      welcome/                        Funnel steps
+      auth/                           AuthProvider, AuthGate, AccountChip
+      pantheon/                       PantheonContext (culture resolution)
+      matrix/, waitlist/              TranslationMatrix, WaitListForm
+    data/                             cultures (10 bodies), deities (50), cultureVoice, aspectRulings,
+                                      transitSpine, notifications, permissionsRegister, planetInSign
+                                      (120), aspectReadings (45 pairs), yearNarrative, oracleDecrees,
+                                      methodologyContent, zodiacSigns, houses, and related tables
+    lib/                              ephemeris, houses, transits, transitSpans, reading,
+                                      personalReading, weekReading, permissions, dayPressure,
+                                      savedCharts, feedback, onboarding, pantheonPreference,
+                                      waitlistSchema/waitlistStore, siteUrl, classNames, reducedMotion
     lib/auth/                         session, db, users, charts, rateLimit, origin, nextPath
     types/                            deity (Deity, DeityMatrix)
+  scripts/                            fetch-fonts.mjs, generate-icons.mjs, check-gates.mjs
   data/                               Wait-list JSON + SQLite auth db (local dev only, gitignored)
 ```
 
@@ -102,11 +107,18 @@ web/
 
 | Need this                          | Look here                                                     |
 | ---------------------------------- | ------------------------------------------------------------- |
-| Add or edit a deity                | `src/data/deities.ts`                                         |
+| Add or edit a deity                | `src/data/deities.ts` (50 records, 5 cultures x 10 bodies)     |
 | Add or edit oracle decree copy     | `src/data/oracleDecrees.ts`                                   |
-| Add or edit a glyph                | `src/components/glyphs/paths/<culture>.ts`                    |
+| Rename a surface per culture       | `src/data/cultureVoice.ts` (titles, structures, house groups) |
+| Edit an aspect ruling              | `src/data/aspectRulings.ts` (5 x 5)                           |
+| Edit long-transit prose            | `src/data/transitSpine.ts` (5 cultures x 5 slow bodies)       |
+| Edit a daily notification line     | `src/data/notifications.ts` (32 per culture)                  |
+| Edit the day's permission items    | `src/data/permissionsRegister.ts`                             |
+| Change the orb table               | `src/data/sampleChart.ts` (`ASPECT_RULES`, published on `/method`) |
 | Change the mock chart positions    | `src/data/sampleChart.ts` (`SAMPLE_CHART`)                    |
 | Tune design tokens                 | `src/app/globals.css` (`@theme` block)                        |
+| Change the shared chassis          | `src/components/chrome/`                                      |
+| Run the style gates                | `npm run gates`                                               |
 | Wait-list file (local dev)         | `data/wait-list.json` (gitignored)                             |
 | Wait-list adapter                  | `src/lib/waitlistStore.ts`                                    |
 | Validation schema                  | `src/lib/waitlistSchema.ts`                                   |
@@ -132,21 +144,45 @@ replaces only `src/lib/waitlistStore.ts`.
 
 ## Design tokens
 
-The "Relic" aesthetic is gold on near-black. The signature gold-leaf gradient is
-defined as the `text-gold-leaf` utility in `globals.css` and as a canvas linear
-gradient in `wheelDraw.ts`. The same gradient is also baked into the SVG
-`<linearGradient>` of each `DeityGlyph` instance.
+The identity is "The Instrument in the Temple": a lapidary reading surface on a
+flat, culture-tinted ground, with a single muted accent per culture. The whole
+scheme shifts with the active culture. Tokens live in the `@theme` block of
+`globals.css`; the same values are mirrored in `src/data/palettes.ts` for the
+few places that need them in JS.
 
-Restrict `text-gold-leaf` to display headings (24px and above). Body copy uses
-solid `text-ink-primary` so contrast is clear to a11y auditors. The utility
-carries a solid `color: #d4af37` fallback for tools that cannot interpret
-gradient text.
+| Culture | Ground | Accent |
+|---------|--------|--------|
+| Egypt | `#1A1712` | `#B59A55` gold |
+| Greece | `#171A1C` | `#7C93A6` aegean |
+| Canaan | `#1A1813` | `#8A9268` cedar |
+| Carthage | `#191218` | `#94648C` Tyrian purple |
+| Rome | `#1B1410` | `#A5544A` Pompeian red |
+| (neutral) | `#171310` | `#B59A55` |
 
-## Glassmorphism
+Neutral ground is used only where no culture is presumed: `/welcome`,
+`/signin`, `/account`, `/waitlist`, and the error states.
 
-`backdrop-filter` is expensive on mid-tier mobile. The `glass-panel` utility is
-limited to at most three simultaneous instances per route. The deity grid uses
-solid `bg-bg-deep` with hairline borders instead of glass.
+Inks: bone `#E6DECC`, prose `#D9D1BF`, dim `#9A917D`, faint `#6F6B60`. Signals:
+harmony `#B59A55`, conflict `#B56B71` (also retrograde values and destructive
+actions). Rules are `rgba(230,222,204,.16)`, row rules `.11`.
+
+Runtime CSS variables `--ground` and `--accent` are set per culture by
+`body[data-pantheon="..."]`, so components reference `var(--accent)` rather
+than any specific hex.
+
+## Geometry
+
+Hard rules, enforced by eye and by review:
+
+- `border-radius: 0` everywhere. No shadows. No gradients. No `backdrop-filter`.
+- Rules are 1px only. Accent-tinted borders use `color-mix` at 48% of the accent.
+- Mono microcopy floors at 11px, even where the design mocks show 9.5 to 10px.
+
+## Type
+
+Cinzel (`font-display`) for display and caps, letter-spacing .06 to .3em.
+Spectral (`font-body`) for prose, 15 to 18px at 1.65 to 1.75 line-height.
+IBM Plex Mono (`font-mono`) for data and microcopy, letter-spacing .06 to .22em.
 
 ## Reduced motion
 
@@ -154,49 +190,47 @@ Two layers, both active:
 
 1. `globals.css` zeroes out CSS animation and transition durations under
    `prefers-reduced-motion: reduce`.
-2. JS-driven motion (Framer Motion via `motion/react`, the canvas conjunction
-   pulse, the oracle decree crossfade) reads `usePrefersReducedMotion()` from
-   `src/lib/reducedMotion.ts` and skips the animated frame.
+2. JS-driven motion (via `motion/react`, and the canvas conjunction pulse where
+   it survives) reads `usePrefersReducedMotion()` from `src/lib/reducedMotion.ts`
+   and skips the animated frame.
 
-## Style gates (CI-friendly)
+The rebrand removed nearly all motion: progress bars render static, page
+transitions are at most a 200ms opacity fade.
+
+## Style gates
 
 ```bash
-rg "—" src/                                                          # no em dashes
-rg -i "\b(inter|roboto|harness|unlock your|discover your)\b" src/   # no banned terms
-rg "framer-motion" src/                                              # must use motion/react instead
+npm run gates
 ```
 
-All three return zero matches on a clean tree.
-
-## Known shortcuts
-
-None. The 35 deity glyphs are all hand-authored geometric line-art per the
-culture vocabulary brief (Egyptian hieroglyph-style strokes, Greek geometric
-clarity, Canaanite cuneiform-inflected angularity, Punic Tanit-based geometry,
-Roman legionary/augural motifs).
+Scans `src/` for em dashes, banned terms (`inter`, `roboto`, `harness`,
+"unlock your", "discover your"), and `framer-motion` imports, and exits
+non-zero with a `file:line` list. Run it alongside `npm run typecheck` and
+`npm run lint` before every commit.
 
 ## Routes
 
 | Route                          | Type         | Notes                                                |
 | ------------------------------ | ------------ | ---------------------------------------------------- |
-| `/`                            | static       | Hero, selector, today dashboard, week, demo, method, wait-list |
-| `/about`                       | static       | "Why real astronomy" pitch for a skeptical reader     |
-| `/forecast`                    | static       | Annual report + moon phases, eclipses, retrogrades, ingresses |
-| `/reading`                     | static       | Cast a natal chart, save it, read it in any pantheon |
-| `/charts`                      | static       | Saved-chart management (anonymous and signed-in)     |
-| `/synastry`                    | static       | Two-chart comparison                                 |
-| `/learn`                       | static       | Plain-language explainer: planets, signs, houses, cultures |
-| `/learn/{signs,houses,house-systems,aspects,transits,rising}` | static | One topic explainer per route |
-| `/onboarding`, `/onboarding/success` | static | First-visit funnel shown once to anonymous visitors entering `/reading`, `/charts`, `/forecast`, or `/synastry` |
-| `/sign-in`, `/sign-up`         | static       | Auth                                                 |
-| `/account`                     | static       | Display name, password, data export, deletion       |
-| `/pantheon/[culture]`          | SSG (5 pages) | Overview: deities, oracle decree, interpretive notes. `generateStaticParams` (culture layout) over the five cultures |
-| `/pantheon/[culture]/today`    | SSG (5 pages) | Today + week, read in that pantheon's voice          |
-| `/pantheon/[culture]/reading`  | SSG (5 pages) | Cast/read a chart with the pantheon fixed (no selector) |
-| `/pantheon/[culture]/forecast` | SSG (5 pages) | Annual forecast with the pantheon fixed (no selector) |
-| `/methodology`                 | static       | Methodology page                                     |
-| `/translation-matrix`          | static       | 7x5 interactive table                                |
-| `/wait-list`                   | static       | Long-form pitch + form for the Android launch        |
+| `/`                            | static       | The day: ephemeris rail, the decree, aspects in orb, the active long transit, plus the day's permissions and where the day falls |
+| `/week`                        | static       | Seven days, per-culture structure (Rome flags days F/N/C) |
+| `/season`                      | static       | The current zodiac season, spine reading + the season's sky |
+| `/year`                        | static       | The year, structured per culture (3 river seasons, festival circuit, 2 rain halves, open/closed sea, 4 quarters) |
+| `/transits`, `/transits/[id]`  | static       | Long-transit readings scoped to the transit's real span |
+| `/reading`                     | static       | Cast a natal chart and save it                       |
+| `/charts`                      | static       | The natal instrument: placements, wheel, saved charts |
+| `/charts/[id]/[body]`          | static       | One placement read at length                         |
+| `/synastry`                    | static       | Two charts weighed                                   |
+| `/forecast`                    | static       | Stations, twelve-month spans, long-transit cards     |
+| `/voices`, `/voices/[culture]` | SSG (5 pages) | The five doorways and their journeys. Canaan carries the continuity passage |
+| `/matrix`                      | static       | The 10x5 translation matrix                          |
+| `/method`                      | static       | How the sky is computed, including the reception statement |
+| `/learn`                       | static       | Plain-language explainers                            |
+| `/learn/{signs,houses,house-systems,aspects,transits,rising}` | static | One topic each; `/learn/aspects` is the per-culture glossary |
+| `/welcome`                     | static       | Three-step funnel: culture, birth details, account. All skippable |
+| `/signin`                      | static       | Email and password, both modes                       |
+| `/account`                     | static       | The record: culture, counts, sign out, strike the record |
+| `/waitlist`                    | static       | The roll                                             |
 | `/manifest.webmanifest`        | generated    | PWA manifest from `src/app/manifest.ts`; icons in `public/icons/` |
 | `/api/auth/{signup,signin,signout,me}` | dynamic | Email/password auth                                  |
 | `/api/charts`, `/api/charts/[id]` | dynamic    | Authenticated chart CRUD                             |
@@ -204,6 +238,11 @@ Roman legionary/augural motifs).
 | `/api/me/export`               | dynamic      | JSON export of account + saved charts                |
 | `/api/geocode`                 | dynamic      | OSM Nominatim proxy with caching + rate limiting    |
 | `/api/wait-list`               | dynamic      | POST only, file-backed in dev, no-op + log on Vercel |
+
+Redirects in `next.config.ts` keep every pre-rebrand URL working: the pantheon
+journeys map onto `/voices` and the shared horizons with a `?culture=` param,
+and `/about`, `/methodology`, `/translation-matrix`, `/onboarding`, `/sign-in`,
+`/sign-up`, and `/wait-list` all point at their replacements.
 
 ## Environment variables
 

@@ -54,6 +54,7 @@ export async function POST(request: Request) {
       ok: true,
       persisted: result.persisted,
       duplicate: result.duplicate,
+      position: result.position,
     });
   } catch (err) {
     console.error("[waitlist] storage error", err);

@@ -3,17 +3,27 @@ import { CULTURES } from "@/data/cultures";
 import { SITE_URL } from "@/lib/siteUrl";
 
 /**
- * Machine-readable URL list for crawlers. Covers the static content pages, the
- * learn section, and every per-culture pantheon route (overview + today +
- * reading + forecast). Private/utility routes (account, sign-in, sign-up, api)
- * are intentionally excluded.
+ * Machine-readable URL list for crawlers. Covers the reading horizons, the
+ * instruments, the learn section, the method and matrix references, and the
+ * five voice doorways. Private/utility routes (account, signin, welcome, api)
+ * and per-chart routes are intentionally excluded.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE_URL;
 
   const staticPaths = [
     "",
-    "/about",
+    "/week",
+    "/season",
+    "/year",
+    "/transits",
+    "/reading",
+    "/charts",
+    "/synastry",
+    "/forecast",
+    "/voices",
+    "/method",
+    "/matrix",
     "/learn",
     "/learn/signs",
     "/learn/rising",
@@ -21,25 +31,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/learn/house-systems",
     "/learn/aspects",
     "/learn/transits",
-    "/methodology",
-    "/translation-matrix",
-    "/reading",
-    "/season",
-    "/forecast",
-    "/synastry",
-    "/charts",
-    "/wait-list",
+    "/waitlist",
   ];
 
-  const pantheonPaths = CULTURES.flatMap((c) => [
-    `/pantheon/${c}`,
-    `/pantheon/${c}/today`,
-    `/pantheon/${c}/reading`,
-    `/pantheon/${c}/season`,
-    `/pantheon/${c}/forecast`,
-  ]);
+  const voicePaths = CULTURES.map((c) => `/voices/${c}`);
 
-  return [...staticPaths, ...pantheonPaths].map((path) => ({
+  return [...staticPaths, ...voicePaths].map((path) => ({
     url: `${base}${path}`,
     changeFrequency: path === "" ? "weekly" : "monthly",
     priority: path === "" ? 1 : 0.7,

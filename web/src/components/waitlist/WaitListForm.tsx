@@ -3,29 +3,38 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion, AnimatePresence } from "motion/react";
-import {
-  CULTURES,
-  CULTURE_LABELS,
-  type Culture,
-} from "@/data/cultures";
+import { CULTURES, CULTURE_LABELS } from "@/data/cultures";
 import { waitListSchema, type WaitListInput } from "@/lib/waitlistSchema";
-import { GlassPanel } from "@/components/ui/GlassPanel";
-import { usePrefersReducedMotion } from "@/lib/reducedMotion";
 import { cn } from "@/lib/classNames";
 
-interface WaitListFormProps {
+export interface WaitListFormProps {
+  /** Email-only form (the standalone /waitlist page). When false, also
+   * collects the optional name/culture/background fields. */
   compact?: boolean;
 }
 
 type SubmitState =
   | { kind: "idle" }
   | { kind: "submitting" }
-  | { kind: "success"; persisted: boolean; duplicate: boolean }
+  | { kind: "success"; position: number }
   | { kind: "error"; message: string };
 
+type WaitListResponse =
+  | { ok: true; persisted: boolean; duplicate: boolean; position: number }
+  | { ok: false; error: string };
+
+/** 1ST, 2ND, 3RD, 4TH, and the teens that break the pattern. */
+function ordinal(n: number): string {
+  const lastTwo = n % 100;
+  if (lastTwo >= 11 && lastTwo <= 13) return `${n}TH`;
+  const suffix = { 1: "ST", 2: "ND", 3: "RD" }[n % 10] ?? "TH";
+  return `${n}${suffix}`;
+}
+
+const INPUT_CLASS =
+  "w-full border border-rule bg-transparent px-3.5 py-3 font-mono text-[11px] tracking-[0.04em] text-bone placeholder:text-faint-ink outline-none transition-colors focus:border-[var(--accent)]";
+
 export function WaitListForm({ compact = false }: WaitListFormProps) {
-  const reduce = usePrefersReducedMotion();
   const [state, setState] = useState<SubmitState>({ kind: "idle" });
 
   const {
@@ -47,163 +56,107 @@ export function WaitListForm({ compact = false }: WaitListFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
-      const data = (await res.json()) as
-        | { ok: true; persisted: boolean; duplicate?: boolean }
-        | { ok: false; error: string };
+      const data = (await res.json()) as WaitListResponse;
       if (!res.ok || !data.ok) {
-        const message = data && "error" in data && data.error ? data.error : "Submission failed.";
+        const message = !data.ok && data.error ? data.error : "The roll did not open. Try again.";
         setState({ kind: "error", message });
         return;
       }
-      setState({ kind: "success", persisted: data.persisted, duplicate: data.duplicate ?? false });
+      setState({ kind: "success", position: data.position });
       reset();
     } catch {
-      setState({ kind: "error", message: "Network error. Please try again." });
+      setState({ kind: "error", message: "The roll did not open. Try again." });
     }
   });
 
-  const isSuccess = state.kind === "success";
+  if (state.kind === "success") {
+    return (
+      <div className="font-mono text-[11px] tracking-[0.08em] text-dim">
+        YOU ARE {ordinal(state.position)} ON THE ROLL · WE EMAIL ONCE, WHEN CALLED
+      </div>
+    );
+  }
 
   return (
-    <GlassPanel tone="solid" className={cn("p-6 md:p-8")}>
-      <AnimatePresence mode="wait">
-        {isSuccess ? (
-          <motion.div
-            key="success"
-            initial={reduce ? false : { opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduce ? 0.01 : 0.4 }}
-          >
-            <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
-              {state.kind === "success" && state.duplicate ? "Already on the list" : "You are on the list"}
-            </div>
-            <h3 className="font-display text-ink-primary mt-3 text-2xl md:text-3xl">
-              {state.kind === "success" && state.duplicate
-                ? "You were already here. Nothing more to do."
-                : "The signal will reach you when the build is ready."}
-            </h3>
-            <p className="text-ink-secondary font-body mt-4 text-base leading-relaxed">
-              One short email at launch. No newsletter. No drip sequence.
-            </p>
-            {!state.persisted ? (
-              <p className="text-ink-tertiary font-mono mt-6 text-[10px] uppercase tracking-[0.25em]">
-                Note: this preview deployment captures entries in logs only.
-              </p>
-            ) : null}
-          </motion.div>
-        ) : (
-          <motion.form
-            key="form"
-            onSubmit={onSubmit}
-            initial={reduce ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduce ? 0.01 : 0.3 }}
-            className="flex flex-col gap-5"
-            noValidate
-          >
-            <div>
-              <div className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.3em]">
-                Wait list
-              </div>
-              <h3 className="font-display text-ink-primary mt-2 text-2xl md:text-3xl">
-                Be told when it lands.
-              </h3>
-            </div>
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <input
+          id="wl-email"
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          placeholder="scribe@example.com"
+          aria-invalid={Boolean(errors.email)}
+          {...register("email")}
+          className={cn(INPUT_CLASS, "sm:flex-1")}
+        />
+        <button
+          type="submit"
+          disabled={state.kind === "submitting"}
+          className="border border-[var(--accent)] px-[18px] py-3 font-display text-[10.5px] tracking-[0.14em] text-[var(--accent)] transition-colors hover:bg-[var(--accent)]/10 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {state.kind === "submitting" ? "ENTERING" : "ENTER"}
+        </button>
+      </div>
+      {errors.email ? (
+        <p role="alert" className="font-mono text-[11px] tracking-[0.06em] text-conflict">
+          {errors.email.message}
+        </p>
+      ) : null}
 
-            <Field
-              id="wl-email"
-              label="Email"
-              error={errors.email?.message}
-              required
+      {compact ? null : (
+        <div className="flex flex-col gap-4">
+          <Field id="wl-name" label="NAME (OPTIONAL)" error={errors.name?.message}>
+            <input
+              id="wl-name"
+              type="text"
+              autoComplete="name"
+              aria-invalid={Boolean(errors.name)}
+              {...register("name")}
+              className={INPUT_CLASS}
+            />
+          </Field>
+
+          <Field id="wl-pantheon" label="CULTURE PREFERENCE (OPTIONAL)" error={errors.pantheon?.message}>
+            <select
+              id="wl-pantheon"
+              aria-invalid={Boolean(errors.pantheon)}
+              {...register("pantheon")}
+              className={cn(INPUT_CLASS, "appearance-none")}
             >
-              <input
-                id="wl-email"
-                type="email"
-                inputMode="email"
-                autoComplete="email"
-                placeholder="you@example.com"
-                aria-invalid={Boolean(errors.email)}
-                {...register("email")}
-                className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
-              />
-            </Field>
+              <option value="">NO PREFERENCE</option>
+              {CULTURES.map((c) => (
+                <option key={c} value={c}>
+                  {CULTURE_LABELS[c].toUpperCase()}
+                </option>
+              ))}
+            </select>
+          </Field>
 
-            {compact ? null : (
-              <>
-                <Field id="wl-name" label="Name (optional)" error={errors.name?.message}>
-                  <input
-                    id="wl-name"
-                    type="text"
-                    autoComplete="name"
-                    aria-invalid={Boolean(errors.name)}
-                    {...register("name")}
-                    className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
-                  />
-                </Field>
+          <Field
+            id="wl-background"
+            label="CLASSICS OR RELIGIOUS-STUDIES BACKGROUND? (OPTIONAL)"
+            error={errors.background?.message}
+          >
+            <textarea
+              id="wl-background"
+              rows={3}
+              aria-invalid={Boolean(errors.background)}
+              {...register("background")}
+              className={INPUT_CLASS}
+            />
+          </Field>
+        </div>
+      )}
 
-                <Field
-                  id="wl-pantheon"
-                  label="Pantheon preference (optional)"
-                  error={errors.pantheon?.message}
-                >
-                  <select
-                    id="wl-pantheon"
-                    aria-invalid={Boolean(errors.pantheon)}
-                    {...register("pantheon")}
-                    className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
-                  >
-                    <option value="">No preference</option>
-                    {CULTURES.map((c) => (
-                      <option key={c} value={c as Culture}>
-                        {CULTURE_LABELS[c]}
-                      </option>
-                    ))}
-                  </select>
-                </Field>
+      {state.kind === "error" ? (
+        <p role="alert" className="font-mono text-[11px] tracking-[0.06em] text-conflict">
+          {state.message}
+        </p>
+      ) : null}
 
-                <Field
-                  id="wl-background"
-                  label="Classics or religious-studies background? (optional)"
-                  error={errors.background?.message}
-                >
-                  <textarea
-                    id="wl-background"
-                    rows={3}
-                    aria-invalid={Boolean(errors.background)}
-                    {...register("background")}
-                    className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
-                  />
-                </Field>
-              </>
-            )}
-
-            <button
-              type="submit"
-              disabled={state.kind === "submitting"}
-              className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 mt-2 inline-flex items-center justify-center gap-2 rounded-full border px-6 py-3 text-sm uppercase tracking-[0.2em] transition-colors disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {state.kind === "submitting" ? "Sending" : "Join the wait list"}
-              {state.kind !== "submitting" ? <span aria-hidden>→</span> : null}
-            </button>
-
-            {state.kind === "error" ? (
-              <p
-                role="alert"
-                className="text-conflict-red font-mono text-xs uppercase tracking-[0.2em]"
-              >
-                {state.message}
-              </p>
-            ) : null}
-
-            <p className="text-ink-tertiary font-body text-xs">
-              Your email is recorded once and used only to notify you when the app is ready.
-            </p>
-          </motion.form>
-        )}
-      </AnimatePresence>
-    </GlassPanel>
+      <p className="font-mono text-[10.5px] tracking-[0.08em] text-dim">WE EMAIL ONCE, WHEN CALLED</p>
+    </form>
   );
 }
 
@@ -211,23 +164,18 @@ interface FieldProps {
   id: string;
   label: string;
   error?: string;
-  required?: boolean;
   children: React.ReactNode;
 }
 
-function Field({ id, label, error, required, children }: FieldProps) {
+function Field({ id, label, error, children }: FieldProps) {
   return (
-    <div>
-      <label
-        htmlFor={id}
-        className="text-ink-secondary font-mono mb-2 block text-[10px] uppercase tracking-[0.25em]"
-      >
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className="font-mono text-[11px] tracking-[0.14em] text-dim">
         {label}
-        {required ? <span className="text-gold-leaf ml-1">*</span> : null}
       </label>
       {children}
       {error ? (
-        <p className="text-conflict-red font-mono mt-2 text-[11px] uppercase tracking-[0.2em]">
+        <p role="alert" className="font-mono text-[11px] tracking-[0.06em] text-conflict">
           {error}
         </p>
       ) : null}

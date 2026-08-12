@@ -78,6 +78,11 @@ type GeocodeStatus =
 
 const GEOCODE_DEBOUNCE_MS = 350;
 
+const INPUT_CLASS =
+  "w-full border border-rule bg-transparent px-4 py-3 font-body text-[16px] text-bone outline-none transition-colors focus:border-[var(--accent)]";
+const LINK_CLASS =
+  "font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--accent)] underline-offset-4 hover:underline";
+
 export function BirthForm({
   onSubmit,
   submitting = false,
@@ -330,7 +335,7 @@ export function BirthForm({
             min="1800-01-01"
             max={todayIso}
             onChange={(e) => patch({ date: e.target.value })}
-            className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
+            className={INPUT_CLASS}
             required
           />
         </Field>
@@ -340,19 +345,19 @@ export function BirthForm({
             type="time"
             value={state.time}
             onChange={(e) => patch({ time: e.target.value })}
-            className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
+            className={INPUT_CLASS}
             required
           />
         </Field>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-ink-tertiary font-body max-w-md text-xs">
+        <p className="max-w-md font-body text-[13px] text-dim">
           The Sun, planets, and aspects are accurate to the minute of arc. The Moon and the Ascendant depend on the birth time; without it they are approximate.
         </p>
         <button
           type="button"
           onClick={() => patch({ time: "12:00" })}
-          className="text-gold-leaf font-mono shrink-0 text-[10px] uppercase tracking-[0.2em] underline-offset-4 hover:underline"
+          className={cn(LINK_CLASS, "shrink-0")}
         >
           I don&apos;t know my time
         </button>
@@ -396,7 +401,7 @@ export function BirthForm({
               onKeyDown={onCityKeyDown}
               placeholder="Start typing a city: Toledo, Tbilisi, Reykjavik..."
               autoComplete="off"
-              className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
+              className={INPUT_CLASS}
             />
           </Field>
           {showDropdown ? (
@@ -406,10 +411,10 @@ export function BirthForm({
               // Keep the input focused when an option is clicked so onBlur does
               // not fire before onClick.
               onMouseDown={(e) => e.preventDefault()}
-              className="border-gold-soft bg-bg-deep absolute z-10 mt-2 max-h-80 w-full overflow-auto rounded-xl border shadow-2xl"
+              className="absolute z-10 mt-2 max-h-80 w-full overflow-auto border border-[var(--accent)] bg-[var(--ground)]"
             >
               {suggestions.length > 0 ? (
-                <ul className="p-1">
+                <ul>
                   {suggestions.map((s, idx) => (
                     <li key={s.id}>
                       <button
@@ -420,39 +425,37 @@ export function BirthForm({
                         onClick={() => selectSuggestion(s)}
                         onMouseEnter={() => setActiveIndex(idx)}
                         className={cn(
-                          "flex w-full items-baseline justify-between gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
-                          idx === activeIndex
-                            ? "bg-gold-leaf/10 text-ink-primary"
-                            : "text-ink-primary hover:bg-gold-leaf/5",
+                          "flex w-full items-baseline justify-between gap-3 border-t border-rule-row px-3 py-2.5 text-left transition-colors first:border-t-0",
+                          idx === activeIndex ? "bg-bone/10 text-bone" : "text-bone hover:bg-bone/5",
                         )}
                       >
                         <span className="min-w-0 flex-1 truncate">
-                          <span className="font-display text-base">{s.label}</span>
+                          <span className="font-body text-[15px]">{s.label}</span>
                           {s.sublabel ? (
-                            <span className="text-ink-secondary font-body ml-2 text-sm">
+                            <span className="ml-2 font-body text-[13px] text-prose">
                               {s.sublabel}
                             </span>
                           ) : null}
                         </span>
-                        <span className="text-ink-tertiary font-mono shrink-0 text-[10px] tracking-[0.1em]">
+                        <span className="shrink-0 font-mono text-[11px] tracking-[0.08em] text-dim">
                           {s.latitude.toFixed(1)}°, {s.longitude.toFixed(1)}°
                         </span>
                       </button>
                     </li>
                   ))}
                   {geocode.kind === "loading" ? (
-                    <li className="text-ink-tertiary font-mono px-3 py-2 text-[10px] uppercase tracking-[0.25em]">
+                    <li className="px-3 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
                       Searching the map...
                     </li>
                   ) : null}
                 </ul>
               ) : geocode.kind === "loading" ? (
-                <div className="text-ink-tertiary font-mono px-3 py-3 text-[10px] uppercase tracking-[0.25em]">
+                <div className="px-3 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
                   Searching the map...
                 </div>
               ) : noMatch ? (
                 <div className="px-3 py-3">
-                  <p className="text-ink-secondary font-body text-sm">
+                  <p className="font-body text-[14px] text-prose">
                     No place matched &ldquo;{query}&rdquo;.
                   </p>
                   <button
@@ -461,24 +464,24 @@ export function BirthForm({
                       setOpen(false);
                       patch({ manualMode: true });
                     }}
-                    className="text-gold-leaf font-mono mt-2 text-[10px] uppercase tracking-[0.25em] underline-offset-4 hover:underline"
+                    className={cn(LINK_CLASS, "mt-2")}
                   >
                     Enter coordinates manually →
                   </button>
                 </div>
               ) : geocode.kind === "error" ? (
-                <div className="text-conflict-red font-mono px-3 py-3 text-[10px] uppercase tracking-[0.25em]">
+                <div className="px-3 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-conflict">
                   {geocode.message}
                 </div>
               ) : typingHint ? (
-                <div className="text-ink-tertiary font-mono px-3 py-3 text-[10px] uppercase tracking-[0.25em]">
+                <div className="px-3 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
                   Keep typing to search the world map...
                 </div>
               ) : null}
             </div>
           ) : null}
           <div className="mt-3 flex items-center justify-between gap-3">
-            <p className="text-ink-tertiary font-mono text-[10px] uppercase tracking-[0.25em]">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
               Selected:{" "}
               {state.latitudeText && state.longitudeText
                 ? `${Number(state.latitudeText).toFixed(3)}°, ${Number(state.longitudeText).toFixed(3)}°`
@@ -487,7 +490,7 @@ export function BirthForm({
             <button
               type="button"
               onClick={() => patch({ manualMode: true })}
-              className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.25em] underline-offset-4 hover:underline"
+              className={LINK_CLASS}
             >
               Enter coordinates manually
             </button>
@@ -506,7 +509,7 @@ export function BirthForm({
                 value={state.latitudeText}
                 onChange={(e) => patch({ latitudeText: e.target.value })}
                 placeholder="35.1495"
-                className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
+                className={INPUT_CLASS}
                 required
               />
             </Field>
@@ -520,7 +523,7 @@ export function BirthForm({
                 value={state.longitudeText}
                 onChange={(e) => patch({ longitudeText: e.target.value })}
                 placeholder="-90.049"
-                className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
+                className={INPUT_CLASS}
                 required
               />
             </Field>
@@ -532,14 +535,14 @@ export function BirthForm({
               value={state.cityLabel}
               onChange={(e) => patch({ cityLabel: e.target.value })}
               placeholder="A label that will appear in your reading"
-              className="border-hairline focus:border-gold-soft bg-bg-void font-body text-ink-primary mt-4 w-full rounded-xl border px-4 py-3 text-base outline-none transition-colors"
+              className={cn(INPUT_CLASS, "mt-4")}
             />
           </Field>
           <div className="mt-3 flex justify-end">
             <button
               type="button"
               onClick={() => patch({ manualMode: false })}
-              className="text-gold-leaf font-mono text-[10px] uppercase tracking-[0.25em] underline-offset-4 hover:underline"
+              className={LINK_CLASS}
             >
               Back to place search
             </button>
@@ -551,16 +554,16 @@ export function BirthForm({
         type="submit"
         disabled={submitting}
         className={cn(
-          "border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 mt-2 inline-flex items-center justify-center gap-2 rounded-full border px-6 py-3 text-sm uppercase tracking-[0.2em] transition-colors",
+          "mt-2 inline-flex items-center justify-center gap-2 border border-[var(--accent)] px-6 py-3 font-display text-[12px] uppercase tracking-[0.2em] text-[var(--accent)] transition-colors hover:bg-[var(--accent)]/10",
           submitting && "cursor-not-allowed opacity-60",
         )}
       >
-        {submitting ? "Casting" : (submitLabel ?? "Cast the chart")}
+        {submitting ? "CASTING" : (submitLabel ?? "CAST THE CHART")}
         {!submitting ? <span aria-hidden>→</span> : null}
       </button>
 
       {error ? (
-        <p role="alert" className="text-conflict-red font-mono text-xs uppercase tracking-[0.2em]">
+        <p role="alert" className="font-mono text-[11px] uppercase tracking-[0.2em] text-conflict">
           {error}
         </p>
       ) : null}
@@ -579,7 +582,7 @@ function Field({ id, label, children }: FieldProps) {
     <div>
       <label
         htmlFor={id}
-        className="text-ink-secondary font-mono mb-2 block text-[10px] uppercase tracking-[0.25em]"
+        className="mb-2 block font-mono text-[11px] uppercase tracking-[0.2em] text-dim"
       >
         {label}
       </label>

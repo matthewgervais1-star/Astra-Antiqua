@@ -53,6 +53,28 @@ const nextConfig: NextConfig = {
   // better-sqlite3 has native bindings and cannot be bundled by the build;
   // mark it as an external server package so Next does not try to webpack it.
   serverExternalPackages: ["better-sqlite3"],
+  // The rebrand reorganized the route map. Every old path keeps working.
+  // The pantheon journeys split: the overview became a voice doorway, and
+  // the per-culture horizon pages became the shared horizons carrying a
+  // culture param. More specific sources first.
+  async redirects() {
+    return [
+      { source: "/pantheon/:culture/today", destination: "/?culture=:culture", permanent: true },
+      { source: "/pantheon/:culture/reading", destination: "/reading?culture=:culture", permanent: true },
+      { source: "/pantheon/:culture/season", destination: "/season?culture=:culture", permanent: true },
+      { source: "/pantheon/:culture/forecast", destination: "/forecast?culture=:culture", permanent: true },
+      { source: "/pantheon/:culture", destination: "/voices/:culture", permanent: true },
+      { source: "/pantheon", destination: "/voices", permanent: true },
+      { source: "/onboarding/success", destination: "/", permanent: true },
+      { source: "/onboarding", destination: "/welcome", permanent: true },
+      { source: "/sign-in", destination: "/signin", permanent: true },
+      { source: "/sign-up", destination: "/signin?mode=new", permanent: true },
+      { source: "/wait-list", destination: "/waitlist", permanent: true },
+      { source: "/methodology", destination: "/method", permanent: true },
+      { source: "/about", destination: "/method", permanent: true },
+      { source: "/translation-matrix", destination: "/matrix", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

@@ -1,56 +1,32 @@
 import Link from "next/link";
-import { CULTURES, CULTURE_LABELS } from "@/data/cultures";
-import { SectionContainer } from "@/components/ui/SectionContainer";
-import { GoldText } from "@/components/ui/GoldText";
+
+const LINK_CLASS =
+  "border-b border-bone/40 pb-[2px] transition-colors hover:text-[var(--accent)] hover:border-[var(--accent)]";
 
 export default function NotFound() {
   return (
-    <SectionContainer size="default" spacing="default">
-      <div className="text-ink-tertiary font-mono text-xs uppercase tracking-[0.3em]">
-        404
+    <div className="mx-auto flex max-w-[560px] flex-col items-center px-5 py-24 text-center">
+      <div className="font-mono text-[11px] tracking-[0.18em] text-dim">
+        NOTHING IS CHARTED HERE
       </div>
-      <GoldText as="h1" className="mt-4 max-w-3xl text-4xl leading-tight md:text-6xl">
-        This part of the sky is uncharted.
-      </GoldText>
-      <p className="text-ink-secondary font-body mt-6 max-w-xl text-lg leading-relaxed">
-        The page you asked for is not here. Here is the way back.
+      <div className="my-[18px] h-px w-11 bg-[var(--accent)]" />
+      <h1 className="font-display text-[19px] leading-[1.5] tracking-[0.1em] text-bone">
+        THIS PART OF THE SKY IS UNMAPPED
+      </h1>
+      <p className="mx-auto mt-3 max-w-[360px] font-body text-[14px] leading-[1.65] text-prose">
+        Nothing was ever charted at this address. Here is the way back.
       </p>
-      <div className="mt-8 flex flex-wrap gap-3">
-        <Link
-          href="/"
-          className="border-gold-soft text-gold-leaf hover:bg-gold-leaf/10 inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm uppercase tracking-[0.2em] transition-colors"
-        >
-          Home
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 font-mono text-[11px] tracking-[0.14em] text-bone">
+        <Link href="/" className={LINK_CLASS}>
+          THE DAY
         </Link>
-        <Link
-          href="/reading"
-          className="border-hairline text-ink-secondary hover:text-ink-primary hover:border-gold-soft inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm uppercase tracking-[0.2em] transition-colors"
-        >
-          Cast your chart
+        <Link href="/voices" className={LINK_CLASS}>
+          THE FIVE VOICES
         </Link>
-        <Link
-          href="/learn"
-          className="border-hairline text-ink-secondary hover:text-ink-primary hover:border-gold-soft inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm uppercase tracking-[0.2em] transition-colors"
-        >
-          Learn
+        <Link href="/method" className={LINK_CLASS}>
+          THE METHOD
         </Link>
       </div>
-      <div className="border-border-hairline mt-12 border-t pt-8">
-        <div className="text-ink-tertiary font-mono text-[11px] uppercase tracking-[0.3em]">
-          The five pantheons
-        </div>
-        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
-          {CULTURES.map((c) => (
-            <Link
-              key={c}
-              href={`/pantheon/${c}`}
-              className="hover:text-gold-leaf font-display text-ink-secondary text-xl underline-offset-4 hover:underline md:text-2xl"
-            >
-              {CULTURE_LABELS[c]}
-            </Link>
-          ))}
-        </div>
-      </div>
-    </SectionContainer>
+    </div>
   );
 }

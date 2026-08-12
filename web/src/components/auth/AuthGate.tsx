@@ -10,7 +10,16 @@ import { hasSeenOnboarding } from "@/lib/onboarding";
 // pantheon, about, …) never funnel, and /account already self-gates to
 // sign-in. The whole product works anonymously, so this is a one-shot
 // introduction, never a wall.
-const FUNNEL_PREFIXES = ["/reading", "/charts", "/forecast", "/season", "/synastry"];
+const FUNNEL_PREFIXES = [
+  "/reading",
+  "/charts",
+  "/forecast",
+  "/season",
+  "/synastry",
+  "/week",
+  "/year",
+  "/transits",
+];
 
 function isFunnelPath(pathname: string): boolean {
   return FUNNEL_PREFIXES.some(
@@ -30,7 +39,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     // The "seen" flag is set when OnboardingFlow mounts, not here, so if this
     // navigation is interrupted the funnel gets another chance.
     const nextPath = `${pathname}${window.location.search}`;
-    router.replace(`/onboarding?next=${encodeURIComponent(nextPath)}`);
+    router.replace(`/welcome?next=${encodeURIComponent(nextPath)}`);
   }, [pathname, router, status]);
 
   return <>{children}</>;

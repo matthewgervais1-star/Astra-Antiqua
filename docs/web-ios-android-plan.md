@@ -13,6 +13,12 @@
 | Onboarding + PWA install (web) | **Done.** First-visit onboarding funnel, web app manifest, install icons, LAN install path (`start:lan` + `ASTRA_ALLOW_HTTP`). |
 | Auth + saved charts on Android (Milestone 2) | **Deferred.** The Android app is standalone (Room storage, no backend client). Needs the shared backend contract below. |
 | iOS app (Milestone 2/3) | **Deferred — blocked on tooling.** Requires macOS/Xcode; cannot be built or verified from this Windows workstation. Architecture direction below still stands. |
+| Web rebrand Phase 2 ("The Instrument in the Temple") | **Done.** Full visual and structural rebrand of `web/` per [rebrand-brief.md](design/rebrand-brief.md) and the [Phase 2 handoff](design/handoff/README.md): two chassis (nave and instrument), Cinzel/Spectral/IBM Plex Mono, per-culture grounds and accents, ten bodies with designed receptions, long-transit readings, placement pages, reading feedback, the day's permissions and day-pressure modules, and the whole route map reorganized with redirects. |
+| Android restyle to the new identity | **Not started.** The rebrand deliberately covered `web/` only. Android still carries the relic gold-on-black identity and the 7-planet model. |
+| Android ten-body + orb-table catch-up | **Not started.** `ClassicalPlanet`, `DeityRegistry`, and `oracle_decrees.json` need the three received bodies and the corrected Greek and Canaanite deity names; `AspectType` needs the documented orb table. See divergences 6 to 8 in [shared-content-model.md](shared-content-model.md). |
+| Notification delivery (web) | **Not started.** The per-culture notification corpus is authored and in the code (160 lines, one per day, user's culture only). No push infrastructure exists to deliver it. |
+| PWA home-screen widgets | **Not started.** The handoff designs small and medium widgets; the OG share card ships, the widget surfaces do not. |
+| Social features ("add friends") | **Out of scope, per brief.** Needs a backend social graph. |
 | Shared domain extraction (Phase 4) | **Not started.** The content-model document is the agreed contract; extraction into a shared module/API remains future work. |
 
 ## Overview

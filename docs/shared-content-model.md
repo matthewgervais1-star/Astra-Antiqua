@@ -12,15 +12,15 @@ implementation (`web/src/data/*.ts`) is the source of truth for content**, and
 | Concept | Canonical set | Web | Android |
 |---------|---------------|-----|---------|
 | Cultures | **5**: egypt, greece, canaan, carthage, rome | `CULTURES` in `cultures.ts` | `AncientCulture` enum ✓ |
-| Classical planets | **7**: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn | `PLANETS` in `cultures.ts` | `ClassicalPlanet` enum ✓ |
+| Bodies | **10**: the classical seven + Uranus, Neptune, Pluto as received bodies | `PLANETS` in `cultures.ts` (+ `RECEIVED_BODIES`, `isReceived`) | `ClassicalPlanet` enum — **7 only, divergent** |
 | Zodiac signs | **12**, with element, modality, traits, date range | `ZODIAC_SIGN_INFO` in `zodiacSigns.ts` | `ZodiacSign` enum (names only) |
 | Houses | **12**, whole-sign, each with title/domain/arena | `HOUSE_MEANINGS` in `houses.ts` | `HouseMeanings` in `domain/HouseMeanings.kt` ✓ (ported verbatim) |
-| Aspect kinds | **5**: conjunction, sextile, square, trine, opposition | `AspectKind` in `sampleChart.ts` | `AspectType` enum ✓ (orbs match) |
+| Aspect kinds | **5**: conjunction, sextile, square, trine, opposition | `AspectKind` in `sampleChart.ts` | `AspectType` enum — kinds match, **orbs divergent** |
 | Life domains | **5**: self, bonds, work, fortune, spirit | `LIFE_DOMAINS` in `lifeDomains.ts` | none |
 
 ## Deity model
 
-One deity per (culture × planet) — 35 records. Canonical shape (web
+One deity per (culture × body) — **50 records** (5 × 10). Canonical shape (web
 `types/deity.ts`):
 
 ```
@@ -67,10 +67,14 @@ fully authored per-culture prose (the decree corpus), the five readings must
 feel native to their cultures while agreeing on what the placement means.
 
 Web-only interpretive banks (no Android counterpart yet; they become shared
-content when Android gains those features): aspect readings (21 pairs × 3
-tones), domain readings (15), week readings (12), year narrative (41), planet
-areas/domains, sign registers, aspect reflections, pair themes, cultural
-orientations, methodology sources.
+content when Android gains those features): placement text (`PLANET_IN_SIGN`,
+10 × 12 = 120 paragraphs), aspect readings (45 pairs × 3 tones = 135), year
+narrative (83 entries), aspect rulings (5 cultures × 5 kinds = 25),
+notification lines (5 × 32 = 160), the permissions register, the long-transit
+spine bank (5 cultures × 5 slow bodies), the culture voice config (surface
+names and structural variants), domain readings (15), week readings (12),
+planet areas/domains, sign registers, aspect reflections, pair themes,
+cultural orientations, methodology sources.
 
 Android-only vocabulary (needed by any future shared schema): per-culture UI
 lexicon — menu titles, officer roles, priest titles, aspect labels
@@ -81,7 +85,7 @@ lexicon — menu titles, officer roles, priest titles, aspect labels
 | Rule | Canonical | Web | Android |
 |------|-----------|-----|---------|
 | House system | **Whole-sign** (Hellenistic; stated publicly on the learn pages) | `lib/houses.ts` ✓ | Whole-sign (`CalculateNatalChartUseCase.wholeSignHouseCusps`) ✓ |
-| Aspect orbs | conjunction 4°, sextile 3°, square 4°, trine 4°, opposition 5° | `ASPECT_RULES` in `lib/transits.ts` ✓ | `AspectType` in `NatalChartData.kt` ✓ |
+| Aspect orbs | **conjunction 8°, opposition 8°, square 7°, trine 7°, sextile 5°** (the one documented table, published on `/method`) | `ASPECT_RULES` in `data/sampleChart.ts`, read by natal, transit, and synastry detection ✓ | `AspectType` in `NatalChartData.kt` — still 4/3/4/4/5, **divergent** |
 | Ephemeris | astronomy-engine (same upstream: cosinekitty/astronomy) | npm package | JAR ✓ |
 | degree → sign | 30° blocks from 0° Aries | `longitudeToSign()` | `ZodiacUtils` ✓ |
 
@@ -110,10 +114,28 @@ as product commitments (whole-sign houses are named on `/learn`).
 5. **Android lacks** transits, synastry, forecast, and the whole
    reading-composition layer; web lacks Android's per-culture UI lexicon.
    (House meanings are ported and rendered on the decree cards.)
-6. **Planned (rebrand brief):** the system expands from 7 to 10 bodies —
-   Uranus, Neptune, and Pluto as designed cultural receptions — on web
-   first, per docs/design/rebrand-brief.md. The canonical-planets row above
-   changes when that ships; Android follows after the rebrand.
+6. ~~Planned: the system expands from 7 to 10 bodies~~ — **shipped on web**
+   (rebrand Phase 2). Uranus, Neptune, and Pluto are first-class bodies with
+   a named reception in every culture (Nut/Ouranos/Shamem/Baal Shamem/Caelus,
+   Nun/Poseidon/Yammu/Yam/Neptunus, Osiris/Plouton/Motu/Mot/Dis Pater), each
+   carrying a note that opens "Received:" and a `/method` statement that the
+   extension is modern work made in the ancient manner. **Android is still
+   7-planet**; catching up means `ClassicalPlanet`, `DeityRegistry` (+15
+   records), and 36 more `oracle_decrees.json` placements per culture.
+7. **Orb table changed on web (Phase 2).** Web unified its three divergent
+   internal orb tables onto the one documented table (8/8/7/7/5) so the
+   published method page and the running detectors agree. Android's
+   `AspectType` still carries the old 4/3/4/4/5 values and will read tighter
+   until it follows.
+8. **Deity names corrected on web (Phase 2)** to the handoff matrix: Greece
+   Sun is **Helios** (not Apollo) and Moon is **Selene** (not Artemis), since
+   the planets take the older bodies rather than their later syncretisms;
+   Greece Saturn is **Kronos**; Canaan Mercury is **Kothar** (full name kept
+   in the note) and Venus is **Attart**, the Ugaritic form, which keeps
+   Canaan distinct from Carthage's Astarte; Carthage's two Baal Hammon seats
+   are disambiguated as **in bounty** (Jupiter) and **the elder** (Saturn).
+   Android's `DeityRegistry` and `oracle_decrees.json` still carry the old
+   names and must be updated to match.
 
 ## Sync protocol
 
