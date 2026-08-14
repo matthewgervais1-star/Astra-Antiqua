@@ -102,7 +102,7 @@ function AccountLedger({
         <button
           type="button"
           onClick={onSignOut}
-          className="flex-1 border border-rule py-3 text-center font-mono text-[10.5px] tracking-[0.12em] text-bone hover:border-bone/50"
+          className="flex-1 border border-rule py-3 text-center font-mono text-[11px] tracking-[0.12em] text-bone hover:border-bone/50"
         >
           SIGN OUT
         </button>
@@ -177,7 +177,7 @@ function StrikeAction({ email }: { email: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex-1 border border-conflict py-3 text-center font-mono text-[10.5px] tracking-[0.12em] text-conflict hover:bg-conflict/10"
+        className="flex-1 border border-conflict py-3 text-center font-mono text-[11px] tracking-[0.12em] text-conflict hover:bg-conflict/10"
       >
         STRIKE THE RECORD
       </button>
@@ -186,7 +186,7 @@ function StrikeAction({ email }: { email: string }) {
 
   return (
     <div className="flex-1 border border-conflict px-4 py-3">
-      <p className="font-mono text-[10.5px] tracking-[0.08em] text-conflict">
+      <p className="font-mono text-[11px] tracking-[0.08em] text-conflict">
         TYPE {email.toUpperCase()} TO CONFIRM
       </p>
       <input
@@ -200,12 +200,12 @@ function StrikeAction({ email }: { email: string }) {
         type="button"
         onClick={onDelete}
         disabled={!canDelete || status === "deleting"}
-        className="mt-2 w-full border border-conflict py-2 text-center font-mono text-[10.5px] tracking-[0.12em] text-conflict disabled:cursor-not-allowed disabled:opacity-40"
+        className="mt-2 w-full border border-conflict py-2 text-center font-mono text-[11px] tracking-[0.12em] text-conflict disabled:cursor-not-allowed disabled:opacity-40"
       >
         {status === "deleting" ? "STRIKING…" : "STRIKE THE RECORD PERMANENTLY"}
       </button>
       {error ? (
-        <p role="alert" className="mt-2 font-mono text-[10.5px] tracking-[0.06em] text-conflict">
+        <p role="alert" className="mt-2 font-mono text-[11px] tracking-[0.06em] text-conflict">
           {error}
         </p>
       ) : null}
@@ -288,7 +288,7 @@ function DisplayNameDisclosure({
         <button
           type="submit"
           disabled={status === "saving"}
-          className="self-start border border-rule px-5 py-2 font-mono text-[10.5px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
+          className="self-start border border-rule px-5 py-2 font-mono text-[11px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
         >
           {status === "saving" ? "SAVING…" : status === "saved" ? "SAVED" : "SAVE"}
         </button>
@@ -395,7 +395,7 @@ function PasswordDisclosure() {
         <button
           type="submit"
           disabled={status === "saving"}
-          className="self-start border border-rule px-5 py-2 font-mono text-[10.5px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
+          className="self-start border border-rule px-5 py-2 font-mono text-[11px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
         >
           {status === "saving" ? "UPDATING…" : status === "saved" ? "UPDATED" : "CHANGE PASSWORD"}
         </button>
@@ -449,7 +449,7 @@ function ExportDisclosure({ email }: { email: string }) {
         type="button"
         onClick={onExport}
         disabled={status === "loading"}
-        className="border border-rule px-5 py-2 font-mono text-[10.5px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
+        className="border border-rule px-5 py-2 font-mono text-[11px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
       >
         {status === "loading" ? "PREPARING…" : `DOWNLOAD ${email.toUpperCase()}'S DATA ↓`}
       </button>

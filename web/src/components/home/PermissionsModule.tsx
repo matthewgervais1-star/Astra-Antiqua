@@ -18,10 +18,10 @@ export function PermissionsModule({ culture, permissions, tone }: PermissionsMod
   return (
     <section className="mx-auto max-w-[720px] px-5 py-10 md:px-14">
       <div className="flex items-baseline justify-between">
-        <span className="font-mono text-[10px] tracking-[0.16em] text-[var(--accent)]">
+        <span className="font-mono text-[11px] tracking-[0.16em] text-[var(--accent)]">
           {CULTURE_LABELS[culture].toUpperCase()} · THE DAY&rsquo;S PERMISSIONS
         </span>
-        <span className="font-mono text-[9.5px] text-dim">{TONE_LABELS[tone].toUpperCase()}</span>
+        <span className="font-mono text-[11px] text-dim">{TONE_LABELS[tone].toUpperCase()}</span>
       </div>
       <div className="my-4 h-px w-[34px] bg-[var(--accent)]" />
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-[22px]">
@@ -42,7 +42,7 @@ export function PermissionsModule({ culture, permissions, tone }: PermissionsMod
           </div>
         </div>
       </div>
-      <div className="mt-4 font-mono text-[9.5px] leading-[1.6] tracking-[0.06em] text-dim">
+      <div className="mt-4 font-mono text-[11px] leading-[1.6] tracking-[0.06em] text-dim">
         DERIVED FROM TODAY&rsquo;S ASPECTS, NOT A RANDOMIZER →{" "}
         <a href="#aspects" className="text-[var(--accent)]">
           WHY THESE

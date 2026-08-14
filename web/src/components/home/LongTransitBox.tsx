@@ -14,13 +14,13 @@ export function LongTransitBox({ data, className }: LongTransitBoxProps) {
   if (data.status === "cta") {
     return (
       <div className={cn("border border-[var(--accent-strong-border)] px-5 py-[18px]", className)}>
-        <div className="mb-[10px] font-mono text-[10px] tracking-[0.16em] text-[var(--accent)]">
+        <div className="mb-[10px] font-mono text-[11px] tracking-[0.16em] text-[var(--accent)]">
           THE LONG TRANSIT
         </div>
         <div className="mb-3 font-display text-[14px] leading-[1.5] tracking-[0.08em] text-bone">
           THE LONG TRANSITS ARE READ AGAINST A CHART
         </div>
-        <Link href="/reading" className="font-mono text-[10.5px] text-[var(--accent)]">
+        <Link href="/reading" className="font-mono text-[11px] text-[var(--accent)]">
           CAST THE FIRST CHART →
         </Link>
       </div>
@@ -30,7 +30,7 @@ export function LongTransitBox({ data, className }: LongTransitBoxProps) {
   if (data.status === "none" || !data.span || !data.title1 || !data.title2) {
     return (
       <div className={cn("border border-rule px-5 py-[18px]", className)}>
-        <div className="mb-[10px] font-mono text-[10px] tracking-[0.16em] text-dim">THE LONG TRANSIT</div>
+        <div className="mb-[10px] font-mono text-[11px] tracking-[0.16em] text-dim">THE LONG TRANSIT</div>
         <div className="font-mono text-[11px] leading-[1.6] text-dim">
           No slow body holds within reach of your chart right now.
         </div>
@@ -40,7 +40,7 @@ export function LongTransitBox({ data, className }: LongTransitBoxProps) {
 
   return (
     <div className={cn("border border-[var(--accent-strong-border)] px-5 py-[18px]", className)}>
-      <div className="mb-[10px] font-mono text-[10px] tracking-[0.16em] text-[var(--accent)]">
+      <div className="mb-[10px] font-mono text-[11px] tracking-[0.16em] text-[var(--accent)]">
         THE LONG TRANSIT · {data.status === "active" ? "ACTIVE" : "NEXT"}
       </div>
       <div className="mb-2 font-display text-[14px] leading-[1.5] tracking-[0.08em] text-bone">
@@ -48,11 +48,11 @@ export function LongTransitBox({ data, className }: LongTransitBoxProps) {
         <br />
         {data.title2}
       </div>
-      <div className="mb-[10px] font-mono text-[10px] leading-[1.5] text-dim">{data.rangeLabel}</div>
+      <div className="mb-[10px] font-mono text-[11px] leading-[1.5] text-dim">{data.rangeLabel}</div>
       <div className="mb-3">
         <TransitProgress progressPct={data.progressPct ?? 0} />
       </div>
-      <Link href={data.href ?? "/transits"} className="font-mono text-[10.5px] text-[var(--accent)]">
+      <Link href={data.href ?? "/transits"} className="font-mono text-[11px] text-[var(--accent)]">
         READ THE LONG TRANSIT →
       </Link>
     </div>

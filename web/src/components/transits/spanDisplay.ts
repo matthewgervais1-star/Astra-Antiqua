@@ -80,6 +80,38 @@ export function monthYear(d: Date): string {
   return `${MONTHS_SHORT[d.getMonth()] ?? "JAN"} ${d.getFullYear()}`;
 }
 
+const MONTHS_FULL = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
+
+/**
+ * Prose forms. The uppercase labels above are for mono chrome; inside a
+ * Spectral sentence they read as shouting, so composed paragraphs use these.
+ */
+export function monthYearProse(d: Date): string {
+  return `${MONTHS_FULL[d.getMonth()] ?? "January"} ${d.getFullYear()}`;
+}
+
+export function signPhraseProse(sign: ZodiacSign): string {
+  const phrase = SIGN_PHRASES[sign];
+  return phrase
+    .toLowerCase()
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join("-");
+}
+
 export function monthDay(d: Date): string {
   return `${MONTHS_SHORT[d.getMonth()] ?? "JAN"} ${d.getDate()}`;
 }

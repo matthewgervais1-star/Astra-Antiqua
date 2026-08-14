@@ -47,9 +47,9 @@ export function HomeBody() {
 
   return (
     <>
-      <div className="grid grid-cols-1 min-[720px]:grid-cols-[310px_1fr_330px]">
+      <div className="grid grid-cols-1 min-[1100px]:grid-cols-[310px_1fr_330px]">
         <EphemerisRail
-          className="hidden border-b border-rule min-[720px]:block min-[720px]:border-b-0 min-[720px]:border-r"
+          className="hidden border-b border-rule min-[1100px]:block min-[1100px]:border-b-0 min-[1100px]:border-r"
           rows={bundle.ephemerisRows}
           stationsAndIngresses={bundle.stationsAndIngresses}
         />
@@ -63,15 +63,15 @@ export function HomeBody() {
           now={bundle.now}
         />
 
-        <CompactSkyTable className="px-6 pb-8 min-[720px]:hidden md:px-14" rows={bundle.compactSkyRows} />
+        <CompactSkyTable className="px-6 pb-8 min-[1100px]:hidden md:px-14" rows={bundle.compactSkyRows} />
 
         <AspectsRail
-          className="hidden border-t border-rule min-[720px]:flex min-[720px]:border-t-0 min-[720px]:border-l"
+          className="hidden border-t border-rule min-[1100px]:flex min-[1100px]:border-t-0 min-[1100px]:border-l"
           aspects={bundle.aspectRows}
           longTransit={bundle.longTransit}
         />
 
-        <TransitTeaser className="px-6 pb-10 min-[720px]:hidden md:px-14" data={bundle.longTransit} />
+        <TransitTeaser className="px-6 pb-10 min-[1100px]:hidden md:px-14" data={bundle.longTransit} />
       </div>
 
       {bundle.natal && bundle.permissions ? (

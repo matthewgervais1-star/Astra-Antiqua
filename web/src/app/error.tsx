@@ -37,7 +37,7 @@ export default function Error({
       >
         TAKE THE AUSPICES AGAIN
       </button>
-      <div className="mt-3 font-mono text-[9.5px] tracking-[0.08em] text-dim">
+      <div className="mt-3 font-mono text-[11px] tracking-[0.08em] text-dim">
         ERROR {code} ·{" "}
         <Link href="/" className="border-b border-bone/40 text-bone">
           {"YESTERDAY'S READING IS STILL HERE"}

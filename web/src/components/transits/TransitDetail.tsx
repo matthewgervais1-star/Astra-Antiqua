@@ -27,13 +27,14 @@ import {
   houseGroupIndex,
   isPointPlanetKey,
   monthYear,
+  monthYearProse,
+  signPhraseProse,
   natalDegreeSide,
   natalPointLabel,
   ordinalWord,
   passNarrative,
   passStatusLine,
   seasonWord,
-  SIGN_PHRASES,
   spanTone,
   wholeSignHouse,
 } from "@/components/transits/spanDisplay";
@@ -113,8 +114,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
       ? NATAL_POINT_CLOSING[culture].asc
       : NATAL_POINT_CLOSING[culture].mc;
 
-  const signPhrase = SIGN_PHRASES[span.transitSign];
-  const beginsParagraph = `It began in ${monthYear(span.start)}, when ${transitDeity} first held the ${ordinalWord(span.transitDegree)} degree of the ${signPhrase}. ${passNarrative(span, now)} The degree is not released until ${monthYear(span.end)}. ${WHERE_BEGINS_CADENCE[culture]}`;
+  const beginsParagraph = `It began in ${monthYearProse(span.start)}, when ${transitDeity} first held the ${ordinalWord(span.transitDegree)} degree of the ${signPhraseProse(span.transitSign)}. ${passNarrative(span, now)} The degree is not released until ${monthYearProse(span.end)}. ${WHERE_BEGINS_CADENCE[culture]}`;
 
   let touchesParagraph: string;
   if (pointKey) {

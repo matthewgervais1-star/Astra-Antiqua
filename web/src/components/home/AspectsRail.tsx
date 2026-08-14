@@ -20,7 +20,7 @@ const LABEL_TONE_CLASS: Readonly<Record<AspectRow["tone"], string>> = {
 export function AspectsRail({ className, aspects, longTransit }: AspectsRailProps) {
   return (
     <aside id="aspects" className={cn("flex flex-col px-7 py-[26px]", className)}>
-      <div className="mb-[14px] font-mono text-[10px] tracking-[0.16em] text-dim">ASPECTS IN ORB</div>
+      <div className="mb-[14px] font-mono text-[11px] tracking-[0.16em] text-dim">ASPECTS IN ORB</div>
       <div className="flex flex-col gap-4">
         {aspects.length === 0 ? (
           <div className="font-mono text-[11.5px] text-dim">Nothing is in orb today. A quiet sky.</div>
@@ -34,7 +34,7 @@ export function AspectsRail({ className, aspects, longTransit }: AspectsRailProp
                 <span className="text-dim">{row.orbLabel}</span>
               </div>
               <OrbBar orb={row.orb} maxOrb={row.maxOrb} tone={row.tone} />
-              <div className={cn("mt-[6px] font-mono text-[10px]", LABEL_TONE_CLASS[row.tone])}>
+              <div className={cn("mt-[6px] font-mono text-[11px]", LABEL_TONE_CLASS[row.tone])}>
                 {row.rulingLabel}
               </div>
             </div>

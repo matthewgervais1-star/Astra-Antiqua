@@ -21,7 +21,10 @@ export function NaveShell({ children, context, horizon, active }: NaveShellProps
     <>
       <Lintel active={active} />
       <SubBar context={context} horizon={horizon} showSync />
-      <main className="mx-auto max-w-[720px] px-5 py-12 md:py-16">{children}</main>
+      {/* min-w-0: as a flex item, main defaults to min-width:auto, which lets a
+          wide child (the matrix table, a data row) push the page wider than the
+          viewport and defeat its own overflow-x wrapper. */}
+      <main className="mx-auto w-full min-w-0 max-w-[720px] px-5 py-12 md:py-16">{children}</main>
       <MethodFooter />
     </>
   );

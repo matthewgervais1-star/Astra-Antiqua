@@ -12,8 +12,8 @@ export function CompactSkyTable({ className, rows }: CompactSkyTableProps) {
   return (
     <div className={className}>
       <div className="border border-rule px-4 py-[14px] text-left">
-        <div className="mb-[10px] font-mono text-[9px] tracking-[0.16em] text-dim">THE SKY, COMPUTED</div>
-        <div className="flex flex-col gap-[7px] font-mono text-[10.5px] leading-[1.4]">
+        <div className="mb-[10px] font-mono text-[11px] tracking-[0.16em] text-dim">THE SKY, COMPUTED</div>
+        <div className="flex flex-col gap-[7px] font-mono text-[11px] leading-[1.4]">
           {rows.map((row) => (
             <div key={row.planet} className="flex items-center justify-between">
               <span className={row.received ? "text-[var(--accent)]" : "text-bone"}>

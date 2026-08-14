@@ -93,7 +93,7 @@ export function WaitListForm({ compact = false }: WaitListFormProps) {
         <button
           type="submit"
           disabled={state.kind === "submitting"}
-          className="border border-[var(--accent)] px-[18px] py-3 font-display text-[10.5px] tracking-[0.14em] text-[var(--accent)] transition-colors hover:bg-[var(--accent)]/10 disabled:cursor-not-allowed disabled:opacity-60"
+          className="border border-[var(--accent)] px-[18px] py-3 font-display text-[11px] tracking-[0.14em] text-[var(--accent)] transition-colors hover:bg-[var(--accent)]/10 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {state.kind === "submitting" ? "ENTERING" : "ENTER"}
         </button>
@@ -155,7 +155,7 @@ export function WaitListForm({ compact = false }: WaitListFormProps) {
         </p>
       ) : null}
 
-      <p className="font-mono text-[10.5px] tracking-[0.08em] text-dim">WE EMAIL ONCE, WHEN CALLED</p>
+      <p className="font-mono text-[11px] tracking-[0.08em] text-dim">WE EMAIL ONCE, WHEN CALLED</p>
     </form>
   );
 }

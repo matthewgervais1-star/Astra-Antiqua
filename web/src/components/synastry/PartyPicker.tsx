@@ -54,7 +54,7 @@ export function PartyPicker({ chart, charts, excludeId, onSelect }: PartyPickerP
         <span className="font-display text-[13px] tracking-[0.08em] text-bone">
           {chart ? chart.name.toUpperCase() : "NO PARTY CHOSEN"}
         </span>
-        <span className="whitespace-nowrap font-mono text-[10px] text-dim">
+        <span className="whitespace-nowrap font-mono text-[11px] text-dim">
           {chart ? partyYearCity(chart) : "–"}
         </span>
       </div>
@@ -63,14 +63,14 @@ export function PartyPicker({ chart, charts, excludeId, onSelect }: PartyPickerP
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="border border-rule px-[15px] py-3 text-center font-mono text-[10.5px] tracking-[0.1em] text-dim hover:text-bone"
+        className="border border-rule px-[15px] py-3 text-center font-mono text-[11px] tracking-[0.1em] text-dim hover:text-bone"
       >
         CHANGE A PARTY ▾
       </button>
       {open ? (
         <div role="menu" className="absolute left-0 right-0 top-full z-40 mt-1 border border-rule bg-[var(--ground)]">
           {options.length === 0 ? (
-            <div className="px-[15px] py-3 font-mono text-[10.5px] text-faint-ink">NO OTHER CHARTS SAVED</div>
+            <div className="px-[15px] py-3 font-mono text-[11px] text-faint-ink">NO OTHER CHARTS SAVED</div>
           ) : (
             options.map((c) => (
               <button
@@ -82,7 +82,7 @@ export function PartyPicker({ chart, charts, excludeId, onSelect }: PartyPickerP
                   setOpen(false);
                 }}
                 className={cn(
-                  "block w-full px-[15px] py-2.5 text-left font-mono text-[10.5px]",
+                  "block w-full px-[15px] py-2.5 text-left font-mono text-[11px]",
                   c.id === chart?.id ? "text-[var(--accent)]" : "text-bone/80 hover:text-bone",
                 )}
               >

@@ -96,14 +96,16 @@ export function WheelSvg({
   return (
     <figure className="m-0">
       {caption ? (
-        <figcaption className="mb-[10px] font-mono text-[10px] tracking-[0.16em] text-dim">
+        <figcaption className="mb-[10px] font-mono text-[11px] tracking-[0.16em] text-dim">
           {caption}
         </figcaption>
       ) : null}
+      {/* Scales down inside narrow columns; `size` is the ceiling, not a
+          fixed width, so the wheel never forces the page to scroll. */}
       <svg
-        width={size}
-        height={size}
         viewBox={`0 0 ${VIEW} ${VIEW}`}
+        className="block h-auto w-full"
+        style={{ maxWidth: size }}
         role="img"
         aria-label={caption ?? "Natal wheel"}
       >
@@ -193,7 +195,7 @@ export function WheelSvg({
 
         <g
           fontFamily="var(--font-mono)"
-          fontSize={9}
+          fontSize={12}
           letterSpacing={1}
           textAnchor="middle"
           dominantBaseline="middle"

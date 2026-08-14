@@ -18,14 +18,14 @@ export function DayPressureModule({ groups }: DayPressureModuleProps) {
   return (
     <section className="mx-auto max-w-[720px] border-t border-rule px-5 py-10 md:px-14">
       <div className="flex items-baseline justify-between">
-        <span className="font-mono text-[10px] tracking-[0.16em] text-[var(--accent)]">WHERE THE DAY FALLS</span>
-        <span className="font-mono text-[9.5px] text-dim">FROM YOUR CHART&rsquo;S HOUSES</span>
+        <span className="font-mono text-[11px] tracking-[0.16em] text-[var(--accent)]">WHERE THE DAY FALLS</span>
+        <span className="font-mono text-[11px] text-dim">FROM YOUR CHART&rsquo;S HOUSES</span>
       </div>
       <div className="my-4 h-px w-[34px] bg-[var(--accent)]" />
       <div className="flex flex-col gap-[14px]">
         {groups.map((group) => (
           <div key={group.name}>
-            <div className="mb-[7px] flex items-center justify-between font-mono text-[10.5px] text-bone">
+            <div className="mb-[7px] flex items-center justify-between font-mono text-[11px] text-bone">
               <span>
                 {group.name} · {group.sub}
               </span>
@@ -38,7 +38,7 @@ export function DayPressureModule({ groups }: DayPressureModuleProps) {
           </div>
         ))}
       </div>
-      <div className="mt-4 font-mono text-[9.5px] leading-[1.6] tracking-[0.06em] text-dim">
+      <div className="mt-4 font-mono text-[11px] leading-[1.6] tracking-[0.06em] text-dim">
         BARS = TIGHTNESS OF ASPECTS INTO EACH HOUSE GROUP · NAMES ARE PER CULTURE
       </div>
     </section>

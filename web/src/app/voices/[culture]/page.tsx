@@ -98,7 +98,7 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
                 {planet === firstReceived ? (
                   <div className="flex flex-col items-stretch pt-2">
                     <span className="h-px w-full bg-harmony" />
-                    <span className="py-2 text-center font-mono text-[10px] tracking-[0.16em] text-dim">
+                    <span className="py-2 text-center font-mono text-[11px] tracking-[0.16em] text-dim">
                       BELOW THE RULE: THE THREE RECEIVED
                     </span>
                   </div>

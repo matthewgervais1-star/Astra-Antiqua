@@ -14,7 +14,7 @@ export interface EphemerisRailProps {
 export function EphemerisRail({ className, rows, stationsAndIngresses }: EphemerisRailProps) {
   return (
     <aside className={cn("px-7 py-[26px]", className)}>
-      <div className="mb-[14px] font-mono text-[10px] tracking-[0.16em] text-dim">EPHEMERIS · 00:00 UTC</div>
+      <div className="mb-[14px] font-mono text-[11px] tracking-[0.16em] text-dim">EPHEMERIS · 00:00 UTC</div>
       <div className="flex flex-col border-b border-rule-row font-mono text-[11.5px]">
         {rows.map((row) => (
           <div key={row.planet} className="flex items-center justify-between border-t border-rule-row py-[9px]">
@@ -29,7 +29,7 @@ export function EphemerisRail({ className, rows, stationsAndIngresses }: Ephemer
         ))}
       </div>
 
-      <div className="mb-3 mt-[26px] font-mono text-[10px] tracking-[0.16em] text-dim">STATIONS &amp; INGRESSES</div>
+      <div className="mb-3 mt-[26px] font-mono text-[11px] tracking-[0.16em] text-dim">STATIONS &amp; INGRESSES</div>
       <div className="flex flex-col gap-[9px] font-mono text-[11px] leading-[1.5]">
         {stationsAndIngresses.length === 0 ? (
           <div className="text-dim">Nothing turns in the next ninety days.</div>
@@ -43,7 +43,7 @@ export function EphemerisRail({ className, rows, stationsAndIngresses }: Ephemer
         )}
       </div>
 
-      <div className="mt-[26px] border-t border-rule pt-[14px] font-mono text-[10.5px] leading-[1.7] text-dim">
+      <div className="mt-[26px] border-t border-rule pt-[14px] font-mono text-[11px] leading-[1.7] text-dim">
         ASTRONOMY-ENGINE · WHOLE-SIGN · ORBS DOCUMENTED →{" "}
         <Link href="/method" className="text-[var(--accent)]">
           METHOD
