@@ -45,9 +45,9 @@ Deity { planet, culture, name, epithet, note, contested? }
 The two surfaces currently model placement text differently:
 
 - **Web (canonical going forward):** placement meaning is *universal* text —
-  `PLANET_IN_SIGN` (7 × 12 = 84 paragraphs) — and the active culture is a
+  `PLANET_IN_SIGN` (10 × 12 = 120 paragraphs) — and the active culture is a
   *render-time mask*: deity names, epithets, aspect verbs, and cultural register
-  are layered on top when displayed. Content grows linearly (84 + 35 + 25 …).
+  are layered on top when displayed. Content grows linearly (120 + 50 + 25 …).
 - **Android (legacy):** fully denormalized per culture —
   `assets/oracle_decrees.json` holds 84 placements × 5 cultures = 420 records
   with the deity and prose baked in. Content grows multiplicatively and drifts.
