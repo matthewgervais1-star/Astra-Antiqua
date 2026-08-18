@@ -21,6 +21,24 @@ otherwise fail silently in production copy.
 **Gate discipline:** every phase ends with `./gradlew assembleDebug` green plus
 its own stated check. Do not start a phase before its predecessor's gate passes.
 
+## Verified facts (checked, not assumed)
+
+Run against the tree on 2026-08-18 before this plan was finalized, so the phases
+below plan around what is true rather than what looked risky:
+
+| Check | Result |
+|---|---|
+| `./gradlew assembleDebug` | **BUILD SUCCESSFUL** (26s). AGP 9.1.1 + compileSdk 34 + Compose BOM 2024.09.02 build fine together. |
+| `./gradlew assembleRelease` | **BUILD SUCCESSFUL** (1m36s), but the artifact is **`app-release-unsigned.apk`**. |
+| Missing `proguard-rules.pro` | **Latent, not active.** `isMinifyEnabled = false` means the file is never read. It breaks only when R8 is enabled. |
+| Cinzel / Spectral / IBM Plex Mono as TTF | **All three serve TTF** from the Google Fonts css2 API when queried without a browser user-agent (3 / 4 / 2 files). |
+| Cinzel TTF on Android | **Already proven**: `web/src/fonts/cinzel-og-500.ttf` (46 KB) was fetched by this route for the OG card. |
+
+**What this changes about the plan:** the toolchain pairing is *not* a blocker
+and Phase 0 does not need to chase it. The real Phase 0 items are the unsigned
+artifact and `targetSdk 34`. Font acquisition for Phase 5 is a solved problem,
+not a research task.
+
 ## The situation in one page
 
 | | Web (canonical) | Android (today) |
@@ -54,57 +72,81 @@ its own stated check. Do not start a phase before its predecessor's gate passes.
 
 ## Phase 0 — Build health and release readiness
 
-**Why first:** the survey flagged pairings that may not build at all, and
-blockers that would surface at the worst moment. Verify the ground before
-building on it.
+**Why first:** the app currently cannot produce an installable release artifact
+and cannot be submitted to Play. Both are quiet failures: the build succeeds and
+hands you something unusable.
 
-Findings to resolve: AGP 9.1.1 against `compileSdk 34` is a suspicious pairing;
-Compose BOM `2024.09.02` is ~2 years behind the toolchain; `proguard-rules.pro`
-is referenced but **does not exist**; there are no `signingConfigs`;
-`targetSdk 34` cannot be submitted to Google Play; four
-`android.*=false` compatibility escape hatches sit in `gradle.properties`.
+**Already verified green, so this phase does not need to fix them:** the debug
+and release builds both pass, and the AGP 9.1.1 / compileSdk 34 / Compose BOM
+2024.09.02 pairing works despite looking mismatched. Leave the toolchain alone
+unless `targetSdk 36` forces a move.
+
+Real items: the release artifact is **unsigned**; **`targetSdk 34`** is below
+Play's floor; **`proguard-rules.pro` is referenced but absent** (latent while
+minify is off); four `android.*=false` escape hatches sit in
+`gradle.properties`; `local.properties` and `.idea/workspace.xml` are tracked.
 
 **Prompt:**
 
 ```text
 Work in L:\Claude Projects\astra-antiqua\android. Do not touch web/.
 
-Goal: get this module to a known-good, releasable build. Make no feature or
-visual changes in this phase.
+Goal: make this module produce an installable, submittable release artifact.
+No feature or visual changes in this phase.
 
-1. Run `./gradlew assembleDebug` and report the actual result before changing
-   anything. If JAVA_HOME is unset, point it at the Android Studio JBR
-   (C:/Program Files/Android/Android Studio/jbr). Paste the real output.
-2. Resolve the toolchain pairing. AGP is 9.1.1 with compileSdk 34 and Compose
-   BOM 2024.09.02. Determine what AGP 9 actually requires, then move compileSdk
-   and the BOM to a coherent set. Prefer the smallest change that is internally
-   consistent; do not chase latest for its own sake.
-3. targetSdk 34 is below Google Play's floor. Raise compileSdk/targetSdk to 36
-   and fix the fallout. Expect edge-to-edge enforcement to break
-   ui/theme/Theme.kt, which currently sets window.statusBarColor in a SideEffect
-   (deprecated as of SDK 35). Replace with enableEdgeToEdge() in MainActivity
-   and the modern insets APIs.
-4. Create app/proguard-rules.pro with the rules this app needs: kotlinx
-   .serialization (@Serializable classes and their generated serializers), Room
-   entities, and the cosinekitty astronomy library. Then set isMinifyEnabled
-   = true for release and prove it with `./gradlew assembleRelease`.
-5. Add a signingConfigs block reading from a gitignored keystore.properties
-   (storeFile, storePassword, keyAlias, keyPassword), falling back to debug
-   signing when the file is absent so the repo still builds for a fresh clone.
-   Add keystore.properties to .gitignore. Do NOT generate a keystore or invent
-   credentials; leave a commented template and tell me what to run.
-6. Review the four compatibility escape hatches in gradle.properties
-   (android.disallowKotlinSourceSets, android.uniquePackageNames,
-   android.dependency.useConstraints, android.r8.strictFullModeForKeepRules,
-   all =false). For each: determine whether it is still needed after the
-   toolchain move, and remove the ones that are not. Report what each was
-   masking.
-7. local.properties and .idea/workspace.xml appear to be tracked. Confirm and
-   untrack them (keep the files on disk), adding them to .gitignore.
+Context already verified, do not redo it: `./gradlew assembleDebug` and
+`./gradlew assembleRelease` both succeed today. The AGP 9.1.1 / compileSdk 34 /
+Compose BOM 2024.09.02 pairing builds fine. Release currently emits
+app/build/outputs/apk/release/app-release-unsigned.apk. Set JAVA_HOME to the
+Android Studio JBR (C:/Program Files/Android/Android Studio/jbr) if java is not
+on PATH.
 
-GATE: `./gradlew assembleDebug` and `./gradlew assembleRelease` both green.
-Report every version you changed, old to new, and anything you could not
-resolve. Commit in reviewable slices, conventional messages.
+1. SIGNING. There are no signingConfigs, which is why release output is
+   unsigned and therefore not installable or uploadable. Add a signingConfigs
+   block that reads a gitignored keystore.properties (storeFile, storePassword,
+   keyAlias, keyPassword) and falls back to debug signing when that file is
+   absent, so a fresh clone still builds. Add keystore.properties to .gitignore
+   and commit a keystore.properties.template. Do NOT generate a keystore or
+   invent credentials: print the exact keytool command for me to run myself, and
+   confirm afterwards that release output is app-release.apk, not
+   app-release-unsigned.apk.
+2. TARGET SDK. targetSdk 34 is below Google Play's floor (35+ required since
+   Aug 2025, 36 since Aug 2026). Raise compileSdk and targetSdk to 36. Expect
+   fallout: SDK 35+ enforces edge-to-edge, and ui/theme/Theme.kt sets
+   window.statusBarColor in a SideEffect, which is deprecated as of 35 and
+   ineffective under enforcement. Replace it with enableEdgeToEdge() in
+   MainActivity plus the modern insets APIs, and check every screen for content
+   drawn under the status or navigation bar. Only move AGP or the Compose BOM if
+   36 actually forces it; if you do move them, say exactly what forced it.
+3. PROGUARD. app/proguard-rules.pro is referenced by the release buildType and
+   does not exist. It is harmless today only because isMinifyEnabled = false.
+   Create it with the rules this dependency set needs:
+     - kotlinx.serialization 1.7.1: keep @Serializable classes and their
+       synthetic Companion/$serializer members. The library publishes consumer
+       rules, so verify what is actually still required rather than pasting a
+       stale block.
+     - Room 2.8.4 entities and the generated _Impl classes.
+     - com.github.cosinekitty:astronomy v2.1.17.
+   Then set isMinifyEnabled = true (and isShrinkResources = true) for release,
+   build, and INSTALL the result on an emulator. A minified build that compiles
+   but crashes on first chart calculation is the failure mode here, so actually
+   run the app through onboarding to a rendered chart before calling it done.
+4. GRADLE PROPERTIES. Four compatibility escape hatches sit in
+   gradle.properties: android.disallowKotlinSourceSets,
+   android.uniquePackageNames, android.dependency.useConstraints,
+   android.r8.strictFullModeForKeepRules, all =false, several with comments
+   admitting they work around AGP errors. Note that item 3 turns R8 on, which
+   makes strictFullModeForKeepRules load-bearing. For each flag: remove it, see
+   what breaks, and either fix the cause or restore it with a comment saying
+   what it is masking and when it must be revisited.
+5. HYGIENE. local.properties (machine-specific SDK path) and
+   .idea/workspace.xml are tracked. Untrack both, keep them on disk, add to
+   .gitignore.
+
+GATE: `./gradlew assembleRelease` produces a SIGNED apk, minification is on, and
+that minified build runs on an emulator from onboarding through a rendered
+chart. Report every version you changed and every escape hatch you removed or
+kept. Commit in reviewable slices, conventional messages.
 ```
 
 ---
@@ -398,13 +440,28 @@ system resolves in practice.
 Build the Android design system for the new identity. No screen rewrites in this
 phase: this phase produces the vocabulary that Phase 6 applies.
 
-1. FONTS. ui/theme/Type.kt currently aliases FontFamily.Serif and
-   FontFamily.Monospace while calling them PlayfairDisplay and JetBrainsMono.
-   That identity is also the OLD one. The new identity is Cinzel (display),
-   Spectral (prose), IBM Plex Mono (data). The .woff2 files in web/src/fonts are
-   web format; fetch the .ttf equivalents for Android, put them in res/font/,
-   and wire real FontFamily declarations. Remove the dead playfairDisplay and
-   jetbrainsMono entries from gradle/libs.versions.toml.
+1. FONTS. ui/theme/Type.kt declares `val PlayfairDisplay = FontFamily.Serif` and
+   `val JetBrainsMono = FontFamily.Monospace`: the names are a fiction, they are
+   the system families, there is no res/font/ directory, and the identity they
+   name is the OLD one anyway. The new identity is Cinzel (display), Spectral
+   (prose), IBM Plex Mono (data).
+   Acquisition is already solved, do not research it: the Google Fonts css2 API
+   returns TTF when queried WITHOUT a browser user-agent, and all three families
+   are confirmed available that way (Cinzel 3 files, Spectral 4, IBM Plex Mono
+   2). web/scripts/fetch-fonts.mjs already does exactly this fetch for woff2 and
+   already knows the three family query strings; web/src/fonts/cinzel-og-500.ttf
+   is a 46 KB TTF fetched by this route. Extend that script with a TTF mode that
+   writes into android/app/src/main/res/font/ rather than writing a second
+   downloader, so both surfaces keep one font pipeline.
+   Android constraints that will bite: res/font/ filenames must be lowercase
+   letters, digits and underscores only, so hyphenated web names like
+   cinzel-latin-var.ttf must become cinzel_variable.ttf. Variable fonts need
+   API 26+, which matches minSdk 26 exactly, so verify on a minSdk emulator
+   rather than assuming. All three families are SIL Open Font License, so
+   embedding is fine; add the license text to the app's attributions.
+   Remove the dead playfairDisplay and jetbrainsMono entries from
+   gradle/libs.versions.toml (declared under [versions] with no [libraries]
+   entry and no usage).
 2. TYPE SCALE. Define the FULL Material3 scale, not 4 of 15. Screens currently
    use displaySmall, headlineSmall, bodySmall, labelSmall and titleMedium, all
    of which silently fall back to Roboto today. Map each M3 slot to the identity:
