@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -51,10 +52,15 @@ class MainActivity : ComponentActivity() {
                     viewModel.init(context)
                 }
 
+                // Edge-to-edge is enforced from SDK 35. The Surface must fill the
+                // whole window so the culture's ground paints behind the system
+                // bars; the inset is applied to the CONTENT inside it, not to the
+                // Surface, or the bars show the bare window background instead.
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                  Box(modifier = Modifier.safeDrawingPadding()) {
                     AnimatedContent(
                         targetState = currentPhase,
                         transitionSpec = {
@@ -74,6 +80,7 @@ class MainActivity : ComponentActivity() {
                             AppPhase.MAIN_DASHBOARD -> MainDashboardScreen()
                         }
                     }
+                  }
                 }
             }
         }

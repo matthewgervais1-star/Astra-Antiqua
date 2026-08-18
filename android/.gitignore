@@ -32,6 +32,7 @@ captures/
 # Keystores / signing
 *.jks
 *.keystore
+keystore.properties
 
 # OS
 .DS_Store

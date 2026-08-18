@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.astra.antiqua.domain.LexiconDictionary
@@ -63,11 +62,14 @@ fun AstraAntiquaTheme(
         AncientCulture.ROME -> LexiconDictionary.Roman
     }
 
+    // Under edge-to-edge (enforced from SDK 35) the system bars are drawn by
+    // the app and window.statusBarColor is a no-op, so the only thing left to
+    // set is the icon appearance: these are dark grounds in every culture, so
+    // the bar icons stay light.
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.background.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }
     }
