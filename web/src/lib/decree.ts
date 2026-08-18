@@ -43,12 +43,28 @@ const SIGN_PHRASE: Readonly<Record<string, string>> = {
   Pisces: "THE FISHES",
 };
 
+/** Paired against QUIET_LINE, which prints directly beneath it: no headline
+ *  here may reuse a word the body line already carries. */
 const QUIET_HEADLINE: Readonly<Record<Culture, string>> = {
   egypt: "THE SCALE RESTS LEVEL",
-  greece: "THE ORACLE KEEPS SILENCE",
-  canaan: "THE COUNCIL DOES NOT SIT",
-  carthage: "THE LEDGER HOLDS",
+  greece: "THE TRIPOD IS COLD",
+  canaan: "THE COUNCIL FLOOR IS EMPTY",
+  carthage: "NOTHING IS POSTED",
   rome: "A DAY WITHOUT OMEN",
+};
+
+/**
+ * Closes the decree when the sky offers no second figure worth a paragraph.
+ * The old fallback printed QUIET_LINE here, which flatly contradicted the
+ * paragraph above it, and the old candidate fallback could print the same
+ * aspect kind twice and so repeat its imperative word for word.
+ */
+const NO_SECOND_FIGURE: Readonly<Record<Culture, string>> = {
+  egypt: "Nothing else on the river stands close enough to weigh. One matter goes on the scale today. Set the rest of it aside.",
+  greece: "No second shrine has anything to add to this. Carry the one answer out and do not go back up for another.",
+  canaan: "No other business reaches the floor behind it. Close it here and go down to the field.",
+  carthage: "The ink is spent on this one and nowhere else. Rule off beneath it and leave the sheet at that.",
+  rome: "No second sign stands beside it. Act on the one omen and let the rest of the day alone.",
 };
 
 function toneForKind(kind: AspectKind): "harmony" | "tension" {
@@ -85,18 +101,22 @@ export function composeDecree(
     ASPECT_IMPERATIVES[culture][top.kind],
   ].join(" ");
 
+  // A second figure only earns its paragraph if it speaks in a different
+  // aspect kind. Falling back to the next-tightest candidate regardless of
+  // kind reprinted ASPECT_IMPERATIVES[culture][kind] verbatim under the
+  // paragraph that had just used it, which is the template seam itself.
   const second = candidates.find(
     (a) => (a.a !== top.a || a.b !== top.b) && a.kind !== top.kind,
-  ) ?? candidates[1];
+  );
   const paragraphs = second
     ? [
         first,
         [
-          composeAspectSentence(culture, second.a, second.b, second.kind, second.orb < 0.5, chart),
+          composeAspectSentence(culture, second.a, second.b, second.kind, second.orb < 0.5, chart, 1),
           ASPECT_IMPERATIVES[culture][second.kind],
         ].join(" "),
       ]
-    : [first, QUIET_LINE[culture]];
+    : [first, NO_SECOND_FIGURE[culture]];
 
   return { headline, paragraphs, tone: toneForKind(top.kind) };
 }

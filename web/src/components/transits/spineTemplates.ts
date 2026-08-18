@@ -9,70 +9,82 @@ import type { Culture } from "@/data/cultures";
  * Every bank is five entries, one per culture's institutional register.
  */
 
-/** Closes the "WHERE IT BEGINS" paragraph, the shape of the mock's "A
- *  reading this long is not a mood. It is a term." in each institution's
- *  own vocabulary. */
+/** Closes the "WHERE IT BEGINS" paragraph: a long transit is a term, not a
+ *  mood, said in each institution's own vocabulary. The five once shared one
+ *  clause shape ("A {noun} this long is not {verb}ed at one {noun}"), which is
+ *  a fill, not a voice, so each now opens on a different move. */
 export const WHERE_BEGINS_CADENCE: Readonly<Record<Culture, string>> = {
   egypt: "A weighing this long is not settled at one evening's scale. It is a season of evenings.",
-  greece: "A question this long is not answered on one visit to the tripod. It takes the whole cycle of consultations.",
-  canaan: "A sitting this long is not closed at one gathering of the council. It runs to the seventh day and beyond.",
-  carthage: "An entry this long is not closed in one season's ledger. It carries forward until the account is paid.",
-  rome: "A prodigy this long is not read from a single flight of birds. It stands until the augurs close the book on it.",
+  greece: "You will climb to the tripod more than once for this. The god unwinds a question this heavy one piece at a time.",
+  canaan: "The council has not risen. It sits, it adjourns, it sits again, and the matter stays on the floor between sittings.",
+  carthage: "Reckon this in sailing seasons, not in days. The entry is carried forward, ship after ship, until the balance is paid down.",
+  rome: "One flight of birds does not close a prodigy of this size. The augurs keep the book open on it until the state has its answer.",
 };
 
 /**
  * Appended to TRANSIT_SPINE[culture][body].changing when the natal point is
  * the Ascendant or Midheaven, naming what is at stake without a deity to cite.
+ * One shape per culture, and none of them the "It is set against your X, the
+ * Y" appositive that all ten once used. Each is also kept clear of its
+ * culture's TOUCHES_ASC / TOUCHES_MC below, since both render on one page.
  */
 export const NATAL_POINT_CLOSING: Readonly<Record<Culture, { asc: string; mc: string }>> = {
   egypt: {
-    asc: "It is set against your rising sign, the mask you first show the scale.",
-    mc: "It is set against your midheaven, the office recorded in the register of the state.",
+    asc: "Your rising sign goes on the pan here. Ma'at makes no allowance for a mask.",
+    mc: "Your midheaven carries the weight here. The state wrote you down long before today.",
   },
   greece: {
-    asc: "It is set against your rising degree, the face you must show.",
-    mc: "It is set against your midheaven, the office you are climbing toward.",
+    asc: "The god is being asked about your rising degree. That is the face you have to show.",
+    mc: "The god is being asked about your midheaven. That is the office you are climbing toward.",
   },
   canaan: {
-    asc: "It is set against your rising sign, the face you bring before the council.",
-    mc: "It is set against your midheaven, the seat the council has entered in its record.",
+    asc: "Your rising sign is what stands up when your name is called.",
+    mc: "Your midheaven is the seat the council has already entered in its record.",
   },
   carthage: {
-    asc: "It is set against your rising sign, the face you present at the gate of the precinct.",
-    mc: "It is set against your midheaven, the office entered on the city's rolls.",
+    asc: "The posting is against your rising sign, the first line anyone reads about you.",
+    mc: "The posting is against your midheaven, and half the harbor can read it.",
   },
   rome: {
-    asc: "It is set against your rising sign, the face you present to the augur.",
-    mc: "It is set against your midheaven, the office the censor has recorded.",
+    asc: "Rome reads this against your rising sign, which is the face and not the man behind it.",
+    mc: "Rome reads this against your midheaven, and Rome keeps that reading where anyone can consult it.",
   },
 };
 
 /** Closes the WHAT IT TOUCHES paragraph for a sun/moon natal point, after
- *  houseReading()'s single sentence. */
+ *  houseReading()'s single sentence. Three of the five once ran "The
+ *  {institution} does not {verb}", and two carried semicolon chains the
+ *  cadence spec forbids. */
 export const TOUCHES_REGISTER_LINE: Readonly<Record<Culture, string>> = {
   egypt: "The scale does not wait for you to notice which pan is loaded.",
-  greece: "The oracle does not repeat herself; this is the only answer you get to this question.",
-  canaan: "The council does not adjourn until the matter is entered in the record.",
-  carthage: "The ledger keeps its own hours; it does not wait for the harbor to be convenient.",
+  greece: "You get one answer to this question, and the oracle has no other version of it.",
+  canaan: "The record closes when the matter is entered in it, and not before.",
+  carthage: "The ledger keeps its own hours, and the harbor's convenience is not one of them.",
   rome: "The auspices are taken whether or not you attend to them.",
 };
 
 /** WHAT IT TOUCHES, full paragraph, when the natal point is the Ascendant:
- *  identity and approach, since the Ascendant is a face rather than a house. */
+ *  identity and approach, since the Ascendant is a face rather than a house.
+ *  All five once opened "This transit works on the face you..." (the phrase
+ *  TransitDetail's house branch also uses) and all five closed on "What
+ *  {verb}s here {verb}s how every other {noun} is received", which is the
+ *  reference engine's own trick. Neither survives here. */
 export const TOUCHES_ASC: Readonly<Record<Culture, string>> = {
-  egypt: "This transit works on the face you carry into the hall: your bearing, your body, the manner the door-keepers read before you have said a word. It is not a mood laid on for a season; it is the mask itself being reworked, plate by plate. What the scale weighs first is always the face, before it hears a single word from you.",
-  greece: "This transit works on the face you show at the gate of the shrine: your bearing, your first approach, the self a stranger reads before you have spoken. The oracle answers the question you carry in your posture as much as the one on your tongue. What changes here changes how every other answer of hers is received.",
-  canaan: "This transit works on the face you bring before the assembled council: your bearing, your first word, the self that stands to be counted before the matter is even named. The council reads the messenger before it reads the message. What shifts here decides how every other petition of yours is heard.",
-  carthage: "This transit works on the face you present at the gate of the precinct: your bearing, your credit before a word of business is spoken, the reputation that arrives ahead of the cargo. The harbor masters read this face before they read the manifest. What is reworked here changes every contract that follows.",
-  rome: "This transit works on the face you present to the augur before the auspices are even taken: your bearing, your standing at first sight, the presence a stranger reads before your name is given. Rome judges the man at the door before it hears his case. What is remade here changes how every later petition is received.",
+  egypt: "The face you carry into the hall is what this works on: your carriage, your body, the manner the door-keepers read before you have said a word. It is not a wash of paint laid on for one season. It is the plating itself, taken off and hammered flat again. The scale weighs the face first, every time, and only then calls for testimony.",
+  greece: "The god sees you at the gate before he hears you: how you walk up, what you say first, the self a stranger reads before you have spoken. That is the part being remade. The oracle answers the question you carry in your posture as much as the one on your tongue, and every later answer of hers arrives through that face.",
+  canaan: "The council reads the messenger before it reads the message. What is being remade here is the messenger: your first word, and the way you stand while you say it. Nothing you bring afterward is heard apart from it. The gate has a long memory for faces.",
+  carthage: "Your credit reaches the precinct gate ahead of your cargo: the standing, the name the harbor masters know before they open the manifest. That is the account being re-entered now, line by line. Contracts get signed on that name for years after the ship has sailed.",
+  rome: "Rome judges the man at the door before it hears his case. It is that man being re-cut here: your presence at first sight, the impression a stranger takes before your name is given. The presence is weighed first and the case second, in that order, every time.",
 };
 
 /** WHAT IT TOUCHES, full paragraph, when the natal point is the Midheaven:
- *  station and reputation, the public office rather than a private house. */
+ *  station and reputation, the public office rather than a private house.
+ *  The old bank closed all five on "What is {verb}ed here is not the private
+ *  {noun} but the public {noun}", one frame with the nouns swapped. */
 export const TOUCHES_MC: Readonly<Record<Culture, string>> = {
-  egypt: "This transit works on your standing before the wider court: the office you hold, the name entered beside your deeds in the record the scribes will keep. What is weighed here is not the private heart but the public measure, the rank the whole hall can see.",
-  greece: "This transit works on your station in the city's eye: the office, the reputation, the name the herald reads aloud. What is tested here is not the private oracle but the public one, the answer the whole agora hears.",
-  canaan: "This transit works on your seat in the eyes of the wider assembly: the office, the standing, the name the gate remembers when it counts who arrived and in what rank. What moves here is not the private vow but the public one, sworn before witnesses.",
-  carthage: "This transit works on your standing on the city's rolls: the office, the rank entered in the register the suffetes keep, the name the harbor recognizes before your ship has even docked. What is audited here is not the private ledger but the public one.",
-  rome: "This transit works on your standing before the state: the office, the rank the censor enters on the rolls, the name read out at the muster. What is reviewed here is not the private conscience but the public record, the one the whole Forum can consult.",
+  egypt: "Your office is at stake here, and an office is a public thing. The title you hold, the name the scribes set beside your deeds where it cannot be scraped off: the hall can see all of that. The hall cannot see the heart, and it is not the heart that goes on the scale.",
+  greece: "What the city says about you is on the table: the office, the reputation, the name the herald reads aloud. You will not hear this answer first. The agora hears it, and then you hear it from them.",
+  canaan: "The wider assembly holds you to an office, a standing, and a rank the gate remembers when it counts who arrived and in what order. A vow sworn in your own tent binds only you. This one was sworn in front of everybody.",
+  carthage: "Your name on the city's rolls is the entry under review: the office, the rank the suffetes keep in the register, the standing the harbor recognizes before your ship is tied up. A private book gets corrected quietly. Nobody corrects this one without the whole quay watching.",
+  rome: "The censor's hand is on your name. He writes your office and your rank where the whole order can see them, and the muster hears it read out. Your conscience is your own business. The record belongs to the Forum, and the Forum consults it.",
 };

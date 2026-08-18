@@ -70,69 +70,118 @@ function toneForKind(kind: AspectKind): "harmony" | "tension" {
  * One short imperative per (culture, aspect kind): the second half of an
  * aspect day's line, in the culture's institutional register. Egypt weighs,
  * Greece questions, Canaan convenes, Carthage audits, Rome rules.
+ *
+ * The decree prints these directly after ASPECT_RULINGS[culture][kind]
+ * (see lib/decree.ts), so no entry here may reuse a sentence, an object, or
+ * a turn of phrase from the ruling of the same kind. Each closes on the
+ * instruction rather than opening with it, so the day's line ends on
+ * something the reader can carry out.
  */
 export const ASPECT_IMPERATIVES: Readonly<Record<Culture, Readonly<Record<AspectKind, string>>>> = {
   egypt: {
     conjunction: "Declare the union. Let the scribes enter it in one line.",
-    sextile: "Take the offered hand. The current does the rest.",
-    square: "Weigh it before you speak. Isfet enters where the scale is left untended.",
-    trine: "Row with it while the current holds. The work will not cost you twice.",
-    opposition: "Hold the two pans level. Do not force a verdict the river has not given.",
+    sextile: "The inundation does not wait for the man still mending his dyke. Open the channel this morning.",
+    square: "A beam pulled out of true is straightened by hand, never by patience. Weigh it twice before you speak.",
+    trine: "No offering is required to keep this. Row while the current still runs with you.",
+    opposition: "Force nothing. Stand at the balance until it answers, and not one moment less.",
   },
   greece: {
-    conjunction: "Ask the one question, not three. The god answers a single voice.",
-    sextile: "Knock while the door is open. Ask plainly, and pay what is asked.",
-    square: "Name the price before you agree to it. The answer costs; know what.",
-    trine: "Take the answer offered. Nothing is owed for what comes this easily.",
-    opposition: "Change the question. Two shrines will not agree until you do.",
+    conjunction: "Bring one question up the road, not three. Write it out before you climb.",
+    sextile: "Half a question gets half an answer. Say the thing you actually came for, in as few words as you can.",
+    square: "The god is no merchant and will not haggle. Reckon what this takes from you, then accept it or go home.",
+    trine: "This one was not bought. Act on it before you are back down the road.",
+    opposition: "Stop asking the same thing louder. Go back to the beginning and put a different question.",
   },
   canaan: {
-    conjunction: "Bring it to the council as one matter, not two.",
-    sextile: "Make the vow today. It will be heard.",
-    square: "Let the witness speak. Do not silence the objection to save time.",
-    trine: "Work the field while the rains hold. Do not wait for a vow first.",
-    opposition: "Wait for one season to yield. Nothing moves while both hold their ground.",
+    conjunction: "Swear it once, before witnesses, and do not split the wording into two vows.",
+    sextile: "El does not read minds. Stand while the assembly is still seated and put it in words.",
+    square: "Anything forced through over an objection comes back to the floor twice. Let the man finish, and let it go into the record.",
+    trine: "Soft ground does not stay soft. Put the plough in before the feast day.",
+    opposition: "The docket will not clear itself while both sides keep their feet. Adjourn, and take it up when one has sat down.",
   },
   carthage: {
-    conjunction: "Enter it under one name. Do not split what the sky has joined.",
-    sextile: "Load the cargo. The wind will not stay fair forever.",
-    square: "Leave the books open until the discrepancy is explained. Do not close early.",
-    trine: "Set out. Nothing is called in first.",
-    opposition: "Withdraw one claim before you ship. The quay will not release cargo to two.",
+    conjunction: "Two books for one venture is how a house loses money quietly. Keep one, and keep it in your own hand.",
+    sextile: "A standing offer is worth nothing until it is written down. Get it into the register before the day closes.",
+    square: "Someone has already told you the number is wrong. Go back down the column line by line before you sign anything.",
+    trine: "Fair weather is not a cargo. Weigh it out, sign the manifest, and sail.",
+    opposition: "An entry with a rival name on it is not an entry, it is a dispute. Strike one of them out before the tide turns.",
   },
   rome: {
-    conjunction: "Act as one power, not two. Divided command loses the field.",
-    sextile: "Petition for it plainly. The omen favors the one who asks.",
-    square: "Proceed, but expect the objection. Prepare the defense first.",
-    trine: "Proceed without a second reading. The right hand is already offered.",
-    opposition: "Wait for one magistrate to yield the chair. Nothing is settled while both hold it.",
+    conjunction: "Divided command loses the field. Send one man to speak for both.",
+    sextile: "The sky has done its part and will not do yours. Put the matter forward in your own name while the Forum is still full.",
+    square: "Someone will speak against this, and the law lets him. Have your witnesses in the room first.",
+    trine: "Nothing here has to be argued. Get it in front of the magistrate this morning.",
+    opposition: "Neither will yield the chair to the other today. Settle the precedence before you bring anything else forward.",
   },
 };
 
 /** The verb an ingress line uses: "{deity} {verb} the {sign}." */
 const INGRESS_VERB: Readonly<Record<Culture, string>> = {
-  egypt: "crosses into",
-  greece: "steps into",
+  egypt: "is ferried into",
+  greece: "goes on to the shrine of",
   canaan: "comes before",
   carthage: "makes port in",
   rome: "enters the augur's boundary of",
 };
 
+/** Closes an ingress day. Ends on the instruction, and carries no semicolon. */
 const INGRESS_IMPERATIVE: Readonly<Record<Culture, string>> = {
-  egypt: "Cross into it deliberately. The river does not reverse for anyone.",
+  egypt: "The river does not reverse for anyone. Cross deliberately, and stop looking for the old bank.",
   greece: "Meet the new ground with an open question, not an old answer.",
-  canaan: "Bring the matter before the new seat; the council changes with it.",
-  carthage: "Log the new heading. The old bearing no longer holds.",
-  rome: "Take the auspices again; the ground under the standard has changed.",
+  canaan: "The council changes with the seat. Bring the matter before the new one.",
+  carthage: "The old bearing no longer holds. Log the new heading before the next watch.",
+  rome: "The ground under the standard has changed. Take the auspices again before you march.",
 };
 
-/** One honest quiet-day line per culture (5 variants, one per culture, not per day). */
+/** One honest quiet-day line per culture (5 variants, one per culture, not per
+ *  day). These are the corpus's plain days and they stay plain: no aspect is
+ *  invented and no reassurance is offered. Each opens on a different shape so
+ *  the five do not read as one line with the institution swapped, and none
+ *  repeats its culture's QUIET_HEADLINE in lib/decree.ts. */
 export const QUIET_LINE: Readonly<Record<Culture, string>> = {
-  egypt: "No exact aspect. A day of ordinary work. Ma'at counts it no lower than a feast.",
+  egypt: "Nothing on the river runs close enough to weigh. A day of ordinary work, and Ma'at counts it no lower than a feast.",
   greece: "No shrine answers today. The oracle keeps its own counsel, and so should you.",
-  canaan: "No matter reaches the council today. An ordinary day still stands under El's tent.",
-  carthage: "No entry posts today. The ledger holds steady, which is its own kind of profit.",
-  rome: "No omen stands out today. An ordinary day is still taken under auspices.",
+  canaan: "Not one matter is brought forward today. An ordinary day still stands under El's tent.",
+  carthage: "The day's page takes no entry. The books hold steady, which is its own kind of profit.",
+  rome: "Nothing is reported that the augurs would call a sign. The citadel was manned at dawn all the same.",
+};
+
+/**
+ * How each culture marks a degree-exact contact. One adverb in one slot ("X
+ * exactly {verb}s Y") made all five voices rhyme: same word, same position,
+ * five pantheons. So each institution now marks exactness with its own
+ * instrument AND in its own part of the sentence: Egypt opens on the reading,
+ * Greece on an adverbial, Canaan closes on a coordinate clause, Carthage on a
+ * bare absolute, Rome breaks the subject with an appositive.
+ *
+ * Each culture carries two instruments because a decree can run two exact
+ * figures, and the same marker twice on one page is the seam this whole
+ * arrangement exists to avoid. The position stays fixed per culture (that is
+ * what keeps the five from rhyming); only the instrument varies.
+ */
+const EXACT_FORMS: Readonly<
+  Record<Culture, ReadonlyArray<(subject: string, predicate: string) => string>>
+> = {
+  egypt: [
+    (subject, predicate) => `The plumb hangs true: ${subject} ${predicate}.`,
+    (subject, predicate) => `The cord is drawn tight: ${subject} ${predicate}.`,
+  ],
+  greece: [
+    (subject, predicate) => `To the very degree, ${subject} ${predicate}.`,
+    (subject, predicate) => `Within the hair, ${subject} ${predicate}.`,
+  ],
+  canaan: [
+    (subject, predicate) => `${subject} ${predicate}, and the gate is full to the wall.`,
+    (subject, predicate) => `${subject} ${predicate}, and not one seat stands empty.`,
+  ],
+  carthage: [
+    (subject, predicate) => `${subject} ${predicate}, the entry posted to the hour.`,
+    (subject, predicate) => `${subject} ${predicate}, the weight matched to its mark.`,
+  ],
+  rome: [
+    (subject, predicate) => `${subject}, at the line the augur drew, ${predicate}.`,
+    (subject, predicate) => `${subject}, squarely inside the templum, ${predicate}.`,
+  ],
 };
 
 export function composeAspectSentence(
@@ -142,14 +191,22 @@ export function composeAspectSentence(
   kind: AspectKind,
   exact: boolean,
   chart: Readonly<Record<Planet, number>>,
+  /** Which exactness instrument to use, so two exact figures in one decree
+   *  do not carry the same marker. Wraps. */
+  variant = 0,
 ): string {
   const deityA = DEITY_MATRIX[culture][a].name;
   const deityB = DEITY_MATRIX[culture][b].name;
   const verb = ASPECT_VERBS[culture][kind];
   const signClause =
     kind === "conjunction" ? ` in the ${properCase(SIGN_PHRASES[longitudeToSign(chart[a]).sign])}` : "";
-  const exactClause = exact ? "exactly " : "";
-  return `${deityA} ${exactClause}${verb} ${deityB}${signClause}.`;
+  const predicate = `${verb} ${deityB}${signClause}`;
+  if (exact) {
+    const forms = EXACT_FORMS[culture];
+    const form = forms[variant % forms.length] ?? forms[0];
+    if (form) return form(deityA, predicate);
+  }
+  return `${deityA} ${predicate}.`;
 }
 
 /**
