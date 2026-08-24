@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "bf8d54711aa2472ef4650c10749a52b8a0c3f571",
+  "counts": {
+    "cultures": 5,
+    "planets": 10,
+    "deities": 50,
+    "planetInSignParagraphs": 120,
+    "houses": 12,
+    "zodiacSigns": 12,
+    "aspectRules": 5
+  }
+}

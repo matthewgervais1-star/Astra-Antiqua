@@ -1,0 +1,27 @@
+[
+  {
+    "kind": "conjunction",
+    "angle": 0,
+    "orb": 8
+  },
+  {
+    "kind": "sextile",
+    "angle": 60,
+    "orb": 5
+  },
+  {
+    "kind": "square",
+    "angle": 90,
+    "orb": 7
+  },
+  {
+    "kind": "trine",
+    "angle": 120,
+    "orb": 7
+  },
+  {
+    "kind": "opposition",
+    "angle": 180,
+    "orb": 8
+  }
+]

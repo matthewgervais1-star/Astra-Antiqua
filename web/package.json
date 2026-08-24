@@ -9,7 +9,9 @@
     "start:lan": "cross-env NODE_OPTIONS=--use-system-ca ASTRA_ALLOW_HTTP=1 next start -H 0.0.0.0",
     "lint": "eslint --max-warnings 0",
     "typecheck": "tsc --noEmit",
-    "gates": "node scripts/check-gates.mjs"
+    "gates": "node scripts/check-gates.mjs",
+    "export:content": "node scripts/export-content.mjs",
+    "export:goldens": "node scripts/export-goldens.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

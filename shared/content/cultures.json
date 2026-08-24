@@ -1,0 +1,96 @@
+{
+  "cultures": [
+    {
+      "id": "egypt",
+      "label": "Egypt",
+      "tagline": "The Hall of Ma'at",
+      "subtitle": "Memphis. Thebes. The voyage of the solar barque."
+    },
+    {
+      "id": "greece",
+      "label": "Greece",
+      "tagline": "The Oracle of Delphi",
+      "subtitle": "Delphi. Alexandria. The planets and the four elements."
+    },
+    {
+      "id": "canaan",
+      "label": "Canaan",
+      "tagline": "The Divine Council",
+      "subtitle": "Ugarit. The Baal cycle. The council at the mountain."
+    },
+    {
+      "id": "carthage",
+      "label": "Carthage",
+      "tagline": "The Decree of the Council",
+      "subtitle": "Qart-hadasht. The suffetes and the Council. The line that ran from Tyre."
+    },
+    {
+      "id": "rome",
+      "label": "Rome",
+      "tagline": "The Sibylline Books",
+      "subtitle": "The Capitoline. The auspices. The names that still order the week."
+    }
+  ],
+  "planets": [
+    {
+      "id": "sun",
+      "label": "Sun",
+      "symbol": "☉",
+      "received": false
+    },
+    {
+      "id": "moon",
+      "label": "Moon",
+      "symbol": "☽",
+      "received": false
+    },
+    {
+      "id": "mercury",
+      "label": "Mercury",
+      "symbol": "☿",
+      "received": false
+    },
+    {
+      "id": "venus",
+      "label": "Venus",
+      "symbol": "♀",
+      "received": false
+    },
+    {
+      "id": "mars",
+      "label": "Mars",
+      "symbol": "♂",
+      "received": false
+    },
+    {
+      "id": "jupiter",
+      "label": "Jupiter",
+      "symbol": "♃",
+      "received": false
+    },
+    {
+      "id": "saturn",
+      "label": "Saturn",
+      "symbol": "♄",
+      "received": false
+    },
+    {
+      "id": "uranus",
+      "label": "Uranus",
+      "symbol": "♅",
+      "received": true
+    },
+    {
+      "id": "neptune",
+      "label": "Neptune",
+      "symbol": "♆",
+      "received": true
+    },
+    {
+      "id": "pluto",
+      "label": "Pluto",
+      "symbol": "♇",
+      "received": true
+    }
+  ]
+}
