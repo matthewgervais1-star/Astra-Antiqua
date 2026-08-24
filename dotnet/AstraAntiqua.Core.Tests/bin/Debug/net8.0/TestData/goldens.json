@@ -1,0 +1,375 @@
+{
+  "tolerance": 0.001,
+  "cases": [
+    {
+      "name": "alexandria-2000",
+      "utc": "2000-06-21T12:00:00Z",
+      "lat": 31.2001,
+      "lon": 29.9187,
+      "longitudes": {
+        "sun": 90.40565330144646,
+        "moon": 320.0541170338359,
+        "mercury": 109.82945417167859,
+        "venus": 93.16102007529655,
+        "mars": 93.33536658141087,
+        "jupiter": 58.11798843236527,
+        "saturn": 55.59880354133009,
+        "uranus": 320.53066320750327,
+        "neptune": 306.08971906752214,
+        "pluto": 251.01861536799947
+      },
+      "ascendant": 205.69527673089175,
+      "midheaven": 117.82147821975741,
+      "ascendantSign": "Libra",
+      "houses": {
+        "sun": 10,
+        "moon": 5,
+        "mercury": 10,
+        "venus": 10,
+        "mars": 10,
+        "jupiter": 8,
+        "saturn": 8,
+        "uranus": 5,
+        "neptune": 5,
+        "pluto": 3
+      },
+      "aspects": [
+        {
+          "a": "sun",
+          "b": "venus",
+          "kind": "conjunction"
+        },
+        {
+          "a": "sun",
+          "b": "mars",
+          "kind": "conjunction"
+        },
+        {
+          "a": "moon",
+          "b": "saturn",
+          "kind": "square"
+        },
+        {
+          "a": "moon",
+          "b": "uranus",
+          "kind": "conjunction"
+        },
+        {
+          "a": "venus",
+          "b": "mars",
+          "kind": "conjunction"
+        },
+        {
+          "a": "jupiter",
+          "b": "saturn",
+          "kind": "conjunction"
+        },
+        {
+          "a": "saturn",
+          "b": "uranus",
+          "kind": "square"
+        },
+        {
+          "a": "neptune",
+          "b": "pluto",
+          "kind": "sextile"
+        }
+      ]
+    },
+    {
+      "name": "rome-1990",
+      "utc": "1990-01-15T04:30:00Z",
+      "lat": 41.9028,
+      "lon": 12.4964,
+      "longitudes": {
+        "sun": 294.76004239931854,
+        "moon": 163.58319596753475,
+        "mercury": 281.5752497067905,
+        "venus": 300.87208543546575,
+        "mars": 259.68676224801885,
+        "jupiter": 93.40276343001031,
+        "saturn": 287.2775706280724,
+        "uranus": 276.5939786148897,
+        "neptune": 282.55373375670547,
+        "pluto": 227.4224672890375
+      },
+      "ascendant": 262.39847053166096,
+      "midheaven": 195.59877023258176,
+      "ascendantSign": "Sagittarius",
+      "houses": {
+        "sun": 2,
+        "moon": 10,
+        "mercury": 2,
+        "venus": 3,
+        "mars": 1,
+        "jupiter": 8,
+        "saturn": 2,
+        "uranus": 2,
+        "neptune": 2,
+        "pluto": 12
+      },
+      "aspects": [
+        {
+          "a": "sun",
+          "b": "venus",
+          "kind": "conjunction"
+        },
+        {
+          "a": "sun",
+          "b": "saturn",
+          "kind": "conjunction"
+        },
+        {
+          "a": "moon",
+          "b": "mercury",
+          "kind": "trine"
+        },
+        {
+          "a": "moon",
+          "b": "mars",
+          "kind": "square"
+        },
+        {
+          "a": "moon",
+          "b": "saturn",
+          "kind": "trine"
+        },
+        {
+          "a": "moon",
+          "b": "uranus",
+          "kind": "trine"
+        },
+        {
+          "a": "moon",
+          "b": "neptune",
+          "kind": "trine"
+        },
+        {
+          "a": "moon",
+          "b": "pluto",
+          "kind": "sextile"
+        },
+        {
+          "a": "mercury",
+          "b": "saturn",
+          "kind": "conjunction"
+        },
+        {
+          "a": "mercury",
+          "b": "uranus",
+          "kind": "conjunction"
+        },
+        {
+          "a": "mercury",
+          "b": "neptune",
+          "kind": "conjunction"
+        },
+        {
+          "a": "jupiter",
+          "b": "uranus",
+          "kind": "opposition"
+        },
+        {
+          "a": "saturn",
+          "b": "neptune",
+          "kind": "conjunction"
+        },
+        {
+          "a": "saturn",
+          "b": "pluto",
+          "kind": "sextile"
+        },
+        {
+          "a": "uranus",
+          "b": "neptune",
+          "kind": "conjunction"
+        },
+        {
+          "a": "neptune",
+          "b": "pluto",
+          "kind": "sextile"
+        }
+      ]
+    },
+    {
+      "name": "southern-1985",
+      "utc": "1985-11-03T22:15:00Z",
+      "lat": -33.8688,
+      "lon": 151.2093,
+      "longitudes": {
+        "sun": 221.43801810258924,
+        "moon": 109.17041053743317,
+        "mercury": 243.9806271462328,
+        "venus": 202.8690671072628,
+        "mars": 184.56894729361426,
+        "jupiter": 308.72341462179315,
+        "saturn": 238.45491334908735,
+        "uranus": 256.07423771128225,
+        "neptune": 271.58026748077094,
+        "pluto": 214.95498383872754
+      },
+      "ascendant": 274.5183694706765,
+      "midheaven": 167.03153774198043,
+      "ascendantSign": "Capricorn",
+      "houses": {
+        "sun": 11,
+        "moon": 7,
+        "mercury": 12,
+        "venus": 10,
+        "mars": 10,
+        "jupiter": 2,
+        "saturn": 11,
+        "uranus": 12,
+        "neptune": 1,
+        "pluto": 11
+      },
+      "aspects": [
+        {
+          "a": "sun",
+          "b": "jupiter",
+          "kind": "square"
+        },
+        {
+          "a": "sun",
+          "b": "pluto",
+          "kind": "conjunction"
+        },
+        {
+          "a": "moon",
+          "b": "venus",
+          "kind": "square"
+        },
+        {
+          "a": "mercury",
+          "b": "mars",
+          "kind": "sextile"
+        },
+        {
+          "a": "mercury",
+          "b": "jupiter",
+          "kind": "sextile"
+        },
+        {
+          "a": "mercury",
+          "b": "saturn",
+          "kind": "conjunction"
+        },
+        {
+          "a": "mars",
+          "b": "jupiter",
+          "kind": "trine"
+        },
+        {
+          "a": "mars",
+          "b": "neptune",
+          "kind": "square"
+        },
+        {
+          "a": "jupiter",
+          "b": "pluto",
+          "kind": "square"
+        },
+        {
+          "a": "neptune",
+          "b": "pluto",
+          "kind": "sextile"
+        }
+      ]
+    },
+    {
+      "name": "carthage-2026",
+      "utc": "2026-08-24T09:00:00Z",
+      "lat": 36.8529,
+      "lon": 10.3233,
+      "longitudes": {
+        "sun": 151.23203712991554,
+        "moon": 287.9063563107643,
+        "mercury": 147.82923871866961,
+        "venus": 196.74652427046917,
+        "mars": 98.51589598767661,
+        "jupiter": 132.07943113214935,
+        "saturn": 14.069141183325044,
+        "uranus": 65.5678521433929,
+        "neptune": 3.8475450704086964,
+        "pluto": 303.65791877792753
+      },
+      "ascendant": 202.94491567409918,
+      "midheaven": 115.98885103540262,
+      "ascendantSign": "Libra",
+      "houses": {
+        "sun": 12,
+        "moon": 4,
+        "mercury": 11,
+        "venus": 1,
+        "mars": 10,
+        "jupiter": 11,
+        "saturn": 7,
+        "uranus": 9,
+        "neptune": 7,
+        "pluto": 5
+      },
+      "aspects": [
+        {
+          "a": "sun",
+          "b": "mercury",
+          "kind": "conjunction"
+        },
+        {
+          "a": "sun",
+          "b": "uranus",
+          "kind": "square"
+        },
+        {
+          "a": "moon",
+          "b": "venus",
+          "kind": "square"
+        },
+        {
+          "a": "moon",
+          "b": "saturn",
+          "kind": "square"
+        },
+        {
+          "a": "venus",
+          "b": "jupiter",
+          "kind": "sextile"
+        },
+        {
+          "a": "venus",
+          "b": "saturn",
+          "kind": "opposition"
+        },
+        {
+          "a": "mars",
+          "b": "saturn",
+          "kind": "square"
+        },
+        {
+          "a": "mars",
+          "b": "neptune",
+          "kind": "square"
+        },
+        {
+          "a": "jupiter",
+          "b": "saturn",
+          "kind": "trine"
+        },
+        {
+          "a": "uranus",
+          "b": "neptune",
+          "kind": "sextile"
+        },
+        {
+          "a": "uranus",
+          "b": "pluto",
+          "kind": "trine"
+        },
+        {
+          "a": "neptune",
+          "b": "pluto",
+          "kind": "sextile"
+        }
+      ]
+    }
+  ]
+}

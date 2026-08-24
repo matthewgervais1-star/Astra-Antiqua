@@ -1,0 +1,12 @@
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\bin\Debug\net8.0\AstraAntiqua.Core.deps.json
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\bin\Debug\net8.0\AstraAntiqua.Core.dll
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\bin\Debug\net8.0\AstraAntiqua.Core.pdb
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\obj\Debug\net8.0\AstraAntiqua.Core.csproj.AssemblyReference.cache
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\obj\Debug\net8.0\AstraAntiqua.Core.GeneratedMSBuildEditorConfig.editorconfig
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\obj\Debug\net8.0\AstraAntiqua.Core.AssemblyInfoInputs.cache
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\obj\Debug\net8.0\AstraAntiqua.Core.AssemblyInfo.cs
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\obj\Debug\net8.0\AstraAntiqua.Core.csproj.CoreCompileInputs.cache
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\obj\Debug\net8.0\AstraAntiqua.Core.dll
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\obj\Debug\net8.0\refint\AstraAntiqua.Core.dll
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\obj\Debug\net8.0\AstraAntiqua.Core.pdb
+L:\Claude Projects\astra-antiqua\dotnet\AstraAntiqua.Core\obj\Debug\net8.0\ref\AstraAntiqua.Core.dll

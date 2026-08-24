@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "AstraAntiqua.Core/1.0.0": {
+        "dependencies": {
+          "CosineKitty.AstronomyEngine": "2.1.19"
+        },
+        "runtime": {
+          "AstraAntiqua.Core.dll": {}
+        }
+      },
+      "CosineKitty.AstronomyEngine/2.1.19": {
+        "runtime": {
+          "lib/netstandard2.0/astronomy.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AstraAntiqua.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CosineKitty.AstronomyEngine/2.1.19": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PLb0ZrLMLFdnYbnZDPzaiBD9arL1Mx2x3q5492/8pBV7EVbGA6syFCmeMKadgT07lrQ+UdrPaiSw2sMYejQ0AQ==",
+      "path": "cosinekitty.astronomyengine/2.1.19",
+      "hashPath": "cosinekitty.astronomyengine.2.1.19.nupkg.sha512"
+    }
+  }
+}
