@@ -66,6 +66,17 @@ android {
     }
     buildFeatures {
         compose = true
+        // Needed for BuildConfig.DEBUG, used to gate the missing-oracle-key
+        // log in OracleRepository so it only fires in debug builds.
+        buildConfig = true
+    }
+    testOptions {
+        unitTests {
+            // Some code under test (e.g. android.util.Log) is only stubbed by
+            // the Android jar; without this, calling it from a JVM unit test
+            // throws instead of being a no-op.
+            isReturnDefaultValues = true
+        }
     }
 }
 

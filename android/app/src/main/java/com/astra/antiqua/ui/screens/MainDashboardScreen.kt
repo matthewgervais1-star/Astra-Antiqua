@@ -478,13 +478,12 @@ fun NatalWheel(chartData: NatalChartData) {
     }
 }
 
-fun getPlanetColor(planet: ClassicalPlanet): Color {
-    if (planet == ClassicalPlanet.SUN) return Color(0xFFFFCC33)
-    if (planet == ClassicalPlanet.MOON) return Color(0xFFC0C0C0)
-    if (planet == ClassicalPlanet.MERCURY) return Color(0xFF8A2BE2)
-    if (planet == ClassicalPlanet.VENUS) return Color(0xFF00FF7F)
-    if (planet == ClassicalPlanet.MARS) return Color(0xFFFF4500)
-    if (planet == ClassicalPlanet.JUPITER) return Color(0xFF4169E1)
-    if (planet == ClassicalPlanet.SATURN) return Color(0xFF708090)
-    return Color.White
+fun getPlanetColor(planet: ClassicalPlanet): Color = when (planet) {
+    ClassicalPlanet.SUN -> Color(0xFFFFCC33)
+    ClassicalPlanet.MOON -> Color(0xFFC0C0C0)
+    ClassicalPlanet.MERCURY -> Color(0xFF8A2BE2)
+    ClassicalPlanet.VENUS -> Color(0xFF00FF7F)
+    ClassicalPlanet.MARS -> Color(0xFFFF4500)
+    ClassicalPlanet.JUPITER -> Color(0xFF4169E1)
+    ClassicalPlanet.SATURN -> Color(0xFF708090)
 }

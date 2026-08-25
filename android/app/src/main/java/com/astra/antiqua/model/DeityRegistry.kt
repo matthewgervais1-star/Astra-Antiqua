@@ -7,63 +7,67 @@ package com.astra.antiqua.model
  * `DEITY_MATRIX` (`web/src/data/deities.ts`). Other Android components
  * (`data/DeityManager`, `domain/LexiconDictionary`) should read deity names
  * and epithets from here rather than hardcoding their own copies.
+ *
+ * [getDeity] is an exhaustive `when` on [AncientCulture] nested around an
+ * exhaustive `when` on [ClassicalPlanet] rather than a `Map` read via
+ * `getValue()`: a (culture, planet) pair missing its `Deity` is now a
+ * compile error instead of a runtime `NoSuchElementException`, and adding a
+ * new culture or planet forces every branch to be updated before the module
+ * compiles.
  */
 object DeityRegistry {
     // Every entry is ported verbatim from web's DEITIES
     // (web/src/data/deities.ts), the source of truth for deity content per
     // docs/shared-content-model.md. Do not edit names or epithets here
     // without changing the web side first.
-    private val registry: Map<AncientCulture, Map<ClassicalPlanet, Deity>> = mapOf(
-        AncientCulture.EGYPT to mapOf(
-            ClassicalPlanet.SUN to Deity("Ra", "The Creator and King"),
-            ClassicalPlanet.MOON to Deity("Khonsu", "The Traveller"),
-            ClassicalPlanet.MERCURY to Deity("Sebegu", "Aspect of Set"),
-            ClassicalPlanet.VENUS to Deity("Isis", "The One Who Crosses"),
-            ClassicalPlanet.MARS to Deity("Horus the Red", "God of the Horizon"),
-            ClassicalPlanet.JUPITER to Deity("Amun", "He Who Limits the Two Lands"),
-            ClassicalPlanet.SATURN to Deity("Geb", "Father of the Earth")
-        ),
-        AncientCulture.GREECE to mapOf(
-            ClassicalPlanet.SUN to Deity("Apollo", "God of Light"),
-            ClassicalPlanet.MOON to Deity("Artemis", "The Huntress"),
-            ClassicalPlanet.MERCURY to Deity("Hermes", "The Messenger"),
-            ClassicalPlanet.VENUS to Deity("Aphrodite", "Goddess of Love"),
-            ClassicalPlanet.MARS to Deity("Ares", "God of War"),
-            ClassicalPlanet.JUPITER to Deity("Zeus", "King of Olympus"),
-            ClassicalPlanet.SATURN to Deity("Cronus", "Father of Time")
-        ),
-        AncientCulture.CANAAN to mapOf(
-            ClassicalPlanet.SUN to Deity("Shapash", "Luminary of the Deities"),
-            ClassicalPlanet.MOON to Deity("Yarikh", "Lord of the Night"),
-            ClassicalPlanet.MERCURY to Deity("Kothar-wa-Khasis", "The Skilled Craftsman"),
-            ClassicalPlanet.VENUS to Deity("Astarte", "Queen of Heaven"),
-            ClassicalPlanet.MARS to Deity("Resheph", "Lord of the Arrow"),
-            ClassicalPlanet.JUPITER to Deity("Baal Hadad", "Rider of the Clouds"),
-            ClassicalPlanet.SATURN to Deity("El", "Father of Years")
-        ),
-        AncientCulture.CARTHAGE to mapOf(
-            ClassicalPlanet.SUN to Deity("Semes", "The Solar Force"),
-            ClassicalPlanet.MOON to Deity("Tanit", "Dea Caelestis"),
-            ClassicalPlanet.MERCURY to Deity("Sakun", "The Guide"),
-            ClassicalPlanet.VENUS to Deity("Astarte", "Lady of the Sea"),
-            ClassicalPlanet.MARS to Deity("Melqart", "Protector of Tyre"),
-            ClassicalPlanet.JUPITER to Deity("Baal Hammon", "Lord of the Sky"),
-            ClassicalPlanet.SATURN to Deity("Baal Hammon", "The Ancient One")
-        ),
-        AncientCulture.ROME to mapOf(
-            ClassicalPlanet.SUN to Deity("Sol", "The Unconquered"),
-            ClassicalPlanet.MOON to Deity("Luna", "Driver of the Night-Chariot"),
-            ClassicalPlanet.MERCURY to Deity("Mercurius", "Lord of Exchange"),
-            ClassicalPlanet.VENUS to Deity("Venus", "Genetrix, Mother of the Race"),
-            ClassicalPlanet.MARS to Deity("Mars", "Father of the Legions"),
-            ClassicalPlanet.JUPITER to Deity("Iuppiter", "Optimus Maximus, Best and Greatest"),
-            ClassicalPlanet.SATURN to Deity("Saturnus", "King of the Golden Age")
-        )
-    )
-
-    fun getDeity(culture: AncientCulture, planet: ClassicalPlanet): Deity =
-        registry.getValue(culture).getValue(planet)
+    fun getDeity(culture: AncientCulture, planet: ClassicalPlanet): Deity = when (culture) {
+        AncientCulture.EGYPT -> when (planet) {
+            ClassicalPlanet.SUN -> Deity("Ra", "The Creator and King")
+            ClassicalPlanet.MOON -> Deity("Khonsu", "The Traveller")
+            ClassicalPlanet.MERCURY -> Deity("Sebegu", "Aspect of Set")
+            ClassicalPlanet.VENUS -> Deity("Isis", "The One Who Crosses")
+            ClassicalPlanet.MARS -> Deity("Horus the Red", "God of the Horizon")
+            ClassicalPlanet.JUPITER -> Deity("Amun", "He Who Limits the Two Lands")
+            ClassicalPlanet.SATURN -> Deity("Geb", "Father of the Earth")
+        }
+        AncientCulture.GREECE -> when (planet) {
+            ClassicalPlanet.SUN -> Deity("Apollo", "God of Light")
+            ClassicalPlanet.MOON -> Deity("Artemis", "The Huntress")
+            ClassicalPlanet.MERCURY -> Deity("Hermes", "The Messenger")
+            ClassicalPlanet.VENUS -> Deity("Aphrodite", "Goddess of Love")
+            ClassicalPlanet.MARS -> Deity("Ares", "God of War")
+            ClassicalPlanet.JUPITER -> Deity("Zeus", "King of Olympus")
+            ClassicalPlanet.SATURN -> Deity("Cronus", "Father of Time")
+        }
+        AncientCulture.CANAAN -> when (planet) {
+            ClassicalPlanet.SUN -> Deity("Shapash", "Luminary of the Deities")
+            ClassicalPlanet.MOON -> Deity("Yarikh", "Lord of the Night")
+            ClassicalPlanet.MERCURY -> Deity("Kothar-wa-Khasis", "The Skilled Craftsman")
+            ClassicalPlanet.VENUS -> Deity("Astarte", "Queen of Heaven")
+            ClassicalPlanet.MARS -> Deity("Resheph", "Lord of the Arrow")
+            ClassicalPlanet.JUPITER -> Deity("Baal Hadad", "Rider of the Clouds")
+            ClassicalPlanet.SATURN -> Deity("El", "Father of Years")
+        }
+        AncientCulture.CARTHAGE -> when (planet) {
+            ClassicalPlanet.SUN -> Deity("Semes", "The Solar Force")
+            ClassicalPlanet.MOON -> Deity("Tanit", "Dea Caelestis")
+            ClassicalPlanet.MERCURY -> Deity("Sakun", "The Guide")
+            ClassicalPlanet.VENUS -> Deity("Astarte", "Lady of the Sea")
+            ClassicalPlanet.MARS -> Deity("Melqart", "Protector of Tyre")
+            ClassicalPlanet.JUPITER -> Deity("Baal Hammon", "Lord of the Sky")
+            ClassicalPlanet.SATURN -> Deity("Baal Hammon", "The Ancient One")
+        }
+        AncientCulture.ROME -> when (planet) {
+            ClassicalPlanet.SUN -> Deity("Sol", "The Unconquered")
+            ClassicalPlanet.MOON -> Deity("Luna", "Driver of the Night-Chariot")
+            ClassicalPlanet.MERCURY -> Deity("Mercurius", "Lord of Exchange")
+            ClassicalPlanet.VENUS -> Deity("Venus", "Genetrix, Mother of the Race")
+            ClassicalPlanet.MARS -> Deity("Mars", "Father of the Legions")
+            ClassicalPlanet.JUPITER -> Deity("Iuppiter", "Optimus Maximus, Best and Greatest")
+            ClassicalPlanet.SATURN -> Deity("Saturnus", "King of the Golden Age")
+        }
+    }
 
     fun getDeitiesFor(culture: AncientCulture): Map<ClassicalPlanet, Deity> =
-        registry.getValue(culture)
+        ClassicalPlanet.values().associateWith { planet -> getDeity(culture, planet) }
 }
