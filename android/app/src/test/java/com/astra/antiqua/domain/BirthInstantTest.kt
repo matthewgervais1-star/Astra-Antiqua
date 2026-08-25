@@ -68,6 +68,24 @@ class BirthInstantTest {
     }
 
     @Test
+    fun `DST offset is taken at the birth date, not the current season`() {
+        // Guard against a rewrite that asks the zone for its offset "now":
+        // every other fixture in this file is a June date, so such a
+        // regression would pass the rest of the suite whenever CI runs
+        // during northern-hemisphere DST. Winter and summer births in the
+        // same zone must resolve with different offsets.
+        val winter = resolveBirthDateUtcMillis(
+            utcMidnightMillisFor(LocalDate.of(1990, 1, 15)), 4, 30, ZoneId.of("America/New_York")
+        )
+        assertEquals(Instant.parse("1990-01-15T09:30:00Z").toEpochMilli(), winter) // EST, UTC-5
+
+        val summer = resolveBirthDateUtcMillis(
+            utcMidnightMillisFor(LocalDate.of(1990, 7, 15)), 4, 30, ZoneId.of("America/New_York")
+        )
+        assertEquals(Instant.parse("1990-07-15T08:30:00Z").toEpochMilli(), summer) // EDT, UTC-4
+    }
+
+    @Test
     fun `a birth just before local midnight rolls onto the previous UTC day`() {
         // 23:45 local time in Tokyo (UTC+9) on 2000-06-15 is 14:45 UTC on
         // 2000-06-15 still (same day) -- pick a zone west of UTC instead so

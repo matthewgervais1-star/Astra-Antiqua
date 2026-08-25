@@ -24,6 +24,14 @@ import java.time.ZoneOffset
  * function never guesses one. See [estimateZoneOffsetForLongitude] for how
  * OnboardingScreen derives that zone from the birth location instead of the
  * device.
+ *
+ * Pre-fix rows: profiles saved before this function existed carry a
+ * `birthDateUtc` built by the old, wrong arithmetic (UTC-midnight + local
+ * hour/minute millis). Decision: no Room migration -- the app has never
+ * shipped past versionCode 1, so no external installs hold such rows. If
+ * that ever changes, the old encoding is losslessly recoverable: read the
+ * stored value as UTC to get back the wall-clock date/time, then re-resolve
+ * it with the row's stored `timezoneId`.
  */
 fun resolveBirthDateUtcMillis(
     utcMidnightMillis: Long,

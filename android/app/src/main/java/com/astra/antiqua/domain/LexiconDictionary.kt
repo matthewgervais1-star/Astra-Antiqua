@@ -22,7 +22,7 @@ object LexiconDictionary {
                 ClassicalPlanet.VENUS -> "The Rose"
                 ClassicalPlanet.MARS -> "The Warrior"
                 ClassicalPlanet.JUPITER -> "The Thunderer"
-                ClassicalPlanet.SATURN -> "The Chronos"
+                ClassicalPlanet.SATURN -> "The Father of Time"
             }
         },
         highPriestSummaryTitle = "The Pythia's Prophecy",

@@ -47,9 +47,15 @@ object AspectDetector {
         return aspects
     }
 
-    /** Minimal angular separation between two ecliptic longitudes, in [0, 180]. */
+    /**
+     * Minimal angular separation between two ecliptic longitudes, in [0, 180].
+     * The `% 360` matches web's fold (sampleChart.ts computeAspects), so the
+     * function stays correct even for callers that pass unnormalized
+     * longitudes (future synastry/transit deltas), not just the [0, 360)
+     * values the natal path feeds it today.
+     */
     fun angularSeparation(d1: Double, d2: Double): Double {
-        val diff = Math.abs(d1 - d2)
+        val diff = Math.abs(d1 - d2) % 360
         return if (diff > 180) 360 - diff else diff
     }
 }

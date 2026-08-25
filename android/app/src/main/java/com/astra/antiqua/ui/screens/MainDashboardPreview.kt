@@ -130,7 +130,7 @@ fun GreeceDashboardPreview() {
                     content = OracleContent(
                         deity_name = "Helios",
                         epitheton = "The Radiant King",
-                        decree = "Know thyself, for the golden chariot rises to illuminate the hidden path.",
+                        decree = "I see all things from my height, and the golden chariot rises to illuminate the hidden path.",
                         planetPosition = sampleChart.planets[ClassicalPlanet.SUN]
                     )
                 )
