@@ -90,10 +90,13 @@ class LocationSearchViewModel : ViewModel() {
 
     /**
      * [timezoneId] is the zone [birthDateUtc] was resolved against (see
-     * [com.astra.antiqua.domain.resolveBirthDateUtcMillis]) -- an explicit
-     * caller-supplied input, not read from `TimeZone.getDefault()` here, so
-     * the stored profile stays consistent with whatever zone was actually
-     * used to compute the birth instant.
+     * [com.astra.antiqua.domain.resolveBirthDateUtcMillis] and
+     * [com.astra.antiqua.domain.estimateZoneOffsetForLongitude]) -- an
+     * explicit caller-supplied input, not read from `TimeZone.getDefault()`
+     * here, so the stored profile stays consistent with whatever zone was
+     * actually used to compute the birth instant. It is typically a fixed
+     * UTC offset id (e.g. "+01:00") derived from the birth location's
+     * longitude, not a real IANA zone id.
      */
     fun saveProfile(
         context: Context,
