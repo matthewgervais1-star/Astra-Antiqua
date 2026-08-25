@@ -7,6 +7,14 @@ they disagree. Until a shared module or content API exists, **the web
 implementation (`web/src/data/*.ts`) is the source of truth for content**, and
 `web/src/lib/*.ts` is the source of truth for interpretation rules.
 
+**The canonical column now has a generated JSON form.** `shared/content/*.json`
+is exported from the web data by `cd web && npm run export:content` (cultures,
+planets, deities, planet-in-sign, houses, zodiac signs, the orb table). The C#
+core (`dotnet/AstraAntiqua.Core`) embeds and reads it; Android's migration onto
+it is the rollout plan's Phase 3. The JSON is generated output — never hand-edit
+it, and regenerate it whenever web content changes. `npm run export:goldens`
+regenerates the chart-parity fixtures the C# tests assert against.
+
 ## Canonical vocabulary
 
 | Concept | Canonical set | Web | Android |
@@ -142,6 +150,8 @@ as product commitments (whole-sign houses are named on `/learn`).
 - Changing domain content or interpretation rules on one surface? Check this
   document, apply the same change to the other surface (or record a new
   divergence here), and update the counts above if the shape changed.
+- Changed web content? Re-run `npm run export:content` (and `export:goldens` if
+  chart math changed) so `shared/content/` and the C# parity fixtures follow.
 - New surfaces (iOS) implement the canonical column of each table, not the
   legacy Android variants.
 - Medium-term (plan Phase 4): extract this model into structured JSON or a
