@@ -31,19 +31,19 @@ object DeityRegistry {
             ClassicalPlanet.SATURN -> Deity("Geb", "Father of the Earth")
         }
         AncientCulture.GREECE -> when (planet) {
-            ClassicalPlanet.SUN -> Deity("Apollo", "God of Light")
-            ClassicalPlanet.MOON -> Deity("Artemis", "The Huntress")
+            ClassicalPlanet.SUN -> Deity("Helios", "Who Sees All Things")
+            ClassicalPlanet.MOON -> Deity("Selene", "The Moon Herself")
             ClassicalPlanet.MERCURY -> Deity("Hermes", "The Messenger")
             ClassicalPlanet.VENUS -> Deity("Aphrodite", "Goddess of Love")
             ClassicalPlanet.MARS -> Deity("Ares", "God of War")
             ClassicalPlanet.JUPITER -> Deity("Zeus", "King of Olympus")
-            ClassicalPlanet.SATURN -> Deity("Cronus", "Father of Time")
+            ClassicalPlanet.SATURN -> Deity("Kronos", "Father of Time")
         }
         AncientCulture.CANAAN -> when (planet) {
             ClassicalPlanet.SUN -> Deity("Shapash", "Luminary of the Deities")
             ClassicalPlanet.MOON -> Deity("Yarikh", "Lord of the Night")
-            ClassicalPlanet.MERCURY -> Deity("Kothar-wa-Khasis", "The Skilled Craftsman")
-            ClassicalPlanet.VENUS -> Deity("Astarte", "Queen of Heaven")
+            ClassicalPlanet.MERCURY -> Deity("Kothar", "Skilled and Wise")
+            ClassicalPlanet.VENUS -> Deity("Attart", "Queen of Heaven")
             ClassicalPlanet.MARS -> Deity("Resheph", "Lord of the Arrow")
             ClassicalPlanet.JUPITER -> Deity("Baal Hadad", "Rider of the Clouds")
             ClassicalPlanet.SATURN -> Deity("El", "Father of Years")

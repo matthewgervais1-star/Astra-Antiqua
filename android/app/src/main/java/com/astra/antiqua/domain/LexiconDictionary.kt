@@ -17,7 +17,7 @@ object LexiconDictionary {
         culturalVoices = { planet ->
             when (planet) {
                 ClassicalPlanet.SUN -> "The Radiant King"
-                ClassicalPlanet.MOON -> "The Huntress"
+                ClassicalPlanet.MOON -> "The Night Rider"
                 ClassicalPlanet.MERCURY -> "The Messenger"
                 ClassicalPlanet.VENUS -> "The Rose"
                 ClassicalPlanet.MARS -> "The Warrior"

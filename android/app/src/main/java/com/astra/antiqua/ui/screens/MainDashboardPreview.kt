@@ -128,7 +128,7 @@ fun GreeceDashboardPreview() {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
                     content = OracleContent(
-                        deity_name = "Apollo",
+                        deity_name = "Helios",
                         epitheton = "The Radiant King",
                         decree = "Know thyself, for the golden chariot rises to illuminate the hidden path.",
                         planetPosition = sampleChart.planets[ClassicalPlanet.SUN]
