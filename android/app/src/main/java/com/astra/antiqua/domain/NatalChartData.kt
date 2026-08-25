@@ -21,14 +21,17 @@ data class AccuratePlanetPosition(
     val house: Int
 )
 
-// Orbs match the canonical table in docs/shared-content-model.md, mirrored from
-// ASPECT_RULES in web/src/lib/transits.ts.
+// The one documented orb table (docs/shared-content-model.md, the web
+// /method page), mirrored from ASPECT_RULES in web/src/data/sampleChart.ts:
+// conjunction 8, sextile 5, square 7, trine 7, opposition 8. Every aspect
+// detector on this surface should read THESE values so the numbers the
+// method page publishes are the numbers the app runs.
 enum class AspectType(val degree: Double, val orb: Double) {
-    CONJUNCTION(0.0, 4.0),
-    SEXTILE(60.0, 3.0),
-    SQUARE(90.0, 4.0),
-    TRINE(120.0, 4.0),
-    OPPOSITION(180.0, 5.0)
+    CONJUNCTION(0.0, 8.0),
+    SEXTILE(60.0, 5.0),
+    SQUARE(90.0, 7.0),
+    TRINE(120.0, 7.0),
+    OPPOSITION(180.0, 8.0)
 }
 
 data class Aspect(
