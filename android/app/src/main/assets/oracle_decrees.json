@@ -1,10 +1,10 @@
 {
   "SUN_ARIES": {
     "GREEK": {
-      "deity_name": "Apollo",
+      "deity_name": "Helios",
       "epitheton": "The Radiant King",
       "decree": "I ignite the first fire. You are born of the primal spark, a soul forged at the origin of the celestial wheel.",
-      "interpretation": "Apollo declares a soul of initiative and untamed will."
+      "interpretation": "Helios declares a soul of initiative and untamed will."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -33,10 +33,10 @@
   },
   "SUN_TAURUS": {
     "GREEK": {
-      "deity_name": "Apollo",
+      "deity_name": "Helios",
       "epitheton": "The Golden Herdsman",
       "decree": "I pour my radiance upon the fertile pasture. The soul that endures shall inherit the abundance of the earth.",
-      "interpretation": "Apollo bestows an identity rooted in steadfast patience and material mastery."
+      "interpretation": "Helios bestows an identity rooted in steadfast patience and material mastery."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -65,10 +65,10 @@
   },
   "SUN_GEMINI": {
     "GREEK": {
-      "deity_name": "Apollo",
+      "deity_name": "Helios",
       "epitheton": "The Twin-Eyed Sun",
       "decree": "I cast two shadows where there should be one. The soul I mark sees all roads and speaks in every tongue.",
-      "interpretation": "Apollo reveals a dual nature, brilliant in thought and restless in purpose."
+      "interpretation": "Helios reveals a dual nature, brilliant in thought and restless in purpose."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -97,10 +97,10 @@
   },
   "SUN_CANCER": {
     "GREEK": {
-      "deity_name": "Apollo",
+      "deity_name": "Helios",
       "epitheton": "The Hearthbound Sun",
       "decree": "I descend from my zenith to warm the threshold of home. The shell of the crab guards a heart of molten gold.",
-      "interpretation": "Apollo reveals a soul whose strength radiates from the bonds of family and memory."
+      "interpretation": "Helios reveals a soul whose strength radiates from the bonds of family and memory."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -129,10 +129,10 @@
   },
   "SUN_LEO": {
     "GREEK": {
-      "deity_name": "Apollo",
+      "deity_name": "Helios",
       "epitheton": "The Unconquered Sun",
       "decree": "I blaze at the summit of heaven. The Lion is my throne, and sovereignty is my gift to those who dare to shine.",
-      "interpretation": "Apollo at his apex crowns a soul born to radiate and rule."
+      "interpretation": "Helios at his apex crowns a soul born to radiate and rule."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -161,10 +161,10 @@
   },
   "SUN_VIRGO": {
     "GREEK": {
-      "deity_name": "Apollo",
+      "deity_name": "Helios",
       "epitheton": "The Discerning Light",
       "decree": "I separate the wheat from the chaff with a single ray. The soul I illumine finds its power in precision.",
-      "interpretation": "Apollo declares a soul whose identity is forged through service and meticulous craft."
+      "interpretation": "Helios declares a soul whose identity is forged through service and meticulous craft."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -193,10 +193,10 @@
   },
   "SUN_LIBRA": {
     "GREEK": {
-      "deity_name": "Apollo",
+      "deity_name": "Helios",
       "epitheton": "The Balanced Ray",
       "decree": "I stand at the equinox where day and night hold equal court. The soul I touch seeks harmony in all things.",
-      "interpretation": "Apollo reveals an identity defined by the pursuit of justice and aesthetic balance."
+      "interpretation": "Helios reveals an identity defined by the pursuit of justice and aesthetic balance."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -225,10 +225,10 @@
   },
   "SUN_SCORPIO": {
     "GREEK": {
-      "deity_name": "Apollo",
+      "deity_name": "Helios",
       "epitheton": "The Veiled Sun",
       "decree": "I descend into the cavern where the scorpion guards its treasure. My light burns brightest in the deepest dark.",
-      "interpretation": "Apollo marks a soul whose identity is forged through transformation and hidden power."
+      "interpretation": "Helios marks a soul whose identity is forged through transformation and hidden power."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -257,10 +257,10 @@
   },
   "SUN_SAGITTARIUS": {
     "GREEK": {
-      "deity_name": "Apollo",
-      "epitheton": "The Archer's Sun",
-      "decree": "I ride the arc of the heavens with the centaur's aim. My arrow of light reaches beyond the known horizon.",
-      "interpretation": "Apollo declares a soul born to seek truth and explore the farthest frontiers."
+      "deity_name": "Helios",
+      "epitheton": "The Far-Driving Sun",
+      "decree": "I drive my blazing chariot along the centaur's arc, and my flame-maned horses outrun the known horizon.",
+      "interpretation": "Helios declares a soul born to seek truth and explore the farthest frontiers."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -289,10 +289,10 @@
   },
   "SUN_CAPRICORN": {
     "GREEK": {
-      "deity_name": "Apollo",
+      "deity_name": "Helios",
       "epitheton": "The Winter Sun",
       "decree": "I hang low upon the solstice sky, yet my light endures. The soul I mark builds empires from stone and silence.",
-      "interpretation": "Apollo reveals an identity tempered by discipline and destined for enduring achievement."
+      "interpretation": "Helios reveals an identity tempered by discipline and destined for enduring achievement."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -321,10 +321,10 @@
   },
   "SUN_AQUARIUS": {
     "GREEK": {
-      "deity_name": "Apollo",
+      "deity_name": "Helios",
       "epitheton": "The Rebel Sun",
       "decree": "I shatter the mold of heaven and pour new light upon the world. The soul I mark answers to no law but the future.",
-      "interpretation": "Apollo reveals an identity forged in rebellion and devoted to the liberation of all."
+      "interpretation": "Helios reveals an identity forged in rebellion and devoted to the liberation of all."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -353,10 +353,10 @@
   },
   "SUN_PISCES": {
     "GREEK": {
-      "deity_name": "Apollo",
+      "deity_name": "Helios",
       "epitheton": "The Drowning Sun",
       "decree": "I dissolve into the cosmic sea at the end of the wheel. My light becomes all light, and the soul I touch knows no boundary.",
-      "interpretation": "Apollo reveals an identity that transcends the self and merges with the infinite."
+      "interpretation": "Helios reveals an identity that transcends the self and merges with the infinite."
     },
     "EGYPTIAN": {
       "deity_name": "Ra",
@@ -385,10 +385,10 @@
   },
   "MOON_ARIES": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Warring Moon",
       "decree": "My silver light falls upon the battlefield of the heart. I stir the blood and set fire to the still waters of feeling.",
-      "interpretation": "Artemis reveals emotions that burn with urgency and demand immediate expression."
+      "interpretation": "Selene reveals emotions that burn with urgency and demand immediate expression."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -417,10 +417,10 @@
   },
   "MOON_TAURUS": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Verdant Moon",
       "decree": "I bathe the meadow in silver and the soul drinks deeply. Comfort is the altar at which the faithful heart worships.",
-      "interpretation": "Artemis bestows emotions of serene steadfastness and sensory delight."
+      "interpretation": "Selene bestows emotions of serene steadfastness and sensory delight."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -449,10 +449,10 @@
   },
   "MOON_GEMINI": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Restless Moon",
       "decree": "I wax and wane between two faces, never settling. The heart I govern speaks before it feels and feels before it knows.",
-      "interpretation": "Artemis reveals an emotional nature of quicksilver changeability and verbal processing."
+      "interpretation": "Selene reveals an emotional nature of quicksilver changeability and verbal processing."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -481,10 +481,10 @@
   },
   "MOON_CANCER": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Great Mother Moon",
       "decree": "I am enthroned in my own house. Here, every tide answers my call and every heart finds its sanctuary.",
-      "interpretation": "Artemis at her most powerful reveals emotions of profound depth and nurturing instinct."
+      "interpretation": "Selene at her most powerful reveals emotions of profound depth and nurturing instinct."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -513,10 +513,10 @@
   },
   "MOON_LEO": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Proud Moon",
       "decree": "I shine not to reflect but to rival the sun itself. The heart I govern demands to be seen and adored.",
-      "interpretation": "Artemis reveals emotions that crave recognition and burn with dramatic warmth."
+      "interpretation": "Selene reveals emotions that crave recognition and burn with dramatic warmth."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -545,10 +545,10 @@
   },
   "MOON_VIRGO": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Careful Moon",
       "decree": "I sort the tides into ordered channels. The heart I govern serves best when it has a task to complete.",
-      "interpretation": "Artemis reveals emotions that are processed through analysis and devoted service."
+      "interpretation": "Selene reveals emotions that are processed through analysis and devoted service."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -577,10 +577,10 @@
   },
   "MOON_LIBRA": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Harmonious Moon",
       "decree": "I hang in perfect balance between the darkened halves of heaven. The heart I govern aches when beauty is absent.",
-      "interpretation": "Artemis reveals emotions that seek equilibrium, grace, and the comfort of partnership."
+      "interpretation": "Selene reveals emotions that seek equilibrium, grace, and the comfort of partnership."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -609,10 +609,10 @@
   },
   "MOON_SCORPIO": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Dark Moon",
       "decree": "I plunge into the abyss where no light dares follow. The heart I govern holds oceans of untold depth.",
-      "interpretation": "Artemis reveals emotions of volcanic intensity and relentless depth."
+      "interpretation": "Selene reveals emotions of volcanic intensity and relentless depth."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -641,10 +641,10 @@
   },
   "MOON_SAGITTARIUS": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Wandering Moon",
       "decree": "I gallop across the heavens with the centaur beneath me. The heart I govern is a pilgrim that worships at every altar.",
-      "interpretation": "Artemis reveals emotions that are expansive, restless, and fueled by faith."
+      "interpretation": "Selene reveals emotions that are expansive, restless, and fueled by faith."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -673,10 +673,10 @@
   },
   "MOON_CAPRICORN": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Austere Moon",
       "decree": "I cast cold silver upon the mountain's peak. The heart I govern is a fortress built of duty and quiet endurance.",
-      "interpretation": "Artemis reveals emotions that are controlled, reserved, and strengthened by solitude."
+      "interpretation": "Selene reveals emotions that are controlled, reserved, and strengthened by solitude."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -705,10 +705,10 @@
   },
   "MOON_AQUARIUS": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Eccentric Moon",
       "decree": "I tilt my orbit and the tides obey no familiar rhythm. The heart I govern beats for the future, not for the self.",
-      "interpretation": "Artemis reveals emotions that are detached, humanitarian, and fiercely independent."
+      "interpretation": "Selene reveals emotions that are detached, humanitarian, and fiercely independent."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -737,10 +737,10 @@
   },
   "MOON_PISCES": {
     "GREEK": {
-      "deity_name": "Artemis",
+      "deity_name": "Selene",
       "epitheton": "The Dreaming Moon",
       "decree": "I dissolve into the ocean of night and become all feeling. The heart I govern has no walls; it is the sea itself.",
-      "interpretation": "Artemis reveals emotions of oceanic depth, mystical sensitivity, and boundless compassion."
+      "interpretation": "Selene reveals emotions of oceanic depth, mystical sensitivity, and boundless compassion."
     },
     "EGYPTIAN": {
       "deity_name": "Khonsu",
@@ -781,10 +781,10 @@
       "interpretation": "Sebegu marks a mind that cuts through hesitation with ruthless speed."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Smith of the First Word",
       "decree": "I forge the thought in fire and deliver it still glowing. The mind I shape speaks before the world is ready to listen.",
-      "interpretation": "Kothar-wa-Khasis anoints a communicator of daring innovation and verbal boldness."
+      "interpretation": "Kothar anoints a communicator of daring innovation and verbal boldness."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -813,10 +813,10 @@
       "interpretation": "Sebegu marks a thinker of grounded sensibility and reliable judgment."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Artisan of Enduring Words",
       "decree": "I build my sentences as I build my palaces: with materials that last. The mind I govern trades cleverness for craft.",
-      "interpretation": "Kothar-wa-Khasis consecrates a mind devoted to tangible results and methodical creation."
+      "interpretation": "Kothar consecrates a mind devoted to tangible results and methodical creation."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -845,10 +845,10 @@
       "interpretation": "Sebegu marks a thinker of exceptional agility and effortless eloquence."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Master of Every Craft",
       "decree": "My hands build and my tongue explains in the same breath. I am the god of skill multiplied without limit.",
-      "interpretation": "Kothar-wa-Khasis anoints a mind capable of mastering many arts simultaneously."
+      "interpretation": "Kothar anoints a mind capable of mastering many arts simultaneously."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -877,10 +877,10 @@
       "interpretation": "Sebegu marks a thinker whose intelligence is intuitive and emotionally attuned."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Builder of the Home",
       "decree": "I design the dwelling place of the soul. Every word I craft is a shelter for the vulnerable.",
-      "interpretation": "Kothar-wa-Khasis consecrates a mind that communicates through nurture and protective instinct."
+      "interpretation": "Kothar consecrates a mind that communicates through nurture and protective instinct."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -909,10 +909,10 @@
       "interpretation": "Sebegu marks a thinker of regal conviction and creative authority."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Artisan of the Royal Court",
       "decree": "I craft the throne of Baal and inscribe his name in letters of fire. The mind I shape creates to be glorified.",
-      "interpretation": "Kothar-wa-Khasis anoints a mind that thinks boldly and speaks with magnetic authority."
+      "interpretation": "Kothar anoints a mind that thinks boldly and speaks with magnetic authority."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -941,10 +941,10 @@
       "interpretation": "Sebegu marks a thinker of meticulous order and practical genius."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Master Craftsman",
       "decree": "I measure twice and cut once, and my creations are flawless. The mind I shape perfects everything it touches.",
-      "interpretation": "Kothar-wa-Khasis consecrates a mind of exacting standards and methodical mastery."
+      "interpretation": "Kothar consecrates a mind of exacting standards and methodical mastery."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -973,10 +973,10 @@
       "interpretation": "Sebegu marks a thinker of harmonious logic and the gift of mediation."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Artisan of Harmony",
       "decree": "I design the symmetry of the celestial palace. The mind I shape cannot rest until beauty and reason are aligned.",
-      "interpretation": "Kothar-wa-Khasis anoints a communicator of aesthetic refinement and balanced reason."
+      "interpretation": "Kothar anoints a communicator of aesthetic refinement and balanced reason."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -1005,10 +1005,10 @@
       "interpretation": "Sebegu marks a thinker of relentless depth and the ability to decode hidden truths."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Forger of Secret Weapons",
       "decree": "I craft tools in darkness that no eye may inspect. The mind I shape knows that the deepest truths are kept beneath the surface.",
-      "interpretation": "Kothar-wa-Khasis consecrates a mind of strategic secrecy and psychological acumen."
+      "interpretation": "Kothar consecrates a mind of strategic secrecy and psychological acumen."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -1037,10 +1037,10 @@
       "interpretation": "Sebegu marks a thinker of broad perspective and restless philosophical seeking."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Builder of Temples Abroad",
       "decree": "I raise altars in every land I visit. The mind I shape trades precision for prophecy and detail for doctrine.",
-      "interpretation": "Kothar-wa-Khasis anoints a communicator of bold ideas and the love of grand narrative."
+      "interpretation": "Kothar anoints a communicator of bold ideas and the love of grand narrative."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -1069,10 +1069,10 @@
       "interpretation": "Sebegu marks a thinker of grave precision and the ambition to build lasting systems of thought."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Architect of the Ziggurat",
       "decree": "I design structures that outlast the gods who commission them. The mind I shape respects tradition and builds upon it.",
-      "interpretation": "Kothar-wa-Khasis consecrates a mind of strategic planning and the discipline to execute grand designs."
+      "interpretation": "Kothar consecrates a mind of strategic planning and the discipline to execute grand designs."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -1101,10 +1101,10 @@
       "interpretation": "Sebegu marks a thinker of revolutionary insight and the courage to break intellectual convention."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Inventor of New Arts",
       "decree": "I forge tools that have never existed and name them with words that have never been spoken. My mind remakes the world.",
-      "interpretation": "Kothar-wa-Khasis anoints a mind of technological brilliance and utopian imagination."
+      "interpretation": "Kothar anoints a mind of technological brilliance and utopian imagination."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -1133,10 +1133,10 @@
       "interpretation": "Sebegu marks a thinker of mystical receptivity and imaginative, boundless awareness."
     },
     "CANAANITE": {
-      "deity_name": "Kothar-wa-Khasis",
+      "deity_name": "Kothar",
       "epitheton": "The Weaver of Visions",
       "decree": "I craft instruments that play the music of the unseen. The mind I shape hears what logic cannot and speaks what reason will not.",
-      "interpretation": "Kothar-wa-Khasis consecrates a mind of artistic genius and prophetic imagination."
+      "interpretation": "Kothar consecrates a mind of artistic genius and prophetic imagination."
     },
     "CARTHAGINIAN": {
       "deity_name": "Sakun",
@@ -1165,10 +1165,10 @@
       "interpretation": "Isis marks a soul whose love is active, initiating, and uncompromising in its desire."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Queen of Battle and Desire",
       "decree": "I ride into the field of love upon the back of the lion. My desire is a conquering army.",
-      "interpretation": "Astarte anoints a love nature that is fierce, direct, and thrilling in its intensity."
+      "interpretation": "Attart anoints a love nature that is fierce, direct, and thrilling in its intensity."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -1197,10 +1197,10 @@
       "interpretation": "Isis reveals a soul whose love is expressed through material generosity and steadfast presence."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Lady of the Harvest",
       "decree": "I bless the vine and the olive with my touch. The love I govern is a feast that never ends.",
-      "interpretation": "Astarte consecrates a love nature of deep sensuality and unwavering faithfulness."
+      "interpretation": "Attart consecrates a love nature of deep sensuality and unwavering faithfulness."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -1229,10 +1229,10 @@
       "interpretation": "Isis reveals a soul whose affection flows through communication and mental connection."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Lady of Two Songs",
       "decree": "I dance at the crossroads where two melodies meet. The love I govern delights in novelty and the surprise of the new.",
-      "interpretation": "Astarte anoints a love nature of charming adaptability and curious flirtation."
+      "interpretation": "Attart anoints a love nature of charming adaptability and curious flirtation."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -1261,10 +1261,10 @@
       "interpretation": "Isis marks a soul whose love is healing, sacrificial, and rooted in the deepest emotional bonds."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Lady of the Hearth",
       "decree": "I bless the threshold and sanctify the marriage bed. The love I govern builds nests for the tender and the true.",
-      "interpretation": "Astarte consecrates a love nature of domestic devotion and fierce emotional attachment."
+      "interpretation": "Attart consecrates a love nature of domestic devotion and fierce emotional attachment."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -1293,10 +1293,10 @@
       "interpretation": "Isis marks a soul whose love demands honor and offers boundless creative devotion."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Lioness of Love",
       "decree": "I roar with desire and the heavens tremble. My love is not a quiet stream but a torrent of gold.",
-      "interpretation": "Astarte anoints a love nature of passionate display and royal-hearted generosity."
+      "interpretation": "Attart anoints a love nature of passionate display and royal-hearted generosity."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -1325,10 +1325,10 @@
       "interpretation": "Isis marks a soul whose love is exacting, modest, and demonstrated through practical devotion."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Priestess of the Threshold",
       "decree": "I sweep the temple floor before the beloved arrives. My love is in the preparation and the quiet offering.",
-      "interpretation": "Astarte consecrates a love nature of humble dedication and discriminating taste."
+      "interpretation": "Attart consecrates a love nature of humble dedication and discriminating taste."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -1357,10 +1357,10 @@
       "interpretation": "Isis declares a soul whose love is an act of cosmic balance and refined beauty."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Lady of the Covenant",
       "decree": "I seal the bond between two souls with the grace of the evening star. My love is a sacred agreement.",
-      "interpretation": "Astarte anoints a love nature of harmonious partnership and the devotion to fairness in love."
+      "interpretation": "Attart anoints a love nature of harmonious partnership and the devotion to fairness in love."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -1389,10 +1389,10 @@
       "interpretation": "Isis marks a soul whose love is an act of power that defies all boundaries, even mortality."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Lady of the Abyss",
       "decree": "I descend to the throne of Mot and make love my weapon against oblivion. My desire is a covenant sealed in blood.",
-      "interpretation": "Astarte consecrates a love nature of fearless depth and soul-merging intensity."
+      "interpretation": "Attart consecrates a love nature of fearless depth and soul-merging intensity."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -1421,10 +1421,10 @@
       "interpretation": "Isis marks a soul whose love is expansive, generous, and inspired by shared belief."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Wandering Star",
       "decree": "I follow the caravan of love wherever it leads. My desire is a pilgrimage, not a settlement.",
-      "interpretation": "Astarte anoints a love nature of adventurous passion and the refusal to be confined."
+      "interpretation": "Attart anoints a love nature of adventurous passion and the refusal to be confined."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -1453,10 +1453,10 @@
       "interpretation": "Isis marks a soul whose love is serious, committed, and measured by its longevity."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Lady of the Fortress",
       "decree": "I guard my heart behind high walls and open the gate only to the worthy. My love is earned, not given.",
-      "interpretation": "Astarte consecrates a love nature of dignified restraint and deeply loyal commitment."
+      "interpretation": "Attart consecrates a love nature of dignified restraint and deeply loyal commitment."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -1485,10 +1485,10 @@
       "interpretation": "Isis marks a soul whose love is idealistic, humanitarian, and unbound by tradition."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Star of the Gathering",
       "decree": "I dance in the circle of equals, not upon the pedestal. The love I govern is a bond of shared vision, not possession.",
-      "interpretation": "Astarte anoints a love nature of intellectual communion and the celebration of individuality."
+      "interpretation": "Attart anoints a love nature of intellectual communion and the celebration of individuality."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -1517,10 +1517,10 @@
       "interpretation": "Isis marks a soul whose love is sacrificial, healing, and capable of divine compassion."
     },
     "CANAANITE": {
-      "deity_name": "Astarte",
+      "deity_name": "Attart",
       "epitheton": "The Star in the Deep",
       "decree": "I descend into the waters of Yam and become one with the sea of souls. My love forgives everything and refuses nothing.",
-      "interpretation": "Astarte consecrates a love nature of mystical surrender and the bliss of total union."
+      "interpretation": "Attart consecrates a love nature of mystical surrender and the bliss of total union."
     },
     "CARTHAGINIAN": {
       "deity_name": "Astarte",
@@ -2305,10 +2305,10 @@
   },
   "SATURN_ARIES": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Reluctant Reaper",
       "decree": "I set my scythe against the fire of youth. The soul I test must learn that haste is the enemy of mastery.",
-      "interpretation": "Cronus imposes the lesson of patience upon a spirit that burns to act."
+      "interpretation": "Kronos imposes the lesson of patience upon a spirit that burns to act."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
@@ -2337,10 +2337,10 @@
   },
   "SATURN_TAURUS": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Lord of Scarcity",
       "decree": "I withhold the harvest until the soil has been earned. My lesson is that true wealth is built through austerity.",
-      "interpretation": "Cronus imposes a discipline of careful stewardship and the fear of loss that forges enduring strength."
+      "interpretation": "Kronos imposes a discipline of careful stewardship and the fear of loss that forges enduring strength."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
@@ -2369,10 +2369,10 @@
   },
   "SATURN_GEMINI": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Silent Elder",
       "decree": "I close one mouth and force the mind to deepen. The soul I test must learn that a single truth outweighs a thousand clever words.",
-      "interpretation": "Cronus imposes the discipline of focused thought and the burden of choosing depth over breadth."
+      "interpretation": "Kronos imposes the discipline of focused thought and the burden of choosing depth over breadth."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
@@ -2401,10 +2401,10 @@
   },
   "SATURN_CANCER": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Cold Father",
       "decree": "I deny the warmth of the hearth to teach the soul to build its own fire. My lesson is that emotional independence is the highest shelter.",
-      "interpretation": "Cronus imposes the trial of emotional self-reliance and the painful mastery of vulnerability."
+      "interpretation": "Kronos imposes the trial of emotional self-reliance and the painful mastery of vulnerability."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
@@ -2433,10 +2433,10 @@
   },
   "SATURN_LEO": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Humbler of Kings",
       "decree": "I dim the spotlight and demand that the soul earn its glory in the dark. My lesson is that true authority comes from character, not spectacle.",
-      "interpretation": "Cronus imposes the discipline of humble leadership and the test of ego upon the royal spirit."
+      "interpretation": "Kronos imposes the discipline of humble leadership and the test of ego upon the royal spirit."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
@@ -2465,10 +2465,10 @@
   },
   "SATURN_VIRGO": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Master of Toil",
       "decree": "I demand perfection and grant no rest until it is achieved. My lesson is that the craft is the soul's only salvation.",
-      "interpretation": "Cronus imposes a discipline of relentless self-improvement and devotion to mastery."
+      "interpretation": "Kronos imposes a discipline of relentless self-improvement and devotion to mastery."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
@@ -2497,10 +2497,10 @@
   },
   "SATURN_LIBRA": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Lord of the Scales",
       "decree": "I hold the scales with an unwavering hand. My justice is cold, precise, and eternal. No charm may tip my balance.",
-      "interpretation": "Cronus in his exaltation bestows the supreme discipline of fairness and the authority of impartial law."
+      "interpretation": "Kronos in his exaltation bestows the supreme discipline of fairness and the authority of impartial law."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
@@ -2529,10 +2529,10 @@
   },
   "SATURN_SCORPIO": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Lord of the Grave",
       "decree": "I stand at the gate of the underworld and demand that you shed everything you are. My lesson is that only through total death may you be reborn.",
-      "interpretation": "Cronus imposes the most severe discipline: the annihilation of what is false within the soul."
+      "interpretation": "Kronos imposes the most severe discipline: the annihilation of what is false within the soul."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
@@ -2561,10 +2561,10 @@
   },
   "SATURN_SAGITTARIUS": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Stern Teacher",
       "decree": "I demand that the arrow of belief be tested against the stone of truth. My lesson is that faith without structure is folly.",
-      "interpretation": "Cronus imposes discipline upon the expansive spirit, demanding that wisdom be earned through rigorous study."
+      "interpretation": "Kronos imposes discipline upon the expansive spirit, demanding that wisdom be earned through rigorous study."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
@@ -2593,10 +2593,10 @@
   },
   "SATURN_CAPRICORN": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Enthroned Titan",
       "decree": "I am seated in my own house of stone and time. Here, my power is absolute: the law of effort, the law of patience, the law of the mountain.",
-      "interpretation": "Cronus at his zenith bestows supreme mastery through discipline, structure, and the long reign of perseverance."
+      "interpretation": "Kronos at his zenith bestows supreme mastery through discipline, structure, and the long reign of perseverance."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
@@ -2625,10 +2625,10 @@
   },
   "SATURN_AQUARIUS": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Architect of the Future",
       "decree": "I build the framework of the age to come. My discipline shapes not the individual but the structure that holds the collective together.",
-      "interpretation": "Cronus bestows the discipline of systemic thinking and the duty to build enduring social structures."
+      "interpretation": "Kronos bestows the discipline of systemic thinking and the duty to build enduring social structures."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
@@ -2657,10 +2657,10 @@
   },
   "SATURN_PISCES": {
     "GREEK": {
-      "deity_name": "Cronus",
+      "deity_name": "Kronos",
       "epitheton": "The Lord of the Last Gate",
       "decree": "I stand at the final threshold where time meets eternity. My lesson is that the soul must give form to its faith or dissolve into nothing.",
-      "interpretation": "Cronus imposes the discipline of spiritual maturity and the burden of giving structure to the intangible."
+      "interpretation": "Kronos imposes the discipline of spiritual maturity and the burden of giving structure to the intangible."
     },
     "EGYPTIAN": {
       "deity_name": "Geb",
