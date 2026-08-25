@@ -66,9 +66,21 @@ android {
     }
     buildFeatures {
         compose = true
-        // Needed for BuildConfig.DEBUG, used to gate the missing-oracle-key
-        // log in OracleRepository so it only fires in debug builds.
+        // Needed for BuildConfig.DEBUG, used to gate the missing-content-key
+        // log in NatalReadingRepository so it only fires in debug builds.
         buildConfig = true
+    }
+    sourceSets {
+        getByName("main") {
+            // The universal placement layer (planet-in-sign.json, plus the
+            // rest of shared/content/) is generated from web
+            // (docs/shared-content-model.md) and embedded by the dotnet
+            // surface the same way: read in place rather than copied into
+            // Kotlin or duplicated under an android/ asset, so the repo keeps
+            // exactly one copy of the content. This merges with (now empty,
+            // since oracle_decrees.json is retired) src/main/assets.
+            assets.srcDir(rootProject.file("../shared/content"))
+        }
     }
     testOptions {
         unitTests {
