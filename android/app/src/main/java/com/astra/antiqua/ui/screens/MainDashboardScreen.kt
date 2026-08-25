@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -367,11 +368,43 @@ fun HighPriestSummaryCard(summary: String) {
     }
 }
 
+/**
+ * The wheel budget: Phase 2 widened the orb table (roughly doubling how many
+ * pairs qualify as an aspect on a typical chart -- 3 to 4 on the golden
+ * fixture's 7 bodies, and Phase 4's ten-body chart raises the pair count
+ * from 21 to 45), and NatalWheel draws one chord per aspect with no budget
+ * before this change. Left unbounded, a dense chart becomes an unreadable
+ * tangle of lines. Two rules keep it legible:
+ *  1. Budget: only the [MAX_WHEEL_ASPECTS] tightest (most exact) aspects are
+ *     drawn. A loose, barely-in-orb aspect is the least astrologically
+ *     significant and the first thing that should drop off as the chart
+ *     gets busier.
+ *  2. Z-order: within the kept set, soft aspects (sextile, trine) are drawn
+ *     first and hard aspects (square, opposition) drawn last, so the more
+ *     visually "important" hard lines sit on top instead of being buried
+ *     under a pile of softer ones.
+ * Phase 4 revisits this budget once ten bodies are live (see the rollout
+ * plan's Phase 4 item 7).
+ */
+private const val MAX_WHEEL_ASPECTS = 12
+
+private fun isHardAspect(type: com.astra.antiqua.domain.AspectType) =
+    type == com.astra.antiqua.domain.AspectType.SQUARE ||
+        type == com.astra.antiqua.domain.AspectType.OPPOSITION
+
 @Composable
 fun NatalWheel(chartData: NatalChartData) {
     val haptic = LocalHapticFeedback.current
     val lexicon = LocalLexicon.current
-    
+
+    // See the MAX_WHEEL_ASPECTS doc above: budget to the tightest aspects,
+    // then order soft-before-hard so hard aspects draw on top.
+    val visibleAspects = remember(chartData) {
+        val budgeted = chartData.aspects.sortedBy { it.exactness }.take(MAX_WHEEL_ASPECTS)
+        val (soft, hard) = budgeted.partition { !isHardAspect(it.type) }
+        soft + hard
+    }
+
     Canvas(
         modifier = Modifier
             .size(320.dp)
@@ -415,7 +448,7 @@ fun NatalWheel(chartData: NatalChartData) {
             )
         }
 
-        chartData.aspects.forEach { aspect ->
+        visibleAspects.forEach { aspect ->
             val pos1 = chartData.planets[aspect.p1] ?: return@forEach
             val pos2 = chartData.planets[aspect.p2] ?: return@forEach
             
