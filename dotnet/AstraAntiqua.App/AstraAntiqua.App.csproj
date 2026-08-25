@@ -1,0 +1,39 @@
+<!--
+  The MAUI iOS head. NOT in AstraAntiqua.sln and NOT buildable on this
+  workstation: it has no MAUI workload, and compiling/signing iOS requires
+  Apple's build tools, which run only on macOS. This project is built by
+  .github/workflows/ios.yml on a macOS runner. The domain logic it renders
+  lives in AstraAntiqua.Core, which IS built and tested locally.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-ios</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>AstraAntiqua.App</RootNamespace>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <ApplicationTitle>Astra Antiqua</ApplicationTitle>
+    <ApplicationId>com.astra.antiqua.ios</ApplicationId>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+
+    <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#171310" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AstraAntiqua.Core\AstraAntiqua.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,43 @@
+# The .NET surface's CI. Two jobs:
+#   core-tests — the parity + completeness suite, on Linux (mirrors what the
+#                Windows workstation runs locally with `dotnet test`).
+#   ios-build  — the MAUI head, on macOS, because compiling iOS requires
+#                Apple's build tools. Unsigned simulator build for now;
+#                signing + TestFlight need an Apple Developer membership
+#                and come later.
+name: dotnet
+
+on:
+  push:
+    paths:
+      - "dotnet/**"
+      - "shared/**"
+      - ".github/workflows/ios.yml"
+  workflow_dispatch:
+
+jobs:
+  core-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - name: Test AstraAntiqua.Core
+        run: dotnet test dotnet/AstraAntiqua.Core.Tests --configuration Release
+
+  ios-build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Install MAUI workload
+        run: dotnet workload install maui
+      - name: Build iOS head (unsigned, simulator)
+        run: >
+          dotnet build dotnet/AstraAntiqua.App/AstraAntiqua.App.csproj
+          -f net10.0-ios
+          -c Release
+          -p:RuntimeIdentifier=iossimulator-arm64
