@@ -6,13 +6,13 @@ import com.astra.antiqua.model.ClassicalPlanet
  * Aspect detection over raw ecliptic longitudes, split out of
  * [CalculateNatalChartUseCase] so a JVM test can exercise it directly with a
  * synthetic set of bodies instead of a full ephemeris-backed chart. Behavior
- * is unchanged from the original private methods on the use case.
- *
- * NOTE: for each pair, [AspectType.values] is checked in full with no early
- * exit ("break") once a match is found — unlike web's `computeAspects`
- * (`web/src/lib/transits.ts`), which stops at the first match. See
- * AspectDetectionTest for whether this can double-count a pair under the
- * current orb table.
+ * is unchanged from the original private methods on the use case, except
+ * that (Phase 2) it now stops at the first matching [AspectType] per pair,
+ * matching web's `computeAspects` (`web/src/data/sampleChart.ts`) exactly.
+ * See AspectDetectionTest: under the current, wider orb table this `break`
+ * cannot actually change any result (no two orb bands overlap for any
+ * separation in [0, 180]), but it removes the latent double-counting risk
+ * the missing `break` used to carry.
  */
 object AspectDetector {
     fun detect(longitudes: Map<ClassicalPlanet, Double>): List<Aspect> {
@@ -28,7 +28,7 @@ object AspectDetector {
 
                 val diff = angularSeparation(pos1, pos2)
 
-                AspectType.values().forEach { type ->
+                for (type in AspectType.values()) {
                     val orbDiff = Math.abs(diff - type.degree)
                     if (orbDiff <= type.orb) {
                         aspects.add(
@@ -39,6 +39,7 @@ object AspectDetector {
                                 exactness = orbDiff / type.orb
                             )
                         )
+                        break
                     }
                 }
             }
