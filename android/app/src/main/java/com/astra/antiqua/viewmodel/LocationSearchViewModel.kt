@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.util.Locale
-import java.util.TimeZone
 import kotlin.coroutines.resume
 
 class LocationSearchViewModel : ViewModel() {
@@ -89,21 +88,33 @@ class LocationSearchViewModel : ViewModel() {
         }
     }
 
-    fun saveProfile(context: Context, name: String, birthDateUtc: Long, address: Address, onSaved: () -> Unit) {
+    /**
+     * [timezoneId] is the zone [birthDateUtc] was resolved against (see
+     * [com.astra.antiqua.domain.resolveBirthDateUtcMillis]) -- an explicit
+     * caller-supplied input, not read from `TimeZone.getDefault()` here, so
+     * the stored profile stays consistent with whatever zone was actually
+     * used to compute the birth instant.
+     */
+    fun saveProfile(
+        context: Context,
+        name: String,
+        birthDateUtc: Long,
+        timezoneId: String,
+        address: Address,
+        onSaved: () -> Unit
+    ) {
         viewModelScope.launch {
             try {
                 val database = AppDatabase.getDatabase(context)
                 val cityName = address.locality ?: address.subAdminArea ?: address.featureName ?: "Unknown"
-                
-                // Attempt to get a better timezone based on coordinates if possible, 
-                // but defaulting to system for now as per original code.
+
                 val profile = UserProfile(
                     name = name,
                     birthDateUtc = birthDateUtc,
                     latitude = address.latitude,
                     longitude = address.longitude,
                     cityName = cityName,
-                    timezoneId = TimeZone.getDefault().id
+                    timezoneId = timezoneId
                 )
                 database.userDao().insertUserProfile(profile)
                 withContext(Dispatchers.Main) {

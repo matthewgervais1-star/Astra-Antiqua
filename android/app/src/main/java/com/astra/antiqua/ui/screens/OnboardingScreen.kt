@@ -47,11 +47,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.astra.antiqua.domain.resolveBirthDateUtcMillis
 import com.astra.antiqua.ui.components.GlassCard
 import com.astra.antiqua.ui.theme.Gold
 import com.astra.antiqua.viewmodel.LocationSearchViewModel
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
+import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -334,10 +336,30 @@ fun OnboardingScreen(
         Button(
             onClick = {
                 val addr = selectedAddress ?: return@Button
-                val birthDateUtc = (selectedDateMillis ?: 0L) +
-                        (selectedHour * 3600000L) +
-                        (selectedMinute * 60000L)
-                viewModel.saveProfile(context, name, birthDateUtc, addr, onLocationSaved)
+
+                // We have no birth-location timezone lookup (see
+                // resolveBirthDateUtcMillis's doc): the device's current
+                // zone is the explicit, documented stand-in for "the zone
+                // this birth time was recorded in". selectedDateMillis is
+                // UTC midnight of the picked calendar date (Material3's
+                // DatePickerState contract), not a real instant, so it must
+                // be combined with the picked hour/minute THROUGH a zone
+                // conversion, not by adding clock-offset millis onto it.
+                val assumedBirthZone = ZoneId.systemDefault()
+                val birthDateUtc = resolveBirthDateUtcMillis(
+                    utcMidnightMillis = selectedDateMillis ?: 0L,
+                    hour = selectedHour,
+                    minute = selectedMinute,
+                    zoneId = assumedBirthZone
+                )
+                viewModel.saveProfile(
+                    context = context,
+                    name = name,
+                    birthDateUtc = birthDateUtc,
+                    timezoneId = assumedBirthZone.id,
+                    address = addr,
+                    onSaved = onLocationSaved
+                )
             },
             enabled = canConfirm,
             modifier = Modifier.fillMaxWidth(),
