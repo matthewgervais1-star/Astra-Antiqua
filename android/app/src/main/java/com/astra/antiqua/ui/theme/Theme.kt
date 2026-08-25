@@ -54,13 +54,7 @@ fun AstraAntiquaTheme(
         AncientCulture.CANAAN,
         AncientCulture.CARTHAGE -> DarkColorScheme
     }
-    val lexicon = when (selectedCulture) {
-        AncientCulture.GREECE -> LexiconDictionary.Greek
-        AncientCulture.EGYPT -> LexiconDictionary.Egyptian
-        AncientCulture.CANAAN -> LexiconDictionary.Canaanite
-        AncientCulture.CARTHAGE -> LexiconDictionary.Carthaginian
-        AncientCulture.ROME -> LexiconDictionary.Roman
-    }
+    val lexicon = LexiconDictionary.forCulture(selectedCulture)
 
     // Under edge-to-edge (enforced from SDK 35) the system bars are drawn by
     // the app and window.statusBarColor is a no-op, so the only thing left to

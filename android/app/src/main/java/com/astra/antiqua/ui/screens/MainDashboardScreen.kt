@@ -44,9 +44,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.astra.antiqua.domain.HouseMeanings
 import com.astra.antiqua.domain.NatalChartData
-import com.astra.antiqua.domain.OracleContent
+import com.astra.antiqua.domain.NatalPlacementReading
 import com.astra.antiqua.model.ClassicalPlanet
 import com.astra.antiqua.ui.components.GlassCard
 import com.astra.antiqua.ui.theme.Gold
@@ -125,9 +124,9 @@ fun MainDashboardScreen() {
 
         if (chartState is ChartState.Success) {
             val successState = chartState as ChartState.Success
-            val decrees = successState.bigThreeDecrees
-            items(decrees) { content ->
-                OracleDecreeCard(content = content)
+            val placements = successState.bigThreePlacements
+            items(placements) { reading ->
+                OracleDecreeCard(reading = reading)
                 Spacer(modifier = Modifier.height(16.dp))
             }
             
@@ -152,10 +151,9 @@ fun MainDashboardScreen() {
 }
 
 @Composable
-fun OracleDecreeCard(content: OracleContent) {
+fun OracleDecreeCard(reading: NatalPlacementReading) {
     val lexicon = LocalLexicon.current
-    val planet = content.planetPosition?.planet
-    val deityName = content.deity_name
+    val deityName = reading.deityName
     val officerRole = lexicon.officerRole
 
     GlassCard(
@@ -200,61 +198,55 @@ fun OracleDecreeCard(content: OracleContent) {
                     Spacer(modifier = Modifier.height(20.dp))
                     
                     Text(
-                        text = "\"${content.decree}\"",
+                        text = "\"${reading.decreeLine}\"",
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
                             lineHeight = 24.sp
                         ),
                         color = Color.White
                     )
-                    
-                    if (content.interpretation != null) {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "PRIESTLY INTERPRETATION",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontSize = 9.sp,
-                                letterSpacing = 1.5.sp,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            color = Gold.copy(alpha = 0.5f)
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = content.interpretation,
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                lineHeight = 20.sp
-                            ),
-                            color = Color.White.copy(alpha = 0.85f)
-                        )
-                    }
 
-                    content.planetPosition?.let { pos ->
-                        val houseMeaning = HouseMeanings.get(pos.house)
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "IN THE ${houseMeaning.ordinal.uppercase()} HOUSE · ${houseMeaning.title.uppercase()}",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontSize = 9.sp,
-                                letterSpacing = 1.5.sp,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            color = Gold.copy(alpha = 0.5f)
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = houseMeaning.domain,
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                lineHeight = 20.sp
-                            ),
-                            color = Color.White.copy(alpha = 0.7f)
-                        )
-                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "PRIESTLY INTERPRETATION",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontSize = 9.sp,
+                            letterSpacing = 1.5.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = Gold.copy(alpha = 0.5f)
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = reading.placementText,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            lineHeight = 20.sp
+                        ),
+                        color = Color.White.copy(alpha = 0.85f)
+                    )
+
+                    val houseMeaning = reading.houseMeaning
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "IN THE ${houseMeaning.ordinal.uppercase()} HOUSE · ${houseMeaning.title.uppercase()}",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontSize = 9.sp,
+                            letterSpacing = 1.5.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = Gold.copy(alpha = 0.5f)
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = houseMeaning.domain,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            lineHeight = 20.sp
+                        ),
+                        color = Color.White.copy(alpha = 0.7f)
+                    )
                 }
 
-                content.planetPosition?.let { pos ->
-                    ScribeMargin(planetData = pos)
-                }
+                ScribeMargin(planetData = reading.planetPosition)
             }
         }
     }

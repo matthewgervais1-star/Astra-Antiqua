@@ -7,12 +7,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.astra.antiqua.domain.AccuratePlanetPosition
+import com.astra.antiqua.domain.HouseMeanings
 import com.astra.antiqua.domain.NatalChartData
-import com.astra.antiqua.domain.OracleContent
+import com.astra.antiqua.domain.NatalPlacementReading
 import com.astra.antiqua.domain.ZodiacSign
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.ClassicalPlanet
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
+
+/** Preview-only helper: builds the composed reading the same way
+ *  NatalReadingComposer would, without needing a Context to load
+ *  planet-in-sign.json. */
+private fun previewReading(
+    position: AccuratePlanetPosition,
+    deityName: String,
+    deityEpithet: String,
+    decreeLine: String,
+    placementText: String,
+): NatalPlacementReading = NatalPlacementReading(
+    deityName = deityName,
+    deityEpithet = deityEpithet,
+    decreeLine = decreeLine,
+    placementText = placementText,
+    houseMeaning = HouseMeanings.get(position.house),
+    planetPosition = position,
+)
 
 @Preview(showBackground = true, backgroundColor = 0xFF000000, name = "Egypt - Hall of Ma'at")
 @Composable
@@ -51,11 +70,12 @@ fun EgyptDashboardPreview() {
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
-                    content = OracleContent(
-                        deity_name = "Sebegu",
-                        epitheton = "The Erratic Set-God",
-                        decree = "The scribe's ink runs thin as the storm approaches.",
-                        planetPosition = sampleChart.planets[ClassicalPlanet.MERCURY]
+                    reading = previewReading(
+                        position = sampleChart.planets.getValue(ClassicalPlanet.MERCURY),
+                        deityName = "Sebegu",
+                        deityEpithet = "Aspect of Set",
+                        decreeLine = "The scribe's ink runs thin as the storm approaches.",
+                        placementText = "Speech is performance. You think toward the room, and the room's face edits the sentence. The cost is winning the delivery and losing the argument."
                     )
                 )
             }
@@ -89,11 +109,12 @@ fun CarthageDashboardPreview() {
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
-                    content = OracleContent(
-                        deity_name = "Tanit",
-                        epitheton = "The Face of Baal",
-                        decree = "A sacrifice of spirit is demanded to secure the city's gates.",
-                        planetPosition = sampleChart.planets[ClassicalPlanet.MOON]
+                    reading = previewReading(
+                        position = sampleChart.planets.getValue(ClassicalPlanet.MOON),
+                        deityName = "Tanit",
+                        deityEpithet = "Dea Caelestis",
+                        decreeLine = "A sacrifice of spirit is demanded to secure the city's gates.",
+                        placementText = "The body holds its mood. You change slowly and root deep; the cost is staying past when staying served."
                     )
                 )
             }
@@ -127,11 +148,12 @@ fun GreeceDashboardPreview() {
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
-                    content = OracleContent(
-                        deity_name = "Helios",
-                        epitheton = "The Radiant King",
-                        decree = "I see all things from my height, and the golden chariot rises to illuminate the hidden path.",
-                        planetPosition = sampleChart.planets[ClassicalPlanet.SUN]
+                    reading = previewReading(
+                        position = sampleChart.planets.getValue(ClassicalPlanet.SUN),
+                        deityName = "Helios",
+                        deityEpithet = "Who Sees All Things",
+                        decreeLine = "I see all things from my height, and the golden chariot rises to illuminate the hidden path.",
+                        placementText = "Identity built for first moves. You reach for what you want before deliberation; the cost is starting things that should have been considered, the gift is acting when others freeze."
                     )
                 )
             }
@@ -165,11 +187,12 @@ fun CanaanDashboardPreview() {
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
-                    content = OracleContent(
-                        deity_name = "Resheph",
-                        epitheton = "Lord of the Arrow",
-                        decree = "The fortress is strong, but the pestilence of doubt creeps through the stones.",
-                        planetPosition = sampleChart.planets[ClassicalPlanet.MARS]
+                    reading = previewReading(
+                        position = sampleChart.planets.getValue(ClassicalPlanet.MARS),
+                        deityName = "Resheph",
+                        deityEpithet = "Lord of the Arrow",
+                        decreeLine = "The fortress is strong, but the pestilence of doubt creeps through the stones.",
+                        placementText = "Effort is sustained. You push by enduring; the cost is the body that ran out before the project did."
                     )
                 )
             }
@@ -203,11 +226,12 @@ fun RomeDashboardPreview() {
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
-                    content = OracleContent(
-                        deity_name = "Iuppiter",
-                        epitheton = "Optimus Maximus, Best and Greatest",
-                        decree = "The Capitoline stands firm; the augur reads favor in the flight of the eagle.",
-                        planetPosition = sampleChart.planets[ClassicalPlanet.JUPITER]
+                    reading = previewReading(
+                        position = sampleChart.planets.getValue(ClassicalPlanet.JUPITER),
+                        deityName = "Iuppiter",
+                        deityEpithet = "Optimus Maximus, Best and Greatest",
+                        decreeLine = "The Capitoline stands firm; the augur reads favor in the flight of the eagle.",
+                        placementText = "Increase comes through care. You take people in and the household widens. The cost is the family you outgrew and kept anyway."
                     )
                 )
             }
