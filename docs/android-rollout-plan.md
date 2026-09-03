@@ -430,12 +430,13 @@ surface that shows them says so.
    framing has nowhere else to live.
 4. Author the universal placement text for the three new bodies by porting the
    36 paragraphs already written and audited in web/src/data/planetInSign.ts.
-5. AstronomyEngine needs no change (the else -> branch already covers all three)
-   but Pluto is only valid 1700-2200 CE in this library and getPlanetPosition
-   has no try/catch, so an out-of-range birth date currently collapses the whole
-   chart into a generic error. Guard it: a body that cannot be computed should
-   degrade gracefully, not take the chart down. Add a test with an out-of-range
-   date.
+5. AstronomyEngine needs no change: the else -> branch already covers all
+   three. The claim that Pluto is range-limited to 1700-2200 and throws outside
+   it, which earlier drafts of this plan repeated from the survey, was tested
+   against this library version and is false. It answered at 1000, 1500, 1600,
+   1700, 2000, 2200, 2400 and 3000 CE and threw at none. Do not add a guard:
+   returning null outside an assumed span would drop a body the library is
+   willing to compute. The finding is recorded in AstronomyEngine's docstring.
 6. Surface the reception honestly in the UI: received bodies are visually marked
    (web uses the culture accent colour), and the app states plainly somewhere a
    user can reach that the outer planets are a modern extension made in the

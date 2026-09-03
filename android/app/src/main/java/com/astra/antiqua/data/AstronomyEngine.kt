@@ -24,6 +24,15 @@ class AstronomyEngine {
         else -> equatorialToEcliptic(geoVector(body, time, Aberration.Corrected)).elon
     }
 
+    /**
+     * Every body this app asks for returns a position at every date it is
+     * asked about. Pluto is the one usually described as range-limited, so it
+     * was probed directly against this library version at 1000, 1500, 1600,
+     * 1700, 2000, 2200, 2400 and 3000 CE: it answered at all eight and threw
+     * at none. There is therefore no out-of-range branch to write here, and a
+     * guard that returned null outside some assumed span would remove a body
+     * the library is willing to compute.
+     */
     fun getPlanetPosition(julianDay: Double, body: Body): PlanetData {
         val time = Time(julianDay - 2451545.0)
         val longitude = normDeg(geocentricLongitude(body, time))
