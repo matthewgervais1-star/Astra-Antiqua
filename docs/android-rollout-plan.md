@@ -21,6 +21,37 @@ otherwise fail silently in production copy.
 **Gate discipline:** every phase ends with `./gradlew assembleDebug` green plus
 its own stated check. Do not start a phase before its predecessor's gate passes.
 
+> ## Correction, 2026-08-18: phases 1 to 3 were already done
+>
+> This plan was written from a codebase survey that described a much older
+> state of `android/`. Checked directly against the branch afterwards, the
+> survey was wrong on every point that set the plan's ordering:
+>
+> | The survey said | The branch actually has |
+> |---|---|
+> | No test source set, zero tests | 29 tests in 11 classes, all green |
+> | Orbs 4 / 3 / 4 / 4 / 5, stale | 8 / 5 / 7 / 7 / 8, matching the documented table |
+> | `oracle_decrees.json`, 420 denormalized records | Retired; `shared/content/*.json` read as a build-time asset |
+> | Deity names stale (Apollo, Artemis, Cronus) | Corrected in `72af9a0` |
+> | Four silent-failure sites | Three already compile-enforced in `c5325c4` |
+>
+> So **Phase 1 (safety net), Phase 2 (correctness parity) and Phase 3 (content
+> migration) are complete**, and Phase 3 landed better than this plan proposed:
+> Android does not keep its own copy of the universal layer, it consumes the
+> same files the web exporter generates, so the two surfaces cannot drift.
+>
+> **Phase 0 is done** (commit `03b07de`), executed against the real branch.
+>
+> **What actually remains:** Phase 4 (ten bodies) is now small, because
+> `shared/content/` already carries all 10 bodies, 50 deity records including
+> the 15 receptions with their "Received:" notes, and the correct orb table.
+> The work is widening `ClassicalPlanet` and following the compiler, with the
+> existing completeness tests as the net. Phases 5 to 7 (design system, screen
+> rebrand, structure) stand as written.
+>
+> Read the phases below with that in mind: 1 to 3 are kept as a record of the
+> reasoning, not as work to do.
+
 ## Verified facts (checked, not assumed)
 
 Run against the tree on 2026-08-18 before this plan was finalized, so the phases
