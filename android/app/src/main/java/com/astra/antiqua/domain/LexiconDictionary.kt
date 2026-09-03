@@ -23,6 +23,9 @@ object LexiconDictionary {
                 ClassicalPlanet.MARS -> "The Warrior"
                 ClassicalPlanet.JUPITER -> "The Thunderer"
                 ClassicalPlanet.SATURN -> "The Father of Time"
+                ClassicalPlanet.URANUS -> "The Elder Sky"
+                ClassicalPlanet.NEPTUNE -> "The Earth-Shaker"
+                ClassicalPlanet.PLUTO -> "The Host Below"
             }
         },
         highPriestSummaryTitle = "The Pythia's Prophecy",
@@ -51,6 +54,9 @@ object LexiconDictionary {
                 ClassicalPlanet.MARS -> deityName(AncientCulture.EGYPT, ClassicalPlanet.MARS)
                 ClassicalPlanet.JUPITER -> deityName(AncientCulture.EGYPT, ClassicalPlanet.JUPITER)
                 ClassicalPlanet.SATURN -> deityName(AncientCulture.EGYPT, ClassicalPlanet.SATURN)
+                ClassicalPlanet.URANUS -> "The Star-Vault"
+                ClassicalPlanet.NEPTUNE -> "The First Water"
+                ClassicalPlanet.PLUTO -> "The King Below"
             }
         },
         highPriestSummaryTitle = "The Weighing of the Heart",
@@ -79,6 +85,9 @@ object LexiconDictionary {
                 ClassicalPlanet.MARS -> deityName(AncientCulture.CANAAN, ClassicalPlanet.MARS)
                 ClassicalPlanet.JUPITER -> deityName(AncientCulture.CANAAN, ClassicalPlanet.JUPITER)
                 ClassicalPlanet.SATURN -> deityName(AncientCulture.CANAAN, ClassicalPlanet.SATURN)
+                ClassicalPlanet.URANUS -> "The Open Heavens"
+                ClassicalPlanet.NEPTUNE -> "The Prince of Sea"
+                ClassicalPlanet.PLUTO -> "The Swallower"
             }
         },
         highPriestSummaryTitle = "The Seer's Judgment",
@@ -107,6 +116,9 @@ object LexiconDictionary {
                 ClassicalPlanet.MARS -> deityName(AncientCulture.CARTHAGE, ClassicalPlanet.MARS)
                 ClassicalPlanet.JUPITER -> deityName(AncientCulture.CARTHAGE, ClassicalPlanet.JUPITER)
                 ClassicalPlanet.SATURN -> deityName(AncientCulture.CARTHAGE, ClassicalPlanet.SATURN)
+                ClassicalPlanet.URANUS -> "The Witness Above"
+                ClassicalPlanet.NEPTUNE -> "The Sea-Partner"
+                ClassicalPlanet.PLUTO -> "The Creditor"
             }
         },
         highPriestSummaryTitle = "The Ba'al Priest's Command",
@@ -135,6 +147,9 @@ object LexiconDictionary {
                 ClassicalPlanet.MARS -> deityName(AncientCulture.ROME, ClassicalPlanet.MARS)
                 ClassicalPlanet.JUPITER -> deityName(AncientCulture.ROME, ClassicalPlanet.JUPITER)
                 ClassicalPlanet.SATURN -> deityName(AncientCulture.ROME, ClassicalPlanet.SATURN)
+                ClassicalPlanet.URANUS -> "The Elder Canopy"
+                ClassicalPlanet.NEPTUNE -> "The Lord of Waters"
+                ClassicalPlanet.PLUTO -> "The Rich Father"
             }
         },
         highPriestSummaryTitle = "The Pontifex Maximus's Judgment",

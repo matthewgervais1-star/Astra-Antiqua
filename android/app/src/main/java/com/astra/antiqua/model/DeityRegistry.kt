@@ -29,6 +29,9 @@ object DeityRegistry {
             ClassicalPlanet.MARS -> Deity("Horus the Red", "God of the Horizon")
             ClassicalPlanet.JUPITER -> Deity("Amun", "He Who Limits the Two Lands")
             ClassicalPlanet.SATURN -> Deity("Geb", "Father of the Earth")
+            ClassicalPlanet.URANUS -> Deity("Nut", "the vault of stars, whose five stolen days stand outside the year")
+            ClassicalPlanet.NEPTUNE -> Deity("Nun", "the water before the world, still standing beneath every river")
+            ClassicalPlanet.PLUTO -> Deity("Osiris", "the murdered king enthroned below, green with returning grain")
         }
         AncientCulture.GREECE -> when (planet) {
             ClassicalPlanet.SUN -> Deity("Helios", "Who Sees All Things")
@@ -38,6 +41,9 @@ object DeityRegistry {
             ClassicalPlanet.MARS -> Deity("Ares", "God of War")
             ClassicalPlanet.JUPITER -> Deity("Zeus", "King of Olympus")
             ClassicalPlanet.SATURN -> Deity("Kronos", "Father of Time")
+            ClassicalPlanet.URANUS -> Deity("Ouranos", "the first sky, unthroned by his own son's sickle")
+            ClassicalPlanet.NEPTUNE -> Deity("Poseidon", "earth-shaker, the sea that sets its own price for every crossing")
+            ClassicalPlanet.PLUTO -> Deity("Plouton", "the host below, called Wealth because none dared say Death")
         }
         AncientCulture.CANAAN -> when (planet) {
             ClassicalPlanet.SUN -> Deity("Shapash", "Luminary of the Deities")
@@ -47,6 +53,9 @@ object DeityRegistry {
             ClassicalPlanet.MARS -> Deity("Resheph", "Lord of the Arrow")
             ClassicalPlanet.JUPITER -> Deity("Baal Hadad", "Rider of the Clouds")
             ClassicalPlanet.SATURN -> Deity("El", "Father of Years")
+            ClassicalPlanet.URANUS -> Deity("Shamem", "the heavens themselves, sudden as weather off the sea")
+            ClassicalPlanet.NEPTUNE -> Deity("Yammu", "Prince Sea, the dissolving flood that tests every shore")
+            ClassicalPlanet.PLUTO -> Deity("Motu", "Death the swallower, before whom even Baal goes down and returns")
         }
         AncientCulture.CARTHAGE -> when (planet) {
             ClassicalPlanet.SUN -> Deity("Semes", "The Solar Force")
@@ -56,6 +65,9 @@ object DeityRegistry {
             ClassicalPlanet.MARS -> Deity("Melqart", "Protector of Tyre")
             ClassicalPlanet.JUPITER -> Deity("Baal Hammon", "Lord of the Sky")
             ClassicalPlanet.SATURN -> Deity("Baal Hammon", "The Ancient One")
+            ClassicalPlanet.URANUS -> Deity("Baal Shamem", "Lord of the Heavens, first witness named when the city swears")
+            ClassicalPlanet.NEPTUNE -> Deity("Yam", "the sea itself, the partner every voyage out of Carthage signs with")
+            ClassicalPlanet.PLUTO -> Deity("Mot", "Death the creditor, in whose ledger every living name is entered")
         }
         AncientCulture.ROME -> when (planet) {
             ClassicalPlanet.SUN -> Deity("Sol", "The Unconquered")
@@ -65,6 +77,9 @@ object DeityRegistry {
             ClassicalPlanet.MARS -> Deity("Mars", "Father of the Legions")
             ClassicalPlanet.JUPITER -> Deity("Iuppiter", "Optimus Maximus, Best and Greatest")
             ClassicalPlanet.SATURN -> Deity("Saturnus", "King of the Golden Age")
+            ClassicalPlanet.URANUS -> Deity("Caelus", "father of Saturn, the canopy under which every auspice is taken")
+            ClassicalPlanet.NEPTUNE -> Deity("Neptunus", "lord of all waters, from the field-spring to the open sea")
+            ClassicalPlanet.PLUTO -> Deity("Dis Pater", "the Rich Father below, to whom the last census always reports")
         }
     }
 

@@ -14,12 +14,10 @@ import org.junit.Test
  * something actually checks it agrees with `shared/content/deities.json`,
  * the same generated file the dotnet surface embeds. This test is that
  * check: it reads the JSON directly (the same relative-path-off-the-module-
- * directory approach `PlacementContentStoreTest` and the old
- * `OracleDecreeKeyCoverageTest` use) and asserts record-for-record agreement
- * for the 7 classical planets DeityRegistry currently covers. The JSON also
- * carries uranus/neptune/pluto records (Phase 4 territory); those are parsed
- * and simply excluded from the comparison until ClassicalPlanet grows to
- * match.
+ * directory approach `PlacementContentStoreTest` uses) and asserts
+ * record-for-record agreement for every body, the three receptions included.
+ * The exclusion this test used to carry, while ClassicalPlanet still held
+ * only seven, is gone now that the enum covers all ten.
  */
 class DeityRegistryDeitiesJsonParityTest {
 
@@ -44,17 +42,18 @@ class DeityRegistryDeitiesJsonParityTest {
         AncientCulture.values().first { it.name.equals(jsonKey, ignoreCase = true) }
 
     @Test
-    fun `DeityRegistry agrees with deities json for every classical planet by culture pair`() {
+    fun `DeityRegistry agrees with deities json for every body by culture pair`() {
         assertTrue("Expected to find ${assetFile.path}", assetFile.exists())
 
         val records: List<DeityRecord> = json.decodeFromString(assetFile.readText())
-        val classicalRecords = records.filter { classicalPlanetFor(it.planet) != null }
+        val knownRecords = records.filter { classicalPlanetFor(it.planet) != null }
 
-        // 5 cultures x 7 classical planets: every classical record in the
-        // JSON is exercised, and none is silently skipped by a typo'd key.
-        assertEquals(35, classicalRecords.size)
+        // 5 cultures x 10 bodies: every record in the JSON is exercised, and
+        // none is silently skipped by a typo'd key. If this number drops, a
+        // planet name stopped resolving rather than a record disappearing.
+        assertEquals(50, knownRecords.size)
 
-        for (record in classicalRecords) {
+        for (record in knownRecords) {
             val planet = classicalPlanetFor(record.planet)!!
             val culture = cultureFor(record.culture)
             val deity = DeityRegistry.getDeity(culture, planet)

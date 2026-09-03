@@ -71,6 +71,9 @@ class CalculateNatalChartUseCase(private val astronomyEngine: AstronomyEngine) {
             ClassicalPlanet.MARS -> Body.Mars
             ClassicalPlanet.JUPITER -> Body.Jupiter
             ClassicalPlanet.SATURN -> Body.Saturn
+            ClassicalPlanet.URANUS -> Body.Uranus
+            ClassicalPlanet.NEPTUNE -> Body.Neptune
+            ClassicalPlanet.PLUTO -> Body.Pluto
         }
     }
 }

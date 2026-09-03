@@ -511,4 +511,9 @@ fun getPlanetColor(planet: ClassicalPlanet): Color = when (planet) {
     ClassicalPlanet.MARS -> Color(0xFFFF4500)
     ClassicalPlanet.JUPITER -> Color(0xFF4169E1)
     ClassicalPlanet.SATURN -> Color(0xFF708090)
+    // The received three share one tone so they read as a set the ancients
+    // did not have, rather than as three more classical bodies.
+    ClassicalPlanet.URANUS -> Color(0xFF7FB0A5)
+    ClassicalPlanet.NEPTUNE -> Color(0xFF6E8FB8)
+    ClassicalPlanet.PLUTO -> Color(0xFF9A7BA8)
 }
