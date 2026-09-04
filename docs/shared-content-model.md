@@ -10,8 +10,8 @@ implementation (`web/src/data/*.ts`) is the source of truth for content**, and
 **The canonical column now has a generated JSON form.** `shared/content/*.json`
 is exported from the web data by `cd web && npm run export:content` (cultures,
 planets, deities, planet-in-sign, houses, zodiac signs, the orb table). The C#
-core (`dotnet/AstraAntiqua.Core`) embeds and reads it; Android's migration onto
-it is the rollout plan's Phase 3. The JSON is generated output — never hand-edit
+core (`dotnet/AstraAntiqua.Core`) embeds it and Android reads it as a build-time
+asset, so all three surfaces consume one generated corpus. The JSON is generated output — never hand-edit
 it, and regenerate it whenever web content changes. `npm run export:goldens`
 regenerates the chart-parity fixtures the C# tests assert against.
 
@@ -20,10 +20,10 @@ regenerates the chart-parity fixtures the C# tests assert against.
 | Concept | Canonical set | Web | Android |
 |---------|---------------|-----|---------|
 | Cultures | **5**: egypt, greece, canaan, carthage, rome | `CULTURES` in `cultures.ts` | `AncientCulture` enum ✓ |
-| Bodies | **10**: the classical seven + Uranus, Neptune, Pluto as received bodies | `PLANETS` in `cultures.ts` (+ `RECEIVED_BODIES`, `isReceived`) | `ClassicalPlanet` enum — **7 only, divergent** |
+| Bodies | **10**: the classical seven + Uranus, Neptune, Pluto as received bodies | `PLANETS` in `cultures.ts` (+ `RECEIVED_BODIES`, `isReceived`) | `ClassicalPlanet` enum, 10 with `isReceived` ✓ |
 | Zodiac signs | **12**, with element, modality, traits, date range | `ZODIAC_SIGN_INFO` in `zodiacSigns.ts` | `ZodiacSign` enum (names only) |
 | Houses | **12**, whole-sign, each with title/domain/arena | `HOUSE_MEANINGS` in `houses.ts` | `HouseMeanings` in `domain/HouseMeanings.kt` ✓ (ported verbatim) |
-| Aspect kinds | **5**: conjunction, sextile, square, trine, opposition | `AspectKind` in `sampleChart.ts` | `AspectType` enum — kinds match, **orbs divergent** |
+| Aspect kinds | **5**: conjunction, sextile, square, trine, opposition | `AspectKind` in `sampleChart.ts` | `AspectType` enum, kinds and orbs match ✓ |
 | Life domains | **5**: self, bonds, work, fortune, spirit | `LIFE_DOMAINS` in `lifeDomains.ts` | none |
 
 ## Deity model
@@ -42,11 +42,11 @@ Deity { planet, culture, name, epithet, note, contested? }
   `model/DeityRegistry.kt` — the single Android source of truth for all five
   cultures, ported from web. `data/DeityManager.getDeity` and
   `domain/LexiconDictionary.culturalVoices` both read from it rather than
-  duplicating names. `assets/oracle_decrees.json` bakes its own copies of the
-  deity names and prose into its decree records (now 84 x 5 = 420, Roman
-  column included) — that duplication persists until it migrates to the
-  universal model. Any deity change on web must be applied to `DeityRegistry`
-  and, until the migration, to `oracle_decrees.json`.
+  duplicating names. The denormalized `assets/oracle_decrees.json` that used to
+  bake its own copies of every pantheon is retired; Android reads
+  `shared/content/deities.json` instead, and a parity test asserts
+  `DeityRegistry` agrees with it record for record, so a deity change on web
+  reaches Android by regeneration rather than by hand.
 
 ## Interpretation model
 
@@ -56,15 +56,11 @@ The two surfaces currently model placement text differently:
   `PLANET_IN_SIGN` (10 × 12 = 120 paragraphs) — and the active culture is a
   *render-time mask*: deity names, epithets, aspect verbs, and cultural register
   are layered on top when displayed. Content grows linearly (120 + 50 + 25 …).
-- **Android (legacy):** fully denormalized per culture —
-  `assets/oracle_decrees.json` holds 84 placements × 5 cultures = 420 records
-  with the deity and prose baked in. Content grows multiplicatively and drifts.
+- **Android:** the same model, reading the same generated files. The
+  denormalized 420-record corpus is retired, so content no longer grows
+  multiplicatively on this surface either.
 
-New content must follow the web model. The Roman column was added under the
-legacy shape to reach five-culture parity now (grounded in the web's
-`PLANET_IN_SIGN` meanings); the eventual migration of `oracle_decrees.json`
-to universal text + cultural mask is still the plan, and collapses all five
-baked pantheons at once.
+New content must follow the web model.
 
 **Product principle, either way:** the universal layer carries the
 placement's core astrological meaning, and the cultural layer must be
@@ -93,7 +89,7 @@ lexicon — menu titles, officer roles, priest titles, aspect labels
 | Rule | Canonical | Web | Android |
 |------|-----------|-----|---------|
 | House system | **Whole-sign** (Hellenistic; stated publicly on the learn pages) | `lib/houses.ts` ✓ | Whole-sign (`CalculateNatalChartUseCase.wholeSignHouseCusps`) ✓ |
-| Aspect orbs | **conjunction 8°, opposition 8°, square 7°, trine 7°, sextile 5°** (the one documented table, published on `/method`) | `ASPECT_RULES` in `data/sampleChart.ts`, read by natal, transit, and synastry detection ✓ | `AspectType` in `NatalChartData.kt` — still 4/3/4/4/5, **divergent** |
+| Aspect orbs | **conjunction 8°, opposition 8°, square 7°, trine 7°, sextile 5°** (the one documented table, published on `/method`) | `ASPECT_RULES` in `data/sampleChart.ts`, read by natal, transit, and synastry detection ✓ | `AspectType` in `NatalChartData.kt`, same table ✓ |
 | Ephemeris | astronomy-engine (same upstream: cosinekitty/astronomy) | npm package | JAR ✓ |
 | degree → sign | 30° blocks from 0° Aries | `longitudeToSign()` | `ZodiacUtils` ✓ |
 
@@ -127,14 +123,16 @@ as product commitments (whole-sign houses are named on `/learn`).
    a named reception in every culture (Nut/Ouranos/Shamem/Baal Shamem/Caelus,
    Nun/Poseidon/Yammu/Yam/Neptunus, Osiris/Plouton/Motu/Mot/Dis Pater), each
    carrying a note that opens "Received:" and a `/method` statement that the
-   extension is modern work made in the ancient manner. **Android is still
-   7-planet**; catching up means `ClassicalPlanet`, `DeityRegistry` (+15
-   records), and 36 more `oracle_decrees.json` placements per culture.
-7. **Orb table changed on web (Phase 2).** Web unified its three divergent
-   internal orb tables onto the one documented table (8/8/7/7/5) so the
-   published method page and the running detectors agree. Android's
-   `AspectType` still carries the old 4/3/4/4/5 values and will read tighter
-   until it follows.
+   extension is modern work made in the ancient manner. ~~Android is still
+   7-planet~~ — resolved: `ClassicalPlanet` carries all ten with an
+   `isReceived` flag, `DeityRegistry` holds the fifteen receptions ported from
+   `shared/content/deities.json`, and the placement text comes from the same
+   generated corpus rather than being re-authored.
+7. ~~Orb table changed on web (Phase 2)~~ — resolved on both surfaces. Web
+   unified its three divergent internal tables onto the one documented table
+   so the published method page and the running detectors agree, and Android's
+   `AspectType` now carries the same values, pinned by a test so it cannot
+   drift back silently.
 8. **Deity names corrected on web (Phase 2)** to the handoff matrix: Greece
    Sun is **Helios** (not Apollo) and Moon is **Selene** (not Artemis), since
    the planets take the older bodies rather than their later syncretisms;
@@ -142,8 +140,8 @@ as product commitments (whole-sign houses are named on `/learn`).
    in the note) and Venus is **Attart**, the Ugaritic form, which keeps
    Canaan distinct from Carthage's Astarte; Carthage's two Baal Hammon seats
    are disambiguated as **in bounty** (Jupiter) and **the elder** (Saturn).
-   Android's `DeityRegistry` and `oracle_decrees.json` still carry the old
-   names and must be updated to match.
+   Android's `DeityRegistry` carries the corrected names, and a parity test
+   asserts it against `shared/content/deities.json` record for record.
 
 ## Sync protocol
 
