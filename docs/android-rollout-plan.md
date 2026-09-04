@@ -52,6 +52,34 @@ its own stated check. Do not start a phase before its predecessor's gate passes.
 > Read the phases below with that in mind: 1 to 3 are kept as a record of the
 > reasoning, not as work to do.
 
+> ## Status: the rollout is complete
+>
+> All seven phases are done, on branch `feature/android-rollout`.
+>
+> | Phase | Outcome |
+> |---|---|
+> | 0 Build health | Release emits a signed apk, targetSdk 36, R8 on with rules proven on device. `03b07de` |
+> | 1 Safety net | Was already done before this rollout began. |
+> | 2 Correctness | Was already done. Orbs, aspect detection, deity names, timezone. |
+> | 3 Content model | Was already done, and better: Android reads the web exporter's own output. |
+> | 4 Ten bodies | `c1cfac3`. The compiler found all twelve gaps; none could fail silently. |
+> | 5 Design system | `e0eb763`. Real fonts, the full type scale, five culture schemes, a component vocabulary. |
+> | 6 Screens | `5837c7b`. Every screen on the system, three defects fixed, one regression caught on device. |
+> | 7 Structure | `57c066f` and `c7e08bf`. Room hardened, dead files retired, the method page, a nav graph. |
+>
+> **Deliberately not done, with reasons:**
+> - **Hilt.** Two destinations and three ViewModels do not pay for the
+>   indirection. The case arrives with surfaces that need shared repositories.
+> - **The Placidus routines.** Listed here as dead, but the code carries a
+>   comment saying they are retained for future use. That decision outranks
+>   this plan.
+> - **`getDeitiesFor` and `getOfficerName`.** Listed as dead; both are covered
+>   by tests, so they are API rather than debris.
+> - **Long transits and the week / season / year horizons.** These are feature
+>   work rather than parity work. Android is in step with web on the domain,
+>   the identity and the honesty commitments; these are what it needs to keep
+>   up as web grows.
+
 ## Verified facts (checked, not assumed)
 
 Run against the tree on 2026-08-18 before this plan was finalized, so the phases
