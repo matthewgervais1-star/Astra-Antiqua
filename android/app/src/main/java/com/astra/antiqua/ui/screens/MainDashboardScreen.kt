@@ -1,6 +1,7 @@
 package com.astra.antiqua.ui.screens
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -65,7 +67,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun MainDashboardScreen() {
+fun MainDashboardScreen(onOpenMethod: () -> Unit = {}) {
     val appViewModel: AppViewModel = viewModel()
     val dashboardViewModel: DashboardViewModel = viewModel()
 
@@ -133,9 +135,18 @@ fun MainDashboardScreen() {
 
         if (chartState is ChartState.Success) {
             item {
+                // The claim and the page that backs it. A reader who wants to
+                // know why three bodies the ancients never saw are in their
+                // chart can reach the answer from the claim itself.
                 Kicker(
-                    text = "Modern bodies, received in the ancient manner",
-                    modifier = Modifier.padding(bottom = Spacing.Step),
+                    text = "Modern bodies, received in the ancient manner · read the method",
+                    modifier = Modifier
+                        .padding(bottom = Spacing.Step)
+                        .clickable(
+                            onClickLabel = "Read how the sky is computed",
+                            role = Role.Button,
+                            onClick = onOpenMethod,
+                        ),
                 )
             }
 

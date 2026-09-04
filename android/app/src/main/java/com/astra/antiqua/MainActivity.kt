@@ -28,9 +28,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.astra.antiqua.model.AppPhase
 import com.astra.antiqua.ui.screens.CultureSelectionScreen
 import com.astra.antiqua.ui.screens.MainDashboardScreen
+import com.astra.antiqua.ui.screens.MethodScreen
 import com.astra.antiqua.ui.screens.OnboardingScreen
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
 import com.astra.antiqua.ui.theme.Bone
@@ -78,7 +82,23 @@ class MainActivity : ComponentActivity() {
                             AppPhase.ONBOARDING -> OnboardingScreen {
                                 viewModel.completeOnboarding(context)
                             }
-                            AppPhase.MAIN_DASHBOARD -> MainDashboardScreen()
+                            AppPhase.MAIN_DASHBOARD -> {
+                                // The first-run flow stays a phase machine: it
+                                // is a sequence, not somewhere you navigate. Past
+                                // it, destinations are real places with real back
+                                // behaviour, which is what the nav graph is for.
+                                val navController = rememberNavController()
+                                NavHost(navController, startDestination = "reading") {
+                                    composable("reading") {
+                                        MainDashboardScreen(
+                                            onOpenMethod = { navController.navigate("method") },
+                                        )
+                                    }
+                                    composable("method") {
+                                        MethodScreen(onBack = { navController.popBackStack() })
+                                    }
+                                }
+                            }
                         }
                     }
                   }
