@@ -2,16 +2,39 @@ package com.astra.antiqua.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Black = Color(0xFF000000)
-val White = Color(0xFFFFFFFF)
-val Gold = Color(0xFFFFD700)
-val Red = Color(0xFFFF0000)
+/**
+ * "The Instrument in the Temple" palette, shared with the web surface
+ * (docs/design/handoff/tokens.css, web/src/app/globals.css).
+ *
+ * One flat ground and one muted accent per culture. No gradients, no glass,
+ * no glow: the incised 1px rule is the only ornament this identity allows.
+ */
 
-// Rome: imperial purple and gold, distinct from the other cultures' black/gold field.
-val TyrianPurple = Color(0xFF66023C) // the historical dye of the Roman senatorial and imperial stripe
-val TyrianPurpleDeep = Color(0xFF1A0512) // Tyrian purple deepened for dark backgrounds/surfaces
+// Grounds. Neutral is for the places no culture is presumed.
+val GroundNeutral = Color(0xFF171310)
+val GroundEgypt = Color(0xFF1A1712)
+val GroundGreece = Color(0xFF171A1C)
+val GroundCanaan = Color(0xFF1A1813)
+val GroundCarthage = Color(0xFF191218)
+val GroundRome = Color(0xFF1B1410)
 
-// Ultra-thin material backgrounds for premium feel
-val GlassBackground = Color(0x0DFFFFFF) // 0.05f white for "ultraThin" effect
-val GlassBorder = Color(0x26FFFFFF) // 0.15f white for "frosted edge"
-val CardBackground = Color(0x4D000000) // 0.3f black for content grounding
+// Accents, one muted metal each.
+val AccentEgypt = Color(0xFFB59A55)
+val AccentGreece = Color(0xFF7C93A6)
+val AccentCanaan = Color(0xFF8A9268)
+val AccentCarthage = Color(0xFF94648C)
+val AccentRome = Color(0xFFA5544A)
+
+// Inks.
+val Bone = Color(0xFFE6DECC)
+val Prose = Color(0xFFD9D1BF)
+val Dim = Color(0xFF9A917D)
+val FaintInk = Color(0xFF6F6B60)
+
+// Signals. Conflict also carries retrograde and destructive actions.
+val Harmony = Color(0xFFB59A55)
+val Conflict = Color(0xFFB56B71)
+
+// Rules: 1px only, at two weights.
+val Rule = Color(0x29E6DECC)
+val RuleRow = Color(0x1CE6DECC)

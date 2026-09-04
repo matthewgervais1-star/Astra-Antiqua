@@ -1,12 +1,27 @@
+<!--
+  The AA mason's mark: two interlocked A forms, one bone and one gold, over a
+  short gold rule. Built from straight strokes only, matching the web icon in
+  web/scripts/generate-icons.mjs so the two surfaces are recognisably one app.
+
+  The 108dp adaptive canvas keeps its art inside the middle 72dp safe zone,
+  so everything here sits between 18 and 90.
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M31,63.923C31,63.923 43.414,75.5 54,75.5C64.586,75.5 77,63.923 77,63.923C77,63.923 64.586,52.346 54,52.346C43.414,52.346 31,63.923 31,63.923Z" />
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M54,54.5C56.761,54.5 59,52.261 59,49.5C59,46.739 56.761,44.5 54,44.5C51.239,44.5 49,46.739 49,49.5C49,52.261 51.239,54.5 54,54.5Z" />
+
+    <!-- First A, bone. Left leg, right leg, crossbar. -->
+    <path android:fillColor="#E6DECC" android:pathData="M44.5,34 L50.5,34 L38.5,70 L32.5,70 Z" />
+    <path android:fillColor="#E6DECC" android:pathData="M44.5,34 L50.5,34 L56.5,70 L50.5,70 Z" />
+    <path android:fillColor="#E6DECC" android:pathData="M38.6,58 L52.4,58 L51.2,63 L37.4,63 Z" />
+
+    <!-- Second A, gold, offset right and overlapping the first by a quarter. -->
+    <path android:fillColor="#B59A55" android:pathData="M62.5,34 L68.5,34 L56.5,70 L50.5,70 Z" />
+    <path android:fillColor="#B59A55" android:pathData="M62.5,34 L68.5,34 L74.5,70 L68.5,70 Z" />
+    <path android:fillColor="#B59A55" android:pathData="M56.6,58 L70.4,58 L69.2,63 L55.4,63 Z" />
+
+    <!-- The incised rule beneath. -->
+    <path android:fillColor="#B59A55" android:pathData="M38,76 L70,76 L70,77.5 L38,77.5 Z" />
 </vector>

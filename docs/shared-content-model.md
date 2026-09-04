@@ -156,3 +156,17 @@ as product commitments (whole-sign houses are named on `/learn`).
   legacy Android variants.
 - Medium-term (plan Phase 4): extract this model into structured JSON or a
   typed schema served by the shared backend, and delete the per-surface copies.
+
+## Android parity, as of the ten-body rollout
+
+Android no longer diverges on the domain. It carries all **10 bodies** with
+`isReceived` marking the three receptions, reads the same
+`shared/content/*.json` the web exporter generates (so deity names and
+placement text cannot drift), and runs the same documented orb table
+(8 / 5 / 7 / 7 / 8). The divergences this document used to list under bodies,
+orbs, and the denormalized decree corpus are closed.
+
+What remains Android-only is `domain/LexiconDictionary.kt`: per-culture UI
+vocabulary (dashboard titles, officer roles, the voice epithets) with no web
+counterpart, because web names those surfaces differently. It is authored
+content and should be held to the same voice bar as the rest.

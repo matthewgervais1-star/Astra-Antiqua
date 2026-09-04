@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.astra.antiqua.domain.LexiconDictionary
@@ -14,32 +15,37 @@ import com.astra.antiqua.model.AncientCulture
 
 val LocalLexicon = staticCompositionLocalOf { LexiconDictionary.Greek }
 
-private val DarkColorScheme = darkColorScheme(
-    primary = White,
-    secondary = Gold,
-    tertiary = White,
-    background = Black,
-    surface = Black,
-    onPrimary = Black,
-    onSecondary = Black,
-    onTertiary = Black,
-    onBackground = White,
-    onSurface = White
-)
+/**
+ * The active culture's accent, for the places a Material role does not
+ * express: a rule under a heading, a retrograde mark, the tick on a bar.
+ * Provided alongside the lexicon so a composable can read either without
+ * being handed the culture itself.
+ */
+val LocalAccent = staticCompositionLocalOf { AccentGreece }
 
-// Rome: imperial purple (Tyrian purple, deepened for dark backgrounds/surfaces) and gold,
-// visually distinct from Carthage's black-and-gold field.
-private val RomanColorScheme = darkColorScheme(
-    primary = Gold,
-    secondary = TyrianPurple,
-    tertiary = Gold,
-    background = TyrianPurpleDeep,
-    surface = TyrianPurpleDeep,
-    onPrimary = Black,
-    onSecondary = White,
-    onTertiary = Black,
-    onBackground = White,
-    onSurface = White
+/**
+ * Every culture gets its own ground and accent. Four of the five used to
+ * share one identical black-and-gold scheme, so the theming promise was only
+ * a fifth kept; these are the five grounds and five accents the web surface
+ * ships, so a reader moving between surfaces sees the same Egypt.
+ */
+private fun schemeFor(ground: Color, accent: Color) = darkColorScheme(
+    primary = accent,
+    onPrimary = ground,
+    secondary = accent,
+    onSecondary = ground,
+    tertiary = Bone,
+    onTertiary = ground,
+    background = ground,
+    onBackground = Bone,
+    surface = ground,
+    onSurface = Bone,
+    surfaceVariant = ground,
+    onSurfaceVariant = Dim,
+    outline = Rule,
+    outlineVariant = RuleRow,
+    error = Conflict,
+    onError = ground,
 )
 
 @Composable
@@ -47,19 +53,31 @@ fun AstraAntiquaTheme(
     selectedCulture: AncientCulture = AncientCulture.GREECE,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when (selectedCulture) {
-        AncientCulture.ROME -> RomanColorScheme
-        AncientCulture.GREECE,
-        AncientCulture.EGYPT,
-        AncientCulture.CANAAN,
-        AncientCulture.CARTHAGE -> DarkColorScheme
+    val accent = when (selectedCulture) {
+        AncientCulture.EGYPT -> AccentEgypt
+        AncientCulture.GREECE -> AccentGreece
+        AncientCulture.CANAAN -> AccentCanaan
+        AncientCulture.CARTHAGE -> AccentCarthage
+        AncientCulture.ROME -> AccentRome
     }
-    val lexicon = LexiconDictionary.forCulture(selectedCulture)
+    val ground = when (selectedCulture) {
+        AncientCulture.EGYPT -> GroundEgypt
+        AncientCulture.GREECE -> GroundGreece
+        AncientCulture.CANAAN -> GroundCanaan
+        AncientCulture.CARTHAGE -> GroundCarthage
+        AncientCulture.ROME -> GroundRome
+    }
+    val lexicon = when (selectedCulture) {
+        AncientCulture.GREECE -> LexiconDictionary.Greek
+        AncientCulture.EGYPT -> LexiconDictionary.Egyptian
+        AncientCulture.CANAAN -> LexiconDictionary.Canaanite
+        AncientCulture.CARTHAGE -> LexiconDictionary.Carthaginian
+        AncientCulture.ROME -> LexiconDictionary.Roman
+    }
 
-    // Under edge-to-edge (enforced from SDK 35) the system bars are drawn by
-    // the app and window.statusBarColor is a no-op, so the only thing left to
-    // set is the icon appearance: these are dark grounds in every culture, so
-    // the bar icons stay light.
+    // Under edge-to-edge (enforced from SDK 35) the app paints its own ground
+    // behind the system bars and window.statusBarColor is a no-op, so the only
+    // thing left to set is icon appearance. Every ground is dark.
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -68,9 +86,9 @@ fun AstraAntiquaTheme(
         }
     }
 
-    CompositionLocalProvider(LocalLexicon provides lexicon) {
+    CompositionLocalProvider(LocalLexicon provides lexicon, LocalAccent provides accent) {
         MaterialTheme(
-            colorScheme = colorScheme,
+            colorScheme = schemeFor(ground, accent),
             typography = Typography,
             content = content
         )

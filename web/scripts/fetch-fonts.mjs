@@ -1,6 +1,12 @@
 /**
- * Downloads the site's font files (latin subset, woff2) from Google Fonts
- * into src/fonts/ for self-hosting via next/font/local.
+ * Downloads the identity's font files from Google Fonts.
+ *
+ * Default: latin-subset woff2 into web/src/fonts/, self-hosted via
+ * next/font/local. With `--android`: the same three families as TTF into
+ * android/app/src/main/res/font/, because Compose cannot read woff2 and
+ * Android resource names allow only lowercase letters, digits and
+ * underscores. One pipeline for both surfaces, so the two cannot drift onto
+ * different cuts of the same typeface.
  *
  * Why not next/font/google: it downloads every font in one parallel burst at
  * build time, and some networks reset bursty connections to fonts.gstatic.com
@@ -48,28 +54,79 @@ const FAMILIES = [
   },
 ];
 
+const ANDROID_OUT_DIR = path.join(
+  path.dirname(fileURLToPath(import.meta.url)), "..", "..",
+  "android", "app", "src", "main", "res", "font",
+);
+
+// The css2 API serves TTF to clients that do not look like a modern browser,
+// so the android pass simply omits the spoofed user-agent. Names are
+// res/font-legal: lowercase, digits, underscore.
+const ANDROID_FAMILIES = [
+  {
+    family: "Cinzel",
+    css: "family=Cinzel:wght@400;500;600",
+    picks: [
+      { style: "normal", weight: "400", file: "cinzel_regular.ttf" },
+      { style: "normal", weight: "500", file: "cinzel_medium.ttf" },
+      { style: "normal", weight: "600", file: "cinzel_semibold.ttf" },
+    ],
+  },
+  {
+    family: "Spectral",
+    css: "family=Spectral:ital,wght@0,300;0,400;1,300;1,400",
+    picks: [
+      { style: "normal", weight: "300", file: "spectral_light.ttf" },
+      { style: "normal", weight: "400", file: "spectral_regular.ttf" },
+      { style: "italic", weight: "300", file: "spectral_light_italic.ttf" },
+      { style: "italic", weight: "400", file: "spectral_regular_italic.ttf" },
+    ],
+  },
+  {
+    family: "IBM Plex Mono",
+    css: "family=IBM+Plex+Mono:wght@400;500",
+    picks: [
+      { style: "normal", weight: "400", file: "ibm_plex_mono_regular.ttf" },
+      { style: "normal", weight: "500", file: "ibm_plex_mono_medium.ttf" },
+    ],
+  },
+];
+
 /**
  * Parse @font-face blocks; return the latin-subset woff2 URL for a style
  * (and, for static families, a specific weight). Errors if the request
  * resolves to more than one URL, which for a weight-less pick would mean
  * the family is no longer served as a single variable file.
  */
-function pickUrl(cssText, style, weight) {
+function pickUrl(cssText, style, weight, ext = "woff2") {
   const urls = new Set();
   const blocks = cssText.split("@font-face").slice(1);
+  // The woff2 response splits each family across subsets and labels them with
+  // a /* latin */ comment. The ttf response is one block per weight with no
+  // subset comments at all, so the subset filter only applies to woff2.
+  const hasSubsetComments = cssText.includes("/* latin */");
   for (let i = 0; i < blocks.length; i += 1) {
     const block = blocks[i];
-    // The CSS API precedes each block with a subset comment, e.g. /* latin */.
-    const before = cssText.slice(0, cssText.indexOf(block));
-    const lastComment = before.lastIndexOf("/*");
-    const subset = before.slice(lastComment + 2, before.indexOf("*/", lastComment)).trim();
-    if (subset !== "latin") continue;
+    if (hasSubsetComments) {
+      const before = cssText.slice(0, cssText.indexOf(block));
+      const lastComment = before.lastIndexOf("/*");
+      const subset = before.slice(lastComment + 2, before.indexOf("*/", lastComment)).trim();
+      if (subset !== "latin") continue;
+    }
     if (!block.includes(`font-style: ${style}`)) continue;
     if (weight && !block.includes(`font-weight: ${weight}`)) continue;
-    const m = block.match(/url\((https:[^)]+\.woff2)\)/);
-    if (m) urls.add(m[1]);
+    // Extracted without a regex: the url is always url(...) and the closing
+    // paren cannot appear inside it, so indexOf is both simpler and immune to
+    // escaping mistakes.
+    const start = block.indexOf("url(");
+    if (start !== -1) {
+      const raw = block.slice(start + 4, block.indexOf(")", start));
+      if (raw.startsWith("https:") && raw.endsWith("." + ext)) urls.add(raw);
+    }
+    const m = null;
+    void m;
   }
-  if (urls.size === 0) throw new Error(`No latin woff2 for style ${style} weight ${weight ?? "any"}`);
+  if (urls.size === 0) throw new Error(`No ${ext} for style ${style} weight ${weight ?? "any"}`);
   if (urls.size > 1) {
     throw new Error(
       `Multiple woff2 URLs for style ${style}; the family is not a single variable file anymore. Update the picks to per-weight files.`,
@@ -78,20 +135,26 @@ function pickUrl(cssText, style, weight) {
   return [...urls][0];
 }
 
-await mkdir(OUT_DIR, { recursive: true });
+const android = process.argv.includes("--android");
+const outDir = android ? ANDROID_OUT_DIR : OUT_DIR;
+const families = android ? ANDROID_FAMILIES : FAMILIES;
+const label = android ? "android/app/src/main/res/font" : "src/fonts";
 
-for (const fam of FAMILIES) {
+await mkdir(outDir, { recursive: true });
+
+for (const fam of families) {
   const cssUrl = `https://fonts.googleapis.com/css2?${fam.css}&display=swap`;
-  const res = await fetch(cssUrl, { headers: { "User-Agent": UA } });
+  // No spoofed UA on the android pass: that is what makes the API serve TTF.
+  const res = await fetch(cssUrl, android ? {} : { headers: { "User-Agent": UA } });
   if (!res.ok) throw new Error(`CSS fetch failed for ${fam.family}: ${res.status}`);
   const cssText = await res.text();
   for (const pick of fam.picks) {
-    const url = pickUrl(cssText, pick.style, pick.weight);
+    const url = pickUrl(cssText, pick.style, pick.weight, android ? "ttf" : "woff2");
     // Sequential on purpose: parallel bursts are exactly what breaks here.
     const fontRes = await fetch(url);
     if (!fontRes.ok) throw new Error(`Font fetch failed: ${url} (${fontRes.status})`);
     const buf = Buffer.from(await fontRes.arrayBuffer());
-    await writeFile(path.join(OUT_DIR, pick.file), buf);
-    console.log(`wrote src/fonts/${pick.file} (${(buf.length / 1024).toFixed(0)} KB)`);
+    await writeFile(path.join(outDir, pick.file), buf);
+    console.log(`wrote ${label}/${pick.file} (${(buf.length / 1024).toFixed(0)} KB)`);
   }
 }
