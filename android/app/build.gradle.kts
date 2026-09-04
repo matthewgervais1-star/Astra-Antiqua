@@ -92,6 +92,12 @@ android {
     }
 }
 
+// The exported schema is committed, so a future entity change has a baseline
+// to write a migration against rather than being discovered in production.
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)

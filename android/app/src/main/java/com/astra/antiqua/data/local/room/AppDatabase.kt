@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [UserProfile::class], version = 2, exportSchema = false)
+@Database(entities = [UserProfile::class], version = 2, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
@@ -19,7 +19,12 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "astra_antiqua_db"
-                ).fallbackToDestructiveMigration(true).build()
+                )
+                    // No destructive fallback. It silently wiped the user's
+                    // saved birth data on any version bump, which is the one
+                    // thing this database holds. A missing migration should
+                    // fail loudly in development instead.
+                    .build()
                 INSTANCE = instance
                 instance
             }
