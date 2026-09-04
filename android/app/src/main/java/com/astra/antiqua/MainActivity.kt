@@ -26,7 +26,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.astra.antiqua.model.AppPhase
@@ -34,6 +33,8 @@ import com.astra.antiqua.ui.screens.CultureSelectionScreen
 import com.astra.antiqua.ui.screens.MainDashboardScreen
 import com.astra.antiqua.ui.screens.OnboardingScreen
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
+import com.astra.antiqua.ui.theme.Bone
+import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.viewmodel.AppViewModel
 
 class MainActivity : ComponentActivity() {
@@ -72,7 +73,7 @@ class MainActivity : ComponentActivity() {
                         when (phase) {
                             AppPhase.ENGINE_WARMUP -> EngineWarmupScreen()
                             AppPhase.CULTURE_SELECTION -> CultureSelectionScreen { culture ->
-                                viewModel.selectCulture(context, culture)
+                                viewModel.selectCulture(context, culture.name)
                             }
                             AppPhase.ONBOARDING -> OnboardingScreen {
                                 viewModel.completeOnboarding(context)
@@ -94,12 +95,12 @@ fun EngineWarmupScreen() {
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp)
+            CircularProgressIndicator(color = LocalAccent.current, strokeWidth = 2.dp)
             Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = "Aligning the Astrolabe...",
                 style = MaterialTheme.typography.headlineMedium,
-                color = Color.White
+                color = Bone
             )
         }
     }

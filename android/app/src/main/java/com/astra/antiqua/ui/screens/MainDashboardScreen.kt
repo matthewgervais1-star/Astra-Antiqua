@@ -1,20 +1,17 @@
 package com.astra.antiqua.ui.screens
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -38,19 +35,28 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.astra.antiqua.domain.AccuratePlanetPosition
+import com.astra.antiqua.domain.AspectType
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
 import com.astra.antiqua.model.ClassicalPlanet
-import com.astra.antiqua.ui.components.GlassCard
-import com.astra.antiqua.ui.theme.Gold
+import com.astra.antiqua.ui.components.AccentRule
+import com.astra.antiqua.ui.components.Kicker
+import com.astra.antiqua.ui.components.Panel
+import com.astra.antiqua.ui.components.SectionDivider
+import com.astra.antiqua.ui.theme.Bone
+import com.astra.antiqua.ui.theme.Conflict
+import com.astra.antiqua.ui.theme.Dim
+import com.astra.antiqua.ui.theme.Harmony
+import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.LocalLexicon
-import com.astra.antiqua.ui.theme.Red
+import com.astra.antiqua.ui.theme.Prose
+import com.astra.antiqua.ui.theme.Rule
+import com.astra.antiqua.ui.theme.Spacing
 import com.astra.antiqua.viewmodel.AppViewModel
 import com.astra.antiqua.viewmodel.ChartState
 import com.astra.antiqua.viewmodel.DashboardViewModel
@@ -62,10 +68,11 @@ import kotlin.math.sin
 fun MainDashboardScreen() {
     val appViewModel: AppViewModel = viewModel()
     val dashboardViewModel: DashboardViewModel = viewModel()
-    
+
     val chartState by dashboardViewModel.chartState.collectAsState()
     val context = LocalContext.current
     val lexicon = LocalLexicon.current
+    val accent = LocalAccent.current
 
     LaunchedEffect(Unit) {
         dashboardViewModel.calculateChart(context)
@@ -74,16 +81,21 @@ fun MainDashboardScreen() {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp),
+            .padding(horizontal = Spacing.Gutter),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Spacing.Step))
             Text(
                 text = lexicon.dashboardTitle,
-                style = MaterialTheme.typography.displayLarge,
-                modifier = Modifier.padding(vertical = 16.dp)
+                style = MaterialTheme.typography.displayMedium,
+                color = Bone,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = Spacing.Step)
             )
+            Spacer(modifier = Modifier.height(Spacing.Snug))
+            AccentRule()
+            Spacer(modifier = Modifier.height(Spacing.Step))
         }
 
         item {
@@ -96,56 +108,56 @@ fun MainDashboardScreen() {
                 when (val state = chartState) {
                     is ChartState.Loading -> {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            CircularProgressIndicator(color = Color.White)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text("Consulting the Ephemeris...", color = Color.Gray)
+                            CircularProgressIndicator(color = accent)
+                            Spacer(modifier = Modifier.height(Spacing.Snug))
+                            Text(
+                                text = "Consulting the Ephemeris...",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = Dim,
+                            )
                         }
                     }
                     is ChartState.Success -> {
                         NatalWheel(chartData = state.chartData)
                     }
                     is ChartState.Error -> {
-                        Text("Error: ${state.message}", color = Red)
+                        Text(
+                            text = "Error: ${state.message}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Conflict,
+                        )
                     }
                 }
             }
         }
 
-        item {
-            Text(
-                text = "Decrees of the Oracle",
-                style = MaterialTheme.typography.headlineMedium,
-                color = Gold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 32.dp, bottom = 16.dp)
-            )
-        }
-
         if (chartState is ChartState.Success) {
+            item {
+                Kicker(
+                    text = "Modern bodies, received in the ancient manner",
+                    modifier = Modifier.padding(bottom = Spacing.Step),
+                )
+            }
+
+            item {
+                SectionDivider(label = "Decrees of the Oracle")
+            }
+
             val successState = chartState as ChartState.Success
             val placements = successState.bigThreePlacements
-            items(placements) { reading ->
+            items(placements, key = { it.planetPosition.planet.name }) { reading ->
                 OracleDecreeCard(reading = reading)
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Spacing.Step))
             }
-            
+
             item {
-                Text(
-                    text = lexicon.highPriestSummaryTitle,
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = Gold,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp, bottom = 16.dp)
-                )
-                
+                SectionDivider(label = lexicon.highPriestSummaryTitle)
                 HighPriestSummaryCard(summary = successState.highPriestSummary)
             }
         }
-        
+
         item {
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(Spacing.Section))
         }
     }
 }
@@ -153,172 +165,109 @@ fun MainDashboardScreen() {
 @Composable
 fun OracleDecreeCard(reading: NatalPlacementReading) {
     val lexicon = LocalLexicon.current
-    val deityName = reading.deityName
-    val officerRole = lexicon.officerRole
+    val accent = LocalAccent.current
 
-    GlassCard(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Box {
-            // Deity Glyph Placeholder
-            Text(
-                text = deityName.take(1),
-                style = MaterialTheme.typography.displayLarge.copy(
-                    fontSize = 140.sp,
-                    fontWeight = FontWeight.Black
-                ),
-                color = Gold.copy(alpha = 0.05f),
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .offset(x = (-30).dp)
-            )
+    Panel(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min),
+            verticalAlignment = Alignment.Top
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Kicker(text = "As interpreted by ${lexicon.officerRole}")
+                Spacer(modifier = Modifier.height(Spacing.Snug))
 
-            Row(
-                modifier = Modifier.height(IntrinsicSize.Min),
-                verticalAlignment = Alignment.Top
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = deityName.uppercase(),
-                        style = MaterialTheme.typography.displaySmall.copy(
-                            letterSpacing = 2.sp
-                        ),
-                        color = Gold,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "As interpreted by $officerRole",
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontSize = 10.sp,
-                            letterSpacing = 0.5.sp
-                        ),
-                        color = Color.Gray.copy(alpha = 0.7f)
-                    )
-                    
-                    Spacer(modifier = Modifier.height(20.dp))
-                    
-                    Text(
-                        text = "\"${reading.decreeLine}\"",
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
-                            lineHeight = 24.sp
-                        ),
-                        color = Color.White
-                    )
+                Text(
+                    text = reading.deityName.uppercase(),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = accent,
+                )
+                Text(
+                    text = reading.deityEpithet,
+                    style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
+                    color = Dim,
+                )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "PRIESTLY INTERPRETATION",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontSize = 9.sp,
-                            letterSpacing = 1.5.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = Gold.copy(alpha = 0.5f)
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = reading.placementText,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            lineHeight = 20.sp
-                        ),
-                        color = Color.White.copy(alpha = 0.85f)
-                    )
+                Spacer(modifier = Modifier.height(Spacing.Step))
 
-                    val houseMeaning = reading.houseMeaning
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "IN THE ${houseMeaning.ordinal.uppercase()} HOUSE · ${houseMeaning.title.uppercase()}",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontSize = 9.sp,
-                            letterSpacing = 1.5.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = Gold.copy(alpha = 0.5f)
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = houseMeaning.domain,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            lineHeight = 20.sp
-                        ),
-                        color = Color.White.copy(alpha = 0.7f)
-                    )
-                }
+                Text(
+                    text = "\"${reading.decreeLine}\"",
+                    style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic),
+                    color = Bone,
+                )
 
-                ScribeMargin(planetData = reading.planetPosition)
+                Spacer(modifier = Modifier.height(Spacing.Step))
+                Kicker(text = "Priestly interpretation")
+                Spacer(modifier = Modifier.height(Spacing.Tight))
+                Text(
+                    text = reading.placementText,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Prose,
+                )
+
+                val houseMeaning = reading.houseMeaning
+                Spacer(modifier = Modifier.height(Spacing.Step))
+                Kicker(text = "In the ${houseMeaning.ordinal} house · ${houseMeaning.title}")
+                Spacer(modifier = Modifier.height(Spacing.Tight))
+                Text(
+                    text = houseMeaning.domain,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Dim,
+                )
             }
+
+            ScribeMargin(planetData = reading.planetPosition)
         }
     }
 }
 
 @Composable
-fun ScribeMargin(planetData: com.astra.antiqua.domain.AccuratePlanetPosition) {
+fun ScribeMargin(planetData: AccuratePlanetPosition) {
+    val accent = LocalAccent.current
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(Spacing.Step))
         VerticalDivider(
             modifier = Modifier.fillMaxHeight(),
-            thickness = 0.5.dp,
-            color = Color.White.copy(alpha = 0.15f)
+            thickness = 1.dp,
+            color = Rule,
         )
-        Spacer(modifier = Modifier.width(12.dp))
-        
-        Column(
-            modifier = Modifier.width(90.dp),
-            horizontalAlignment = Alignment.End
-        ) {
-            // Babylonian sexagesimal format with SF Mono style (Monospace)
+        Spacer(modifier = Modifier.width(Spacing.Snug))
+
+        Column(horizontalAlignment = Alignment.End) {
+            // Babylonian sexagesimal format, set in the mono scale.
             val d = planetData.degreeInSign.toString().padStart(2, '0')
             val m = planetData.minuteInSign.toString().padStart(2, '0')
             val s = planetData.secondInSign.toString().padStart(2, '0')
 
             Text(
                 text = planetData.zodiacSign.signName.uppercase(),
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontFamily = FontFamily.Monospace,
-                    fontSize = 9.sp,
-                    letterSpacing = 1.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                color = Gold.copy(alpha = 0.8f),
-                textAlign = TextAlign.End
+                style = MaterialTheme.typography.labelMedium,
+                color = accent,
+                textAlign = TextAlign.End,
             )
             Text(
                 text = "$d°$m'$s\"",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontFamily = FontFamily.Monospace,
-                    fontSize = 11.sp,
-                    letterSpacing = 0.5.sp
-                ),
-                color = Gold,
-                textAlign = TextAlign.End
+                style = MaterialTheme.typography.labelMedium,
+                color = Bone,
+                textAlign = TextAlign.End,
             )
             Text(
                 text = "HOUSE ${planetData.house}",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontFamily = FontFamily.Monospace,
-                    fontSize = 9.sp,
-                    letterSpacing = 1.sp
-                ),
-                color = Color.Gray,
-                textAlign = TextAlign.End
+                style = MaterialTheme.typography.labelMedium,
+                color = Dim,
+                textAlign = TextAlign.End,
             )
-            val velocityText = if (planetData.velocity == 0.0) {
-                "STATIC"
-            } else if (planetData.velocity < 0) {
-                "RETROGRADE"
-            } else {
-                "DIRECT"
+            val velocityText = when {
+                planetData.velocity == 0.0 -> "STATIC"
+                planetData.velocity < 0 -> "RETROGRADE"
+                else -> "DIRECT"
             }
             Text(
                 text = velocityText,
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontFamily = FontFamily.Monospace,
-                    fontSize = 9.sp,
-                    letterSpacing = 1.sp
-                ),
-                color = if (planetData.isRetrograde) Red else Color.Gray,
-                textAlign = TextAlign.End
+                style = MaterialTheme.typography.labelMedium,
+                color = if (planetData.isRetrograde) Conflict else Dim,
+                textAlign = TextAlign.End,
             )
         }
     }
@@ -326,36 +275,18 @@ fun ScribeMargin(planetData: com.astra.antiqua.domain.AccuratePlanetPosition) {
 
 @Composable
 fun HighPriestSummaryCard(summary: String) {
-    Box(
+    Panel(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
-            .background(
-                color = Color.White.copy(alpha = 0.05f),
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
-            )
-            .padding(1.dp)
-            .background(
-                color = Color.Black.copy(alpha = 0.8f),
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
-            )
-            .border(
-                width = 0.5.dp,
-                color = Gold.copy(alpha = 0.4f),
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
-            )
-            .padding(32.dp)
+            .padding(vertical = Spacing.Step),
+        accented = true,
     ) {
         Text(
             text = summary,
-            style = MaterialTheme.typography.headlineSmall.copy(
-                fontWeight = FontWeight.Medium,
-                lineHeight = 32.sp,
-                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
-            ),
-            color = Color.White,
+            style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic),
+            color = Bone,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
@@ -380,14 +311,20 @@ fun HighPriestSummaryCard(summary: String) {
  */
 private const val MAX_WHEEL_ASPECTS = 12
 
-private fun isHardAspect(type: com.astra.antiqua.domain.AspectType) =
-    type == com.astra.antiqua.domain.AspectType.SQUARE ||
-        type == com.astra.antiqua.domain.AspectType.OPPOSITION
+/**
+ * Planets are drawn just inside the rim rather than sitting on it, so the
+ * dot doesn't visually fuse with the wheel's outer stroke. Tap hit-testing
+ * targets this same ring so what a reader sees is what a reader can touch.
+ */
+private const val PLANET_RING_FRACTION = 0.92f
+
+private fun isHardAspect(type: AspectType) =
+    type == AspectType.SQUARE || type == AspectType.OPPOSITION
 
 @Composable
 fun NatalWheel(chartData: NatalChartData) {
     val haptic = LocalHapticFeedback.current
-    val lexicon = LocalLexicon.current
+    val accent = LocalAccent.current
 
     // See the MAX_WHEEL_ASPECTS doc above: budget to the tightest aspects,
     // then order soft-before-hard so hard aspects draw on top.
@@ -401,12 +338,45 @@ fun NatalWheel(chartData: NatalChartData) {
         modifier = Modifier
             .size(320.dp)
             .aspectRatio(1f)
-            .padding(16.dp)
-            .pointerInput(Unit) {
+            .padding(Spacing.Step)
+            .pointerInput(chartData, visibleAspects) {
+                // Real hit-testing against the drawn planet dots, replacing a
+                // placeholder that fired on `longitude % 60.0 < 5.0` -- a
+                // condition unrelated to where the tap landed and unrelated
+                // to the aspects actually drawn. A tap now has to land near a
+                // planet's dot (on the same PLANET_RING_FRACTION ring used to
+                // draw it) before anything fires, and the feedback reflects
+                // whether THAT planet sits in a hard aspect from the visible,
+                // budgeted set.
                 detectTapGestures(
-                    onTap = {
-                        val hasHarmony = chartData.planets.values.any { it.longitude % 60.0 < 5.0 }
-                        if (hasHarmony) {
+                    onTap = { tapOffset ->
+                        // PointerInputScope.size is an IntSize (pixel grid),
+                        // not the Size DrawScope exposes, so the radius is
+                        // built from width/height rather than minDimension.
+                        val radius = minOf(size.width, size.height) / 2f
+                        val center = Offset(size.width / 2f, size.height / 2f)
+                        val hitRadiusPx = 20.dp.toPx()
+
+                        var tappedPlanet: ClassicalPlanet? = null
+                        var closestDistance = Float.MAX_VALUE
+                        chartData.planets.forEach { (planet, pos) ->
+                            val angle = ((pos.longitude - 90) * PI / 180).toFloat()
+                            val point = Offset(
+                                center.x + radius * PLANET_RING_FRACTION * cos(angle),
+                                center.y + radius * PLANET_RING_FRACTION * sin(angle),
+                            )
+                            val distance = (point - tapOffset).getDistance()
+                            if (distance < hitRadiusPx && distance < closestDistance) {
+                                closestDistance = distance
+                                tappedPlanet = planet
+                            }
+                        }
+
+                        val planet = tappedPlanet ?: return@detectTapGestures
+                        val hasHardAspect = visibleAspects.any {
+                            (it.p1 == planet || it.p2 == planet) && isHardAspect(it.type)
+                        }
+                        if (hasHardAspect) {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                         } else {
                             haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
@@ -419,22 +389,21 @@ fun NatalWheel(chartData: NatalChartData) {
         val center = Offset(size.width / 2, size.height / 2)
 
         drawCircle(
-            color = Color.White,
+            color = Bone,
             radius = radius,
             center = center,
-            style = Stroke(width = 2.dp.toPx())
+            style = Stroke(width = 1.dp.toPx())
         )
 
         chartData.houseCusps.drop(1).forEach { cusp ->
             val angle = (cusp - 90) * (PI / 180).toFloat()
-            val start = center
             val end = Offset(
                 (center.x + radius * cos(angle)).toFloat(),
                 (center.y + radius * sin(angle)).toFloat()
             )
             drawLine(
-                color = Color.Gray.copy(alpha = 0.3f),
-                start = start,
+                color = Rule,
+                start = center,
                 end = end,
                 strokeWidth = 1.dp.toPx()
             )
@@ -443,29 +412,25 @@ fun NatalWheel(chartData: NatalChartData) {
         visibleAspects.forEach { aspect ->
             val pos1 = chartData.planets[aspect.p1] ?: return@forEach
             val pos2 = chartData.planets[aspect.p2] ?: return@forEach
-            
-            val color = if (aspect.type == com.astra.antiqua.domain.AspectType.TRINE || 
-                            aspect.type == com.astra.antiqua.domain.AspectType.SEXTILE) {
-                Gold
-            } else if (aspect.type == com.astra.antiqua.domain.AspectType.SQUARE || 
-                       aspect.type == com.astra.antiqua.domain.AspectType.OPPOSITION) {
-                Color.White
-            } else {
-                Gold.copy(alpha = 0.8f)
+
+            val color = when {
+                aspect.type == AspectType.TRINE || aspect.type == AspectType.SEXTILE -> Harmony
+                isHardAspect(aspect.type) -> Conflict
+                else -> accent
             }
 
             val angle1 = (pos1.longitude - 90) * (PI / 180).toFloat()
             val angle2 = (pos2.longitude - 90) * (PI / 180).toFloat()
-            
+
             val start = Offset(
-                (center.x + (radius * 0.7f) * cos(angle1.toFloat())).toFloat(),
-                (center.y + (radius * 0.7f) * sin(angle1.toFloat())).toFloat()
+                (center.x + (radius * 0.7f) * cos(angle1)).toFloat(),
+                (center.y + (radius * 0.7f) * sin(angle1)).toFloat()
             )
             val end = Offset(
-                (center.x + (radius * 0.7f) * cos(angle2.toFloat())).toFloat(),
-                (center.y + (radius * 0.7f) * sin(angle2.toFloat())).toFloat()
+                (center.x + (radius * 0.7f) * cos(angle2)).toFloat(),
+                (center.y + (radius * 0.7f) * sin(angle2)).toFloat()
             )
-            
+
             drawLine(
                 color = color.copy(alpha = (0.5f * (1.0f - aspect.exactness.toFloat())).coerceAtLeast(0.1f)),
                 start = start,
@@ -476,21 +441,34 @@ fun NatalWheel(chartData: NatalChartData) {
 
         chartData.planets.forEach { (planet, pos) ->
             val angle = (pos.longitude - 90) * (PI / 180).toFloat()
-            val x = (center.x + radius * cos(angle.toFloat())).toFloat()
-            val y = (center.y + radius * sin(angle.toFloat())).toFloat()
+            val x = (center.x + radius * PLANET_RING_FRACTION * cos(angle)).toFloat()
+            val y = (center.y + radius * PLANET_RING_FRACTION * sin(angle)).toFloat()
 
             drawCircle(
-                color = Color.White,
+                color = Bone,
                 radius = 8.dp.toPx(),
                 center = Offset(x, y)
             )
-            
+
             if (pos.isRetrograde) {
                 drawCircle(
-                    color = Red.copy(alpha = 0.5f),
+                    color = Conflict,
                     radius = 12.dp.toPx(),
                     center = Offset(x, y),
-                    style = Stroke(width = 2.dp.toPx())
+                    style = Stroke(width = 1.dp.toPx())
+                )
+            }
+
+            // The received three get a second, quieter ring so the mark
+            // survives even where getPlanetColor's shared tone is hard to
+            // read (small canvas, colour-deficient vision) -- a marker that
+            // doesn't depend on hue, next to the one that does.
+            if (planet.isReceived) {
+                drawCircle(
+                    color = Dim,
+                    radius = 10.dp.toPx(),
+                    center = Offset(x, y),
+                    style = Stroke(width = 1.dp.toPx())
                 )
             }
 

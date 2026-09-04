@@ -2,6 +2,8 @@ package com.astra.antiqua.ui.screens
 
 import android.location.Address
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,8 +20,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -43,14 +43,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.domain.estimateZoneOffsetForLongitude
 import com.astra.antiqua.domain.resolveBirthDateUtcMillis
-import com.astra.antiqua.ui.components.GlassCard
-import com.astra.antiqua.ui.theme.Gold
+import com.astra.antiqua.ui.components.Panel
+import com.astra.antiqua.ui.components.PrimaryAction
+import com.astra.antiqua.ui.theme.Bone
+import com.astra.antiqua.ui.theme.Dim
+import com.astra.antiqua.ui.theme.LocalAccent
+import com.astra.antiqua.ui.theme.Rule
+import com.astra.antiqua.ui.theme.Spacing
 import com.astra.antiqua.viewmodel.LocationSearchViewModel
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -68,6 +77,7 @@ fun OnboardingScreen(
     val searchResults by viewModel.searchResults.collectAsState()
     val isSearching by viewModel.isSearching.collectAsState()
     val context = LocalContext.current
+    val accent = LocalAccent.current
 
     // Birth data state
     var name by remember { mutableStateOf("") }
@@ -105,11 +115,11 @@ fun OnboardingScreen(
                 TextButton(onClick = {
                     selectedDateMillis = datePickerState.selectedDateMillis
                     showDatePicker = false
-                }) { Text("OK", color = Gold) }
+                }) { Text("OK", color = accent) }
             },
             dismissButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancel", color = Color.White)
+                    Text("Cancel", color = Bone)
                 }
             }
         ) {
@@ -121,50 +131,48 @@ fun OnboardingScreen(
     if (showTimePicker) {
         AlertDialog(
             onDismissRequest = { showTimePicker = false },
-            title = { Text("Select Birth Time", color = Color.White) },
+            title = { Text("Select Birth Time", color = Bone) },
             text = { TimePicker(state = timePickerState) },
             confirmButton = {
                 TextButton(onClick = {
                     selectedHour = timePickerState.hour
                     selectedMinute = timePickerState.minute
                     showTimePicker = false
-                }) { Text("OK", color = Gold) }
+                }) { Text("OK", color = accent) }
             },
             dismissButton = {
                 TextButton(onClick = { showTimePicker = false }) {
-                    Text("Cancel", color = Color.White)
+                    Text("Cancel", color = Bone)
                 }
             }
         )
     }
 
     val textFieldColors = TextFieldDefaults.colors(
-        focusedTextColor = Color.White,
-        unfocusedTextColor = Color.White,
+        focusedTextColor = Bone,
+        unfocusedTextColor = Bone,
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
-        focusedIndicatorColor = Gold,
-        unfocusedIndicatorColor = Color.Gray,
-        focusedLabelColor = Gold,
-        unfocusedLabelColor = Color.Gray
+        focusedIndicatorColor = accent,
+        unfocusedIndicatorColor = Rule,
+        focusedLabelColor = accent,
+        unfocusedLabelColor = Dim,
+        cursorColor = accent,
     )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
-            .padding(horizontal = 32.dp, vertical = 24.dp)
+            .padding(horizontal = Spacing.Gutter, vertical = Spacing.Section)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "ENTER YOUR BIRTH DATA",
-            style = MaterialTheme.typography.displaySmall.copy(
-                fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
-                letterSpacing = 2.sp
-            ),
-            color = Color.White,
-            modifier = Modifier.padding(bottom = 32.dp)
+            text = "Enter Your Birth Data",
+            style = MaterialTheme.typography.displaySmall,
+            color = Bone,
+            modifier = Modifier.padding(bottom = Spacing.Section)
         )
 
         // Name
@@ -174,77 +182,76 @@ fun OnboardingScreen(
             label = { Text("Your Name") },
             modifier = Modifier.fillMaxWidth(),
             colors = textFieldColors,
+            shape = RectangleShape,
             singleLine = true
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(Spacing.Step))
 
-        // Birth Date
-        Row(modifier = Modifier.fillMaxWidth()) {
-            OutlinedTextField(
-                value = selectedDateMillis?.let { dateFormatter.format(Date(it)) } ?: "",
-                onValueChange = {},
-                label = { Text("Birth Date") },
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable { showDatePicker = true },
-                colors = textFieldColors,
-                readOnly = true,
-                enabled = false
-            )
+        // Birth Date. Read-only, but the field itself -- not a separate
+        // TextButton underneath it -- is the tap target and the thing
+        // TalkBack announces, so the accessible control and the visible one
+        // are the same element.
+        // A read-only field cannot be opened with Modifier.clickable: the text
+        // field consumes the press for focus and the click never arrives. The
+        // press has to be read from the field's own interaction source, with
+        // the semantics declared separately so a screen reader still announces
+        // and activates it as a button.
+        val dateLabel = if (selectedDateMillis == null) "Select birth date" else "Change birth date"
+        val datePresses = remember { MutableInteractionSource() }
+        LaunchedEffect(datePresses) {
+            datePresses.interactions.collect { if (it is PressInteraction.Release) showDatePicker = true }
         }
-        // Tap target for the disabled field
-        Box(
+        OutlinedTextField(
+            value = selectedDateMillis?.let { dateFormatter.format(Date(it)) } ?: "",
+            onValueChange = {},
+            label = { Text("Birth Date") },
+            placeholder = { Text("Tap to select", color = Dim) },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(0.dp)
+                .semantics {
+                    role = Role.Button
+                    onClick(label = dateLabel) { showDatePicker = true; true }
+                },
+            interactionSource = datePresses,
+            colors = textFieldColors,
+            shape = RectangleShape,
+            readOnly = true,
+            singleLine = true,
         )
-        TextButton(
-            onClick = { showDatePicker = true },
-            modifier = Modifier.align(Alignment.Start)
-        ) {
-            Text(
-                if (selectedDateMillis == null) "TAP TO SELECT DATE" else "CHANGE DATE",
-                color = Gold,
-                style = MaterialTheme.typography.labelSmall
-            )
-        }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(Spacing.Step))
 
-        // Birth Time
-        Row(modifier = Modifier.fillMaxWidth()) {
-            OutlinedTextField(
-                value = String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute),
-                onValueChange = {},
-                label = { Text("Birth Time (24h)") },
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable { showTimePicker = true },
-                colors = textFieldColors,
-                readOnly = true,
-                enabled = false
-            )
+        // Birth Time. Same read-only-plus-clickable treatment as the date.
+        val timePresses = remember { MutableInteractionSource() }
+        LaunchedEffect(timePresses) {
+            timePresses.interactions.collect { if (it is PressInteraction.Release) showTimePicker = true }
         }
-        TextButton(
-            onClick = { showTimePicker = true },
-            modifier = Modifier.align(Alignment.Start)
-        ) {
-            Text(
-                "CHANGE TIME",
-                color = Gold,
-                style = MaterialTheme.typography.labelSmall
-            )
-        }
+        OutlinedTextField(
+            value = String.format(Locale.US, "%02d:%02d", selectedHour, selectedMinute),
+            onValueChange = {},
+            label = { Text("Birth Time (24h)") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics {
+                    role = Role.Button
+                    onClick(label = "Change birth time") { showTimePicker = true; true }
+                },
+            interactionSource = timePresses,
+            colors = textFieldColors,
+            shape = RectangleShape,
+            readOnly = true,
+            singleLine = true,
+        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(Spacing.Step))
 
         // Location Search
         OutlinedTextField(
             value = searchQuery,
-            onValueChange = { 
+            onValueChange = {
                 selectedAddress = null
-                viewModel.onSearchQueryChanged(it) 
+                viewModel.onSearchQueryChanged(it)
             },
             label = {
                 Text(
@@ -253,12 +260,13 @@ fun OnboardingScreen(
             },
             modifier = Modifier.fillMaxWidth(),
             colors = textFieldColors,
+            shape = RectangleShape,
             singleLine = true,
             trailingIcon = {
                 if (isSearching) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(24.dp),
-                        color = Gold,
+                        color = accent,
                         strokeWidth = 2.dp
                     )
                 }
@@ -271,16 +279,16 @@ fun OnboardingScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp)
+                        .padding(top = Spacing.Snug)
                 ) {
                     items(searchResults) { address ->
                         val locationName = address.getAddressLine(0)
                             ?: "${address.locality}, ${address.countryName}"
-                        GlassCard(
+                        Panel(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 4.dp)
-                                .clickable { 
+                                .padding(vertical = Spacing.Tight)
+                                .clickable {
                                     selectedAddress = address
                                     viewModel.onSearchQueryChanged(locationName)
                                 }
@@ -288,7 +296,7 @@ fun OnboardingScreen(
                             Text(
                                 text = locationName,
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = Color.White
+                                color = Bone
                             )
                         }
                     }
@@ -298,8 +306,8 @@ fun OnboardingScreen(
              Text(
                 text = "No cities found. Try a different name.",
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray,
-                modifier = Modifier.padding(top = 8.dp)
+                color = Dim,
+                modifier = Modifier.padding(top = Spacing.Snug)
             )
         }
 
@@ -307,10 +315,10 @@ fun OnboardingScreen(
             val addr = selectedAddress!!
             val locationName = addr.getAddressLine(0)
                 ?: "${addr.locality}, ${addr.countryName}"
-            GlassCard(
+            Panel(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
+                    .padding(top = Spacing.Snug)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -319,13 +327,19 @@ fun OnboardingScreen(
                     Text(
                         text = locationName,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Gold,
+                        color = accent,
                         modifier = Modifier.weight(1f)
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    TextButton(onClick = { selectedAddress = null }) {
-                        Text("CHANGE", color = Color.Gray, style = MaterialTheme.typography.labelSmall)
-                    }
+                    Spacer(modifier = Modifier.width(Spacing.Snug))
+                    Text(
+                        text = "CHANGE",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Dim,
+                        modifier = Modifier.clickable(
+                            onClickLabel = "Change birth city",
+                            role = Role.Button,
+                        ) { selectedAddress = null }
+                    )
                 }
             }
             Text(
@@ -335,17 +349,20 @@ fun OnboardingScreen(
                     "zone changes, so charts near a time-zone boundary or on a daylight-saving " +
                     "transition date may be off by up to an hour.",
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray,
-                modifier = Modifier.padding(top = 8.dp)
+                color = Dim,
+                modifier = Modifier.padding(top = Spacing.Snug)
             )
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(Spacing.Section))
 
         // Confirm Button
-        Button(
+        PrimaryAction(
+            label = "Consult the Oracle",
+            enabled = canConfirm,
+            modifier = Modifier.fillMaxWidth(),
             onClick = {
-                val addr = selectedAddress ?: return@Button
+                val addr = selectedAddress ?: return@PrimaryAction
 
                 // We have no birth-location timezone lookup (see
                 // estimateZoneOffsetForLongitude's doc), so the birth
@@ -374,24 +391,8 @@ fun OnboardingScreen(
                     onSaved = onLocationSaved
                 )
             },
-            enabled = canConfirm,
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Gold,
-                contentColor = Color.Black,
-                disabledContainerColor = Color.DarkGray,
-                disabledContentColor = Color.Gray
-            )
-        ) {
-            Text(
-                text = "CONSULT THE ORACLE",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontFamily = MaterialTheme.typography.displayLarge.fontFamily,
-                    letterSpacing = 2.sp
-                )
-            )
-        }
+        )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(Spacing.Section))
     }
 }

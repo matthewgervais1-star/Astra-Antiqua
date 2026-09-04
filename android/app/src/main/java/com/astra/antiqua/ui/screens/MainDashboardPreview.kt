@@ -61,12 +61,26 @@ fun EgyptDashboardPreview() {
                         minuteInSign = 30,
                         secondInSign = 45,
                         house = 10
+                    ),
+                    // A received body in the sample so this preview also
+                    // exercises the wheel's reception ring and the shared
+                    // received-body tone from getPlanetColor.
+                    ClassicalPlanet.URANUS to AccuratePlanetPosition(
+                        planet = ClassicalPlanet.URANUS,
+                        longitude = 220.0,
+                        velocity = 0.05,
+                        isRetrograde = false,
+                        zodiacSign = ZodiacSign.SCORPIO,
+                        degreeInSign = 10,
+                        minuteInSign = 0,
+                        secondInSign = 0,
+                        house = 3
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
                 julianDay = 2451545.0
             )
-            
+
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
@@ -100,6 +114,17 @@ fun CarthageDashboardPreview() {
                         minuteInSign = 10,
                         secondInSign = 22,
                         house = 2
+                    ),
+                    ClassicalPlanet.NEPTUNE to AccuratePlanetPosition(
+                        planet = ClassicalPlanet.NEPTUNE,
+                        longitude = 300.0,
+                        velocity = 0.02,
+                        isRetrograde = true,
+                        zodiacSign = ZodiacSign.AQUARIUS,
+                        degreeInSign = 0,
+                        minuteInSign = 0,
+                        secondInSign = 0,
+                        house = 11
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
@@ -139,6 +164,17 @@ fun GreeceDashboardPreview() {
                         minuteInSign = 0,
                         secondInSign = 0,
                         house = 1
+                    ),
+                    ClassicalPlanet.PLUTO to AccuratePlanetPosition(
+                        planet = ClassicalPlanet.PLUTO,
+                        longitude = 190.0,
+                        velocity = 0.01,
+                        isRetrograde = false,
+                        zodiacSign = ZodiacSign.LIBRA,
+                        degreeInSign = 10,
+                        minuteInSign = 0,
+                        secondInSign = 0,
+                        house = 7
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
@@ -178,6 +214,17 @@ fun CanaanDashboardPreview() {
                         minuteInSign = 0,
                         secondInSign = 0,
                         house = 10
+                    ),
+                    ClassicalPlanet.URANUS to AccuratePlanetPosition(
+                        planet = ClassicalPlanet.URANUS,
+                        longitude = 60.0,
+                        velocity = 0.05,
+                        isRetrograde = false,
+                        zodiacSign = ZodiacSign.GEMINI,
+                        degreeInSign = 0,
+                        minuteInSign = 0,
+                        secondInSign = 0,
+                        house = 3
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
@@ -217,6 +264,17 @@ fun RomeDashboardPreview() {
                         minuteInSign = 0,
                         secondInSign = 0,
                         house = 4
+                    ),
+                    ClassicalPlanet.NEPTUNE to AccuratePlanetPosition(
+                        planet = ClassicalPlanet.NEPTUNE,
+                        longitude = 340.0,
+                        velocity = 0.02,
+                        isRetrograde = false,
+                        zodiacSign = ZodiacSign.PISCES,
+                        degreeInSign = 10,
+                        minuteInSign = 0,
+                        secondInSign = 0,
+                        house = 12
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },

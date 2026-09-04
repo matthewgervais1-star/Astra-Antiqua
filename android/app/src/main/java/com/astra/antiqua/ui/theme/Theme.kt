@@ -48,25 +48,38 @@ private fun schemeFor(ground: Color, accent: Color) = darkColorScheme(
     onError = ground,
 )
 
+/**
+ * A culture's accent, outside the theme.
+ *
+ * The culture-selection screen has to draw all five cultures at once, before
+ * any one of them is the active theme, so it needs this as a plain function
+ * rather than through LocalAccent. Keeping it here stops the mapping being
+ * copied into a screen and drifting.
+ */
+fun accentFor(culture: AncientCulture): Color = when (culture) {
+    AncientCulture.EGYPT -> AccentEgypt
+    AncientCulture.GREECE -> AccentGreece
+    AncientCulture.CANAAN -> AccentCanaan
+    AncientCulture.CARTHAGE -> AccentCarthage
+    AncientCulture.ROME -> AccentRome
+}
+
+/** A culture's ground, on the same terms as [accentFor]. */
+fun groundFor(culture: AncientCulture): Color = when (culture) {
+    AncientCulture.EGYPT -> GroundEgypt
+    AncientCulture.GREECE -> GroundGreece
+    AncientCulture.CANAAN -> GroundCanaan
+    AncientCulture.CARTHAGE -> GroundCarthage
+    AncientCulture.ROME -> GroundRome
+}
+
 @Composable
 fun AstraAntiquaTheme(
     selectedCulture: AncientCulture = AncientCulture.GREECE,
     content: @Composable () -> Unit
 ) {
-    val accent = when (selectedCulture) {
-        AncientCulture.EGYPT -> AccentEgypt
-        AncientCulture.GREECE -> AccentGreece
-        AncientCulture.CANAAN -> AccentCanaan
-        AncientCulture.CARTHAGE -> AccentCarthage
-        AncientCulture.ROME -> AccentRome
-    }
-    val ground = when (selectedCulture) {
-        AncientCulture.EGYPT -> GroundEgypt
-        AncientCulture.GREECE -> GroundGreece
-        AncientCulture.CANAAN -> GroundCanaan
-        AncientCulture.CARTHAGE -> GroundCarthage
-        AncientCulture.ROME -> GroundRome
-    }
+    val accent = accentFor(selectedCulture)
+    val ground = groundFor(selectedCulture)
     val lexicon = when (selectedCulture) {
         AncientCulture.GREECE -> LexiconDictionary.Greek
         AncientCulture.EGYPT -> LexiconDictionary.Egyptian
