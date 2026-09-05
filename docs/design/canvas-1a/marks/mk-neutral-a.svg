@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="The monogram: two A's as a ruined temple front">
+<title>The monogram: two A's as a ruined temple front</title>
+<g fill="currentColor" stroke="none">
+  <rect x="48" y="416" width="416" height="22"/>
+  <rect x="26" y="438" width="460" height="24"/>
+  <rect x="242" y="342" width="28" height="74"/>
+  <path d="M424 372 L442 416 H414 Z"/>
+</g>
+<g fill="none" stroke="currentColor" stroke-width="34" stroke-linejoin="miter">
+  <path d="M70 416 L142 88 H158 L230 416"/>
+  <path d="M282 416 L354 88 H370 L418 314"/>
+  <path d="M96 292 H416" stroke-width="26"/>
+</g>
+</svg>

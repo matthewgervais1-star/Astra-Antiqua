@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="The templum: the augur's quarter of sky, with the lituus laid across it">
+<title>The templum: the augur's quarter of sky, with the lituus laid across it</title>
+<g fill="none" stroke="currentColor" stroke-linejoin="miter">
+  <rect x="64" y="112" width="384" height="288" stroke-width="28"/>
+  <path d="M256 112 V400" stroke-width="16"/>
+  <path d="M64 256 H448" stroke-width="16"/>
+</g>
+<g fill="none" stroke="currentColor" stroke-linecap="round">
+  <path d="M150 372 C164 320 182 272 208 234" stroke-width="20"/>
+  <path d="M208 234 C224 200 264 198 276 224 C288 250 260 272 240 258 C226 248 230 228 248 226" stroke-width="20"/>
+</g>
+</svg>

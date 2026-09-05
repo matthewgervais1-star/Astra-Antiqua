@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="The Delphic tripod, as a struck coin device">
+<title>The Delphic tripod, as a struck coin device</title>
+<g fill="none" stroke="currentColor" stroke-width="18"><circle cx="256" cy="256" r="228"/></g>
+<g transform="translate(256,262) scale(0.66) translate(-256,-256)" fill="none" stroke="currentColor" stroke-width="36" stroke-linejoin="miter">
+  <path d="M136 176 C138 250 194 276 258 276 C322 276 376 248 374 160"/>
+  <path d="M124 180 L386 152" stroke-width="30"/>
+  <path d="M192 262 L128 440"/>
+  <path d="M326 258 L390 440"/>
+  <path d="M258 276 V446" stroke-width="28"/>
+  <path d="M96 444 H164" stroke-width="26"/>
+  <path d="M354 444 H422" stroke-width="26"/>
+  <path d="M224 450 H292" stroke-width="26"/>
+</g>
+</svg>
