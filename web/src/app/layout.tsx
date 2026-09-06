@@ -29,6 +29,18 @@ const spectral = localFont({
   ],
 });
 
+// Display-type prototype (docs/design/canvas-1a/DECISIONS.md). Spectral SC has
+// true small caps; regular Spectral's latin subset has no `smcp`, so asking for
+// small-caps there would get synthesised ones at the wrong weight.
+const spectralSc = localFont({
+  variable: "--font-spectral-sc",
+  display: "swap",
+  src: [
+    { path: "../fonts/spectral-sc-latin-400.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/spectral-sc-latin-500.woff2", weight: "500", style: "normal" },
+  ],
+});
+
 const plexMono = localFont({
   variable: "--font-plex-mono",
   display: "swap",
@@ -85,7 +97,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cinzel.variable} ${spectral.variable} ${plexMono.variable}`}
+      className={`${cinzel.variable} ${spectral.variable} ${spectralSc.variable} ${plexMono.variable}`}
     >
       <body className="flex min-h-screen flex-col text-bone">
         <AuthProvider>

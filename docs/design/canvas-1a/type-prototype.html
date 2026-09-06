@@ -1,0 +1,128 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Display type prototype: Cinzel against Spectral SC</title>
+<!--
+  The prototype Canvas 1a asked for: "dropping display caps to Spectral small
+  caps on the four non-Roman surfaces and keeping Cinzel for Rome and the
+  shell. That is a code change, not a font purchase. Cheap to prototype, and I
+  would want to see it before recommending it."
+
+  Open directly in a browser. Fonts load from web/src/fonts/ by relative path,
+  so this needs no dev server.
+-->
+<style>
+  @font-face { font-family: "Cinzel"; src: url("../../../web/src/fonts/cinzel-latin-var.woff2") format("woff2"); font-weight: 400 600; }
+  @font-face { font-family: "Spectral SC"; src: url("../../../web/src/fonts/spectral-sc-latin-400.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Spectral SC"; src: url("../../../web/src/fonts/spectral-sc-latin-500.woff2") format("woff2"); font-weight: 500; }
+  @font-face { font-family: "Spectral"; src: url("../../../web/src/fonts/spectral-latin-400.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "IBM Plex Mono"; src: url("../../../web/src/fonts/ibm-plex-mono-latin-400.woff2") format("woff2"); font-weight: 400; }
+
+  :root {
+    --bone: #e6decc; --prose: #d9d1bf; --dim: #9a917d; --faint: #6f6b60;
+    --rule: rgb(230 222 204 / 0.16);
+  }
+  body { margin: 0; padding: 40px; background: #171310; color: var(--bone);
+         font-family: "Spectral", Georgia, serif; }
+  h2 { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 400;
+       letter-spacing: 0.18em; color: var(--dim); margin: 44px 0 18px;
+       border-bottom: 1px solid var(--rule); padding-bottom: 8px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--rule); }
+  .col { padding: 26px 30px; }
+  .col + .col { border-left: 1px solid var(--rule); }
+  .tag { font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: 0.16em;
+         color: var(--faint); margin-bottom: 22px; }
+  .row { padding: 16px 0; border-bottom: 1px solid rgb(230 222 204 / 0.11); }
+  .row:last-child { border-bottom: 0; }
+  .cinzel { font-family: "Cinzel", Georgia, serif; }
+  /* The four non-Roman surfaces: Spectral SC, lowercased so its small capitals
+     engage, tracked tighter than Cinzel because small caps sit closer. */
+  .sc { font-family: "Spectral SC", Georgia, serif; text-transform: lowercase; }
+  .t-doorway { font-size: 58px; line-height: 1.25; }
+  .cinzel.t-doorway { letter-spacing: 0.1em; }
+  .sc.t-doorway { letter-spacing: 0.06em; }
+  .t-section { font-size: 24px; }
+  .cinzel.t-section { letter-spacing: 0.05em; }
+  .sc.t-section { letter-spacing: 0.04em; }
+  .t-label { font-size: 11.5px; }
+  .cinzel.t-label { letter-spacing: 0.2em; }
+  .sc.t-label { letter-spacing: 0.12em; }
+  .ground { display: flex; gap: 0; border: 1px solid var(--rule); margin-top: 8px; }
+  .ground > div { flex: 1; padding: 20px 18px; }
+  .note { color: var(--prose); font-size: 15px; line-height: 1.7; max-width: 62ch; }
+  .note b { color: var(--bone); font-weight: 400; }
+</style>
+
+<h2>THE ARGUMENT</h2>
+<p class="note">
+  Canvas 1a keeps Cinzel and then names a cost the brief never considered:
+  <b>a Roman inscriptional cap sets the titles for four cultures that are not Roman.</b>
+  "THE COUNCIL OF EL" in Trajanic caps is a small act of imperial typesetting, and the
+  product's claim is that five theologies read the same sky on equal terms. The proposed fix
+  is a code change rather than a font purchase: display drops to Spectral small caps on
+  Egypt, Greece, Canaan and Carthage, and Cinzel keeps Rome and the app shell.
+</p>
+
+<h2>DOORWAY TITLE &middot; 58PX</h2>
+<div class="grid">
+  <div class="col"><div class="tag">CINZEL &middot; AS IT SHIPS TODAY</div>
+    <div class="row cinzel t-doorway">CANAAN</div>
+    <div class="row cinzel t-doorway">CARTHAGE</div>
+    <div class="row cinzel t-doorway">ROME</div>
+  </div>
+  <div class="col"><div class="tag">SPECTRAL SC &middot; PROPOSED, NON-ROMAN ONLY</div>
+    <div class="row sc t-doorway">CANAAN</div>
+    <div class="row sc t-doorway">CARTHAGE</div>
+    <div class="row cinzel t-doorway">ROME</div>
+  </div>
+</div>
+
+<h2>SECTION HEAD &middot; 24PX &middot; THE LINE THE ARGUMENT IS ABOUT</h2>
+<div class="grid">
+  <div class="col"><div class="tag">CINZEL</div>
+    <div class="row cinzel t-section">THE COUNCIL OF EL</div>
+    <div class="row cinzel t-section">THE HALL OF MA'AT</div>
+    <div class="row cinzel t-section">THE DECREE OF THE TOPHET</div>
+    <div class="row cinzel t-section">THE AUSPICES OF THE DAY</div>
+  </div>
+  <div class="col"><div class="tag">SPECTRAL SC, ROME STAYS CINZEL</div>
+    <div class="row sc t-section">THE COUNCIL OF EL</div>
+    <div class="row sc t-section">THE HALL OF MA'AT</div>
+    <div class="row sc t-section">THE DECREE OF THE TOPHET</div>
+    <div class="row cinzel t-section">THE AUSPICES OF THE DAY</div>
+  </div>
+</div>
+
+<h2>SMALL LABEL &middot; 11.5PX &middot; WHERE SMALL CAPS ARE MOST AT RISK</h2>
+<div class="grid">
+  <div class="col"><div class="tag">CINZEL</div>
+    <div class="row cinzel t-label">THE CANAAN DOORWAY &middot; THE COUNCIL OF EL</div>
+    <div class="row cinzel t-label">CAST THE CHART</div>
+  </div>
+  <div class="col"><div class="tag">SPECTRAL SC</div>
+    <div class="row sc t-label">THE CANAAN DOORWAY &middot; THE COUNCIL OF EL</div>
+    <div class="row sc t-label">CAST THE CHART</div>
+  </div>
+</div>
+
+<h2>ON EACH CULTURE GROUND</h2>
+<div class="ground">
+  <div style="background:#1a1712"><div class="tag" style="color:#b59a55">EGYPT</div><div class="sc t-section">THE HALL OF MA'AT</div></div>
+  <div style="background:#171a1c"><div class="tag" style="color:#7c93a6">GREECE</div><div class="sc t-section">THE DAY'S ORACLE</div></div>
+  <div style="background:#1a1813"><div class="tag" style="color:#8a9268">CANAAN</div><div class="sc t-section">THE COUNCIL OF EL</div></div>
+  <div style="background:#191218"><div class="tag" style="color:#94648c">CARTHAGE</div><div class="sc t-section">THE DECREE OF THE TOPHET</div></div>
+  <div style="background:#1b1410"><div class="tag" style="color:#a5544a">ROME</div><div class="cinzel t-section">THE AUSPICES OF THE DAY</div></div>
+</div>
+
+<h2>PROOF THE SMALL CAPS ARE REAL, NOT SYNTHESISED</h2>
+<p class="note">
+  Spectral SC carries its small capitals on the lowercase codepoints. Measured at 100px:
+  in Spectral SC <b>H is 81px wide and h is 74px</b>, near cap width. In regular Spectral
+  <b>h is 58.2px</b>, a true lowercase. So the glyphs below are drawn small capitals, and
+  none of this relies on the browser scaling capitals down.
+</p>
+<div class="grid">
+  <div class="col"><div class="tag">SPECTRAL SC &middot; Hh</div>
+    <div class="row" style="font-family:'Spectral SC';font-size:64px">Hh Nn Rr</div></div>
+  <div class="col"><div class="tag">SPECTRAL &middot; Hh, FOR COMPARISON</div>
+    <div class="row" style="font-family:'Spectral';font-size:64px">Hh Nn Rr</div></div>
+</div>

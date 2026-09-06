@@ -52,6 +52,19 @@ const FAMILIES = [
       { style: "normal", weight: "500", file: "ibm-plex-mono-latin-500.woff2" },
     ],
   },
+  // Spectral SC carries TRUE small caps. Regular Spectral's latin subset has no
+  // `smcp` feature, so `font-variant-caps: small-caps` on it makes the browser
+  // synthesise them by scaling capitals down: thinner strokes, wrong
+  // proportions, and no longer weight-matched to Cinzel 600. Used by the
+  // display-type prototype on the four non-Roman surfaces.
+  {
+    family: "Spectral SC",
+    css: "family=Spectral+SC:wght@400;500",
+    picks: [
+      { style: "normal", weight: "400", file: "spectral-sc-latin-400.woff2" },
+      { style: "normal", weight: "500", file: "spectral-sc-latin-500.woff2" },
+    ],
+  },
 ];
 
 const ANDROID_OUT_DIR = path.join(

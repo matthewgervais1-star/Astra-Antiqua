@@ -1,55 +1,62 @@
 # Canvas 1a, and where it argues with the research
 
 Imported from the Claude Design project `Astra Antiqua Brand.dc.html`
-(project `42219d9c-93ce-4102-b92f-34c06c74f3f8`, canvas `1a`, artboard 1440px).
-The asset library extracted from it sits in `marks/` and `wordmark/`.
+(project `42219d9c-93ce-4102-b92f-34c06c74f3f8`). Extracted vector assets sit in
+`marks/` and `wordmark/`.
 
-Canvas 1a states that it **supersedes A1**. It is not a clean handoff of the
-brief. It reopens the tier 1 question, changes the answer for three cultures,
-and marks one of those changes as a placeholder it wants replaced.
+**Read the per-culture board, not A1.** The canvas carries several boards and
+they disagree. A0 offers candidates, A1 picks one per culture, and the board
+titled THE MARKS, PER CULTURE says `supersedes A1`. That last board is the
+handoff. An earlier version of this file quoted A1 and had Egypt and Greece
+wrong as a result.
 
 ## The move it makes
 
-The brief asked for five drawn instruments. Canvas 1a proposes something else:
+The brief asked for five drawn instruments. Canvas 1a splits the set by whether
+the culture wrote the thing down:
 
-> Tier 1 is now the attested signs themselves. Where the sign exists as an
-> encoded character, palaeographers have already drawn it from the material
-> record and it is set as type. The augur's staff and the coin devices never
-> existed as signs, so they are drawn flat from their named sources.
+> Where the sign exists as an encoded character, palaeographers have already
+> drawn it from the material record and it is set as type. The augur's staff and
+> the coin devices never existed as signs, so they are drawn flat from their
+> named sources.
 
-So the set splits by whether the culture wrote the thing down. Egypt, Greece
-and Canaan get real Unicode characters. Rome gets a drawing, because the lituus
-existed as an object and never as a written sign.
+This is a stronger form of the honesty claim than the brief asked for. A modern
+drawing of a balance sits one remove further from the record than the glyph
+Egyptian scribes used to write "balance".
 
-This is a stronger form of the product's honesty claim than the brief asked for.
-The brief said "attested in the material record". Canvas 1a answers that the
-most attested form of a sign is the sign, and that a modern drawing of a balance
-is one remove further from the record than the glyph Egyptian scribes used to
-write "balance".
+The guidelines make it a fourth type role. `guidelines/type-epigraphic.html`
+names the faces: Hieroglyphs at `U+13080`, Ugaritic at `U+1039B U+1038D`,
+**GFS Didot** for the Greek `U+0395`, and Symbols 2 for `U+2625`.
 
-## The six tier-1 tiles
+## The marks, per culture, as the board has them
 
-| Culture | Canvas 1a | Source it cites | Research said |
-|---|---|---|---|
-| Egypt | 𓍝 the balance | Gardiner U38, U+1335D | the balance, drawn from Papyrus of Ani |
-| Greece | Ε the E at Delphi | Plutarch, *De E apud Delphos* | the Delphic tripod |
-| Canaan | 𐎛𐎍 ʾIl, "El" | Ugaritic U+1039B, U+1038D | a cluster of driven wedge signs |
-| Carthage | the sign of Tanit | tophet stelae | **refused at tier 1**, moved to tier 2 |
-| Rome | the lituus | Caesar's denarius, RRC 443/1 | the lituus |
-| Neutral | the monogram | ours | not specified |
+| Culture | Marks | Form |
+|---|---|---|
+| Egypt | ☥ the ankh `U+2625`, 𓂀 the wedjat `U+13080`, 𓀻 the seated king `U+1303B` | all typeset |
+| Greece | Ω omega `U+03A9`, the tripod (after the Delphic stater), Athena's owl (after the tetradrachm) | typeset + two drawn |
+| Canaan | the Baal stele (Louvre AO 15775), 𐎛𐎍 ʾIl "El" | raster mask + typeset |
+| Carthage | Tanit launcher (outline, no crescent), Tanit header (crescent, solid disc, arms up), Tanit with crescent (full stela form) | all drawn |
+| Rome | the she-wolf (Capitoline bronze), Augustus (Prima Porta), the aquila, the eagle, the lituus (after RRC 443/1) | two raster masks + three drawn |
+| Neutral | the monogram, two A's as a ruined temple front | drawn |
 
-Egypt and Canaan are refinements rather than reversals. The research wanted a
-balance and got the balance sign; it wanted Ugaritic wedges and got the two
-letters that spell the god whose council Canaan's surface actually convenes.
-Canvas 1a is right that `𐎛𐎍` beats a generic wedge cluster, and it asks for a
-Ugaritic reader to confirm the spelling before it ships.
+Egypt's balance (`𓍝`, Gardiner U38, `U+1335D`) appears on A0 and A1 and **not**
+on the per-culture board. The designer's note explains the shape of Egypt's row:
+Ramses was the one statue with no source supplied, and rather than draw a
+colossus from memory they left Egypt to its attested signs.
 
-Greece and Carthage are reversals, and only one of them is defended.
+## Decisions taken
 
-## Carthage, which the designer flags as broken
+| Question | Answer |
+|---|---|
+| Carthage at tier 1 | **Ship Tanit**, accepting the two named costs |
+| Greece | **All three**: the owl, the omega, and the tripod |
+| Rome tier 2 | **The aquila, Augustus and the she-wolf** |
+| Display type | **Prototype** Spectral small caps on the four non-Roman surfaces |
 
-The research refused Tanit at tier 1 on three grounds. Canvas 1a promotes it
-anyway and says plainly what that costs:
+### What shipping Tanit costs, on the record
+
+The research refused Tanit at tier 1 on three grounds. The designer defends two
+and concedes the third:
 
 > Two of them I can defend against in the drawing: the tripod collision is
 > answered by keeping Tanit in outline while Greece is three separate strokes
@@ -59,49 +66,42 @@ anyway and says plainly what that costs:
 
 It also breaks the tier system. The same sign now stands at tier 1 and tier 2,
 so C1's rule that Tanit never appears without the word Carthage is broken by the
-launcher, which has no label by definition. The designer split the treatments
-(plain outline for the launcher in `marks/em-tanit.svg`, solid disc with
-upturned arms and a heavier frame for headers in `marks/em-tanit-hdr.svg`) and
-calls the result "a placeholder with two real costs, not a resolution".
+launcher, which has no label by definition. The two cuts are drawn to be told
+apart by weight and terminal rather than size: `marks/em-tanit.svg` is the plain
+outline for the launcher, `marks/em-tanit-hdr.svg` the solid disc with upturned
+arms for headers.
 
-**What it wants instead:** the cothon, and a Salammbo harbour survey plan to
-trace it from. Its words: "a harbour plan is a surveyed document and no glyph
-substitutes for it". Failing that, it proposes commissioning a Punic-free
-abstraction of the harbour.
+The cothon stays the better answer and needs a Salammbo harbour survey to trace
+from. The designer's words: "a harbour plan is a surveyed document and no glyph
+substitutes for it."
 
-## Where it says the research is wrong
+### Rome tier 2, and the aquila argument that was overruled
 
-**The aquila at tier 2.** Canvas 1a accepts the brief's reasoning and then turns
-it around: the brief refused the aquila at tier 1 for meaning rather than
-contamination, and meaning does not change with a caption.
+Canvas 1a argued the aquila fails on the brief's own logic, since the brief
+refused it at tier 1 for meaning rather than contamination and meaning does not
+change with a caption. It drew a templum instead (`marks/dr-templum.svg`).
 
-> A section head for the auspices carrying a legionary standard says "the army"
-> beside a page about lawful days.
+That argument was heard and overruled: Rome tier 2 carries the aquila, Augustus
+and the she-wolf. The templum stays in `marks/` unused rather than deleted.
 
-It proposes a captioned **templum** in that slot instead, the augur's marked-out
-quarter of sky with the lituus laid across it, and drew it: `marks/dr-templum.svg`.
-The aquila moves to editorial only.
+## The crescent, which the research and the canvas half agree on
 
-**The crescent and disc.** The research refused it because it collapses into the
-star and crescent at 48px. Canvas 1a agrees for the launcher and disagrees for
-the header, on the grounds that the stelae carry the disc under a crescent with
-horns up. It keeps the plain disc at launcher size and shows what is lost in
-`marks/em-tanit-cr.svg`.
+The research refused the crescent and disc because it collapses into the star
+and crescent at 48px. The canvas agrees for the launcher and disagrees for the
+header, on the grounds that the stelae carry the disc under a crescent with
+horns up. `marks/em-tanit-cr.svg` is the full stela form, kept so the loss is
+visible: "the crescent is the first thing to go at 48px".
 
-**Baal, the she-wolf and Augustus.** All three traced from photographs supplied
-to the project, all three refused at tier 1, and the reasoning is the brief's
-own: a deity portrait or an imperial statue says "five civilisations" where the
-set needs to say "five ways of reading the sky". It offers them for tier 2 and
-editorial on request. Egypt's Ramses is left undrawn because no source arrived,
-and the designer refused to draw a colossus from memory.
+## The type question
 
-## The Cinzel question, answered
+`guidelines/type-display.html` still specs `CINZEL 400/600 · 52 / 40 / 26 / 22 ·
+TRACKING 0.16EM`. Small caps exist only in the designer's note, not in the spec,
+which is why this is a prototype rather than an adoption.
 
-Canvas 1a keeps Cinzel and gives three product-specific reasons: a Trajanic cap
-is the museum wall label's actual voice rather than an allusion to it; it is the
-only face a reader sees in caps at large size, where a less conventional display
-face would compete with the marks; and it already pairs with Spectral at the
-same optical weight.
+The note keeps Cinzel and gives three reasons: a Trajanic cap is the museum wall
+label's actual voice rather than an allusion to it; it is the only face a reader
+sees in caps at large size, where a less conventional display face would compete
+with the marks; and it already pairs with Spectral at matched optical weight.
 
 Then it raises an objection the brief never considered:
 
@@ -110,32 +110,37 @@ Then it raises an objection the brief never considered:
 > typesetting, and the product's whole claim is that five theologies read the
 > same sky on equal terms.
 
-Its proposed fix is a code change rather than a font purchase: drop display caps
-to Spectral small caps on the four non-Roman surfaces, keep Cinzel for Rome and
-the shell. It wants to prototype that before recommending it.
+The proposed fix is a code change: display caps drop to Spectral small caps on
+Egypt, Greece, Canaan and Carthage, and Cinzel keeps Rome and the app shell.
 
 ## What this costs in engineering
 
-1. **The launcher marks are type, not drawings.** Egyptian Hieroglyphs (U+13000)
-   and Ugaritic (U+10380) are in none of the three shipped faces. Canvas 1a
-   already answers this: "THE ANDROID FOREGROUND SHIPS AS A VECTOR OUTLINE OF
-   THE GLYPH, NOT AS LIVE TEXT". So the signs must be converted to outlines at
-   build time and committed as vectors. No runtime font dependency.
-2. **The hieroglyph goes thin at 48px.** Canvas 1a names the fix as a weighted
-   cut of the same sign, same outline, heavier stroke, no shape change, and
-   calls it "type work, not illustration". Three glyphs need that cut.
-3. **Mask fitting is solved.** Setting the glyph at 0.66 of the canvas puts it
-   inside the 72-unit safe circle under every mask.
-4. **Every mark paints with `currentColor`**, so a culture accent or bone ink is
-   a CSS change rather than a second file.
+1. **Three tier-1 marks are type, not drawings.** Egyptian Hieroglyphs
+   (`U+13000`), Ugaritic (`U+10380`) and GFS Didot are in none of the three
+   shipped faces. The canvas answers this for icons: "THE ANDROID FOREGROUND
+   SHIPS AS A VECTOR OUTLINE OF THE GLYPH, NOT AS LIVE TEXT". Any in-app
+   epigraphic use needs those faces added to `web/scripts/fetch-fonts.mjs`.
+2. **The hieroglyph goes thin at 48px.** The named fix is a weighted cut of the
+   same sign, same outline, heavier stroke, no shape change. The designer calls
+   it "type work, not illustration".
+3. **Two Rome marks and one Canaan mark are raster.** The she-wolf, Augustus and
+   the Baal stele are PNG alpha masks in the project's `assets/`, coloured by a
+   `background` behind a `mask`, which is what lets each take its culture accent
+   without a second file. They will not scale to a 512 launcher or become an
+   Android vector drawable without being traced to paths first.
+4. **Mask fitting is solved.** Setting a glyph at 0.66 of the canvas puts it
+   inside the 72-unit safe circle under every launcher mask.
+5. **Every extracted vector paints with `currentColor`**, so a culture accent is
+   a CSS change rather than a second file. The monogram's architrave is the one
+   hardcoded colour (`#B59A55`) and should take `var(--accent)` when wired in.
 
-## Open, needing a decision
+## Still needed from the design project
 
-- Carthage at tier 1: keep the Tanit placeholder, or hold the slot for the cothon.
-- Greece at tier 1: the E at Delphi, or the tripod the research chose.
-- Rome at tier 2: the aquila, or the templum.
-- The four non-Roman surfaces: keep Cinzel caps, or prototype Spectral small caps.
-- Whether to trace Baal, the she-wolf and Augustus for tier 2 and editorial.
+These are binary and could not be pulled through the browser bridge. They need
+either `/design-login` run once in an interactive session, so `DesignSync` can
+read the project directly, or a download.
 
-None of these is implemented. `marks/` holds what Canvas 1a drew, including the
-alternatives, so any of them can be taken without redrawing.
+- `assets/icon-shewolf.png`, `assets/icon-augustus.png` (Rome tier 2, chosen)
+- `assets/icon-baal-stele.png`, `assets/icon-baal.png` (Canaan)
+- `assets/canaan-baal-stele.png`, `assets/rome-augustus.png`, `assets/rome-shewolf.png`
+- `uploads/BAAL.jpg`, `uploads/Statue-Augustus.jpg`, `uploads/rqgvol5zn55g1.jpeg`

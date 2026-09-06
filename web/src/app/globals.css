@@ -33,6 +33,7 @@
   --color-rule-row: rgb(230 222 204 / 0.11);
 
   --font-display: var(--font-cinzel), "Cinzel", Georgia, serif;
+  --font-display-sc: var(--font-spectral-sc), "Spectral SC", Georgia, serif;
   --font-body: var(--font-spectral), "Spectral", Georgia, serif;
   --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
@@ -58,29 +59,75 @@ body {
   --accent-strong-border: color-mix(in srgb, var(--accent) 48%, transparent);
 }
 
+/*
+ * DISPLAY-TYPE PROTOTYPE, per docs/design/canvas-1a/DECISIONS.md.
+ *
+ * Cinzel is a Trajanic cap, so setting "THE COUNCIL OF EL" in it is a small act
+ * of imperial typesetting, and the product's claim is that five theologies read
+ * the same sky on equal terms. The four non-Roman surfaces drop display to
+ * Spectral SC; Rome and the app shell keep Cinzel, where a Roman cap is the
+ * right voice rather than an imposed one.
+ *
+ * This rebinds one token, so no component changes. Every `font-display` class
+ * resolves var(--font-display) against the body that declares it.
+ *
+ * Spectral SC is a real small-caps family. Do not swap this for
+ * `font-variant-caps: small-caps` on regular Spectral: the latin subset has no
+ * `smcp` table, so browsers synthesise by scaling capitals, which thins the
+ * strokes and loses the weight match against Cinzel 600.
+ *
+ * Still open: Cinzel's tracking (0.16em at display sizes) is set per component
+ * and reads loose on small caps, which sit closer by design. Tune after this
+ * has been looked at, not before.
+ */
 body[data-pantheon="egypt"] {
   --ground: var(--color-ground-egypt);
   --accent: var(--color-accent-egypt);
+  --font-display: var(--font-display-sc);
 }
 
 body[data-pantheon="greece"] {
   --ground: var(--color-ground-greece);
   --accent: var(--color-accent-greece);
+  --font-display: var(--font-display-sc);
 }
 
 body[data-pantheon="canaan"] {
   --ground: var(--color-ground-canaan);
   --accent: var(--color-accent-canaan);
+  --font-display: var(--font-display-sc);
 }
 
 body[data-pantheon="carthage"] {
   --ground: var(--color-ground-carthage);
   --accent: var(--color-accent-carthage);
+  --font-display: var(--font-display-sc);
 }
 
+/* Rome keeps Cinzel: a Roman inscriptional cap on the Roman surface. */
 body[data-pantheon="rome"] {
   --ground: var(--color-ground-rome);
   --accent: var(--color-accent-rome);
+}
+
+/*
+ * Spectral SC carries its small capitals on the LOWERCASE codepoints, and this
+ * product writes display text pre-uppercased ("CANAAN", not "Canaan"). Swapping
+ * the family alone therefore renders ordinary Spectral capitals and no small
+ * caps at all. Lowercasing the display text is what makes the small caps
+ * engage; the glyphs are drawn small capitals, so nothing is synthesised and
+ * nothing reads as lowercase on screen.
+ *
+ * Tracking comes down with it. Cinzel is tracked at 0.1em to 0.16em because
+ * Trajanic caps need the air; small caps sit closer, and inheriting the wide
+ * setting makes them read as scattered.
+ */
+body[data-pantheon="egypt"] :is(h1, h2, h3, h4, h5, h6, .font-display),
+body[data-pantheon="greece"] :is(h1, h2, h3, h4, h5, h6, .font-display),
+body[data-pantheon="canaan"] :is(h1, h2, h3, h4, h5, h6, .font-display),
+body[data-pantheon="carthage"] :is(h1, h2, h3, h4, h5, h6, .font-display) {
+  text-transform: lowercase;
+  letter-spacing: 0.06em;
 }
 
 :root {

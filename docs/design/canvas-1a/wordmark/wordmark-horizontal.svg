@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 1424 132" width="1424" height="132" role="img" aria-label="ASTRA ANTIQVA">
+<title>ASTRA ANTIQVA, horizontal lockup</title>
+<!--
+  Twelve drawn caps, uniform stroke, tracking set at 26% of the advance.
+  Letter advance is 120 units; the word gap between ASTRA and ANTIQVA is 160.
+  Apex and vertex are cut flat (the H52 in A and V), so the two are the same
+  form inverted, which is why the V never reads as a substitution for U.
+  Imported from assets/wordmark-horizontal.svg in the Claude Design project.
+-->
+<g fill="none" stroke="currentColor" stroke-width="12" stroke-linejoin="miter">
+  <g transform="translate(0 0)"><path d="M6 100 L44 6 H52 L90 100"/><path d="M22 68 H74"/></g>
+  <g transform="translate(120 0)"><path d="M84 24 C76 4 22 0 16 28 C10 56 82 54 84 76 C86 100 30 104 14 84"/></g>
+  <g transform="translate(240 0)"><path d="M4 8 H92"/><path d="M48 8 V100"/></g>
+  <g transform="translate(360 0)"><path d="M14 100 V6"/><path d="M14 6 H56 C86 6 86 54 56 54 H14"/><path d="M50 54 L88 100"/></g>
+  <g transform="translate(480 0)"><path d="M6 100 L44 6 H52 L90 100"/><path d="M22 68 H74"/></g>
+
+  <g transform="translate(640 0)"><path d="M6 100 L44 6 H52 L90 100"/><path d="M22 68 H74"/></g>
+  <g transform="translate(760 0)"><path d="M14 100 V6 L82 100 V6"/></g>
+  <g transform="translate(880 0)"><path d="M4 8 H92"/><path d="M48 8 V100"/></g>
+  <g transform="translate(968 0)"><path d="M48 6 V100"/></g>
+  <g transform="translate(1052 0)"><path d="M48 6 C80 6 88 30 88 53 C88 76 80 100 48 100 C16 100 8 76 8 53 C8 30 16 6 48 6 Z"/><path d="M58 78 L94 112"/></g>
+  <g transform="translate(1180 0)"><path d="M6 4 L44 98 H52 L90 4"/></g>
+  <g transform="translate(1300 0)"><path d="M6 100 L44 6 H52 L90 100"/><path d="M22 68 H74"/></g>
+</g>
+</svg>
