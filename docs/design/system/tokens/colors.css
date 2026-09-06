@@ -1,0 +1,57 @@
+:root {
+  /* ---- culture grounds ---- */
+  --ground-egypt: #1A1712;
+  --ground-greece: #171A1C;
+  --ground-canaan: #1A1813;
+  --ground-carthage: #191218;
+  --ground-rome: #1B1410;
+  --ground-neutral: #171310;
+
+  /* ---- culture accents, one per culture, never decorative ---- */
+  --accent-egypt: #B59A55;    /* gold */
+  --accent-greece: #7C93A6;   /* aegean */
+  --accent-canaan: #8A9268;   /* cedar */
+  --accent-carthage: #94648C; /* tyrian */
+  --accent-rome: #A5544A;     /* pompeian red */
+  --accent-neutral: #B59A55;
+
+  /* ---- inks ---- */
+  --ink-bone: #E6DECC;   /* display type, active values */
+  --ink-prose: #D9D1BF;  /* running prose */
+  --ink-dim: #9A917D;    /* secondary, captions */
+  --ink-faint: #6F6B60;  /* labels, disabled, rules on ink */
+
+  /* ---- signals ---- */
+  --signal-harmony: #B59A55;
+  --signal-conflict: #B56B71;
+
+  /* ---- surfaces and rules ---- */
+  --surface-page: #0B0907;
+  --surface-card: #121010;
+  --rule-incised: #2A241C;
+  --rule-hairline: #4A3E28;
+
+  /* ---- light ground (print, share cards) ---- */
+  --light-ground: #E6DECC;
+  --light-ink: #171310;
+  --light-ink-dim: #4A453C;
+  --light-accent: #8A6E2E;  /* accent darkened to hold 4.5:1 on bone */
+
+  /* ---- semantic aliases ---- */
+  --bg: var(--surface-page);
+  --bg-card: var(--surface-card);
+  --text-display: var(--ink-bone);
+  --text-body: var(--ink-prose);
+  --text-muted: var(--ink-dim);
+  --text-label: var(--ink-faint);
+  --accent: var(--accent-neutral);
+  --border: var(--rule-incised);
+}
+
+/* Scope a subtree to one culture: <div data-culture="rome"> */
+[data-culture="egypt"]    { --ground: var(--ground-egypt);    --accent: var(--accent-egypt); }
+[data-culture="greece"]   { --ground: var(--ground-greece);   --accent: var(--accent-greece); }
+[data-culture="canaan"]   { --ground: var(--ground-canaan);   --accent: var(--accent-canaan); }
+[data-culture="carthage"] { --ground: var(--ground-carthage); --accent: var(--accent-carthage); }
+[data-culture="rome"]     { --ground: var(--ground-rome);     --accent: var(--accent-rome); }
+[data-culture="neutral"]  { --ground: var(--ground-neutral);  --accent: var(--accent-neutral); }

@@ -7,6 +7,12 @@
       "runtimeArgs": ["run", "dev"],
       "port": 3000,
       "cwd": "web"
+    },
+    {
+      "name": "design-system",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/serve-design-system.mjs"],
+      "port": 8731
     }
   ]
 }

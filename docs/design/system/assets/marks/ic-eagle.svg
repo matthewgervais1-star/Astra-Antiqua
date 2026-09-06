@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="The eagle, solid display cut">
+<title>The eagle, solid display cut</title>
+<g fill="currentColor" stroke="none">
+  <circle cx="256" cy="104" r="34"/>
+  <path d="M288 88 L344 100 L286 124 Z"/>
+  <path d="M214 140 L298 140 L312 296 L200 296 Z"/>
+  <path d="M214 158 L156 132 L150 168 L96 138 L88 178 L36 148 L30 196 L120 232 L212 254 Z"/>
+  <path d="M298 158 L356 132 L362 168 L416 138 L424 178 L476 148 L482 196 L392 232 L300 254 Z"/>
+  <path d="M202 292 L226 400 L256 356 L286 400 L310 292 Z"/>
+  <rect x="220" y="292" width="26" height="120"/>
+  <rect x="266" y="292" width="26" height="120"/>
+  <rect x="168" y="410" width="176" height="26"/>
+</g>
+</svg>

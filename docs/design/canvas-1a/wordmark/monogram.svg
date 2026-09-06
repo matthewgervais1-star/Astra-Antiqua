@@ -6,7 +6,7 @@
   stylobate. The second A's right stroke stops at 178,76 instead of reaching
   the baseline: that is the broken column, with its fallen fragment beside it.
   The architrave is the accent (#B59A55 as authored). When this is wired into
-  the app it should take var(--accent) so it follows the active culture.
+  the app it should take the accent custom property so it follows the active culture.
   Imported from assets/monogram.svg in the Claude Design project.
 -->
 <g fill="currentColor" stroke="none">

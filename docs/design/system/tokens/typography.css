@@ -1,0 +1,40 @@
+:root {
+  /* display: Cinzel, caps, wide tracking. Never lowercase, never body copy. */
+  --type-display-xl: 52px;
+  --type-display-l: 40px;
+  --type-display-m: 26px;
+  --type-display-s: 22px;
+  --track-display: 0.16em;
+  --leading-display: 1.1;
+
+  /* the small-caps prototype on the four non-Roman surfaces sits closer */
+  --track-display-sc: 0.06em;
+
+  /* prose: Spectral */
+  --type-prose-l: 19px;
+  --type-prose-m: 17px;
+  --type-prose-s: 15px;
+  --leading-prose: 1.65;
+
+  /* data and microcopy: IBM Plex Mono */
+  --type-data-m: 15px;
+  --type-data-s: 12px;
+  --type-data-xs: 11px;
+  --track-data: 0.04em;
+  --track-microcopy: 0.18em;
+  --track-label: 0.14em;
+  --leading-data: 2;
+
+  /* epigraphic signs, as a share of their tile */
+  --sign-scale-single: 0.62;  /* one glyph in a square tile */
+  --sign-scale-pair: 0.44;    /* two-glyph run, e.g. Ugaritic */
+
+  /* deity glyphs: drawn on a 24 grid, 1.5 nominal stroke, shown at 16 to 24 px */
+  --glyph-size-inline: 16px;
+  --glyph-size-table: 20px;
+  --glyph-size-wheel: 24px;
+
+  --text-display-font: var(--font-display);
+  --text-body-font: var(--font-prose);
+  --text-data-font: var(--font-data);
+}

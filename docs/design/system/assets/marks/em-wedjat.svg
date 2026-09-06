@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="The wedjat, Egypt tier 2">
+<title>The wedjat, Egypt tier 2</title>
+<g fill="none" stroke="currentColor" stroke-width="20" stroke-linejoin="miter">
+  <path d="M84 248 C146 168 300 158 404 214" stroke-width="22"/>
+  <path d="M104 268 C182 328 322 322 404 218"/>
+  <path d="M92 190 C158 116 320 106 428 172" stroke-width="18"/>
+  <path d="M214 308 C206 352 200 384 216 410" stroke-width="18"/>
+  <path d="M318 300 C368 320 408 306 412 262" stroke-width="18"/>
+</g>
+<g fill="currentColor" stroke="none"><circle cx="248" cy="244" r="34"/></g>
+</svg>

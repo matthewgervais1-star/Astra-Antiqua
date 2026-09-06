@@ -1,0 +1,29 @@
+:root {
+  /* square corners everywhere except the app icon, which the platform masks */
+  --radius: 0;
+  --radius-icon-squircle: 22%;
+
+  /* one rule weight, three inks */
+  --rule-width: 1px;
+  --rule-structural: 1px solid var(--rule-incised);
+  --rule-data: 1px solid var(--ink-faint);
+  --rule-active: 1px solid var(--accent);
+
+  --space-1: 6px;
+  --space-2: 12px;
+  --space-3: 18px;
+  --space-4: 26px;
+  --space-5: 34px;
+  --space-6: 44px;
+  --space-7: 64px;
+  --space-8: 80px;
+
+  --board-padding: var(--space-6);
+  --tile-lg: 170px;
+  --tile-md: 150px;
+  --tile-sm: 48px;
+
+  /* no gradients, no shadows, no bevels, no glow, anywhere */
+  --shadow: none;
+  --transition: none;
+}
