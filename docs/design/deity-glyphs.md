@@ -17,7 +17,10 @@ Every entry carries a status:
   a planetary sign is modern work.
 - **invented.** no ancient basis. Made for this product, and labelled so.
 
-The result across fifty entries: **27 attested, 22 composed, 1 invented.**
+The result across fifty entries: **28 attested, 21 composed, 1 invented.**
+
+(An earlier version of this line read 27 and 22. The tables below are the
+record, they were counted, and the summary was one out.)
 
 The rule that mattered most: the three received bodies cannot have attested
 glyphs, because the culture never knew the planet. All fifteen came back
