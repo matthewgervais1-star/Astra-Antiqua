@@ -48,3 +48,7 @@ next-env.d.ts
 /data/astra-antiqua.sqlite-journal
 /data/astra-antiqua.sqlite-shm
 /data/astra-antiqua.sqlite-wal
+
+# design-system specimen build outputs (scripts/specimens)
+scripts/specimens/html/
+scripts/specimens/out/

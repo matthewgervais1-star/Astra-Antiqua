@@ -1,0 +1,22 @@
+/*
+ * Standalone build of the site stylesheet for the design-system preview cards.
+ * Imports globals.css untouched so the utilities and the body[data-pantheon]
+ * culture rules are byte-for-byte what the site ships, then widens content
+ * scanning to the rendered specimen HTML.
+ */
+@import "../../src/app/globals.css";
+@source "./html";
+
+/*
+ * next/font/local binds these on <html> at runtime. Without them every
+ * font-display, font-body and font-mono declaration is invalid at computed-value
+ * time and silently falls back to the UA serif. The faces themselves come from
+ * Google Fonts in the design project (see wrap-cards.mjs), the same families the
+ * site vendors as woff2.
+ */
+:root {
+  --font-cinzel: "Cinzel";
+  --font-spectral: "Spectral";
+  --font-spectral-sc: "Spectral SC";
+  --font-plex-mono: "IBM Plex Mono";
+}

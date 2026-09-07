@@ -1,0 +1,317 @@
+[
+ {
+  "file": "components/chrome/CultureChip.tsx",
+  "name": "CultureChip",
+  "exportKind": "named",
+  "role": "The CULTURE: EGYPT ▾ chip in the SubBar and instrument bar; opens a five-item menu that rewrites ?culture= in the URL and persists the choice.",
+  "spec": "CultureSwitch",
+  "viewport": "700x220",
+  "sampleProps": "{}"
+ },
+ {
+  "file": "components/chrome/FeedbackRow.tsx",
+  "name": "FeedbackRow",
+  "exportKind": "named",
+  "role": "The on-device verdict line under a reading: AGAINST THIS READING → IT WAS SO · IT WAS NOT SO · KEPT ON THIS DEVICE.",
+  "spec": "Button",
+  "viewport": "700x220",
+  "sampleProps": "{ readingId: \"rome:2026-09-06:mars-scorpio-10\", noun: \"READING\" }"
+ },
+ {
+  "file": "components/chrome/HorizonControl.tsx",
+  "name": "HorizonControl",
+  "exportKind": "named",
+  "role": "The D · W · S · Y segmented control that moves the reader between the day, week, season and year horizons.",
+  "spec": "Button",
+  "viewport": "700x220",
+  "sampleProps": "{ active: \"week\" }"
+ },
+ {
+  "file": "components/chrome/Lintel.tsx",
+  "name": "Lintel",
+  "exportKind": "named",
+  "role": "The nave header: TODAY · VOICES · LEARN on the left, ASTRA ANTIQVA centered, CHARTS · ACCOUNT on the right; collapses to an INDEX disclosure below 720px.",
+  "spec": "none",
+  "viewport": "700x140",
+  "sampleProps": "{ active: \"today\" }"
+ },
+ {
+  "file": "components/chrome/MethodFooter.tsx",
+  "name": "MethodFooter",
+  "exportKind": "named",
+  "role": "The honesty footer every reading chassis ends with: ASTRONOMY-ENGINE EPHEMERIS · WHOLE-SIGN · ORBS DOCUMENTED → METHOD, and NO ACCOUNT NEEDED · AN ACCOUNT ADDS SYNC.",
+  "spec": "MethodNote",
+  "viewport": "700x220",
+  "sampleProps": "{}"
+ },
+ {
+  "file": "components/chrome/NaveHead.tsx",
+  "name": "NaveHead",
+  "exportKind": "named",
+  "role": "Centered page head: mono kicker, 64x1 accent rule, Cinzel headline, optional sub block, closing rule.",
+  "spec": "SectionHead",
+  "viewport": "700x220",
+  "sampleProps": "{ kicker: \"THE SIBYLLINE BOOKS · 6 SEPTEMBER 2026\", children: \"MARS ENTERS SCORPIO\", sub: <span className=\"font-mono text-[11px] tracking-[0.14em] text-dim\">MARS 0°00' SCORPIO → 14°22' · THE TENTH HOUSE</span> }"
+ },
+ {
+  "file": "components/chrome/OrbBar.tsx",
+  "name": "OrbBar",
+  "exportKind": "named",
+  "role": "3px orb-tightness track under an aspect row: the fill shrinks as the orb widens toward the maximum.",
+  "spec": "none",
+  "viewport": "700x220",
+  "sampleProps": "{ orb: 1.4, maxOrb: 8, tone: \"conflict\" }"
+ },
+ {
+  "file": "components/chrome/ReceptionNote.tsx",
+  "name": "ReceptionNote",
+  "exportKind": "named",
+  "role": "The honesty note on outer-planet surfaces: names the modern body, says it was received into the ancient manner, and points at METHOD.",
+  "spec": "MethodNote",
+  "viewport": "700x220",
+  "sampleProps": "{ intro: \"PLOUTON IS A MODERN BODY, RECEIVED INTO THE GREEK MANNER.\" }"
+ },
+ {
+  "file": "components/chrome/SectionDivider.tsx",
+  "name": "SectionDivider",
+  "exportKind": "named",
+  "role": "Centered Cinzel caption flanked by 1px rules; breaks a reading's spine into sections.",
+  "spec": "SectionHead",
+  "viewport": "700x220",
+  "sampleProps": "{ label: \"THE PLANETS IN THEIR HOUSES\" }"
+ },
+ {
+  "file": "components/chrome/Skeleton.tsx",
+  "name": "Skeleton",
+  "exportKind": "named",
+  "role": "Loading state for a reading: three faint rules and a dim mono label. Never spins.",
+  "spec": "none",
+  "viewport": "700x220",
+  "sampleProps": "{ label: \"COMPUTING THE SKY…\" }"
+ },
+ {
+  "file": "components/chrome/SpanBar.tsx",
+  "name": "SpanBar",
+  "exportKind": "named",
+  "role": "12-month span track: a positioned fill between two percents with bone tick marks for exact passes (a transit's span across the year).",
+  "spec": "none",
+  "viewport": "700x220",
+  "sampleProps": "{ startPct: 18, endPct: 61, ticks: [27, 44, 58], tone: \"conflict\" }"
+ },
+ {
+  "file": "components/chrome/SubBar.tsx",
+  "name": "SubBar",
+  "exportKind": "named",
+  "role": "46px context row under the Lintel: truncating context line, optional D·W·S·Y control, culture chip, and SYNC flag.",
+  "spec": "none",
+  "viewport": "700x220",
+  "sampleProps": "{ context: \"6 SEPTEMBER 2026 · SUN 13°48' VIRGO · MOON 2°10' CAPRICORN\", horizon: \"day\", showSync: true }"
+ },
+ {
+  "file": "components/chrome/SyncFlag.tsx",
+  "name": "SyncFlag",
+  "exportKind": "named",
+  "role": "The SYNC ON / SYNC OFF indicator in the SubBar, a tiny client island over the auth state.",
+  "spec": "Badge",
+  "viewport": "700x220",
+  "sampleProps": "{}"
+ },
+ {
+  "file": "components/chrome/Votive.tsx",
+  "name": "Votive",
+  "exportKind": "named",
+  "role": "The votive instruction: a two-line imperative in accent Cinzel, bordered top and bottom, closing a reading.",
+  "spec": "VotiveInstruction",
+  "viewport": "700x220",
+  "sampleProps": "{ children: \"POUR THE LIBATION BEFORE THE FIRST HOUR.\\nSPEAK THE NAME OF MARS AND GO OUT.\" }"
+ },
+ {
+  "file": "components/chrome/WheelSvg.tsx",
+  "name": "WheelSvg",
+  "exportKind": "named",
+  "role": "Server-safe pure SVG natal wheel: three rings, twelve spokes, sign abbreviations, planet glyphs (nudged inward on collision), aspect lines and an accent ascendant line.",
+  "spec": "none",
+  "viewport": "700x520",
+  "sampleProps": "{ chart: { sun: 25.5, moon: 98.2, mercury: 12.8, venus: 52.1, mars: 224.37, jupiter: 160.3, saturn: 305.7, uranus: 288.4, neptune: 283.1, pluto: 232.9 }, ascendant: 128.0, aspects: [{ planetA: \"mars\", planetB: \"saturn\", kind: \"square\" }, { planetA: \"moon\", planetB: \"neptune\", kind: \"opposition\" }, { planetA: \"sun\", planetB: \"jupiter\", kind: \"trine\" }, { planetA: \"venus\", planetB: \"moon\", kind: \"sextile\" }], accentPlanets: [\"mars\"], size: 400, caption: \"NATAL · MARS 14°22' SCORPIO · THE TENTH HOUSE\" }"
+ },
+ {
+  "file": "components/home/AspectsRail.tsx",
+  "name": "AspectsRail",
+  "exportKind": "named",
+  "role": "Desktop right rail: the day's tightest aspects in orb with orb bars and per-culture ruling labels, plus the long-transit box pinned to the bottom.",
+  "spec": "DataRow",
+  "viewport": "700x360",
+  "sampleProps": "{ aspects: [{ key: 'mars-square-saturn', a: 'mars', b: 'saturn', kind: 'square', kindGlyph: '□', symbolA: '♂', symbolB: '♄', nameA: 'MARS', nameB: 'SATURNUS', orb: 1.35, maxOrb: 6, orbLabel: '1°21′', tone: 'conflict', rulingLabel: 'THE WALL HOLDS' }, { key: 'venus-trine-jupiter', a: 'venus', b: 'jupiter', kind: 'trine', kindGlyph: '△', symbolA: '♀', symbolB: '♃', nameA: 'VENUS', nameB: 'IUPPITER', orb: 2.58, maxOrb: 7, orbLabel: '2°35′', tone: 'harmony', rulingLabel: 'THE GIFT IS RECEIVED' }, { key: 'sun-sextile-moon', a: 'sun', b: 'moon', kind: 'sextile', kindGlyph: '⚹', symbolA: '☉', symbolB: '☽', nameA: 'SOL', nameB: 'LUNA', orb: 4.1, maxOrb: 5, orbLabel: '4°06′', tone: 'quiet', rulingLabel: 'A DOOR AJAR' }], longTransit: { status: 'cta' } }"
+ },
+ {
+  "file": "components/home/CenterDecree.tsx",
+  "name": "CenterDecree",
+  "exportKind": "named",
+  "role": "The day's reading: institution kicker, headline, two prose paragraphs, the votive instruction, the feedback row, and the three horizon links (week, season, year).",
+  "spec": "Card",
+  "viewport": "700x360",
+  "sampleProps": "{ institution: 'THE AUSPICES OF THE DAY', weekday: 'SUNDAY', dateLong: 'SEPTEMBER 6, 2026', reading: { headline: 'MARS SQUARES SATURNUS IN THE SCORPION', paragraphs: ['Mars at 14°22′ Scorpio meets Saturnus at 13°01′ Aquarius by square, one degree and twenty-one minutes from exact. The augurs read a wall where the road was expected.', 'Venus at 2°35′ from a trine to Iuppiter softens the afternoon. What is offered in good faith is received; what is forced is refused.'], tone: 'tension' }, votive: 'FINISH THE WORK ALREADY BEGUN.\\nSTART NOTHING NEW BEFORE DUSK.', now: new Date('2026-09-06T00:00:00Z') }"
+ },
+ {
+  "file": "components/home/CompactSkyTable.tsx",
+  "name": "CompactSkyTable",
+  "exportKind": "named",
+  "role": "Mobile-only compact ephemeris: the Sun plus the bodies carrying the day's tightest aspects, as a bordered four-row box.",
+  "spec": "DataRow",
+  "viewport": "700x420",
+  "sampleProps": "{ rows: [{ planet: 'sun', symbol: '☉', name: 'SOL', deg: '13', min: '48', sign3: 'VIR', retrograde: false, received: false }, { planet: 'mars', symbol: '♂', name: 'MARS', deg: '14', min: '22', sign3: 'SCO', retrograde: false, received: false }, { planet: 'saturn', symbol: '♄', name: 'SATURNUS', deg: '13', min: '01', sign3: 'AQU', retrograde: true, received: false }, { planet: 'uranus', symbol: '♅', name: 'CAELUS', deg: '29', min: '55', sign3: 'TAU', retrograde: true, received: true }] }"
+ },
+ {
+  "file": "components/home/DayPressureModule.tsx",
+  "name": "DayPressureModule",
+  "exportKind": "named",
+  "role": "'Where the day falls': today's transits bucketed into the culture's four whole-sign house groups, each with a tightness bar, a level label, and a sentence. Rendered only when a natal chart exists.",
+  "spec": "DataRow",
+  "viewport": "700x300",
+  "sampleProps": "{ groups: [{ name: 'THE GRANARY', sub: 'GRAIN & RATIONS', level: 'strained', levelLabel: 'STRAINED', orb: 1.35, maxOrb: 6, tone: 'conflict', sentence: 'Mars squares your tenth-house Saturn from 14°22′ Scorpio. The rations are counted twice today.' }, { name: 'THE HOUSE OF THE KA', sub: 'HOME & FOREBEARS', level: 'loud', levelLabel: 'LOUD', orb: 0.7, maxOrb: 7, tone: 'harmony', sentence: 'Venus trines your fourth-house Moon. The hearth is well kept.' }, { name: 'THE RIVERBANK', sub: 'KIN & NEIGHBOURS', level: 'quiet', levelLabel: 'QUIET', orb: null, maxOrb: 6, tone: 'quiet', sentence: 'Nothing in orb touches the third, seventh, or eleventh today.' }, { name: 'THE TEMPLE', sub: 'RITE & SOLITUDE', level: 'quiet', levelLabel: 'QUIET', orb: 4.9, maxOrb: 5, tone: 'quiet', sentence: 'The Sun sextiles your twelfth-house Mercury at wide orb. A door ajar, no more.' }] }"
+ },
+ {
+  "file": "components/home/EphemerisRail.tsx",
+  "name": "EphemerisRail",
+  "exportKind": "named",
+  "role": "Desktop left rail: the ten-body 00:00 UTC ephemeris, the next stations and ingresses within ninety days, and the method line linking to /method.",
+  "spec": "DataRow",
+  "viewport": "700x420",
+  "sampleProps": "{ rows: [{ planet: 'sun', symbol: '☉', name: 'SOL', deg: '13', min: '48', sign3: 'VIR', retrograde: false, received: false }, { planet: 'moon', symbol: '☽', name: 'LUNA', deg: '27', min: '10', sign3: 'CNC', retrograde: false, received: false }, { planet: 'mercury', symbol: '☿', name: 'MERCURIUS', deg: '02', min: '19', sign3: 'LIB', retrograde: false, received: false }, { planet: 'venus', symbol: '♀', name: 'VENUS', deg: '08', min: '40', sign3: 'LIB', retrograde: false, received: false }, { planet: 'mars', symbol: '♂', name: 'MARS', deg: '14', min: '22', sign3: 'SCO', retrograde: false, received: false }, { planet: 'jupiter', symbol: '♃', name: 'IUPPITER', deg: '11', min: '15', sign3: 'AQU', retrograde: false, received: false }, { planet: 'saturn', symbol: '♄', name: 'SATURNUS', deg: '13', min: '01', sign3: 'AQU', retrograde: true, received: false }, { planet: 'uranus', symbol: '♅', name: 'CAELUS', deg: '29', min: '55', sign3: 'TAU', retrograde: true, received: true }, { planet: 'neptune', symbol: '♆', name: 'NEPTUNUS', deg: '01', min: '12', sign3: 'ARI', retrograde: true, received: true }, { planet: 'pluto', symbol: '♇', name: 'DIS PATER', deg: '02', min: '48', sign3: 'AQU', retrograde: true, received: true }], stationsAndIngresses: [{ key: 'saturn-direct', date: new Date('2026-09-28T00:00:00Z'), dateLabel: '28 SEP', text: 'SATURNUS STATIONS DIRECT · 12°44′ AQU', conflict: false }, { key: 'mars-ingress-sag', date: new Date('2026-10-14T00:00:00Z'), dateLabel: '14 OCT', text: 'MARS ENTERS THE ARCHER', conflict: true }, { key: 'mercury-rx', date: new Date('2026-11-02T00:00:00Z'), dateLabel: '02 NOV', text: 'MERCURIUS STATIONS RETROGRADE · 27°30′ SCO', conflict: true }] }"
+ },
+ {
+  "file": "components/home/LongTransitBox.tsx",
+  "name": "LongTransitBox",
+  "exportKind": "named",
+  "role": "The desktop long-transit box: the tightest active or upcoming slow-body span read against the saved chart with a progress bar, a 'none' state, or a CAST THE FIRST CHART call to action.",
+  "spec": "Card",
+  "viewport": "700x300",
+  "sampleProps": "{ data: { status: 'active', span: { id: 'saturn-square-mars', transitPlanet: 'saturn', natalKey: 'mars', natalLongitude: 224.37, aspectKind: 'square', start: new Date('2026-06-12T00:00:00Z'), end: new Date('2027-02-03T00:00:00Z'), passes: [new Date('2026-07-20T00:00:00Z'), new Date('2026-11-02T00:00:00Z'), new Date('2027-01-15T00:00:00Z')], transitSign: 'Aquarius', transitDegree: 13.02 }, title1: 'SATURNUS IN THE WATER-BEARER', title2: 'SQUARES YOUR MARS IN THE SCORPION', rangeLabel: '12 JUN 2026 → 03 FEB 2027', progressPct: 37, href: '/transits/saturn-square-mars' } }"
+ },
+ {
+  "file": "components/home/PermissionsModule.tsx",
+  "name": "PermissionsModule",
+  "exportKind": "named",
+  "role": "The day's permissions in the culture's own pair (PROCEED/REFRAIN, OFFER/WITHHOLD, ASK/DO NOT ASK, BRING/HOLD BACK, PAY/DEFER): two columns derived from today's aspects. Rendered only when a natal chart exists.",
+  "spec": "Card",
+  "viewport": "700x300",
+  "sampleProps": "{ culture: 'rome', permissions: { proceed: ['Settle a debt owed since spring', 'Repair what is already standing', 'Speak plainly to the one above you'], refrain: ['Signing what you have not read twice', 'Opening a quarrel with a neighbour', 'Beginning the journey before dusk'] }, tone: 'tension' }"
+ },
+ {
+  "file": "components/home/TransitProgress.tsx",
+  "name": "TransitProgress",
+  "exportKind": "named",
+  "role": "The long-transit box's 3px progress track: an accent fill from 0 to the current position with a 9px square marking now. Clamps to 0..100.",
+  "spec": "none",
+  "viewport": "700x220",
+  "sampleProps": "{ progressPct: 37 }"
+ },
+ {
+  "file": "components/home/TransitTeaser.tsx",
+  "name": "TransitTeaser",
+  "exportKind": "named",
+  "role": "Mobile-only compact long-transit link: one bordered line naming the active span and its end date, the 'no slow body in reach' state, or the CAST THE FIRST CHART call to action.",
+  "spec": "Button",
+  "viewport": "700x220",
+  "sampleProps": "{ data: { status: 'active', title1: 'SATURNUS IN THE WATER-BEARER', title2: 'SQUARES YOUR MARS IN THE SCORPION', rangeLabel: '12 JUN 2026 → 03 FEB 2027', progressPct: 37, href: '/transits/saturn-square-mars' } }"
+ },
+ {
+  "file": "components/reading/BirthForm.tsx",
+  "name": "BirthForm",
+  "exportKind": "named",
+  "role": "The birth-details form that casts a chart: date, time, and a combobox birthplace search (curated cities plus a debounced OpenStreetMap lookup) with a manual-coordinates fallback.",
+  "spec": "none",
+  "viewport": "700x520",
+  "sampleProps": "{ onSubmit: (values) => console.log(values), submitting: false, initialValues: { date: \"1989-08-19\", time: \"14:22\", cityLabel: \"Toledo, Spain\", latitude: 39.8628, longitude: -4.0273 }, submitLabel: \"CAST THE CHART\" }"
+ },
+ {
+  "file": "components/reading/ReadingDisplay.tsx",
+  "name": "ReadingDisplay",
+  "exportKind": "named",
+  "role": "The full natal reading spine: header with birth metadata, the ten placements with cultural lines, what each body governs, the twelve whole-sign houses with occupants, and the aspects grouped by kind with OrbBar tracks.",
+  "spec": "none",
+  "viewport": "700x520",
+  "sampleProps": "{ culture: \"greece\", reading: { culture: \"greece\", summary: \"The Hellenistic chart for the moment of your birth has been cast in the names of Olympus.\", placements: [ { planet: \"sun\", longitude: 146.55, sign: \"Leo\", degreeInSign: 26.55, deityName: \"Helios\", deityEpithet: \"Who Sees All Things\", domain: \"Vitality, purpose, the self that is seen.\", culturalLine: \"Helios drives his chariot across the sky and reports to the gods what he has seen.\", signReading: \"In Leo the sun stands in its own house; the light is undivided.\" }, { planet: \"mars\", longitude: 224.37, sign: \"Scorpio\", degreeInSign: 14.37, deityName: \"Ares\", deityEpithet: \"God of War\", domain: \"Drive, conflict, the will to act.\", culturalLine: \"Ares, whom even Zeus called the most hateful of the gods, is honored for the same reason he is feared.\", signReading: \"Mars at 14°22' Scorpio holds its force below the surface and spends it all at once.\" }, { planet: \"pluto\", longitude: 222.10, sign: \"Scorpio\", degreeInSign: 12.10, deityName: \"Plouton\", deityEpithet: \"the host below, called Wealth because none dared say Death\", domain: \"Loss, inheritance, what the ground keeps.\", culturalLine: \"Plouton is a modern body, received into the Greek manner.\", signReading: \"Pluto in Scorpio: the generation that inherits its own excavations.\" } ], aspects: [ { a: \"mars\", b: \"pluto\", kind: \"conjunction\", exactAngle: 2.3, orb: 2.3, deityA: \"Ares\", deityB: \"Plouton\", verbLine: \"ARES STANDS WITH PLOUTON.\", pairTheme: \"Force bound to the underworld's patience.\", culturalReflection: \"The Greeks kept the two apart in cult; here they share one degree of the wheel.\" } ] }, birth: { utcDate: new Date(\"1989-08-19T12:22:00Z\"), timezone: \"Europe/Madrid\", offsetMinutes: 120 }, inputs: { date: \"1989-08-19\", time: \"14:22\", cityLabel: \"Toledo, Spain\", latitude: 39.8628, longitude: -4.0273 }, ascendant: 251.4, midheaven: 168.9, chartId: \"chart-sample\" }"
+ },
+ {
+  "file": "components/charts/SaveChartPanel.tsx",
+  "name": "SaveChartPanel",
+  "exportKind": "named",
+  "role": "The bordered save panel under a cast reading: name, relationship select, primary checkbox, and the SAVED confirmation state.",
+  "spec": "Card",
+  "viewport": "700x360",
+  "sampleProps": "{ values: { date: \"1989-08-19\", time: \"14:22\", cityLabel: \"Toledo, Spain\", latitude: 39.8628, longitude: -4.0273 }, initialName: \"Me\", initialRelationship: \"self\", initialPrimary: true, onSaved: (saved) => console.log(saved.id) }"
+ },
+ {
+  "file": "components/waitlist/WaitListForm.tsx",
+  "name": "WaitListForm",
+  "exportKind": "named",
+  "role": "The wait-list roll entry form: email plus ENTER button, optionally name, culture preference select, and a background textarea, posting to /api/wait-list and reporting your ordinal on the roll.",
+  "spec": "none",
+  "viewport": "700x300",
+  "sampleProps": "{ compact: false }"
+ },
+ {
+  "file": "components/transits/TransitEmptyState.tsx",
+  "name": "TransitEmptyState",
+  "exportKind": "named",
+  "role": "Empty state for the long-transit surfaces when no chart is saved or the span id is unknown: kicker, accent rule, Cinzel headline, one sentence, bordered CTA to cast a chart, mono anonymity note.",
+  "spec": "Card",
+  "viewport": "700x220",
+  "sampleProps": "{ showAllLink: true }"
+ },
+ {
+  "file": "components/transits/TransitSubBar.tsx",
+  "name": "TransitSubBar",
+  "exportKind": "named",
+  "role": "The 46px mono sub-bar for /transits/[id]: context line on the left, the span's date range and the culture chip on the right.",
+  "spec": "SectionHead",
+  "viewport": "700x220",
+  "sampleProps": "{ context: \"LONG TRANSIT · SATURNUS □ NATAL SOL\", span: \"OCT 2025 → JUL 2027\" }"
+ },
+ {
+  "file": "components/voices/EnterVoiceCta.tsx",
+  "name": "EnterVoiceCta",
+  "exportKind": "named",
+  "role": "The full-width bordered CTA on a /voices/[culture] page: persists the chosen culture and routes into the day's reading in that voice.",
+  "spec": "Button",
+  "viewport": "700x220",
+  "sampleProps": "{ culture: \"rome\", label: \"ENTER THE DAY IN THE ROMAN VOICE\" }"
+ },
+ {
+  "file": "components/voices/TodaySpecimen.tsx",
+  "name": "TodaySpecimen",
+  "exportKind": "named",
+  "role": "A bordered specimen card on a /voices/[culture] page: today's sky composed as that culture's decree, cut to the headline and first sentence, with the date line above.",
+  "spec": "Card",
+  "viewport": "700x360",
+  "sampleProps": "{ culture: \"egypt\" }"
+ },
+ {
+  "file": "components/synastry/PartyPicker.tsx",
+  "name": "PartyPicker",
+  "exportKind": "named",
+  "role": "One party slot on the synastry instrument: a bordered card with the chart's name and year·city, plus a CHANGE A PARTY ▾ dropdown of the other saved charts.",
+  "spec": "Card",
+  "viewport": "700x360",
+  "sampleProps": "{ chart: { id: \"c-owner\", name: \"The Owner\", relationship: \"self\", date: \"1987-11-04\", time: \"06:42\", cityLabel: \"Rome\", latitude: 41.9028, longitude: 12.4964, primary: true, createdAt: \"2026-01-12T09:00:00.000Z\" }, charts: [ { id: \"c-owner\", name: \"The Owner\", relationship: \"self\", date: \"1987-11-04\", time: \"06:42\", cityLabel: \"Rome\", latitude: 41.9028, longitude: 12.4964, primary: true, createdAt: \"2026-01-12T09:00:00.000Z\" }, { id: \"c-partner\", name: \"Livia\", relationship: \"partner\", date: \"1990-03-21\", time: \"14:15\", cityLabel: \"Carthage\", latitude: 36.8531, longitude: 10.3231, primary: false, createdAt: \"2026-02-03T18:30:00.000Z\" }, { id: \"c-sister\", name: \"Nefertari\", relationship: \"family\", date: \"1984-07-09\", time: \"23:05\", cityLabel: \"Thebes\", latitude: 25.7188, longitude: 32.6573, primary: false, createdAt: \"2026-02-20T11:00:00.000Z\" } ], excludeId: \"c-partner\", onSelect: (id) => {} }"
+ },
+ {
+  "file": "components/matrix/TranslationMatrix.tsx",
+  "name": "TranslationMatrix",
+  "exportKind": "named",
+  "role": "The ten-by-five reference table: every tracked body beside its deity name in each of the five cultures, with a gold rule where the received bodies begin and a mono note linking to /method.",
+  "spec": "DataRow",
+  "viewport": "700x520",
+  "sampleProps": "{}"
+ },
+ {
+  "file": "components/LearnTOC.tsx",
+  "name": "LearnTOC",
+  "exportKind": "named",
+  "role": "Every Learn page's footer: the ALL SECTIONS divider and the full table of contents as numbered, bordered rows, the current page in the accent color.",
+  "spec": "DataRow",
+  "viewport": "700x420",
+  "sampleProps": "{ current: \"/learn/houses\" }"
+ }
+]
