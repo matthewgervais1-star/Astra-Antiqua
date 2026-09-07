@@ -7,5 +7,8 @@ type Props = ImgHTMLAttributes<HTMLImageElement> & {
 
 export default function Image({ fill, priority, quality, placeholder, unoptimized, alt, ...rest }: Props) {
   void fill; void priority; void quality; void placeholder; void unoptimized;
+  // A plain <img> is the whole purpose of this stub: it stands in for next/image
+  // under a static render where Next's loader does not exist.
+  // eslint-disable-next-line @next/next/no-img-element
   return <img alt={alt ?? ""} {...rest} />;
 }
