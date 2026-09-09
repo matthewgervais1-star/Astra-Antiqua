@@ -4,7 +4,6 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import {
   PLANETS,
-  PLANET_SYMBOLS,
   isReceived,
   type Culture,
 } from "@/data/cultures";
@@ -13,6 +12,7 @@ import { formatOffset, type ResolvedBirth } from "@/lib/birthDateTime";
 import { CULTURE_LABELS } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import { PLANET_AREAS } from "@/data/planetAreas";
+import { DeityGlyph } from "@/components/chrome/DeityGlyph";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { OrbBar, type OrbTone } from "@/components/chrome/OrbBar";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
@@ -122,14 +122,15 @@ export function ReadingDisplay({
           {reading.placements.map((p) => {
             const received = isReceived(p.planet);
             const header = (
-              <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <span
                   className={cn(
-                    "font-mono text-[12px] uppercase tracking-[0.1em]",
+                    "inline-flex items-center gap-[6px] font-mono text-[12px] uppercase tracking-[0.1em]",
                     received ? "text-[var(--accent)]" : "text-bone",
                   )}
                 >
-                  {PLANET_SYMBOLS[p.planet]} {p.deityName.toUpperCase()}
+                  <DeityGlyph body={p.planet} culture={culture} size={16} />
+                  {p.deityName.toUpperCase()}
                   <span className="ml-2 font-body text-[13px] normal-case italic text-dim">
                     {p.deityEpithet}
                   </span>
@@ -181,11 +182,12 @@ export function ReadingDisplay({
               <div key={planet} className="border-t border-rule-row pt-4">
                 <div
                   className={cn(
-                    "font-mono text-[11px] uppercase tracking-[0.14em]",
+                    "flex items-center gap-[6px] font-mono text-[11px] uppercase tracking-[0.14em]",
                     received ? "text-[var(--accent)]" : "text-bone",
                   )}
                 >
-                  {PLANET_SYMBOLS[planet]} {deity.name.toUpperCase()} · {area.area.toUpperCase()}
+                  <DeityGlyph body={planet} culture={culture} size={16} />
+                  {deity.name.toUpperCase()} · {area.area.toUpperCase()}
                 </div>
                 <p className="mt-2 font-body text-[14px] leading-[1.6] text-prose">{area.blurb}</p>
               </div>
@@ -221,13 +223,14 @@ export function ReadingDisplay({
                 <ul className="mt-3 flex flex-col gap-2">
                   {h.occupants.map((p) => (
                     <li key={p.planet} className="flex items-start gap-2 font-body text-[14px] leading-[1.6] text-prose">
+                      {/* The prose line box is 14px at leading 1.6, 22.4px tall; a 3px top offset centres the 16px glyph on its first line. */}
                       <span
                         className={cn(
-                          "font-mono text-[13px]",
+                          "mt-[3px] flex font-mono text-[13px]",
                           isReceived(p.planet) ? "text-[var(--accent)]" : "text-bone",
                         )}
                       >
-                        {PLANET_SYMBOLS[p.planet]}
+                        <DeityGlyph body={p.planet} culture={culture} size={16} />
                       </span>
                       <span>{houseReading(culture, p.planet, h.house)}</span>
                     </li>

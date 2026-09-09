@@ -234,6 +234,7 @@ function ReadingExperienceImpl({ explicitCulture }: ReadingExperienceImplProps) 
                 ascendant={state.angles.ascendant}
                 aspects={wheelAspects}
                 accentPlanets={[...RECEIVED_BODIES]}
+                culture={culture}
               />
             </div>
             {culture && reading ? (

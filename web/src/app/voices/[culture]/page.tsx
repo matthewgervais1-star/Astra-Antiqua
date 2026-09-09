@@ -6,7 +6,6 @@ import {
   CULTURE_LABELS,
   PLANETS,
   PLANET_LABELS,
-  PLANET_SYMBOLS,
   RECEIVED_BODIES,
   isCulture,
   isReceived,
@@ -21,6 +20,7 @@ import { NaveShell } from "@/components/chrome/NaveShell";
 import { NaveHead } from "@/components/chrome/NaveHead";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
+import { DeityGlyph } from "@/components/chrome/DeityGlyph";
 import { VoiceScope } from "@/components/voices/VoiceScope";
 import { TodaySpecimen } from "@/components/voices/TodaySpecimen";
 import { EnterVoiceCta } from "@/components/voices/EnterVoiceCta";
@@ -103,9 +103,10 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
                     </span>
                   </div>
                 ) : null}
-                <div className="grid grid-cols-[104px_1fr] items-baseline gap-x-4 gap-y-1 border-t border-rule-row py-3 last:border-b sm:grid-cols-[104px_150px_1fr]">
-                  <span className="font-mono text-[11px] tracking-[0.08em] text-dim">
-                    {PLANET_SYMBOLS[planet]} {PLANET_LABELS[planet].toUpperCase()}
+                <div className="grid grid-cols-[104px_1fr] items-center gap-x-4 gap-y-1 border-t border-rule-row py-3 last:border-b sm:grid-cols-[104px_150px_1fr]">
+                  <span className="inline-flex items-center gap-[6px] font-mono text-[11px] tracking-[0.08em] text-dim">
+                    <DeityGlyph body={planet} culture={culture} size={16} />
+                    {PLANET_LABELS[planet].toUpperCase()}
                   </span>
                   <span
                     className={cn(

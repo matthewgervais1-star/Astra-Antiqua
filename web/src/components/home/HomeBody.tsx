@@ -50,6 +50,7 @@ export function HomeBody() {
       <div className="grid grid-cols-1 min-[1100px]:grid-cols-[310px_1fr_330px]">
         <EphemerisRail
           className="hidden border-b border-rule min-[1100px]:block min-[1100px]:border-b-0 min-[1100px]:border-r"
+          culture={bundle.culture}
           rows={bundle.ephemerisRows}
           stationsAndIngresses={bundle.stationsAndIngresses}
         />
@@ -63,10 +64,15 @@ export function HomeBody() {
           now={bundle.now}
         />
 
-        <CompactSkyTable className="px-6 pb-8 min-[1100px]:hidden md:px-14" rows={bundle.compactSkyRows} />
+        <CompactSkyTable
+          className="px-6 pb-8 min-[1100px]:hidden md:px-14"
+          culture={bundle.culture}
+          rows={bundle.compactSkyRows}
+        />
 
         <AspectsRail
           className="hidden border-t border-rule min-[1100px]:flex min-[1100px]:border-t-0 min-[1100px]:border-l"
+          culture={bundle.culture}
           aspects={bundle.aspectRows}
           longTransit={bundle.longTransit}
         />

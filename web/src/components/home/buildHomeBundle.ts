@@ -1,6 +1,5 @@
 import {
   PLANETS,
-  PLANET_SYMBOLS,
   isReceived,
   type Culture,
   type Planet,
@@ -50,7 +49,6 @@ const ASPECT_GLYPH: Readonly<Record<AspectKind, string>> = {
 
 export interface EphemerisRow {
   planet: Planet;
-  symbol: string;
   name: string;
   deg: string;
   min: string;
@@ -73,8 +71,6 @@ export interface AspectRow {
   b: Planet;
   kind: AspectKind;
   kindGlyph: string;
-  symbolA: string;
-  symbolB: string;
   nameA: string;
   nameB: string;
   orb: number;
@@ -148,7 +144,6 @@ function buildEphemerisRows(
     const retrograde = wrapDelta(todayChart[planet], tomorrowChart[planet]) < 0;
     return {
       planet,
-      symbol: PLANET_SYMBOLS[planet],
       name: DEITY_MATRIX[culture][planet].name.toUpperCase(),
       deg,
       min,
@@ -202,8 +197,6 @@ function buildAspectRows(
       b: aspect.b,
       kind: aspect.kind,
       kindGlyph: ASPECT_GLYPH[aspect.kind],
-      symbolA: PLANET_SYMBOLS[aspect.a],
-      symbolB: PLANET_SYMBOLS[aspect.b],
       nameA: DEITY_MATRIX[culture][aspect.a].name.toUpperCase(),
       nameB: DEITY_MATRIX[culture][aspect.b].name.toUpperCase(),
       orb: aspect.orb,

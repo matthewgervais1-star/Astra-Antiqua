@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { isReceived, PLANET_SYMBOLS } from "@/data/cultures";
+import { isReceived } from "@/data/cultures";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { DEITY_MATRIX } from "@/data/deities";
 import { ASPECT_VERBS } from "@/data/aspectVerbs";
@@ -11,6 +11,7 @@ import { TRANSIT_SPINE, type SlowBody } from "@/data/transitSpine";
 import { houseReading } from "@/lib/houseReading";
 import { findSpanById } from "@/lib/transitSpans";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
+import { DeityGlyph } from "@/components/chrome/DeityGlyph";
 import { FeedbackRow } from "@/components/chrome/FeedbackRow";
 import { NaveHead } from "@/components/chrome/NaveHead";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
@@ -47,6 +48,9 @@ import {
 } from "@/components/transits/spineTemplates";
 
 const FALLBACK_HOUSE_GROUP = { name: "", sub: "" } as const;
+
+/** natalDegreeSide leads a sun or moon point with these words; the glyph goes between them and the deity name. */
+const NATAL_PREFIX = "YOUR NATAL ";
 
 export interface TransitDetailProps {
   id: string;
@@ -96,14 +100,24 @@ export function TransitDetail({ id }: TransitDetailProps) {
   const pointKey = isPointPlanetKey(span.natalKey) ? span.natalKey : null;
 
   const { sign: natalSign, degree: natalDegree } = longitudeToSign(span.natalLongitude);
-  const degreesLine = [
-    PLANET_SYMBOLS[span.transitPlanet],
-    transitDeity.toUpperCase(),
-    formatDegMin(span.transitDegree),
-    span.transitSign.toUpperCase(),
-    kindGlyph,
-    natalDegreeSide(culture, span, natalSign, natalDegree),
-  ].join(" ");
+  const natalSide = natalDegreeSide(culture, span, natalSign, natalDegree);
+  const natalWords = pointKey ? natalSide.slice(NATAL_PREFIX.length) : natalSide;
+  const degreesLine = (
+    <span className="inline-flex flex-wrap items-center justify-center gap-x-[6px]">
+      <DeityGlyph body={span.transitPlanet} culture={culture} size={16} />
+      <span>{transitDeity.toUpperCase()}</span>
+      <span>{formatDegMin(span.transitDegree)}</span>
+      <span>{span.transitSign.toUpperCase()}</span>
+      <span>{kindGlyph}</span>
+      {pointKey ? (
+        <>
+          <span>{NATAL_PREFIX.trim()}</span>
+          <DeityGlyph body={pointKey} culture={culture} size={16} />
+        </>
+      ) : null}
+      <span>{natalWords}</span>
+    </span>
+  );
 
   const season = seasonWord(span.end);
   const releaseYear = span.end.getFullYear();

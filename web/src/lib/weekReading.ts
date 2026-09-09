@@ -1,5 +1,5 @@
 import type { Culture, Planet } from "@/data/cultures";
-import { PLANETS, PLANET_SYMBOLS } from "@/data/cultures";
+import { PLANETS } from "@/data/cultures";
 import { computeAspects, longitudeToSign, type AspectKind, type ZodiacSign } from "@/data/sampleChart";
 import { computeChart } from "@/lib/ephemeris";
 import { findYearIngresses } from "@/lib/yearForecast";
@@ -12,13 +12,23 @@ import type { SavedNatal } from "@/lib/savedNatal";
 export type WeekTone = "harmony" | "tension" | "quiet";
 export type RomeDayFlag = "F" | "N" | "C";
 
+/**
+ * The day's shorthand as data. WeekNave renders it: the renderer draws each
+ * body as a DeityGlyph in the active culture and prints ASPECT_GLYPH,
+ * SIGN_ABBR, the arrow and EXACT around the glyphs.
+ */
+export type WeekShorthand =
+  | { kind: "aspect"; a: Planet; aspect: AspectKind; b: Planet; exact: boolean }
+  | { kind: "ingress"; planet: Planet; sign: ZodiacSign }
+  | { kind: "quiet" };
+
 export interface WeekDay {
   date: Date;
   /** "MON 11" */
   label: string;
   isToday: boolean;
   line: string;
-  shorthand: string;
+  shorthand: WeekShorthand;
   tone: WeekTone;
   /** Rome only: fastus / nefastus / comitialis. */
   flag?: RomeDayFlag;
@@ -39,7 +49,7 @@ const EXACT_ORB = 0.35;
  */
 const FAST_BODIES: ReadonlySet<Planet> = new Set(["sun", "moon", "mercury", "venus", "mars"]);
 
-const ASPECT_GLYPH: Readonly<Record<AspectKind, string>> = {
+export const ASPECT_GLYPH: Readonly<Record<AspectKind, string>> = {
   conjunction: "☌",
   sextile: "⚹",
   square: "□",
@@ -47,7 +57,7 @@ const ASPECT_GLYPH: Readonly<Record<AspectKind, string>> = {
   opposition: "☍",
 };
 
-const SIGN_ABBR: Readonly<Record<ZodiacSign, string>> = {
+export const SIGN_ABBR: Readonly<Record<ZodiacSign, string>> = {
   Aries: "ARI",
   Taurus: "TAU",
   Gemini: "GEM",
@@ -259,7 +269,7 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
     const dayIngress = weekIngresses.find((e) => e.date >= dayStart && e.date < dayEnd) ?? null;
 
     let line: string;
-    let shorthand: string;
+    let shorthand: WeekShorthand;
     let tone: WeekTone;
     let exact = false;
 
@@ -268,19 +278,17 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       tone = toneForKind(tightest.kind);
       const astro = composeAspectSentence(culture, tightest.a, tightest.b, tightest.kind, exact, chart);
       line = `${astro} ${ASPECT_IMPERATIVES[culture][tightest.kind]}`;
-      shorthand = `${PLANET_SYMBOLS[tightest.a]} ${ASPECT_GLYPH[tightest.kind]} ${PLANET_SYMBOLS[tightest.b]}${
-        exact ? " EXACT" : ""
-      }`;
+      shorthand = { kind: "aspect", a: tightest.a, aspect: tightest.kind, b: tightest.b, exact };
     } else if (dayIngress) {
       tone = "harmony";
       const deity = DEITY_MATRIX[culture][dayIngress.planet].name;
       const signWord = properCase(SIGN_PHRASES[dayIngress.toSign]);
       line = `${deity} ${INGRESS_VERB[culture]} the ${signWord}. ${INGRESS_IMPERATIVE[culture]}`;
-      shorthand = `${PLANET_SYMBOLS[dayIngress.planet]} → ${SIGN_ABBR[dayIngress.toSign]}`;
+      shorthand = { kind: "ingress", planet: dayIngress.planet, sign: dayIngress.toSign };
     } else {
       tone = "quiet";
       line = QUIET_LINE[culture];
-      shorthand = "QUIET";
+      shorthand = { kind: "quiet" };
     }
 
     const flag: RomeDayFlag | undefined = isRome

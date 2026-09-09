@@ -1,11 +1,6 @@
 import Link from "next/link";
-import {
-  CULTURES,
-  CULTURE_LABELS,
-  PLANETS,
-  PLANET_SYMBOLS,
-  RECEIVED_BODIES,
-} from "@/data/cultures";
+import { DeityGlyph } from "@/components/chrome/DeityGlyph";
+import { CULTURES, CULTURE_LABELS, PLANETS, RECEIVED_BODIES } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import { CULTURE_ACCENTS } from "@/data/palettes";
 import { cn } from "@/lib/classNames";
@@ -14,6 +9,8 @@ import { cn } from "@/lib/classNames";
  * The ten-by-five reference table: every body this almanac tracks, seated
  * beside its name in every culture's own theology. Mono, bordered, no
  * ornament beyond the one gold rule that marks where the ancient lists end.
+ * The BODY column has no culture in scope, so it keeps the classical sign;
+ * each culture cell leads with that culture's own drawn glyph for the body.
  * The table wrapper scrolls horizontally on its own at small widths; the
  * page around it never does.
  */
@@ -57,10 +54,15 @@ export function TranslationMatrix() {
                   planet === firstReceived ? "border-harmony/35" : "border-rule-row",
                 )}
               >
-                <td className="px-2 py-[9px] text-dim">{PLANET_SYMBOLS[planet]}</td>
+                <td className="px-2 py-[9px] text-dim">
+                  <DeityGlyph body={planet} culture={null} size={16} />
+                </td>
                 {CULTURES.map((culture) => (
                   <td key={culture} className="px-2 py-[9px] text-bone">
-                    {DEITY_MATRIX[culture][planet].name}
+                    <span className="inline-flex items-center gap-[6px]">
+                      <DeityGlyph body={planet} culture={culture} size={16} />
+                      {DEITY_MATRIX[culture][planet].name}
+                    </span>
                   </td>
                 ))}
               </tr>

@@ -1,0 +1,173 @@
+/**
+ * Exports the fifty deity glyphs from docs/design/system/assets/glyphs, the
+ * canonical drawn set, into web/src/glyphs: a byte-for-byte copy of every SVG
+ * plus a generated index.ts that carries each glyph's inner markup and status.
+ *
+ *   cd web && npm run export:glyphs
+ *
+ * The docs SVGs stay the source of truth; everything under web/src/glyphs is
+ * generated and must never be hand-edited. The script validates all fifty
+ * files before it writes anything, fails loudly on any invariant the README
+ * states (allowed elements, no literal colour, status tally 28 / 21 / 1), and
+ * writes atomically (temp file, then rename), so a failed run never leaves
+ * partial output.
+ */
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const SRC_DIR = path.resolve(HERE, "../../docs/design/system/assets/glyphs");
+const OUT_DIR = path.resolve(HERE, "../src/glyphs");
+const INDEX_FILE = path.join(OUT_DIR, "index.ts");
+
+// Canonical order. Must match CULTURES and PLANETS in web/src/data/cultures.ts.
+const CULTURES = ["egypt", "greece", "canaan", "carthage", "rome"];
+const BODIES = [
+  "sun",
+  "moon",
+  "mercury",
+  "venus",
+  "mars",
+  "jupiter",
+  "saturn",
+  "uranus",
+  "neptune",
+  "pluto",
+];
+
+const STATUSES = ["attested", "composed", "invented"];
+const EXPECTED_TALLY = { attested: 28, composed: 21, invented: 1 };
+const ALLOWED_TAGS = new Set(["g", "path", "circle", "ellipse", "line", "polyline", "polygon", "rect"]);
+
+function assert(cond, message) {
+  if (!cond) throw new Error(`export-glyphs: ${message}`);
+}
+
+// ---- Parse one SVG with regular expressions, asserting the README's shape. --
+
+function parseGlyph(file, label) {
+  const text = fs.readFileSync(file, "utf8");
+
+  const svgOpen = text.match(/<svg\b[^>]*>/g);
+  assert(svgOpen && svgOpen.length === 1, `${label}: expected exactly one <svg> open tag`);
+  assert(/\sviewBox="0 0 24 24"[\s>]/.test(svgOpen[0]), `${label}: viewBox is not "0 0 24 24"`);
+
+  const titles = text.match(/<title>[^<]*<\/title>/g);
+  assert(titles && titles.length === 1, `${label}: expected exactly one <title> element`);
+  const titleText = titles[0].slice("<title>".length, -"</title>".length).trim();
+  const sep = titleText.lastIndexOf(" · ");
+  assert(sep > 0, `${label}: <title> "${titleText}" has no " · " status segment`);
+  const status = titleText.slice(sep + " · ".length).trim();
+  assert(STATUSES.includes(status), `${label}: <title> status "${status}" is not one of ${STATUSES.join("/")}`);
+
+  const stripped = text.replace(titles[0], "");
+  assert(!stripped.includes("#"), `${label}: contains a "#" colour literal`);
+  assert(!stripped.includes("url("), `${label}: contains a "url(" reference`);
+
+  const body = stripped.match(/<svg\b[^>]*>([\s\S]*)<\/svg>/);
+  assert(body, `${label}: could not find the <svg> ... </svg> body`);
+  const inner = body[1].trim();
+  assert(inner.length > 0, `${label}: <svg> body is empty after removing <title>`);
+  assert(inner.startsWith("<g") && inner.endsWith("</g>"), `${label}: inner markup is not a <g> ... </g> block`);
+  assert(inner.includes("currentColor"), `${label}: never paints with currentColor`);
+
+  for (const match of inner.matchAll(/<([^\s/>]+)/g)) {
+    const tag = match[1].startsWith("/") ? match[1].slice(1) : match[1];
+    assert(ALLOWED_TAGS.has(tag), `${label}: element <${tag}> is not in the allowed set`);
+  }
+
+  return { inner, status };
+}
+
+// ---- Validate the full 5 x 10 matrix before writing anything. --------------
+
+assert(fs.existsSync(SRC_DIR), `source directory missing: ${SRC_DIR}`);
+
+const glyphs = {};
+const tally = { attested: 0, composed: 0, invented: 0 };
+for (const culture of CULTURES) {
+  assert(/^[a-z]+$/.test(culture), `culture id "${culture}" is not a bare identifier`);
+  const dir = path.join(SRC_DIR, culture);
+  assert(fs.existsSync(dir), `missing culture directory ${culture}`);
+
+  const present = fs.readdirSync(dir).filter((f) => f.endsWith(".svg")).sort();
+  const expected = BODIES.map((b) => `${b}.svg`).sort();
+  assert(
+    JSON.stringify(present) === JSON.stringify(expected),
+    `${culture}: expected exactly ${expected.join(" ")}, found ${present.join(" ")}`,
+  );
+
+  glyphs[culture] = {};
+  for (const body of BODIES) {
+    assert(/^[a-z]+$/.test(body), `body id "${body}" is not a bare identifier`);
+    const record = parseGlyph(path.join(dir, `${body}.svg`), `${culture}/${body}`);
+    glyphs[culture][body] = record;
+    tally[record.status] += 1;
+  }
+}
+
+const total = CULTURES.length * BODIES.length;
+assert(total === 50, `expected a 5 x 10 matrix, got ${total} cells`);
+for (const status of STATUSES)
+  assert(
+    tally[status] === EXPECTED_TALLY[status],
+    `expected ${EXPECTED_TALLY[status]} ${status} glyphs, counted ${tally[status]}`,
+  );
+
+// ---- Emit index.ts. --------------------------------------------------------
+
+const lines = [
+  "/**",
+  " * GENERATED by scripts/export-glyphs.mjs from docs/design/system/assets/glyphs.",
+  " * Do not edit; run `npm run export:glyphs`.",
+  " */",
+  'import type { Culture, Planet } from "@/data/cultures";',
+  "",
+  `export type GlyphStatus = ${STATUSES.map((s) => JSON.stringify(s)).join(" | ")};`,
+  "",
+  "export interface GlyphRecord {",
+  "  readonly inner: string;",
+  "  readonly status: GlyphStatus;",
+  "}",
+  "",
+  "export const GLYPHS: Readonly<Record<Culture, Readonly<Record<Planet, GlyphRecord>>>> = {",
+];
+for (const culture of CULTURES) {
+  lines.push(`  ${culture}: {`);
+  for (const body of BODIES) {
+    const { inner, status } = glyphs[culture][body];
+    lines.push(`    ${body}: {`);
+    lines.push(`      inner: ${JSON.stringify(inner)},`);
+    lines.push(`      status: ${JSON.stringify(status)},`);
+    lines.push("    },");
+  }
+  lines.push("  },");
+}
+lines.push("};");
+const indexSource = `${lines.join("\n")}\n`;
+
+// ---- Write atomically: copy the SVGs, then the index. ----------------------
+
+let copied = 0;
+for (const culture of CULTURES) {
+  const outDir = path.join(OUT_DIR, culture);
+  fs.mkdirSync(outDir, { recursive: true });
+  for (const body of BODIES) {
+    const src = path.join(SRC_DIR, culture, `${body}.svg`);
+    const target = path.join(outDir, `${body}.svg`);
+    const tmp = `${target}.tmp`;
+    fs.copyFileSync(src, tmp);
+    fs.renameSync(tmp, target);
+    copied += 1;
+  }
+}
+
+const indexTmp = `${INDEX_FILE}.tmp`;
+fs.writeFileSync(indexTmp, indexSource, "utf8");
+fs.renameSync(indexTmp, INDEX_FILE);
+
+console.log(
+  `export-glyphs: copied ${copied} SVGs and wrote src/glyphs/index.ts ` +
+    `(attested ${tally.attested}, composed ${tally.composed}, invented ${tally.invented})`,
+);

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CultureGate } from "@/components/chrome/CultureGate";
 import { CultureChip } from "@/components/chrome/CultureChip";
+import { DeityGlyph } from "@/components/chrome/DeityGlyph";
 import { MethodFooter } from "@/components/chrome/MethodFooter";
 import { NaveHead } from "@/components/chrome/NaveHead";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
@@ -19,7 +20,7 @@ import { getHouseMeaning } from "@/data/houses";
 import { longitudeToSign } from "@/data/sampleChart";
 import { DEITY_MATRIX } from "@/data/deities";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
-import { PLANETS, PLANET_SYMBOLS, isReceived, type Planet } from "@/data/cultures";
+import { PLANETS, isReceived, type Planet } from "@/data/cultures";
 import { SIGN_PHRASE, formatDegMin } from "@/components/charts/chartFormat";
 import { buildHowItShows, buildKeepInView, buildWhatItIs } from "@/components/charts/placementCopy";
 import { PLACEMENT_VOTIVES } from "@/components/charts/placementVotives";
@@ -123,9 +124,12 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
         <NaveHead
           kicker={`${voice.institution} · YOUR STANDING PLACEMENT`}
           sub={
-            <div className="font-mono text-[11px] uppercase leading-[1.7] tracking-[0.12em] text-dim">
-              {PLANET_SYMBOLS[body]} {formatDegMin(degree)} {sign.toUpperCase()} ·{" "}
-              {houseMeaning.ordinal.toUpperCase()} HOUSE · FIXED AT YOUR BIRTH
+            <div className="inline-flex items-center gap-[6px] font-mono text-[11px] uppercase leading-[1.7] tracking-[0.12em] text-dim">
+              <DeityGlyph body={body} culture={culture} size={16} />
+              <span>
+                {formatDegMin(degree)} {sign.toUpperCase()} ·{" "}
+                {houseMeaning.ordinal.toUpperCase()} HOUSE · FIXED AT YOUR BIRTH
+              </span>
             </div>
           }
         >

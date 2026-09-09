@@ -5,12 +5,20 @@ import Link from "next/link";
 import { NaveShell } from "@/components/chrome/NaveShell";
 import { CultureGate } from "@/components/chrome/CultureGate";
 import { NaveHead } from "@/components/chrome/NaveHead";
+import { DeityGlyph } from "@/components/chrome/DeityGlyph";
 import { Votive } from "@/components/chrome/Votive";
 import { FeedbackRow } from "@/components/chrome/FeedbackRow";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
-import { buildWeekDays, type WeekDay, type WeekTone } from "@/lib/weekReading";
+import {
+  ASPECT_GLYPH,
+  SIGN_ABBR,
+  buildWeekDays,
+  type WeekDay,
+  type WeekShorthand,
+  type WeekTone,
+} from "@/lib/weekReading";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import type { Culture } from "@/data/cultures";
 import { cn } from "@/lib/classNames";
@@ -65,7 +73,38 @@ const WEEK_VOTIVE: Readonly<Record<Culture, Readonly<Record<WeekTone, string>>>>
   },
 };
 
-function WeekRow({ day }: { day: WeekDay }) {
+/**
+ * The items of the shorthand column. The wrapping span in WeekRow is an
+ * inline-flex row aligned on the baseline, so the text items keep the same
+ * baseline as the other two grid columns; each glyph centres itself on the
+ * text with self-center. Measured in Chrome: items-center on the row would
+ * make the row's baseline the svg's bottom edge and lift the shorthand
+ * about 4px on event days.
+ */
+function ShorthandItems({ shorthand, culture }: { shorthand: WeekShorthand; culture: Culture }) {
+  if (shorthand.kind === "aspect") {
+    return (
+      <>
+        <DeityGlyph body={shorthand.a} culture={culture} size={16} className="self-center" />
+        {ASPECT_GLYPH[shorthand.aspect]}
+        <DeityGlyph body={shorthand.b} culture={culture} size={16} className="self-center" />
+        {shorthand.exact ? "EXACT" : null}
+      </>
+    );
+  }
+  if (shorthand.kind === "ingress") {
+    return (
+      <>
+        <DeityGlyph body={shorthand.planet} culture={culture} size={16} className="self-center" />
+        {"→"}
+        {SIGN_ABBR[shorthand.sign]}
+      </>
+    );
+  }
+  return "QUIET";
+}
+
+function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
   return (
     <div
       className={cn(
@@ -91,11 +130,11 @@ function WeekRow({ day }: { day: WeekDay }) {
       <span className="font-body text-[14.5px] leading-[1.55] text-bone">{day.line}</span>
       <span
         className={cn(
-          "whitespace-nowrap font-mono text-[11px]",
+          "inline-flex items-baseline gap-[4px] whitespace-nowrap font-mono text-[11px]",
           day.tone === "tension" ? "text-conflict" : "text-dim",
         )}
       >
-        {day.shorthand}
+        <ShorthandItems shorthand={day.shorthand} culture={culture} />
       </span>
     </div>
   );
@@ -129,7 +168,7 @@ function WeekContent({
       </p>
       <div className="mt-8 flex flex-col">
         {days.map((day) => (
-          <WeekRow key={day.date.toISOString()} day={day} />
+          <WeekRow key={day.date.toISOString()} day={day} culture={culture} />
         ))}
       </div>
       <div className="mx-auto mt-6 max-w-[560px] text-center font-mono text-[11px] tracking-[0.14em] text-dim">

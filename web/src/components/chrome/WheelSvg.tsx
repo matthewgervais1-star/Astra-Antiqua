@@ -1,5 +1,7 @@
-import { PLANET_SYMBOLS, type Planet } from "@/data/cultures";
+import { PLANET_SYMBOLS, type Culture, type Planet } from "@/data/cultures";
+import { DEITY_MATRIX } from "@/data/deities";
 import type { AspectKind } from "@/data/sampleChart";
+import { GLYPHS } from "@/glyphs";
 
 export interface WheelAspect {
   planetA: Planet;
@@ -14,6 +16,8 @@ export interface WheelSvgProps {
   accentPlanets?: readonly Planet[];
   size?: number;
   caption?: string;
+  /** Draws each body as this culture's deity glyph; null keeps the classical Unicode sign. */
+  culture?: Culture | null;
 }
 
 const VIEW = 420;
@@ -61,6 +65,11 @@ function angularDistance(a: number, b: number): number {
   return raw > 180 ? 360 - raw : raw;
 }
 
+/** Escapes the characters that would break out of a glyph's title text inside the SVG string. */
+function escapeHtml(text: string): string {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 /**
  * Server-safe pure SVG natal wheel, per the 3a-charts-canaan mock. `chart`
  * may carry only a subset of planets at runtime during the ten-body
@@ -74,6 +83,7 @@ export function WheelSvg({
   accentPlanets = [],
   size = 400,
   caption,
+  culture = null,
 }: WheelSvgProps) {
   const planets = Object.keys(chart) as Planet[];
   const accentSet = new Set(accentPlanets);
@@ -211,16 +221,37 @@ export function WheelSvg({
           })}
         </g>
 
-        <g fontFamily="var(--font-mono)" fontSize={16} textAnchor="middle" dominantBaseline="middle">
-          {sorted.map((planet) => {
-            const { x, y } = pointAt(chart[planet], radiusByPlanet.get(planet) ?? R_PLANET);
-            return (
-              <text key={planet} x={x} y={y} fill={accentSet.has(planet) ? "var(--accent)" : "var(--color-bone)"}>
-                {PLANET_SYMBOLS[planet]}
-              </text>
-            );
-          })}
-        </g>
+        {culture ? (
+          <g>
+            {sorted.map((planet) => {
+              const { x, y } = pointAt(chart[planet], radiusByPlanet.get(planet) ?? R_PLANET);
+              const { name } = DEITY_MATRIX[culture][planet];
+              const { inner, status } = GLYPHS[culture][planet];
+              // React forbids children beside dangerouslySetInnerHTML, so the title rides inside the string.
+              const markup = "<title>" + escapeHtml(name) + " · " + planet + " · " + status + "</title>" + inner;
+              // The 24-unit glyph box centres on the same point the <text> run used, so the collision nudge holds.
+              return (
+                <g
+                  key={planet}
+                  transform={`translate(${x - 12} ${y - 12})`}
+                  style={{ color: accentSet.has(planet) ? "var(--accent)" : "var(--color-bone)" }}
+                  dangerouslySetInnerHTML={{ __html: markup }}
+                />
+              );
+            })}
+          </g>
+        ) : (
+          <g fontFamily="var(--font-mono)" fontSize={16} textAnchor="middle" dominantBaseline="middle">
+            {sorted.map((planet) => {
+              const { x, y } = pointAt(chart[planet], radiusByPlanet.get(planet) ?? R_PLANET);
+              return (
+                <text key={planet} x={x} y={y} fill={accentSet.has(planet) ? "var(--accent)" : "var(--color-bone)"}>
+                  {PLANET_SYMBOLS[planet]}
+                </text>
+              );
+            })}
+          </g>
+        )}
       </svg>
     </figure>
   );

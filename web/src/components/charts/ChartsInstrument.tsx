@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { CultureGate } from "@/components/chrome/CultureGate";
+import { DeityGlyph } from "@/components/chrome/DeityGlyph";
 import { InstrumentShell, type InstrumentSibling } from "@/components/chrome/InstrumentShell";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { WheelSvg } from "@/components/chrome/WheelSvg";
@@ -11,7 +12,6 @@ import { mirrorDeleteToServer, mirrorPrimaryToServer, useAuth } from "@/componen
 import {
   CULTURE_LABELS,
   PLANETS,
-  PLANET_SYMBOLS,
   RECEIVED_BODIES,
   isReceived,
 } from "@/data/cultures";
@@ -161,12 +161,13 @@ function ChartsInstrumentInner() {
                 key={planet}
                 href={`/charts/${selectedChart.id}/${planet}`}
                 className={cn(
-                  "grid grid-cols-[1fr_78px_46px] items-baseline gap-2 border-t border-rule-row py-2 hover:bg-bone/5",
+                  "grid grid-cols-[1fr_78px_46px] items-center gap-2 border-t border-rule-row py-2 hover:bg-bone/5",
                   received ? "text-[var(--accent)]" : "text-bone",
                 )}
               >
-                <span className="truncate">
-                  {PLANET_SYMBOLS[planet]} {deity.name.toUpperCase()}
+                <span className="flex min-w-0 items-center gap-[6px]">
+                  <DeityGlyph body={planet} culture={culture} size={16} />
+                  <span className="truncate">{deity.name.toUpperCase()}</span>
                 </span>
                 <span className="text-dim">{formatDegMin(degree)}</span>
                 <span className="text-dim">{SIGN_ABBR3[sign]}</span>
@@ -191,6 +192,7 @@ function ChartsInstrumentInner() {
         <div className="mt-3">
           <WheelSvg
             chart={natal.chart}
+            culture={culture}
             ascendant={natal.angles.ascendant}
             aspects={wheelAspects}
             accentPlanets={[...RECEIVED_BODIES]}
@@ -289,8 +291,9 @@ function ChartsInstrumentInner() {
                 key={planet}
                 className="border-l-2 border-[var(--accent)] pl-3 font-body text-[12.5px] leading-[1.55] text-prose"
               >
-                <span className="font-display text-[11px] tracking-[0.1em] text-[var(--accent)]">
-                  {PLANET_SYMBOLS[planet]} {deity.name.toUpperCase()}
+                <span className="inline-flex items-center gap-[6px] align-middle font-display text-[11px] tracking-[0.1em] text-[var(--accent)]">
+                  <DeityGlyph body={planet} culture={culture} size={16} />
+                  {deity.name.toUpperCase()}
                 </span>{" "}
                 · {deity.epithet}
               </div>

@@ -12,7 +12,8 @@
     "gates": "node scripts/check-gates.mjs",
     "specimens": "node scripts/specimens/gen-specimens.mjs && node scripts/specimens/render.mjs && node scripts/specimens/build-css.mjs && node scripts/specimens/wrap-cards.mjs",
     "export:content": "node scripts/export-content.mjs",
-    "export:goldens": "node scripts/export-goldens.mjs"
+    "export:goldens": "node scripts/export-goldens.mjs",
+    "export:glyphs": "node scripts/export-glyphs.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

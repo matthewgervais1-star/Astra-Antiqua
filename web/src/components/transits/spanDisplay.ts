@@ -1,5 +1,4 @@
 import type { Culture, Planet } from "@/data/cultures";
-import { PLANET_SYMBOLS } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import type { AspectKind, ZodiacSign } from "@/data/sampleChart";
 import type { TransitSpan } from "@/lib/transitSpans";
@@ -248,11 +247,12 @@ export function passNarrative(span: TransitSpan, now: Date): string {
   return `The first exact meeting has passed. ${capitalize(smallNumberWord(remainingAfterFirst))} more come with the retrogradations.`;
 }
 
-/** "☉ APOLLO 05°12′ TAURUS" (sun/moon) or "YOUR RISING 12°34′ LEO" (asc/mc). */
+/** "YOUR NATAL APOLLO 05°12′ TAURUS" (sun/moon) or "YOUR RISING 12°34′ LEO" (asc/mc).
+ *  Words only: the caller places the natal body's deity glyph after "YOUR NATAL". */
 export function natalDegreeSide(culture: Culture, span: Pick<TransitSpan, "natalKey">, sign: ZodiacSign, degree: number): string {
   if (isPointPlanetKey(span.natalKey)) {
     const planet: Planet = span.natalKey;
-    return `YOUR NATAL ${PLANET_SYMBOLS[planet]} ${DEITY_MATRIX[culture][planet].name.toUpperCase()} ${formatDegMin(degree)} ${sign.toUpperCase()}`;
+    return `YOUR NATAL ${DEITY_MATRIX[culture][planet].name.toUpperCase()} ${formatDegMin(degree)} ${sign.toUpperCase()}`;
   }
   return `${natalPointLabel(culture, span.natalKey)} ${formatDegMin(degree)} ${sign.toUpperCase()}`;
 }
