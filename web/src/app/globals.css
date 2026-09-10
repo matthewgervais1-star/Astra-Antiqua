@@ -163,9 +163,17 @@ body {
   box-sizing: border-box;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/*
+ * Links inherit their colour and carry no underline. This sits in the base
+ * layer on purpose: Tailwind v4 emits its utilities inside @layer utilities,
+ * and an unlayered rule here outranks every one of them, so text-[var(--accent)]
+ * on a link never painted. In the base layer the utility wins, as intended.
+ */
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 ::selection {
