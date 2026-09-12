@@ -8,6 +8,7 @@ import com.astra.antiqua.data.local.room.AppDatabase
 import com.astra.antiqua.model.AncientCulture
 import kotlinx.coroutines.delay
 import com.astra.antiqua.model.AppPhase
+import com.astra.antiqua.ui.LauncherIcon
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -70,6 +71,9 @@ class AppViewModel : ViewModel() {
             } catch (_: Exception) {
                 _selectedCulture.value = AncientCulture.GREECE
             }
+            // The home screen icon follows the culture. This is its one call
+            // site; LauncherIcon holds the alias mapping.
+            LauncherIcon.applyLauncherIcon(context, _selectedCulture.value)
             updatePhase(AppPhase.ONBOARDING)
         }
     }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The culture grounds and accents, generated from
+  docs/design/system/tokens/colors.css by web/scripts/gen-android-launchers.mjs.
+  The launcher drawables name these rather than a hex literal.
+  ui/theme/Color.kt carries the same values for Compose.
+-->
+<resources>
+    <color name="accent_neutral">#B59A55</color>
+    <color name="ground_neutral">#171310</color>
+    <color name="accent_egypt">#B59A55</color>
+    <color name="ground_egypt">#1A1712</color>
+    <color name="accent_greece">#7C93A6</color>
+    <color name="ground_greece">#171A1C</color>
+    <color name="accent_canaan">#8A9268</color>
+    <color name="ground_canaan">#1A1813</color>
+    <color name="accent_carthage">#94648C</color>
+    <color name="ground_carthage">#191218</color>
+    <color name="accent_rome">#A5544A</color>
+    <color name="ground_rome">#1B1410</color>
+</resources>

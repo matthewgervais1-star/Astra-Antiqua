@@ -12,15 +12,104 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AstraAntiqua">
+        <!--
+          MainActivity carries no MAIN/LAUNCHER filter of its own. The home
+          screen entry is an activity-alias instead, one per culture, so the
+          icon follows the culture the reader chose, and exactly one alias is
+          enabled at a time (see ui.LauncherIcon.applyLauncherIcon). Leaving
+          the filter on the activity as well would show two icons while an
+          alias was enabled, and disabling the activity to stop that would
+          leave every alias pointing at a component that cannot start.
+        -->
         <activity
             android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AstraAntiqua" />
+
+        <!-- Neutral: what a fresh install shows, before a culture is chosen. -->
+        <activity-alias
+            android:name=".Launcher"
+            android:enabled="true"
             android:exported="true"
-            android:theme="@style/Theme.AstraAntiqua">
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:targetActivity=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".LauncherEgypt"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_egypt"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_egypt_round"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".LauncherGreece"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_greece"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_greece_round"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".LauncherCanaan"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_canaan"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_canaan_round"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".LauncherCarthage"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_carthage"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_carthage_round"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".LauncherRome"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_rome"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_rome_round"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
     </application>
 
 </manifest>
