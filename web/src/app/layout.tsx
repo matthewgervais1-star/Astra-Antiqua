@@ -50,6 +50,36 @@ const plexMono = localFont({
   ],
 });
 
+// Epigraphic faces (docs/design/system/readme.md, Type): attested signs only,
+// never copy. preload: false, so no page carries a preload link for them.
+const notoHieroglyphs = localFont({
+  variable: "--font-noto-hieroglyphs",
+  display: "swap",
+  preload: false,
+  src: [{ path: "../fonts/noto-sans-egyptian-hieroglyphs-400.woff2", weight: "400", style: "normal" }],
+});
+
+const notoUgaritic = localFont({
+  variable: "--font-noto-ugaritic",
+  display: "swap",
+  preload: false,
+  src: [{ path: "../fonts/noto-sans-ugaritic-400.woff2", weight: "400", style: "normal" }],
+});
+
+const notoSymbols = localFont({
+  variable: "--font-noto-symbols",
+  display: "swap",
+  preload: false,
+  src: [{ path: "../fonts/noto-sans-symbols-400.woff2", weight: "400", style: "normal" }],
+});
+
+const gfsDidot = localFont({
+  variable: "--font-gfs-didot",
+  display: "swap",
+  preload: false,
+  src: [{ path: "../fonts/gfs-didot-400.woff2", weight: "400", style: "normal" }],
+});
+
 const SITE_DESCRIPTION =
   "One computed sky, read through the theologies of ancient Egypt, Greece, Canaan, Carthage, and Rome.";
 
@@ -77,6 +107,10 @@ export const metadata: Metadata = {
       SITE_TAGLINE,
   },
   icons: {
+    // Setting icons here makes Next skip the file-based icon convention, so
+    // the monogram favicon (src/app/icon.svg, from scripts/generate-icons.mjs)
+    // is linked explicitly; favicon.ico keeps its own special case.
+    icon: [{ url: "/icon.svg", type: "image/svg+xml", sizes: "any" }],
     apple: "/icons/apple-touch-icon.png",
   },
   appleWebApp: {
@@ -97,7 +131,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cinzel.variable} ${spectral.variable} ${spectralSc.variable} ${plexMono.variable}`}
+      className={`${cinzel.variable} ${spectral.variable} ${spectralSc.variable} ${plexMono.variable} ${notoHieroglyphs.variable} ${notoUgaritic.variable} ${notoSymbols.variable} ${gfsDidot.variable}`}
     >
       <body className="flex min-h-screen flex-col text-bone">
         <AuthProvider>

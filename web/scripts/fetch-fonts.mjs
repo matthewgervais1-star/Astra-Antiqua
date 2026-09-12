@@ -65,6 +65,45 @@ const FAMILIES = [
       { style: "normal", weight: "500", file: "spectral-sc-latin-500.woff2" },
     ],
   },
+  // Epigraphic faces (docs/design/system/readme.md, Type). They set attested
+  // signs only, never copy: the sign the design system draws from each family
+  // lives outside the latin subset, so each family names the css2 subset that
+  // carries it. The API's unicode-range is a range label, not a glyph
+  // inventory, so each sign was verified in the vendored file's cmap
+  // (format 12 for the supplementary planes, format 4 for the BMP) on
+  // 2026-09-10:
+  //   egyptian-hieroglyphs U+13080 gid 138
+  //   ugaritic             U+1038D gid 17, U+1039B gid 31
+  //   symbols              U+2625  gid 203
+  //   greek                U+03A9  gid 43
+  // The design system's tokens/fonts.css names Noto Sans Symbols 2 for the
+  // ankh, but on Google Fonts that family lacks U+2625; Noto Sans Symbols
+  // carries it, so that is the family vendored under the same token.
+  // Web only: the Android build draws these signs as outlines, not text.
+  {
+    family: "Noto Sans Egyptian Hieroglyphs",
+    css: "family=Noto+Sans+Egyptian+Hieroglyphs",
+    subset: "egyptian-hieroglyphs",
+    picks: [{ style: "normal", weight: "400", file: "noto-sans-egyptian-hieroglyphs-400.woff2" }],
+  },
+  {
+    family: "Noto Sans Ugaritic",
+    css: "family=Noto+Sans+Ugaritic",
+    subset: "ugaritic",
+    picks: [{ style: "normal", weight: "400", file: "noto-sans-ugaritic-400.woff2" }],
+  },
+  {
+    family: "Noto Sans Symbols",
+    css: "family=Noto+Sans+Symbols",
+    subset: "symbols",
+    picks: [{ style: "normal", weight: "400", file: "noto-sans-symbols-400.woff2" }],
+  },
+  {
+    family: "GFS Didot",
+    css: "family=GFS+Didot",
+    subset: "greek",
+    picks: [{ style: "normal", weight: "400", file: "gfs-didot-400.woff2" }],
+  },
 ];
 
 const ANDROID_OUT_DIR = path.join(
@@ -106,25 +145,27 @@ const ANDROID_FAMILIES = [
 ];
 
 /**
- * Parse @font-face blocks; return the latin-subset woff2 URL for a style
- * (and, for static families, a specific weight). Errors if the request
- * resolves to more than one URL, which for a weight-less pick would mean
- * the family is no longer served as a single variable file.
+ * Parse @font-face blocks; return the woff2 URL for one subset (latin unless
+ * the family names another) and a style (and, for static families, a
+ * specific weight). Errors if the request resolves to more than one URL,
+ * which for a weight-less pick would mean the family is no longer served as
+ * a single variable file.
  */
-function pickUrl(cssText, style, weight, ext = "woff2") {
+function pickUrl(cssText, style, weight, ext = "woff2", subset = "latin") {
   const urls = new Set();
   const blocks = cssText.split("@font-face").slice(1);
-  // The woff2 response splits each family across subsets and labels them with
-  // a /* latin */ comment. The ttf response is one block per weight with no
-  // subset comments at all, so the subset filter only applies to woff2.
-  const hasSubsetComments = cssText.includes("/* latin */");
+  // The woff2 response splits each family across subsets and labels each
+  // block with a comment such as /* latin */. The ttf response is one block
+  // per weight with no subset comments at all, so the subset filter only
+  // applies to woff2.
+  const hasSubsetComments = cssText.includes(`/* ${subset} */`);
   for (let i = 0; i < blocks.length; i += 1) {
     const block = blocks[i];
     if (hasSubsetComments) {
       const before = cssText.slice(0, cssText.indexOf(block));
       const lastComment = before.lastIndexOf("/*");
-      const subset = before.slice(lastComment + 2, before.indexOf("*/", lastComment)).trim();
-      if (subset !== "latin") continue;
+      const label = before.slice(lastComment + 2, before.indexOf("*/", lastComment)).trim();
+      if (label !== subset) continue;
     }
     if (!block.includes(`font-style: ${style}`)) continue;
     if (weight && !block.includes(`font-weight: ${weight}`)) continue;
@@ -136,8 +177,6 @@ function pickUrl(cssText, style, weight, ext = "woff2") {
       const raw = block.slice(start + 4, block.indexOf(")", start));
       if (raw.startsWith("https:") && raw.endsWith("." + ext)) urls.add(raw);
     }
-    const m = null;
-    void m;
   }
   if (urls.size === 0) throw new Error(`No ${ext} for style ${style} weight ${weight ?? "any"}`);
   if (urls.size > 1) {
@@ -162,7 +201,7 @@ for (const fam of families) {
   if (!res.ok) throw new Error(`CSS fetch failed for ${fam.family}: ${res.status}`);
   const cssText = await res.text();
   for (const pick of fam.picks) {
-    const url = pickUrl(cssText, pick.style, pick.weight, android ? "ttf" : "woff2");
+    const url = pickUrl(cssText, pick.style, pick.weight, android ? "ttf" : "woff2", fam.subset);
     // Sequential on purpose: parallel bursts are exactly what breaks here.
     const fontRes = await fetch(url);
     if (!fontRes.ok) throw new Error(`Font fetch failed: ${url} (${fontRes.status})`);

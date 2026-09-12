@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { CultureChip } from "@/components/chrome/CultureChip";
+import { Wordmark } from "@/components/chrome/Wordmark";
 
 export interface InstrumentSibling {
   label: string;
@@ -25,7 +26,7 @@ export function InstrumentShell({ children, context, siblings }: InstrumentShell
     <>
       <header className="flex h-[60px] flex-wrap items-center gap-6 border-b border-rule px-8">
         <Link href="/" className="whitespace-nowrap font-display text-[14px] font-medium tracking-[0.28em] text-bone">
-          ASTRA ANTIQVA
+          <Wordmark capHeight={9.8} />
         </Link>
         <span className="min-w-0 truncate font-mono text-[11px] text-dim">{context}</span>
         <div className="ml-auto flex items-center gap-6">

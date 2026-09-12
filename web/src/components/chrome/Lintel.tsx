@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LintelIndexMenu } from "@/components/chrome/LintelIndexMenu";
+import { Wordmark } from "@/components/chrome/Wordmark";
 
 export type LintelSection = "today" | "voices" | "learn" | "charts" | "account";
 
@@ -53,7 +54,7 @@ export function Lintel({ active }: LintelProps) {
         href="/"
         className="justify-self-center whitespace-nowrap px-4 text-center font-display text-[17px] font-medium tracking-[0.3em] text-bone md:px-10"
       >
-        ASTRA ANTIQVA
+        <Wordmark capHeight={11.9} />
       </Link>
       <div className="flex items-center justify-end">
         <nav className="hidden items-center gap-[26px] font-display text-[12px] tracking-[0.22em] min-[720px]:flex">

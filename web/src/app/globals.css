@@ -17,6 +17,7 @@
   --color-accent-canaan: #8a9268;
   --color-accent-carthage: #94648c;
   --color-accent-rome: #a5544a;
+  --color-accent-neutral: #b59a55; /* the ground with no culture; same value as harmony, its own token */
 
   /* inks */
   --color-bone: #e6decc;
@@ -36,6 +37,11 @@
   --font-display-sc: var(--font-spectral-sc), "Spectral SC", Georgia, serif;
   --font-body: var(--font-spectral), "Spectral", Georgia, serif;
   --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* epigraphic faces: attested signs only, never copy (docs/design/system/readme.md, Type) */
+  --font-hieroglyph: var(--font-noto-hieroglyphs), "Noto Sans Egyptian Hieroglyphs", serif;
+  --font-ugaritic: var(--font-noto-ugaritic), "Noto Sans Ugaritic", serif;
+  --font-symbols: var(--font-noto-symbols), "Noto Sans Symbols", serif;
+  --font-greek-display: var(--font-gfs-didot), "GFS Didot", serif;
 
   --radius: 0px;
 }
@@ -47,7 +53,7 @@
  */
 :root {
   --ground: var(--color-ground-neutral);
-  --accent: var(--color-harmony);
+  --accent: var(--color-accent-neutral);
 }
 
 /*

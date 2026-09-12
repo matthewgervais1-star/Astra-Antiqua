@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Wordmark } from "@/components/chrome/Wordmark";
 
 /**
  * The welcome funnel's own slim header: just the wordmark, no site nav. The
@@ -10,7 +11,7 @@ export function WelcomeHeader() {
   return (
     <header className="border-b border-rule px-4 py-6 text-center">
       <Link href="/" className="font-display text-[15px] font-medium tracking-[0.3em] text-bone">
-        ASTRA ANTIQVA
+        <Wordmark capHeight={10.5} />
       </Link>
     </header>
   );
