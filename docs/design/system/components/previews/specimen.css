@@ -30,6 +30,7 @@
     --color-accent-canaan: #8a9268;
     --color-accent-carthage: #94648c;
     --color-accent-rome: #a5544a;
+    --color-accent-neutral: #b59a55;
     --color-bone: #e6decc;
     --color-prose: #d9d1bf;
     --color-dim: #9a917d;
@@ -335,6 +336,9 @@
   .mt-16 {
     margin-top: calc(var(--spacing) * 16);
   }
+  .mt-\[3px\] {
+    margin-top: 3px;
+  }
   .mt-\[6px\] {
     margin-top: 6px;
   }
@@ -570,6 +574,9 @@
   .cursor-pointer {
     cursor: pointer;
   }
+  .resize {
+    resize: both;
+  }
   .appearance-none {
     appearance: none;
   }
@@ -672,6 +679,12 @@
   .gap-\[2px\] {
     gap: 2px;
   }
+  .gap-\[4px\] {
+    gap: 4px;
+  }
+  .gap-\[6px\] {
+    gap: 6px;
+  }
   .gap-\[7px\] {
     gap: 7px;
   }
@@ -704,6 +717,9 @@
   }
   .gap-x-8 {
     column-gap: calc(var(--spacing) * 8);
+  }
+  .gap-x-\[6px\] {
+    column-gap: 6px;
   }
   .gap-x-\[18px\] {
     column-gap: 18px;
@@ -1029,6 +1045,9 @@
   .text-right {
     text-align: right;
   }
+  .align-middle {
+    vertical-align: middle;
+  }
   .font-body {
     font-family: var(--font-body);
   }
@@ -1314,6 +1333,10 @@
   }
   .underline-offset-4 {
     text-underline-offset: 4px;
+  }
+  .antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   .accent-\[var\(--accent\)\] {
     accent-color: var(--accent);
@@ -1784,7 +1807,7 @@
 }
 :root {
   --ground: var(--color-ground-neutral);
-  --accent: var(--color-harmony);
+  --accent: var(--color-accent-neutral);
 }
 body {
   --accent-strong-border: var(--accent);
@@ -1842,9 +1865,11 @@ body {
 * {
   box-sizing: border-box;
 }
-a {
-  color: inherit;
-  text-decoration: none;
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 ::selection {
   background: var(--accent);
