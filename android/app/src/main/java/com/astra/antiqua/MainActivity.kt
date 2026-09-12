@@ -37,6 +37,7 @@ import com.astra.antiqua.ui.screens.MainDashboardScreen
 import com.astra.antiqua.ui.screens.MethodScreen
 import com.astra.antiqua.ui.screens.OnboardingScreen
 import com.astra.antiqua.ui.LauncherIcon
+import com.astra.antiqua.ui.components.Monogram
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.LocalAccent
@@ -126,6 +127,10 @@ fun EngineWarmupScreen() {
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            // The app's own mark, on the one screen that speaks as the app
+            // rather than as a culture. The architrave follows the accent.
+            Monogram(height = 64.dp)
+            Spacer(modifier = Modifier.height(32.dp))
             CircularProgressIndicator(color = LocalAccent.current, strokeWidth = 2.dp)
             Spacer(modifier = Modifier.height(24.dp))
             Text(

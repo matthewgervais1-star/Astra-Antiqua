@@ -33,6 +33,7 @@ import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.accentFor
 import com.astra.antiqua.ui.theme.Dim
 import com.astra.antiqua.ui.theme.Prose
+import com.astra.antiqua.ui.components.Wordmark
 import com.astra.antiqua.ui.theme.Spacing
 
 
@@ -46,6 +47,11 @@ fun CultureSelectionScreen(
             .padding(horizontal = Spacing.Gutter, vertical = Spacing.Section),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Before a culture is chosen the app speaks in its own name, so the
+        // lockup is drawn here rather than typed anywhere.
+        Wordmark(capHeight = 16.dp)
+        Spacer(modifier = Modifier.height(Spacing.Section))
+
         Text(
             text = "Choose Your Doorway",
             style = MaterialTheme.typography.displaySmall,
