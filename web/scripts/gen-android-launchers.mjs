@@ -25,10 +25,12 @@
  * is installed there, the way fetch-fonts.mjs already writes Android font
  * resources from here.
  *
- * This surface's node_modules is a pnpm tree that npm will not add to, so the
- * converter is written out rather than taking an SVG library.
+ * The shape conversion it shares with the glyph generator lives in
+ * svg-shapes.mjs, written out rather than taken from an SVG library because
+ * this surface's node_modules is a pnpm tree that npm's resolver will not add to.
  */
 import sharp from "sharp";
+import { fail, flatten, parseDocument, parseElements } from "./svg-shapes.mjs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -55,107 +57,18 @@ const CULTURES = [
   { culture: "rome", mark: "dr-lituus.svg" },
 ];
 
-function fail(message) {
-  throw new Error(`gen-android-launchers: ${message}`);
-}
+const CAPS = { butt: "butt", round: "round", square: "square" };
+const JOINS = { miter: "miter", round: "round", bevel: "bevel" };
 
+/** Trims a computed transform value; the mark's own numbers are never touched. */
+const n = (v) => Number(Number(v).toFixed(3));
+
+/** Reads --name: #hex pairs out of tokens/colors.css. */
 async function readTokens() {
   const css = await readFile(TOKENS, "utf8");
   const tokens = new Map();
   for (const [, name, hex] of css.matchAll(/--([a-z-]+):\s*(#[0-9A-Fa-f]{6})\b/g)) tokens.set(name, hex.toUpperCase());
   return tokens;
-}
-
-/** A minimal element tree for the mark SVGs, which the SVG gate keeps well formed. */
-function parseElements(inner) {
-  const nodes = [];
-  const stack = [{ children: nodes }];
-  const tag = /<(\/?)([a-zA-Z][\w-]*)((?:\s+[\w:-]+\s*=\s*"[^"]*")*)\s*(\/?)>/g;
-  let m;
-  while ((m = tag.exec(inner))) {
-    const [, closing, name, attrText, selfClosing] = m;
-    if (closing) {
-      stack.pop();
-      continue;
-    }
-    const attrs = {};
-    for (const [, key, value] of attrText.matchAll(/([\w:-]+)\s*=\s*"([^"]*)"/g)) attrs[key] = value;
-    const node = { name, attrs, children: [] };
-    stack[stack.length - 1].children.push(node);
-    if (!selfClosing) stack.push(node);
-  }
-  return nodes;
-}
-
-const n = (v) => Number(Number(v).toFixed(3));
-
-/** Every shape the marks use, as path data. A VectorDrawable has only <path>. */
-function shapeToPathData(node) {
-  const a = node.attrs;
-  const points = (raw) =>
-    raw
-      .trim()
-      .split(/[\s,]+/)
-      .map(Number);
-  switch (node.name) {
-    case "path":
-      return a.d ?? fail("a <path> with no d");
-    case "circle": {
-      const cx = Number(a.cx);
-      const cy = Number(a.cy);
-      const r = Number(a.r);
-      return `M${n(cx - r)},${n(cy)} a${n(r)},${n(r)} 0 1,0 ${n(2 * r)},0 a${n(r)},${n(r)} 0 1,0 ${n(-2 * r)},0 Z`;
-    }
-    case "ellipse": {
-      const cx = Number(a.cx);
-      const cy = Number(a.cy);
-      const rx = Number(a.rx);
-      const ry = Number(a.ry);
-      return `M${n(cx - rx)},${n(cy)} a${n(rx)},${n(ry)} 0 1,0 ${n(2 * rx)},0 a${n(rx)},${n(ry)} 0 1,0 ${n(-2 * rx)},0 Z`;
-    }
-    case "rect": {
-      const x = Number(a.x ?? 0);
-      const y = Number(a.y ?? 0);
-      const w = Number(a.width);
-      const h = Number(a.height);
-      if (a.rx || a.ry) fail("a rounded rect, which this identity does not use");
-      return `M${n(x)},${n(y)} h${n(w)} v${n(h)} h${n(-w)} Z`;
-    }
-    case "line":
-      return `M${n(a.x1)},${n(a.y1)} L${n(a.x2)},${n(a.y2)}`;
-    case "polyline": {
-      const p = points(a.points);
-      let d = `M${n(p[0])},${n(p[1])}`;
-      for (let i = 2; i < p.length; i += 2) d += ` L${n(p[i])},${n(p[i + 1])}`;
-      return d;
-    }
-    case "polygon": {
-      const p = points(a.points);
-      let d = `M${n(p[0])},${n(p[1])}`;
-      for (let i = 2; i < p.length; i += 2) d += ` L${n(p[i])},${n(p[i + 1])}`;
-      return `${d} Z`;
-    }
-    default:
-      return fail(`the mark uses <${node.name}>, which this converter does not handle`);
-  }
-}
-
-const CAPS = { butt: "butt", round: "round", square: "square" };
-const JOINS = { miter: "miter", round: "round", bevel: "bevel" };
-
-/** Flattens the mark's tree into paths, resolving inherited paint attributes. */
-function flatten(nodes, inherited = {}) {
-  const out = [];
-  for (const node of nodes) {
-    const attrs = { ...inherited, ...node.attrs };
-    if (node.name === "g") {
-      out.push(...flatten(node.children, attrs));
-      continue;
-    }
-    if (node.name === "title" || node.name === "desc") continue;
-    out.push({ d: shapeToPathData(node), attrs });
-  }
-  return out;
 }
 
 function vectorPath(pathSpec, colorRef) {
@@ -229,16 +142,8 @@ await mkdir(path.join(RES, "drawable"), { recursive: true });
 await mkdir(path.join(RES, "mipmap-anydpi-v26"), { recursive: true });
 
 for (const { culture, mark: markFile } of CULTURES) {
-  const text = await readFile(path.join(MARKS, markFile), "utf8");
-  const open = text.match(/<svg\b([^>]*)>/);
-  const viewBox = open[1].match(/viewBox="([^"]+)"/);
-  const [minX, minY, width, height] = viewBox[1].trim().split(/[\s,]+/).map(Number);
+  const { minX, minY, width, height, inner } = parseDocument(await readFile(path.join(MARKS, markFile), "utf8"));
   if (width !== height) fail(`${markFile} is not square`);
-  const inner = text
-    .slice(open.index + open[0].length, text.lastIndexOf("</svg>"))
-    .replace(/<!--[\s\S]*?-->/g, "")
-    .replace(/<title>[\s\S]*?<\/title>/g, "")
-    .trim();
   const mark = { inner, minX, minY, size: width };
 
   let fit = 0.66;

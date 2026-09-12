@@ -84,6 +84,7 @@ fun EgyptDashboardPreview() {
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
+                    culture = AncientCulture.EGYPT,
                     reading = previewReading(
                         position = sampleChart.planets.getValue(ClassicalPlanet.MERCURY),
                         deityName = "Sebegu",
@@ -134,6 +135,7 @@ fun CarthageDashboardPreview() {
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
+                    culture = AncientCulture.CARTHAGE,
                     reading = previewReading(
                         position = sampleChart.planets.getValue(ClassicalPlanet.MOON),
                         deityName = "Tanit",
@@ -184,6 +186,7 @@ fun GreeceDashboardPreview() {
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
+                    culture = AncientCulture.GREECE,
                     reading = previewReading(
                         position = sampleChart.planets.getValue(ClassicalPlanet.SUN),
                         deityName = "Helios",
@@ -234,6 +237,7 @@ fun CanaanDashboardPreview() {
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
+                    culture = AncientCulture.CANAAN,
                     reading = previewReading(
                         position = sampleChart.planets.getValue(ClassicalPlanet.MARS),
                         deityName = "Resheph",
@@ -284,6 +288,7 @@ fun RomeDashboardPreview() {
             Column {
                 NatalWheel(chartData = sampleChart)
                 OracleDecreeCard(
+                    culture = AncientCulture.ROME,
                     reading = previewReading(
                         position = sampleChart.planets.getValue(ClassicalPlanet.JUPITER),
                         deityName = "Iuppiter",

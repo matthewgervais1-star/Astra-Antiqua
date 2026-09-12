@@ -46,6 +46,8 @@ import com.astra.antiqua.domain.AspectType
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
 import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.ui.components.DeityGlyph
+import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.ui.components.AccentRule
 import com.astra.antiqua.ui.components.Kicker
 import com.astra.antiqua.ui.components.Panel
@@ -72,6 +74,7 @@ fun MainDashboardScreen(onOpenMethod: () -> Unit = {}) {
     val dashboardViewModel: DashboardViewModel = viewModel()
 
     val chartState by dashboardViewModel.chartState.collectAsState()
+    val culture by appViewModel.selectedCulture.collectAsState()
     val context = LocalContext.current
     val lexicon = LocalLexicon.current
     val accent = LocalAccent.current
@@ -157,7 +160,7 @@ fun MainDashboardScreen(onOpenMethod: () -> Unit = {}) {
             val successState = chartState as ChartState.Success
             val placements = successState.bigThreePlacements
             items(placements, key = { it.planetPosition.planet.name }) { reading ->
-                OracleDecreeCard(reading = reading)
+                OracleDecreeCard(reading = reading, culture = culture)
                 Spacer(modifier = Modifier.height(Spacing.Step))
             }
 
@@ -174,7 +177,7 @@ fun MainDashboardScreen(onOpenMethod: () -> Unit = {}) {
 }
 
 @Composable
-fun OracleDecreeCard(reading: NatalPlacementReading) {
+fun OracleDecreeCard(reading: NatalPlacementReading, culture: AncientCulture) {
     val lexicon = LocalLexicon.current
     val accent = LocalAccent.current
 
@@ -189,11 +192,22 @@ fun OracleDecreeCard(reading: NatalPlacementReading) {
                 Kicker(text = "As interpreted by ${lexicon.officerRole}")
                 Spacer(modifier = Modifier.height(Spacing.Snug))
 
-                Text(
-                    text = reading.deityName.uppercase(),
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = accent,
-                )
+                // The glyph is this culture's own drawing of the body, beside
+                // the name the culture gives it. Received bodies take the
+                // accent through DeityGlyph's own rule.
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    DeityGlyph(
+                        body = reading.planetPosition.planet,
+                        culture = culture,
+                        size = 20.dp,
+                    )
+                    Spacer(modifier = Modifier.width(Spacing.Tight))
+                    Text(
+                        text = reading.deityName.uppercase(),
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = accent,
+                    )
+                }
                 Text(
                     text = reading.deityEpithet,
                     style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),

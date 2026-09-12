@@ -71,9 +71,10 @@ class AppViewModel : ViewModel() {
             } catch (_: Exception) {
                 _selectedCulture.value = AncientCulture.GREECE
             }
-            // The home screen icon follows the culture. This is its one call
-            // site; LauncherIcon holds the alias mapping.
-            LauncherIcon.applyLauncherIcon(context, _selectedCulture.value)
+            // The home screen icon follows the culture. Recorded here and
+            // applied when the app stops: swapping the alias under a running
+            // task closes it. LauncherIcon holds the mapping and the timing.
+            LauncherIcon.request(_selectedCulture.value)
             updatePhase(AppPhase.ONBOARDING)
         }
     }

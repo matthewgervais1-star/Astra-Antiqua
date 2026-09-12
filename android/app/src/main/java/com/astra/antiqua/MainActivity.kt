@@ -36,6 +36,7 @@ import com.astra.antiqua.ui.screens.CultureSelectionScreen
 import com.astra.antiqua.ui.screens.MainDashboardScreen
 import com.astra.antiqua.ui.screens.MethodScreen
 import com.astra.antiqua.ui.screens.OnboardingScreen
+import com.astra.antiqua.ui.LauncherIcon
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.LocalAccent
@@ -43,6 +44,16 @@ import com.astra.antiqua.viewmodel.AppViewModel
 
 class MainActivity : ComponentActivity() {
     private val viewModel: AppViewModel by viewModels()
+
+    /**
+     * The launcher icon the reader chose is swapped here rather than at the
+     * moment of choosing: disabling the alias that started this task would
+     * close it. See ui.LauncherIcon.
+     */
+    override fun onStop() {
+        super.onStop()
+        LauncherIcon.applyPending(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
