@@ -74,7 +74,9 @@ Web-only interpretive banks (no Android counterpart yet; they become shared
 content when Android gains those features): placement text (`PLANET_IN_SIGN`,
 10 × 12 = 120 paragraphs), aspect readings (45 pairs × 3 tones = 135), year
 narrative (83 entries), aspect rulings (5 cultures × 5 kinds = 25),
-notification lines (5 × 32 = 160), the permissions register, the long-transit
+deity charges (5 × 10 = 50) with aspect frames (25 rulings, 25 exact-only
+instructions, 5 ingress frames) that the decree, the week lines and the daily
+message are composed from, the permissions register, the long-transit
 spine bank (5 cultures × 5 slow bodies), the culture voice config (surface
 names and structural variants), domain readings (15), week readings (12),
 planet areas/domains, sign registers, aspect reflections, pair themes,

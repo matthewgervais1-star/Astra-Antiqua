@@ -70,6 +70,28 @@ the same placement, read five ways, sharing **no sentence and no image**. If two
 cultures could swap a sentence without anyone noticing, that sentence is a
 template fill and must be rewritten native.
 
+## The decree, and what a daily line may say
+
+The home decree and the week's daily lines are composed, not written, and the
+composition has its own rule: **every sentence after the sky sentence takes the
+figure**. A ruling keyed on the aspect kind alone prints the same words under
+Sun sextile Mars as under Moon sextile Venus, which is a template seam by
+another route, and it lets a wide sextile issue orders it never earned.
+
+So each god carries a charge (`data/deityCharges.ts`), a noun phrase in its
+culture's own nouns, and each ruling is a frame that takes both charges
+(`data/aspectFrames.ts`). The line changes whenever the bodies do.
+
+One ask per screen. The home page's votive is the one line that asks something
+of the reader, so the decree body states and does not order. The single
+exception is an exact figure, which earns one instruction naming the headline
+god; a wide aspect gets none. Week lines and ingress lines never order.
+
+A daily message (`lib/dailyMessage.ts`) is the decree's first paragraph and
+nothing else. There is no bank of fixed daily lines: a message that says the
+same thing whatever the ephemeris shows is the invention the method page
+disowns.
+
 ## The bar, stated in our own prose
 
 The test is not a comparison against anyone else's page. It is whether a

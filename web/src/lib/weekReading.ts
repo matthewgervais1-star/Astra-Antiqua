@@ -5,6 +5,8 @@ import { computeChart } from "@/lib/ephemeris";
 import { findYearIngresses } from "@/lib/yearForecast";
 import { DEITY_MATRIX } from "@/data/deities";
 import { ASPECT_VERBS } from "@/data/aspectVerbs";
+import { ASPECT_FRAMES, INGRESS_FRAMES } from "@/data/aspectFrames";
+import { DEITY_CHARGES } from "@/data/deityCharges";
 import { SIGN_PHRASES } from "@/components/horizons/signPhrase";
 import { noonUTCFor, properCase, sameLocalDay, weekdayAbbr } from "@/components/horizons/format";
 import type { SavedNatal } from "@/lib/savedNatal";
@@ -76,55 +78,6 @@ function toneForKind(kind: AspectKind): "harmony" | "tension" {
   return kind === "square" || kind === "opposition" ? "tension" : "harmony";
 }
 
-/**
- * One short imperative per (culture, aspect kind): the second half of an
- * aspect day's line, in the culture's institutional register. Egypt weighs,
- * Greece questions, Canaan convenes, Carthage audits, Rome rules.
- *
- * The decree prints these directly after ASPECT_RULINGS[culture][kind]
- * (see lib/decree.ts), so no entry here may reuse a sentence, an object, or
- * a turn of phrase from the ruling of the same kind. Each closes on the
- * instruction rather than opening with it, so the day's line ends on
- * something the reader can carry out.
- */
-export const ASPECT_IMPERATIVES: Readonly<Record<Culture, Readonly<Record<AspectKind, string>>>> = {
-  egypt: {
-    conjunction: "Declare the union. Let the scribes enter it in one line.",
-    sextile: "The inundation does not wait for the man still mending his dyke. Open the channel this morning.",
-    square: "A beam pulled out of true is straightened by hand, never by patience. Weigh it twice before you speak.",
-    trine: "No offering is required to keep this. Row while the current still runs with you.",
-    opposition: "Force nothing. Stand at the balance until it answers, and not one moment less.",
-  },
-  greece: {
-    conjunction: "Bring one question up the road, not three. Write it out before you climb.",
-    sextile: "Half a question gets half an answer. Say the thing you actually came for, in as few words as you can.",
-    square: "The god is no merchant and will not haggle. Reckon what this takes from you, then accept it or go home.",
-    trine: "This one was not bought. Act on it before you are back down the road.",
-    opposition: "Stop asking the same thing louder. Go back to the beginning and put a different question.",
-  },
-  canaan: {
-    conjunction: "Swear it once, before witnesses, and do not split the wording into two vows.",
-    sextile: "El does not read minds. Stand while the assembly is still seated and put it in words.",
-    square: "Anything forced through over an objection comes back to the floor twice. Let the man finish, and let it go into the record.",
-    trine: "Soft ground does not stay soft. Put the plough in before the feast day.",
-    opposition: "The docket will not clear itself while both sides keep their feet. Adjourn, and take it up when one has sat down.",
-  },
-  carthage: {
-    conjunction: "Two books for one venture is how a house loses money quietly. Keep one, and keep it in your own hand.",
-    sextile: "A standing offer is worth nothing until it is written down. Get it into the register before the day closes.",
-    square: "Someone has already told you the number is wrong. Go back down the column line by line before you sign anything.",
-    trine: "Fair weather is not a cargo. Weigh it out, sign the manifest, and sail.",
-    opposition: "An entry with a rival name on it is not an entry, it is a dispute. Strike one of them out before the tide turns.",
-  },
-  rome: {
-    conjunction: "Divided command loses the field. Send one man to speak for both.",
-    sextile: "The sky has done its part and will not do yours. Put the matter forward in your own name while the Forum is still full.",
-    square: "Someone will speak against this, and the law lets him. Have your witnesses in the room first.",
-    trine: "Nothing here has to be argued. Get it in front of the magistrate this morning.",
-    opposition: "Neither will yield the chair to the other today. Settle the precedence before you bring anything else forward.",
-  },
-};
-
 /** The verb an ingress line uses: "{deity} {verb} the {sign}." */
 const INGRESS_VERB: Readonly<Record<Culture, string>> = {
   egypt: "is ferried into",
@@ -132,15 +85,6 @@ const INGRESS_VERB: Readonly<Record<Culture, string>> = {
   canaan: "comes before",
   carthage: "makes port in",
   rome: "enters the augur's boundary of",
-};
-
-/** Closes an ingress day. Ends on the instruction, and carries no semicolon. */
-const INGRESS_IMPERATIVE: Readonly<Record<Culture, string>> = {
-  egypt: "The river does not reverse for anyone. Cross deliberately, and stop looking for the old bank.",
-  greece: "Meet the new ground with an open question, not an old answer.",
-  canaan: "The council changes with the seat. Bring the matter before the new one.",
-  carthage: "The old bearing no longer holds. Log the new heading before the next watch.",
-  rome: "The ground under the standard has changed. Take the auspices again before you march.",
 };
 
 /** One honest quiet-day line per culture (5 variants, one per culture, not per
@@ -277,13 +221,21 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       exact = tightest.orb < EXACT_ORB;
       tone = toneForKind(tightest.kind);
       const astro = composeAspectSentence(culture, tightest.a, tightest.b, tightest.kind, exact, chart);
-      line = `${astro} ${ASPECT_IMPERATIVES[culture][tightest.kind]}`;
+      // The ruling takes both gods' charges, so the day's line changes with
+      // the figure rather than with the aspect kind alone. No order: a week
+      // line reports the figure, and the decree carries the one instruction.
+      line = `${astro} ${ASPECT_FRAMES[culture][tightest.kind](
+        DEITY_CHARGES[culture][tightest.a],
+        DEITY_CHARGES[culture][tightest.b],
+      )}`;
       shorthand = { kind: "aspect", a: tightest.a, aspect: tightest.kind, b: tightest.b, exact };
     } else if (dayIngress) {
       tone = "harmony";
       const deity = DEITY_MATRIX[culture][dayIngress.planet].name;
       const signWord = properCase(SIGN_PHRASES[dayIngress.toSign]);
-      line = `${deity} ${INGRESS_VERB[culture]} the ${signWord}. ${INGRESS_IMPERATIVE[culture]}`;
+      line = `${deity} ${INGRESS_VERB[culture]} the ${signWord}. ${INGRESS_FRAMES[culture](
+        DEITY_CHARGES[culture][dayIngress.planet],
+      )}`;
       shorthand = { kind: "ingress", planet: dayIngress.planet, sign: dayIngress.toSign };
     } else {
       tone = "quiet";

@@ -1,14 +1,15 @@
 import { type Culture, type Planet } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import { ASPECT_VERBS } from "@/data/aspectVerbs";
-import { ASPECT_RULINGS } from "@/data/aspectRulings";
+import { ASPECT_FRAMES, EXACT_INSTRUCTIONS } from "@/data/aspectFrames";
+import { DEITY_CHARGES } from "@/data/deityCharges";
 import {
   computeAspects,
   longitudeToSign,
   type AspectKind,
   type Longitude,
 } from "@/data/sampleChart";
-import { ASPECT_IMPERATIVES, QUIET_LINE, composeAspectSentence } from "@/lib/weekReading";
+import { QUIET_LINE, composeAspectSentence } from "@/lib/weekReading";
 
 /**
  * The day's decree, composed entirely from the culture's own banks: deity
@@ -27,6 +28,10 @@ export interface DayDecree {
  * their orb for months and belong to the season, the year, and the long
  * transits instead. */
 const FAST_BODIES: ReadonlySet<Planet> = new Set(["sun", "moon", "mercury", "venus", "mars"]);
+
+/** Below this orb a figure is exact, marked in the sky sentence by the
+ *  culture's own instrument and the only case that earns an instruction. */
+const EXACT_ORB = 0.5;
 
 const SIGN_PHRASE: Readonly<Record<string, string>> = {
   Aries: "THE RAM",
@@ -95,16 +100,22 @@ export function composeDecree(
     top.kind === "conjunction" ? ` IN ${SIGN_PHRASE[longitudeToSign(chart[top.a]).sign]}` : "";
   const headline = `${deityA} ${verb} ${deityB}${signClause}`.toUpperCase();
 
+  // Every sentence after the sky sentence takes the two bodies' charges, so
+  // the ruling changes whenever the figure does. The one instruction a decree
+  // may carry belongs to the headline figure and only when it is exact: the
+  // home page's votive already asks something of the reader, and a wide
+  // aspect has no standing to give orders.
+  const exact = top.orb < EXACT_ORB;
+  const chargeA = DEITY_CHARGES[culture][top.a];
+  const chargeB = DEITY_CHARGES[culture][top.b];
   const first = [
-    composeAspectSentence(culture, top.a, top.b, top.kind, top.orb < 0.5, chart),
-    ASPECT_RULINGS[culture][top.kind],
-    ASPECT_IMPERATIVES[culture][top.kind],
+    composeAspectSentence(culture, top.a, top.b, top.kind, exact, chart),
+    ASPECT_FRAMES[culture][top.kind](chargeA, chargeB),
+    ...(exact ? [EXACT_INSTRUCTIONS[culture][top.kind](deityA)] : []),
   ].join(" ");
 
   // A second figure only earns its paragraph if it speaks in a different
-  // aspect kind. Falling back to the next-tightest candidate regardless of
-  // kind reprinted ASPECT_IMPERATIVES[culture][kind] verbatim under the
-  // paragraph that had just used it, which is the template seam itself.
+  // aspect kind, so the two paragraphs never rhyme on the frame.
   const second = candidates.find(
     (a) => (a.a !== top.a || a.b !== top.b) && a.kind !== top.kind,
   );
@@ -112,8 +123,11 @@ export function composeDecree(
     ? [
         first,
         [
-          composeAspectSentence(culture, second.a, second.b, second.kind, second.orb < 0.5, chart, 1),
-          ASPECT_IMPERATIVES[culture][second.kind],
+          composeAspectSentence(culture, second.a, second.b, second.kind, second.orb < EXACT_ORB, chart, 1),
+          ASPECT_FRAMES[culture][second.kind](
+            DEITY_CHARGES[culture][second.a],
+            DEITY_CHARGES[culture][second.b],
+          ),
         ].join(" "),
       ]
     : [first, NO_SECOND_FIGURE[culture]];

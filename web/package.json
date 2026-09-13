@@ -10,6 +10,7 @@
     "lint": "eslint --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "gates": "node scripts/check-gates.mjs",
+    "test": "node --import ./scripts/register-alias.mjs --test \"src/**/*.test.ts\"",
     "specimens": "node scripts/specimens/gen-specimens.mjs && node scripts/specimens/render.mjs && node scripts/specimens/build-css.mjs && node scripts/specimens/wrap-cards.mjs",
     "export:content": "node scripts/export-content.mjs",
     "export:goldens": "node scripts/export-goldens.mjs",
