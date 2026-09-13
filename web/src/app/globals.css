@@ -44,6 +44,83 @@
   --font-greek-display: var(--font-gfs-didot), "GFS Didot", serif;
 
   --radius: 0px;
+
+  /*
+   * TYPE SCALE, verbatim from docs/design/system/tokens/typography.css.
+   * The design system is canonical: where a component disagrees with these
+   * values, the component is wrong. Ten sizes, five tracking values, three
+   * leadings. Do not add a size here to fit one screen, and do not set a
+   * literal px font-size in a component.
+   *
+   * Tailwind v4 turns a --text-* key into a text-* utility, so these read as
+   * text-display-xl through text-data-xs. None of the names collide with
+   * Tailwind's own text-xs through text-9xl, so nothing existing changes
+   * meaning. Same for --tracking-* (tracking-display and friends, alongside
+   * Tailwind's tracking-tight) and --leading-*.
+   */
+
+  /* display: Cinzel, caps, wide tracking. Never lowercase, never body copy. */
+  --text-display-xl: 52px;
+  --text-display-l: 40px;
+  --text-display-m: 26px;
+  --text-display-s: 22px;
+
+  /* prose: Spectral */
+  --text-prose-l: 19px;
+  --text-prose-m: 17px;
+  --text-prose-s: 15px;
+
+  /* data and microcopy: IBM Plex Mono */
+  --text-data-m: 15px;
+  --text-data-s: 12px;
+  --text-data-xs: 11px;
+
+  --tracking-display: 0.16em;
+  /* the small-caps prototype on the four non-Roman surfaces sits closer */
+  --tracking-display-sc: 0.06em;
+  --tracking-data: 0.04em;
+  --tracking-label: 0.14em;
+  --tracking-microcopy: 0.18em;
+
+  --leading-display: 1.1;
+  --leading-prose: 1.65;
+  --leading-data: 2;
+}
+
+/*
+ * SPACING, RULES AND SURFACES, verbatim from docs/design/system/tokens/rules.css
+ * and docs/design/system/tokens/colors.css. The design system is canonical.
+ *
+ * CRITICAL: the spacing steps stay here as plain custom properties and must
+ * NEVER move into @theme as --spacing-1, --spacing-2 and so on. Tailwind v4
+ * generates its entire numeric spacing scale from the --spacing namespace, so
+ * declaring --spacing-1 would silently redefine p-1, m-1, gap-1 and every other
+ * numeric step from 4px to 6px across the whole app. Consumed as arbitrary
+ * values, p-[var(--space-3)] or gap-[var(--space-2)], there is no collision.
+ * Leave this block where it is.
+ */
+:root {
+  --space-1: 6px;
+  --space-2: 12px;
+  --space-3: 18px;
+  --space-4: 26px;
+  --space-5: 34px;
+  --space-6: 44px;
+  --space-7: 64px;
+  --space-8: 80px;
+
+  /* one rule weight, three inks */
+  --rule-width: 1px;
+  --rule-active: 1px solid var(--accent);
+
+  /* no gradients, no shadows, no bevels, no glow, no animation, anywhere */
+  --shadow: none;
+  --transition: none;
+
+  --surface-page: #0B0907;
+  --surface-card: #121010;
+  --bg: var(--surface-page);
+  --bg-card: var(--surface-card);
 }
 
 /*
@@ -158,8 +235,9 @@ html {
 body {
   min-height: 100%;
   font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.7;
+  font-size: var(--text-prose-m);
+  /* 1.65, not 1.7: docs/design/system/tokens/typography.css sets prose leading. */
+  line-height: var(--leading-prose);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
