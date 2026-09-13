@@ -18,6 +18,7 @@ import { ASPECT_RULINGS } from "@/data/aspectRulings";
 import { ASPECT_RULES, type AspectKind } from "@/data/sampleChart";
 import { NaveShell } from "@/components/chrome/NaveShell";
 import { NaveHead } from "@/components/chrome/NaveHead";
+import { CultureEmblem } from "@/components/chrome/CultureEmblem";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
@@ -79,7 +80,14 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
   return (
     <VoiceScope culture={culture}>
       <NaveShell context={`THE ${label} DOORWAY`} active="voices">
-        <NaveHead kicker={`THE ${label} DOORWAY · ${voice.institution}`}>{label}</NaveHead>
+        <NaveHead
+          kicker={`THE ${label} DOORWAY · ${voice.institution}`}
+          emblem={
+            <CultureEmblem culture={culture} size={72} decorative className="text-[var(--accent)]" />
+          }
+        >
+          {label}
+        </NaveHead>
 
         <div className="mx-auto flex max-w-[560px] flex-col gap-5">
           <p className="font-body text-[16px] leading-[1.75] text-prose">

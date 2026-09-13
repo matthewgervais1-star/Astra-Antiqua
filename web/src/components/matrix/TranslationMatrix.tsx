@@ -4,6 +4,7 @@ import { CULTURES, CULTURE_LABELS, PLANETS, RECEIVED_BODIES } from "@/data/cultu
 import { DEITY_MATRIX } from "@/data/deities";
 import { CULTURE_ACCENTS } from "@/data/palettes";
 import { cn } from "@/lib/classNames";
+import { CultureEmblem } from "@/components/chrome/CultureEmblem";
 
 /**
  * The ten-by-five reference table: every body this almanac tracks, seated
@@ -40,7 +41,10 @@ export function TranslationMatrix() {
                   className="px-2 py-2 text-left text-[11px] tracking-[0.1em]"
                   style={{ color: CULTURE_ACCENTS[culture] }}
                 >
-                  {CULTURE_LABELS[culture].toUpperCase()}
+                  <span className="flex items-center gap-[var(--space-1)]">
+                    <CultureEmblem culture={culture} size={18} decorative />
+                    {CULTURE_LABELS[culture].toUpperCase()}
+                  </span>
                 </th>
               ))}
             </tr>

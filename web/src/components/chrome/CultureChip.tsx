@@ -6,6 +6,7 @@ import { CULTURES, CULTURE_LABELS, type Culture } from "@/data/cultures";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { writePersistedPantheon } from "@/lib/pantheonPreference";
 import { cn } from "@/lib/classNames";
+import { CultureEmblem } from "@/components/chrome/CultureEmblem";
 
 const CHIP_CLASS =
   "whitespace-nowrap border border-[var(--accent-strong-border)] px-[13px] py-2 font-mono text-[11px] text-[var(--accent)]";
@@ -56,8 +57,9 @@ function CultureChipImpl() {
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className={CHIP_CLASS}
+        className={cn(CHIP_CLASS, "inline-flex items-center gap-[var(--space-1)]")}
       >
+        {culture ? <CultureEmblem culture={culture} size={14} decorative /> : null}
         {label}
       </button>
       {open ? (
@@ -72,10 +74,11 @@ function CultureChipImpl() {
               role="menuitem"
               onClick={() => select(c)}
               className={cn(
-                "block w-full px-[13px] py-2 text-left font-mono text-[11px]",
+                "flex w-full items-center gap-[var(--space-2)] px-[13px] py-2 text-left font-mono text-[11px]",
                 c === culture ? "text-[var(--accent)]" : "text-bone/80 hover:text-bone",
               )}
             >
+              <CultureEmblem culture={c} size={16} decorative />
               {CULTURE_LABELS[c].toUpperCase()}
             </button>
           ))}
