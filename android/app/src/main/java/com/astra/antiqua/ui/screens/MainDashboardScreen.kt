@@ -49,6 +49,8 @@ import com.astra.antiqua.model.ClassicalPlanet
 import com.astra.antiqua.ui.components.DeityGlyph
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.ui.components.AccentRule
+import com.astra.antiqua.ui.components.Badge
+import com.astra.antiqua.ui.components.BadgeTone
 import com.astra.antiqua.ui.components.Kicker
 import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.components.SectionDivider
@@ -207,6 +209,13 @@ fun OracleDecreeCard(reading: NatalPlacementReading, culture: AncientCulture) {
                         style = MaterialTheme.typography.headlineSmall,
                         color = accent,
                     )
+                    // A body the ancients never saw says so where it is named,
+                    // not only on the method page. The accent is already this
+                    // card's, so the chip takes the rule and no second colour.
+                    if (reading.planetPosition.planet.isReceived) {
+                        Spacer(modifier = Modifier.width(Spacing.Tight))
+                        Badge(text = "Received", tone = BadgeTone.ACCENT)
+                    }
                 }
                 Text(
                     text = reading.deityEpithet,

@@ -28,6 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.astra.antiqua.domain.LexiconDictionary
 import com.astra.antiqua.model.AncientCulture
+import com.astra.antiqua.model.label
+import com.astra.antiqua.ui.components.CultureEmblem
 import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.accentFor
@@ -79,19 +81,23 @@ fun CultureSelectionScreen(
                         .clickable { onCultureSelected(culture) }
                         .semantics {
                             role = Role.Button
-                            contentDescription = "$culture, $institution"
+                            contentDescription = "${culture.label}, $institution"
                         },
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(
-                            modifier = Modifier
-                                .size(8.dp)
-                                .background(accentFor(culture))
+                        // The culture's own tier-2 emblem, in its own accent.
+                        // Five accents on one screen is the exception the
+                        // design system allows here: no culture is active yet,
+                        // and this screen exists to tell the five apart.
+                        CultureEmblem(
+                            culture = culture,
+                            size = 28.dp,
+                            tint = accentFor(culture),
                         )
                         Spacer(modifier = Modifier.width(Spacing.Step))
                         Column {
                             Text(
-                                text = culture.name,
+                                text = culture.label.uppercase(),
                                 style = MaterialTheme.typography.titleLarge,
                                 color = Bone,
                             )
