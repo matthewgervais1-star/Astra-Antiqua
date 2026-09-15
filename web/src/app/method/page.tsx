@@ -32,7 +32,7 @@ const ORB_GLYPHS: Readonly<Record<AspectKind, string>> = {
   sextile: "⚹",
 };
 
-const PROSE_CLASS = "font-body text-[15px] leading-[1.7] text-prose";
+const PROSE_CLASS = "font-body text-prose-s leading-prose text-prose";
 
 export default function MethodPage() {
   return (
@@ -63,7 +63,7 @@ export default function MethodPage() {
             An aspect counts only inside these distances. When nothing is in orb, we say the day is
             quiet. We do not invent weather.
           </p>
-          <div className="flex flex-wrap items-center gap-x-[18px] gap-y-2 border border-rule px-[14px] py-[11px] font-mono text-[11px] text-dim">
+          <div className="flex flex-wrap items-center gap-x-[var(--space-3)] gap-y-2 border border-rule px-[var(--space-2)] py-[var(--space-2)] font-mono text-data-xs text-dim">
             {ORB_DISPLAY_ORDER.map((kind) => {
               const rule = ASPECT_RULES.find((r) => r.kind === kind);
               if (!rule) return null;
@@ -73,7 +73,7 @@ export default function MethodPage() {
                 </span>
               );
             })}
-            <span className="ml-auto tracking-[0.14em]">TIGHTER = LOUDER</span>
+            <span className="ml-auto tracking-label">TIGHTER = LOUDER</span>
           </div>
         </section>
 
@@ -94,7 +94,7 @@ export default function MethodPage() {
             the ancient manner. This page will always say so.
           </p>
           <div className="overflow-x-auto border border-rule">
-            <table className="w-full min-w-[480px] border-collapse font-mono text-[11px]">
+            <table className="w-full min-w-[480px] border-collapse font-mono text-data-xs">
               <thead>
                 <tr>
                   <th scope="col" className="border-b border-r border-rule px-3 py-2 text-left text-dim">
@@ -104,7 +104,7 @@ export default function MethodPage() {
                     <th
                       key={culture}
                       scope="col"
-                      className="border-b border-r border-rule px-3 py-2 text-left tracking-[0.1em] text-dim last:border-r-0"
+                      className="border-b border-r border-rule px-3 py-2 text-left tracking-data text-dim last:border-r-0"
                     >
                       {CULTURE_LABELS[culture].toUpperCase()}
                     </th>
@@ -116,7 +116,7 @@ export default function MethodPage() {
                   <tr key={planet}>
                     <th
                       scope="row"
-                      className="border-r border-rule px-3 py-2 text-left tracking-[0.1em] text-[var(--accent)]"
+                      className="border-r border-rule px-3 py-2 text-left tracking-data text-accent"
                     >
                       {PLANET_LABELS[planet].toUpperCase()}
                     </th>

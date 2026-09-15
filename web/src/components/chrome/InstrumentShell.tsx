@@ -28,14 +28,14 @@ export function InstrumentShell({ children, context, siblings }: InstrumentShell
         <Link href="/" className="whitespace-nowrap font-display text-[14px] font-medium tracking-[0.28em] text-bone">
           <Wordmark capHeight={9.8} />
         </Link>
-        <span className="min-w-0 truncate font-mono text-[11px] text-dim">{context}</span>
+        <span className="min-w-0 truncate font-mono text-data-xs text-dim">{context}</span>
         <div className="ml-auto flex items-center gap-6">
           <CultureChip />
           {siblings.map((s) => (
             <Link
               key={s.href}
               href={s.href}
-              className="whitespace-nowrap font-mono text-[11px] text-dim hover:text-bone"
+              className="whitespace-nowrap font-mono text-data-xs text-dim hover:text-bone"
             >
               {s.label.toUpperCase()}
             </Link>

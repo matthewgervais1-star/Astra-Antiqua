@@ -2,7 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { Badge } from "@/components/chrome/Badge";
+import { Button } from "@/components/chrome/Button";
 import { CultureGate } from "@/components/chrome/CultureGate";
+import { DataRow, DataRowHead } from "@/components/chrome/DataRow";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
 import { InstrumentShell, type InstrumentSibling } from "@/components/chrome/InstrumentShell";
 import { Skeleton } from "@/components/chrome/Skeleton";
@@ -24,6 +27,8 @@ import {
   type SavedChartInputs,
 } from "@/lib/savedCharts";
 import { resolveSavedChart } from "@/lib/savedNatal";
+import { computeWholeSignHouses, houseOfSign } from "@/lib/houses";
+import { computeMotion } from "@/lib/motion";
 import { cn } from "@/lib/classNames";
 import { SIGN_ABBR3, cityShort, formatDegMin } from "@/components/charts/chartFormat";
 
@@ -93,24 +98,21 @@ function ChartsInstrumentInner() {
     return (
       <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
         <div className="mx-auto flex max-w-[560px] flex-col items-center px-5 py-16 text-center min-[720px]:col-span-3">
-          <div className="font-mono text-[11px] tracking-[0.18em] text-dim">SAVED CHARTS</div>
-          <div className="mx-auto my-5 h-px w-11 bg-[var(--accent)]" />
-          <h1 className="font-display text-[22px] leading-[1.5] tracking-[0.1em] text-bone">
+          <div className="font-mono text-data-xs tracking-microcopy text-dim">SAVED CHARTS</div>
+          <div className="mx-auto my-5 h-px w-11 bg-accent" />
+          <h1 className="font-display text-display-s leading-display tracking-display text-bone">
             NO CHART IS YET
             <br />
             ENTERED IN THE RECORD
           </h1>
-          <p className="mx-auto mt-4 max-w-[360px] font-body text-[15px] leading-[1.65] text-prose">
+          <p className="mx-auto mt-4 max-w-[360px] font-body text-prose-s leading-prose text-prose">
             A chart is cast once and kept: your sky, fixed at the hour of your birth, read by any
             of the five voices.
           </p>
-          <Link
-            href="/reading"
-            className="mt-6 inline-block border border-[var(--accent)] px-[30px] py-[14px] font-display text-[12px] uppercase tracking-[0.2em] text-[var(--accent)]"
-          >
+          <Button href="/reading" variant="votive" className="mt-6">
             CAST THE FIRST CHART
-          </Link>
-          <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.1em] text-dim">
+          </Button>
+          <div className="mt-4 font-mono text-data-xs uppercase tracking-data text-dim">
             KEPT ON THIS DEVICE · AN ACCOUNT ADDS SYNC
           </div>
         </div>
@@ -125,7 +127,7 @@ function ChartsInstrumentInner() {
     return (
       <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
         <div className="mx-auto flex max-w-[480px] flex-col items-center px-5 py-16 text-center min-[720px]:col-span-3">
-          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-dim">
+          <p className="font-mono text-data-xs uppercase tracking-label text-dim">
             THIS CHART COULD NOT BE COMPUTED
           </p>
         </div>
@@ -134,6 +136,7 @@ function ChartsInstrumentInner() {
   }
 
   const ascPoint = longitudeToSign(natal.angles.ascendant);
+  const { ascendantSignIndex } = computeWholeSignHouses(natal.angles.ascendant);
   const wheelAspects = computeAspects(natal.chart).map((a) => ({
     planetA: a.a,
     planetB: a.b,
@@ -143,50 +146,45 @@ function ChartsInstrumentInner() {
   return (
     <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
       <aside className="border-rule border-b px-7 py-6 min-[720px]:border-b-0 min-[720px]:border-r">
-        <div className="font-mono text-[11px] tracking-[0.16em] text-dim">
+        <div className="font-mono text-data-xs tracking-label text-dim">
           PLACEMENTS · B. {selectedChart.date} · {cityShort(selectedChart.cityLabel)}
         </div>
-        <div className="mt-3 flex flex-col font-mono text-[11px]">
-          <div className="grid grid-cols-[1fr_78px_46px] gap-2 py-2 text-faint-ink">
-            <span>BODY</span>
-            <span>LONG</span>
-            <span>SIGN</span>
-          </div>
+        <div className="mt-3 flex flex-col font-mono text-data-xs">
+          <DataRowHead />
           {PLANETS.map((planet) => {
             const { sign, degree } = longitudeToSign(natal.chart[planet]);
             const deity = DEITY_MATRIX[culture][planet];
-            const received = isReceived(planet);
             return (
-              <Link
+              <DataRow
                 key={planet}
                 href={`/charts/${selectedChart.id}/${planet}`}
-                className={cn(
-                  "grid grid-cols-[1fr_78px_46px] items-center gap-2 border-t border-rule-row py-2 hover:bg-bone/5",
-                  received ? "text-[var(--accent)]" : "text-bone",
-                )}
-              >
-                <span className="flex min-w-0 items-center gap-[6px]">
-                  <DeityGlyph body={planet} culture={culture} size={16} />
-                  <span className="truncate">{deity.name.toUpperCase()}</span>
-                </span>
-                <span className="text-dim">{formatDegMin(degree)}</span>
-                <span className="text-dim">{SIGN_ABBR3[sign]}</span>
-              </Link>
+                received={isReceived(planet)}
+                body={
+                  <>
+                    <DeityGlyph body={planet} culture={culture} size={16} />
+                    <span className="truncate">{deity.name.toUpperCase()}</span>
+                  </>
+                }
+                position={formatDegMin(degree)}
+                sign={SIGN_ABBR3[sign]}
+                house={houseOfSign(sign, ascendantSignIndex)}
+                motion={computeMotion(planet, natal.birth.utcDate)}
+              />
             );
           })}
         </div>
-        <div className="mt-4 font-mono text-[11px] leading-[1.7] text-dim">
+        <div className="mt-4 font-mono text-data-xs leading-data text-dim">
           ASC {formatDegMin(ascPoint.degree)} {ascPoint.sign.toUpperCase()} · WHOLE-SIGN HOUSES
           <br />
           ASTRONOMY-ENGINE · ORBS DOCUMENTED →{" "}
-          <Link href="/method" className="text-[var(--accent)]">
+          <Link href="/method" className="text-accent">
             METHOD
           </Link>
         </div>
       </aside>
 
       <div className="flex flex-col items-center px-7 py-6">
-        <div className="w-full font-mono text-[11px] tracking-[0.16em] text-dim">
+        <div className="w-full font-mono text-data-xs tracking-label text-dim">
           THE NATAL WHEEL
         </div>
         <div className="mt-3">
@@ -198,24 +196,24 @@ function ChartsInstrumentInner() {
             accentPlanets={[...RECEIVED_BODIES]}
           />
         </div>
-        <div className="mt-4 flex w-full items-center gap-2 font-mono text-[11px] text-dim">
+        <div className="mt-4 flex w-full items-center gap-2 font-mono text-data-xs text-dim">
           <span className="h-px w-[18px] bg-conflict" /> CONFLICT
-          <span className="ml-[10px] h-px w-[18px] bg-bone/40" /> HARMONY
-          <span className="ml-auto text-[var(--accent)]">ACCENT GLYPHS: THE THREE RECEIVED</span>
+          <span className="ml-[var(--space-2)] h-px w-[18px] bg-bone/40" /> HARMONY
+          <span className="ml-auto text-accent">ACCENT GLYPHS: THE THREE RECEIVED</span>
         </div>
       </div>
 
       <aside className="border-rule flex flex-col border-t px-7 py-6 min-[720px]:border-t-0 min-[720px]:border-l">
-        <div className="font-mono text-[11px] tracking-[0.16em] text-dim">
+        <div className="font-mono text-data-xs tracking-label text-dim">
           SAVED CHARTS · ON THIS DEVICE
         </div>
-        <ul className="mt-3 flex flex-col gap-[10px]">
+        <ul className="mt-3 flex flex-col gap-[var(--space-2)]">
           {charts.map((chart) => (
             <li key={chart.id}>
               <div
                 className={cn(
-                  "border px-[15px] py-[13px]",
-                  chart.id === selectedChart.id ? "border-[var(--accent)]" : "border-rule",
+                  "border px-[var(--space-3)] py-[var(--space-2)]",
+                  chart.id === selectedChart.id ? "border-rule-active" : "border-rule",
                 )}
               >
                 <button
@@ -226,13 +224,13 @@ function ChartsInstrumentInner() {
                   <span className="font-display text-[13px] tracking-[0.08em] text-bone">
                     {chart.name.toUpperCase()}
                   </span>
-                  <span className="font-mono text-[11px] text-dim">
+                  <span className="font-mono text-data-xs text-dim">
                     {chart.date.slice(0, 4)} · {cityShort(chart.cityLabel)}
                   </span>
                 </button>
-                <div className="mt-2 flex flex-wrap gap-4 font-mono text-[11px] tracking-[0.08em]">
+                <div className="mt-2 flex flex-wrap gap-4 font-mono text-data-xs tracking-data">
                   {chart.primary ? (
-                    <span className="text-[var(--accent)]">PRIMARY</span>
+                    <Badge tone="accent">PRIMARY</Badge>
                   ) : (
                     <button
                       type="button"
@@ -273,25 +271,22 @@ function ChartsInstrumentInner() {
             </li>
           ))}
         </ul>
-        <Link
-          href="/reading"
-          className="mt-[10px] border border-[var(--accent)] px-[15px] py-[13px] text-center font-mono text-[11px] tracking-[0.12em] text-[var(--accent)]"
-        >
+        <Button href="/reading" variant="votive" block className="mt-[var(--space-2)]">
           + CAST A NEW CHART
-        </Link>
+        </Button>
 
-        <div className="mt-6 font-mono text-[11px] tracking-[0.16em] text-dim">
+        <div className="mt-6 font-mono text-data-xs tracking-label text-dim">
           THE THREE, AS {CULTURE_LABELS[culture].toUpperCase()} RECEIVES THEM
         </div>
-        <div className="mt-3 flex flex-col gap-[10px]">
+        <div className="mt-3 flex flex-col gap-[var(--space-2)]">
           {RECEIVED_BODIES.map((planet) => {
             const deity = DEITY_MATRIX[culture][planet];
             return (
               <div
                 key={planet}
-                className="border-l-2 border-[var(--accent)] pl-3 font-body text-[12.5px] leading-[1.55] text-prose"
+                className="border-l-2 border-rule-active pl-3 font-body text-prose-s leading-prose text-prose"
               >
-                <span className="inline-flex items-center gap-[6px] align-middle font-display text-[11px] tracking-[0.1em] text-[var(--accent)]">
+                <span className="inline-flex items-center gap-[var(--space-1)] align-middle font-display text-[11px] tracking-[0.1em] text-accent">
                   <DeityGlyph body={planet} culture={culture} size={16} />
                   {deity.name.toUpperCase()}
                 </span>{" "}
@@ -302,9 +297,9 @@ function ChartsInstrumentInner() {
         </div>
 
         <div className="mt-auto pt-6">
-          <div className="border border-rule px-[15px] py-[13px] font-mono text-[11px] leading-[1.7] text-dim">
+          <div className="border border-rule px-[var(--space-3)] py-[var(--space-2)] font-mono text-data-xs leading-data text-dim">
             MODERN BODIES, RECEIVED IN THE ANCIENT MANNER →{" "}
-            <Link href="/method" className="text-[var(--accent)]">
+            <Link href="/method" className="text-accent">
               METHOD
             </Link>
           </div>

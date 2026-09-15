@@ -15,9 +15,9 @@ export function TransitProgress({ progressPct }: TransitProgressProps) {
   const pct = Math.min(100, Math.max(0, progressPct));
   return (
     <div className="relative h-[3px] w-full bg-rule-row">
-      <span className="absolute left-0 top-0 block h-[3px] bg-[var(--accent)]" style={{ width: `${pct}%` }} />
+      <span className="absolute left-0 top-0 block h-[3px] bg-accent" style={{ width: `${pct}%` }} />
       <span
-        className="absolute top-1/2 h-[9px] w-[9px] -translate-y-1/2 bg-[var(--accent)]"
+        className="absolute top-1/2 h-[9px] w-[9px] -translate-y-1/2 bg-accent"
         style={{ left: `${pct}%`, transform: "translate(-50%, -50%)" }}
       />
     </div>

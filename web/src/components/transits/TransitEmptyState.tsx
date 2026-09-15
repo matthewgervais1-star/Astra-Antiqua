@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/chrome/Button";
 
 export interface TransitEmptyStateProps {
   /** Adds a "SEE ALL LONG TRANSITS" link, used when /transits/[id] resolves
@@ -15,26 +16,23 @@ export interface TransitEmptyStateProps {
 export function TransitEmptyState({ showAllLink }: TransitEmptyStateProps) {
   return (
     <div className="mx-auto max-w-[400px] py-10 text-center">
-      <div className="font-mono text-[11px] tracking-[0.18em] text-dim">THE LONG TRANSITS</div>
-      <div className="mx-auto my-5 h-px w-11 bg-[var(--accent)]" />
-      <div className="text-balance font-display text-[19px] leading-[1.5] tracking-[0.1em] text-bone">
+      <div className="font-mono text-data-xs tracking-microcopy text-dim">THE LONG TRANSITS</div>
+      <div className="mx-auto my-5 h-px w-11 bg-accent" />
+      <div className="text-balance font-display text-display-s leading-display tracking-display text-bone">
         THE LONG TRANSITS ARE READ AGAINST A CHART
       </div>
-      <p className="mx-auto mt-3.5 max-w-[360px] font-body text-[14px] leading-[1.65] text-prose">
+      <p className="mx-auto mt-3.5 max-w-[360px] font-body text-prose-s leading-prose text-prose">
         A long transit is scored against your own sky, the chart cast once at the hour of your birth and kept.
       </p>
-      <Link
-        href="/reading"
-        className="mt-[22px] inline-block border border-[var(--accent)] px-[30px] py-[14px] font-display text-[12px] tracking-[0.2em] text-[var(--accent)]"
-      >
+      <Button href="/reading" variant="votive" className="mt-[var(--space-4)]">
         CAST THE FIRST CHART
-      </Link>
-      <div className="mt-3.5 font-mono text-[11px] tracking-[0.08em] text-dim">
+      </Button>
+      <div className="mt-3.5 font-mono text-data-xs tracking-data text-dim">
         KEPT ON THIS DEVICE · AN ACCOUNT ADDS SYNC
       </div>
       {showAllLink ? (
         <div className="mt-5">
-          <Link href="/transits" className="font-display text-[11.5px] tracking-[0.18em] text-[var(--accent)]">
+          <Link href="/transits" className="font-display text-[11.5px] tracking-[0.18em] text-accent">
             SEE ALL LONG TRANSITS →
           </Link>
         </div>

@@ -57,17 +57,17 @@ function SegmentRow({ seg }: { seg: YearSegment }) {
       )}
     >
       <span
-        className={cn("font-mono text-[11px] leading-[1.5]", isCurrent ? "text-[var(--accent)]" : "text-dim")}
+        className={cn("font-mono text-data-xs leading-data", isCurrent ? "text-accent" : "text-dim")}
       >
         {seg.label}
         <br />
         {seg.dateRange}
       </span>
-      <span className={cn("font-body text-[14.5px] leading-[1.55]", isCurrent ? "text-bone" : "text-bone/70")}>
+      <span className={cn("font-body text-prose-s leading-prose", isCurrent ? "text-bone" : "text-bone/70")}>
         {seg.summary || "The sky holds no single dominant beat here."}
       </span>
       <span
-        className={cn("whitespace-nowrap font-mono text-[11px]", isCurrent ? "text-[var(--accent)]" : "text-dim")}
+        className={cn("whitespace-nowrap font-mono text-data-xs", isCurrent ? "text-accent" : "text-dim")}
       >
         {seg.status}
       </span>
@@ -137,7 +137,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
         {roman} · {voice.yearTitle}
       </NaveHead>
 
-      <p className="mx-auto max-w-[560px] text-left font-body text-[17px] leading-[1.7] text-prose">
+      <p className="mx-auto max-w-[560px] text-left font-body text-prose-m leading-prose text-prose">
         {report ? report.yearTheme.body : SKY_ONLY_OPENING[culture]}
       </p>
 
@@ -149,14 +149,14 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
             ))}
           </div>
           {isFestivals ? (
-            <div className="mx-auto mt-3 max-w-[560px] text-center font-mono text-[11px] tracking-[0.14em] text-dim">
+            <div className="mx-auto mt-3 max-w-[560px] text-center font-mono text-data-xs tracking-label text-dim">
               MARKED BY THE ATHENIAN CIRCUIT, NOT QUARTERS
             </div>
           ) : null}
 
           {spans.length > 0 ? (
-            <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-[22px] py-[18px] text-left">
-              <div className="mb-3 font-mono text-[11px] tracking-[0.16em] text-[var(--accent)]">
+            <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-[var(--space-4)] py-[var(--space-3)] text-left">
+              <div className="mb-3 font-mono text-data-xs tracking-label text-accent">
                 THE YEAR&apos;S LONG TRANSITS · ITS SPINE
               </div>
               <div className="flex flex-col gap-2.5">
@@ -164,12 +164,12 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
                   <Link
                     key={span.id}
                     href={`/transits/${span.id}`}
-                    className="flex items-baseline justify-between gap-3 text-bone no-underline hover:text-[var(--accent)]"
+                    className="flex items-baseline justify-between gap-3 text-prose no-underline hover:text-bone"
                   >
                     <span className="font-display text-[13px] tracking-[0.08em]">
                       {spanHeadline(culture, span)}
                     </span>
-                    <span className="whitespace-nowrap font-mono text-[11px] text-dim">
+                    <span className="whitespace-nowrap font-mono text-data-xs text-dim">
                       → {formatMonthYear(span.end)}
                     </span>
                   </Link>
@@ -186,11 +186,11 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
         </>
       ) : skyOnly ? (
         <>
-          <div className="mx-auto mt-8 max-w-[560px] border border-rule px-[22px] py-[18px] text-left">
-            <div className="mb-3 font-mono text-[11px] tracking-[0.16em] text-dim">
+          <div className="mx-auto mt-8 max-w-[560px] border border-rule px-[var(--space-4)] py-[var(--space-3)] text-left">
+            <div className="mb-3 font-mono text-data-xs tracking-label text-dim">
               STATIONS AND INGRESSES · THE YEAR AHEAD
             </div>
-            <div className="flex max-h-[420px] flex-col gap-2 overflow-y-auto font-mono text-[11px] leading-[1.5] text-prose">
+            <div className="flex max-h-[420px] flex-col gap-2 overflow-y-auto font-mono text-data-xs leading-data text-prose">
               {buildSkyOnlyTimeline(culture, skyOnly.stations, skyOnly.ingresses).map((row) => (
                 <div key={row.key}>
                   <span className={row.tone === "conflict" ? "text-conflict" : "text-dim"}>
@@ -201,13 +201,13 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
               ))}
             </div>
           </div>
-          <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-[22px] py-[18px] text-center">
+          <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-[var(--space-4)] py-[var(--space-3)] text-center">
             <div className="font-display text-[15px] tracking-[0.1em] text-bone">
               CAST A CHART TO READ THE YEAR AGAINST YOUR OWN SKY
             </div>
             <Link
               href="/reading"
-              className="mt-4 inline-block border border-[var(--accent-strong-border)] px-5 py-2.5 font-mono text-[11px] tracking-[0.14em] text-[var(--accent)]"
+              className="mt-4 inline-block border border-[var(--accent-strong-border)] px-5 py-2.5 font-mono text-data-xs tracking-label text-accent"
             >
               CAST A CHART →
             </Link>

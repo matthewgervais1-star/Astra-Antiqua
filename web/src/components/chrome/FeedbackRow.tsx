@@ -11,7 +11,7 @@ export interface FeedbackRowProps {
 
 const LINK_BASE = "border-b pb-[2px]";
 const LINK_UNSELECTED = "border-bone/40 text-bone";
-const LINK_SELECTED = "border-[var(--accent)] text-[var(--accent)]";
+const LINK_SELECTED = "border-rule-active text-accent";
 
 export function FeedbackRow({ readingId, noun }: FeedbackRowProps) {
   const [verdict, setVerdict] = useState<FeedbackVerdict | null>(null);
@@ -30,7 +30,7 @@ export function FeedbackRow({ readingId, noun }: FeedbackRowProps) {
   };
 
   return (
-    <div className="font-mono text-[11px] tracking-[0.14em] text-dim">
+    <div className="font-mono text-data-xs tracking-label text-dim">
       AGAINST THIS {noun} →{" "}
       <button
         type="button"

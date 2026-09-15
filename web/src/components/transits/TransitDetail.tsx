@@ -103,7 +103,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
   const natalSide = natalDegreeSide(culture, span, natalSign, natalDegree);
   const natalWords = pointKey ? natalSide.slice(NATAL_PREFIX.length) : natalSide;
   const degreesLine = (
-    <span className="inline-flex flex-wrap items-center justify-center gap-x-[6px]">
+    <span className="inline-flex flex-wrap items-center justify-center gap-x-[var(--space-1)]">
       <DeityGlyph body={span.transitPlanet} culture={culture} size={16} />
       <span>{transitDeity.toUpperCase()}</span>
       <span>{formatDegMin(span.transitDegree)}</span>
@@ -156,10 +156,10 @@ export function TransitDetail({ id }: TransitDetailProps) {
           <NaveHead
             kicker={`${voice.institution} · A READING SCOPED TO THE TRANSIT'S WHOLE SPAN`}
             sub={
-              <div className="font-mono text-[11px] leading-[1.7] tracking-[0.12em] text-dim">
+              <div className="font-mono text-data-xs leading-data tracking-label text-dim">
                 {degreesLine}
                 <br />
-                <span className="text-[var(--accent)]">
+                <span className="text-accent">
                   THROUGH THE {season} OF {releaseYear}
                 </span>
               </div>
@@ -173,15 +173,15 @@ export function TransitDetail({ id }: TransitDetailProps) {
           <div className="mx-auto max-w-[560px]">
             <div className="relative h-[3px] bg-rule-row">
               <span
-                className="absolute left-0 top-0 h-[3px] bg-[var(--accent)]"
+                className="absolute left-0 top-0 h-[3px] bg-accent"
                 style={{ width: `${fraction * 100}%` }}
               />
               <span
-                className="absolute top-1/2 h-[9px] w-[9px] -translate-y-1/2 rounded-full bg-[var(--accent)]"
+                className="absolute top-1/2 h-[9px] w-[9px] -translate-y-1/2 bg-accent"
                 style={{ left: `${fraction * 100}%` }}
               />
             </div>
-            <div className="mt-2 text-center font-mono text-[11px] tracking-[0.14em] text-dim">
+            <div className="mt-2 text-center font-mono text-data-xs tracking-label text-dim">
               {statusLine}
             </div>
           </div>
@@ -189,21 +189,21 @@ export function TransitDetail({ id }: TransitDetailProps) {
           <div className="mt-9 flex flex-col gap-6 text-left">
             <div>
               <SectionDivider label="WHAT IS CHANGING" />
-              <p className="mt-3 text-pretty font-body text-[17px] leading-[1.72] text-prose">
+              <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">
                 {spine.changing} {changingClose}
               </p>
             </div>
             <div>
               <SectionDivider label="WHERE IT BEGINS" />
-              <p className="mt-3 text-pretty font-body text-[17px] leading-[1.72] text-prose">{beginsParagraph}</p>
+              <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{beginsParagraph}</p>
             </div>
             <div>
               <SectionDivider label="WHAT IT TOUCHES" />
-              <p className="mt-3 text-pretty font-body text-[17px] leading-[1.72] text-prose">{touchesParagraph}</p>
+              <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{touchesParagraph}</p>
             </div>
             <div>
               <SectionDivider label="WHAT IT LEAVES BEHIND" />
-              <p className="mt-3 text-pretty font-body text-[17px] leading-[1.72] text-prose">{spine.leaves[tone]}</p>
+              <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{spine.leaves[tone]}</p>
             </div>
           </div>
 
@@ -228,7 +228,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
             <Link href="/forecast" className="text-bone/65 hover:text-bone">
               THE FORECAST
             </Link>
-            <Link href="/transits" className="text-[var(--accent)]">
+            <Link href="/transits" className="text-accent">
               ALL LONG TRANSITS →
             </Link>
           </div>

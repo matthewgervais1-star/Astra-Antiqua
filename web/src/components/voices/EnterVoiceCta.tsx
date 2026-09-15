@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import type { Culture } from "@/data/cultures";
 import { writePersistedPantheon } from "@/lib/pantheonPreference";
+import { Button } from "@/components/chrome/Button";
 
 export interface EnterVoiceCtaProps {
   culture: Culture;
@@ -19,12 +20,8 @@ export function EnterVoiceCta({ culture, label }: EnterVoiceCtaProps) {
   };
 
   return (
-    <button
-      type="button"
-      onClick={enter}
-      className="mx-auto block w-full max-w-[460px] border border-[var(--accent-strong-border)] px-6 py-4 text-center font-display text-[13px] tracking-[0.2em] text-[var(--accent)] transition-colors hover:bg-bone/5"
-    >
+    <Button variant="votive" block onClick={enter} className="mx-auto max-w-[460px]">
       {label}
-    </button>
+    </Button>
   );
 }

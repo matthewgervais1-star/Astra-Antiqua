@@ -31,16 +31,16 @@ function SpanRow({ span, culture }: { span: TransitSpan; culture: Culture }) {
         <div
           className={cn(
             "font-display text-[15px] tracking-[0.06em]",
-            received ? "text-[var(--accent)]" : "text-bone",
+            received ? "text-accent" : "text-bone",
           )}
         >
           {transitDeity.toUpperCase()} {verb.toUpperCase()} {natalLabel}
         </div>
-        <div className="mt-1.5 font-mono text-[11px] text-dim">
+        <div className="mt-1.5 font-mono text-data-xs text-dim">
           {monthYear(span.start)} → {monthYear(span.end)} · {span.passes.length} EXACT {passLabel}
         </div>
       </div>
-      <span className="whitespace-nowrap font-mono text-[11px] text-[var(--accent)]">READ →</span>
+      <span className="whitespace-nowrap font-mono text-data-xs text-accent">READ →</span>
     </Link>
   );
 }
@@ -48,7 +48,7 @@ function SpanRow({ span, culture }: { span: TransitSpan; culture: Culture }) {
 function SpanList({ spans, culture, emptyLabel }: { spans: readonly TransitSpan[]; culture: Culture; emptyLabel: string }) {
   if (spans.length === 0) {
     return (
-      <p className="border-t border-rule py-6 text-center font-mono text-[11px] text-dim">{emptyLabel}</p>
+      <p className="border-t border-rule py-6 text-center font-mono text-data-xs text-dim">{emptyLabel}</p>
     );
   }
   return (

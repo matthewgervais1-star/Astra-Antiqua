@@ -263,13 +263,13 @@ function ForecastInstrument({ culture }: { culture: Culture }) {
   return (
     <InstrumentShell context={contextLabel} siblings={SIBLINGS}>
       <aside className="flex flex-col gap-5 border-r border-rule px-7 py-6">
-        <div className="font-mono text-[11px] tracking-[0.16em] text-dim">COMING STATIONS &amp; INGRESSES</div>
+        <div className="font-mono text-data-xs tracking-label text-dim">COMING STATIONS &amp; INGRESSES</div>
         {feedRows.length === 0 ? (
-          <p className="font-mono text-[11px] leading-[1.6] text-dim">
+          <p className="font-mono text-data-xs leading-data text-dim">
             NO STATIONS OR CROSSINGS IN THE NEXT TWELVE MONTHS.
           </p>
         ) : (
-          <div className="flex flex-col gap-[10px] font-mono text-[11px] leading-[1.5] text-prose">
+          <div className="flex flex-col gap-[var(--space-2)] font-mono text-data-xs leading-data text-prose">
             {feedRows.map((row, idx) => (
               <div key={idx}>
                 <span className={row.dateClass}>{formatDMonYY(row.date)}</span> {row.text}
@@ -277,18 +277,18 @@ function ForecastInstrument({ culture }: { culture: Culture }) {
             ))}
           </div>
         )}
-        <div className="mt-2 border border-rule px-[15px] py-[13px] font-mono text-[11px] leading-[1.7] text-dim">
+        <div className="mt-2 border border-rule px-[var(--space-3)] py-[var(--space-2)] font-mono text-data-xs leading-data text-dim">
           DATES FROM THE EPHEMERIS, NOT VIBES →{" "}
-          <Link href="/method" className="text-[var(--accent)]">
+          <Link href="/method" className="text-accent">
             METHOD
           </Link>
         </div>
       </aside>
 
       <div className="flex flex-col gap-4 px-8 py-6">
-        <div className="font-mono text-[11px] tracking-[0.16em] text-dim">THE SPANS · TWELVE MONTHS</div>
+        <div className="font-mono text-data-xs tracking-label text-dim">THE SPANS · TWELVE MONTHS</div>
         <div
-          className="grid gap-[2px] font-mono text-[11px] text-faint-ink"
+          className="grid gap-[2px] font-mono text-data-xs text-faint-ink"
           style={{ gridTemplateColumns: "150px repeat(12, 1fr)" }}
         >
           <span />
@@ -297,47 +297,47 @@ function ForecastInstrument({ culture }: { culture: Culture }) {
           ))}
         </div>
         {chartRows.length === 0 ? (
-          <p className="font-body text-[15px] italic leading-[1.68] text-prose">
+          <p className="font-body text-prose-s italic leading-prose text-prose">
             No long station or natal span is active in the next twelve months.
           </p>
         ) : (
-          <div className="flex flex-col gap-[14px]">
+          <div className="flex flex-col gap-[var(--space-2)]">
             {chartRows.map((row) => (
               <div key={row.key} className="grid items-center gap-[2px]" style={{ gridTemplateColumns: "150px 1fr" }}>
-                <span className="truncate font-mono text-[11px] leading-[1.4] text-prose">{row.label}</span>
+                <span className="truncate font-mono text-data-xs leading-data text-prose">{row.label}</span>
                 <SpanBar startPct={row.startPct} endPct={row.endPct} ticks={row.ticks} tone={row.tone} />
               </div>
             ))}
           </div>
         )}
-        <div className="mt-1 font-mono text-[11px] leading-[1.6] text-faint-ink">
+        <div className="mt-1 font-mono text-data-xs leading-data text-faint-ink">
           BONE TICK: EXACT PASS · BARS RUN UNTIL RELEASE, NOT UNTIL INTEREST FADES
         </div>
-        <div className="mt-4 border-t border-rule pt-[18px]">
-          <p className="max-w-[560px] font-body text-[15px] leading-[1.68] text-prose">{beatsParagraph}</p>
+        <div className="mt-4 border-t border-rule pt-[var(--space-3)]">
+          <p className="max-w-[560px] font-body text-prose-s leading-prose text-prose">{beatsParagraph}</p>
         </div>
       </div>
 
-      <aside className="flex flex-col gap-4 border-l border-rule px-[30px] py-6">
+      <aside className="flex flex-col gap-4 border-l border-rule px-[var(--space-5)] py-6">
         <div>
-          <div className="font-mono text-[11px] tracking-[0.16em] text-dim">THE LONG TRANSITS · READ EACH</div>
+          <div className="font-mono text-data-xs tracking-label text-dim">THE LONG TRANSITS · READ EACH</div>
           <h2 className="mt-2 font-display text-[15px] tracking-[0.08em] text-bone">{voice.forecastTitle}</h2>
-          <p className="mt-1 font-mono text-[11px] tracking-[0.12em] text-dim">{voice.forecastNote}</p>
+          <p className="mt-1 font-mono text-data-xs tracking-label text-dim">{voice.forecastNote}</p>
         </div>
         {!bundle.natal ? (
           <>
-            <p className="mt-2 font-display text-[18px] leading-[1.4] tracking-[0.05em] text-bone">
+            <p className="mt-2 font-display text-display-s leading-display tracking-display text-bone">
               THE LONG TRANSITS ARE READ AGAINST A CHART
             </p>
             <Link
               href="/reading"
-              className="mt-1 inline-flex w-fit border border-[var(--accent-strong-border)] px-5 py-3 font-mono text-[11px] tracking-[0.14em] text-[var(--accent)]"
+              className="mt-1 inline-flex w-fit border border-[var(--accent-strong-border)] px-5 py-3 font-mono text-data-xs tracking-label text-accent"
             >
               CAST THE FIRST CHART →
             </Link>
           </>
         ) : bundle.spans.length === 0 ? (
-          <p className="font-body text-[15px] italic leading-[1.68] text-prose">
+          <p className="font-body text-prose-s italic leading-prose text-prose">
             No long transit is active against this chart in the next twelve months.
           </p>
         ) : (
@@ -354,21 +354,21 @@ function ForecastInstrument({ culture }: { culture: Culture }) {
                     href={`/transits/${span.id}`}
                     className={
                       active
-                        ? "block border border-[var(--accent-strong-border)] px-[17px] py-[15px]"
-                        : "block border border-rule px-[17px] py-[15px]"
+                        ? "block border border-[var(--accent-strong-border)] px-[var(--space-3)] py-[var(--space-3)]"
+                        : "block border border-rule px-[var(--space-3)] py-[var(--space-3)]"
                     }
                   >
                     <span className="block font-display text-[13px] leading-[1.4] tracking-[0.08em] text-bone">
                       {deity} {verb} {natalName}
                     </span>
-                    <span className="mt-1.5 block font-mono text-[11px] leading-[1.5] text-dim">
+                    <span className="mt-1.5 block font-mono text-data-xs leading-data text-dim">
                       THROUGH {seasonOf(span.end)} {span.end.getFullYear()} · READ →
                     </span>
                   </Link>
                 );
               })}
             </div>
-            <div className="mt-2 font-mono text-[11px] leading-[1.7] text-dim">
+            <div className="mt-2 font-mono text-data-xs leading-data text-dim">
               EACH OPENS AS ITS OWN QUIET PAGE, SCOPED TO THE TRANSIT&apos;S REAL SPAN.
             </div>
           </>

@@ -15,15 +15,15 @@ export interface CompactSkyTableProps {
 export function CompactSkyTable({ className, culture, rows }: CompactSkyTableProps) {
   return (
     <div className={className}>
-      <div className="border border-rule px-4 py-[14px] text-left">
-        <div className="mb-[10px] font-mono text-[11px] tracking-[0.16em] text-dim">THE SKY, COMPUTED</div>
-        <div className="flex flex-col gap-[7px] font-mono text-[11px] leading-[1.4]">
+      <div className="border border-rule px-4 py-[var(--space-2)] text-left">
+        <div className="mb-[var(--space-2)] font-mono text-data-xs tracking-label text-dim">THE SKY, COMPUTED</div>
+        <div className="flex flex-col gap-[var(--space-1)] font-mono text-data-xs leading-data">
           {rows.map((row) => (
             <div key={row.planet} className="flex items-center justify-between">
               <span
                 className={cn(
-                  "inline-flex items-center gap-[6px]",
-                  row.received ? "text-[var(--accent)]" : "text-bone",
+                  "inline-flex items-center gap-[var(--space-1)]",
+                  row.received ? "text-accent" : "text-bone",
                 )}
               >
                 <DeityGlyph body={row.planet} culture={culture} size={16} />

@@ -114,8 +114,8 @@ function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
     >
       <span
         className={cn(
-          "font-mono text-[11px] leading-[1.5]",
-          day.isToday ? "text-[var(--accent)]" : "text-dim",
+          "font-mono text-data-xs leading-data",
+          day.isToday ? "text-accent" : "text-dim",
         )}
       >
         {day.label}
@@ -127,10 +127,10 @@ function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
           </>
         ) : null}
       </span>
-      <span className="font-body text-[14.5px] leading-[1.55] text-bone">{day.line}</span>
+      <span className="font-body text-prose-s leading-prose text-bone">{day.line}</span>
       <span
         className={cn(
-          "inline-flex items-baseline gap-[4px] whitespace-nowrap font-mono text-[11px]",
+          "inline-flex items-baseline gap-[4px] whitespace-nowrap font-mono text-data-xs",
           day.tone === "tension" ? "text-conflict" : "text-dim",
         )}
       >
@@ -163,7 +163,7 @@ function WeekContent({
   return (
     <div className="mx-auto max-w-[640px]">
       <NaveHead kicker={`${voice.institution} · THE WEEK`}>{voice.weekTitle}</NaveHead>
-      <p className="mx-auto max-w-[560px] text-left font-body text-[17px] leading-[1.7] text-prose">
+      <p className="mx-auto max-w-[560px] text-left font-body text-prose-m leading-prose text-prose">
         {voice.weekThesis}
       </p>
       <div className="mt-8 flex flex-col">
@@ -171,7 +171,7 @@ function WeekContent({
           <WeekRow key={day.date.toISOString()} day={day} culture={culture} />
         ))}
       </div>
-      <div className="mx-auto mt-6 max-w-[560px] text-center font-mono text-[11px] tracking-[0.14em] text-dim">
+      <div className="mx-auto mt-6 max-w-[560px] text-center font-mono text-data-xs tracking-label text-dim">
         {voice.weekNote}
         {voice.dayFlags ? " · F LAWFUL · N UNLAWFUL · C MIXED" : ""}
       </div>
@@ -188,7 +188,7 @@ function WeekContent({
         <Link href="/season" className="text-bone/65 hover:text-bone">
           THE SEASON →
         </Link>
-        <Link href="/transits" className="text-[var(--accent)] hover:text-[var(--accent)]">
+        <Link href="/transits" className="text-accent">
           THE LONG TRANSITS →
         </Link>
       </div>

@@ -139,7 +139,7 @@ export default function RootLayout({
             <PantheonBodyAttribute />
             <a
               href="#main-content"
-              className="sr-only z-50 border border-[var(--accent)] bg-[var(--ground)] px-4 py-2 font-mono text-[11px] tracking-[0.14em] text-[var(--accent)] focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+              className="sr-only z-50 border border-rule-active bg-ground px-4 py-2 font-mono text-data-xs tracking-label text-accent focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
             >
               SKIP TO CONTENT
             </a>

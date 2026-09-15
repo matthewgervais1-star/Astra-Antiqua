@@ -11,7 +11,7 @@ const TONE_CLASS: Readonly<Record<SpanTone, string>> = {
   harmony: "bg-harmony",
   conflict: "bg-conflict",
   quiet: "bg-dim",
-  accent: "bg-[var(--accent)]",
+  accent: "bg-accent",
 };
 
 function clampPct(value: number): number {

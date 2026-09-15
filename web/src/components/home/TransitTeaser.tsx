@@ -13,7 +13,7 @@ export function TransitTeaser({ className, data }: TransitTeaserProps) {
   const body =
     data.status === "cta" ? (
       <>
-        <span className="mb-[7px] block font-mono text-[11px] tracking-[0.16em] text-[var(--accent)]">
+        <span className="mb-[var(--space-1)] block font-mono text-data-xs tracking-label text-accent">
           THE LONG TRANSIT
         </span>
         <span className="font-display text-[11.5px] tracking-[0.1em] text-bone">
@@ -22,12 +22,12 @@ export function TransitTeaser({ className, data }: TransitTeaserProps) {
       </>
     ) : data.status === "none" || !data.title1 ? (
       <>
-        <span className="mb-[7px] block font-mono text-[11px] tracking-[0.16em] text-dim">THE LONG TRANSIT</span>
+        <span className="mb-[var(--space-1)] block font-mono text-data-xs tracking-label text-dim">THE LONG TRANSIT</span>
         <span className="font-display text-[11.5px] tracking-[0.1em] text-bone">No slow body in reach right now</span>
       </>
     ) : (
       <>
-        <span className="mb-[7px] block font-mono text-[11px] tracking-[0.16em] text-[var(--accent)]">
+        <span className="mb-[var(--space-1)] block font-mono text-data-xs tracking-label text-accent">
           THE LONG TRANSIT
         </span>
         <span className="font-display text-[11.5px] tracking-[0.1em] text-bone">
@@ -40,7 +40,7 @@ export function TransitTeaser({ className, data }: TransitTeaserProps) {
     <Link
       href={data.href ?? "/reading"}
       className={cn(
-        "mt-[14px] block border border-[var(--accent-strong-border)] px-4 py-[14px] text-center",
+        "mt-[var(--space-2)] block border border-[var(--accent-strong-border)] px-4 py-[var(--space-2)] text-center",
         className,
       )}
     >

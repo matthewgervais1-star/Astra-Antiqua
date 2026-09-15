@@ -15,9 +15,9 @@ export interface TransitSubBarProps {
  */
 export function TransitSubBar({ context, span }: TransitSubBarProps) {
   return (
-    <div className="flex h-[46px] items-center gap-[22px] border-b border-rule px-5 font-mono text-[11px] text-dim md:px-14">
+    <div className="flex h-[46px] items-center gap-[var(--space-4)] border-b border-rule px-5 font-mono text-data-xs text-dim md:px-14">
       <div className="min-w-0 truncate">{context}</div>
-      <div className="ml-auto flex items-center gap-[22px]">
+      <div className="ml-auto flex items-center gap-[var(--space-4)]">
         <span className="whitespace-nowrap">{span}</span>
         <CultureChip />
       </div>

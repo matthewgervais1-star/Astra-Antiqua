@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/components/auth/AuthProvider";
+import { Badge } from "@/components/chrome/Badge";
 
 /**
  * Tiny client island for the SubBar's SYNC indicator, so the rest of the
@@ -9,5 +10,5 @@ import { useAuth } from "@/components/auth/AuthProvider";
 export function SyncFlag() {
   const { status } = useAuth();
   const label = status === "authenticated" ? "SYNC ON" : "SYNC OFF";
-  return <span className="whitespace-nowrap font-mono text-[11px] text-dim">{label}</span>;
+  return <Badge tone="outline">{label}</Badge>;
 }

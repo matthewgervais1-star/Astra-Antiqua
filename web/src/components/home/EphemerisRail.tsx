@@ -16,15 +16,15 @@ export interface EphemerisRailProps {
  * the mobile experience gets the smaller CompactSkyTable instead. */
 export function EphemerisRail({ className, culture, rows, stationsAndIngresses }: EphemerisRailProps) {
   return (
-    <aside className={cn("px-7 py-[26px]", className)}>
-      <div className="mb-[14px] font-mono text-[11px] tracking-[0.16em] text-dim">EPHEMERIS · 00:00 UTC</div>
-      <div className="flex flex-col border-b border-rule-row font-mono text-[11.5px]">
+    <aside className={cn("px-7 py-[var(--space-4)]", className)}>
+      <div className="mb-[var(--space-2)] font-mono text-data-xs tracking-label text-dim">EPHEMERIS · 00:00 UTC</div>
+      <div className="flex flex-col border-b border-rule-row font-mono text-data-xs">
         {rows.map((row) => (
-          <div key={row.planet} className="flex items-center justify-between border-t border-rule-row py-[9px]">
+          <div key={row.planet} className="flex items-center justify-between border-t border-rule-row py-[var(--space-2)]">
             <span
               className={cn(
-                "inline-flex items-center gap-[6px]",
-                row.received ? "text-[var(--accent)]" : "text-bone",
+                "inline-flex items-center gap-[var(--space-1)]",
+                row.received ? "text-accent" : "text-bone",
               )}
             >
               <DeityGlyph body={row.planet} culture={culture} size={16} />
@@ -38,8 +38,8 @@ export function EphemerisRail({ className, culture, rows, stationsAndIngresses }
         ))}
       </div>
 
-      <div className="mb-3 mt-[26px] font-mono text-[11px] tracking-[0.16em] text-dim">STATIONS &amp; INGRESSES</div>
-      <div className="flex flex-col gap-[9px] font-mono text-[11px] leading-[1.5]">
+      <div className="mb-3 mt-[var(--space-4)] font-mono text-data-xs tracking-label text-dim">STATIONS &amp; INGRESSES</div>
+      <div className="flex flex-col gap-[var(--space-2)] font-mono text-data-xs leading-data">
         {stationsAndIngresses.length === 0 ? (
           <div className="text-dim">Nothing turns in the next ninety days.</div>
         ) : (
@@ -52,9 +52,9 @@ export function EphemerisRail({ className, culture, rows, stationsAndIngresses }
         )}
       </div>
 
-      <div className="mt-[26px] border-t border-rule pt-[14px] font-mono text-[11px] leading-[1.7] text-dim">
+      <div className="mt-[var(--space-4)] border-t border-rule pt-[var(--space-2)] font-mono text-data-xs leading-data text-dim">
         ASTRONOMY-ENGINE · WHOLE-SIGN · ORBS DOCUMENTED →{" "}
-        <Link href="/method" className="text-[var(--accent)]">
+        <Link href="/method" className="text-accent">
           METHOD
         </Link>
       </div>

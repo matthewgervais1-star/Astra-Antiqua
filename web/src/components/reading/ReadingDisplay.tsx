@@ -94,24 +94,24 @@ export function ReadingDisplay({
 
   return (
     <motion.div
-      initial={reduce ? false : { opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={reduce ? false : { opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: reduce ? 0.01 : 0.55, ease: "easeOut" }}
       className="flex flex-col gap-14"
     >
       <header>
-        <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
+        <div className="font-mono text-data-xs uppercase tracking-microcopy text-dim">
           READING IN THE VOICE OF {CULTURE_LABELS[culture].toUpperCase()}
         </div>
-        <h2 className="mt-3 font-display text-[28px] tracking-[0.06em] text-bone md:text-[36px]">
+        <h2 className="mt-3 font-display text-display-m tracking-display text-bone md:text-display-l">
           {inputs.cityLabel.toUpperCase()}
         </h2>
-        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
+        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-data-xs uppercase tracking-label text-dim">
           <span>{inputs.date} · {inputs.time}</span>
           <span>{birth.timezone} ({formatOffset(birth.offsetMinutes)})</span>
           <span>{inputs.latitude.toFixed(3)}°, {inputs.longitude.toFixed(3)}°</span>
         </div>
-        <p className="mt-6 max-w-2xl font-body text-[17px] leading-[1.7] text-prose">
+        <p className="mt-6 max-w-2xl font-body text-prose-m leading-prose text-prose">
           {reading.summary}
         </p>
       </header>
@@ -125,17 +125,17 @@ export function ReadingDisplay({
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <span
                   className={cn(
-                    "inline-flex items-center gap-[6px] font-mono text-[12px] uppercase tracking-[0.1em]",
-                    received ? "text-[var(--accent)]" : "text-bone",
+                    "inline-flex items-center gap-[var(--space-1)] font-mono text-data-s uppercase tracking-data",
+                    received ? "text-accent" : "text-bone",
                   )}
                 >
                   <DeityGlyph body={p.planet} culture={culture} size={16} />
                   {p.deityName.toUpperCase()}
-                  <span className="ml-2 font-body text-[13px] normal-case italic text-dim">
+                  <span className="ml-2 font-body text-prose-s normal-case italic text-dim">
                     {p.deityEpithet}
                   </span>
                 </span>
-                <span className="shrink-0 font-mono text-[11px] text-dim">
+                <span className="shrink-0 font-mono text-data-xs text-dim">
                   {p.degreeInSign.toFixed(1)}° {p.sign}
                 </span>
               </div>
@@ -152,13 +152,13 @@ export function ReadingDisplay({
                 ) : (
                   header
                 )}
-                <p className="mt-3 font-body text-[15px] leading-[1.65] text-prose">
+                <p className="mt-3 font-body text-prose-s leading-prose text-prose">
                   {p.culturalLine}
                 </p>
-                <p className="mt-2 font-body text-[15px] leading-[1.65] text-prose">
+                <p className="mt-2 font-body text-prose-s leading-prose text-prose">
                   {p.signReading}
                 </p>
-                <p className="mt-2 font-body text-[13px] italic leading-[1.6] text-dim">
+                <p className="mt-2 font-body text-prose-s italic leading-prose text-dim">
                   {p.domain}
                 </p>
               </li>
@@ -170,7 +170,7 @@ export function ReadingDisplay({
 
       <section className="flex flex-col gap-6">
         <SectionDivider label="WHAT EACH OF THE TEN GOVERNS" />
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
+        <p className="font-mono text-data-xs uppercase tracking-label text-dim">
           The life area each body rules, in the names of {CULTURE_LABELS[culture]}
         </p>
         <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
@@ -182,14 +182,14 @@ export function ReadingDisplay({
               <div key={planet} className="border-t border-rule-row pt-4">
                 <div
                   className={cn(
-                    "flex items-center gap-[6px] font-mono text-[11px] uppercase tracking-[0.14em]",
-                    received ? "text-[var(--accent)]" : "text-bone",
+                    "flex items-center gap-[var(--space-1)] font-mono text-data-xs uppercase tracking-label",
+                    received ? "text-accent" : "text-bone",
                   )}
                 >
                   <DeityGlyph body={planet} culture={culture} size={16} />
                   {deity.name.toUpperCase()} · {area.area.toUpperCase()}
                 </div>
-                <p className="mt-2 font-body text-[14px] leading-[1.6] text-prose">{area.blurb}</p>
+                <p className="mt-2 font-body text-prose-s leading-prose text-prose">{area.blurb}</p>
               </div>
             );
           })}
@@ -198,10 +198,10 @@ export function ReadingDisplay({
 
       <section className="flex flex-col gap-6">
         <SectionDivider label="THE TWELVE HOUSES" />
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
+        <p className="font-mono text-data-xs uppercase tracking-label text-dim">
           Whole-sign houses · Rising in {ascendantSign} · Midheaven in {midheavenSign}
         </p>
-        <p className="max-w-2xl font-body text-[14px] leading-[1.6] text-prose">
+        <p className="max-w-2xl font-body text-prose-s leading-prose text-prose">
           The sign rising at the hour of your birth becomes the First House; each sign after it takes the next house in order. Because the houses are anchored to the Ascendant, they depend on an accurate birth time.
         </p>
         <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
@@ -210,11 +210,11 @@ export function ReadingDisplay({
               <div className="flex items-baseline justify-between gap-3">
                 <div className="font-display text-[16px] tracking-[0.04em] text-bone">
                   {h.meaning.ordinal.toUpperCase()} HOUSE
-                  <span className="ml-2 font-body text-[14px] italic text-prose">
+                  <span className="ml-2 font-body text-prose-s italic text-prose">
                     {h.meaning.title}
                   </span>
                 </div>
-                <div className="shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-dim">
+                <div className="shrink-0 font-mono text-data-xs uppercase tracking-label text-dim">
                   {h.sign}
                   {h.house === 1 ? " · rising" : ""}
                 </div>
@@ -222,12 +222,12 @@ export function ReadingDisplay({
               {h.occupants.length > 0 ? (
                 <ul className="mt-3 flex flex-col gap-2">
                   {h.occupants.map((p) => (
-                    <li key={p.planet} className="flex items-start gap-2 font-body text-[14px] leading-[1.6] text-prose">
+                    <li key={p.planet} className="flex items-start gap-2 font-body text-prose-s leading-prose text-prose">
                       {/* The prose line box is 14px at leading 1.6, 22.4px tall; a 3px top offset centres the 16px glyph on its first line. */}
                       <span
                         className={cn(
-                          "mt-[3px] flex font-mono text-[13px]",
-                          isReceived(p.planet) ? "text-[var(--accent)]" : "text-bone",
+                          "mt-[3px] flex font-mono text-data-s",
+                          isReceived(p.planet) ? "text-accent" : "text-bone",
                         )}
                       >
                         <DeityGlyph body={p.planet} culture={culture} size={16} />
@@ -237,7 +237,7 @@ export function ReadingDisplay({
                   ))}
                 </ul>
               ) : (
-                <p className="mt-3 font-body text-[14px] leading-[1.6] text-dim">
+                <p className="mt-3 font-body text-prose-s leading-prose text-dim">
                   {h.meaning.domain}
                 </p>
               )}
@@ -248,7 +248,7 @@ export function ReadingDisplay({
 
       <section className="flex flex-col gap-6">
         <SectionDivider label="HOW THE TEN SPEAK TO ONE ANOTHER" />
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
+        <p className="font-mono text-data-xs uppercase tracking-label text-dim">
           Major aspects, by kind
         </p>
         <div className="grid gap-8 md:grid-cols-3">
@@ -259,25 +259,25 @@ export function ReadingDisplay({
             return (
               <div key={group.title} className="flex flex-col gap-3">
                 <div>
-                  <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-dim">
+                  <div className="font-mono text-data-xs uppercase tracking-microcopy text-dim">
                     {items.length} FOUND
                   </div>
                   <h4 className="mt-2 font-display text-[16px] tracking-[0.06em] text-bone">
                     {group.title}
                   </h4>
-                  <p className="mt-1 font-body text-[13px] leading-[1.55] text-dim">
+                  <p className="mt-1 font-body text-prose-s leading-prose text-dim">
                     {group.description}
                   </p>
                 </div>
                 {items.length === 0 ? (
-                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-dim">
+                  <p className="font-mono text-data-xs uppercase tracking-label text-dim">
                     NONE AT THE STANDARD ORBS.
                   </p>
                 ) : (
                   <ul className="flex flex-col gap-5">
                     {items.map((a, idx) => (
                       <li key={`${a.a}-${a.b}-${idx}`} className="border-t border-rule-row pt-4">
-                        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-dim">
+                        <div className="font-mono text-data-xs uppercase tracking-label text-dim">
                           {a.kind} · {a.exactAngle.toFixed(1)}° (orb {a.orb.toFixed(1)}°)
                         </div>
                         <div className="mt-2">
@@ -286,10 +286,10 @@ export function ReadingDisplay({
                         <p className="mt-3 font-display text-[17px] leading-[1.4] text-bone">
                           {a.verbLine}
                         </p>
-                        <p className="mt-2 font-body text-[14px] italic leading-[1.6] text-prose">
+                        <p className="mt-2 font-body text-prose-s italic leading-prose text-prose">
                           {a.pairTheme}
                         </p>
-                        <p className="mt-2 font-body text-[14px] leading-[1.6] text-prose">
+                        <p className="mt-2 font-body text-prose-s leading-prose text-prose">
                           {a.culturalReflection}
                         </p>
                       </li>
@@ -303,7 +303,7 @@ export function ReadingDisplay({
       </section>
 
       <footer className="border-t border-rule pt-8">
-        <p className="font-body text-[14px] leading-[1.6] text-dim">
+        <p className="font-body text-prose-s leading-prose text-dim">
           Computed locally in your browser from your birth time and coordinates, using the astronomy-engine ephemeris (cosinekitty/astronomy). No birth data is sent to a server.
         </p>
       </footer>

@@ -65,7 +65,7 @@ export function LintelIndexMenu({
       {open ? (
         <div
           id="lintel-index-panel"
-          className="absolute inset-x-0 top-full z-40 border border-rule bg-[var(--ground)] px-5 py-1"
+          className="absolute inset-x-0 top-full z-40 border border-rule bg-ground px-5 py-1"
         >
           <nav className="flex flex-col">
             {INDEX_ITEMS.map((item) => {
@@ -78,7 +78,7 @@ export function LintelIndexMenu({
                   aria-current={isActive ? "page" : undefined}
                   className={cn(
                     "border-b border-rule-row py-3 font-display text-[13px] tracking-[0.16em] last:border-b-0",
-                    isActive ? "text-[var(--accent)]" : "text-bone/80 hover:text-bone",
+                    isActive ? "text-accent" : "text-bone/80 hover:text-bone",
                   )}
                 >
                   {item.label}

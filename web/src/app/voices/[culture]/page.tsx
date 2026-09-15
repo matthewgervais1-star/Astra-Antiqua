@@ -19,6 +19,7 @@ import { ASPECT_RULES, type AspectKind } from "@/data/sampleChart";
 import { NaveShell } from "@/components/chrome/NaveShell";
 import { NaveHead } from "@/components/chrome/NaveHead";
 import { CultureEmblem } from "@/components/chrome/CultureEmblem";
+import { IconTile, type IconTileMark } from "@/components/chrome/IconTile";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
@@ -42,6 +43,38 @@ const CANAAN_CONTINUITY =
   "receiving Israel as his portion. Later, the rest of the council was demoted to angels, and " +
   "the assembly became a heaven with one throne. The scale, the vow, and the court you read " +
   "here are the older furniture of that house.";
+
+interface Figure {
+  mark: IconTileMark;
+  caption: string;
+}
+
+/**
+ * The tier-3 figures per doorway, from docs/design/system/readme.md,
+ * Iconography: the signs that exist as encoded characters, set as type in
+ * their epigraphic faces, and the three marks that only ever existed as
+ * objects, traced from a source photograph. The captions are the ones
+ * guidelines/marks-traced.html and canvas-1a/DECISIONS.md give them. Carthage
+ * has no encoded sign and no traced mask, so its row is empty and nothing
+ * renders. Bone ink: the doorway's accent is already spent on the emblem in
+ * the head, and the accent is never applied twice on one screen.
+ */
+const CULTURE_FIGURES: Readonly<Record<Culture, readonly Figure[]>> = {
+  egypt: [
+    { mark: "ankh", caption: "THE ANKH · U+2625" },
+    { mark: "balance", caption: "THE BALANCE · GARDINER U38, U+1335D" },
+  ],
+  greece: [{ mark: "omega", caption: "OMEGA · U+03A9, GFS DIDOT" }],
+  canaan: [
+    { mark: "il", caption: "THE NAME OF EL · UGARITIC U+1039B U+1038D" },
+    { mark: "baal-stele", caption: "THE BAAL STELE · LOUVRE AO 15775" },
+  ],
+  carthage: [],
+  rome: [
+    { mark: "shewolf", caption: "THE SHE-WOLF · CAPITOLINE BRONZE" },
+    { mark: "augustus", caption: "AUGUSTUS · PRIMA PORTA" },
+  ],
+};
 
 interface VoicePageParams {
   culture: string;
@@ -76,6 +109,7 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
   const rulings = ASPECT_RULINGS[culture];
   const label = CULTURE_LABELS[culture].toUpperCase();
   const firstReceived = RECEIVED_BODIES[0];
+  const figures = CULTURE_FIGURES[culture];
 
   return (
     <VoiceScope culture={culture}>
@@ -83,20 +117,36 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
         <NaveHead
           kicker={`THE ${label} DOORWAY · ${voice.institution}`}
           emblem={
-            <CultureEmblem culture={culture} size={72} decorative className="text-[var(--accent)]" />
+            <CultureEmblem culture={culture} size={72} decorative className="text-accent" />
           }
         >
           {label}
         </NaveHead>
 
         <div className="mx-auto flex max-w-[560px] flex-col gap-5">
-          <p className="font-body text-[16px] leading-[1.75] text-prose">
+          <p className="font-body text-prose-m leading-prose text-prose">
             {orientation.paragraphs[0]}
           </p>
-          <p className="font-body text-[16px] leading-[1.75] text-prose">
+          <p className="font-body text-prose-m leading-prose text-prose">
             {orientation.paragraphs[1]}
           </p>
         </div>
+
+        {figures.length > 0 ? (
+          <div className="mx-auto mt-[var(--space-6)] flex max-w-[560px] flex-wrap justify-center gap-[var(--space-4)]">
+            {figures.map((figure) => (
+              <figure
+                key={figure.mark}
+                className="m-0 flex w-[150px] flex-col items-center gap-[var(--space-2)]"
+              >
+                <IconTile mark={figure.mark} size="md" ink="bone" decorative />
+                <figcaption className="text-center font-mono text-data-xs tracking-label text-dim">
+                  {figure.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        ) : null}
 
         <div className="mt-16 flex flex-col gap-6">
           <SectionDivider label="THE PANTHEON SEATED" />
@@ -106,25 +156,25 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
                 {planet === firstReceived ? (
                   <div className="flex flex-col items-stretch pt-2">
                     <span className="h-px w-full bg-harmony" />
-                    <span className="py-2 text-center font-mono text-[11px] tracking-[0.16em] text-dim">
+                    <span className="py-2 text-center font-mono text-data-xs tracking-label text-dim">
                       BELOW THE RULE: THE THREE RECEIVED
                     </span>
                   </div>
                 ) : null}
                 <div className="grid grid-cols-[104px_1fr] items-center gap-x-4 gap-y-1 border-t border-rule-row py-3 last:border-b sm:grid-cols-[104px_150px_1fr]">
-                  <span className="inline-flex items-center gap-[6px] font-mono text-[11px] tracking-[0.08em] text-dim">
+                  <span className="inline-flex items-center gap-[var(--space-1)] font-mono text-data-xs tracking-data text-dim">
                     <DeityGlyph body={planet} culture={culture} size={16} />
                     {PLANET_LABELS[planet].toUpperCase()}
                   </span>
                   <span
                     className={cn(
                       "font-display text-[15px] tracking-[0.04em]",
-                      isReceived(planet) ? "text-[var(--accent)]" : "text-bone",
+                      isReceived(planet) ? "text-accent" : "text-bone",
                     )}
                   >
                     {deities[planet].name}
                   </span>
-                  <span className="col-span-2 font-body text-[14px] italic leading-[1.6] text-prose sm:col-span-1">
+                  <span className="col-span-2 font-body text-prose-s italic leading-prose text-prose sm:col-span-1">
                     {deities[planet].epithet}
                   </span>
                 </div>
@@ -142,13 +192,13 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
                 key={rule.kind}
                 className="grid grid-cols-[76px_1fr] gap-x-4 gap-y-1 border-t border-rule-row py-4 last:border-b sm:grid-cols-[92px_150px_1fr]"
               >
-                <span className="font-mono text-[15px] text-dim">
+                <span className="font-mono text-data-m text-dim">
                   {ASPECT_GLYPHS[rule.kind]} {rule.angle}°
                 </span>
                 <span className="font-display text-[13px] tracking-[0.1em] text-bone">
                   {rule.kind.toUpperCase()}
                 </span>
-                <span className="col-span-2 font-body text-[15px] leading-[1.65] text-prose sm:col-span-1">
+                <span className="col-span-2 font-body text-prose-s leading-prose text-prose sm:col-span-1">
                   {rulings[rule.kind]}
                 </span>
               </div>
@@ -168,10 +218,10 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
         {culture === "canaan" ? (
           <div className="mt-16 flex flex-col gap-6">
             <SectionDivider label="WHERE THIS RELIGION WENT" />
-            <p className="font-body text-[16px] leading-[1.75] text-prose">{CANAAN_CONTINUITY}</p>
-            <div className="border border-rule px-[18px] py-[13px] font-mono text-[11px] uppercase leading-[1.7] tracking-[0.06em] text-dim">
+            <p className="font-body text-prose-m leading-prose text-prose">{CANAAN_CONTINUITY}</p>
+            <div className="border border-rule px-[var(--space-3)] py-[var(--space-2)] font-mono text-data-xs uppercase leading-data tracking-data text-dim">
               HISTORY, NOT A SEAT: NO LIVING GOD HOLDS A PLANET IN THIS ALMANAC →{" "}
-              <Link href="/method" className="text-[var(--accent)]">
+              <Link href="/method" className="text-accent">
                 METHOD
               </Link>
             </div>

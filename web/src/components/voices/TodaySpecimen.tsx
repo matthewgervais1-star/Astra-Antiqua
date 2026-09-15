@@ -35,12 +35,12 @@ export function TodaySpecimen({ culture }: TodaySpecimenProps) {
 
   return (
     <div className="border border-rule px-6 py-7 text-center">
-      <div className="font-mono text-[11px] tracking-[0.18em] text-dim">{specimen.dateLine}</div>
-      <div className="mx-auto mt-4 h-px w-10 bg-[var(--accent)]" />
-      <h3 className="mt-4 font-display text-[20px] leading-[1.35] tracking-[0.05em] text-bone">
+      <div className="font-mono text-data-xs tracking-microcopy text-dim">{specimen.dateLine}</div>
+      <div className="mx-auto mt-4 h-px w-10 bg-accent" />
+      <h3 className="mt-4 font-display text-display-s leading-display tracking-display text-bone">
         {specimen.headline}
       </h3>
-      <p className="mx-auto mt-3 max-w-[440px] font-body text-[15px] italic leading-[1.7] text-prose">
+      <p className="mx-auto mt-3 max-w-[440px] font-body text-prose-s italic leading-prose text-prose">
         {specimen.sentence}
       </p>
     </div>

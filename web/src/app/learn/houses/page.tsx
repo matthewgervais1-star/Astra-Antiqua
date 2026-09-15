@@ -16,7 +16,7 @@ export default function HousesLearnPage() {
     <NaveShell context="LEARN · THE HOUSES" active="learn">
       <NaveHead kicker="LEARN · 4 OF 7">THE TWELVE HOUSES</NaveHead>
 
-      <p className="mx-auto max-w-[560px] text-center font-body text-[17px] leading-[1.75] text-prose">
+      <p className="mx-auto max-w-[560px] text-center font-body text-prose-m leading-prose text-prose">
         If the signs are how a planet acts and the planets are what is acting, the houses are
         where it acts. They are the twelve fields of life, raised from the sign rising at your
         birth: the body, what you own, kin, home, pleasure, work, partnership, and so on around
@@ -33,22 +33,22 @@ export default function HousesLearnPage() {
             <div className="flex flex-wrap items-baseline justify-between gap-3">
               <div className="font-display text-[17px] tracking-[0.05em] text-bone">
                 {h.ordinal.toUpperCase()} HOUSE
-                <span className="ml-3 font-body text-[15px] italic text-prose">{h.title}</span>
+                <span className="ml-3 font-body text-prose-s italic text-prose">{h.title}</span>
               </div>
-              <div className="font-mono text-[11px] tracking-[0.14em] text-dim">
+              <div className="font-mono text-data-xs tracking-label text-dim">
                 HOUSE {h.house}
               </div>
             </div>
-            <p className="mt-2 font-body text-[15px] leading-[1.7] text-prose">{h.domain}</p>
+            <p className="mt-2 font-body text-prose-s leading-prose text-prose">{h.domain}</p>
           </div>
         ))}
       </div>
 
-      <p className="mt-8 font-body text-[15px] leading-[1.7] text-dim">
+      <p className="mt-8 font-body text-prose-s leading-prose text-dim">
         Astra Antiqua raises these with whole-sign houses, where the rising sign becomes the
         entire First House and each sign after it the next. For how that compares to other
         methods, see{" "}
-        <Link href="/learn/house-systems" className="text-[var(--accent)] hover:underline">
+        <Link href="/learn/house-systems" className="text-accent hover:underline">
           house systems
         </Link>
         .

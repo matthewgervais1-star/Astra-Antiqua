@@ -18,7 +18,7 @@ export default function VoicesPage() {
     <NaveShell context="THE FIVE VOICES" active="voices">
       <NaveHead kicker="ONE SKY · FIVE THEOLOGIES">THE FIVE VOICES</NaveHead>
 
-      <p className="mx-auto max-w-[560px] text-center font-body text-[17px] italic leading-[1.75] text-prose">
+      <p className="mx-auto max-w-[560px] text-center font-body text-prose-m italic leading-prose text-prose">
         Every culture reads the same computed sky. What changes is the theology it must pass
         through.
       </p>
@@ -37,7 +37,7 @@ export default function VoicesPage() {
               <span className="font-display text-[16px] tracking-[0.14em] text-bone">
                 {CULTURE_LABELS[culture].toUpperCase()}
               </span>
-              <span className="ml-auto font-mono text-[11px] tracking-[0.06em] text-dim lowercase">
+              <span className="ml-auto font-mono text-data-xs tracking-data text-dim lowercase">
                 {CULTURE_VOICES[culture].institution}
               </span>
             </Link>

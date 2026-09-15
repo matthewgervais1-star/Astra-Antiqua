@@ -2,8 +2,8 @@
 
 import { Suspense, useEffect, type ReactNode } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { CULTURES, CULTURE_LABELS, type Culture } from "@/data/cultures";
-import { CULTURE_VOICES } from "@/data/cultureVoice";
+import type { Culture } from "@/data/cultures";
+import { CultureSwitch } from "@/components/chrome/CultureSwitch";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { readPersistedPantheon, writePersistedPantheon } from "@/lib/pantheonPreference";
 import { Skeleton } from "@/components/chrome/Skeleton";
@@ -41,28 +41,12 @@ function CultureGateImpl({ children }: CultureGateProps) {
 
   return (
     <div className="mx-auto max-w-[560px] py-10">
-      <div className="text-center font-mono text-[11px] tracking-[0.2em] text-dim">
+      <div className="text-center font-mono text-data-xs tracking-microcopy text-dim">
         ONE SKY IS COMPUTED · FIVE CULTURES READ IT
       </div>
-      <div className="mx-auto my-6 h-px w-16 bg-[var(--accent)]" />
-      <div className="flex flex-col">
-        {CULTURES.map((c) => (
-          <button
-            key={c}
-            type="button"
-            onClick={() => choose(c)}
-            className="flex items-baseline justify-between gap-4 border-t border-rule px-4 py-4 text-left last:border-b hover:bg-bone/5"
-          >
-            <span className="font-display text-[15px] tracking-[0.14em]">
-              {CULTURE_LABELS[c].toUpperCase()}
-            </span>
-            <span className="font-mono text-[11px] tracking-[0.08em] text-dim">
-              {CULTURE_VOICES[c].institution.toLowerCase()}
-            </span>
-          </button>
-        ))}
-      </div>
-      <div className="mt-5 text-center font-mono text-[11px] tracking-[0.14em] text-faint-ink">
+      <div className="mx-auto my-6 h-px w-16 bg-accent" />
+      <CultureSwitch value={null} onChange={choose} />
+      <div className="mt-5 text-center font-mono text-data-xs tracking-label text-faint-ink">
         THE CHOICE PERSISTS ON THIS DEVICE · CHANGE IT ANY TIME
       </div>
     </div>

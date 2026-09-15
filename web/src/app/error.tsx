@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { Button } from "@/components/chrome/Button";
+import { Monogram } from "@/components/chrome/Monogram";
 
 export default function Error({
   error,
@@ -19,25 +21,22 @@ export default function Error({
 
   return (
     <div className="mx-auto flex max-w-[560px] flex-col items-center px-5 py-24 text-center">
-      <div className="font-mono text-[11px] tracking-[0.18em] text-conflict">
+      <Monogram height={56} className="mb-[var(--space-4)] text-bone" />
+      <div className="font-mono text-data-xs tracking-microcopy text-conflict">
         THE COMPUTATION FAILED
       </div>
-      <div className="my-[18px] h-px w-11 bg-conflict" />
-      <h1 className="font-display text-[19px] leading-[1.5] tracking-[0.1em] text-bone">
+      <div className="my-[var(--space-3)] h-px w-11 bg-conflict" />
+      <h1 className="font-display text-display-s leading-display tracking-display text-bone">
         THE OMEN IS ILLEGIBLE
       </h1>
-      <p className="mx-auto mt-3 max-w-[360px] font-body text-[14px] leading-[1.65] text-prose">
+      <p className="mx-auto mt-3 max-w-[360px] font-body text-prose-s leading-prose text-prose">
         The ephemeris did not answer. Nothing you did caused this, and nothing was lost. We do not
         guess at skies.
       </p>
-      <button
-        type="button"
-        onClick={reset}
-        className="mt-6 border border-[var(--accent)] px-7 py-[13px] font-display text-[11.5px] tracking-[0.2em] text-[var(--accent)] transition-colors hover:bg-[var(--accent)]/10"
-      >
+      <Button variant="votive" onClick={reset} className="mt-6">
         TAKE THE AUSPICES AGAIN
-      </button>
-      <div className="mt-3 font-mono text-[11px] tracking-[0.08em] text-dim">
+      </Button>
+      <div className="mt-3 font-mono text-data-xs tracking-data text-dim">
         ERROR {code} ·{" "}
         <Link href="/" className="border-b border-bone/40 text-bone">
           {"YESTERDAY'S READING IS STILL HERE"}

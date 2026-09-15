@@ -45,7 +45,7 @@ export function AspectGlossary() {
             key={rule.kind}
             className="grid grid-cols-[64px_1fr] gap-x-5 gap-y-2 border-t border-rule-row py-5 last:border-b sm:grid-cols-[92px_1fr]"
           >
-            <div className="font-mono text-[15px] leading-[1.3] text-dim">
+            <div className="font-mono text-data-m leading-data text-dim">
               <div className="text-[22px] leading-none">{ASPECT_GLYPHS[rule.kind]}</div>
               <div className="mt-1">{rule.angle}°</div>
             </div>
@@ -53,10 +53,10 @@ export function AspectGlossary() {
               <div className="font-display text-[14px] tracking-[0.1em] text-bone">
                 {rule.kind.toUpperCase()}
               </div>
-              <p className="mt-2 font-body text-[15px] leading-[1.65] text-prose">
+              <p className="mt-2 font-body text-prose-s leading-prose text-prose">
                 {rulings[rule.kind]}
               </p>
-              <p className="mt-2 font-mono text-[11px] leading-[1.6] tracking-[0.02em] text-faint-ink">
+              <p className="mt-2 font-mono text-data-xs leading-data tracking-data text-faint-ink">
                 {GEOMETRY[rule.kind]}
               </p>
             </div>
@@ -64,7 +64,7 @@ export function AspectGlossary() {
         ))}
       </div>
 
-      <div className="mt-8 font-mono text-[11px] leading-[1.7] tracking-[0.04em] text-dim">
+      <div className="mt-8 font-mono text-data-xs leading-data tracking-data text-dim">
         SAME ANGLES EVERYWHERE · EACH CULTURE SUPPLIES ITS OWN RULINGS · ORBS ON THE METHOD PAGE
       </div>
     </>

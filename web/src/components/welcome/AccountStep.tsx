@@ -14,16 +14,16 @@ export function AccountStep() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="w-full text-left font-mono text-[11px] tracking-[0.16em] text-dim hover:text-bone"
+        className="w-full text-left font-mono text-data-xs tracking-label text-dim hover:text-bone"
       >
         III OF III · AN ACCOUNT, IF YOU WANT SYNC {open ? "▴" : "▾"}
       </button>
       {open ? (
         <div className="mt-5 flex flex-col gap-3">
-          <p className="font-mono text-[11px] tracking-[0.08em] text-dim">
+          <p className="font-mono text-data-xs tracking-data text-dim">
             An account adds sync and nothing else.
           </p>
-          <Link href="/signin" className="font-mono text-[11px] tracking-[0.1em] text-[var(--accent)]">
+          <Link href="/signin" className="font-mono text-data-xs tracking-data text-accent">
             OPEN THE RECORD →
           </Link>
         </div>

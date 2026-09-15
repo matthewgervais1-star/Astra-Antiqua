@@ -20,19 +20,19 @@ export function LearnTOC({ current }: { current?: string }) {
               className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-rule-row py-3 last:border-b hover:bg-bone/5"
             >
               <span className="flex items-baseline gap-3">
-                <span className="font-mono text-[11px] text-faint-ink">
+                <span className="font-mono text-data-xs text-faint-ink">
                   {String(s.n).padStart(2, "0")}
                 </span>
                 <span
                   className={cn(
                     "font-display text-[14px] tracking-[0.06em]",
-                    isActive ? "text-[var(--accent)]" : "text-bone",
+                    isActive ? "text-accent" : "text-bone",
                   )}
                 >
                   {s.title.toUpperCase()}
                 </span>
               </span>
-              <span className="max-w-full font-mono text-[11px] text-dim sm:max-w-[46%]">
+              <span className="max-w-full font-mono text-data-xs text-dim sm:max-w-[46%]">
                 {s.blurb}
               </span>
             </Link>

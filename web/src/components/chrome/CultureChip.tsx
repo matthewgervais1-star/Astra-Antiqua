@@ -9,7 +9,7 @@ import { cn } from "@/lib/classNames";
 import { CultureEmblem } from "@/components/chrome/CultureEmblem";
 
 const CHIP_CLASS =
-  "whitespace-nowrap border border-[var(--accent-strong-border)] px-[13px] py-2 font-mono text-[11px] text-[var(--accent)]";
+  "whitespace-nowrap border border-[var(--accent-strong-border)] px-[var(--space-2)] py-2 font-mono text-data-xs text-accent";
 
 function CultureChipImpl() {
   const culture = useActivePantheon();
@@ -65,7 +65,7 @@ function CultureChipImpl() {
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 top-full z-40 mt-1 min-w-[160px] border border-rule bg-[var(--ground)]"
+          className="absolute right-0 top-full z-40 mt-1 min-w-[160px] border border-rule bg-ground"
         >
           {CULTURES.map((c) => (
             <button
@@ -74,8 +74,8 @@ function CultureChipImpl() {
               role="menuitem"
               onClick={() => select(c)}
               className={cn(
-                "flex w-full items-center gap-[var(--space-2)] px-[13px] py-2 text-left font-mono text-[11px]",
-                c === culture ? "text-[var(--accent)]" : "text-bone/80 hover:text-bone",
+                "flex w-full items-center gap-[var(--space-2)] px-[var(--space-2)] py-2 text-left font-mono text-data-xs",
+                c === culture ? "text-accent" : "text-bone/80 hover:text-bone",
               )}
             >
               <CultureEmblem culture={c} size={16} decorative />

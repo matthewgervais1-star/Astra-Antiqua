@@ -12,8 +12,8 @@ import { feedbackCount } from "@/lib/feedback";
 import { cn } from "@/lib/classNames";
 
 const INPUT_CLASS =
-  "w-full border border-rule bg-transparent px-4 py-3 font-mono text-[12px] text-bone placeholder:text-faint-ink outline-none focus:border-[var(--accent)]";
-const LABEL_CLASS = "mb-2 block font-mono text-[11px] tracking-[0.14em] text-dim";
+  "w-full border border-rule bg-transparent px-4 py-3 font-mono text-data-s text-bone placeholder:text-faint-ink outline-none focus:border-rule-active";
+const LABEL_CLASS = "mb-2 block font-mono text-data-xs tracking-label text-dim";
 
 export default function AccountPage() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function AccountPage() {
   if (status !== "authenticated" || !user) {
     return (
       <main className="mx-auto max-w-[560px] px-5 py-16 text-center">
-        <p className="font-mono text-[11px] tracking-[0.2em] text-dim">
+        <p className="font-mono text-data-xs tracking-microcopy text-dim">
           {status === "loading" ? "READING THE RECORD…" : "REDIRECTING…"}
         </p>
       </main>
@@ -75,18 +75,18 @@ function AccountLedger({
   return (
     <main className="mx-auto max-w-[560px] px-5 py-14 md:py-16">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <span className="font-mono text-[11px] tracking-[0.18em] text-dim">
+        <span className="font-mono text-data-xs tracking-microcopy text-dim">
           THE RECORD · {email.toUpperCase()}
         </span>
         <SyncFlag />
       </div>
-      <div className="mt-5 h-px w-11 bg-[var(--accent)]" />
+      <div className="mt-5 h-px w-11 bg-accent" />
 
-      <div className="flex flex-col font-mono text-[11.5px]">
+      <div className="flex flex-col font-mono text-data-xs">
         <LedgerRow label="CULTURE">
           <span className="flex items-baseline gap-3">
             {cultureLabel}
-            <Link href="/welcome" className="text-[var(--accent)]">
+            <Link href="/welcome" className="text-accent">
               CHANGE →
             </Link>
           </span>
@@ -102,13 +102,13 @@ function AccountLedger({
         <button
           type="button"
           onClick={onSignOut}
-          className="flex-1 border border-rule py-3 text-center font-mono text-[11px] tracking-[0.12em] text-bone hover:border-bone/50"
+          className="flex-1 border border-rule py-3 text-center font-mono text-data-xs tracking-label text-bone hover:border-bone/50"
         >
           SIGN OUT
         </button>
         <StrikeAction email={email} />
       </div>
-      <p className="mt-3 font-mono text-[11px] leading-[1.6] tracking-[0.06em] text-dim">
+      <p className="mt-3 font-mono text-data-xs leading-data tracking-data text-dim">
         STRIKING DELETES THE SERVER COPY; THIS DEVICE KEEPS ITS OWN.
       </p>
 
@@ -133,7 +133,7 @@ function LedgerRow({
   return (
     <div
       className={cn(
-        "flex items-baseline justify-between gap-4 border-t border-rule-row py-[11px]",
+        "flex items-baseline justify-between gap-4 border-t border-rule-row py-[var(--space-2)]",
         last && "border-b",
       )}
     >
@@ -177,7 +177,7 @@ function StrikeAction({ email }: { email: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex-1 border border-conflict py-3 text-center font-mono text-[11px] tracking-[0.12em] text-conflict hover:bg-conflict/10"
+        className="flex-1 border border-conflict py-3 text-center font-mono text-data-xs tracking-label text-conflict hover:bg-conflict/10"
       >
         STRIKE THE RECORD
       </button>
@@ -186,7 +186,7 @@ function StrikeAction({ email }: { email: string }) {
 
   return (
     <div className="flex-1 border border-conflict px-4 py-3">
-      <p className="font-mono text-[11px] tracking-[0.08em] text-conflict">
+      <p className="font-mono text-data-xs tracking-data text-conflict">
         TYPE {email.toUpperCase()} TO CONFIRM
       </p>
       <input
@@ -194,18 +194,18 @@ function StrikeAction({ email }: { email: string }) {
         value={confirmText}
         onChange={(e) => setConfirmText(e.target.value)}
         placeholder={email}
-        className="mt-2 w-full border border-rule bg-transparent px-3 py-2 font-mono text-[11px] text-bone placeholder:text-faint-ink outline-none focus:border-conflict"
+        className="mt-2 w-full border border-rule bg-transparent px-3 py-2 font-mono text-data-xs text-bone placeholder:text-faint-ink outline-none focus:border-conflict"
       />
       <button
         type="button"
         onClick={onDelete}
         disabled={!canDelete || status === "deleting"}
-        className="mt-2 w-full border border-conflict py-2 text-center font-mono text-[11px] tracking-[0.12em] text-conflict disabled:cursor-not-allowed disabled:opacity-40"
+        className="mt-2 w-full border border-conflict py-2 text-center font-mono text-data-xs tracking-label text-conflict disabled:cursor-not-allowed disabled:opacity-40"
       >
         {status === "deleting" ? "STRIKING…" : "STRIKE THE RECORD PERMANENTLY"}
       </button>
       {error ? (
-        <p role="alert" className="mt-2 font-mono text-[11px] tracking-[0.06em] text-conflict">
+        <p role="alert" className="mt-2 font-mono text-data-xs tracking-data text-conflict">
           {error}
         </p>
       ) : null}
@@ -221,7 +221,7 @@ function DisclosureShell({ title, children }: { title: string; children: React.R
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full items-center justify-between px-4 py-3 text-left font-mono text-[11px] tracking-[0.14em] text-dim hover:text-bone"
+        className="flex w-full items-center justify-between px-4 py-3 text-left font-mono text-data-xs tracking-label text-dim hover:text-bone"
       >
         <span>{title}</span>
         <span aria-hidden>{open ? "▴" : "▾"}</span>
@@ -288,12 +288,12 @@ function DisplayNameDisclosure({
         <button
           type="submit"
           disabled={status === "saving"}
-          className="self-start border border-rule px-5 py-2 font-mono text-[11px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
+          className="self-start border border-rule px-5 py-2 font-mono text-data-xs tracking-label text-bone hover:border-bone/50 disabled:opacity-50"
         >
           {status === "saving" ? "SAVING…" : status === "saved" ? "SAVED" : "SAVE"}
         </button>
         {error ? (
-          <p role="alert" className="font-mono text-[11px] text-conflict">
+          <p role="alert" className="font-mono text-data-xs text-conflict">
             {error.toUpperCase()}
           </p>
         ) : null}
@@ -395,12 +395,12 @@ function PasswordDisclosure() {
         <button
           type="submit"
           disabled={status === "saving"}
-          className="self-start border border-rule px-5 py-2 font-mono text-[11px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
+          className="self-start border border-rule px-5 py-2 font-mono text-data-xs tracking-label text-bone hover:border-bone/50 disabled:opacity-50"
         >
           {status === "saving" ? "UPDATING…" : status === "saved" ? "UPDATED" : "CHANGE PASSWORD"}
         </button>
         {error ? (
-          <p role="alert" className="font-mono text-[11px] text-conflict">
+          <p role="alert" className="font-mono text-data-xs text-conflict">
             {error.toUpperCase()}
           </p>
         ) : null}
@@ -449,12 +449,12 @@ function ExportDisclosure({ email }: { email: string }) {
         type="button"
         onClick={onExport}
         disabled={status === "loading"}
-        className="border border-rule px-5 py-2 font-mono text-[11px] tracking-[0.12em] text-bone hover:border-bone/50 disabled:opacity-50"
+        className="border border-rule px-5 py-2 font-mono text-data-xs tracking-label text-bone hover:border-bone/50 disabled:opacity-50"
       >
         {status === "loading" ? "PREPARING…" : `DOWNLOAD ${email.toUpperCase()}'S DATA ↓`}
       </button>
       {error ? (
-        <p role="alert" className="mt-2 font-mono text-[11px] text-conflict">
+        <p role="alert" className="mt-2 font-mono text-data-xs text-conflict">
           {error.toUpperCase()}
         </p>
       ) : null}

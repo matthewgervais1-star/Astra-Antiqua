@@ -188,14 +188,14 @@ function ReadingExperienceImpl({ explicitCulture }: ReadingExperienceImplProps) 
         {headlineFrom(culture)}
       </NaveHead>
 
-      <p className="mx-auto max-w-[560px] text-center font-body text-[16px] leading-[1.7] text-prose">
+      <p className="mx-auto max-w-[560px] text-center font-body text-prose-m leading-prose text-prose">
         {culture
           ? ORACLE_INTRO[culture]
           : "Set the date, the hour, and the place of your birth. The ten bodies will be placed for the exact moment you came into the world; the answer will be rendered in the voice of whichever culture you call on."}
       </p>
-      <p className="mx-auto mt-4 max-w-[560px] text-center font-mono text-[11px] uppercase leading-[1.7] tracking-[0.1em] text-dim">
+      <p className="mx-auto mt-4 max-w-[560px] text-center font-mono text-data-xs uppercase leading-data tracking-data text-dim">
         ALL COMPUTATION RUNS IN YOUR BROWSER · SAVED CHARTS LIVE ON THIS DEVICE →{" "}
-        <Link href="/charts" className="text-[var(--accent)]">
+        <Link href="/charts" className="text-accent">
           YOUR CHARTS
         </Link>
       </p>
@@ -208,7 +208,7 @@ function ReadingExperienceImpl({ explicitCulture }: ReadingExperienceImplProps) 
           initialValues={initialValues}
         />
         {computeError ? (
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-conflict">
+          <p className="font-mono text-data-xs uppercase tracking-microcopy text-conflict">
             {computeError}
           </p>
         ) : null}
@@ -250,7 +250,7 @@ function ReadingExperienceImpl({ explicitCulture }: ReadingExperienceImplProps) 
             ) : null}
           </>
         ) : (
-          <div className="border border-rule px-6 py-10 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
+          <div className="border border-rule px-6 py-10 text-center font-mono text-data-xs uppercase tracking-label text-dim">
             THE WHEEL DRAWS ITSELF ONCE YOU CAST
           </div>
         )}

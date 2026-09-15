@@ -7,7 +7,7 @@ export function SectionDivider({ label }: SectionDividerProps) {
   return (
     <div className="flex items-center gap-3.5">
       <span className="h-px flex-1 bg-rule" />
-      <span className="font-display text-[11px] tracking-[0.24em] text-[var(--accent)]">{label}</span>
+      <span className="font-display text-[11px] tracking-[0.24em] text-accent">{label}</span>
       <span className="h-px flex-1 bg-rule" />
     </div>
   );

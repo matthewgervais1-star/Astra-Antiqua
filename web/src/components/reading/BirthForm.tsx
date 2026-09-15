@@ -4,6 +4,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { CITIES, searchCities } from "@/data/cities";
 import { geocodePlace, GeocodeError } from "@/lib/geocoding";
 import { cn } from "@/lib/classNames";
+import { Button } from "@/components/chrome/Button";
 
 export interface BirthFormValues {
   date: string; // YYYY-MM-DD
@@ -79,9 +80,9 @@ type GeocodeStatus =
 const GEOCODE_DEBOUNCE_MS = 350;
 
 const INPUT_CLASS =
-  "w-full border border-rule bg-transparent px-4 py-3 font-body text-[16px] text-bone outline-none transition-colors focus:border-[var(--accent)]";
+  "w-full border border-rule bg-transparent px-4 py-3 font-body text-prose-m text-bone outline-none focus:border-rule-active";
 const LINK_CLASS =
-  "font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--accent)] underline-offset-4 hover:underline";
+  "font-mono text-data-xs uppercase tracking-microcopy text-accent underline-offset-4 hover:underline";
 
 export function BirthForm({
   onSubmit,
@@ -351,7 +352,7 @@ export function BirthForm({
         </Field>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="max-w-md font-body text-[13px] text-dim">
+        <p className="max-w-md font-body text-prose-s text-dim">
           The Sun, planets, and aspects are accurate to the minute of arc. The Moon and the Ascendant depend on the birth time; without it they are approximate.
         </p>
         <button
@@ -411,7 +412,7 @@ export function BirthForm({
               // Keep the input focused when an option is clicked so onBlur does
               // not fire before onClick.
               onMouseDown={(e) => e.preventDefault()}
-              className="absolute z-10 mt-2 max-h-80 w-full overflow-auto border border-[var(--accent)] bg-[var(--ground)]"
+              className="absolute z-10 mt-2 max-h-80 w-full overflow-auto border border-rule-active bg-ground"
             >
               {suggestions.length > 0 ? (
                 <ul>
@@ -425,37 +426,37 @@ export function BirthForm({
                         onClick={() => selectSuggestion(s)}
                         onMouseEnter={() => setActiveIndex(idx)}
                         className={cn(
-                          "flex w-full items-baseline justify-between gap-3 border-t border-rule-row px-3 py-2.5 text-left transition-colors first:border-t-0",
+                          "flex w-full items-baseline justify-between gap-3 border-t border-rule-row px-3 py-2.5 text-left first:border-t-0",
                           idx === activeIndex ? "bg-bone/10 text-bone" : "text-bone hover:bg-bone/5",
                         )}
                       >
                         <span className="min-w-0 flex-1 truncate">
-                          <span className="font-body text-[15px]">{s.label}</span>
+                          <span className="font-body text-prose-s">{s.label}</span>
                           {s.sublabel ? (
-                            <span className="ml-2 font-body text-[13px] text-prose">
+                            <span className="ml-2 font-body text-prose-s text-prose">
                               {s.sublabel}
                             </span>
                           ) : null}
                         </span>
-                        <span className="shrink-0 font-mono text-[11px] tracking-[0.08em] text-dim">
+                        <span className="shrink-0 font-mono text-data-xs tracking-data text-dim">
                           {s.latitude.toFixed(1)}°, {s.longitude.toFixed(1)}°
                         </span>
                       </button>
                     </li>
                   ))}
                   {geocode.kind === "loading" ? (
-                    <li className="px-3 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
+                    <li className="px-3 py-2 font-mono text-data-xs uppercase tracking-microcopy text-dim">
                       Searching the map...
                     </li>
                   ) : null}
                 </ul>
               ) : geocode.kind === "loading" ? (
-                <div className="px-3 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
+                <div className="px-3 py-3 font-mono text-data-xs uppercase tracking-microcopy text-dim">
                   Searching the map...
                 </div>
               ) : noMatch ? (
                 <div className="px-3 py-3">
-                  <p className="font-body text-[14px] text-prose">
+                  <p className="font-body text-prose-s text-prose">
                     No place matched &ldquo;{query}&rdquo;.
                   </p>
                   <button
@@ -470,18 +471,18 @@ export function BirthForm({
                   </button>
                 </div>
               ) : geocode.kind === "error" ? (
-                <div className="px-3 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-conflict">
+                <div className="px-3 py-3 font-mono text-data-xs uppercase tracking-microcopy text-conflict">
                   {geocode.message}
                 </div>
               ) : typingHint ? (
-                <div className="px-3 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
+                <div className="px-3 py-3 font-mono text-data-xs uppercase tracking-microcopy text-dim">
                   Keep typing to search the world map...
                 </div>
               ) : null}
             </div>
           ) : null}
           <div className="mt-3 flex items-center justify-between gap-3">
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
+            <p className="font-mono text-data-xs uppercase tracking-microcopy text-dim">
               Selected:{" "}
               {state.latitudeText && state.longitudeText
                 ? `${Number(state.latitudeText).toFixed(3)}°, ${Number(state.longitudeText).toFixed(3)}°`
@@ -550,20 +551,13 @@ export function BirthForm({
         </div>
       )}
 
-      <button
-        type="submit"
-        disabled={submitting}
-        className={cn(
-          "mt-2 inline-flex items-center justify-center gap-2 border border-[var(--accent)] px-6 py-3 font-display text-[12px] uppercase tracking-[0.2em] text-[var(--accent)] transition-colors hover:bg-[var(--accent)]/10",
-          submitting && "cursor-not-allowed opacity-60",
-        )}
-      >
+      <Button type="submit" variant="votive" disabled={submitting} className="mt-2">
         {submitting ? "CASTING" : (submitLabel ?? "CAST THE CHART")}
         {!submitting ? <span aria-hidden>→</span> : null}
-      </button>
+      </Button>
 
       {error ? (
-        <p role="alert" className="font-mono text-[11px] uppercase tracking-[0.2em] text-conflict">
+        <p role="alert" className="font-mono text-data-xs uppercase tracking-microcopy text-conflict">
           {error}
         </p>
       ) : null}
@@ -582,7 +576,7 @@ function Field({ id, label, children }: FieldProps) {
     <div>
       <label
         htmlFor={id}
-        className="mb-2 block font-mono text-[11px] uppercase tracking-[0.2em] text-dim"
+        className="mb-2 block font-mono text-data-xs uppercase tracking-microcopy text-dim"
       >
         {label}
       </label>

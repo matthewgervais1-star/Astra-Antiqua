@@ -18,33 +18,33 @@ export function PermissionsModule({ culture, permissions, tone }: PermissionsMod
   return (
     <section className="mx-auto max-w-[720px] px-5 py-10 md:px-14">
       <div className="flex items-baseline justify-between">
-        <span className="font-mono text-[11px] tracking-[0.16em] text-[var(--accent)]">
+        <span className="font-mono text-data-xs tracking-label text-accent">
           {CULTURE_LABELS[culture].toUpperCase()} · THE DAY&rsquo;S PERMISSIONS
         </span>
-        <span className="font-mono text-[11px] text-dim">{TONE_LABELS[tone].toUpperCase()}</span>
+        <span className="font-mono text-data-xs text-dim">{TONE_LABELS[tone].toUpperCase()}</span>
       </div>
-      <div className="my-4 h-px w-[34px] bg-[var(--accent)]" />
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-[22px]">
+      <div className="my-4 h-px w-[34px] bg-accent" />
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-[var(--space-4)]">
         <div>
-          <div className="mb-[10px] font-display text-[11px] tracking-[0.2em] text-harmony">{proceedLabel}</div>
-          <div className="flex flex-col gap-[7px] font-body text-[14px] font-light leading-[1.5] text-prose">
+          <div className="mb-[var(--space-2)] font-display text-[11px] tracking-[0.2em] text-harmony">{proceedLabel}</div>
+          <div className="flex flex-col gap-[var(--space-1)] font-body text-prose-s font-light leading-prose text-prose">
             {permissions.proceed.map((item) => (
               <span key={item}>{item}</span>
             ))}
           </div>
         </div>
         <div>
-          <div className="mb-[10px] font-display text-[11px] tracking-[0.2em] text-conflict">{refrainLabel}</div>
-          <div className="flex flex-col gap-[7px] font-body text-[14px] font-light leading-[1.5] text-prose">
+          <div className="mb-[var(--space-2)] font-display text-[11px] tracking-[0.2em] text-conflict">{refrainLabel}</div>
+          <div className="flex flex-col gap-[var(--space-1)] font-body text-prose-s font-light leading-prose text-prose">
             {permissions.refrain.map((item) => (
               <span key={item}>{item}</span>
             ))}
           </div>
         </div>
       </div>
-      <div className="mt-4 font-mono text-[11px] leading-[1.6] tracking-[0.06em] text-dim">
+      <div className="mt-4 font-mono text-data-xs leading-data tracking-data text-dim">
         DERIVED FROM TODAY&rsquo;S ASPECTS, NOT A RANDOMIZER →{" "}
-        <a href="#aspects" className="text-[var(--accent)]">
+        <a href="#aspects" className="text-accent">
           WHY THESE
         </a>
       </div>

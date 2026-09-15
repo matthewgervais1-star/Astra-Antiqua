@@ -44,7 +44,7 @@ function Section({ label, body }: { label: string; body: string }) {
   return (
     <div className="flex flex-col gap-2.5">
       <SectionDivider label={label} />
-      <p className="font-body text-[17px] leading-[1.7] text-prose">{body}</p>
+      <p className="font-body text-prose-m leading-prose text-prose">{body}</p>
     </div>
   );
 }
@@ -92,7 +92,7 @@ function SeasonContent({
             <div className="w-full">
               <OrbBar orb={window.daysRemaining} maxOrb={window.totalDays} tone="harmony" />
             </div>
-            <div className="font-mono text-[11px] tracking-[0.14em] text-dim">
+            <div className="font-mono text-data-xs tracking-label text-dim">
               DAY {window.dayOfSeason} OF {window.totalDays} · {status}
             </div>
           </div>
@@ -116,9 +116,9 @@ function SeasonContent({
         <FeedbackRow readingId={seasonReadingId(window)} noun="SEASON" />
       </div>
 
-      <div className="mx-auto mt-8 max-w-[560px] border border-rule px-[22px] py-[18px] text-left">
-        <div className="mb-3 font-mono text-[11px] tracking-[0.16em] text-dim">THE SEASON&apos;S SKY</div>
-        <div className="flex flex-col gap-2 font-mono text-[11px] leading-[1.5] text-prose">
+      <div className="mx-auto mt-8 max-w-[560px] border border-rule px-[var(--space-4)] py-[var(--space-3)] text-left">
+        <div className="mb-3 font-mono text-data-xs tracking-label text-dim">THE SEASON&apos;S SKY</div>
+        <div className="flex flex-col gap-2 font-mono text-data-xs leading-data text-prose">
           {skyRows.map((row) => (
             <div key={row.key}>
               <span
@@ -126,7 +126,7 @@ function SeasonContent({
                   row.tone === "conflict"
                     ? "text-conflict"
                     : row.tone === "harmony"
-                      ? "text-[var(--accent)]"
+                      ? "text-accent"
                       : "text-dim",
                 )}
               >
@@ -139,9 +139,9 @@ function SeasonContent({
       </div>
 
       {!natal ? (
-        <div className="mx-auto mt-8 max-w-[560px] text-center font-mono text-[11px] tracking-[0.14em] text-dim">
+        <div className="mx-auto mt-8 max-w-[560px] text-center font-mono text-data-xs tracking-label text-dim">
           CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES →{" "}
-          <Link href="/reading" className="text-[var(--accent)]">
+          <Link href="/reading" className="text-accent">
             READING
           </Link>
         </div>
@@ -157,7 +157,7 @@ function SeasonContent({
         <Link href="/year" className="text-bone/65 hover:text-bone">
           THE YEAR →
         </Link>
-        <Link href="/transits" className="text-[var(--accent)] hover:text-[var(--accent)]">
+        <Link href="/transits" className="text-accent">
           THE LONG TRANSITS →
         </Link>
       </div>

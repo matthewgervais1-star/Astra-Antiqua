@@ -106,7 +106,7 @@ export function WheelSvg({
   return (
     <figure className="m-0">
       {caption ? (
-        <figcaption className="mb-[10px] font-mono text-[11px] tracking-[0.16em] text-dim">
+        <figcaption className="mb-[var(--space-2)] font-mono text-data-xs tracking-label text-dim">
           {caption}
         </figcaption>
       ) : null}

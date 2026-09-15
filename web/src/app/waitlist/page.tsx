@@ -17,7 +17,7 @@ export default function WaitlistPage() {
       <NaveHead
         kicker={CONTEXT}
         sub={
-          <p className="mx-auto max-w-[400px] font-body text-[14px] leading-[1.65] text-prose">
+          <p className="mx-auto max-w-[400px] font-body text-prose-s leading-prose text-prose">
             Names are called in order, a cohort at a time. Everything else already works without
             one.
           </p>

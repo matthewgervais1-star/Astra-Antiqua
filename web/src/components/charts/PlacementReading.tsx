@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Badge } from "@/components/chrome/Badge";
+import { Button } from "@/components/chrome/Button";
 import { CultureGate } from "@/components/chrome/CultureGate";
 import { CultureChip } from "@/components/chrome/CultureChip";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
@@ -41,7 +43,7 @@ export function PlacementReading({ chartId, body }: PlacementReadingProps) {
 function TopBar({ body }: { body: Planet }) {
   const index = PLANETS.indexOf(body);
   return (
-    <div className="flex h-[46px] items-center gap-[22px] border-b border-rule px-5 font-mono text-[11px] text-dim md:px-14">
+    <div className="flex h-[46px] items-center gap-[var(--space-4)] border-b border-rule px-5 font-mono text-data-xs text-dim md:px-14">
       <Link href="/charts" className="hover:text-bone">
         ← YOUR CHART
       </Link>
@@ -84,20 +86,17 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
       <>
         <TopBar body={body} />
         <main className="mx-auto max-w-[560px] px-5 py-16 text-center">
-          <div className="font-mono text-[11px] tracking-[0.2em] text-dim">NO CHART FOUND</div>
-          <h1 className="mt-4 font-display text-[28px] tracking-[0.08em] text-bone">
+          <div className="font-mono text-data-xs tracking-microcopy text-dim">NO CHART FOUND</div>
+          <h1 className="mt-4 font-display text-display-m tracking-display text-bone">
             THIS CHART IS NOT ON THIS DEVICE
           </h1>
-          <p className="mt-4 font-body text-[16px] leading-[1.7] text-prose">
+          <p className="mt-4 font-body text-prose-m leading-prose text-prose">
             The chart this placement belongs to could not be found in this browser. It may have
             been removed, or you may be on a different device.
           </p>
-          <Link
-            href="/charts"
-            className="mt-8 inline-block border border-[var(--accent)] px-6 py-3 font-display text-[12px] uppercase tracking-[0.2em] text-[var(--accent)]"
-          >
+          <Button href="/charts" variant="votive" className="mt-8">
             BACK TO YOUR CHARTS
-          </Link>
+          </Button>
         </main>
         <MethodFooter />
       </>
@@ -120,44 +119,45 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
   return (
     <>
       <TopBar body={body} />
-      <main className="mx-auto max-w-[560px] px-5 py-11 text-center md:py-[44px]">
+      <main className="mx-auto max-w-[560px] px-5 py-11 text-center md:py-[var(--space-6)]">
         <NaveHead
           kicker={`${voice.institution} · YOUR STANDING PLACEMENT`}
           sub={
-            <div className="inline-flex items-center gap-[6px] font-mono text-[11px] uppercase leading-[1.7] tracking-[0.12em] text-dim">
+            <div className="inline-flex items-center gap-[var(--space-1)] font-mono text-data-xs uppercase leading-data tracking-label text-dim">
               <DeityGlyph body={body} culture={culture} size={16} />
               <span>
                 {formatDegMin(degree)} {sign.toUpperCase()} ·{" "}
                 {houseMeaning.ordinal.toUpperCase()} HOUSE · FIXED AT YOUR BIRTH
               </span>
+              {isReceived(body) ? <Badge tone="accent">RECEIVED</Badge> : null}
             </div>
           }
         >
           <span className="whitespace-pre-line">{`YOUR ${deity.name.toUpperCase()}\nIN THE ${SIGN_PHRASE[sign]}`}</span>
         </NaveHead>
 
-        <div className="flex flex-col gap-[22px] text-left">
-          <section className="flex flex-col gap-[9px]">
+        <div className="flex flex-col gap-[var(--space-4)] text-left">
+          <section className="flex flex-col gap-[var(--space-2)]">
             <SectionDivider label="WHAT IT IS" />
-            <p className="text-pretty font-body text-[16px] leading-[1.7] text-prose">
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">
               {buildWhatItIs(culture, body, sign)}
             </p>
           </section>
-          <section className="flex flex-col gap-[9px]">
+          <section className="flex flex-col gap-[var(--space-2)]">
             <SectionDivider label="HOW IT SHOWS" />
-            <p className="text-pretty font-body text-[16px] leading-[1.7] text-prose">
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">
               {buildHowItShows(culture, body, house)}
             </p>
           </section>
-          <section className="flex flex-col gap-[9px]">
+          <section className="flex flex-col gap-[var(--space-2)]">
             <SectionDivider label="WHAT TO KEEP IN VIEW" />
-            <p className="text-pretty font-body text-[16px] leading-[1.7] text-prose">
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">
               {buildKeepInView(body, sign)}
             </p>
           </section>
         </div>
 
-        <div className="mt-[30px]">
+        <div className="mt-[var(--space-5)]">
           <Votive>{PLACEMENT_VOTIVES[culture](deity.name)}</Votive>
         </div>
 
@@ -171,11 +171,11 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
           <FeedbackRow readingId={`placement-${chartId}-${body}`} noun="PLACEMENT" />
         </div>
 
-        <div className="mt-7 flex justify-center gap-[26px] font-display text-[11px] tracking-[0.18em]">
+        <div className="mt-7 flex justify-center gap-[var(--space-4)] font-display text-[11px] tracking-[0.18em]">
           <Link href={`/charts/${chartId}/${prevPlanet}`} className="text-bone/65 hover:text-bone">
             ← YOUR {prevDeity.name.toUpperCase()}
           </Link>
-          <Link href={`/charts/${chartId}/${nextPlanet}`} className="text-[var(--accent)]">
+          <Link href={`/charts/${chartId}/${nextPlanet}`} className="text-accent">
             YOUR {nextDeity.name.toUpperCase()} →
           </Link>
         </div>

@@ -30,7 +30,7 @@ export function CenterDecree({
 }: CenterDecreeProps) {
   const readingId = `day-${isoDateUtc(now)}`;
   return (
-    <main className={cn("flex flex-col items-center px-6 py-11 text-center md:px-14 md:py-[44px]", className)}>
+    <main className={cn("flex flex-col items-center px-6 py-11 text-center md:px-14 md:py-[var(--space-6)]", className)}>
       <NaveHead kicker={`${weekday} · ${dateLong} · ${institution}`}>
         <span className="uppercase">{reading.headline}</span>
       </NaveHead>
@@ -39,14 +39,14 @@ export function CenterDecree({
         {reading.paragraphs.map((paragraph, i) => (
           <p
             key={i}
-            className="font-body text-[17.5px] font-light leading-[1.72] text-prose text-pretty [&:not(:last-child)]:mb-[15px]"
+            className="font-body text-prose-m font-light leading-prose text-prose text-pretty [&:not(:last-child)]:mb-[var(--space-3)]"
           >
             {paragraph}
           </p>
         ))}
       </div>
 
-      <div className="mt-[30px] w-full max-w-[560px]">
+      <div className="mt-[var(--space-5)] w-full max-w-[560px]">
         <Votive>{votive}</Votive>
       </div>
 
@@ -54,7 +54,7 @@ export function CenterDecree({
         <FeedbackRow readingId={readingId} noun="DECREE" />
       </div>
 
-      <div className="mt-10 flex justify-center gap-[26px] font-display text-[11.5px] tracking-[0.2em] text-dim">
+      <div className="mt-10 flex justify-center gap-[var(--space-4)] font-display text-[11.5px] tracking-[0.2em] text-dim">
         <Link href="/week" className="hover:text-bone">
           THE WEEK →
         </Link>

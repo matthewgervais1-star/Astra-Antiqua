@@ -16,12 +16,12 @@ export interface SubBarProps {
  * own small client islands. */
 export function SubBar({ context, horizon, showSync }: SubBarProps) {
   return (
-    <div className="flex h-[46px] items-center gap-4 border-b border-rule px-5 font-mono text-[11px] text-dim md:gap-[22px] md:px-14">
+    <div className="flex h-[46px] items-center gap-4 border-b border-rule px-5 font-mono text-data-xs text-dim md:gap-[var(--space-4)] md:px-14">
       <div className="min-w-0 flex-1 truncate">{context}</div>
       {/* The controls keep their intrinsic width; the context line is what
           gives way. SYNC drops below the instrument breakpoint, as the mobile
           mock does, so the row still fits a 375px viewport. */}
-      <div className="flex shrink-0 items-center gap-4 md:gap-[22px]">
+      <div className="flex shrink-0 items-center gap-4 md:gap-[var(--space-4)]">
         {horizon ? <HorizonControl active={horizon} /> : null}
         <CultureChip />
         {showSync ? (

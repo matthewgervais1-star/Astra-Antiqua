@@ -20,7 +20,11 @@ const CELLS: readonly Cell[] = [
   { key: "year", label: "Y", href: "/year" },
 ];
 
-/** D · W · S · Y segmented control: one bordered row of Link cells. */
+/**
+ * D · W · S · Y segmented control: one bordered row of Link cells. The active
+ * cell wears the accent as ink and as the rule under it, never as a fill: the
+ * accent is never a background.
+ */
 export function HorizonControl({ active }: HorizonControlProps) {
   return (
     <div className="flex border border-bone/20">
@@ -32,9 +36,9 @@ export function HorizonControl({ active }: HorizonControlProps) {
             href={cell.href}
             aria-current={isActive ? "page" : undefined}
             className={cn(
-              "px-[15px] py-2 font-mono text-[11px]",
+              "-mb-px px-[var(--space-3)] py-2 font-mono text-data-xs",
               i > 0 && "border-l border-bone/20",
-              isActive ? "bg-[var(--accent)] font-medium text-[var(--ground)]" : "text-dim",
+              isActive ? "border-b border-rule-active text-accent" : "text-dim",
             )}
           >
             {cell.label}

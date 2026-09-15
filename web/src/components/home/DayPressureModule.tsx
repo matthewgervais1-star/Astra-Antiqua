@@ -18,27 +18,27 @@ export function DayPressureModule({ groups }: DayPressureModuleProps) {
   return (
     <section className="mx-auto max-w-[720px] border-t border-rule px-5 py-10 md:px-14">
       <div className="flex items-baseline justify-between">
-        <span className="font-mono text-[11px] tracking-[0.16em] text-[var(--accent)]">WHERE THE DAY FALLS</span>
-        <span className="font-mono text-[11px] text-dim">FROM YOUR CHART&rsquo;S HOUSES</span>
+        <span className="font-mono text-data-xs tracking-label text-accent">WHERE THE DAY FALLS</span>
+        <span className="font-mono text-data-xs text-dim">FROM YOUR CHART&rsquo;S HOUSES</span>
       </div>
-      <div className="my-4 h-px w-[34px] bg-[var(--accent)]" />
-      <div className="flex flex-col gap-[14px]">
+      <div className="my-4 h-px w-[34px] bg-accent" />
+      <div className="flex flex-col gap-[var(--space-2)]">
         {groups.map((group) => (
           <div key={group.name}>
-            <div className="mb-[7px] flex items-center justify-between font-mono text-[11px] text-bone">
+            <div className="mb-[var(--space-1)] flex items-center justify-between font-mono text-data-xs text-bone">
               <span>
                 {group.name} · {group.sub}
               </span>
               <span className={LEVEL_TEXT_CLASS[group.level]}>{group.levelLabel}</span>
             </div>
             <OrbBar orb={group.orb ?? group.maxOrb} maxOrb={group.maxOrb} tone={group.tone} />
-            <div className="mt-[6px] font-body text-[12.5px] font-light leading-[1.5] text-prose">
+            <div className="mt-[var(--space-1)] font-body text-prose-s font-light leading-prose text-prose">
               {group.sentence}
             </div>
           </div>
         ))}
       </div>
-      <div className="mt-4 font-mono text-[11px] leading-[1.6] tracking-[0.06em] text-dim">
+      <div className="mt-4 font-mono text-data-xs leading-data tracking-data text-dim">
         BARS = TIGHTNESS OF ASPECTS INTO EACH HOUSE GROUP · NAMES ARE PER CULTURE
       </div>
     </section>

@@ -3,13 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { geocodePlace, GeocodeError, type GeocodeResult } from "@/lib/geocoding";
 import { upsertChart } from "@/lib/savedCharts";
+import { Button } from "@/components/chrome/Button";
 
 const GEOCODE_DEBOUNCE_MS = 350;
 
 const INPUT_CLASS =
-  "w-full border border-rule bg-transparent px-3 py-[10px] font-mono text-[12px] text-bone placeholder:text-faint-ink outline-none focus:border-[var(--accent)]";
+  "w-full border border-rule bg-transparent px-3 py-[var(--space-2)] font-mono text-data-s text-bone placeholder:text-faint-ink outline-none focus:border-rule-active";
 
-const LABEL_CLASS = "mb-2 block font-mono text-[11px] tracking-[0.12em] text-dim";
+const LABEL_CLASS = "mb-2 block font-mono text-data-xs tracking-label text-dim";
 
 interface SelectedPlace {
   label: string;
@@ -115,13 +116,13 @@ export function BirthDetailsStep() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="w-full text-left font-mono text-[11px] tracking-[0.16em] text-dim hover:text-bone"
+        className="w-full text-left font-mono text-data-xs tracking-label text-dim hover:text-bone"
       >
         II OF III · ENTER THE BIRTH DETAILS {open ? "▴" : "▾"}
       </button>
       {open ? (
         saved ? (
-          <p className="mt-5 font-mono text-[11px] tracking-[0.1em] text-[var(--accent)]">
+          <p className="mt-5 font-mono text-data-xs tracking-data text-accent">
             ENTERED IN THE RECORD.
           </p>
         ) : (
@@ -177,48 +178,45 @@ export function BirthDetailsStep() {
                         key={`${r.latitude},${r.longitude},${idx}`}
                         type="button"
                         onClick={() => pick(r)}
-                        className="flex w-full items-baseline justify-between gap-3 border-b border-rule-row px-3 py-[9px] text-left font-mono text-[11px] text-bone last:border-b-0 hover:bg-bone/5"
+                        className="flex w-full items-baseline justify-between gap-3 border-b border-rule-row px-3 py-[var(--space-2)] text-left font-mono text-data-xs text-bone last:border-b-0 hover:bg-bone/5"
                       >
                         <span className="truncate">{r.name}</span>
                         <span className="shrink-0 text-faint-ink">{r.context || r.country}</span>
                       </button>
                     ))
                   ) : searchStatus === "loading" ? (
-                    <div className="px-3 py-[9px] font-mono text-[11px] text-faint-ink">
+                    <div className="px-3 py-[var(--space-2)] font-mono text-data-xs text-faint-ink">
                       SEARCHING…
                     </div>
                   ) : searchStatus === "error" ? (
-                    <div className="px-3 py-[9px] font-mono text-[11px] text-conflict">
+                    <div className="px-3 py-[var(--space-2)] font-mono text-data-xs text-conflict">
                       {(searchError ?? "").toUpperCase()}
                     </div>
                   ) : (
-                    <div className="px-3 py-[9px] font-mono text-[11px] text-faint-ink">
+                    <div className="px-3 py-[var(--space-2)] font-mono text-data-xs text-faint-ink">
                       NO MATCH
                     </div>
                   )}
                 </div>
               ) : null}
               {selected ? (
-                <p className="mt-2 font-mono text-[11px] tracking-[0.08em] text-faint-ink">
+                <p className="mt-2 font-mono text-data-xs tracking-data text-faint-ink">
                   {selected.latitude.toFixed(2)}°, {selected.longitude.toFixed(2)}°
                 </p>
               ) : null}
             </div>
-            <button
-              type="submit"
-              className="border border-[var(--accent)] py-[13px] text-center font-display text-[12px] tracking-[0.2em] text-[var(--accent)] hover:bg-bone/5"
-            >
+            <Button type="submit" variant="votive" block>
               ENTER IT IN THE RECORD
-            </button>
+            </Button>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="self-start font-mono text-[11px] tracking-[0.1em] text-dim underline decoration-dotted underline-offset-4 hover:text-bone"
+              className="self-start font-mono text-data-xs tracking-data text-dim underline decoration-dotted underline-offset-4 hover:text-bone"
             >
               SKIP · CAST LATER
             </button>
             {formError ? (
-              <p role="alert" className="font-mono text-[11px] tracking-[0.08em] text-conflict">
+              <p role="alert" className="font-mono text-data-xs tracking-data text-conflict">
                 {formError.toUpperCase()}
               </p>
             ) : null}

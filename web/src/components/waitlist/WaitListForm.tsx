@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CULTURES, CULTURE_LABELS } from "@/data/cultures";
 import { waitListSchema, type WaitListInput } from "@/lib/waitlistSchema";
 import { cn } from "@/lib/classNames";
+import { Button } from "@/components/chrome/Button";
 
 export interface WaitListFormProps {
   /** Email-only form (the standalone /waitlist page). When false, also
@@ -32,7 +33,7 @@ function ordinal(n: number): string {
 }
 
 const INPUT_CLASS =
-  "w-full border border-rule bg-transparent px-3.5 py-3 font-mono text-[11px] tracking-[0.04em] text-bone placeholder:text-faint-ink outline-none transition-colors focus:border-[var(--accent)]";
+  "w-full border border-rule bg-transparent px-3.5 py-3 font-mono text-data-xs tracking-data text-bone placeholder:text-faint-ink outline-none focus:border-rule-active";
 
 export function WaitListForm({ compact = false }: WaitListFormProps) {
   const [state, setState] = useState<SubmitState>({ kind: "idle" });
@@ -71,7 +72,7 @@ export function WaitListForm({ compact = false }: WaitListFormProps) {
 
   if (state.kind === "success") {
     return (
-      <div className="font-mono text-[11px] tracking-[0.08em] text-dim">
+      <div className="font-mono text-data-xs tracking-data text-dim">
         YOU ARE {ordinal(state.position)} ON THE ROLL · WE EMAIL ONCE, WHEN CALLED
       </div>
     );
@@ -90,16 +91,12 @@ export function WaitListForm({ compact = false }: WaitListFormProps) {
           {...register("email")}
           className={cn(INPUT_CLASS, "sm:flex-1")}
         />
-        <button
-          type="submit"
-          disabled={state.kind === "submitting"}
-          className="border border-[var(--accent)] px-[18px] py-3 font-display text-[11px] tracking-[0.14em] text-[var(--accent)] transition-colors hover:bg-[var(--accent)]/10 disabled:cursor-not-allowed disabled:opacity-60"
-        >
+        <Button type="submit" variant="votive" disabled={state.kind === "submitting"}>
           {state.kind === "submitting" ? "ENTERING" : "ENTER"}
-        </button>
+        </Button>
       </div>
       {errors.email ? (
-        <p role="alert" className="font-mono text-[11px] tracking-[0.06em] text-conflict">
+        <p role="alert" className="font-mono text-data-xs tracking-data text-conflict">
           {errors.email.message}
         </p>
       ) : null}
@@ -150,12 +147,12 @@ export function WaitListForm({ compact = false }: WaitListFormProps) {
       )}
 
       {state.kind === "error" ? (
-        <p role="alert" className="font-mono text-[11px] tracking-[0.06em] text-conflict">
+        <p role="alert" className="font-mono text-data-xs tracking-data text-conflict">
           {state.message}
         </p>
       ) : null}
 
-      <p className="font-mono text-[11px] tracking-[0.08em] text-dim">WE EMAIL ONCE, WHEN CALLED</p>
+      <p className="font-mono text-data-xs tracking-data text-dim">WE EMAIL ONCE, WHEN CALLED</p>
     </form>
   );
 }
@@ -170,12 +167,12 @@ interface FieldProps {
 function Field({ id, label, error, children }: FieldProps) {
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="font-mono text-[11px] tracking-[0.14em] text-dim">
+      <label htmlFor={id} className="font-mono text-data-xs tracking-label text-dim">
         {label}
       </label>
       {children}
       {error ? (
-        <p role="alert" className="font-mono text-[11px] tracking-[0.06em] text-conflict">
+        <p role="alert" className="font-mono text-data-xs tracking-data text-conflict">
           {error}
         </p>
       ) : null}

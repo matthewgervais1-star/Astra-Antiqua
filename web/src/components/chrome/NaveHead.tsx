@@ -17,13 +17,13 @@ export function NaveHead({ kicker, children, sub, emblem }: NaveHeadProps) {
   return (
     <div className="text-center">
       {emblem ? <div className="mb-[var(--space-3)] flex justify-center">{emblem}</div> : null}
-      <div className="font-mono text-[11px] tracking-[0.2em] text-dim">{kicker}</div>
-      <div className="mx-auto my-6 h-px w-16 bg-[var(--accent)]" />
-      <h1 className="mx-auto max-w-[680px] text-balance font-display text-[clamp(40px,5vw,58px)] leading-[1.25] tracking-[0.1em] text-bone">
+      <div className="font-mono text-data-xs tracking-microcopy text-dim">{kicker}</div>
+      <div className="mx-auto my-6 h-px w-16 bg-accent" />
+      <h1 className="mx-auto max-w-[680px] text-balance font-display text-display-l leading-display tracking-display text-bone md:text-display-xl">
         {children}
       </h1>
       {sub ? <div className="mt-4">{sub}</div> : null}
-      <div className="mx-auto my-6 h-px w-16 bg-[var(--accent)]" />
+      <div className="mx-auto my-6 h-px w-16 bg-accent" />
     </div>
   );
 }

@@ -22,16 +22,16 @@ const LABEL_TONE_CLASS: Readonly<Record<AspectRow["tone"], string>> = {
  * transit box pinned to the bottom of the column. */
 export function AspectsRail({ className, culture, aspects, longTransit }: AspectsRailProps) {
   return (
-    <aside id="aspects" className={cn("flex flex-col px-7 py-[26px]", className)}>
-      <div className="mb-[14px] font-mono text-[11px] tracking-[0.16em] text-dim">ASPECTS IN ORB</div>
+    <aside id="aspects" className={cn("flex flex-col px-7 py-[var(--space-4)]", className)}>
+      <div className="mb-[var(--space-2)] font-mono text-data-xs tracking-label text-dim">ASPECTS IN ORB</div>
       <div className="flex flex-col gap-4">
         {aspects.length === 0 ? (
-          <div className="font-mono text-[11.5px] text-dim">Nothing is in orb today. A quiet sky.</div>
+          <div className="font-mono text-data-xs text-dim">Nothing is in orb today. A quiet sky.</div>
         ) : (
           aspects.map((row) => (
             <div key={row.key}>
-              <div className="mb-2 flex items-center justify-between font-mono text-[11.5px] text-bone">
-                <span className="inline-flex items-center gap-[6px]">
+              <div className="mb-2 flex items-center justify-between font-mono text-data-xs text-bone">
+                <span className="inline-flex items-center gap-[var(--space-1)]">
                   <DeityGlyph body={row.a} culture={culture} size={16} />
                   {row.kindGlyph}
                   <DeityGlyph body={row.b} culture={culture} size={16} />
@@ -42,7 +42,7 @@ export function AspectsRail({ className, culture, aspects, longTransit }: Aspect
                 <span className="text-dim">{row.orbLabel}</span>
               </div>
               <OrbBar orb={row.orb} maxOrb={row.maxOrb} tone={row.tone} />
-              <div className={cn("mt-[6px] font-mono text-[11px]", LABEL_TONE_CLASS[row.tone])}>
+              <div className={cn("mt-[var(--space-1)] font-mono text-data-xs", LABEL_TONE_CLASS[row.tone])}>
                 {row.rulingLabel}
               </div>
             </div>

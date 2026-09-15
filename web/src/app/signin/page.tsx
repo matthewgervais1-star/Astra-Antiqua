@@ -6,12 +6,13 @@ import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { safeNextPath } from "@/lib/auth/nextPath";
 import { cn } from "@/lib/classNames";
+import { Button } from "@/components/chrome/Button";
 
 type Mode = "signin" | "signup";
 
 const INPUT_CLASS =
-  "w-full border border-rule bg-transparent px-4 py-3 font-mono text-[12px] text-bone placeholder:text-faint-ink outline-none focus:border-[var(--accent)]";
-const LABEL_CLASS = "mb-2 block text-left font-mono text-[11px] tracking-[0.14em] text-dim";
+  "w-full border border-rule bg-transparent px-4 py-3 font-mono text-data-s text-bone placeholder:text-faint-ink outline-none focus:border-rule-active";
+const LABEL_CLASS = "mb-2 block text-left font-mono text-data-xs tracking-label text-dim";
 const AUTH_FAILURE = "THE RECORD DOES NOT ANSWER. CHECK THE EMAIL OR THE PASSWORD.";
 
 /**
@@ -74,14 +75,14 @@ export default function SignInPage() {
   return (
     <main className="mx-auto flex min-h-dvh max-w-[460px] flex-col items-center justify-center px-5 py-16">
       <div className="w-full border border-rule px-7 py-10 text-center sm:px-10">
-        <div className="font-mono text-[11px] tracking-[0.18em] text-dim">THE RECORD</div>
-        <div className="mx-auto mt-5 h-px w-11 bg-[var(--accent)]" />
-        <h1 className="mt-5 font-display text-[19px] leading-[1.5] tracking-[0.1em] text-bone">
+        <div className="font-mono text-data-xs tracking-microcopy text-dim">THE RECORD</div>
+        <div className="mx-auto mt-5 h-px w-11 bg-accent" />
+        <h1 className="mt-5 font-display text-display-s leading-display tracking-display text-bone">
           AN ACCOUNT ADDS SYNC,
           <br />
           NOTHING ELSE
         </h1>
-        <p className="mx-auto mt-4 max-w-[340px] font-body text-[14px] leading-[1.65] text-prose">
+        <p className="mx-auto mt-4 max-w-[340px] font-body text-prose-s leading-prose text-prose">
           Your voice, charts and feedback already live on this device. Sign in only to carry
           them to another.
         </p>
@@ -92,9 +93,9 @@ export default function SignInPage() {
             onClick={() => setMode("signin")}
             aria-pressed={mode === "signin"}
             className={cn(
-              "flex-1 border-b py-2 text-center font-mono text-[11px] tracking-[0.14em]",
+              "flex-1 border-b py-2 text-center font-mono text-data-xs tracking-label",
               mode === "signin"
-                ? "border-[var(--accent)] text-[var(--accent)]"
+                ? "border-rule-active text-accent"
                 : "border-transparent text-dim hover:text-bone",
             )}
           >
@@ -105,9 +106,9 @@ export default function SignInPage() {
             onClick={() => setMode("signup")}
             aria-pressed={mode === "signup"}
             className={cn(
-              "flex-1 border-b py-2 text-center font-mono text-[11px] tracking-[0.14em]",
+              "flex-1 border-b py-2 text-center font-mono text-data-xs tracking-label",
               mode === "signup"
-                ? "border-[var(--accent)] text-[var(--accent)]"
+                ? "border-rule-active text-accent"
                 : "border-transparent text-dim hover:text-bone",
             )}
           >
@@ -183,10 +184,12 @@ export default function SignInPage() {
             </>
           ) : null}
 
-          <button
+          <Button
             type="submit"
+            variant="votive"
+            block
             disabled={submitting || status === "authenticated"}
-            className="mt-1 border border-[var(--accent)] py-[13px] text-center font-display text-[12px] tracking-[0.2em] text-[var(--accent)] hover:bg-bone/5 disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-1"
           >
             {submitting
               ? mode === "signin"
@@ -195,21 +198,21 @@ export default function SignInPage() {
               : mode === "signin"
                 ? "OPEN THE RECORD"
                 : "ENTER THE RECORD"}
-          </button>
+          </Button>
 
           {error ? (
-            <p role="alert" className="text-center font-mono text-[11px] tracking-[0.06em] text-conflict">
+            <p role="alert" className="text-center font-mono text-data-xs tracking-data text-conflict">
               {error}
             </p>
           ) : null}
         </form>
 
-        <p className="mx-auto mt-6 max-w-[340px] font-mono text-[11px] leading-[1.6] tracking-[0.08em] text-dim">
+        <p className="mx-auto mt-6 max-w-[340px] font-mono text-data-xs leading-data tracking-data text-dim">
           EMAIL AND A PASSWORD, KEPT HASHED · NOTHING ELSE STORED
         </p>
       </div>
 
-      <div className="mt-6 text-center font-mono text-[11px] tracking-[0.1em] text-dim">
+      <div className="mt-6 text-center font-mono text-data-xs tracking-data text-dim">
         <Link href={continueHref} className="underline decoration-dotted underline-offset-4 hover:text-bone">
           CONTINUE WITHOUT AN ACCOUNT
         </Link>

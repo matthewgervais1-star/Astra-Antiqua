@@ -50,11 +50,11 @@ export function PartyPicker({ chart, charts, excludeId, onSelect }: PartyPickerP
 
   return (
     <div className="relative flex flex-col gap-2" ref={wrapRef}>
-      <div className="flex items-baseline justify-between gap-3 border border-[var(--accent-strong-border)] px-[15px] py-[13px]">
+      <div className="flex items-baseline justify-between gap-3 border border-[var(--accent-strong-border)] px-[var(--space-3)] py-[var(--space-2)]">
         <span className="font-display text-[13px] tracking-[0.08em] text-bone">
           {chart ? chart.name.toUpperCase() : "NO PARTY CHOSEN"}
         </span>
-        <span className="whitespace-nowrap font-mono text-[11px] text-dim">
+        <span className="whitespace-nowrap font-mono text-data-xs text-dim">
           {chart ? partyYearCity(chart) : "–"}
         </span>
       </div>
@@ -63,14 +63,14 @@ export function PartyPicker({ chart, charts, excludeId, onSelect }: PartyPickerP
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="border border-rule px-[15px] py-3 text-center font-mono text-[11px] tracking-[0.1em] text-dim hover:text-bone"
+        className="border border-rule px-[var(--space-3)] py-3 text-center font-mono text-data-xs tracking-data text-dim hover:text-bone"
       >
         CHANGE A PARTY ▾
       </button>
       {open ? (
-        <div role="menu" className="absolute left-0 right-0 top-full z-40 mt-1 border border-rule bg-[var(--ground)]">
+        <div role="menu" className="absolute left-0 right-0 top-full z-40 mt-1 border border-rule bg-ground">
           {options.length === 0 ? (
-            <div className="px-[15px] py-3 font-mono text-[11px] text-faint-ink">NO OTHER CHARTS SAVED</div>
+            <div className="px-[var(--space-3)] py-3 font-mono text-data-xs text-faint-ink">NO OTHER CHARTS SAVED</div>
           ) : (
             options.map((c) => (
               <button
@@ -82,8 +82,8 @@ export function PartyPicker({ chart, charts, excludeId, onSelect }: PartyPickerP
                   setOpen(false);
                 }}
                 className={cn(
-                  "block w-full px-[15px] py-2.5 text-left font-mono text-[11px]",
-                  c.id === chart?.id ? "text-[var(--accent)]" : "text-bone/80 hover:text-bone",
+                  "block w-full px-[var(--space-3)] py-2.5 text-left font-mono text-data-xs",
+                  c.id === chart?.id ? "text-accent" : "text-bone/80 hover:text-bone",
                 )}
               >
                 {c.name.toUpperCase()} · {partyYearCity(c)}

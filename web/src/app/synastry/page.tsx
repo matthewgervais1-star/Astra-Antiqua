@@ -131,9 +131,9 @@ function SynastryInstrument() {
     <InstrumentShell context="SYNASTRY · TWO CHARTS WEIGHED" siblings={SIBLINGS}>
       <aside className="flex flex-col gap-6 border-r border-rule px-7 py-6">
         <div>
-          <div className="mb-3 font-mono text-[11px] tracking-[0.16em] text-dim">THE TWO PARTIES</div>
+          <div className="mb-3 font-mono text-data-xs tracking-label text-dim">THE TWO PARTIES</div>
           {charts.length === 0 ? (
-            <p className="font-mono text-[11px] leading-[1.6] text-dim">NO CHARTS ARE SAVED YET.</p>
+            <p className="font-mono text-data-xs leading-data text-dim">NO CHARTS ARE SAVED YET.</p>
           ) : (
             <div className="flex flex-col gap-3">
               <PartyPicker chart={chartA} charts={charts} excludeId={idB} onSelect={setIdA} />
@@ -142,7 +142,7 @@ function SynastryInstrument() {
               ) : (
                 <Link
                   href="/reading"
-                  className="border border-rule px-[15px] py-3 text-center font-mono text-[11px] tracking-[0.1em] text-dim hover:text-bone"
+                  className="border border-rule px-[var(--space-3)] py-3 text-center font-mono text-data-xs tracking-data text-dim hover:text-bone"
                 >
                   CAST THE SECOND CHART →
                 </Link>
@@ -152,8 +152,8 @@ function SynastryInstrument() {
         </div>
         {ready ? (
           <div>
-            <div className="mb-3 font-mono text-[11px] tracking-[0.16em] text-dim">THE WEIGHING</div>
-            <div className="flex flex-col gap-2.5 font-mono text-[11.5px] leading-[1.5]">
+            <div className="mb-3 font-mono text-data-xs tracking-label text-dim">THE WEIGHING</div>
+            <div className="flex flex-col gap-2.5 font-mono text-data-xs leading-data">
               <div className="flex items-baseline justify-between">
                 <span className="text-harmony">HARMONIES</span>
                 <span className="font-mono text-xl tabular-nums text-bone">{harmonyCount}</span>
@@ -167,7 +167,7 @@ function SynastryInstrument() {
                 <span className="font-mono text-xl tabular-nums text-bone">{altarCount}</span>
               </div>
             </div>
-            <div className="mt-[22px] border border-rule px-[15px] py-[13px] font-mono text-[11px] leading-[1.7] text-dim">
+            <div className="mt-[var(--space-4)] border border-rule px-[var(--space-3)] py-[var(--space-2)] font-mono text-data-xs leading-data text-dim">
               THE COUNT IS NOT THE VERDICT; READ THE BONDS →
             </div>
           </div>
@@ -175,9 +175,9 @@ function SynastryInstrument() {
       </aside>
 
       <div className="flex flex-col gap-3 px-8 py-6">
-        <div className="font-mono text-[11px] tracking-[0.16em] text-dim">BONDS IN ORB · STRONGEST FIRST</div>
+        <div className="font-mono text-data-xs tracking-label text-dim">BONDS IN ORB · STRONGEST FIRST</div>
         {!ready || !natalA || !natalB ? (
-          <p className="mt-3 max-w-md font-body text-[15px] italic leading-[1.68] text-prose">
+          <p className="mt-3 max-w-md font-body text-prose-s italic leading-prose text-prose">
             {charts.length === 0
               ? "No charts are saved yet. Cast the first to begin weighing a pair."
               : charts.length === 1
@@ -186,7 +186,7 @@ function SynastryInstrument() {
           </p>
         ) : (
           <>
-            <div className="flex flex-col font-mono text-[11.5px]">
+            <div className="flex flex-col font-mono text-data-xs">
               {topBonds.map((bond, idx) => {
                 const deityA = DEITY_MATRIX[culture][bond.planetA];
                 const deityB = DEITY_MATRIX[culture][bond.planetB];
@@ -194,7 +194,7 @@ function SynastryInstrument() {
                 return (
                   <div
                     key={`${bond.planetA}-${bond.planetB}-${bond.kind}-${idx}`}
-                    className="grid grid-cols-[minmax(0,1fr)_90px_54px] items-center gap-3 border-t border-rule-row py-[11px] last:border-b sm:grid-cols-[minmax(0,1fr)_100px_140px_64px]"
+                    className="grid grid-cols-[minmax(0,1fr)_90px_54px] items-center gap-3 border-t border-rule-row py-[var(--space-2)] last:border-b sm:grid-cols-[minmax(0,1fr)_100px_140px_64px]"
                   >
                     <span className="truncate text-bone">
                       {natalA.meta.name.toUpperCase()}&apos;S {deityA.name.toUpperCase()} {ASPECT_GLYPHS[bond.kind]}{" "}
@@ -212,10 +212,10 @@ function SynastryInstrument() {
               })}
             </div>
             {receivedDeityName ? (
-              <div className="mt-2 font-mono text-[11px] leading-[1.7] text-dim">
+              <div className="mt-2 font-mono text-data-xs leading-data text-dim">
                 {receivedDeityName.toUpperCase()} IS A RECEIVED BODY; THE PAIR&apos;S SLOWEST BONDS ARE THE
                 CONTRACT&apos;S FOUNDATIONS →{" "}
-                <Link href="/method" className="text-[var(--accent)]">
+                <Link href="/method" className="text-accent">
                   METHOD
                 </Link>
               </div>
@@ -224,51 +224,51 @@ function SynastryInstrument() {
         )}
       </div>
 
-      <aside className="flex flex-col gap-5 border-l border-rule px-[30px] py-6">
-        <div className="font-mono text-[11px] tracking-[0.16em] text-[var(--accent)]">
+      <aside className="flex flex-col gap-5 border-l border-rule px-[var(--space-5)] py-6">
+        <div className="font-mono text-data-xs tracking-label text-accent">
           READING · {voice.synastryTitle}
         </div>
         {ready && natalA && natalB ? (
           <>
-            <h2 className="font-display text-[22px] leading-[1.45] tracking-[0.06em] text-bone">{headline}</h2>
-            <div className="h-px w-11 bg-[var(--accent)]" />
-            <p className="font-body text-[15px] leading-[1.68] text-prose">{para1}</p>
-            <p className="font-body text-[15px] leading-[1.68] text-prose">{para2}</p>
+            <h2 className="font-display text-display-s leading-display tracking-display text-bone">{headline}</h2>
+            <div className="h-px w-11 bg-accent" />
+            <p className="font-body text-prose-s leading-prose text-prose">{para1}</p>
+            <p className="font-body text-prose-s leading-prose text-prose">{para2}</p>
             <Votive>{votiveText}</Votive>
             <FeedbackRow readingId={`synastry-${idA}-${idB}`} noun="READING" />
           </>
         ) : charts.length === 0 ? (
           <>
-            <h2 className="font-display text-[20px] leading-[1.4] tracking-[0.06em] text-bone">
+            <h2 className="font-display text-display-s leading-display tracking-display text-bone">
               THE {stripLeadingThe(voice.synastryTitle)} NEEDS TWO CHARTS
             </h2>
             <Link
               href="/reading"
-              className="mt-1 inline-flex w-fit border border-[var(--accent-strong-border)] px-5 py-3 font-mono text-[11px] tracking-[0.14em] text-[var(--accent)]"
+              className="mt-1 inline-flex w-fit border border-[var(--accent-strong-border)] px-5 py-3 font-mono text-data-xs tracking-label text-accent"
             >
               CAST →
             </Link>
           </>
         ) : charts.length === 1 ? (
           <>
-            <h2 className="font-display text-[20px] leading-[1.4] tracking-[0.06em] text-bone">
+            <h2 className="font-display text-display-s leading-display tracking-display text-bone">
               ONE PARTY IS SET. CAST THE SECOND.
             </h2>
-            <p className="font-body text-[15px] leading-[1.68] text-prose">
+            <p className="font-body text-prose-s leading-prose text-prose">
               {stripLeadingThe(voice.synastryTitle)} needs two charts in orb of each other before a bond can be
               weighed.
             </p>
             <Link
               href="/reading"
-              className="mt-1 inline-flex w-fit border border-[var(--accent-strong-border)] px-5 py-3 font-mono text-[11px] tracking-[0.14em] text-[var(--accent)]"
+              className="mt-1 inline-flex w-fit border border-[var(--accent-strong-border)] px-5 py-3 font-mono text-data-xs tracking-label text-accent"
             >
               CAST THE SECOND CHART →
             </Link>
           </>
         ) : (
-          <p className="font-body text-[15px] italic leading-[1.68] text-prose">
+          <p className="font-body text-prose-s italic leading-prose text-prose">
             One of these charts could not be read. Recast it on the{" "}
-            <Link href="/charts" className="text-[var(--accent)]">
+            <Link href="/charts" className="text-accent">
               charts page
             </Link>
             .

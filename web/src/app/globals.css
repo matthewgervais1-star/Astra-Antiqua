@@ -88,6 +88,23 @@
 }
 
 /*
+ * THE ACCENT, THE GROUND AND THE ACTIVE RULE AS UTILITIES.
+ *
+ * These are @theme inline on purpose. A plain @theme entry would emit
+ * --color-accent: var(--accent) on :root, where --accent is the neutral gold,
+ * and every text-accent would then ignore the culture that body[data-pantheon]
+ * sets. Inline, the utility carries var(--accent) itself and resolves on the
+ * element it lands on. --color-rule-active is the third rule ink of
+ * tokens/rules.css: border-rule-active is the 1px accent rule, for the active
+ * culture only, never two on a screen.
+ */
+@theme inline {
+  --color-accent: var(--accent);
+  --color-ground: var(--ground);
+  --color-rule-active: var(--accent);
+}
+
+/*
  * SPACING, RULES AND SURFACES, verbatim from docs/design/system/tokens/rules.css
  * and docs/design/system/tokens/colors.css. The design system is canonical.
  *
@@ -108,6 +125,13 @@
   --space-6: 44px;
   --space-7: 64px;
   --space-8: 80px;
+
+  /* tile sizes and the share of a tile an epigraphic sign takes */
+  --tile-lg: 170px;
+  --tile-md: 150px;
+  --tile-sm: 48px;
+  --sign-scale-single: 0.62;
+  --sign-scale-pair: 0.44;
 
   /* one rule weight, three inks */
   --rule-width: 1px;

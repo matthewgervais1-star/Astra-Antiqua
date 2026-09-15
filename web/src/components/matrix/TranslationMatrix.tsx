@@ -21,7 +21,7 @@ export function TranslationMatrix() {
   return (
     <div>
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[640px] border-collapse font-mono text-[11px]">
+        <table className="w-full min-w-[640px] border-collapse font-mono text-data-xs">
           <caption className="sr-only">
             Ten bodies across five ancient theologies: the seven each culture named, and the
             three every culture received.
@@ -30,7 +30,7 @@ export function TranslationMatrix() {
             <tr>
               <th
                 scope="col"
-                className="px-2 py-2 text-left text-[11px] tracking-[0.2em] text-faint-ink"
+                className="px-2 py-2 text-left text-data-xs tracking-microcopy text-faint-ink"
               >
                 BODY
               </th>
@@ -38,7 +38,7 @@ export function TranslationMatrix() {
                 <th
                   key={culture}
                   scope="col"
-                  className="px-2 py-2 text-left text-[11px] tracking-[0.1em]"
+                  className="px-2 py-2 text-left text-data-xs tracking-data"
                   style={{ color: CULTURE_ACCENTS[culture] }}
                 >
                   <span className="flex items-center gap-[var(--space-1)]">
@@ -58,12 +58,12 @@ export function TranslationMatrix() {
                   planet === firstReceived ? "border-harmony/35" : "border-rule-row",
                 )}
               >
-                <td className="px-2 py-[9px] text-dim">
+                <td className="px-2 py-[var(--space-2)] text-dim">
                   <DeityGlyph body={planet} culture={null} size={16} />
                 </td>
                 {CULTURES.map((culture) => (
-                  <td key={culture} className="px-2 py-[9px] text-bone">
-                    <span className="inline-flex items-center gap-[6px]">
+                  <td key={culture} className="px-2 py-[var(--space-2)] text-bone">
+                    <span className="inline-flex items-center gap-[var(--space-1)]">
                       <DeityGlyph body={planet} culture={culture} size={16} />
                       {DEITY_MATRIX[culture][planet].name}
                     </span>
@@ -74,10 +74,10 @@ export function TranslationMatrix() {
           </tbody>
         </table>
       </div>
-      <div className="mt-3 font-mono text-[11px] leading-[1.7] tracking-[0.04em] text-dim">
+      <div className="mt-3 font-mono text-data-xs leading-data tracking-data text-dim">
         GOLD RULE MARKS WHERE THE ANCIENT LISTS END. THE LAST THREE ROWS ARE RECEPTIONS, MADE IN
         THE ANCIENT MANNER AND SAID SO →{" "}
-        <Link href="/method" className="text-[var(--accent)]">
+        <Link href="/method" className="text-accent">
           METHOD
         </Link>
       </div>
