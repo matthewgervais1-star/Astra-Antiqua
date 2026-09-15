@@ -46,6 +46,7 @@ import com.astra.antiqua.ui.screens.MethodScreen
 import com.astra.antiqua.ui.screens.OnboardingScreen
 import com.astra.antiqua.ui.screens.PlacementScreen
 import com.astra.antiqua.ui.screens.PlacementsScreen
+import com.astra.antiqua.ui.screens.SynastryScreen
 import com.astra.antiqua.ui.screens.SeasonScreen
 import com.astra.antiqua.ui.screens.YearScreen
 import com.astra.antiqua.ui.screens.TransitDetailScreen
@@ -106,12 +107,12 @@ class MainActivity : ComponentActivity() {
                                 AppPhase.CULTURE_SELECTION -> CultureSelectionScreen { culture ->
                                     viewModel.selectCulture(culture)
                                 }
-                                AppPhase.ONBOARDING -> OnboardingScreen {
-                                    viewModel.completeOnboarding()
-                                }
+                                AppPhase.ONBOARDING -> OnboardingScreen(
+                                    onLocationSaved = { viewModel.completeOnboarding() },
+                                )
                                 AppPhase.MAIN_DASHBOARD -> AstraNavHost(
                                     culture = selectedCulture,
-                                    onChooseCulture = viewModel::selectCulture,
+                                    onChooseCulture = viewModel::switchCulture,
                                 )
                             }
                         }
@@ -210,6 +211,7 @@ fun AstraNavHost(
                 onOpenPlacement = { open(Route.placement(it)) },
                 onOpenForecast = { open(Route.FORECAST) },
                 onRecast = { open(Route.READING) },
+                onOpenSynastry = { open(Route.SYNASTRY) },
             )
         }
         composable(Route.PLACEMENT) { entry ->
@@ -243,13 +245,27 @@ fun AstraNavHost(
             // The same form the first run uses. A chart cast again replaces
             // the one on the device, which is what the single birth record
             // this app keeps allows; web keeps many and this keeps one.
-            OnboardingScreen { navController.popBackStack() }
+            // The form wears no shell, so it is the one screen a reader can
+            // be stuck on: a restored stack can have it at the root, and
+            // popping an empty stack does nothing. Leaving it therefore falls
+            // back to the chart rather than trusting the pop.
+            val leave = {
+                if (!navController.popBackStack()) navController.goToSection(Route.PLACEMENTS)
+            }
+            OnboardingScreen(onLocationSaved = leave, onCancel = leave)
         }
         composable(Route.FORECAST) {
             ForecastScreen(
                 culture = culture,
                 onNavigate = go,
                 onOpenSpan = { open(Route.transitDetail(it)) },
+            )
+        }
+        composable(Route.SYNASTRY) {
+            SynastryScreen(
+                culture = culture,
+                onNavigate = go,
+                onCastChart = { open(Route.READING) },
             )
         }
         composable(Route.METHOD) {

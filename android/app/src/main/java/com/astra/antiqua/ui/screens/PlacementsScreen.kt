@@ -53,6 +53,7 @@ fun PlacementsScreen(
     onOpenPlacement: (ClassicalPlanet) -> Unit = {},
     onOpenForecast: () -> Unit = {},
     onRecast: () -> Unit = {},
+    onOpenSynastry: () -> Unit = {},
 ) {
     val viewModel: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
     val state by viewModel.chartState.collectAsState()
@@ -139,8 +140,19 @@ fun PlacementsScreen(
                                 .padding(top = Spacing.Snug),
                         ) {
                             ActionButton(
-                                label = "Cast this chart again",
+                                label = "Read against another chart",
                                 weight = ActionWeight.PRIMARY,
+                                onClick = onOpenSynastry,
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = Spacing.Gutter)
+                                .padding(top = Spacing.Snug),
+                        ) {
+                            ActionButton(
+                                label = "Cast this chart again",
+                                weight = ActionWeight.GHOST,
                                 onClick = onRecast,
                             )
                         }

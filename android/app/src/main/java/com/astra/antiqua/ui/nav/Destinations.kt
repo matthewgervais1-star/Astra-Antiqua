@@ -25,6 +25,7 @@ object Route {
     /** Casting a chart again, the counterpart of web's /reading. */
     const val READING = "reading"
     const val FORECAST = "forecast"
+    const val SYNASTRY = "synastry"
     const val METHOD = "method"
 
     /**

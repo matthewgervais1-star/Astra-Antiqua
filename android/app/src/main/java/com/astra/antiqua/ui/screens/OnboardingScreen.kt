@@ -71,7 +71,13 @@ import java.util.TimeZone
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
-    onLocationSaved: () -> Unit
+    onLocationSaved: () -> Unit,
+    /**
+     * A way out, for the times this form is reached from the chart rather
+     * than from the first run. The first run has nowhere to go back to and
+     * passes null, so no dead control is drawn there.
+     */
+    onCancel: (() -> Unit)? = null,
 ) {
     val viewModel: LocationSearchViewModel = viewModel(factory = AstraViewModelFactory)
     val searchQuery by viewModel.searchQuery.collectAsState()
@@ -169,6 +175,22 @@ fun OnboardingScreen(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (onCancel != null) {
+            Text(
+                text = "← BACK",
+                style = MaterialTheme.typography.labelSmall,
+                color = Dim,
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .clickable(
+                        onClickLabel = "Leave this form",
+                        role = Role.Button,
+                        onClick = onCancel,
+                    )
+                    .padding(bottom = Spacing.Step),
+            )
+        }
+
         Text(
             text = "Enter Your Birth Data",
             style = MaterialTheme.typography.displaySmall,

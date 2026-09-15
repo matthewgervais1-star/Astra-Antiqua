@@ -60,7 +60,24 @@ class AppViewModel(
         }
     }
 
+    /**
+     * The first run's choice: records the culture and moves on to the birth
+     * details. Only the culture picker may call this.
+     */
     fun selectCulture(culture: AncientCulture) {
+        switchCulture(culture)
+        _currentPhase.value = AppPhase.ONBOARDING
+    }
+
+    /**
+     * Changing the culture later, from a doorway or a chip.
+     *
+     * This used to be the same function as the first run's, so entering a
+     * voice from its doorway sent the reader back to the birth form with no
+     * way out. Choosing a culture and starting the app are different acts and
+     * are different functions now.
+     */
+    fun switchCulture(culture: AncientCulture) {
         viewModelScope.launch {
             settings.saveCulture(culture)
             _selectedCulture.value = culture
@@ -68,7 +85,6 @@ class AppViewModel(
             // applied when the app stops: swapping the alias under a running
             // task closes it. LauncherIcon holds the mapping and the timing.
             LauncherIcon.request(culture)
-            _currentPhase.value = AppPhase.ONBOARDING
         }
     }
 

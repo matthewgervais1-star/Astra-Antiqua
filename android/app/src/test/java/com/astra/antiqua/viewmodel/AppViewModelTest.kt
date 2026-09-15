@@ -125,6 +125,24 @@ class AppViewModelTest {
     }
 
     @Test
+    fun `switching culture later does not send the reader back to the birth form`() = runTest(dispatcher) {
+        val settings = FakeSettings(AncientCulture.ROME, onboardingCompleted = true)
+        val model = AppViewModel(settings, FakeProfiles(aProfile()))
+        model.start()
+        advanceUntilIdle()
+
+        model.switchCulture(AncientCulture.EGYPT)
+        advanceUntilIdle()
+
+        assertEquals(AncientCulture.EGYPT, settings.storedCulture())
+        assertEquals(AncientCulture.EGYPT, model.selectedCulture.value)
+        // The regression this guards: entering a voice from its doorway used
+        // to call the first run's setter, which dropped the reader into the
+        // birth details with no way back.
+        assertEquals(AppPhase.MAIN_DASHBOARD, model.currentPhase.value)
+    }
+
+    @Test
     fun `the splash runs once, however many times the screen recomposes`() = runTest(dispatcher) {
         val settings = FakeSettings(AncientCulture.ROME, onboardingCompleted = true)
         val model = AppViewModel(settings, FakeProfiles(aProfile()))
