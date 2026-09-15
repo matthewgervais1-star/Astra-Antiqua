@@ -142,6 +142,20 @@ const ANDROID_FAMILIES = [
       { style: "normal", weight: "500", file: "ibm_plex_mono_medium.ttf" },
     ],
   },
+  /**
+   * The symbols face, for the zodiac and planet notation the Learn pages set
+   * as text. None of the three product faces carries those codepoints, so
+   * Android's font chain falls through to the colour emoji font and paints
+   * them as orange pictographs: two dozen hues the palette does not own, on
+   * pages whose whole job is to separate by form. This is the same family the
+   * web surface vendors under --font-symbols. Notation, never copy.
+   */
+  {
+    family: "Noto Sans Symbols",
+    css: "family=Noto+Sans+Symbols",
+    subset: "symbols",
+    picks: [{ style: "normal", weight: "400", file: "noto_sans_symbols.ttf" }],
+  },
 ];
 
 /**

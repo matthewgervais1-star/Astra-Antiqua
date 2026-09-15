@@ -38,6 +38,7 @@ import com.astra.antiqua.ui.LauncherIcon
 import com.astra.antiqua.ui.components.Monogram
 import com.astra.antiqua.ui.nav.Route
 import com.astra.antiqua.ui.screens.CultureSelectionScreen
+import com.astra.antiqua.ui.screens.LearnScreen
 import com.astra.antiqua.ui.screens.MainDashboardScreen
 import com.astra.antiqua.ui.screens.MatrixScreen
 import com.astra.antiqua.ui.screens.MethodScreen
@@ -138,15 +139,19 @@ fun AstraNavHost(
     onChooseCulture: (AncientCulture) -> Unit,
 ) {
     val navController = rememberNavController()
-    val go: (String) -> Unit = { route -> navController.navigateSingleTop(route) }
-    val openVoice: (AncientCulture) -> Unit = { go(Route.voice(it)) }
+
+    // The bars navigate BETWEEN sections; a row inside a section navigates
+    // INTO one. The two need different stacks, so they are different lambdas.
+    val go: (String) -> Unit = { route -> navController.goToSection(route) }
+    val open: (String) -> Unit = { route -> navController.openDetail(route) }
+    val openVoice: (AncientCulture) -> Unit = { open(Route.voice(it)) }
 
     NavHost(navController, startDestination = Route.DAY) {
         composable(Route.DAY) {
             MainDashboardScreen(
                 culture = culture,
                 onNavigate = go,
-                onOpenMethod = { go(Route.METHOD) },
+                onOpenMethod = { open(Route.METHOD) },
             )
         }
         composable(Route.WEEK) {
@@ -183,7 +188,7 @@ fun AstraNavHost(
             TransitsScreen(
                 culture = culture,
                 onNavigate = go,
-                onOpenSpan = { go(Route.transitDetail(it)) },
+                onOpenSpan = { open(Route.transitDetail(it)) },
             )
         }
         composable(Route.TRANSIT_DETAIL) { entry ->
@@ -201,7 +206,7 @@ fun AstraNavHost(
             PlacementsScreen(
                 culture = culture,
                 onNavigate = go,
-                onOpenPlacement = { go(Route.placement(it)) },
+                onOpenPlacement = { open(Route.placement(it)) },
             )
         }
         composable(Route.PLACEMENT) { entry ->
@@ -211,16 +216,25 @@ fun AstraNavHost(
                 PlacementsScreen(
                     culture = culture,
                     onNavigate = go,
-                    onOpenPlacement = { go(Route.placement(it)) },
+                    onOpenPlacement = { open(Route.placement(it)) },
                 )
             } else {
                 PlacementScreen(
                     body = body,
                     culture = culture,
                     onNavigate = go,
-                    onOpenPlacement = { go(Route.placement(it)) },
+                    onOpenPlacement = { open(Route.placement(it)) },
                 )
             }
+        }
+        composable(Route.LEARN) { entry ->
+            val slug = entry.arguments?.getString("slug") ?: Route.LEARN_INDEX
+            LearnScreen(
+                href = Route.learnHref(slug),
+                culture = culture,
+                onNavigate = go,
+                onOpenSection = { open(Route.learn(it)) },
+            )
         }
         composable(Route.METHOD) {
             MethodScreen(onBack = { navController.popBackStack() })
@@ -229,15 +243,31 @@ fun AstraNavHost(
 }
 
 /**
- * One copy of a destination on the stack, and back always leads home.
- * Tapping TODAY four times should not put four days behind you.
+ * Moving between sections: one copy of a destination on the stack, and back
+ * always leads home. Tapping TODAY four times should not put four days behind
+ * you, and returning to a section it should find it where you left it.
  */
-private fun NavHostController.navigateSingleTop(route: String) {
+private fun NavHostController.goToSection(route: String) {
     navigate(route) {
         popUpTo(Route.DAY) { saveState = true }
         launchSingleTop = true
         restoreState = true
     }
+}
+
+/**
+ * Moving INTO something: a culture's doorway, a placement, a long transit, a
+ * Learn section. These are plain pushes.
+ *
+ * They must not restore state. A route that carries an argument, such as
+ * learn/{slug}, is one destination with many arguments; asking the navigator
+ * to restore that destination's saved state hands back the argument you were
+ * already looking at, so the second Learn section you tapped never opened.
+ * A push keeps the argument and puts the previous screen behind you, which is
+ * also what the back gesture should find there.
+ */
+private fun NavHostController.openDetail(route: String) {
+    navigate(route) { launchSingleTop = true }
 }
 
 @Composable

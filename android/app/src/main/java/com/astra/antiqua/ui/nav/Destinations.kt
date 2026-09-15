@@ -24,10 +24,27 @@ object Route {
     const val PLACEMENT = "placements/{body}"
     const val METHOD = "method"
 
+    /**
+     * The Learn sections. Their web hrefs are "/learn" and "/learn/<slug>";
+     * a Compose route cannot hold a slash in an argument, so the slug travels
+     * on its own and the hub takes the reserved word "index".
+     */
+    const val LEARN = "learn/{slug}"
+
     fun transitDetail(id: String) = "transits/$id"
     fun voice(culture: AncientCulture) = "voices/${culture.name.lowercase()}"
 
     fun placement(body: ClassicalPlanet) = "placements/${body.name.lowercase()}"
+
+    fun learn(href: String): String {
+        val slug = href.removePrefix("/learn").removePrefix("/")
+        return "learn/${slug.ifEmpty { LEARN_INDEX }}"
+    }
+
+    fun learnHref(slug: String): String =
+        if (slug == LEARN_INDEX) "/learn" else "/learn/$slug"
+
+    const val LEARN_INDEX = "index"
 }
 
 /**
@@ -51,6 +68,7 @@ enum class Section(val label: String, val route: String) {
     TODAY("TODAY", Route.DAY),
     VOICES("VOICES", Route.VOICES),
     TRANSITS("TRANSITS", Route.TRANSITS),
+    LEARN("LEARN", "learn/${Route.LEARN_INDEX}"),
     MATRIX("MATRIX", Route.MATRIX),
     CHART("CHART", Route.PLACEMENTS),
 }

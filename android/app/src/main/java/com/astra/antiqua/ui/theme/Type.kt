@@ -39,6 +39,17 @@ val PlexMono = FontFamily(
 )
 
 /**
+ * The symbols face, for the zodiac and planet notation the Learn pages set as
+ * text. It is the design system's --font-symbols, vendored here for the same
+ * reason web vendors it: none of the three product faces carries those
+ * codepoints, and without this the platform falls through to the colour emoji
+ * font and paints them as orange pictographs.
+ *
+ * Notation only, never copy. Nothing in this app may set a sentence in it.
+ */
+val NotoSymbols = FontFamily(Font(R.font.noto_sans_symbols, FontWeight.Normal))
+
+/**
  * THE TYPE SCALE, from docs/design/system/tokens/typography.css, which is
  * canonical for both surfaces. Ten sizes, four tracking values, three
  * leadings, the same ten web binds in web/src/app/globals.css.
