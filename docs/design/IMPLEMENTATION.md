@@ -13,6 +13,9 @@ drawn: nothing here was redrawn, restyled or replaced.
 | `e6bfd05` | Text colour utilities apply to links |
 | `d1d6dd9` | Wordmark, monogram, launcher icons and the epigraphic faces |
 | `4d77131` | The three typeset launcher marks, outlined |
+| `073c7de` | The type and spacing scales connected |
+| `c707b40` | The tier-2 emblems on the doorways, the chip and the matrix |
+| `eba8d47` | The shared components, and the scale on every surface |
 
 **The glyphs.** `web/scripts/export-glyphs.mjs` copies the fifty SVGs into
 `web/src/glyphs` and generates the typed module the app reads, asserting the 24
@@ -43,6 +46,25 @@ their union, and the aspect ratios to four decimals.
 
 Screenshots: `docs/design/screenshots/phase1`, `phase2`, `phase3`.
 
+**The second wave: what the audit found missing.** The first wave put the
+glyphs and the brand in; the site still read as it had, because the type and
+spacing scales were tokens nobody consumed, the six tier-2 emblems and the
+traced masks had no consumer at all, and every call to action hand-typed its
+own border. `073c7de` binds the scale in `globals.css` as Tailwind utilities,
+`text-display-xl` through `text-data-xs`, `tracking-display` through
+`tracking-microcopy`, `leading-display`, `leading-prose`, `leading-data`, and
+the eight spacing steps as `var(--space-N)`. `c707b40` exports the emblems
+through `scripts/export-marks.mjs` and sets them on the doorway heads, in the
+culture chip and across the matrix header. `eba8d47` adds the components
+`components/specs/` describes: `Button` in three weights, `Badge`, `IconTile`
+for the attested signs and the traced masks, `DataRow` with house and motion,
+`CultureSwitch` and `Monogram`, then moves 366 font sizes, 180 tracking
+values, 137 leadings and 122 spacing steps onto the scale, and the accent
+utilities onto `text-accent`, `bg-accent` and `border-rule-active`. Each
+doorway carries its tier-3 figures with captions and has its own share card.
+
+Screenshots: `docs/design/screenshots/phase7`, `phase8`.
+
 ## Android
 
 | Commit | What landed |
@@ -71,7 +93,7 @@ Screenshots: `docs/design/screenshots/phase4`, `phase5`, `phase6`.
 ## Verified
 
 Web: `npm run typecheck`, `npm run lint`, `npm run gates` and `npm run build`
-pass. Android: `./gradlew compileDebugSources` and `./gradlew testDebugUnitTest`
+pass after every wave, the second included. Android: `./gradlew compileDebugSources` and `./gradlew testDebugUnitTest`
 pass. `node scripts/check-svgs.mjs docs/design/system` passes on all 75 files.
 The launcher icons and the glyphs were checked on a Pixel emulator, not inferred
 from a green build.
@@ -106,6 +128,28 @@ applied from `onStop`.
 TrueType outline reader and the SVG shape converter are written out. That is why
 `outline-signs.mjs` parses `glyf` itself rather than calling opentype.js.
 
+**The accent utilities are inline.** `text-accent` is declared in
+`@theme inline`, not `@theme`. A plain entry would emit
+`--color-accent: var(--accent)` on `:root`, where the accent is the neutral
+gold, and every use would ignore the culture that `body[data-pantheon]` sets.
+Inline, the utility carries `var(--accent)` itself and resolves where it lands.
+
+**The spacing steps stay out of `@theme`.** Tailwind generates its numeric
+scale from the `--spacing` namespace, so `--spacing-1: 6px` would silently
+change `p-1` across the app. The steps live in `:root` and are consumed as
+`p-[var(--space-3)]`.
+
+**Cinzel below 18px stays literal.** The display scale has four steps and the
+smallest is 22px. Sixty sites set Cinzel between 11 and 17px, as list names,
+nav labels and small heads. Mapping them up would break those rows, and the
+tokens file says not to add a step to fit one screen, so they stay at their
+literal size and are listed by the sweep. The buttons that were among them are
+now mono, which is what the Button spec asks for.
+
+**Greece ships the omega, not the tripod.** The research names the tripod as
+the launcher; both icon generators cut it from `ts-omega.svg`. The reasoning
+is recorded in `docs/design/canvas-1a/DECISIONS.md`.
+
 ## Left for people, not code
 
 **The weighted cut for the three typeset signs.** The design notes record that
@@ -119,6 +163,14 @@ width the single signs get.
 better mark and that Tanit carries a cost a launcher icon cannot disarm, having
 no label. Tracing it needs a Salammbo harbour survey, which is a document to be
 got rather than a thing to be drawn. Tanit ships meanwhile, in her outline cut.
+
+**A display step under 22px, or none.** Whether the small Cinzel labels get
+a `display-xs` step or move to mono is a design call; the sweep left them
+literal so the decision is not made by a script.
+
+**The Android surface has no counterpart to the second wave.** Its type and
+spacing still come from the app's own theme, and the emblems, Button and
+Badge have no Compose equivalents yet.
 
 **The Spectral SC display decision.** The small-caps treatment on the four
 non-Roman surfaces is still a prototype in `globals.css` and was not promoted

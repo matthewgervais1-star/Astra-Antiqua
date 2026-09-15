@@ -144,3 +144,31 @@ read the project directly, or a download.
 - `assets/icon-baal-stele.png`, `assets/icon-baal.png` (Canaan)
 - `assets/canaan-baal-stele.png`, `assets/rome-augustus.png`, `assets/rome-shewolf.png`
 - `uploads/BAAL.jpg`, `uploads/Statue-Augustus.jpg`, `uploads/rqgvol5zn55g1.jpeg`
+
+## Greece at tier 1: the omega shipped, not the tripod
+
+The research (`docs/design/culture-marks.md`, tier 1) names the Delphic
+tripod as Greece's launcher icon, and the canvas keeps all three Greek marks:
+the owl, the omega and the tripod. The build ships the omega. Both icon
+generators, `web/scripts/generate-icons.mjs` and
+`web/scripts/gen-android-launchers.mjs`, cut Greece's launcher from
+`ts-omega.svg`, the typeset outline, and the tripod stays a drawn mark in
+`assets/marks/dr-tripod.svg` with no consumer.
+
+Why the omega. The canvas resolved the tier-1 collision table by drawing: a
+tripod at 48px is a triangle under a disc, and so is the sign of Tanit, and
+Carthage took Tanit by decision. Once Tanit holds tier 1 the tripod is the
+mark that has to be defended against a sibling in every launcher grid, and the
+omega is the one Greek mark with no collision in the set: a single closed
+form, encoded, and cut from GFS Didot the way the ankh and the Ugaritic pair
+are cut from their faces. It is the same rule the readme gives for every
+encoded sign, set as type rather than redrawn.
+
+What it costs. The tripod was chosen for meaning, the furniture where a
+question met its answer, and the omega has none of that: it is a letter. The
+Greek doorway carries the omega as a figure with its codepoint in the caption,
+and the tripod remains available should the Carthage decision change.
+
+Recorded 2026-09-15 by the design-system rollout, so the disagreement between
+the research and the shipped icon is a decision on the record rather than a
+drift.
