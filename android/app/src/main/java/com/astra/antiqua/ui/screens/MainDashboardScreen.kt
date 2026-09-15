@@ -97,9 +97,9 @@ fun MainDashboardScreen(
         onNavigate = onNavigate,
         section = Section.TODAY,
         horizon = Horizon.DAY,
-        // The other three horizons are not in the graph yet, so their cells
+        // The season and the year are not in the graph yet, so their cells
         // are shown inert rather than made to throw.
-        builtHorizons = setOf(Horizon.DAY),
+        builtHorizons = setOf(Horizon.DAY, Horizon.WEEK),
     ) {
     LazyColumn(
         modifier = Modifier

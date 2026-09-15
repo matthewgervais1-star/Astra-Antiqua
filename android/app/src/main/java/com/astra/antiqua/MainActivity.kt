@@ -46,6 +46,7 @@ import com.astra.antiqua.ui.screens.TransitDetailScreen
 import com.astra.antiqua.ui.screens.TransitsScreen
 import com.astra.antiqua.ui.screens.VoiceScreen
 import com.astra.antiqua.ui.screens.VoicesScreen
+import com.astra.antiqua.ui.screens.WeekScreen
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.LocalAccent
@@ -143,6 +144,9 @@ fun AstraNavHost(
                 onNavigate = go,
                 onOpenMethod = { go(Route.METHOD) },
             )
+        }
+        composable(Route.WEEK) {
+            WeekScreen(culture = culture, onNavigate = go)
         }
         composable(Route.VOICES) {
             VoicesScreen(culture = culture, onNavigate = go, onOpenVoice = openVoice)
