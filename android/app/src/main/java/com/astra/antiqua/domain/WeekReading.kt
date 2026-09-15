@@ -46,6 +46,9 @@ object WeekReading {
     private const val EXACT_ORB = 0.35
     private const val DAY_MS = 86_400_000L
 
+    /** Seven days plus the buffer the coarsest sampling step needs. */
+    private const val INGRESS_SCAN_DAYS = 9
+
     /** The Moon and the inner planets: the bodies that move enough to headline a day. */
     private val FAST_BODIES = setOf(
         ClassicalPlanet.MOON,
@@ -151,6 +154,16 @@ object WeekReading {
         val days = mutableListOf<WeekDay>()
         val usedPairs = mutableSetOf<String>()
 
+        // One ingress scan for the whole week rather than seven, buffered two
+        // days past the end so the coarsest sampling step still lands beyond
+        // the last day and nothing in the tail is missed.
+        val weekIngresses = SkyEvents.ingresses(
+            engine,
+            start,
+            INGRESS_SCAN_DAYS,
+            ClassicalPlanet.entries,
+        )
+
         for (i in 0 until 7) {
             val calendar = Calendar.getInstance()
             calendar.time = start
@@ -191,9 +204,28 @@ object WeekReading {
                 shorthand = "${tightest.a.name.take(3)} ${tightest.aspect.name.take(3)} " +
                     "${tightest.b.name.take(3)}${if (exact) " · EXACT" else ""}"
             } else {
-                tone = DayTone.QUIET
-                line = quietLine(culture)
-                shorthand = "QUIET"
+                // Nothing in orb. A body crossing into a new sign that day is
+                // still something the sky did, and it is reported before the
+                // day is called quiet.
+                val dayStart = startOfDay(date)
+                val dayEnd = Date(dayStart.time + DAY_MS)
+                val ingress = weekIngresses.firstOrNull {
+                    it.date.time >= dayStart.time && it.date.time < dayEnd.time
+                }
+                if (ingress != null) {
+                    tone = DayTone.HARMONY
+                    val deity =
+                        com.astra.antiqua.model.DeityRegistry.getDeity(culture, ingress.body).name
+                    val verb = ingressVerb(culture)
+                    val ruling = ingressFrame(culture, deityCharge(culture, ingress.body))
+                    line = "$deity $verb the ${signPhrase(ingress.sign)}. $ruling"
+                    shorthand = "${ingress.body.name.take(3)} → " +
+                        ingress.sign.signName.take(3).uppercase()
+                } else {
+                    tone = DayTone.QUIET
+                    line = quietLine(culture)
+                    shorthand = "QUIET"
+                }
             }
 
             val flag = if (culture == AncientCulture.ROME) {
@@ -288,6 +320,14 @@ object WeekReading {
         calendar.time = date
         return WEEKDAYS[calendar.get(Calendar.DAY_OF_WEEK) - 1]
     }
+
+    private fun startOfDay(date: Date): Date = Calendar.getInstance().apply {
+        time = date
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }.time
 
     private fun sameLocalDay(a: Date, b: Date): Boolean {
         val ca = Calendar.getInstance().apply { time = a }

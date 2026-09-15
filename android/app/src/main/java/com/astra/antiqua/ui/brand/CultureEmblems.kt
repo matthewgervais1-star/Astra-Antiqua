@@ -24,9 +24,10 @@ import com.astra.antiqua.model.AncientCulture
  * web/scripts/export-marks.mjs, so neither surface has a mark the other lacks.
  */
 
-private val INK = SolidColor(Color.Black)
+/** Every mark paints black so the caller's tint is what decides its colour. */
+internal val INK = SolidColor(Color.Black)
 
-private fun emblem(name: String, paths: ImageVector.Builder.() -> Unit): ImageVector =
+internal fun mark512(name: String, paths: ImageVector.Builder.() -> Unit): ImageVector =
     ImageVector.Builder(
         name = name,
         defaultWidth = 512.dp,
@@ -61,7 +62,7 @@ fun emblemName(culture: AncientCulture): String =
     }
 
 /** The wedjat, Egypt tier 2 */
-private fun EgyptEmblem(): ImageVector = emblem("EgyptEmblem") {
+private fun EgyptEmblem(): ImageVector = mark512("EgyptEmblem") {
     addPath(
         pathData = addPathNodes("M84 248 C146 168 300 158 404 214"),
         stroke = INK,
@@ -99,7 +100,7 @@ private fun EgyptEmblem(): ImageVector = emblem("EgyptEmblem") {
 }
 
 /** Athena's owl, after the Athenian tetradrachm */
-private fun GreeceEmblem(): ImageVector = emblem("GreeceEmblem") {
+private fun GreeceEmblem(): ImageVector = mark512("GreeceEmblem") {
     addPath(
         pathData = addPathNodes("M182 208 C182 154 330 154 330 208 C342 306 318 376 256 376 C194 376 170 306 182 208 Z"),
         stroke = INK,
@@ -151,7 +152,7 @@ private fun GreeceEmblem(): ImageVector = emblem("GreeceEmblem") {
 }
 
 /** The name of El in Ugaritic, U+1039B U+1038D outlined from Noto Sans Ugaritic */
-private fun CanaanEmblem(): ImageVector = emblem("CanaanEmblem") {
+private fun CanaanEmblem(): ImageVector = mark512("CanaanEmblem") {
     addPath(
         pathData = addPathNodes("M87.04 201.6Q89.5 190.63 89.5 180.6Q89.5 170.01 87.04 160.74Q98.2 163.76 108.8 166.22Q119.39 168.68 131.5 170.57Q143.61 172.47 159.32 174.07Q175.02 175.68 196.5 177.39Q217.97 179.09 247.49 180.98L247.49 185.9Q219.48 186.66 197.91 187.7Q176.34 188.74 159.79 190.06Q143.23 191.39 130.37 193.09Q117.5 194.79 107 196.87Q96.5 198.95 87.04 201.6Z M87.04 250.99Q89.5 240.01 89.5 229.98Q89.5 219.39 87.04 210.12Q98.2 213.15 108.8 215.6Q119.39 218.06 131.5 219.96Q143.61 221.85 159.32 223.46Q175.02 225.06 196.5 226.77Q217.97 228.47 247.49 230.36L247.49 235.28Q219.48 236.04 197.91 237.08Q176.34 238.12 159.79 239.44Q143.23 240.77 130.37 242.47Q117.5 244.17 107 246.26Q96.5 248.34 87.04 250.99Z M87.04 300.37Q89.5 289.39 89.5 279.37Q89.5 268.77 87.04 259.5Q98.2 262.53 108.8 264.99Q119.39 267.45 131.5 269.34Q143.61 271.23 159.32 272.84Q175.02 274.45 196.5 276.15Q217.97 277.85 247.49 279.75L247.49 284.66Q219.48 285.42 197.91 286.46Q176.34 287.5 159.79 288.83Q143.23 290.15 130.37 291.85Q117.5 293.56 107 295.64Q96.5 297.72 87.04 300.37Z M118.26 361.67Q114.66 339.91 109.84 326.57Q105.01 313.23 100.28 303.4Q105.77 304.15 111.26 304.63Q116.75 305.1 122.23 305.1Q126.96 305.1 131.69 304.72Q136.42 304.34 141.15 303.4Q138.31 310.21 135.1 318.25Q131.88 326.29 128.76 336.7Q125.64 347.1 123.18 361.67L118.26 361.67Z M404.34 310.77Q402.44 281.26 400.74 259.78Q399.04 238.31 397.43 222.61Q395.82 206.9 393.93 194.79Q392.04 182.68 389.67 172.09Q387.31 161.49 384.09 150.33Q393.36 152.79 403.96 152.79Q413.99 152.79 424.96 150.33Q422.31 159.79 420.23 170.29Q418.15 180.79 416.45 193.66Q414.74 206.52 413.42 223.08Q412.09 239.63 411.05 261.2Q410.01 282.77 409.26 310.77L404.34 310.77Z M305.57 310.77Q303.68 281.26 301.98 259.78Q300.27 238.31 298.67 222.61Q297.06 206.9 295.17 194.79Q293.27 182.68 290.91 172.09Q288.54 161.49 285.33 150.33Q294.6 152.79 305.19 152.79Q315.22 152.79 326.2 150.33Q323.55 159.79 321.46 170.29Q319.38 180.79 317.68 193.66Q315.98 206.52 314.65 223.08Q313.33 239.63 312.29 261.2Q311.25 282.77 310.49 310.77L305.57 310.77Z M354.95 310.77Q353.06 281.26 351.36 259.78Q349.66 238.31 348.05 222.61Q346.44 206.9 344.55 194.79Q342.66 182.68 340.29 172.09Q337.93 161.49 334.71 150.33Q343.98 152.79 354.58 152.79Q364.6 152.79 375.58 150.33Q372.93 159.79 370.85 170.29Q368.77 180.79 367.06 193.66Q365.36 206.52 364.04 223.08Q362.71 239.63 361.67 261.2Q360.63 282.77 359.87 310.77L354.95 310.77Z"),
         fill = INK,
@@ -159,7 +160,7 @@ private fun CanaanEmblem(): ImageVector = emblem("CanaanEmblem") {
 }
 
 /** The sign of Tanit, header cut: solid disc, upturned arms, heavier frame */
-private fun CarthageEmblem(): ImageVector = emblem("CarthageEmblem") {
+private fun CarthageEmblem(): ImageVector = mark512("CarthageEmblem") {
     addPath(
         pathData = addPathNodes("M112 268 H400"),
         stroke = INK,
@@ -201,7 +202,7 @@ private fun CarthageEmblem(): ImageVector = emblem("CarthageEmblem") {
 }
 
 /** The aquila: standard, plaque and eagle, frontal and small-winged */
-private fun RomeEmblem(): ImageVector = emblem("RomeEmblem") {
+private fun RomeEmblem(): ImageVector = mark512("RomeEmblem") {
     addPath(
         pathData = addPathNodes("M256 236 V456"),
         stroke = INK,

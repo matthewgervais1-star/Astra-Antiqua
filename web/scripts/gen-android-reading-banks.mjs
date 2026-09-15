@@ -102,6 +102,47 @@ const frameWhen = CULTURES.map((culture) => {
   return `    AncientCulture.${upper(culture)} -> when (aspect) {\n${inner}\n    }`;
 }).join("\n\n");
 
+/**
+ * The ingress ruling is a one-slot frame, `(c) => ...`, and the ingress verb
+ * is a plain string in the week builder. Both are read the same way the
+ * two-slot frames are, and anything unfamiliar inside one is refused.
+ */
+function toKotlinIngress(template) {
+  const escaped = template.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  return `"${escaped
+    .replace(/\$\{cap\(c\)\}/g, "\${cap(c)}")
+    .replace(/\$\{c\}/g, "\$c")}"`;
+}
+
+const ingressFrames = {};
+for (const culture of CULTURES) {
+  const m = framesSource.match(
+    new RegExp(`\\n\\s*${culture}: \\(c\\) =>\\s*\`([^\`]*)\`,`),
+  );
+  if (!m) fail(`${culture} has no INGRESS_FRAMES entry, or it is not a (c) template`);
+  const template = m[1];
+  const unknown = template.replace(/\$\{cap\(c\)\}|\$\{c\}/g, "").match(/\$\{[^}]*\}/);
+  if (unknown) fail(`the ${culture} ingress frame uses ${unknown[0]}, which this generator does not read`);
+  ingressFrames[culture] = template;
+}
+
+const weekSource = await readFile(path.join(DATA, "..", "lib", "weekReading.ts"), "utf8");
+const verbBlock = weekSource.slice(weekSource.indexOf("const INGRESS_VERB"));
+const ingressVerbs = {};
+for (const culture of CULTURES) {
+  const m = verbBlock.match(new RegExp(`\\n\\s*${culture}:\\s*"([^"]*)",`));
+  if (!m) fail(`${culture} has no INGRESS_VERB entry in weekReading.ts`);
+  ingressVerbs[culture] = m[1];
+}
+
+const ingressFrameWhen = CULTURES.map(
+  (culture) => `    AncientCulture.${upper(culture)} -> ${toKotlinIngress(ingressFrames[culture])}`,
+).join("\n");
+
+const ingressVerbWhen = CULTURES.map(
+  (culture) => `    AncientCulture.${upper(culture)} -> ${kotlinString(ingressVerbs[culture])}`,
+).join("\n");
+
 const file = `package com.astra.antiqua.domain
 
 import com.astra.antiqua.model.AncientCulture
@@ -145,6 +186,20 @@ fun aspectFrame(
     b: String,
 ): String = when (culture) {
 ${frameWhen}
+}
+
+/** The verb an ingress line uses: "{deity} {verb} the {sign image}." */
+fun ingressVerb(culture: AncientCulture): String = when (culture) {
+${ingressVerbWhen}
+}
+
+/**
+ * The ruling on an ingress, taking the moving body's charge. A body that has
+ * crossed into a new sign has not been ruled on there yet, and each of these
+ * says that in its own institution's terms.
+ */
+fun ingressFrame(culture: AncientCulture, c: String): String = when (culture) {
+${ingressFrameWhen}
 }
 `;
 

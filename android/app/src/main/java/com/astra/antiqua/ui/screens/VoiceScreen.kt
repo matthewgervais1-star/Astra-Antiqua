@@ -33,11 +33,16 @@ import com.astra.antiqua.ui.components.Badge
 import com.astra.antiqua.ui.components.BadgeTone
 import com.astra.antiqua.ui.components.CultureEmblem
 import com.astra.antiqua.ui.components.DeityGlyph
+import com.astra.antiqua.ui.components.IconTile
+import com.astra.antiqua.ui.components.TileMark
+import com.astra.antiqua.ui.components.TileSize
+import com.astra.antiqua.ui.components.TracedMarks
 import com.astra.antiqua.ui.components.NaveHead
 import com.astra.antiqua.ui.components.NaveShell
 import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.components.RowRule
 import com.astra.antiqua.ui.components.SectionDivider
+import com.astra.antiqua.ui.brand.TypesetSign
 import com.astra.antiqua.ui.nav.Section
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.Dim
@@ -58,6 +63,30 @@ import com.astra.antiqua.ui.theme.AstraAntiquaTheme
  * would wear two accents at once, the doorway's and the reader's, and the
  * design system allows exactly one on a screen.
  */
+/**
+ * The tier-3 figures per doorway, from docs/design/system/readme.md,
+ * Iconography: the signs that exist as encoded characters, carried here as
+ * outlines, and the three marks that only ever existed as objects, traced
+ * from a source photograph. Carthage has neither, so its row is empty and
+ * nothing renders rather than something being found for it.
+ *
+ * Bone ink: the doorway's accent is already spent on the emblem in the head,
+ * and the accent is never applied twice on one screen.
+ */
+private fun figuresFor(culture: AncientCulture): List<TileMark> = when (culture) {
+    AncientCulture.EGYPT -> listOf(TileMark.Sign(TypesetSign.ANKH))
+    AncientCulture.GREECE -> listOf(TileMark.Sign(TypesetSign.OMEGA))
+    AncientCulture.CANAAN -> listOf(
+        TileMark.Sign(TypesetSign.IL),
+        TracedMarks.BAAL_STELE,
+    )
+    AncientCulture.CARTHAGE -> emptyList()
+    AncientCulture.ROME -> listOf(
+        TracedMarks.SHEWOLF,
+        TracedMarks.AUGUSTUS,
+    )
+}
+
 @Composable
 fun VoiceScreen(
     voice: AncientCulture,
@@ -96,6 +125,36 @@ private fun VoiceScreenContent(
                     emblem = { CultureEmblem(culture = voice, size = 64.dp, tint = accent) },
                     sub = copy?.subtitle,
                 )
+            }
+            val figures = figuresFor(voice)
+            if (figures.isNotEmpty()) {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = Spacing.Gutter),
+                        horizontalArrangement = Arrangement.spacedBy(
+                            Spacing.Gutter,
+                            Alignment.CenterHorizontally,
+                        ),
+                    ) {
+                        figures.forEach { figure ->
+                            Column(
+                                modifier = Modifier.width(140.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                IconTile(mark = figure, size = TileSize.MEDIUM, ink = Bone)
+                                Text(
+                                    text = figure.caption.uppercase(),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Dim,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(top = Spacing.Snug),
+                                )
+                            }
+                        }
+                    }
+                }
             }
             item {
                 SectionDivider(

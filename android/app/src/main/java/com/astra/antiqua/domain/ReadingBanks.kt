@@ -143,3 +143,25 @@ fun aspectFrame(
         AspectType.OPPOSITION -> "${cap(a)} and $b hold one office between them, and each vetoes the other."
     }
 }
+
+/** The verb an ingress line uses: "{deity} {verb} the {sign image}." */
+fun ingressVerb(culture: AncientCulture): String = when (culture) {
+    AncientCulture.EGYPT -> "is ferried into"
+    AncientCulture.GREECE -> "goes on to the shrine of"
+    AncientCulture.CANAAN -> "comes before"
+    AncientCulture.CARTHAGE -> "makes port in"
+    AncientCulture.ROME -> "enters the augur's boundary of"
+}
+
+/**
+ * The ruling on an ingress, taking the moving body's charge. A body that has
+ * crossed into a new sign has not been ruled on there yet, and each of these
+ * says that in its own institution's terms.
+ */
+fun ingressFrame(culture: AncientCulture, c: String): String = when (culture) {
+    AncientCulture.EGYPT -> "${cap(c)} crosses to a new bank of the river, and the old mark no longer measures it."
+    AncientCulture.GREECE -> "${cap(c)} comes onto new ground, and the shrine there has not yet been asked."
+    AncientCulture.CANAAN -> "${cap(c)} is brought before a new seat, and the council there has not yet ruled."
+    AncientCulture.CARTHAGE -> "${cap(c)} is entered under a new heading, and the old bearing no longer holds."
+    AncientCulture.ROME -> "${cap(c)} stands on new ground, and the auspices there have not been taken."
+}
