@@ -38,6 +38,7 @@ import com.astra.antiqua.ui.LauncherIcon
 import com.astra.antiqua.ui.components.Monogram
 import com.astra.antiqua.ui.nav.Route
 import com.astra.antiqua.ui.screens.CultureSelectionScreen
+import com.astra.antiqua.ui.screens.ForecastScreen
 import com.astra.antiqua.ui.screens.LearnScreen
 import com.astra.antiqua.ui.screens.MainDashboardScreen
 import com.astra.antiqua.ui.screens.MatrixScreen
@@ -207,6 +208,8 @@ fun AstraNavHost(
                 culture = culture,
                 onNavigate = go,
                 onOpenPlacement = { open(Route.placement(it)) },
+                onOpenForecast = { open(Route.FORECAST) },
+                onRecast = { open(Route.READING) },
             )
         }
         composable(Route.PLACEMENT) { entry ->
@@ -234,6 +237,19 @@ fun AstraNavHost(
                 culture = culture,
                 onNavigate = go,
                 onOpenSection = { open(Route.learn(it)) },
+            )
+        }
+        composable(Route.READING) {
+            // The same form the first run uses. A chart cast again replaces
+            // the one on the device, which is what the single birth record
+            // this app keeps allows; web keeps many and this keeps one.
+            OnboardingScreen { navController.popBackStack() }
+        }
+        composable(Route.FORECAST) {
+            ForecastScreen(
+                culture = culture,
+                onNavigate = go,
+                onOpenSpan = { open(Route.transitDetail(it)) },
             )
         }
         composable(Route.METHOD) {

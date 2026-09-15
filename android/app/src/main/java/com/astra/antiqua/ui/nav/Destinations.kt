@@ -22,6 +22,9 @@ object Route {
     const val MATRIX = "matrix"
     const val PLACEMENTS = "placements"
     const val PLACEMENT = "placements/{body}"
+    /** Casting a chart again, the counterpart of web's /reading. */
+    const val READING = "reading"
+    const val FORECAST = "forecast"
     const val METHOD = "method"
 
     /**

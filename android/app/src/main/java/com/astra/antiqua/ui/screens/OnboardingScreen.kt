@@ -1,6 +1,5 @@
 package com.astra.antiqua.ui.screens
 
-import android.location.Address
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
@@ -60,7 +59,9 @@ import com.astra.antiqua.ui.theme.Dim
 import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.LocationSearchViewModel
+import com.astra.antiqua.viewmodel.Place
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -72,7 +73,7 @@ import java.util.TimeZone
 fun OnboardingScreen(
     onLocationSaved: () -> Unit
 ) {
-    val viewModel: LocationSearchViewModel = viewModel()
+    val viewModel: LocationSearchViewModel = viewModel(factory = AstraViewModelFactory)
     val searchQuery by viewModel.searchQuery.collectAsState()
     val searchResults by viewModel.searchResults.collectAsState()
     val isSearching by viewModel.isSearching.collectAsState()
@@ -84,7 +85,7 @@ fun OnboardingScreen(
     var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
     var selectedHour by remember { mutableIntStateOf(12) }
     var selectedMinute by remember { mutableIntStateOf(0) }
-    var selectedAddress by remember { mutableStateOf<Address?>(null) }
+    var selectedPlace by remember { mutableStateOf<Place?>(null) }
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
 
@@ -97,11 +98,11 @@ fun OnboardingScreen(
         }
     }
 
-    val canConfirm = name.isNotBlank() && selectedDateMillis != null && selectedAddress != null
+    val canConfirm = name.isNotBlank() && selectedDateMillis != null && selectedPlace != null
 
     // Debounced search trigger
     LaunchedEffect(searchQuery) {
-        if (searchQuery.length >= 3 && selectedAddress == null) {
+        if (searchQuery.length >= 3 && selectedPlace == null) {
             delay(600) // Debounce delay
             viewModel.searchLocation(context, searchQuery)
         }
@@ -250,12 +251,12 @@ fun OnboardingScreen(
         OutlinedTextField(
             value = searchQuery,
             onValueChange = {
-                selectedAddress = null
-                viewModel.onSearchQueryChanged(it)
+                selectedPlace = null
+                viewModel.onSearchQueryChanged(context, it)
             },
             label = {
                 Text(
-                    if (selectedAddress != null) "Birth City (selected)" else "Search Birth City"
+                    if (selectedPlace != null) "Birth City (selected)" else "Search Birth City"
                 )
             },
             modifier = Modifier.fillMaxWidth(),
@@ -274,27 +275,25 @@ fun OnboardingScreen(
         )
 
         // Search results (fixed height so it doesn't fight with scroll)
-        if (searchResults.isNotEmpty() && selectedAddress == null) {
+        if (searchResults.isNotEmpty() && selectedPlace == null) {
             Box(modifier = Modifier.height(200.dp)) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = Spacing.Snug)
                 ) {
-                    items(searchResults) { address ->
-                        val locationName = address.getAddressLine(0)
-                            ?: "${address.locality}, ${address.countryName}"
+                    items(searchResults) { place ->
                         Panel(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = Spacing.Tight)
                                 .clickable {
-                                    selectedAddress = address
-                                    viewModel.onSearchQueryChanged(locationName)
+                                    selectedPlace = place
+                                    viewModel.onSearchQueryChanged(context, place.label)
                                 }
                         ) {
                             Text(
-                                text = locationName,
+                                text = place.label,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = Bone
                             )
@@ -302,7 +301,7 @@ fun OnboardingScreen(
                     }
                 }
             }
-        } else if (searchQuery.length >= 3 && searchResults.isEmpty() && !isSearching && selectedAddress == null) {
+        } else if (searchQuery.length >= 3 && searchResults.isEmpty() && !isSearching && selectedPlace == null) {
              Text(
                 text = "No cities found. Try a different name.",
                 style = MaterialTheme.typography.bodySmall,
@@ -311,10 +310,9 @@ fun OnboardingScreen(
             )
         }
 
-        if (selectedAddress != null) {
-            val addr = selectedAddress!!
-            val locationName = addr.getAddressLine(0)
-                ?: "${addr.locality}, ${addr.countryName}"
+        if (selectedPlace != null) {
+            val addr = selectedPlace!!
+            val locationName = addr.label
             Panel(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -338,7 +336,7 @@ fun OnboardingScreen(
                         modifier = Modifier.clickable(
                             onClickLabel = "Change birth city",
                             role = Role.Button,
-                        ) { selectedAddress = null }
+                        ) { selectedPlace = null }
                     )
                 }
             }
@@ -362,7 +360,7 @@ fun OnboardingScreen(
             enabled = canConfirm,
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                val addr = selectedAddress ?: return@PrimaryAction
+                val addr = selectedPlace ?: return@PrimaryAction
 
                 // We have no birth-location timezone lookup (see
                 // estimateZoneOffsetForLongitude's doc), so the birth
@@ -383,11 +381,10 @@ fun OnboardingScreen(
                     zoneId = assumedBirthZone
                 )
                 viewModel.saveProfile(
-                    context = context,
                     name = name,
                     birthDateUtc = birthDateUtc,
                     timezoneId = assumedBirthZone.id,
-                    address = addr,
+                    place = addr,
                     onSaved = onLocationSaved
                 )
             },

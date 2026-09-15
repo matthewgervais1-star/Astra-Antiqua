@@ -7,10 +7,11 @@ import android.os.Build
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.astra.antiqua.data.local.room.AppDatabase
+import com.astra.antiqua.data.CityEntry
+import com.astra.antiqua.data.Cities
+import com.astra.antiqua.data.ProfileRepository
 import com.astra.antiqua.data.local.room.UserProfile
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,110 +23,164 @@ import kotlinx.coroutines.withContext
 import java.util.Locale
 import kotlin.coroutines.resume
 
-class LocationSearchViewModel : ViewModel() {
+/**
+ * A birthplace the reader can pick, from either source.
+ *
+ * The packaged list and the geocoder used to be different types, and the
+ * screen only knew the geocoder's, so with no network there was nothing to
+ * choose and no way past the first run at all. One type, two sources.
+ */
+data class Place(
+    val label: String,
+    val cityName: String,
+    val latitude: Double,
+    val longitude: Double,
+    /** True where the place came from the packaged list rather than the network. */
+    val offline: Boolean,
+)
+
+class LocationSearchViewModel(
+    private val profiles: ProfileRepository,
+) : ViewModel() {
+
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
-    private val _searchResults = MutableStateFlow<List<Address>>(emptyList())
-    val searchResults: StateFlow<List<Address>> = _searchResults.asStateFlow()
+    private val _searchResults = MutableStateFlow(Cities.POPULAR.map(::placeOf))
+    val searchResults: StateFlow<List<Place>> = _searchResults.asStateFlow()
 
     private val _isSearching = MutableStateFlow(false)
     val isSearching: StateFlow<Boolean> = _isSearching.asStateFlow()
 
     private var searchJob: Job? = null
 
-    fun onSearchQueryChanged(query: String) {
+    /**
+     * The packaged matches appear as the reader types, with no wait and no
+     * network. The geocoder is then asked in the background and its answers
+     * appended, so a place that is not on the list still resolves and the
+     * field is never empty while that happens.
+     */
+    fun onSearchQueryChanged(context: Context, query: String) {
         _searchQuery.value = query
-        // Debounce search
+        _searchResults.value = Cities.search(query).map(::placeOf)
+
         searchJob?.cancel()
-        if (query.length >= 3) {
-            searchJob = viewModelScope.launch {
-                delay(500) // 500ms debounce
-                // We'll trigger this from the UI for now as it needs context,
-                // but we manage the timing here.
-            }
-        } else {
-            _searchResults.value = emptyList()
+        if (query.trim().length < MIN_QUERY) return
+        searchJob = viewModelScope.launch {
+            delay(DEBOUNCE_MS)
+            searchLocation(context, query)
         }
     }
 
     fun searchLocation(context: Context, query: String) {
-        if (query.length < 3) return
-        
+        if (query.trim().length < MIN_QUERY) return
         viewModelScope.launch {
             _isSearching.value = true
-            val results = withContext(Dispatchers.IO) {
-                try {
-                    if (!Geocoder.isPresent()) {
-                        Log.e("LocationSearch", "Geocoder is not present on this device")
-                        return@withContext emptyList<Address>()
-                    }
-
-                    val geocoder = Geocoder(context, Locale.getDefault())
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        suspendCancellableCoroutine { continuation ->
-                            geocoder.getFromLocationName(query, 5, object : Geocoder.GeocodeListener {
-                                override fun onGeocode(addresses: MutableList<Address>) {
-                                    continuation.resume(addresses)
-                                }
-                                override fun onError(errorMessage: String?) {
-                                    Log.e("LocationSearch", "Geocode error: $errorMessage")
-                                    continuation.resume(emptyList())
-                                }
-                            })
-                        }
-                    } else {
-                        @Suppress("DEPRECATION")
-                        geocoder.getFromLocationName(query, 5) ?: emptyList()
-                    }
-                } catch (e: Exception) {
-                    Log.e("LocationSearch", "Exception during geocoding", e)
-                    emptyList()
-                }
+            val found = withContext(Dispatchers.IO) { geocode(context, query) }
+            // The packaged matches stay on top: they are instant, and they
+            // were chosen for being places people are actually born.
+            val offline = Cities.search(query).map(::placeOf)
+            val extra = found.filterNot { remote ->
+                offline.any { it.cityName.equals(remote.cityName, ignoreCase = true) }
             }
-            _searchResults.value = results
+            _searchResults.value = offline + extra
             _isSearching.value = false
         }
     }
 
+    private suspend fun geocode(context: Context, query: String): List<Place> = try {
+        if (!Geocoder.isPresent()) {
+            Log.w(TAG, "No geocoder here; the packaged list is the whole picker")
+            emptyList()
+        } else {
+            val geocoder = Geocoder(context, Locale.getDefault())
+            val addresses = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                suspendCancellableCoroutine { continuation ->
+                    geocoder.getFromLocationName(
+                        query,
+                        MAX_REMOTE,
+                        object : Geocoder.GeocodeListener {
+                            override fun onGeocode(addresses: MutableList<Address>) {
+                                continuation.resume(addresses)
+                            }
+
+                            override fun onError(errorMessage: String?) {
+                                Log.w(TAG, "Geocode error: $errorMessage")
+                                continuation.resume(emptyList())
+                            }
+                        },
+                    )
+                }
+            } else {
+                @Suppress("DEPRECATION")
+                geocoder.getFromLocationName(query, MAX_REMOTE) ?: emptyList()
+            }
+            addresses.map(::placeOf)
+        }
+    } catch (e: Exception) {
+        Log.w(TAG, "The geocoder could not be reached", e)
+        emptyList()
+    }
+
     /**
+     * Saves the one birth record this app keeps.
+     *
      * [timezoneId] is the zone [birthDateUtc] was resolved against (see
-     * [com.astra.antiqua.domain.resolveBirthDateUtcMillis] and
-     * [com.astra.antiqua.domain.estimateZoneOffsetForLongitude]) -- an
-     * explicit caller-supplied input, not read from `TimeZone.getDefault()`
-     * here, so the stored profile stays consistent with whatever zone was
-     * actually used to compute the birth instant. It is typically a fixed
-     * UTC offset id (e.g. "+01:00") derived from the birth location's
-     * longitude, not a real IANA zone id.
+     * `resolveBirthDateUtcMillis` and `estimateZoneOffsetForLongitude`): an
+     * explicit caller-supplied input, not read from the device here, so the
+     * stored profile stays consistent with the zone actually used to compute
+     * the birth instant. It is typically a fixed UTC offset derived from the
+     * birth location's longitude rather than a real IANA zone id.
      */
     fun saveProfile(
-        context: Context,
         name: String,
         birthDateUtc: Long,
         timezoneId: String,
-        address: Address,
-        onSaved: () -> Unit
+        place: Place,
+        onSaved: () -> Unit,
     ) {
         viewModelScope.launch {
             try {
-                val database = AppDatabase.getDatabase(context)
-                val cityName = address.locality ?: address.subAdminArea ?: address.featureName ?: "Unknown"
-
-                val profile = UserProfile(
-                    name = name,
-                    birthDateUtc = birthDateUtc,
-                    latitude = address.latitude,
-                    longitude = address.longitude,
-                    cityName = cityName,
-                    timezoneId = timezoneId
+                profiles.save(
+                    UserProfile(
+                        name = name,
+                        birthDateUtc = birthDateUtc,
+                        latitude = place.latitude,
+                        longitude = place.longitude,
+                        cityName = place.cityName,
+                        timezoneId = timezoneId,
+                    )
                 )
-                database.userDao().insertUserProfile(profile)
-                withContext(Dispatchers.Main) {
-                    onSaved()
-                }
+                onSaved()
             } catch (e: Exception) {
-                Log.e("LocationSearch", "Error saving profile", e)
+                Log.e(TAG, "Error saving profile", e)
             }
         }
     }
+
+    private companion object {
+        const val TAG = "LocationSearch"
+        const val DEBOUNCE_MS = 400L
+        const val MIN_QUERY = 3
+        const val MAX_REMOTE = 5
+    }
+}
+
+private fun placeOf(city: CityEntry) = Place(
+    label = "${city.name}, ${city.country}",
+    cityName = city.name,
+    latitude = city.latitude,
+    longitude = city.longitude,
+    offline = true,
+)
+
+private fun placeOf(address: Address): Place {
+    val city = address.locality ?: address.subAdminArea ?: address.featureName ?: "Unknown"
+    return Place(
+        label = address.getAddressLine(0) ?: "$city, ${address.countryName.orEmpty()}",
+        cityName = city,
+        latitude = address.latitude,
+        longitude = address.longitude,
+        offline = false,
+    )
 }

@@ -20,6 +20,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.ClassicalPlanet
 import com.astra.antiqua.model.DeityRegistry
+import com.astra.antiqua.ui.components.ActionButton
+import com.astra.antiqua.ui.components.ActionWeight
 import com.astra.antiqua.ui.components.DataRow
 import com.astra.antiqua.ui.components.DataRowHead
 import com.astra.antiqua.ui.components.DeityGlyph
@@ -49,6 +51,8 @@ fun PlacementsScreen(
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
     onOpenPlacement: (ClassicalPlanet) -> Unit = {},
+    onOpenForecast: () -> Unit = {},
+    onRecast: () -> Unit = {},
 ) {
     val viewModel: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
     val state by viewModel.chartState.collectAsState()
@@ -122,6 +126,24 @@ fun PlacementsScreen(
                             color = Dim,
                             modifier = Modifier.padding(Spacing.Gutter),
                         )
+                        Box(modifier = Modifier.padding(horizontal = Spacing.Gutter)) {
+                            ActionButton(
+                                label = "Read the year ahead",
+                                weight = ActionWeight.VOTIVE,
+                                onClick = onOpenForecast,
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = Spacing.Gutter)
+                                .padding(top = Spacing.Snug),
+                        ) {
+                            ActionButton(
+                                label = "Cast this chart again",
+                                weight = ActionWeight.PRIMARY,
+                                onClick = onRecast,
+                            )
+                        }
                     }
                 }
             }
