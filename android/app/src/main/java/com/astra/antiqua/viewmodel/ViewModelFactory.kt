@@ -1,0 +1,22 @@
+package com.astra.antiqua.viewmodel
+
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import com.astra.antiqua.AppContainer
+import com.astra.antiqua.AstraApplication
+
+/**
+ * The one place a ViewModel is wired to the container. A screen asks for a
+ * ViewModel and gets one with its dependencies already in it, so no screen
+ * passes a Context into a method and no ViewModel builds a database.
+ */
+private fun CreationExtras.container(): AppContainer =
+    (this[APPLICATION_KEY] as AstraApplication).container
+
+val AstraViewModelFactory: ViewModelProvider.Factory = viewModelFactory {
+    initializer { AppViewModel(container().settings, container().profiles) }
+    initializer { DashboardViewModel(container().astronomy, container().profiles, container().settings, container().readings) }
+}

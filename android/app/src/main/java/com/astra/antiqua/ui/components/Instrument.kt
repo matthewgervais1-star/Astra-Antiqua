@@ -223,9 +223,10 @@ enum class RowQuality { NONE, HARMONY, CONFLICT }
  * Body, position, sign, house, motion, signal.
  */
 private val POSITION_WIDTH = 74.dp
-private val SIGN_WIDTH = 42.dp
-private val HOUSE_WIDTH = 30.dp
-private val MOTION_WIDTH = 20.dp
+private val SIGN_WIDTH = 40.dp
+private val HOUSE_WIDTH = 28.dp
+/** Wide enough for the head's "MOT" at the data size, or it wraps to two lines. */
+private val MOTION_WIDTH = 30.dp
 private val SIGNAL_WIDTH = 10.dp
 
 /** The column labels, in the faint ink a table interior takes. */
@@ -240,7 +241,7 @@ fun DataRowHead(modifier: Modifier = Modifier) {
         Text("LONG", style = style, color = FaintInk, modifier = Modifier.width(POSITION_WIDTH))
         Text("SIGN", style = style, color = FaintInk, modifier = Modifier.width(SIGN_WIDTH))
         Text("HSE", style = style, color = FaintInk, modifier = Modifier.width(HOUSE_WIDTH))
-        Text("MOT", style = style, color = FaintInk, modifier = Modifier.width(MOTION_WIDTH))
+        Text("MOT", style = style, color = FaintInk, maxLines = 1, modifier = Modifier.width(MOTION_WIDTH))
         Box(Modifier.width(SIGNAL_WIDTH))
     }
 }

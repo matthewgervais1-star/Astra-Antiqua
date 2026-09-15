@@ -31,11 +31,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -47,13 +50,17 @@ import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
 import com.astra.antiqua.model.ClassicalPlanet
 import com.astra.antiqua.ui.components.DeityGlyph
+import com.astra.antiqua.ui.glyphs.deityGlyph
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.ui.components.AccentRule
 import com.astra.antiqua.ui.components.Badge
 import com.astra.antiqua.ui.components.BadgeTone
 import com.astra.antiqua.ui.components.Kicker
 import com.astra.antiqua.ui.components.Panel
+import com.astra.antiqua.ui.components.NaveShell
 import com.astra.antiqua.ui.components.SectionDivider
+import com.astra.antiqua.ui.nav.Horizon
+import com.astra.antiqua.ui.nav.Section
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.Conflict
 import com.astra.antiqua.ui.theme.Dim
@@ -63,7 +70,7 @@ import com.astra.antiqua.ui.theme.LocalLexicon
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.Spacing
-import com.astra.antiqua.viewmodel.AppViewModel
+import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.ChartState
 import com.astra.antiqua.viewmodel.DashboardViewModel
 import kotlin.math.PI
@@ -71,20 +78,29 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun MainDashboardScreen(onOpenMethod: () -> Unit = {}) {
-    val appViewModel: AppViewModel = viewModel()
-    val dashboardViewModel: DashboardViewModel = viewModel()
+fun MainDashboardScreen(
+    culture: AncientCulture,
+    onNavigate: (String) -> Unit,
+    onOpenMethod: () -> Unit = {},
+) {
+    val dashboardViewModel: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
 
     val chartState by dashboardViewModel.chartState.collectAsState()
-    val culture by appViewModel.selectedCulture.collectAsState()
-    val context = LocalContext.current
     val lexicon = LocalLexicon.current
     val accent = LocalAccent.current
 
-    LaunchedEffect(Unit) {
-        dashboardViewModel.calculateChart(context)
-    }
+    LaunchedEffect(Unit) { dashboardViewModel.calculateChart() }
 
+    NaveShell(
+        context = lexicon.dashboardTitle,
+        culture = culture,
+        onNavigate = onNavigate,
+        section = Section.TODAY,
+        horizon = Horizon.DAY,
+        // The other three horizons are not in the graph yet, so their cells
+        // are shown inert rather than made to throw.
+        builtHorizons = setOf(Horizon.DAY),
+    ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -125,7 +141,7 @@ fun MainDashboardScreen(onOpenMethod: () -> Unit = {}) {
                         }
                     }
                     is ChartState.Success -> {
-                        NatalWheel(chartData = state.chartData)
+                        NatalWheel(chartData = state.chartData, culture = culture)
                     }
                     is ChartState.Error -> {
                         Text(
@@ -175,6 +191,7 @@ fun MainDashboardScreen(onOpenMethod: () -> Unit = {}) {
         item {
             Spacer(modifier = Modifier.height(Spacing.Section))
         }
+    }
     }
 }
 
@@ -356,9 +373,20 @@ private fun isHardAspect(type: AspectType) =
     type == AspectType.SQUARE || type == AspectType.OPPOSITION
 
 @Composable
-fun NatalWheel(chartData: NatalChartData) {
+fun NatalWheel(chartData: NatalChartData, culture: AncientCulture) {
     val haptic = LocalHapticFeedback.current
     val accent = LocalAccent.current
+    val ground = MaterialTheme.colorScheme.background
+
+    // The culture's own drawing of each body, rendered into the wheel rather
+    // than a coloured disc. The ten hues this used to carry were the previous
+    // identity's and broke the rule that separates by form and only confirms
+    // by hue: five of them were brighter than any ink in the palette, and a
+    // colour-deficient reader got nothing from them. The glyphs differ by
+    // drawing hand, which is what tells them apart at this size.
+    val glyphs = ClassicalPlanet.entries.associateWith {
+        rememberVectorPainter(deityGlyph(culture, it))
+    }
 
     // See the MAX_WHEEL_ASPECTS doc above: budget to the tightest aspects,
     // then order soft-before-hard so hard aspects draw on top.
@@ -478,9 +506,11 @@ fun NatalWheel(chartData: NatalChartData) {
             val x = (center.x + radius * PLANET_RING_FRACTION * cos(angle)).toFloat()
             val y = (center.y + radius * PLANET_RING_FRACTION * sin(angle)).toFloat()
 
+            // The ground behind the glyph, so an aspect chord does not run
+            // through the mark it connects.
             drawCircle(
-                color = Bone,
-                radius = 8.dp.toPx(),
+                color = ground,
+                radius = GLYPH_PX.dp.toPx() * 0.62f,
                 center = Offset(x, y)
             )
 
@@ -493,10 +523,8 @@ fun NatalWheel(chartData: NatalChartData) {
                 )
             }
 
-            // The received three get a second, quieter ring so the mark
-            // survives even where getPlanetColor's shared tone is hard to
-            // read (small canvas, colour-deficient vision) -- a marker that
-            // doesn't depend on hue, next to the one that does.
+            // The received three carry a quiet ring as well as the accent, so
+            // the marker does not depend on hue alone.
             if (planet.isReceived) {
                 drawCircle(
                     color = Dim,
@@ -506,26 +534,23 @@ fun NatalWheel(chartData: NatalChartData) {
                 )
             }
 
-            drawCircle(
-                color = getPlanetColor(planet),
-                radius = 5.dp.toPx(),
-                center = Offset(x, y)
-            )
+            val painter = glyphs[planet]
+            if (painter != null) {
+                val side = GLYPH_PX.dp.toPx()
+                translate(left = x - side / 2f, top = y - side / 2f) {
+                    with(painter) {
+                        draw(
+                            size = Size(side, side),
+                            colorFilter = ColorFilter.tint(
+                                if (planet.isReceived) accent else Bone
+                            ),
+                        )
+                    }
+                }
+            }
         }
     }
 }
 
-fun getPlanetColor(planet: ClassicalPlanet): Color = when (planet) {
-    ClassicalPlanet.SUN -> Color(0xFFFFCC33)
-    ClassicalPlanet.MOON -> Color(0xFFC0C0C0)
-    ClassicalPlanet.MERCURY -> Color(0xFF8A2BE2)
-    ClassicalPlanet.VENUS -> Color(0xFF00FF7F)
-    ClassicalPlanet.MARS -> Color(0xFFFF4500)
-    ClassicalPlanet.JUPITER -> Color(0xFF4169E1)
-    ClassicalPlanet.SATURN -> Color(0xFF708090)
-    // The received three share one tone so they read as a set the ancients
-    // did not have, rather than as three more classical bodies.
-    ClassicalPlanet.URANUS -> Color(0xFF7FB0A5)
-    ClassicalPlanet.NEPTUNE -> Color(0xFF6E8FB8)
-    ClassicalPlanet.PLUTO -> Color(0xFF9A7BA8)
-}
+/** The wheel's glyph size, the design system's --glyph-size-wheel. */
+private const val GLYPH_PX = 24

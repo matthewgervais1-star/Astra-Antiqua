@@ -64,7 +64,7 @@ fun EgyptDashboardPreview() {
                     ),
                     // A received body in the sample so this preview also
                     // exercises the wheel's reception ring and the shared
-                    // received-body tone from getPlanetColor.
+                    // accent, and its glyph.
                     ClassicalPlanet.URANUS to AccuratePlanetPosition(
                         planet = ClassicalPlanet.URANUS,
                         longitude = 220.0,
@@ -82,7 +82,7 @@ fun EgyptDashboardPreview() {
             )
 
             Column {
-                NatalWheel(chartData = sampleChart)
+                NatalWheel(chartData = sampleChart, culture = AncientCulture.EGYPT)
                 OracleDecreeCard(
                     culture = AncientCulture.EGYPT,
                     reading = previewReading(
@@ -133,7 +133,7 @@ fun CarthageDashboardPreview() {
             )
             
             Column {
-                NatalWheel(chartData = sampleChart)
+                NatalWheel(chartData = sampleChart, culture = AncientCulture.CARTHAGE)
                 OracleDecreeCard(
                     culture = AncientCulture.CARTHAGE,
                     reading = previewReading(
@@ -184,7 +184,7 @@ fun GreeceDashboardPreview() {
             )
             
             Column {
-                NatalWheel(chartData = sampleChart)
+                NatalWheel(chartData = sampleChart, culture = AncientCulture.GREECE)
                 OracleDecreeCard(
                     culture = AncientCulture.GREECE,
                     reading = previewReading(
@@ -235,7 +235,7 @@ fun CanaanDashboardPreview() {
             )
 
             Column {
-                NatalWheel(chartData = sampleChart)
+                NatalWheel(chartData = sampleChart, culture = AncientCulture.CANAAN)
                 OracleDecreeCard(
                     culture = AncientCulture.CANAAN,
                     reading = previewReading(
@@ -286,7 +286,7 @@ fun RomeDashboardPreview() {
             )
 
             Column {
-                NatalWheel(chartData = sampleChart)
+                NatalWheel(chartData = sampleChart, culture = AncientCulture.ROME)
                 OracleDecreeCard(
                     culture = AncientCulture.ROME,
                     reading = previewReading(

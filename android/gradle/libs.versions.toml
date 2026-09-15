@@ -17,9 +17,11 @@ playfairDisplay = "1.0.0"
 jetbrainsMono = "1.0.0"
 astronomy = "v2.1.17"
 kotlinxSerialization = "1.7.1"
+kotlinxCoroutines = "1.9.0"
 
 [libraries]
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref = "astronomy" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

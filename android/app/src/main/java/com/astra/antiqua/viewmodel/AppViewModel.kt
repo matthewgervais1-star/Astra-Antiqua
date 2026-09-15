@@ -1,89 +1,86 @@
 package com.astra.antiqua.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.astra.antiqua.data.local.datastore.DataStoreManager
-import com.astra.antiqua.data.local.room.AppDatabase
+import com.astra.antiqua.data.ProfileRepository
+import com.astra.antiqua.data.SettingsRepository
 import com.astra.antiqua.model.AncientCulture
-import kotlinx.coroutines.delay
 import com.astra.antiqua.model.AppPhase
 import com.astra.antiqua.ui.LauncherIcon
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class AppViewModel : ViewModel() {
+/**
+ * The first-run sequence and the culture in force.
+ *
+ * Dependencies arrive in the constructor rather than as a Context handed to
+ * every method, so this can be built with fakes and tested without a device.
+ * The culture arrives already parsed: [SettingsRepository] owns the one
+ * `valueOf` and its fallback, where this class used to carry two of its own.
+ */
+class AppViewModel(
+    private val settings: SettingsRepository,
+    private val profiles: ProfileRepository,
+) : ViewModel() {
+
     private val _currentPhase = MutableStateFlow(AppPhase.ENGINE_WARMUP)
     val currentPhase: StateFlow<AppPhase> = _currentPhase.asStateFlow()
 
     private val _selectedCulture = MutableStateFlow(AncientCulture.GREECE)
     val selectedCulture: StateFlow<AncientCulture> = _selectedCulture.asStateFlow()
 
-    fun init(context: Context) {
+    /** Guards against the splash running again on every recomposition. */
+    private var started = false
+
+    fun start() {
+        if (started) return
+        started = true
         viewModelScope.launch {
             _currentPhase.value = AppPhase.ENGINE_WARMUP
-            
-            // Brief splash delay for animation
-            delay(1500)
+            delay(SPLASH_MS)
 
-            // Load settings and determine next phase
-            val dataStore = DataStoreManager(context)
-            val database = AppDatabase.getDatabase(context)
-            
-            val hasCompletedSetup = dataStore.isOnboardingCompleted.first()
-            val savedCulture = dataStore.selectedPantheon.first()
-            val userProfile = database.userDao().getUserProfile().first()
-            
-            if (savedCulture != null) {
-                try {
-                    _selectedCulture.value = AncientCulture.valueOf(savedCulture.uppercase())
-                } catch (_: Exception) {
-                    _selectedCulture.value = AncientCulture.GREECE
-                }
-            }
-            
-            // On first launch or if no profile exists, go to Culture Selection
-            if (hasCompletedSetup && userProfile != null) {
-                _currentPhase.value = AppPhase.MAIN_DASHBOARD
+            settings.selectedCulture.first()?.let { _selectedCulture.value = it }
+
+            val completed = settings.isOnboardingCompleted.first()
+            val profile = profiles.profile.first()
+
+            _currentPhase.value = if (completed && profile != null) {
+                AppPhase.MAIN_DASHBOARD
             } else {
-                // If profile is missing but setup was "completed", reset setup flag
-                if (hasCompletedSetup && userProfile == null) {
-                    dataStore.setOnboardingCompleted(false)
-                }
-                _currentPhase.value = AppPhase.CULTURE_SELECTION
+                // A completed flag with no record behind it is a lie the app
+                // told itself. Clear it rather than send the reader to a
+                // dashboard with nothing to read.
+                if (completed) settings.setOnboardingCompleted(false)
+                AppPhase.CULTURE_SELECTION
             }
         }
     }
 
-    fun updatePhase(newPhase: AppPhase) {
-        _currentPhase.value = newPhase
-    }
-
-    fun selectCulture(context: Context, culture: String) {
+    fun selectCulture(culture: AncientCulture) {
         viewModelScope.launch {
-            val dataStore = DataStoreManager(context)
-            dataStore.savePantheon(culture)
-            try {
-                _selectedCulture.value = AncientCulture.valueOf(culture.uppercase())
-            } catch (_: Exception) {
-                _selectedCulture.value = AncientCulture.GREECE
-            }
+            settings.saveCulture(culture)
+            _selectedCulture.value = culture
             // The home screen icon follows the culture. Recorded here and
             // applied when the app stops: swapping the alias under a running
             // task closes it. LauncherIcon holds the mapping and the timing.
-            LauncherIcon.request(_selectedCulture.value)
-            updatePhase(AppPhase.ONBOARDING)
+            LauncherIcon.request(culture)
+            _currentPhase.value = AppPhase.ONBOARDING
         }
     }
 
-    fun completeOnboarding(context: Context) {
+    fun completeOnboarding() {
         viewModelScope.launch {
-            val dataStore = DataStoreManager(context)
-            dataStore.setOnboardingCompleted(true)
-            updatePhase(AppPhase.MAIN_DASHBOARD)
+            settings.setOnboardingCompleted(true)
+            _currentPhase.value = AppPhase.MAIN_DASHBOARD
         }
+    }
+
+    private companion object {
+        /** Long enough for the monogram to be read, short enough not to wait on. */
+        const val SPLASH_MS = 1500L
     }
 }
