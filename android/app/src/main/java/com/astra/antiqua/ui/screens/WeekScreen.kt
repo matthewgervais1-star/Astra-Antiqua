@@ -69,7 +69,6 @@ fun WeekScreen(
         culture = culture,
         onNavigate = onNavigate,
         horizon = Horizon.WEEK,
-        builtHorizons = setOf(Horizon.DAY, Horizon.WEEK),
         section = Section.TODAY,
     ) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {

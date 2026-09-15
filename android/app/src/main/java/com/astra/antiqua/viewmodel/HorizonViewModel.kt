@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.data.SettingsRepository
+import com.astra.antiqua.domain.SkyEvent
+import com.astra.antiqua.domain.SkyEvents
 import com.astra.antiqua.domain.WeekDay
 import com.astra.antiqua.domain.WeekReading
 import com.astra.antiqua.model.AncientCulture
+import com.astra.antiqua.model.ClassicalPlanet
 import java.util.Calendar
 import java.util.Date
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +25,26 @@ sealed class WeekState {
     object Loading : WeekState()
     data class Ready(val days: List<WeekDay>, val start: Date, val end: Date) : WeekState()
     data class Error(val message: String) : WeekState()
+}
+
+sealed class SeasonState {
+    object Loading : SeasonState()
+    data class Ready(
+        val window: SkyEvents.SeasonWindow,
+        val events: List<SkyEvent>,
+        val culture: AncientCulture,
+    ) : SeasonState()
+    data class Error(val message: String) : SeasonState()
+}
+
+sealed class YearState {
+    object Loading : YearState()
+    data class Ready(
+        val start: Date,
+        val events: List<SkyEvent>,
+        val culture: AncientCulture,
+    ) : YearState()
+    data class Error(val message: String) : YearState()
 }
 
 /**
@@ -40,7 +63,15 @@ class HorizonViewModel(
     private val _week = MutableStateFlow<WeekState>(WeekState.Loading)
     val week: StateFlow<WeekState> = _week.asStateFlow()
 
+    private val _season = MutableStateFlow<SeasonState>(SeasonState.Loading)
+    val season: StateFlow<SeasonState> = _season.asStateFlow()
+
+    private val _year = MutableStateFlow<YearState>(YearState.Loading)
+    val year: StateFlow<YearState> = _year.asStateFlow()
+
     private var built = false
+    private var seasonBuilt = false
+    private var yearBuilt = false
 
     fun loadWeek() {
         if (built) return
@@ -67,7 +98,83 @@ class HorizonViewModel(
         }
     }
 
+    /**
+     * The season: the stretch the Sun spends in its current sign, and every
+     * sky event inside it. The three inner planets are the ones whose sign
+     * changes are worth naming over ten weeks; the outers barely move.
+     */
+    fun loadSeason() {
+        if (seasonBuilt) return
+        seasonBuilt = true
+        viewModelScope.launch {
+            try {
+                val culture = settings.selectedCulture.first() ?: AncientCulture.GREECE
+                val today = Date()
+                val ready = withContext(Dispatchers.Default) {
+                    val window = SkyEvents.currentSeason(astronomy, today)
+                    val days = ((window.end.time - window.start.time) / 86_400_000L).toInt() + 1
+                    val events = buildList {
+                        addAll(SkyEvents.ingresses(astronomy, window.start, days, SEASON_BODIES))
+                        addAll(SkyEvents.stations(astronomy, window.start, days))
+                        addAll(SkyEvents.moonQuarters(astronomy, window.start, days))
+                    }.filter { it.date.time <= window.end.time }.sortedBy { it.date.time }
+                    SeasonState.Ready(window, events, culture)
+                }
+                _season.value = ready
+            } catch (e: Exception) {
+                Log.e(TAG, "Could not read the season", e)
+                _season.value = SeasonState.Error(
+                    "The season could not be read: ${e.localizedMessage ?: "unknown error"}"
+                )
+            }
+        }
+    }
+
+    /**
+     * The year: twelve months of sign changes and stations, from the start of
+     * this month. The Moon is left out; thirteen ingresses a month would bury
+     * everything else.
+     */
+    fun loadYear() {
+        if (yearBuilt) return
+        yearBuilt = true
+        viewModelScope.launch {
+            try {
+                val culture = settings.selectedCulture.first() ?: AncientCulture.GREECE
+                val start = Calendar.getInstance().apply {
+                    set(Calendar.DAY_OF_MONTH, 1)
+                    set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
+                }.time
+                val events = withContext(Dispatchers.Default) {
+                    buildList {
+                        addAll(SkyEvents.ingresses(astronomy, start, YEAR_DAYS, YEAR_BODIES))
+                        addAll(SkyEvents.stations(astronomy, start, YEAR_DAYS))
+                    }.sortedBy { it.date.time }
+                }
+                _year.value = YearState.Ready(start, events, culture)
+            } catch (e: Exception) {
+                Log.e(TAG, "Could not read the year", e)
+                _year.value = YearState.Error(
+                    "The year could not be read: ${e.localizedMessage ?: "unknown error"}"
+                )
+            }
+        }
+    }
+
     private companion object {
         const val TAG = "HorizonViewModel"
+        const val YEAR_DAYS = 365
+
+        /** Over ten weeks these are the bodies that actually change sign. */
+        val SEASON_BODIES = listOf(
+            ClassicalPlanet.MERCURY,
+            ClassicalPlanet.VENUS,
+            ClassicalPlanet.MARS,
+            ClassicalPlanet.SUN,
+        )
+
+        /** Every body but the Moon, whose monthly circuit would bury the rest. */
+        val YEAR_BODIES = ClassicalPlanet.entries.filter { it != ClassicalPlanet.MOON }
     }
 }
