@@ -48,6 +48,7 @@ import com.astra.antiqua.viewmodel.DashboardViewModel
 fun PlacementsScreen(
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
+    onOpenPlacement: (ClassicalPlanet) -> Unit = {},
 ) {
     val viewModel: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
     val state by viewModel.chartState.collectAsState()
@@ -108,6 +109,7 @@ fun PlacementsScreen(
                                     leading = {
                                         DeityGlyph(body = body, culture = culture, size = 14.dp)
                                     },
+                                    onClick = { onOpenPlacement(body) },
                                 )
                             }
                         }

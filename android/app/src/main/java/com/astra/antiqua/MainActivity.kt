@@ -33,6 +33,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.AppPhase
+import com.astra.antiqua.model.ClassicalPlanet
 import com.astra.antiqua.ui.LauncherIcon
 import com.astra.antiqua.ui.components.Monogram
 import com.astra.antiqua.ui.nav.Route
@@ -41,6 +42,7 @@ import com.astra.antiqua.ui.screens.MainDashboardScreen
 import com.astra.antiqua.ui.screens.MatrixScreen
 import com.astra.antiqua.ui.screens.MethodScreen
 import com.astra.antiqua.ui.screens.OnboardingScreen
+import com.astra.antiqua.ui.screens.PlacementScreen
 import com.astra.antiqua.ui.screens.PlacementsScreen
 import com.astra.antiqua.ui.screens.SeasonScreen
 import com.astra.antiqua.ui.screens.YearScreen
@@ -196,7 +198,29 @@ fun AstraNavHost(
             MatrixScreen(culture = culture, onNavigate = go)
         }
         composable(Route.PLACEMENTS) {
-            PlacementsScreen(culture = culture, onNavigate = go)
+            PlacementsScreen(
+                culture = culture,
+                onNavigate = go,
+                onOpenPlacement = { go(Route.placement(it)) },
+            )
+        }
+        composable(Route.PLACEMENT) { entry ->
+            val name = entry.arguments?.getString("body").orEmpty()
+            val body = runCatching { ClassicalPlanet.valueOf(name.uppercase()) }.getOrNull()
+            if (body == null) {
+                PlacementsScreen(
+                    culture = culture,
+                    onNavigate = go,
+                    onOpenPlacement = { go(Route.placement(it)) },
+                )
+            } else {
+                PlacementScreen(
+                    body = body,
+                    culture = culture,
+                    onNavigate = go,
+                    onOpenPlacement = { go(Route.placement(it)) },
+                )
+            }
         }
         composable(Route.METHOD) {
             MethodScreen(onBack = { navController.popBackStack() })

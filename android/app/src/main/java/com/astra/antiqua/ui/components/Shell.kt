@@ -259,7 +259,15 @@ fun NaveHead(
             emblem()
             Box(Modifier.height(Spacing.Step))
         }
-        Text(kicker.uppercase(), style = MaterialTheme.typography.labelSmall, color = Dim)
+        Text(
+            text = kicker.uppercase(),
+            style = MaterialTheme.typography.labelSmall,
+            color = Dim,
+            textAlign = TextAlign.Center,
+            // A long institution line has to keep the screen's gutter, or it
+            // runs to both edges and stops looking set.
+            modifier = Modifier.padding(horizontal = Spacing.Gutter),
+        )
         Box(Modifier.height(Spacing.Step))
         AccentRule()
         Box(Modifier.height(Spacing.Step))

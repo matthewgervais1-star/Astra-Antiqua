@@ -25,7 +25,10 @@ sealed class ChartState {
     object Loading : ChartState()
     data class Success(
         val chartData: NatalChartData,
+        /** The Sun and the Moon, the two the dashboard prints as decree cards. */
         val bigThreePlacements: List<NatalPlacementReading>,
+        /** Every body's composed reading, for the placement screen. */
+        val placements: Map<ClassicalPlanet, NatalPlacementReading>,
         val highPriestSummary: String
     ) : ChartState()
     data class Error(val message: String) : ChartState()
@@ -65,17 +68,25 @@ class DashboardViewModel(
                 }
                 val culture = settings.selectedCulture.first() ?: AncientCulture.GREECE
 
-                val bigThree = mutableListOf<NatalPlacementReading>()
+                // Compose every body once. The corpus covers all ten, the
+                // composition is a string build rather than a lookup per
+                // render, and the placement screen needs the other eight.
+                val placements = chartData.planets.mapNotNull { (body, position) ->
+                    readings.getReading(position, culture)?.let { body to it }
+                }.toMap()
+
                 val sunPosition = chartData.planets[ClassicalPlanet.SUN]
-                sunPosition?.let { readings.getReading(it, culture)?.let(bigThree::add) }
                 val moonPosition = chartData.planets[ClassicalPlanet.MOON]
-                moonPosition?.let { readings.getReading(it, culture)?.let(bigThree::add) }
+                val bigThree = listOfNotNull(
+                    placements[ClassicalPlanet.SUN],
+                    placements[ClassicalPlanet.MOON],
+                )
 
                 val sunSign = sunPosition?.zodiacSign?.signName ?: "the unknown"
                 val moonSign = moonPosition?.zodiacSign?.signName ?: "the depths"
                 val summary = LexiconDictionary.forCulture(culture).highPriestSummary(sunSign, moonSign)
 
-                _chartState.value = ChartState.Success(chartData, bigThree, summary)
+                _chartState.value = ChartState.Success(chartData, bigThree, placements, summary)
             } catch (e: Exception) {
                 Log.e(TAG, "Error calculating chart", e)
                 _chartState.value = ChartState.Error(

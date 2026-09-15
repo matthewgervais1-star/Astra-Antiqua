@@ -1,6 +1,7 @@
 package com.astra.antiqua.ui.nav
 
 import com.astra.antiqua.model.AncientCulture
+import com.astra.antiqua.model.ClassicalPlanet
 
 /**
  * Every place this app can be, and the one place their names are written.
@@ -20,10 +21,13 @@ object Route {
     const val VOICE = "voices/{culture}"
     const val MATRIX = "matrix"
     const val PLACEMENTS = "placements"
+    const val PLACEMENT = "placements/{body}"
     const val METHOD = "method"
 
     fun transitDetail(id: String) = "transits/$id"
     fun voice(culture: AncientCulture) = "voices/${culture.name.lowercase()}"
+
+    fun placement(body: ClassicalPlanet) = "placements/${body.name.lowercase()}"
 }
 
 /**
