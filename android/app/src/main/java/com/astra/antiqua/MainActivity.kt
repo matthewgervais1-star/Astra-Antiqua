@@ -42,6 +42,8 @@ import com.astra.antiqua.ui.screens.MatrixScreen
 import com.astra.antiqua.ui.screens.MethodScreen
 import com.astra.antiqua.ui.screens.OnboardingScreen
 import com.astra.antiqua.ui.screens.PlacementsScreen
+import com.astra.antiqua.ui.screens.TransitDetailScreen
+import com.astra.antiqua.ui.screens.TransitsScreen
 import com.astra.antiqua.ui.screens.VoiceScreen
 import com.astra.antiqua.ui.screens.VoicesScreen
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
@@ -162,6 +164,21 @@ fun AstraNavHost(
                     },
                 )
             }
+        }
+        composable(Route.TRANSITS) {
+            TransitsScreen(
+                culture = culture,
+                onNavigate = go,
+                onOpenSpan = { go(Route.transitDetail(it)) },
+            )
+        }
+        composable(Route.TRANSIT_DETAIL) { entry ->
+            TransitDetailScreen(
+                spanId = entry.arguments?.getString("id").orEmpty(),
+                culture = culture,
+                onNavigate = go,
+                onBack = { navController.popBackStack() },
+            )
         }
         composable(Route.MATRIX) {
             MatrixScreen(culture = culture, onNavigate = go)

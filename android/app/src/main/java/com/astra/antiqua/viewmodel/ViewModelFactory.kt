@@ -19,4 +19,5 @@ private fun CreationExtras.container(): AppContainer =
 val AstraViewModelFactory: ViewModelProvider.Factory = viewModelFactory {
     initializer { AppViewModel(container().settings, container().profiles) }
     initializer { DashboardViewModel(container().astronomy, container().profiles, container().settings, container().readings) }
+    initializer { TransitsViewModel(container().astronomy, container().profiles) }
 }

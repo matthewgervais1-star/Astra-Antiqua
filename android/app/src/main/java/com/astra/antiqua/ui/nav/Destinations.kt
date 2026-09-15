@@ -46,6 +46,7 @@ enum class Horizon(val label: String, val route: String) {
 enum class Section(val label: String, val route: String) {
     TODAY("TODAY", Route.DAY),
     VOICES("VOICES", Route.VOICES),
+    TRANSITS("TRANSITS", Route.TRANSITS),
     MATRIX("MATRIX", Route.MATRIX),
     CHART("CHART", Route.PLACEMENTS),
 }
