@@ -72,6 +72,11 @@ Screenshots: `docs/design/screenshots/phase7`, `phase8`.
 | `89a8c7a` | Launcher icons that follow the chosen culture |
 | `bb3d43c` | The deity glyphs beside every body |
 | `60d9120` | Wordmark and monogram |
+| `04e11c8` | The type and spacing scales, the emblems, and three components |
+| `0a96dfc` | A shell, a nav graph, and four screens web already had |
+| `4f23517` | The long transits, as spans rather than dates |
+| `050844c` | The week, in the culture's own institution |
+| `36581e5` | The season and the year |
 
 **Launcher icons.** Six adaptive icons generated from the design-system marks by
 `web/scripts/gen-android-launchers.mjs`, each mark rasterised and measured
@@ -90,11 +95,31 @@ parameter, because the monogram is two inks and a tint would flatten them.
 
 Screenshots: `docs/design/screenshots/phase4`, `phase5`, `phase6`.
 
+**The second wave: the surfaces stop disagreeing.** Android carried its own
+type and spacing scales that happened to resemble the system's, four screens
+against web's twenty-six, no bar, and no emblem. `04e11c8` puts Type.kt and
+Spacing.kt on the tokens, generates the five tier-2 emblems as ImageVectors
+through `gen-android-emblems.mjs`, and adds ActionButton, Badge and a real
+DataRow. `0a96dfc` replaces the four-branch phase machine with a container,
+a nav graph and a shell, then adds the voices, one culture's doorway, the
+matrix and the placements table. `4f23517`, `050844c` and `36581e5` port the
+transit spans, the week and the sky-event finders, so the long transits and
+all four horizons exist.
+
+**The reading corpus is generated, not retyped.** The fifty deity charges and
+the twenty-five rulings reach Kotlin through
+`web/scripts/gen-android-reading-banks.mjs`, reading
+`web/src/data/deityCharges.ts` and `aspectFrames.ts`. The same figure prints
+the same sentence on both surfaces, and a change to the prose lands on both
+from one edit.
+
+Screenshots: `docs/design/screenshots/phase9`.
+
 ## Verified
 
 Web: `npm run typecheck`, `npm run lint`, `npm run gates` and `npm run build`
-pass after every wave, the second included. Android: `./gradlew compileDebugSources` and `./gradlew testDebugUnitTest`
-pass. `node scripts/check-svgs.mjs docs/design/system` passes on all 75 files.
+pass after every wave, the second included. Android: `./gradlew assembleDebug` and `./gradlew testDebugUnitTest` pass,
+39 tests, five of them new ViewModel tests running against fakes. `node scripts/check-svgs.mjs docs/design/system` passes on all 75 files.
 The launcher icons and the glyphs were checked on a Pixel emulator, not inferred
 from a green build.
 
@@ -150,6 +175,26 @@ now mono, which is what the Button spec asks for.
 the launcher; both icon generators cut it from `ts-omega.svg`. The reasoning
 is recorded in `docs/design/canvas-1a/DECISIONS.md`.
 
+**The wheel's ten colours were the previous identity's.** The Compose natal
+wheel painted each body a bright hue, five of them outside the palette
+entirely, which broke the rule that separates by form and confirms by hue and
+gave a colour-deficient reader nothing. It now draws the culture's own deity
+glyphs, which differ by drawing hand, with the received three in the accent
+and a quiet ring besides.
+
+**Android took a container rather than Hilt.** The rollout plan names Hilt
+and asks for a reason otherwise. The reason is size: the graph is four
+objects with no scoping beyond the process, and what the plan actually asks
+for is ViewModels that stop taking a Context per method and can be tested
+with fakes. Repository interfaces and one factory deliver that with no
+annotation processor to keep in step with Kotlin and AGP. A second entry
+point or a real scope makes Hilt right, and this is small to replace.
+
+**A doorway scopes the whole page to its culture.** Reading about Rome
+through Egypt's accent puts two accents on one screen, which the system
+forbids, so `VoiceScreen` swaps the theme for its own length, exactly as
+`VoiceScope` does on web.
+
 ## Left for people, not code
 
 **The weighted cut for the three typeset signs.** The design notes record that
@@ -168,9 +213,21 @@ got rather than a thing to be drawn. Tanit ships meanwhile, in her outline cut.
 a `display-xs` step or move to mono is a design call; the sweep left them
 literal so the decision is not made by a script.
 
-**The Android surface has no counterpart to the second wave.** Its type and
-spacing still come from the app's own theme, and the emblems, Button and
-Badge have no Compose equivalents yet.
+**Android still lacks nine of web's routes.** The seven learn pages, the
+wait list, sign-in and the account are not built, and there is no auth on
+this surface to build the last two against. The placement reading, synastry
+and the forecast are web-only too. Android now has twelve screens against
+web's twenty-six.
+
+**The week's ingress line is not ported.** Web falls back to an ingress
+sentence when no aspect is in orb before it falls back to the quiet line;
+Android goes straight to quiet. The ingress verbs and frames are a separate
+bank, and the day is honest either way, so this is a gap rather than a bug.
+
+**Android's traced masks and epigraphic signs.** IconTile is a web component.
+The three traced PNGs would need a drawable each, and the four epigraphic
+faces are not in `res/font`, so the Ugaritic and hieroglyph figures on the
+doorways have no Android counterpart.
 
 **The Spectral SC display decision.** The small-caps treatment on the four
 non-Roman surfaces is still a prototype in `globals.css` and was not promoted
