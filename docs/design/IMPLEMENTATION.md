@@ -77,6 +77,11 @@ Screenshots: `docs/design/screenshots/phase7`, `phase8`.
 | `4f23517` | The long transits, as spans rather than dates |
 | `050844c` | The week, in the culture's own institution |
 | `36581e5` | The season and the year |
+| `d4381ad` | The traced masks, the outlined signs, the week's ingress line |
+| `6ecba33` | A reading for every standing placement |
+| `c4ec1ca` | The seven Learn sections |
+| `9219b0e` | The forecast, casting again, and an offline birthplace picker |
+| `e0aff05` | Synastry |
 
 **Launcher icons.** Six adaptive icons generated from the design-system marks by
 `web/scripts/gen-android-launchers.mjs`, each mark rasterised and measured
@@ -115,11 +120,28 @@ from one edit.
 
 Screenshots: `docs/design/screenshots/phase9`.
 
+**The third wave: the gap closed.** Android went from four screens to
+eighteen. The traced masks ship as alpha drawables tinted at the call site,
+and the three encoded signs as outlines, because this surface gets outlines
+and not fonts. Every standing placement has a reading. The seven Learn
+sections are read out of the web pages themselves by `gen-android-learn.mjs`,
+so the explainer prose lives once. The forecast reads the year against one
+chart, with a computed solar return. Synastry compares the saved chart with a
+second party entered for the reading and never stored.
+
+**Four generators keep the two surfaces on one corpus.**
+`gen-android-emblems.mjs` carries the marks, `gen-android-reading-banks.mjs`
+the fifty charges and the thirty rulings, `gen-android-learn.mjs` the
+explainer prose and its reference tables, and `gen-android-cities.mjs` the
+birthplace list. Nothing in that corpus is retyped, so neither surface can
+drift from the other by a sentence.
+
 ## Verified
 
 Web: `npm run typecheck`, `npm run lint`, `npm run gates` and `npm run build`
 pass after every wave, the second included. Android: `./gradlew assembleDebug` and `./gradlew testDebugUnitTest` pass,
-39 tests, five of them new ViewModel tests running against fakes. `node scripts/check-svgs.mjs docs/design/system` passes on all 75 files.
+40 tests, six of them ViewModel tests running against fakes. Eighteen screens
+were walked on a Pixel 9 emulator with the network unreachable. `node scripts/check-svgs.mjs docs/design/system` passes on all 75 files.
 The launcher icons and the glyphs were checked on a Pixel emulator, not inferred
 from a green build.
 
@@ -195,6 +217,21 @@ through Egypt's accent puts two accents on one screen, which the system
 forbids, so `VoiceScreen` swaps the theme for its own length, exactly as
 `VoiceScope` does on web.
 
+**Three defects were found by building the screens, not by reading the
+code.** The navigation restored state on every push, so a second Learn
+section, a second placement or a second doorway never opened: moving between
+sections and moving into something are different operations now. Entering a
+voice from its doorway called the first run's culture setter and dropped the
+reader into the birth form, which a test now guards. The birth form had only
+the platform Geocoder, so a reader offline could not finish the first run at
+all; it now leads with the packaged city list.
+
+**The zodiac notation needed a fourth face.** None of the three product faces
+carries those codepoints, so Android's font chain fell through to the colour
+emoji font and painted them as orange pictographs. Noto Sans Symbols ships in
+`res/font` under the design system's own `--font-symbols` token. Notation
+only, never copy.
+
 ## Left for people, not code
 
 **The weighted cut for the three typeset signs.** The design notes record that
@@ -213,21 +250,23 @@ got rather than a thing to be drawn. Tanit ships meanwhile, in her outline cut.
 a `display-xs` step or move to mono is a design call; the sweep left them
 literal so the decision is not made by a script.
 
-**Android still lacks nine of web's routes.** The seven learn pages, the
-wait list, sign-in and the account are not built, and there is no auth on
-this surface to build the last two against. The placement reading, synastry
-and the forecast are web-only too. Android now has twelve screens against
-web's twenty-six.
+**The account, sign-in and wait-list routes need a server, not a screen.**
+Web talks to `/api/auth/*`, `/api/charts` and `/api/wait-list` from the same
+origin. Android would need a base URL, a session store and a cookie client,
+and the rollout plan calls sync with the web account "a real feature
+decision, not a parity gap". Three of web's twenty-six routes are therefore
+deliberately absent, and they are the three that do nothing without an
+account.
 
-**The week's ingress line is not ported.** Web falls back to an ingress
-sentence when no aspect is in orb before it falls back to the quiet line;
-Android goes straight to quiet. The ingress verbs and frames are a separate
-bank, and the day is honest either way, so this is a gap rather than a bug.
+**Android keeps one birth record where web keeps many.** That is why casting
+a chart replaces the one on the device, and why synastry enters the second
+party rather than choosing a saved one. Multiple charts mean a Room migration
+and a chart list, which is a feature rather than a port.
 
-**Android's traced masks and epigraphic signs.** IconTile is a web component.
-The three traced PNGs would need a drawable each, and the four epigraphic
-faces are not in `res/font`, so the Ugaritic and hieroglyph figures on the
-doorways have no Android counterpart.
+**The Learn hub's sample wheel did not cross.** It is the one block the
+extractor deliberately leaves behind: the day screen already draws a wheel
+from a real chart, so a fixed illustration of one would be the weaker of the
+two on a phone.
 
 **The Spectral SC display decision.** The small-caps treatment on the four
 non-Roman surfaces is still a prototype in `globals.css` and was not promoted
