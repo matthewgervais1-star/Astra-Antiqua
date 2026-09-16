@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getCurrentUser } from "@/lib/auth/users";
+import { getCurrentUser } from "@/lib/auth/currentUser";
 import { listChartsForUser } from "@/lib/auth/charts";
 import { assertSameOrigin } from "@/lib/auth/origin";
 
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
   if (!user) {
     return NextResponse.json({ ok: false, error: "Not signed in." }, { status: 401 });
   }
-  const charts = listChartsForUser(user.id);
+  const charts = await listChartsForUser(user.id);
   const payload = {
     exportedAt: new Date().toISOString(),
     user: {

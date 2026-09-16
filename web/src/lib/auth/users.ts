@@ -1,6 +1,5 @@
 import bcrypt from "bcryptjs";
-import { getDb } from "@/lib/auth/db";
-import { readSession } from "@/lib/auth/session";
+import { execute, queryOne } from "@/lib/auth/db";
 
 export interface User {
   id: string;
@@ -51,18 +50,23 @@ export async function createUser(input: CreateUserInput): Promise<User> {
   if (input.password.length < 8) {
     throw new AuthError("Password must be at least eight characters.");
   }
-  const db = getDb();
-  const existing = db.prepare("SELECT id FROM users WHERE email = ?").get(email);
-  if (existing) {
-    throw new AuthError("An account with this email already exists.");
-  }
   const passwordHash = await bcrypt.hash(input.password, 11);
   const id = generateId();
   const now = Date.now();
-  db.prepare(
+  // Checking for the address and then inserting it leaves a gap two concurrent
+  // signups can both pass through. The UNIQUE index is the thing that actually
+  // decides, so let it: ON CONFLICT means the loser of that race writes
+  // nothing and gets the same message as anyone else who is already
+  // registered, rather than a 500 from a constraint violation.
+  const inserted = await execute(
     `INSERT INTO users (id, email, password_hash, display_name, created_at)
-     VALUES (?, ?, ?, ?, ?)`,
-  ).run(id, email, passwordHash, input.displayName ?? null, now);
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO NOTHING`,
+    [id, email, passwordHash, input.displayName ?? null, now],
+  );
+  if (inserted === 0) {
+    throw new AuthError("An account with this email already exists.");
+  }
   return { id, email, displayName: input.displayName ?? null, createdAt: now };
 }
 
@@ -71,10 +75,7 @@ export async function authenticateUser(
   password: string,
 ): Promise<User> {
   const normalized = normalizeEmail(email);
-  const db = getDb();
-  const row = db
-    .prepare("SELECT * FROM users WHERE email = ?")
-    .get(normalized) as UserRow | undefined;
+  const row = await queryOne<UserRow>("SELECT * FROM users WHERE email = $1", [normalized]);
   if (!row) {
     // Run a dummy hash to keep response time constant.
     await bcrypt.compare(password, "$2a$11$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY");
@@ -87,16 +88,9 @@ export async function authenticateUser(
   return rowToUser(row);
 }
 
-export function getUserById(id: string): User | null {
-  const db = getDb();
-  const row = db.prepare("SELECT * FROM users WHERE id = ?").get(id) as UserRow | undefined;
+export async function getUserById(id: string): Promise<User | null> {
+  const row = await queryOne<UserRow>("SELECT * FROM users WHERE id = $1", [id]);
   return row ? rowToUser(row) : null;
-}
-
-export async function getCurrentUser(): Promise<User | null> {
-  const session = await readSession();
-  if (!session) return null;
-  return getUserById(session.sub);
 }
 
 export class AuthError extends Error {

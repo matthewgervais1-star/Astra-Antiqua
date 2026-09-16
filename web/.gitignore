@@ -40,10 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# wait-list data store (local dev only)
+# Left over from before the move to Postgres. Nothing reads these now; they
+# stay ignored so an old working copy does not commit its accounts.
 /data/wait-list.json
-
-# auth + charts SQLite (local dev only; production uses Postgres)
 /data/astra-antiqua.sqlite
 /data/astra-antiqua.sqlite-journal
 /data/astra-antiqua.sqlite-shm

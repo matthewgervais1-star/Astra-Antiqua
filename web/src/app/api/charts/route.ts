@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getCurrentUser } from "@/lib/auth/users";
+import { getCurrentUser } from "@/lib/auth/currentUser";
 import { listChartsForUser, upsertChartForUser } from "@/lib/auth/charts";
 import { assertSameOrigin } from "@/lib/auth/origin";
 
@@ -26,7 +26,7 @@ export async function GET() {
   if (!user) {
     return NextResponse.json({ ok: false, error: "Not signed in." }, { status: 401 });
   }
-  const charts = listChartsForUser(user.id);
+  const charts = await listChartsForUser(user.id);
   return NextResponse.json({ ok: true, charts });
 }
 
@@ -52,6 +52,6 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const saved = upsertChartForUser(user.id, parsed.data);
+  const saved = await upsertChartForUser(user.id, parsed.data);
   return NextResponse.json({ ok: true, chart: saved });
 }

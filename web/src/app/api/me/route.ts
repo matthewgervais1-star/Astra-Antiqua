@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { getCurrentUser, AuthError } from "@/lib/auth/users";
-import { getDb } from "@/lib/auth/db";
+import { AuthError } from "@/lib/auth/users";
+import { getCurrentUser } from "@/lib/auth/currentUser";
+import { execute, queryOne } from "@/lib/auth/db";
 import { assertSameOrigin } from "@/lib/auth/origin";
 import {
   clientIdentifier,
@@ -60,12 +61,12 @@ export async function PATCH(request: Request) {
     );
   }
 
-  const db = getDb();
   try {
     if (parsed.data.newPassword && parsed.data.currentPassword) {
-      const row = db
-        .prepare("SELECT password_hash FROM users WHERE id = ?")
-        .get(user.id) as { password_hash: string } | undefined;
+      const row = await queryOne<{ password_hash: string }>(
+        "SELECT password_hash FROM users WHERE id = $1",
+        [user.id],
+      );
       if (!row) {
         throw new AuthError("Account not found.");
       }
@@ -81,17 +82,19 @@ export async function PATCH(request: Request) {
         throw new AuthError("Current password is incorrect.");
       }
       const hash = await bcrypt.hash(parsed.data.newPassword, 11);
-      db.prepare("UPDATE users SET password_hash = ? WHERE id = ?").run(hash, user.id);
+      await execute("UPDATE users SET password_hash = $1 WHERE id = $2", [hash, user.id]);
     }
     if (parsed.data.displayName !== undefined) {
-      db.prepare("UPDATE users SET display_name = ? WHERE id = ?").run(
+      await execute("UPDATE users SET display_name = $1 WHERE id = $2", [
         parsed.data.displayName || null,
         user.id,
-      );
+      ]);
     }
-    const refreshed = db.prepare("SELECT id, email, display_name FROM users WHERE id = ?").get(user.id) as
-      | { id: string; email: string; display_name: string | null }
-      | undefined;
+    const refreshed = await queryOne<{
+      id: string;
+      email: string;
+      display_name: string | null;
+    }>("SELECT id, email, display_name FROM users WHERE id = $1", [user.id]);
     return NextResponse.json({
       ok: true,
       user: refreshed
@@ -119,9 +122,8 @@ export async function DELETE(request: Request) {
   if (!user) {
     return NextResponse.json({ ok: false, error: "Not signed in." }, { status: 401 });
   }
-  const db = getDb();
   // FK ON DELETE CASCADE removes the user's charts automatically.
-  db.prepare("DELETE FROM users WHERE id = ?").run(user.id);
+  await execute("DELETE FROM users WHERE id = $1", [user.id]);
   // Also clear the session cookie so the client signs out.
   const { clearSessionCookie } = await import("@/lib/auth/session");
   await clearSessionCookie();

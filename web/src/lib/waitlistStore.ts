@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { query, queryOne } from "@/lib/auth/db";
 import type { WaitListEntry } from "@/lib/waitlistSchema";
 
 export interface AppendResult {
@@ -88,6 +89,48 @@ function fileBackedStore(absoluteFilePath: string): WaitListStore {
   };
 }
 
+/**
+ * The durable store, and the only one a deploy should ever use.
+ *
+ * The roll is a table rather than a file for the same reason accounts are: a
+ * serverless filesystem is per-invocation, so a file-backed roll loses every
+ * signup it takes. The email is the primary key, which makes a repeat
+ * submission a no-op at the database rather than a scan for a match.
+ */
+function postgresStore(): WaitListStore {
+  return {
+    async append(entry) {
+      const email = entry.email.trim().toLowerCase();
+      const inserted = await query<{ email: string }>(
+        `INSERT INTO wait_list (email, entry, created_at)
+         VALUES ($1, $2, $3)
+         ON CONFLICT (email) DO NOTHING
+         RETURNING email`,
+        [email, JSON.stringify(entry), Date.now()],
+      );
+      // Position counts everyone who joined no later than this address did, so
+      // a repeat submission is told the place it already holds rather than a
+      // new one at the end of the roll.
+      const row = await queryOne<{ position: number }>(
+        `SELECT COUNT(*)::int AS position FROM wait_list
+         WHERE created_at <= (SELECT created_at FROM wait_list WHERE email = $1)`,
+        [email],
+      );
+      return {
+        persisted: true,
+        duplicate: inserted.length === 0,
+        position: row?.position ?? 1,
+      };
+    },
+    async count() {
+      const row = await queryOne<{ total: number }>(
+        "SELECT COUNT(*)::int AS total FROM wait_list",
+      );
+      return row?.total ?? 0;
+    },
+  };
+}
+
 export function getWaitListStore(): WaitListStore {
   const override = process.env.WAITLIST_STORE;
   if (override === "noop") {
@@ -99,9 +142,13 @@ export function getWaitListStore(): WaitListStore {
     return fileBackedStore(path.resolve(overridePath));
   }
 
+  if (process.env.DATABASE_URL) {
+    return postgresStore();
+  }
+
   if (process.env.VERCEL === "1") {
     return loggedNoOpStore(
-      "Running on Vercel serverless without WAITLIST_FILE configured (filesystem is ephemeral)",
+      "Running on Vercel serverless without DATABASE_URL configured (the filesystem is ephemeral)",
     );
   }
 

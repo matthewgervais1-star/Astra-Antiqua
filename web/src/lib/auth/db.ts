@@ -1,65 +1,179 @@
-import path from "node:path";
-import fs from "node:fs";
-import Database from "better-sqlite3";
+import { Pool, types, type PoolClient, type QueryResultRow } from "pg";
 
-let cachedDb: Database.Database | null = null;
+/**
+ * The auth + charts store, on Postgres.
+ *
+ * This was a local SQLite file, which cannot survive a serverless deploy: each
+ * invocation gets its own filesystem, so a signup written by one request is
+ * gone by the next. Postgres is a connection rather than a file, so every
+ * instance reads the same rows.
+ *
+ * One consequence runs through the rest of the auth code: SQLite's driver was
+ * synchronous and this one is not, so every read and write here returns a
+ * promise and every caller awaits it.
+ */
 
-function resolveDbPath(): string {
-  const override = process.env.AUTH_DB_PATH;
-  if (override && override.length > 0) return path.resolve(override);
-  return path.join(process.cwd(), "data", "astra-antiqua.sqlite");
-}
+/**
+ * Postgres returns BIGINT as a string, because its range is wider than a JS
+ * number. Both bigint columns here hold epoch milliseconds, which stay inside
+ * the safe-integer range until the year 287396, so parsing them to numbers
+ * keeps `created_at` the number the rest of the code already expects.
+ */
+types.setTypeParser(types.builtins.INT8, (value) => Number(value));
 
-function ensureDirectory(filePath: string): void {
-  const dir = path.dirname(filePath);
-  fs.mkdirSync(dir, { recursive: true });
-}
+let cachedPool: Pool | null = null;
+let schemaReady: Promise<void> | null = null;
 
-function migrate(db: Database.Database): void {
-  db.exec(`
-    PRAGMA journal_mode = WAL;
-    PRAGMA foreign_keys = ON;
-
-    CREATE TABLE IF NOT EXISTS users (
-      id TEXT PRIMARY KEY,
-      email TEXT UNIQUE NOT NULL,
-      password_hash TEXT NOT NULL,
-      display_name TEXT,
-      created_at INTEGER NOT NULL
+function connectionString(): string {
+  const url = process.env.DATABASE_URL;
+  if (!url || url.length === 0) {
+    throw new Error(
+      "DATABASE_URL is not set. The app stores accounts and charts in Postgres; " +
+        "point this at a database (Neon, Supabase, or any Postgres) before starting.",
     );
-
-    CREATE TABLE IF NOT EXISTS charts (
-      id TEXT PRIMARY KEY,
-      user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-      name TEXT NOT NULL,
-      relationship TEXT NOT NULL,
-      date TEXT NOT NULL,
-      time TEXT NOT NULL,
-      city_label TEXT NOT NULL,
-      latitude REAL NOT NULL,
-      longitude REAL NOT NULL,
-      is_primary INTEGER NOT NULL DEFAULT 0,
-      created_at INTEGER NOT NULL
-    );
-
-    CREATE INDEX IF NOT EXISTS charts_user_id_idx ON charts (user_id);
-  `);
+  }
+  return url;
 }
 
 /**
- * Returns a process-wide SQLite handle for the auth + charts database. Lazy
- * initialization, with PRAGMA + schema migration on first open.
+ * A pool rather than a client, and a module-level one rather than a per-request
+ * one. A warm serverless instance serves many requests, and each would
+ * otherwise pay a fresh TCP and TLS handshake.
  *
- * Production note: this is a local SQLite file and will not persist across
- * Vercel serverless invocations. For production, swap to a Postgres-backed
- * implementation (Neon, Supabase, Vercel Postgres) by replacing this file.
+ * Keep `max` small. The ceiling that matters is the database's, and it is
+ * shared across every instance the platform decides to run, so a generous
+ * per-instance pool is how a deploy exhausts its connection limit under load.
+ * Against Neon, prefer the pooled (`-pooler`) host, which fronts this with
+ * PgBouncer.
  */
-export function getDb(): Database.Database {
-  if (cachedDb) return cachedDb;
-  const file = resolveDbPath();
-  ensureDirectory(file);
-  const db = new Database(file);
-  migrate(db);
-  cachedDb = db;
-  return db;
+export function getPool(): Pool {
+  if (cachedPool) return cachedPool;
+  cachedPool = new Pool({
+    connectionString: connectionString(),
+    max: 3,
+    idleTimeoutMillis: 30_000,
+    connectionTimeoutMillis: 10_000,
+  });
+  // A dead backend must not take the process with it. Without this listener an
+  // idle client erroring out is an unhandled 'error' event, which is fatal.
+  cachedPool.on("error", (err) => {
+    console.error("[db] idle client error", err);
+  });
+  return cachedPool;
+}
+
+const SCHEMA = `
+  CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    display_name TEXT,
+    created_at BIGINT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS charts (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    relationship TEXT NOT NULL,
+    date TEXT NOT NULL,
+    time TEXT NOT NULL,
+    city_label TEXT NOT NULL,
+    latitude DOUBLE PRECISION NOT NULL,
+    longitude DOUBLE PRECISION NOT NULL,
+    is_primary BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at BIGINT NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS charts_user_id_idx ON charts (user_id);
+
+  CREATE TABLE IF NOT EXISTS wait_list (
+    email TEXT PRIMARY KEY,
+    entry JSONB NOT NULL,
+    created_at BIGINT NOT NULL
+  );
+`;
+
+/** Any constant will do; it only has to be the same number in every instance. */
+const SCHEMA_LOCK_KEY = 8_314_207;
+
+/**
+ * Creates the tables if they are not there yet, once per process.
+ *
+ * `CREATE TABLE IF NOT EXISTS` is idempotent but not concurrency-safe: two cold
+ * starts hitting an empty database at the same moment can deadlock against each
+ * other in the system catalogs. The advisory lock makes them take turns, so a
+ * deploy that wakes several instances at once still ends with one schema and no
+ * failed requests.
+ */
+export function ensureSchema(): Promise<void> {
+  if (schemaReady) return schemaReady;
+  schemaReady = (async () => {
+    const client = await getPool().connect();
+    try {
+      await client.query("SELECT pg_advisory_lock($1)", [SCHEMA_LOCK_KEY]);
+      try {
+        await client.query(SCHEMA);
+      } finally {
+        await client.query("SELECT pg_advisory_unlock($1)", [SCHEMA_LOCK_KEY]);
+      }
+    } catch (err) {
+      // A failed attempt must not be cached as success, or the process spends
+      // the rest of its life querying tables that were never created.
+      schemaReady = null;
+      throw err;
+    } finally {
+      client.release();
+    }
+  })();
+  return schemaReady;
+}
+
+/** Every row a statement returned. */
+export async function query<T extends QueryResultRow>(
+  text: string,
+  params: unknown[] = [],
+): Promise<T[]> {
+  await ensureSchema();
+  const result = await getPool().query<T>(text, params);
+  return result.rows;
+}
+
+/** The first row, or null. For lookups by a key that is unique. */
+export async function queryOne<T extends QueryResultRow>(
+  text: string,
+  params: unknown[] = [],
+): Promise<T | null> {
+  const rows = await query<T>(text, params);
+  return rows[0] ?? null;
+}
+
+/** How many rows a write touched. */
+export async function execute(text: string, params: unknown[] = []): Promise<number> {
+  await ensureSchema();
+  const result = await getPool().query(text, params);
+  return result.rowCount ?? 0;
+}
+
+/**
+ * Runs `fn` inside a transaction on one client, rolling back if it throws.
+ *
+ * The chart writes need this: deciding which chart is primary is a read and
+ * then a write, and two requests interleaving there leave an account with two
+ * primary charts or none.
+ */
+export async function transaction<T>(fn: (client: PoolClient) => Promise<T>): Promise<T> {
+  await ensureSchema();
+  const client = await getPool().connect();
+  try {
+    await client.query("BEGIN");
+    const result = await fn(client);
+    await client.query("COMMIT");
+    return result;
+  } catch (err) {
+    await client.query("ROLLBACK").catch(() => undefined);
+    throw err;
+  } finally {
+    client.release();
+  }
 }

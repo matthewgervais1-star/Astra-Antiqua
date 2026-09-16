@@ -19,7 +19,8 @@ function getSecret(): Uint8Array {
         "AUTH_SECRET is required in production and must be at least 16 characters. Set it in your environment before deploying.",
       );
     }
-    // Dev fallback. Warned once at process start in db.ts so the noise is bounded.
+    // Dev fallback, reachable only outside production: the branch above throws
+    // there rather than signing sessions with a constant anyone can read.
     return new TextEncoder().encode("astra-antiqua-dev-secret-please-override-in-prod");
   }
   return new TextEncoder().encode(raw);

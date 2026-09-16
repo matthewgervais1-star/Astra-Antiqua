@@ -50,9 +50,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  // better-sqlite3 has native bindings and cannot be bundled by the build;
-  // mark it as an external server package so Next does not try to webpack it.
-  serverExternalPackages: ["better-sqlite3"],
+  // pg opens TCP sockets and resolves its own optional native extras at
+  // runtime; mark it external so the build leaves it alone rather than
+  // webpacking it into the server bundle.
+  serverExternalPackages: ["pg"],
   // The rebrand reorganized the route map. Every old path keeps working.
   // The pantheon journeys split: the overview became a voice doorway, and
   // the per-culture horizon pages became the shared horizons carrying a
