@@ -1,20 +1,28 @@
-import { queryOne, query, transaction } from "@/lib/auth/db";
-import type {
-  ChartRelationship,
-  SavedChartInputs,
-} from "@/lib/savedCharts";
+import { execute, queryOne } from "@/lib/auth/db";
+import type { SavedChartInputs } from "@/lib/savedCharts";
+
+/**
+ * The reader's own chart, on the server.
+ *
+ * One row per account, enforced by a unique index on user_id rather than by
+ * this code remembering to check. The server never holds a chart about anyone
+ * but the account holder: comparing against a second party is computed in the
+ * browser and never sent here. See src/lib/savedCharts.ts for why.
+ *
+ * Everything that used to live in this file, the primary-chart juggling and
+ * the transactions that kept exactly one chart marked primary, went with the
+ * list. With one chart there is no primary to elect.
+ */
 
 interface ChartRow {
   id: string;
   user_id: string;
   name: string;
-  relationship: string;
   date: string;
   time: string;
   city_label: string;
   latitude: number;
   longitude: number;
-  is_primary: boolean;
   created_at: number;
 }
 
@@ -22,13 +30,11 @@ function rowToInputs(row: ChartRow): SavedChartInputs {
   return {
     id: row.id,
     name: row.name,
-    relationship: row.relationship as ChartRelationship,
     date: row.date,
     time: row.time,
     cityLabel: row.city_label,
     latitude: row.latitude,
     longitude: row.longitude,
-    primary: row.is_primary,
     createdAt: new Date(row.created_at).toISOString(),
   };
 }
@@ -40,183 +46,62 @@ function generateId(): string {
   return `chart-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-export async function listChartsForUser(userId: string): Promise<SavedChartInputs[]> {
-  const rows = await query<ChartRow>(
-    "SELECT * FROM charts WHERE user_id = $1 ORDER BY is_primary DESC, created_at ASC",
-    [userId],
-  );
-  return rows.map(rowToInputs);
-}
-
-export async function getChartForUser(
-  userId: string,
-  chartId: string,
-): Promise<SavedChartInputs | null> {
-  const row = await queryOne<ChartRow>(
-    "SELECT * FROM charts WHERE user_id = $1 AND id = $2",
-    [userId, chartId],
-  );
+export async function getChartForUser(userId: string): Promise<SavedChartInputs | null> {
+  const row = await queryOne<ChartRow>("SELECT * FROM charts WHERE user_id = $1", [userId]);
   return row ? rowToInputs(row) : null;
 }
 
-export interface UpsertChartArgs {
-  id?: string;
+export interface SaveChartArgs {
   name: string;
-  relationship: ChartRelationship;
   date: string;
   time: string;
   cityLabel: string;
   latitude: number;
   longitude: number;
-  primary?: boolean;
 }
 
-export async function upsertChartForUser(
+/**
+ * Records the account holder's chart, replacing any previous one.
+ *
+ * ON CONFLICT (user_id) is what makes "one chart per account" true rather
+ * than intended. Two tabs saving at once leave one row either way.
+ */
+export async function saveChartForUser(
   userId: string,
-  args: UpsertChartArgs,
+  args: SaveChartArgs,
 ): Promise<SavedChartInputs> {
-  const id = args.id ?? generateId();
-  return transaction(async (client) => {
-    // Read the existing row inside the transaction, not before it. Deciding
-    // which chart is primary depends on what the others are, so the read and
-    // the writes have to see the same snapshot.
-    const existing = (
-      await client.query<ChartRow>(
-        "SELECT * FROM charts WHERE user_id = $1 AND id = $2 FOR UPDATE",
-        [userId, id],
-      )
-    ).rows[0];
-    const wantsPrimary = args.primary ?? existing?.is_primary ?? false;
-    const createdAt = existing ? existing.created_at : Date.now();
-
-    if (wantsPrimary) {
-      await client.query(
-        "UPDATE charts SET is_primary = FALSE WHERE user_id = $1 AND id <> $2",
-        [userId, id],
-      );
-    }
-
-    if (existing) {
-      await client.query(
-        `UPDATE charts SET
-           name = $1,
-           relationship = $2,
-           date = $3,
-           time = $4,
-           city_label = $5,
-           latitude = $6,
-           longitude = $7,
-           is_primary = $8
-         WHERE user_id = $9 AND id = $10`,
-        [
-          args.name,
-          args.relationship,
-          args.date,
-          args.time,
-          args.cityLabel,
-          args.latitude,
-          args.longitude,
-          wantsPrimary,
-          userId,
-          id,
-        ],
-      );
-    } else {
-      await client.query(
-        `INSERT INTO charts (id, user_id, name, relationship, date, time, city_label, latitude, longitude, is_primary, created_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-        [
-          id,
-          userId,
-          args.name,
-          args.relationship,
-          args.date,
-          args.time,
-          args.cityLabel,
-          args.latitude,
-          args.longitude,
-          wantsPrimary,
-          createdAt,
-        ],
-      );
-    }
-
-    // If no chart is primary at this point, make this one primary.
-    const anyPrimary = (
-      await client.query(
-        "SELECT id FROM charts WHERE user_id = $1 AND is_primary LIMIT 1",
-        [userId],
-      )
-    ).rows[0];
-    if (!anyPrimary) {
-      await client.query(
-        "UPDATE charts SET is_primary = TRUE WHERE user_id = $1 AND id = $2",
-        [userId, id],
-      );
-    }
-
-    const row = (
-      await client.query<ChartRow>(
-        "SELECT * FROM charts WHERE user_id = $1 AND id = $2",
-        [userId, id],
-      )
-    ).rows[0];
-    if (!row) {
-      // Unreachable: the row was written a few statements ago on this same
-      // client, inside this same transaction. Saying so out loud beats casting
-      // the type away and returning a chart built from undefined.
-      throw new Error(`Chart ${id} vanished during its own write.`);
-    }
-    return rowToInputs(row);
-  });
+  const row = await queryOne<ChartRow>(
+    `INSERT INTO charts (id, user_id, name, date, time, city_label, latitude, longitude, created_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+     ON CONFLICT (user_id) DO UPDATE SET
+       name = EXCLUDED.name,
+       date = EXCLUDED.date,
+       time = EXCLUDED.time,
+       city_label = EXCLUDED.city_label,
+       latitude = EXCLUDED.latitude,
+       longitude = EXCLUDED.longitude
+     RETURNING *`,
+    [
+      generateId(),
+      userId,
+      args.name,
+      args.date,
+      args.time,
+      args.cityLabel,
+      args.latitude,
+      args.longitude,
+      Date.now(),
+    ],
+  );
+  if (!row) {
+    // Unreachable: RETURNING on an upsert always yields the row it wrote.
+    throw new Error(`Chart for ${userId} vanished during its own write.`);
+  }
+  return rowToInputs(row);
 }
 
-export async function deleteChartForUser(userId: string, chartId: string): Promise<boolean> {
-  return transaction(async (client) => {
-    const deleted = await client.query(
-      "DELETE FROM charts WHERE user_id = $1 AND id = $2",
-      [userId, chartId],
-    );
-    if ((deleted.rowCount ?? 0) === 0) return false;
-    // Ensure at least one chart is primary if any remain.
-    const anyPrimary = (
-      await client.query(
-        "SELECT id FROM charts WHERE user_id = $1 AND is_primary LIMIT 1",
-        [userId],
-      )
-    ).rows[0];
-    if (!anyPrimary) {
-      const first = (
-        await client.query<{ id: string }>(
-          "SELECT id FROM charts WHERE user_id = $1 ORDER BY created_at ASC LIMIT 1",
-          [userId],
-        )
-      ).rows[0];
-      if (first) {
-        await client.query("UPDATE charts SET is_primary = TRUE WHERE id = $1", [first.id]);
-      }
-    }
-    return true;
-  });
-}
-
-export async function setPrimaryChartForUser(
-  userId: string,
-  chartId: string,
-): Promise<boolean> {
-  return transaction(async (client) => {
-    const exists = (
-      await client.query("SELECT 1 FROM charts WHERE user_id = $1 AND id = $2", [
-        userId,
-        chartId,
-      ])
-    ).rows[0];
-    if (!exists) return false;
-    await client.query("UPDATE charts SET is_primary = FALSE WHERE user_id = $1", [userId]);
-    await client.query(
-      "UPDATE charts SET is_primary = TRUE WHERE user_id = $1 AND id = $2",
-      [userId, chartId],
-    );
-    return true;
-  });
+/** Returns false when there was nothing to delete. */
+export async function deleteChartForUser(userId: string): Promise<boolean> {
+  const removed = await execute("DELETE FROM charts WHERE user_id = $1", [userId]);
+  return removed > 0;
 }

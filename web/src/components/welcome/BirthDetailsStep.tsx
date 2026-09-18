@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { geocodePlace, GeocodeError, type GeocodeResult } from "@/lib/geocoding";
-import { upsertChart } from "@/lib/savedCharts";
+import { writeChart } from "@/lib/savedCharts";
 import { Button } from "@/components/chrome/Button";
 
 const GEOCODE_DEBOUNCE_MS = 350;
@@ -20,7 +20,7 @@ interface SelectedPlace {
 
 /**
  * Step II of the welcome funnel: an optional, collapsible birth-details
- * form. Submitting saves a primary "Me" chart via savedCharts.upsertChart so
+ * form. Submitting saves the reader's own chart via savedCharts.writeChart so
  * the reading surfaces have a natal profile to read against; skipping just
  * collapses the disclosure. Neither path blocks the funnel forward.
  */
@@ -97,15 +97,13 @@ export function BirthDetailsStep() {
       setFormError("Pick a birthplace from the list.");
       return;
     }
-    upsertChart({
+    writeChart({
       name: "Me",
-      relationship: "self",
       date,
       time,
       cityLabel: selected.label,
       latitude: selected.latitude,
       longitude: selected.longitude,
-      primary: true,
     });
     setSaved(true);
   };

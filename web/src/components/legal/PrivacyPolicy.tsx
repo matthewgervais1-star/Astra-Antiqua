@@ -57,7 +57,6 @@ export function PrivacyPolicy({
       .replaceAll("{effective}", facts.effectiveDate)
       .replaceAll("{updated}", facts.lastUpdated)
       .replaceAll("{dormantMonths}", String(facts.dormantAccountMonths))
-      .replaceAll("{thirdPartyMonths}", String(facts.thirdPartyChartMonths))
       .replaceAll("{backupDays}", String(facts.backupRetentionDays));
 
   const outside = storedOutsideQuebec(facts);

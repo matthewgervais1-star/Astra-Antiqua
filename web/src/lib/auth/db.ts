@@ -71,21 +71,21 @@ const SCHEMA = `
     created_at BIGINT NOT NULL
   );
 
+  -- One chart per account, the account holder's own. The unique constraint is
+  -- not an optimization: it is the schema refusing to hold a second person's
+  -- birth data. A chart about anyone else is computed in the browser and
+  -- never sent here. See src/lib/savedCharts.ts.
   CREATE TABLE IF NOT EXISTS charts (
     id TEXT PRIMARY KEY,
-    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id TEXT NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
-    relationship TEXT NOT NULL,
     date TEXT NOT NULL,
     time TEXT NOT NULL,
     city_label TEXT NOT NULL,
     latitude DOUBLE PRECISION NOT NULL,
     longitude DOUBLE PRECISION NOT NULL,
-    is_primary BOOLEAN NOT NULL DEFAULT FALSE,
     created_at BIGINT NOT NULL
   );
-
-  CREATE INDEX IF NOT EXISTS charts_user_id_idx ON charts (user_id);
 
   CREATE TABLE IF NOT EXISTS wait_list (
     email TEXT PRIMARY KEY,

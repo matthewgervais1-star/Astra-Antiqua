@@ -8,7 +8,7 @@ import { orbFor, type AspectKind } from "@/data/sampleChart";
 import { getAspectReading } from "@/data/aspectReadings";
 import { ASPECT_VERBS } from "@/data/aspectVerbs";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
-import { listCharts, type SavedChartInputs } from "@/lib/savedCharts";
+import { readChart, type ComparisonParty, type SavedChartInputs } from "@/lib/savedCharts";
 import { resolveSavedChart, type SavedNatal } from "@/lib/savedNatal";
 import { computeSynastry, topSynastry, type SynastryAspect } from "@/lib/synastry";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
@@ -18,7 +18,7 @@ import { OrbBar } from "@/components/chrome/OrbBar";
 import { Votive } from "@/components/chrome/Votive";
 import { FeedbackRow } from "@/components/chrome/FeedbackRow";
 import { Skeleton } from "@/components/chrome/Skeleton";
-import { PartyPicker } from "@/components/synastry/PartyPicker";
+import { ComparisonForm } from "@/components/synastry/ComparisonForm";
 import { ASPECT_GLYPHS, BOND_LABELS, orbToneFor } from "@/components/synastry/bondLabels";
 import { SYNASTRY_HEADLINES, SYNASTRY_VOTIVES, labelToSentence } from "@/components/synastry/synastryCopy";
 
@@ -40,23 +40,18 @@ function stripLeadingThe(title: string): string {
 
 function SynastryInstrument() {
   const culture = useActivePantheon();
-  const [charts, setCharts] = useState<readonly SavedChartInputs[]>([]);
+  const [chartA, setChartA] = useState<SavedChartInputs | null>(null);
   const [hydrated, setHydrated] = useState(false);
-  const [idA, setIdA] = useState("");
-  const [idB, setIdB] = useState("");
+  // The second party lives in component state and nowhere else. It is gone on
+  // refresh, which is the whole point: their birth data is a calculation here,
+  // not a record.
+  const [chartB, setChartB] = useState<ComparisonParty | null>(null);
 
   useEffect(() => {
-    const list = listCharts();
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCharts(list);
+    setChartA(readChart());
     setHydrated(true);
-    const primary = list.find((c) => c.primary) ?? list[0];
-    setIdA((curr) => curr || (primary?.id ?? ""));
-    setIdB((curr) => curr || (list.find((c) => c.id !== primary?.id)?.id ?? ""));
   }, []);
-
-  const chartA = charts.find((c) => c.id === idA) ?? null;
-  const chartB = charts.find((c) => c.id === idB) ?? null;
 
   const natalA = useMemo<SavedNatal | null>(() => (chartA ? resolveSavedChart(chartA) : null), [chartA]);
   const natalB = useMemo<SavedNatal | null>(() => (chartB ? resolveSavedChart(chartB) : null), [chartB]);
@@ -70,7 +65,6 @@ function SynastryInstrument() {
 
   const voice = CULTURE_VOICES[culture];
   const ready = Boolean(natalA && natalB);
-  const twoCharts = charts.length > 1;
 
   const topBonds = topSynastry(allAspects, 8);
   const harmonyCount = allAspects.filter((a) => a.kind === "trine" || a.kind === "sextile").length;
@@ -132,21 +126,32 @@ function SynastryInstrument() {
       <aside className="flex flex-col gap-6 border-r border-rule px-7 py-6">
         <div>
           <div className="mb-3 font-mono text-data-xs tracking-label text-dim">THE TWO PARTIES</div>
-          {charts.length === 0 ? (
-            <p className="font-mono text-data-xs leading-data text-dim">NO CHARTS ARE SAVED YET.</p>
-          ) : (
+          {chartA === null ? (
             <div className="flex flex-col gap-3">
-              <PartyPicker chart={chartA} charts={charts} excludeId={idB} onSelect={setIdA} />
-              {twoCharts ? (
-                <PartyPicker chart={chartB} charts={charts} excludeId={idA} onSelect={setIdB} />
-              ) : (
-                <Link
-                  href="/reading"
-                  className="border border-rule px-[var(--space-3)] py-3 text-center font-mono text-data-xs tracking-data text-dim hover:text-bone"
-                >
-                  CAST THE SECOND CHART →
-                </Link>
-              )}
+              <p className="font-mono text-data-xs leading-data text-dim">
+                YOUR CHART IS NOT CAST YET.
+              </p>
+              <Link
+                href="/reading"
+                className="border border-rule px-[var(--space-3)] py-3 text-center font-mono text-data-xs tracking-data text-dim hover:text-bone"
+              >
+                CAST YOUR CHART →
+              </Link>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4">
+              <div className="border border-rule px-[var(--space-3)] py-[var(--space-2)]">
+                <div className="font-mono text-data-xs tracking-label text-dim">YOU</div>
+                <div className="font-mono text-data-s text-bone">{chartA.name}</div>
+                <div className="font-mono text-data-xs leading-data text-dim">
+                  {chartA.date} · {chartA.cityLabel}
+                </div>
+              </div>
+              <ComparisonForm
+                onCompare={setChartB}
+                onClear={() => setChartB(null)}
+                active={chartB !== null}
+              />
             </div>
           )}
         </div>
@@ -178,11 +183,11 @@ function SynastryInstrument() {
         <div className="font-mono text-data-xs tracking-label text-dim">BONDS IN ORB · STRONGEST FIRST</div>
         {!ready || !natalA || !natalB ? (
           <p className="mt-3 max-w-md font-body text-prose-s italic leading-prose text-prose">
-            {charts.length === 0
-              ? "No charts are saved yet. Cast the first to begin weighing a pair."
-              : charts.length === 1
-                ? "One chart is saved. Cast a second to weigh the bonds between two skies."
-                : "One of these charts could not be read. Recast it on the charts page."}
+            {chartA === null
+              ? "Your chart is not cast yet. Cast it to begin weighing a pair."
+              : chartB === null
+                ? "Enter the second party's birth details to weigh the bonds between two skies."
+                : "One of these charts could not be read. Check the birth details and try again."}
           </p>
         ) : (
           <>
@@ -235,12 +240,12 @@ function SynastryInstrument() {
             <p className="font-body text-prose-s leading-prose text-prose">{para1}</p>
             <p className="font-body text-prose-s leading-prose text-prose">{para2}</p>
             <Votive>{votiveText}</Votive>
-            <FeedbackRow readingId={`synastry-${idA}-${idB}`} noun="READING" />
+            <FeedbackRow readingId={`synastry-${chartA?.id ?? "none"}`} noun="READING" />
           </>
-        ) : charts.length === 0 ? (
+        ) : chartA === null ? (
           <>
             <h2 className="font-display text-display-s leading-display tracking-display text-bone">
-              THE {stripLeadingThe(voice.synastryTitle)} NEEDS TWO CHARTS
+              THE {stripLeadingThe(voice.synastryTitle)} NEEDS YOUR CHART FIRST
             </h2>
             <Link
               href="/reading"
@@ -249,29 +254,20 @@ function SynastryInstrument() {
               CAST →
             </Link>
           </>
-        ) : charts.length === 1 ? (
+        ) : chartB === null ? (
           <>
             <h2 className="font-display text-display-s leading-display tracking-display text-bone">
-              ONE PARTY IS SET. CAST THE SECOND.
+              YOUR CHART IS SET. ENTER THE SECOND PARTY.
             </h2>
             <p className="font-body text-prose-s leading-prose text-prose">
-              {stripLeadingThe(voice.synastryTitle)} needs two charts in orb of each other before a bond can be
-              weighed.
+              {stripLeadingThe(voice.synastryTitle)} needs two skies in orb of each other before a
+              bond can be weighed. Their birth details are used for the weighing and then
+              discarded; nothing about them is kept.
             </p>
-            <Link
-              href="/reading"
-              className="mt-1 inline-flex w-fit border border-[var(--accent-strong-border)] px-5 py-3 font-mono text-data-xs tracking-label text-accent"
-            >
-              CAST THE SECOND CHART →
-            </Link>
           </>
         ) : (
           <p className="font-body text-prose-s italic leading-prose text-prose">
-            One of these charts could not be read. Recast it on the{" "}
-            <Link href="/charts" className="text-accent">
-              charts page
-            </Link>
-            .
+            One of these charts could not be read. Check the birth details and try again.
           </p>
         )}
       </aside>

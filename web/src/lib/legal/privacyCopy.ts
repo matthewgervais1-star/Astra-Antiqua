@@ -16,7 +16,7 @@
  *
  * Tokens in braces are substituted at render from src/lib/legal/policyFacts.ts:
  *   {email} {postal} {officer} {appHost} {dbHost} {dbRegion}
- *   {dormantMonths} {thirdPartyMonths} {backupDays}
+ *   {dormantMonths} {backupDays}
  */
 
 export interface PolicyItem {
@@ -97,10 +97,6 @@ export const PRIVACY_EN: PolicyCopy = {
           text: "To compute the chart and write the reading. The time is to the minute because the rising sign and the house cusps move within the hour, so a rounded time produces a different chart. Required to create a chart.",
         },
         {
-          term: "Whose chart it is",
-          text: "Whether a chart is your own or someone else's. See the next section.",
-        },
-        {
           term: "Your IP address",
           text: "Used at the moment of a request to limit how often anyone can try to sign in, which is what stops someone guessing your password. It is not written to our database.",
         },
@@ -110,12 +106,11 @@ export const PRIVACY_EN: PolicyCopy = {
       ],
     },
     {
-      label: "CHARTS YOU SAVE ABOUT SOMEONE ELSE",
+      label: "COMPARING WITH SOMEONE ELSE",
       paras: [
-        "When you save a chart for a partner, a family member, a friend or anyone else, we store that person's name, birth date, birth time and birth place. That is personal information about a real person who has not used this service and has not agreed to anything.",
-        "Quebec law says information about a person should be collected from that person. By saving a chart about someone else, you are telling us you have their agreement. Please make sure that is true. If you would rather not enter their real name, use a nickname. The reading is computed from the birth moment and place, so it comes out identical.",
-        "If someone has saved a chart about you, write to {email}. You can ask whether we hold anything about you, see it, correct it, and have it deleted. You do not need an account and we will not charge you. We may need enough detail from you to find the record.",
-        "We keep charts saved about other people for {thirdPartyMonths} months of disuse and then delete them, which is a shorter clock than the one on your own charts.",
+        "We hold one chart: yours. When you compare it with another person's, you type their birth details, we compute the comparison, and the details are discarded. They are never written to your device and never sent to our server. Close the page and they are gone.",
+        "That is deliberate, and it is a decision about the database rather than a promise about behaviour. Quebec law says information about a person should be collected from that person, and someone whose chart you are curious about has not agreed to anything. The cleanest way to respect that is to have nowhere to put their details, so we removed the place we used to put them.",
+        "It means nobody has to write to us asking what we hold about them, because the answer is nothing unless they have their own account.",
       ],
     },
     {
@@ -150,8 +145,8 @@ export const PRIVACY_EN: PolicyCopy = {
       label: "HOW LONG WE KEEP IT",
       paras: [
         "Your account: while it is open. If you have not signed in for {dormantMonths} months we email you a warning, and if you do not come back we delete the account and everything in it.",
-        "Your charts: until you delete them or delete your account. Charts about other people go sooner, as described above.",
-        "When you delete: your account record and every chart attached to it are removed from our live database immediately. Copies inside our database provider's encrypted backups age out within {backupDays} days, which is the length of their backup window.",
+        "Your chart: until you replace it, delete it, or delete your account. Casting again replaces it rather than adding a second one.",
+        "When you delete: your account record and the chart attached to it are removed from our live database immediately. Copies inside our database provider's encrypted backups age out within {backupDays} days, which is the length of their backup window.",
         "We destroy information when we no longer need it. We do not claim to anonymize it: a name with an exact birth minute and a set of coordinates is close to unique, and calling that anonymous would not be honest.",
       ],
     },
@@ -260,10 +255,6 @@ export const PRIVACY_FR: PolicyCopy = {
           text: "Pour calculer le thème et rédiger la lecture. L'heure est précise à la minute parce que l'ascendant et les cuspides des maisons changent à l'intérieur d'une même heure : une heure arrondie donne un autre thème. Nécessaire pour créer un thème.",
         },
         {
-          term: "À qui appartient le thème",
-          text: "S'il s'agit de votre thème ou de celui d'une autre personne. Voir la section suivante.",
-        },
-        {
           term: "Votre adresse IP",
           text: "Utilisée au moment de la requête pour limiter le nombre de tentatives de connexion, ce qui empêche quelqu'un de deviner votre mot de passe. Elle n'est pas inscrite dans notre base de données.",
         },
@@ -273,12 +264,11 @@ export const PRIVACY_FR: PolicyCopy = {
       ],
     },
     {
-      label: "LES THÈMES QUE VOUS ENREGISTREZ POUR AUTRUI",
+      label: "LA COMPARAISON AVEC UNE AUTRE PERSONNE",
       paras: [
-        "Lorsque vous enregistrez un thème pour votre conjoint, un membre de votre famille, un ami ou toute autre personne, nous conservons le nom, la date, l'heure et le lieu de naissance de cette personne. Il s'agit de renseignements personnels concernant une personne réelle qui n'a pas utilisé ce service et qui n'a consenti à rien.",
-        "La loi québécoise prévoit que les renseignements concernant une personne doivent être recueillis auprès d'elle. En enregistrant le thème d'une autre personne, vous nous déclarez avoir son accord. Assurez-vous que c'est le cas. Si vous préférez ne pas inscrire son nom véritable, utilisez un surnom : la lecture est calculée à partir du moment et du lieu de naissance, et le résultat est identique.",
-        "Si quelqu'un a enregistré un thème vous concernant, écrivez à {email}. Vous pouvez demander si nous détenons des renseignements sur vous, les consulter, les faire corriger et les faire supprimer. Vous n'avez pas besoin d'un compte et nous n'exigeons aucuns frais. Nous pourrions vous demander assez de précisions pour retrouver la fiche.",
-        "Les thèmes enregistrés au sujet d'autres personnes sont supprimés après {thirdPartyMonths} mois d'inutilisation, soit un délai plus court que celui qui s'applique à vos propres thèmes.",
+        "Nous conservons un seul thème : le vôtre. Lorsque vous le comparez à celui d'une autre personne, vous saisissez ses données de naissance, nous calculons la comparaison, puis ces données sont écartées. Elles ne sont jamais inscrites sur votre appareil ni transmises à notre serveur. Fermez la page et elles ont disparu.",
+        "C'est délibéré, et il s'agit d'une décision sur la base de données plutôt que d'une promesse de bonne conduite. La loi québécoise prévoit que les renseignements concernant une personne doivent être recueillis auprès d'elle, et la personne dont le thème vous intrigue n'a consenti à rien. La façon la plus nette de respecter cela est de n'avoir nulle part où consigner ses données : nous avons donc supprimé l'endroit où nous les consignions.",
+        "Personne n'a ainsi à nous écrire pour savoir ce que nous détenons à son sujet, puisque la réponse est : rien, à moins d'avoir son propre compte.",
       ],
     },
     {
@@ -313,7 +303,7 @@ export const PRIVACY_FR: PolicyCopy = {
       label: "COMBIEN DE TEMPS NOUS LES CONSERVONS",
       paras: [
         "Votre compte : tant qu'il est ouvert. Si vous ne vous êtes pas connecté depuis {dormantMonths} mois, nous vous envoyons un avertissement par courriel, et si vous ne revenez pas, nous supprimons le compte et tout ce qu'il contient.",
-        "Vos thèmes : jusqu'à ce que vous les supprimiez ou que vous supprimiez votre compte. Les thèmes concernant d'autres personnes sont supprimés plus tôt, comme indiqué ci-dessus.",
+        "Votre thème : jusqu'à ce que vous le remplaciez, le supprimiez ou supprimiez votre compte. Un nouveau calcul remplace le précédent au lieu d'en ajouter un second.",
         "Lorsque vous supprimez : votre fiche de compte et tous les thèmes qui y sont rattachés sont retirés immédiatement de notre base de données active. Les copies qui subsistent dans les sauvegardes chiffrées de notre fournisseur disparaissent dans un délai de {backupDays} jours, soit la durée de leur fenêtre de sauvegarde.",
         "Nous détruisons les renseignements lorsque nous n'en avons plus besoin. Nous ne prétendons pas les anonymiser : un nom accompagné d'une minute de naissance exacte et de coordonnées géographiques est presque unique, et les qualifier d'anonymes ne serait pas honnête.",
       ],

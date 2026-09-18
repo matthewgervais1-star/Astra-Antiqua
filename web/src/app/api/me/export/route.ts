@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth/currentUser";
-import { listChartsForUser } from "@/lib/auth/charts";
+import { getChartForUser } from "@/lib/auth/charts";
 import { assertSameOrigin } from "@/lib/auth/origin";
 
 export const runtime = "nodejs";
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
   if (!user) {
     return NextResponse.json({ ok: false, error: "Not signed in." }, { status: 401 });
   }
-  const charts = await listChartsForUser(user.id);
+  const chart = await getChartForUser(user.id);
   const payload = {
     exportedAt: new Date().toISOString(),
     user: {
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
       displayName: user.displayName,
       createdAt: new Date(user.createdAt).toISOString(),
     },
-    charts,
+    chart,
   };
   const filename = `astra-antiqua-${user.email.replace(/[^a-z0-9._-]/gi, "_")}-${new Date().toISOString().slice(0, 10)}.json`;
   return new NextResponse(JSON.stringify(payload, null, 2), {

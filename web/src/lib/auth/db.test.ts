@@ -2,13 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { ensureSchema, execute, getPool, queryOne } from "@/lib/auth/db";
 import { authenticateUser, createUser, getUserById, AuthError } from "@/lib/auth/users";
-import {
-  deleteChartForUser,
-  getChartForUser,
-  listChartsForUser,
-  setPrimaryChartForUser,
-  upsertChartForUser,
-} from "@/lib/auth/charts";
+import { deleteChartForUser, getChartForUser, saveChartForUser } from "@/lib/auth/charts";
 
 /**
  * The auth store against a real Postgres.
@@ -67,10 +61,9 @@ test("authentication accepts the password and rejects everything else", RUN, asy
   await assert.rejects(() => authenticateUser(email("nobody"), "wrong"), AuthError);
 });
 
-test("the first chart becomes primary and only one ever is", RUN, async () => {
+test("an account holds exactly one chart, and saving again replaces it", RUN, async () => {
   const user = await createUser({ email: email("charts"), password: "correct horse battery" });
   const base = {
-    relationship: "self" as const,
     date: "1990-01-01",
     time: "12:00",
     cityLabel: "Carthage",
@@ -78,61 +71,61 @@ test("the first chart becomes primary and only one ever is", RUN, async () => {
     longitude: 10.32,
   };
 
-  const first = await upsertChartForUser(user.id, { ...base, name: "First" });
-  assert.equal(first.primary, true, "a lone chart is primary whether or not it asked to be");
+  const first = await saveChartForUser(user.id, { ...base, name: "First" });
+  assert.equal(first.name, "First");
+  assert.equal((await getChartForUser(user.id))?.name, "First");
 
-  const second = await upsertChartForUser(user.id, { ...base, name: "Second" });
-  assert.equal(second.primary, false, "a second chart does not take primary uninvited");
+  // The invariant this whole change exists to create: a second save is the
+  // same chart rewritten, never a second person's birth data alongside it.
+  const second = await saveChartForUser(user.id, { ...base, name: "Second", cityLabel: "Tyre" });
+  assert.equal(second.id, first.id, "the chart keeps its identity across a rewrite");
+  assert.equal(second.createdAt, first.createdAt, "and its original creation time");
+  const stored = await getChartForUser(user.id);
+  assert.equal(stored?.name, "Second");
+  assert.equal(stored?.cityLabel, "Tyre");
 
-  const promoted = await setPrimaryChartForUser(user.id, second.id!);
-  assert.equal(promoted, true);
-  let charts = await listChartsForUser(user.id);
-  assert.equal(charts.filter((c) => c.primary).length, 1, "exactly one chart is primary");
-  assert.equal(charts[0]?.name, "Second", "the primary chart sorts first");
-
-  // Deleting the primary hands primary to whatever remains.
-  assert.equal(await deleteChartForUser(user.id, second.id!), true);
-  charts = await listChartsForUser(user.id);
-  assert.equal(charts.length, 1);
-  assert.equal(charts[0]?.primary, true, "the survivor is promoted rather than left with none");
-
-  assert.equal(await deleteChartForUser(user.id, "no-such-chart"), false);
-  assert.equal(await getChartForUser(user.id, "no-such-chart"), null);
+  const rows = await queryOne<{ n: number }>(
+    "SELECT COUNT(*)::int AS n FROM charts WHERE user_id = $1",
+    [user.id],
+  );
+  assert.equal(rows?.n, 1, "the unique constraint, not this code, is what guarantees one row");
 });
 
-test("an edit keeps the chart's own id and creation time", RUN, async () => {
-  const user = await createUser({ email: email("edit"), password: "correct horse battery" });
-  const created = await upsertChartForUser(user.id, {
-    name: "Before",
-    relationship: "self",
+test("two accounts keep their own charts apart", RUN, async () => {
+  const base = {
+    date: "1990-01-01",
+    time: "12:00",
+    cityLabel: "Carthage",
+    latitude: 36.85,
+    longitude: 10.32,
+  };
+  const a = await createUser({ email: email("sep-a"), password: "correct horse battery" });
+  const b = await createUser({ email: email("sep-b"), password: "correct horse battery" });
+  await saveChartForUser(a.id, { ...base, name: "Hers" });
+  await saveChartForUser(b.id, { ...base, name: "Theirs" });
+  assert.equal((await getChartForUser(a.id))?.name, "Hers");
+  assert.equal((await getChartForUser(b.id))?.name, "Theirs");
+});
+
+test("a chart can be removed, and removing nothing reports nothing", RUN, async () => {
+  const user = await createUser({ email: email("del"), password: "correct horse battery" });
+  assert.equal(await deleteChartForUser(user.id), false, "there is nothing to delete yet");
+  await saveChartForUser(user.id, {
+    name: "Mine",
     date: "1990-01-01",
     time: "12:00",
     cityLabel: "Carthage",
     latitude: 36.85,
     longitude: 10.32,
   });
-  const edited = await upsertChartForUser(user.id, {
-    id: created.id,
-    name: "After",
-    relationship: "self",
-    date: "1990-01-02",
-    time: "13:00",
-    cityLabel: "Tyre",
-    latitude: 33.27,
-    longitude: 35.19,
-  });
-  assert.equal(edited.id, created.id);
-  assert.equal(edited.createdAt, created.createdAt);
-  assert.equal(edited.name, "After");
-  assert.equal(edited.latitude, 33.27, "a float column comes back a float, not a string");
-  assert.equal((await listChartsForUser(user.id)).length, 1, "an edit is not a second chart");
+  assert.equal(await deleteChartForUser(user.id), true);
+  assert.equal(await getChartForUser(user.id), null);
 });
 
 test("deleting an account takes its charts with it", RUN, async () => {
   const user = await createUser({ email: email("cascade"), password: "correct horse battery" });
-  await upsertChartForUser(user.id, {
+  await saveChartForUser(user.id, {
     name: "Doomed",
-    relationship: "self",
     date: "1990-01-01",
     time: "12:00",
     cityLabel: "Carthage",

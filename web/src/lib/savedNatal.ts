@@ -3,11 +3,7 @@ import type { Longitude } from "@/data/sampleChart";
 import { computeChart } from "@/lib/ephemeris";
 import { resolveBirth, type ResolvedBirth } from "@/lib/birthDateTime";
 import { computeAngularPoints, type AngularPoints } from "@/lib/ascendant";
-import {
-  getChart,
-  getPrimaryChart,
-  type SavedChartInputs,
-} from "@/lib/savedCharts";
+import { readChart, type BirthInputs } from "@/lib/savedCharts";
 
 export interface SavedNatalInputs {
   date: string;
@@ -19,13 +15,13 @@ export interface SavedNatalInputs {
 
 export interface SavedNatal {
   inputs: SavedNatalInputs;
-  meta: SavedChartInputs;
+  meta: BirthInputs;
   birth: ResolvedBirth;
   chart: Readonly<Record<Planet, Longitude>>;
   angles: AngularPoints;
 }
 
-function resolveChart(meta: SavedChartInputs): SavedNatal | null {
+function resolveChart(meta: BirthInputs): SavedNatal | null {
   const [yearStr, monthStr, dayStr] = meta.date.split("-");
   const [hourStr, minuteStr] = meta.time.split(":");
   const year = Number(yearStr);
@@ -73,12 +69,20 @@ function resolveChart(meta: SavedChartInputs): SavedNatal | null {
   }
 }
 
-export function loadSavedNatal(chartId?: string): SavedNatal | null {
-  const meta = chartId ? getChart(chartId) : getPrimaryChart();
+/** The reader's own saved chart, computed. */
+export function loadSavedNatal(): SavedNatal | null {
+  const meta = readChart();
   if (!meta) return null;
   return resolveChart(meta);
 }
 
-export function resolveSavedChart(meta: SavedChartInputs): SavedNatal | null {
+/**
+ * Computes any birth inputs, saved or not.
+ *
+ * The comparison party goes through here too. Nothing downstream can tell
+ * whether a chart came from storage, which is the point: the second party is
+ * a calculation, not a record.
+ */
+export function resolveSavedChart(meta: BirthInputs): SavedNatal | null {
   return resolveChart(meta);
 }

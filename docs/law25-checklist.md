@@ -27,6 +27,8 @@ should not be making alone.
   ss. 27 and 23 require. Record the export as a completed s. 3.3 control.
 - `privacyCopy.test.ts` checks the two languages carry the same sections, the
   same interpolated facts, and no token the renderer cannot fill.
+- One chart per account, enforced by a unique index rather than by application
+  code remembering to check. Verified against real Postgres by `pnpm test:db`.
 
 ## Fill these in before the policy can be served
 
@@ -39,7 +41,7 @@ All of them live in `src/lib/legal/policyFacts.ts`.
 | `postalAddress` | Access requests arrive by post, and CPA s. 54.4 requires an address and a telephone number at checkout anyway |
 | `effectiveDate`, `lastUpdated` | The CAI's drafting guide asks for both, separately |
 | `appHost`, `databaseHost`, `databaseRegion` | Blocked on the hosting decision |
-| `dormantAccountMonths`, `thirdPartyChartMonths`, `backupRetentionDays` | Defaults of 24, 12 and 7 are placeholders you must actually implement. `backupRetentionDays` has to be the provider's real window, because a reader can test the claim |
+| `dormantAccountMonths`, `backupRetentionDays` | Defaults of 24 and 7 are placeholders you must actually implement. `backupRetentionDays` has to be the provider's real window, because a reader can test the claim |
 
 ## Before deploying with real data
 
@@ -70,26 +72,23 @@ s. 17 that applies even if everything sits in Montreal, because building the
 app is a project to develop an information system involving personal
 information. Combine it with the s. 17 document.
 
-**5. [LAWYER] Decide the third-party chart question.** In rough order of legal
-effect: drop the real-name field for charts that are not your own; remove the
-`relationship` enum; shorten retention for non-self charts; publish a removal
-route that works without an account; add a user attestation last.
+**5. ~~Decide the third-party chart question.~~ RESOLVED IN THE SCHEMA.**
 
-The two that actually change the analysis are schema changes, not wording.
-s. 6 says information about a person must be collected from that person, and
-"the latter" in that sentence means the person concerned, not the account
-holder. A warranty in the terms does not discharge this: the Federal Court of
-Appeal held in *Privacy Commissioner of Canada v. Facebook, Inc.*, 2024 FCA 140
-that an organization relying on third-party consent must still take reasonable
-measures to ensure that consent was meaningful, judged from the perspective of
-a reasonable person rather than by contract.
+The app no longer stores anyone's chart but your own. The `charts` table has a
+unique constraint on `user_id`, the `relationship` column is gone, and a
+synastry comparison is computed in the browser against details that are never
+written to disk and never sent to the server. The Android app had always
+worked this way; web now matches it.
 
-Note also s. 40, which pulls the other way: you **must refuse** to disclose
-information that would reveal personal information about a third person where
-disclosure may seriously harm them. Telling someone which account saved a chart
-tagged "partner" for them can do exactly that. Write the playbook before you
-need it: confirm what is held about the requester, do not reveal who entered it
-by default, and run the serious-harm assessment first.
+This closes the cluster rather than mitigating it. There is no s. 6 collection
+from a third party, no s. 28 rectification request from a stranger, no s. 40
+serious-harm assessment when someone asks who entered their data, and no
+impossible s. 3.5 breach notification to people you have no way to contact.
+The answer to "what do you hold about me" is nothing, unless the asker has
+their own account.
+
+What it cost: the "sell extra chart slots" idea is foreclosed. Slots on the
+reader's own device cannot be metered server-side.
 
 **6. The confidentiality incident register, created empty.** s. 3.8 is
 unconditional: it must exist before there is anything to record. Build it to
@@ -100,9 +99,9 @@ Entries are kept at least five years. Keep it outside the application database,
 or an incident affecting the app takes the register with it.
 
 **7. The incident runbook.** Notification to the CAI needs eleven items
-including the Quebec enterprise number, so have the NEQ ready. Include the
-public-notice fallback for chart subjects you have no way to contact, which is
-a direct consequence of holding their data without their contact details.
+including the Quebec enterprise number, so have the NEQ ready. The public-notice
+fallback is no longer needed: every person whose data could be in a breach has
+an account and therefore an email address, which is a second dividend of item 5.
 
 **8. The request-handling workflow.** A monitored `privacy@`, identity
 verification proportionate to the request, a ticket log with a 30-day timer, a

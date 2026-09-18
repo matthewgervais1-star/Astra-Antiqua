@@ -15,7 +15,7 @@ import { FeedbackRow } from "@/components/chrome/FeedbackRow";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
-import { getChart } from "@/lib/savedCharts";
+import { readChart } from "@/lib/savedCharts";
 import { resolveSavedChart, type SavedNatal } from "@/lib/savedNatal";
 import { computeWholeSignHouses, houseOfSign } from "@/lib/houses";
 import { getHouseMeaning } from "@/data/houses";
@@ -61,7 +61,7 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
   const [natal, setNatal] = useState<SavedNatal | null>(null);
 
   useEffect(() => {
-    const meta = getChart(chartId);
+    const meta = readChart();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setNatal(meta ? resolveSavedChart(meta) : null);
     setHydrated(true);

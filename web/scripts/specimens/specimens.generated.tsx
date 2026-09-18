@@ -33,9 +33,9 @@ import { TransitEmptyState as C28 } from "@/components/transits/TransitEmptyStat
 import { TransitSubBar as C29 } from "@/components/transits/TransitSubBar";
 import { EnterVoiceCta as C30 } from "@/components/voices/EnterVoiceCta";
 import { TodaySpecimen as C31 } from "@/components/voices/TodaySpecimen";
-import { PartyPicker as C32 } from "@/components/synastry/PartyPicker";
-import { TranslationMatrix as C33 } from "@/components/matrix/TranslationMatrix";
-import { LearnTOC as C34 } from "@/components/LearnTOC";
+import { TranslationMatrix as C32 } from "@/components/matrix/TranslationMatrix";
+import { LearnTOC as C33 } from "@/components/LearnTOC";
+import { ComparisonForm as C34 } from "@/components/synastry/ComparisonForm";
 
 export type Specimen = { name: string; culture: string; viewport: string; role: string; spec: string; render: () => React.ReactElement };
 
@@ -72,7 +72,7 @@ export const SPECIMENS: Specimen[] = [
   { name: "TransitSubBar", culture: "rome", viewport: "700x220", role: "The 46px mono sub-bar for /transits/[id]: context line on the left, the span's date range and the culture chip on the right.", spec: "SectionHead", render: () => <C29 {...({ context: "LONG TRANSIT · SATURNUS □ NATAL SOL", span: "OCT 2025 → JUL 2027" })} /> },
   { name: "EnterVoiceCta", culture: "rome", viewport: "700x220", role: "The full-width bordered CTA on a /voices/[culture] page: persists the chosen culture and routes into the day's reading in that voice.", spec: "Button", render: () => <C30 {...({ culture: "rome", label: "ENTER THE DAY IN THE ROMAN VOICE" })} /> },
   { name: "TodaySpecimen", culture: "egypt", viewport: "700x360", role: "A bordered specimen card on a /voices/[culture] page: today's sky composed as that culture's decree, cut to the headline and first sentence, with the date line above.", spec: "Card", render: () => <C31 {...({ culture: "egypt" })} /> },
-  { name: "PartyPicker", culture: "canaan", viewport: "700x360", role: "One party slot on the synastry instrument: a bordered card with the chart's name and year·city, plus a CHANGE A PARTY ▾ dropdown of the other saved charts.", spec: "Card", render: () => <C32 {...({ chart: { id: "c-owner", name: "The Owner", relationship: "self", date: "1987-11-04", time: "06:42", cityLabel: "Rome", latitude: 41.9028, longitude: 12.4964, primary: true, createdAt: "2026-01-12T09:00:00.000Z" }, charts: [ { id: "c-owner", name: "The Owner", relationship: "self", date: "1987-11-04", time: "06:42", cityLabel: "Rome", latitude: 41.9028, longitude: 12.4964, primary: true, createdAt: "2026-01-12T09:00:00.000Z" }, { id: "c-partner", name: "Livia", relationship: "partner", date: "1990-03-21", time: "14:15", cityLabel: "Carthage", latitude: 36.8531, longitude: 10.3231, primary: false, createdAt: "2026-02-03T18:30:00.000Z" }, { id: "c-sister", name: "Nefertari", relationship: "family", date: "1984-07-09", time: "23:05", cityLabel: "Thebes", latitude: 25.7188, longitude: 32.6573, primary: false, createdAt: "2026-02-20T11:00:00.000Z" } ], excludeId: "c-partner", onSelect: (id) => {} })} /> },
-  { name: "TranslationMatrix", culture: "carthage", viewport: "700x520", role: "The ten-by-five reference table: every tracked body beside its deity name in each of the five cultures, with a gold rule where the received bodies begin and a mono note linking to /method.", spec: "DataRow", render: () => <C33 {...({})} /> },
-  { name: "LearnTOC", culture: "rome", viewport: "700x420", role: "Every Learn page's footer: the ALL SECTIONS divider and the full table of contents as numbered, bordered rows, the current page in the accent color.", spec: "DataRow", render: () => <C34 {...({ current: "/learn/houses" })} /> },
+  { name: "TranslationMatrix", culture: "canaan", viewport: "700x520", role: "The ten-by-five reference table: every tracked body beside its deity name in each of the five cultures, with a gold rule where the received bodies begin and a mono note linking to /method.", spec: "DataRow", render: () => <C32 {...({})} /> },
+  { name: "LearnTOC", culture: "carthage", viewport: "700x420", role: "Every Learn page's footer: the ALL SECTIONS divider and the full table of contents as numbered, bordered rows, the current page in the accent color.", spec: "DataRow", render: () => <C33 {...({ current: "/learn/houses" })} /> },
+  { name: "ComparisonForm", culture: "rome", viewport: "700x520", role: "The second party on the synastry instrument: name, birth date, birth time and a birth place searched on an explicit press, with the note that the details are computed and discarded rather than saved.", spec: "Card", render: () => <C34 {...({ onCompare: () => {}, onClear: () => {}, active: false })} /> },
 ];

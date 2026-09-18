@@ -7,7 +7,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { SyncFlag } from "@/components/chrome/SyncFlag";
 import { CULTURE_LABELS } from "@/data/cultures";
 import { readPersistedPantheon } from "@/lib/pantheonPreference";
-import { listCharts } from "@/lib/savedCharts";
+import { readChart } from "@/lib/savedCharts";
 import { feedbackCount } from "@/lib/feedback";
 import { cn } from "@/lib/classNames";
 
@@ -64,7 +64,7 @@ function AccountLedger({
   // is safe.
   const persisted = readPersistedPantheon();
   const cultureLabel = persisted ? CULTURE_LABELS[persisted].toUpperCase() : "NONE CHOSEN";
-  const chartsCount = listCharts().length;
+  const hasChart = readChart() !== null;
   const entries = feedbackCount();
 
   const onSignOut = async () => {
@@ -91,7 +91,7 @@ function AccountLedger({
             </Link>
           </span>
         </LedgerRow>
-        <LedgerRow label="CHARTS SYNCED">{chartsCount}</LedgerRow>
+        <LedgerRow label="YOUR CHART">{hasChart ? "SYNCED" : "NOT CAST"}</LedgerRow>
         <LedgerRow label="FEEDBACK ENTRIES">{entries} · THIS DEVICE</LedgerRow>
         <LedgerRow label="DEVICES" last>
           THIS ONE

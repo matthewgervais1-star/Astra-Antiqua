@@ -48,10 +48,6 @@ export interface PolicyFacts {
 
   /** Months of not signing in before an account is warned and then deleted. */
   dormantAccountMonths: number;
-  /** Months of disuse before a chart saved about someone ELSE is deleted.
-   *  Deliberately shorter than the account clock: that person never agreed to
-   *  anything, so their data should not outlive its use. */
-  thirdPartyChartMonths: number;
   /** The database provider's backup window. This is the real deletion latency
    *  and a reader can test the claim, so it must be the provider's true
    *  figure, not a round number. */
@@ -76,7 +72,6 @@ export const POLICY_FACTS: PolicyFacts = {
   transferAssessmentCompleted: false,
 
   dormantAccountMonths: 24,
-  thirdPartyChartMonths: 12,
   backupRetentionDays: 7,
 };
 
