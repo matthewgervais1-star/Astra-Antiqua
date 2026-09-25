@@ -57,15 +57,42 @@ All of them live in `src/lib/legal/policyFacts.ts`.
 | `privacyEmail` | A role alias such as `privacy@`, never a personal inbox. It is the statutory destination under s. 30 and it survives a change of person |
 | `postalAddress` | Access requests arrive by post, and CPA s. 54.4 requires an address and a telephone number at checkout anyway |
 | `effectiveDate`, `lastUpdated` | The CAI's drafting guide asks for both, separately |
-| `appHost`, `databaseHost`, `databaseRegion` | Blocked on the hosting decision |
+| `appHost`, `databaseHost`, `databaseRegion` | Blocked on the hosting decision. `storedOutsideQuebec()` reads the region string, so a Montreal value switches the policy to the in-province wording on its own |
 | `dormantAccountMonths`, `backupRetentionDays` | Defaults of 24 and 7 are placeholders you must actually implement. `backupRetentionDays` has to be the provider's real window, because a reader can test the claim |
 
 ## Before deploying with real data
 
-**1. Check for a Montreal region first.** s. 17 attaches to sending personal
-information outside **Quebec**, not outside Canada, so Toronto does not help.
-A Montreal region for the database removes that leg of s. 17 entirely. This is
-the cheapest fix available and it should be settled before anything else here.
+**1. ~~Check for a Montreal region first.~~ CHECKED. The answer is mostly no.**
+
+s. 17 attaches to sending personal information outside **Quebec**, not outside
+Canada, so Toronto does not help. Verified against each provider's own region
+list in September 2026:
+
+| Provider | Canadian region? | In Quebec? |
+| --- | --- | --- |
+| Neon | none at all | no |
+| Vercel Functions | none | no |
+| Fly.io | Toronto `yyz` only | no, Ontario |
+| Supabase | `ca-central-1` | **yes, Montreal** |
+
+Two things follow.
+
+**The database can stay in Quebec, on Supabase `ca-central-1`.** That is the
+only mainstream managed Postgres with a Montreal region, and it is where the
+personal information actually sits at rest. Neon cannot do this at all, and
+Neon fixes the region at project creation with no way to move it, so choosing
+Neon is choosing the assessment.
+
+**The application tier cannot, on any mainstream platform.** Vercel has no
+Canadian function region and Fly's nearest is Ontario. The app reads and
+processes the same personal information, so hosting it in the United States is
+a communication outside Quebec whatever the database does. s. 17 therefore
+applies unless the whole stack moves to a Montreal machine (AWS `ca-central-1`
+directly, or a Quebec VPS), which trades the assessment for owning the ops.
+
+So the realistic choices are: accept s. 17 and do the assessment once; or
+self-host in Montreal and avoid it. Putting the database in Montreal and the
+app in the United States reduces the exposure without removing the obligation.
 
 **2. The s. 17 privacy impact assessment**, if any data does leave Quebec. It
 gates deployment, not just payment, and s. 17's third paragraph closes the
