@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { AuthError, authenticateUser } from "@/lib/auth/users";
 import { setSessionCookie, signSession } from "@/lib/auth/session";
+import { clearWarning, touchLastSeen } from "@/lib/auth/retention";
 import { assertSameOrigin } from "@/lib/auth/origin";
 import {
   clientIdentifier,
@@ -63,6 +64,11 @@ export async function POST(request: Request) {
     recordLoginAttempt(parsed.data.email, true);
     const token = await signSession({ sub: user.id, email: user.email });
     await setSessionCookie(token);
+    // Dormancy is measured from real use, and coming back cancels a pending
+    // deletion: an account someone still signs into is not abandoned.
+    const now = Date.now();
+    await touchLastSeen(user.id, now);
+    await clearWarning(user.id);
     return NextResponse.json({
       ok: true,
       user: { id: user.id, email: user.email, displayName: user.displayName },

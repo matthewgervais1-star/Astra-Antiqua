@@ -4,6 +4,7 @@ import { NaveShell } from "@/components/chrome/NaveShell";
 import { NaveHead } from "@/components/chrome/NaveHead";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import type { LegalCopy, LegalSection } from "@/lib/legal/legalTypes";
+import { GRACE_DAYS } from "@/lib/auth/retention";
 import {
   POLICY_FACTS,
   missingPolicyFacts,
@@ -63,7 +64,9 @@ export function LegalDocument({
       .replaceAll("{effective}", facts.effectiveDate)
       .replaceAll("{updated}", facts.lastUpdated)
       .replaceAll("{dormantMonths}", String(facts.dormantAccountMonths))
-      .replaceAll("{backupDays}", String(facts.backupRetentionDays));
+      .replaceAll("{backupDays}", String(facts.backupRetentionDays))
+      // From the retention code itself, so the promise cannot drift from the sweep.
+      .replaceAll("{graceDays}", String(GRACE_DAYS));
 
   const [crossBefore, crossAfter] = copy.crossSentence.split("{link}");
   const sections = [...copy.sections, ...extraSections];

@@ -34,6 +34,12 @@ should not be making alone.
   CAI's drafting guide lets terms link to a privacy policy but not merge with
   one. The distance-contract disclosures CPA s. 54.4 requires at checkout are
   NOT in them, because there is no checkout yet.
+- The retention schedule (`web/src/lib/auth/retention.ts`), with both statutory
+  holds. Verified against real Postgres: 9 tests covering dormancy, the grace
+  period, a return cancelling a pending deletion, and a hold outranking the
+  schedule.
+- The confidentiality incident register, created empty, at
+  `docs/incident-register.md`, and the runbook at `docs/incident-runbook.md`.
 - The OpenStreetMap geocoder no longer autocompletes. Nominatim's usage policy
   says autocomplete "must not" be implemented against it, and both birth forms
   did exactly that on a 350 ms debounce. The bundled 61-city list still filters
@@ -101,29 +107,40 @@ their own account.
 What it cost: the "sell extra chart slots" idea is foreclosed. Slots on the
 reader's own device cannot be metered server-side.
 
-**6. The confidentiality incident register, created empty.** s. 3.8 is
-unconditional: it must exist before there is anything to record. Build it to
-the eight fields in the Regulation respecting confidentiality incidents
-(RLRQ c. A-2.1, r. 3.1, s. 7), which include the reasoning behind concluding
-there is **no** risk of serious injury, so no-risk determinations go in too.
-Entries are kept at least five years. Keep it outside the application database,
-or an incident affecting the app takes the register with it.
+**6. ~~The confidentiality incident register.~~ CREATED EMPTY.**
+`docs/incident-register.md`, with the eight fields from the regulation and a
+note that no-risk determinations go in too, which is the part most registers
+miss. Kept as a file rather than a table so an incident affecting the app
+cannot take the register with it.
 
-**7. The incident runbook.** Notification to the CAI needs eleven items
-including the Quebec enterprise number, so have the NEQ ready. The public-notice
-fallback is no longer needed: every person whose data could be in a breach has
-an account and therefore an email address, which is a second dividend of item 5.
+**7. ~~The incident runbook.~~ WRITTEN.**
+`docs/incident-runbook.md`. Get your NEQ before you need it. The public-notice
+fallback is not in the plan because it is no longer needed: every person whose
+data could be exposed has an account and therefore an email address.
 
 **8. The request-handling workflow.** A monitored `privacy@`, identity
 verification proportionate to the request, a ticket log with a 30-day timer, a
 refusal template carrying the four elements s. 34 requires, and an intake route
 for people without an account. Decide the s. 33 charging position and state it.
 
-**9. Two statutory holds must be coded into any deletion job** or it will
-destroy evidence the Act requires you to keep: s. 11 (information used to make
-a decision about a person is kept at least a year after the decision) and s. 36
-(information subject to an access or rectification request is kept until the
-applicant's recourses are exhausted).
+**9. ~~Two statutory holds in the deletion job.~~ BUILT.**
+`legal_holds` is read by the sweep rather than remembered by anyone. s. 11 is
+a hold with an expiry; s. 36 is a hold with none, which blocks deletion while
+recourses stay open. `placeHold()` records either.
+
+**10. Wire a mail sender before retention does anything. BLOCKING.**
+The policy promises a warning before a dormant account is deleted, and there is
+no way to send one: no nodemailer, no Resend, no provider of any kind. The
+sweep is built to fail safe, so with no sender it warns nobody and therefore
+deletes nobody. That keeps the promise honest but it also means retention does
+not actually run.
+
+A sender is a new processor. It needs disclosure in the policy, a DPA, and a
+s. 17 assessment if it stores anything outside Quebec, which most do.
+
+**11. Schedule the sweep.** `runRetentionSweep()` has no trigger. On Vercel
+that is a cron entry in `vercel.json` hitting a route guarded by a shared
+secret. Not written, because it depends on the hosting decision.
 
 ## French is required, and it is not Law 25 that requires it
 

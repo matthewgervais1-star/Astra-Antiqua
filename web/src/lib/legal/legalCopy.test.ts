@@ -106,6 +106,7 @@ test("every token used in the copy is one the renderer can fill", () => {
     "{updated}",
     "{dormantMonths}",
     "{backupDays}",
+    "{graceDays}",
     // Not a fact. The renderer splits the sentence on this to place an
     // anchor, so it is consumed structurally rather than substituted.
     "{link}",

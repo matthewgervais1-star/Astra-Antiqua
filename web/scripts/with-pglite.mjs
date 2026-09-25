@@ -9,6 +9,11 @@
  * The database lives in memory and is gone when the command exits.
  *
  *   node scripts/with-pglite.mjs pnpm test
+ *
+ * PGlite serves ONE connection. Node's test runner runs files in parallel by
+ * default, so two database test files racing each other reset the socket and
+ * every one of their assertions fails with ECONNRESET. The `test:db` script
+ * therefore passes --concurrency=1; that flag is load-bearing, not tidiness.
  */
 import { spawn } from "node:child_process";
 import { PGlite } from "@electric-sql/pglite";

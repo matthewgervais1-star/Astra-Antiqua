@@ -16,7 +16,7 @@
  *
  * Tokens in braces are substituted at render from src/lib/legal/policyFacts.ts:
  *   {email} {postal} {officer} {appHost} {dbHost} {dbRegion}
- *   {dormantMonths} {backupDays}
+ *   {dormantMonths} {backupDays} {graceDays}
  */
 
 import type { LegalCopy, LegalSection } from "@/lib/legal/legalTypes";
@@ -142,7 +142,7 @@ export const PRIVACY_EN: PrivacyCopy = {
     {
       label: "HOW LONG WE KEEP IT",
       paras: [
-        "Your account: while it is open. If you have not signed in for {dormantMonths} months we email you a warning, and if you do not come back we delete the account and everything in it.",
+        "Your account: while it is open. If you have not signed in for {dormantMonths} months we email you a warning. If you do not come back within {graceDays} days of that warning, we delete the account and everything in it. Signing in again cancels the deletion.",
         "Your chart: until you replace it, delete it, or delete your account. Casting again replaces it rather than adding a second one.",
         "When you delete: your account record and the chart attached to it are removed from our live database immediately. Copies inside our database provider's encrypted backups age out within {backupDays} days, which is the length of their backup window.",
         "We destroy information when we no longer need it. We do not claim to anonymize it: a name with an exact birth minute and a set of coordinates is close to unique, and calling that anonymous would not be honest.",
@@ -301,7 +301,7 @@ export const PRIVACY_FR: PrivacyCopy = {
     {
       label: "COMBIEN DE TEMPS NOUS LES CONSERVONS",
       paras: [
-        "Votre compte : tant qu'il est ouvert. Si vous ne vous êtes pas connecté depuis {dormantMonths} mois, nous vous envoyons un avertissement par courriel, et si vous ne revenez pas, nous supprimons le compte et tout ce qu'il contient.",
+        "Votre compte : tant qu'il est ouvert. Si vous ne vous êtes pas connecté depuis {dormantMonths} mois, nous vous envoyons un avertissement par courriel. Si vous ne revenez pas dans les {graceDays} jours suivant cet avertissement, nous supprimons le compte et tout ce qu'il contient. Vous reconnecter annule la suppression.",
         "Votre thème : jusqu'à ce que vous le remplaciez, le supprimiez ou supprimiez votre compte. Un nouveau calcul remplace le précédent au lieu d'en ajouter un second.",
         "Lorsque vous supprimez : votre fiche de compte et tous les thèmes qui y sont rattachés sont retirés immédiatement de notre base de données active. Les copies qui subsistent dans les sauvegardes chiffrées de notre fournisseur disparaissent dans un délai de {backupDays} jours, soit la durée de leur fenêtre de sauvegarde.",
         "Nous détruisons les renseignements lorsque nous n'en avons plus besoin. Nous ne prétendons pas les anonymiser : un nom accompagné d'une minute de naissance exacte et de coordonnées géographiques est presque unique, et les qualifier d'anonymes ne serait pas honnête.",
