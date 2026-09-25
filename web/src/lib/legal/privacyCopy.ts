@@ -19,42 +19,39 @@
  *   {dormantMonths} {backupDays}
  */
 
-export interface PolicyItem {
-  term: string;
-  text: string;
-}
+import type { LegalCopy, LegalSection } from "@/lib/legal/legalTypes";
 
-export interface PolicySection {
-  label: string;
-  lead?: string;
-  items?: PolicyItem[];
-  paras: string[];
-}
-
-export interface PolicyCopy {
-  metaTitle: string;
-  metaDescription: string;
-  context: string;
-  heading: string;
-  /** "In effect X - Last updated Y", with the dates substituted. */
-  dateLine: string;
-  intro: string;
-  termsSentence: string;
-  termsLinkText: string;
-  otherLanguageHref: string;
-  otherLanguageLabel: string;
-  sections: PolicySection[];
-  /** The storage section varies with where the database actually sits. */
+/** The privacy policy is a legal document plus one section whose wording
+ *  depends on where the database physically sits. */
+export interface PrivacyCopy extends LegalCopy {
   storage: {
     label: string;
     outside: string;
     outsideAssessed: string;
     inQuebec: string;
   };
-  closing: string;
 }
 
-export const PRIVACY_EN: PolicyCopy = {
+/**
+ * Builds the storage section for the region actually configured.
+ *
+ * The assessment sentence appears only once the assessment exists. s. 17
+ * requires it BEFORE the information leaves the province, so a page that
+ * claimed one that had never been done would breach s. 17 and the accuracy
+ * s. 8 demands of the policy itself.
+ */
+export function storageSection(
+  copy: PrivacyCopy,
+  outsideQuebec: boolean,
+  assessmentCompleted: boolean,
+): LegalSection {
+  const paras = outsideQuebec
+    ? [copy.storage.outside, ...(assessmentCompleted ? [copy.storage.outsideAssessed] : [])]
+    : [copy.storage.inQuebec];
+  return { label: copy.storage.label, paras };
+}
+
+export const PRIVACY_EN: PrivacyCopy = {
   metaTitle: "Privacy Policy",
   metaDescription:
     "What Astra Antiqua collects, why, where it is stored, how long it is kept, and how to see, correct or delete it.",
@@ -63,8 +60,9 @@ export const PRIVACY_EN: PolicyCopy = {
   dateLine: "In effect {effective} · Last updated {updated}",
   intro:
     "This policy explains what Astra Antiqua collects about you, why, where it is kept, how long for, and what you can make us do about it. It covers the website and the Android app.",
-  termsSentence: "Our {link} are a separate document.",
-  termsLinkText: "terms of service",
+  crossSentence: "Our {link} are a separate document.",
+  crossLinkText: "terms of service",
+  crossLinkHref: "/terms",
   otherLanguageHref: "/confidentialite",
   otherLanguageLabel: "Cette politique est aussi disponible en français.",
 
@@ -212,7 +210,7 @@ export const PRIVACY_EN: PolicyCopy = {
   closing: "Questions about any of this go to {email}.",
 };
 
-export const PRIVACY_FR: PolicyCopy = {
+export const PRIVACY_FR: PrivacyCopy = {
   metaTitle: "Politique de confidentialité",
   metaDescription:
     "Ce qu'Astra Antiqua recueille, pourquoi, où l'information est conservée, combien de temps, et comment la consulter, la corriger ou la supprimer.",
@@ -221,8 +219,9 @@ export const PRIVACY_FR: PolicyCopy = {
   dateLine: "En vigueur le {effective} · Dernière mise à jour le {updated}",
   intro:
     "Cette politique explique ce qu'Astra Antiqua recueille à votre sujet, pourquoi, où ces renseignements sont conservés, combien de temps, et ce que vous pouvez nous demander de faire. Elle vise le site Web et l'application Android.",
-  termsSentence: "Nos {link} font l'objet d'un document distinct.",
-  termsLinkText: "conditions d'utilisation",
+  crossSentence: "Nos {link} font l'objet d'un document distinct.",
+  crossLinkText: "conditions d'utilisation",
+  crossLinkHref: "/conditions",
   otherLanguageHref: "/privacy",
   otherLanguageLabel: "This policy is also available in English.",
 

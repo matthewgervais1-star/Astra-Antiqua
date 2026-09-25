@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { CITIES, searchCities } from "@/data/cities";
 import { geocodePlace, GeocodeError } from "@/lib/geocoding";
 import { cn } from "@/lib/classNames";
@@ -77,7 +77,6 @@ type GeocodeStatus =
   | { kind: "ready" }
   | { kind: "error"; message: string };
 
-const GEOCODE_DEBOUNCE_MS = 350;
 
 const INPUT_CLASS =
   "w-full border border-rule bg-transparent px-4 py-3 font-body text-prose-m text-bone outline-none focus:border-rule-active";
@@ -119,52 +118,47 @@ export function BirthForm({
     };
   }, []);
 
-  // Debounced world search. Runs only while the user is actively typing an
-  // unselected query (selectedKey === null).
-  useEffect(() => {
-    if (state.manualMode || !state.hydrated || state.selectedKey !== null) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setGeocode({ kind: "idle" });
-      return;
-    }
+  /**
+   * Searches OpenStreetMap, on an explicit request and never on a keystroke.
+   *
+   * This used to run on a debounce as the reader typed, which is exactly what
+   * Nominatim's usage policy forbids: "Auto-complete search. This is not yet
+   * supported by Nominatim and you must not implement such a service." Being
+   * cut off would break birth-place entry for everyone at once, with no
+   * warning. The curated list still filters as you type, because it is bundled
+   * and costs nobody a request.
+   */
+  const runWorldSearch = useCallback(async () => {
     const query = state.cityLabel.trim();
-    if (query.length < 3) {
-      setGeocode({ kind: "idle" });
-      setOsmResults([]);
-      return;
-    }
+    if (query.length < 2) return;
     const controller = new AbortController();
     abortRef.current?.abort();
     abortRef.current = controller;
     setGeocode({ kind: "loading" });
-    const timer = window.setTimeout(async () => {
-      try {
-        const results = await geocodePlace(query, controller.signal);
-        if (controller.signal.aborted) return;
-        setOsmResults(
-          results.map((g) => ({
-            id: `o:${g.latitude.toFixed(3)},${g.longitude.toFixed(3)}`,
-            label: g.name,
-            sublabel: g.context || g.country,
-            latitude: g.latitude,
-            longitude: g.longitude,
-            source: "osm" as const,
-          })),
-        );
-        setGeocode({ kind: "ready" });
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        const message =
-          err instanceof GeocodeError && err.userMessage
-            ? err.userMessage
-            : "Could not reach the map. Try again, or enter coordinates manually.";
-        setGeocode({ kind: "error", message });
-      }
-    }, GEOCODE_DEBOUNCE_MS);
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [state.cityLabel, state.manualMode, state.hydrated, state.selectedKey]);
+    try {
+      const results = await geocodePlace(query, controller.signal);
+      if (controller.signal.aborted) return;
+      setOsmResults(
+        results.map((g) => ({
+          id: `o:${g.latitude.toFixed(3)},${g.longitude.toFixed(3)}`,
+          label: g.name,
+          sublabel: g.context || g.country,
+          latitude: g.latitude,
+          longitude: g.longitude,
+          source: "osm" as const,
+        })),
+      );
+      setGeocode({ kind: "ready" });
+      setOpen(true);
+    } catch (err) {
+      if (controller.signal.aborted) return;
+      const message =
+        err instanceof GeocodeError && err.userMessage
+          ? err.userMessage
+          : "Could not reach the map. Try again, or enter coordinates manually.";
+      setGeocode({ kind: "error", message });
+    }
+  }, [state.cityLabel]);
 
   const patch = (partial: Partial<FormState>) => {
     setState((curr) => ({ ...curr, ...partial }));
@@ -220,20 +214,35 @@ export function BirthForm({
   };
 
   const query = state.cityLabel.trim();
+  // Searched the world and it came back with nothing.
   const noMatch =
     open &&
     state.selectedKey === null &&
     geocode.kind === "ready" &&
     suggestions.length === 0 &&
-    query.length >= 3;
-  // 1-2 chars with no curated hit: the world search needs 3, so tell the user
-  // to keep typing instead of showing an empty / closed dropdown.
+    query.length >= 2;
+  /**
+   * Typed enough to search, nothing curated matched, and the world has not
+   * been asked yet.
+   *
+   * This branch is what keeps the dropdown open in that state. Without it the
+   * panel closes on a query the curated list does not know, and the button
+   * that runs the search is inside the panel, so the reader is left with a
+   * name the form will not accept and no way to look it up.
+   */
+  const offerSearch =
+    open &&
+    state.selectedKey === null &&
+    suggestions.length === 0 &&
+    query.length >= 2 &&
+    geocode.kind === "idle";
+  /** Under two characters there is nothing worth sending anywhere. */
   const typingHint =
     open &&
     state.selectedKey === null &&
     suggestions.length === 0 &&
     query.length > 0 &&
-    query.length < 3;
+    query.length < 2;
   const showDropdown =
     state.hydrated &&
     !state.manualMode &&
@@ -243,11 +252,19 @@ export function BirthForm({
       geocode.kind === "loading" ||
       geocode.kind === "error" ||
       noMatch ||
+      offerSearch ||
       typingHint);
 
   const onCityKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!showDropdown || suggestions.length === 0) {
       if (e.key === "Escape") setOpen(false);
+      // Enter with nothing to pick is the reader asking us to go and look.
+      // The world search is deliberately never automatic, so this and the
+      // buttons in the dropdown are the only two ways it runs.
+      if (e.key === "Enter" && state.cityLabel.trim().length >= 2) {
+        e.preventDefault();
+        void runWorldSearch();
+      }
       return;
     }
     if (e.key === "ArrowDown") {
@@ -392,6 +409,10 @@ export function BirthForm({
                 });
                 setOpen(true);
                 setActiveIndex(-1);
+                // Results belong to the old query; a stale row must not stay
+                // selectable under a name that no longer matches it.
+                setOsmResults([]);
+                setGeocode({ kind: "idle" });
               }}
               onFocus={() => {
                 if (state.selectedKey === null && state.cityLabel.trim().length >= 2) {
@@ -448,6 +469,17 @@ export function BirthForm({
                     <li className="px-3 py-2 font-mono text-data-xs uppercase tracking-microcopy text-dim">
                       Searching the map...
                     </li>
+                  ) : geocode.kind === "idle" ? (
+                    <li>
+                      <button
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => void runWorldSearch()}
+                        className="w-full border-t border-rule px-3 py-2 text-left font-mono text-data-xs uppercase tracking-microcopy text-dim hover:text-bone"
+                      >
+                        Not here? Search the world map →
+                      </button>
+                    </li>
                   ) : null}
                 </ul>
               ) : geocode.kind === "loading" ? (
@@ -457,15 +489,23 @@ export function BirthForm({
               ) : noMatch ? (
                 <div className="px-3 py-3">
                   <p className="font-body text-prose-s text-prose">
-                    No place matched &ldquo;{query}&rdquo;.
+                    No saved place matched &ldquo;{query}&rdquo;.
                   </p>
+                  <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => void runWorldSearch()}
+                    className={cn(LINK_CLASS, "mt-2")}
+                  >
+                    Search the world map →
+                  </button>
                   <button
                     type="button"
                     onClick={() => {
                       setOpen(false);
                       patch({ manualMode: true });
                     }}
-                    className={cn(LINK_CLASS, "mt-2")}
+                    className={cn(LINK_CLASS, "mt-2 block")}
                   >
                     Enter coordinates manually →
                   </button>
@@ -474,9 +514,18 @@ export function BirthForm({
                 <div className="px-3 py-3 font-mono text-data-xs uppercase tracking-microcopy text-conflict">
                   {geocode.message}
                 </div>
+              ) : offerSearch ? (
+                <button
+                  type="button"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => void runWorldSearch()}
+                  className="w-full px-3 py-3 text-left font-mono text-data-xs uppercase tracking-microcopy text-dim hover:text-bone"
+                >
+                  Search the world map for &ldquo;{query}&rdquo; →
+                </button>
               ) : typingHint ? (
                 <div className="px-3 py-3 font-mono text-data-xs uppercase tracking-microcopy text-dim">
-                  Keep typing to search the world map...
+                  Keep typing...
                 </div>
               ) : null}
             </div>

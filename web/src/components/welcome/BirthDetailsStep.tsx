@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { geocodePlace, GeocodeError, type GeocodeResult } from "@/lib/geocoding";
 import { writeChart } from "@/lib/savedCharts";
 import { Button } from "@/components/chrome/Button";
 
-const GEOCODE_DEBOUNCE_MS = 350;
 
 const INPUT_CLASS =
   "w-full border border-rule bg-transparent px-3 py-[var(--space-2)] font-mono text-data-s text-bone placeholder:text-faint-ink outline-none focus:border-rule-active";
@@ -31,7 +30,7 @@ export function BirthDetailsStep() {
   const [cityQuery, setCityQuery] = useState("");
   const [selected, setSelected] = useState<SelectedPlace | null>(null);
   const [results, setResults] = useState<readonly GeocodeResult[]>([]);
-  const [searchStatus, setSearchStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [searchStatus, setSearchStatus] = useState<"idle" | "loading" | "error" | "empty">("idle");
   const [searchError, setSearchError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -41,42 +40,34 @@ export function BirthDetailsStep() {
     return () => abortRef.current?.abort();
   }, []);
 
-  // Debounced world search, same shape as reading/BirthForm.tsx: fires only
-  // while the user is typing an unselected query.
-  useEffect(() => {
-    if (!open || selected) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setResults([]);
-      return;
-    }
+  /**
+   * Searches OpenStreetMap on an explicit request, the same rule as
+   * reading/BirthForm.tsx. Nominatim's usage policy states that autocomplete
+   * "must not" be implemented against it, and this form used to do exactly
+   * that on a 350 ms debounce.
+   */
+  const runSearch = useCallback(async () => {
     const query = cityQuery.trim();
-    if (query.length < 3) {
-      setResults([]);
-      setSearchStatus("idle");
-      return;
-    }
+    if (query.length < 2) return;
     const controller = new AbortController();
     abortRef.current?.abort();
     abortRef.current = controller;
     setSearchStatus("loading");
-    const timer = window.setTimeout(async () => {
-      try {
-        const found = await geocodePlace(query, controller.signal);
-        if (controller.signal.aborted) return;
-        setResults(found);
-        setSearchStatus("idle");
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        setSearchStatus("error");
-        setSearchError(
-          err instanceof GeocodeError && err.userMessage
-            ? err.userMessage
-            : "Could not reach the map. Try again.",
-        );
-      }
-    }, GEOCODE_DEBOUNCE_MS);
-    return () => window.clearTimeout(timer);
-  }, [cityQuery, open, selected]);
+    try {
+      const found = await geocodePlace(query, controller.signal);
+      if (controller.signal.aborted) return;
+      setResults(found);
+      setSearchStatus(found.length === 0 ? "empty" : "idle");
+    } catch (err) {
+      if (controller.signal.aborted) return;
+      setSearchStatus("error");
+      setSearchError(
+        err instanceof GeocodeError && err.userMessage
+          ? err.userMessage
+          : "Could not reach the map. Try again.",
+      );
+    }
+  }, [cityQuery]);
 
   const pick = (r: GeocodeResult) => {
     const label = r.context ? `${r.name}, ${r.context}` : r.name;
@@ -163,12 +154,22 @@ export function BirthDetailsStep() {
                   const value = e.target.value;
                   setCityQuery(value);
                   if (selected && value !== selected.label) setSelected(null);
+                  // Results belong to the previous query; drop them so a stale
+                  // row cannot be picked under a name that no longer matches.
+                  setResults([]);
+                  setSearchStatus("idle");
                 }}
-                placeholder="Start typing a city…"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    void runSearch();
+                  }
+                }}
+                placeholder="Type a city, then search"
                 autoComplete="off"
                 className={INPUT_CLASS}
               />
-              {!selected && cityQuery.trim().length >= 3 ? (
+              {!selected && cityQuery.trim().length >= 2 ? (
                 <div className="mt-2 border border-rule">
                   {results.length > 0 ? (
                     results.map((r, idx) => (
@@ -190,10 +191,18 @@ export function BirthDetailsStep() {
                     <div className="px-3 py-[var(--space-2)] font-mono text-data-xs text-conflict">
                       {(searchError ?? "").toUpperCase()}
                     </div>
-                  ) : (
+                  ) : searchStatus === "empty" ? (
                     <div className="px-3 py-[var(--space-2)] font-mono text-data-xs text-faint-ink">
                       NO MATCH
                     </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => void runSearch()}
+                      className="w-full px-3 py-[var(--space-2)] text-left font-mono text-data-xs text-dim hover:text-bone"
+                    >
+                      SEARCH THE MAP FOR THIS PLACE →
+                    </button>
                   )}
                 </div>
               ) : null}

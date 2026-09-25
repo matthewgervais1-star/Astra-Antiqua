@@ -3,12 +3,11 @@ import { notFound } from "next/navigation";
 import { NaveShell } from "@/components/chrome/NaveShell";
 import { NaveHead } from "@/components/chrome/NaveHead";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
-import type { PolicyCopy } from "@/lib/legal/privacyCopy";
+import type { LegalCopy, LegalSection } from "@/lib/legal/legalTypes";
 import {
   POLICY_FACTS,
   missingPolicyFacts,
   policyFactsComplete,
-  storedOutsideQuebec,
   type PolicyFacts,
 } from "@/lib/legal/policyFacts";
 
@@ -16,31 +15,37 @@ const PROSE = "font-body text-prose-s leading-prose text-prose";
 const LABEL = "font-mono text-data-s uppercase tracking-microcopy text-dim";
 
 /**
- * The confidentiality policy required by P-39.1 s. 8.2, carrying the published
- * governance information required by s. 3.2 as a labelled section inside it.
+ * Every published legal document: the privacy policy and the terms.
  *
- * One renderer, two copy objects. The English and French versions are the same
- * document in two languages rather than two documents, so a section cannot be
- * added to one and forgotten in the other. That matters beyond tidiness: the
- * Consumer Protection Act resolves a discrepancy between versions in the
- * consumer's favour, so drift is a liability rather than an inconsistency.
+ * One renderer over two copy objects per document. The English and French
+ * versions are the same document in two languages rather than two documents,
+ * so a section cannot be added to one and forgotten in the other. That matters
+ * beyond tidiness: the Consumer Protection Act resolves a discrepancy between
+ * versions in the consumer's favour, so drift is a liability.
  *
- * What is deliberately NOT here is the terms of service. The CAI's drafting
+ * The privacy policy and the terms stay separate routes. The CAI's drafting
  * guide allows terms to link to a privacy policy but not to be merged with
- * one, so the terms live at their own route.
+ * one, which is why they cross-link rather than combine.
+ *
+ * `extraSections` carries anything a document computes rather than declares,
+ * such as the privacy policy's storage paragraph, whose wording depends on
+ * where the database actually sits.
  */
-export function PrivacyPolicy({
+export function LegalDocument({
   copy,
   facts = POLICY_FACTS,
+  extraSections = [],
 }: {
-  copy: PolicyCopy;
+  copy: LegalCopy;
   facts?: PolicyFacts;
+  extraSections?: readonly LegalSection[];
 }) {
   if (!policyFactsComplete(facts)) {
-    // Unreachable rather than half-written. The build log says why, so this
-    // cannot be mistaken for a routing bug on the day someone goes looking.
+    // Unreachable rather than half-written. A legal document with holes in it
+    // is a published false statement, so the route 404s until it is filled.
+    // The build log says why, so this cannot be mistaken for a routing bug.
     console.warn(
-      `[privacy] Policy route is 404 until these are filled in ` +
+      `[legal] ${copy.metaTitle} is 404 until these are filled in ` +
         `src/lib/legal/policyFacts.ts: ${missingPolicyFacts(facts).join(", ")}`,
     );
     notFound();
@@ -48,6 +53,7 @@ export function PrivacyPolicy({
 
   const fill = (text: string) =>
     text
+      .replaceAll("{legalName}", facts.legalName)
       .replaceAll("{email}", facts.privacyEmail)
       .replaceAll("{postal}", facts.postalAddress)
       .replaceAll("{officer}", facts.privacyOfficerTitle)
@@ -59,8 +65,8 @@ export function PrivacyPolicy({
       .replaceAll("{dormantMonths}", String(facts.dormantAccountMonths))
       .replaceAll("{backupDays}", String(facts.backupRetentionDays));
 
-  const outside = storedOutsideQuebec(facts);
-  const [termsBefore, termsAfter] = copy.termsSentence.split("{link}");
+  const [crossBefore, crossAfter] = copy.crossSentence.split("{link}");
+  const sections = [...copy.sections, ...extraSections];
 
   return (
     <NaveShell context={copy.context}>
@@ -70,13 +76,13 @@ export function PrivacyPolicy({
         <section className="flex flex-col gap-2">
           <p className={LABEL}>{facts.legalName}</p>
           <p className={LABEL}>{fill(copy.dateLine)}</p>
-          <p className={`${PROSE} pt-3`}>{copy.intro}</p>
+          <p className={`${PROSE} pt-3`}>{fill(copy.intro)}</p>
           <p className={PROSE}>
-            {termsBefore}
-            <Link href="/terms" className="underline underline-offset-4">
-              {copy.termsLinkText}
+            {crossBefore}
+            <Link href={copy.crossLinkHref} className="underline underline-offset-4">
+              {copy.crossLinkText}
             </Link>
-            {termsAfter}
+            {crossAfter}
           </p>
           <p className={PROSE}>
             <Link href={copy.otherLanguageHref} className="underline underline-offset-4">
@@ -85,7 +91,7 @@ export function PrivacyPolicy({
           </p>
         </section>
 
-        {copy.sections.map((section) => (
+        {sections.map((section) => (
           <section key={section.label} className="flex flex-col gap-5">
             <SectionDivider label={section.label} />
             {section.lead ? <p className={PROSE}>{fill(section.lead)}</p> : null}
@@ -108,20 +114,6 @@ export function PrivacyPolicy({
             ))}
           </section>
         ))}
-
-        <section className="flex flex-col gap-5">
-          <SectionDivider label={copy.storage.label} />
-          <p className={PROSE}>
-            {fill(outside ? copy.storage.outside : copy.storage.inQuebec)}
-          </p>
-          {/* The assessment sentence renders only once the assessment exists.
-              s. 17 requires it BEFORE the information leaves the province, so
-              claiming one that was never done would breach both s. 17 and the
-              accuracy the policy itself is supposed to have. */}
-          {outside && facts.transferAssessmentCompleted ? (
-            <p className={PROSE}>{fill(copy.storage.outsideAssessed)}</p>
-          ) : null}
-        </section>
 
         <p className={`${PROSE} pb-6`}>{fill(copy.closing)}</p>
       </div>

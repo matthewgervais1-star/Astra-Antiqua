@@ -29,6 +29,17 @@ should not be making alone.
   same interpolated facts, and no token the renderer cannot fill.
 - One chart per account, enforced by a unique index rather than by application
   code remembering to check. Verified against real Postgres by `pnpm test:db`.
+- Terms of service at `/terms` and `/conditions`, on the same renderer and the
+  same 404-until-filled guard. They stay a separate route from the policy: the
+  CAI's drafting guide lets terms link to a privacy policy but not merge with
+  one. The distance-contract disclosures CPA s. 54.4 requires at checkout are
+  NOT in them, because there is no checkout yet.
+- The OpenStreetMap geocoder no longer autocompletes. Nominatim's usage policy
+  says autocomplete "must not" be implemented against it, and both birth forms
+  did exactly that on a 350 ms debounce. The bundled 61-city list still filters
+  as you type; reaching Nominatim now takes an explicit press. Verified in the
+  browser: typing ten characters produced zero requests, one press produced
+  exactly one.
 
 ## Fill these in before the policy can be served
 

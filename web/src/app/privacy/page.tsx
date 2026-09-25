@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { PrivacyPolicy } from "@/components/legal/PrivacyPolicy";
-import { PRIVACY_EN } from "@/lib/legal/privacyCopy";
+import { LegalDocument } from "@/components/legal/LegalDocument";
+import { PRIVACY_EN, storageSection } from "@/lib/legal/privacyCopy";
+import { POLICY_FACTS, storedOutsideQuebec } from "@/lib/legal/policyFacts";
 
 export const metadata: Metadata = {
   title: PRIVACY_EN.metaTitle,
@@ -12,5 +13,16 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPage() {
-  return <PrivacyPolicy copy={PRIVACY_EN} />;
+  return (
+    <LegalDocument
+      copy={PRIVACY_EN}
+      extraSections={[
+        storageSection(
+          PRIVACY_EN,
+          storedOutsideQuebec(),
+          POLICY_FACTS.transferAssessmentCompleted,
+        ),
+      ]}
+    />
+  );
 }
