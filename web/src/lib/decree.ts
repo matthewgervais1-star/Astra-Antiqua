@@ -69,7 +69,7 @@ const NO_SECOND_FIGURE: Readonly<Record<Culture, string>> = {
   greece: "No second shrine has anything to add to this. Carry the one answer out and do not go back up for another.",
   canaan: "No other business reaches the floor behind it. Close it here and go down to the field.",
   carthage: "The ink is spent on this one and nowhere else. Rule off beneath it and leave the sheet at that.",
-  rome: "No second sign stands beside it. Act on the one omen and let the rest of the day alone.",
+  rome: "The sky sends no further portent, and the pontiffs leave the remainder of the day unmarked.",
 };
 
 function toneForKind(kind: AspectKind): "harmony" | "tension" {

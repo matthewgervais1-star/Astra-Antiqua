@@ -126,7 +126,7 @@ const EXACT_FORMS: Readonly<
   ],
   canaan: [
     (subject, predicate) => `${subject} ${predicate}, and the gate is full to the wall.`,
-    (subject, predicate) => `${subject} ${predicate}, and not one seat stands empty.`,
+    (subject, predicate) => `${subject} ${predicate}, and every god has come at the summons.`,
   ],
   carthage: [
     (subject, predicate) => `${subject} ${predicate}, the entry posted to the hour.`,
@@ -134,7 +134,7 @@ const EXACT_FORMS: Readonly<
   ],
   rome: [
     (subject, predicate) => `${subject}, at the line the augur drew, ${predicate}.`,
-    (subject, predicate) => `${subject}, squarely inside the templum, ${predicate}.`,
+    (subject, predicate) => `${subject}, inside the templum, ${predicate}.`,
   ],
 };
 
