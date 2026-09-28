@@ -9,12 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import {
-  listCharts,
-  upsertChart,
-  writeChartList,
-  type SavedChartInputs,
-} from "@/lib/savedCharts";
+import { readChart, writeChart, type SavedChartInputs } from "@/lib/savedCharts";
 
 export interface AuthUser {
   id: string;
@@ -45,9 +40,9 @@ interface MeResponse {
   user: AuthUser | null;
 }
 
-interface ChartsListResponse {
+interface ChartResponse {
   ok: boolean;
-  charts?: SavedChartInputs[];
+  chart?: SavedChartInputs | null;
   error?: string;
 }
 
@@ -62,21 +57,21 @@ async function fetchMe(): Promise<AuthUser | null> {
   }
 }
 
-async function pullServerCharts(): Promise<readonly SavedChartInputs[]> {
+async function pullServerChart(): Promise<SavedChartInputs | null> {
   try {
     const res = await fetch("/api/charts", { credentials: "include" });
-    if (!res.ok) return [];
-    const data = (await res.json()) as ChartsListResponse;
-    return data.charts ?? [];
+    if (!res.ok) return null;
+    const data = (await res.json()) as ChartResponse;
+    return data.chart ?? null;
   } catch {
-    return [];
+    return null;
   }
 }
 
 async function pushChartToServer(chart: SavedChartInputs): Promise<boolean> {
   try {
     const res = await fetch("/api/charts", {
-      method: "POST",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify(chart),
@@ -88,23 +83,24 @@ async function pushChartToServer(chart: SavedChartInputs): Promise<boolean> {
 }
 
 /**
- * On successful sign-in / sign-up, reconcile localStorage charts with the
- * server's set: server is the source of truth, but any localStorage-only
- * charts get uploaded so the user does not lose work entered before signing
- * in. Final result becomes localStorage (so reads stay synchronous).
+ * On sign-in, settle which of the two copies of the reader's chart wins.
+ *
+ * The server wins when it has one, because that is the copy that followed
+ * them from another device. When it does not, a chart cast on this device
+ * before signing in is uploaded rather than lost.
+ *
+ * There is only ever one chart to reconcile. Charts about other people are
+ * not stored anywhere, so there is no set to merge and nothing that signing
+ * in could quietly delete.
  */
 async function reconcileAfterSignIn(): Promise<void> {
-  const serverCharts = await pullServerCharts();
-  const localCharts = listCharts();
-  const serverIds = new Set(serverCharts.map((c) => c.id));
-  // Upload local-only charts (treat them as new chart records under the user)
-  for (const c of localCharts) {
-    if (!serverIds.has(c.id)) {
-      await pushChartToServer(c);
-    }
+  const server = await pullServerChart();
+  if (server) {
+    writeChart(server);
+    return;
   }
-  const reFetched = await pullServerCharts();
-  writeChartList([...reFetched]);
+  const local = readChart();
+  if (local) await pushChartToServer(local);
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -113,8 +109,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refresh = useCallback(async () => {
     const user = await fetchMe();
     if (user) {
-      const serverCharts = await pullServerCharts();
-      writeChartList([...serverCharts]);
+      const serverChart = await pullServerChart();
+      if (serverChart) writeChart(serverChart);
       setState({ user, status: "authenticated" });
     } else {
       setState({ user: null, status: "anonymous" });
@@ -209,9 +205,9 @@ export function useAuth(): AuthContextValue {
 }
 
 /**
- * After a chart is upserted in the UI, components call this to also mirror
- * the chart to the server when authenticated. Idempotent on the localStorage
- * side (the chart is already there).
+ * After the reader saves their chart, mirror it to the server so it follows
+ * them to another device. A no-op when signed out, which is why the app works
+ * perfectly well without an account.
  */
 export async function mirrorChartToServer(
   chart: SavedChartInputs,
@@ -221,36 +217,14 @@ export async function mirrorChartToServer(
   await pushChartToServer(chart);
 }
 
-export async function mirrorDeleteToServer(
-  chartId: string,
-  status: AuthState["status"],
-): Promise<void> {
+/** No id: one chart per account, so there is only one thing to delete. */
+export async function mirrorDeleteToServer(status: AuthState["status"]): Promise<void> {
   if (status !== "authenticated") return;
   try {
-    await fetch(`/api/charts/${encodeURIComponent(chartId)}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
+    await fetch("/api/charts", { method: "DELETE", credentials: "include" });
   } catch {
     // ignore
   }
 }
 
-export async function mirrorPrimaryToServer(
-  chartId: string,
-  status: AuthState["status"],
-): Promise<void> {
-  if (status !== "authenticated") return;
-  try {
-    await fetch(`/api/charts/${encodeURIComponent(chartId)}`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "setPrimary" }),
-    });
-  } catch {
-    // ignore
-  }
-}
-
-export { upsertChart };
+export { writeChart };

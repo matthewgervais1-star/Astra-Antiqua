@@ -19,11 +19,7 @@ import { resolveBirth, type ResolvedBirth } from "@/lib/birthDateTime";
 import { buildReading, type Reading } from "@/lib/reading";
 import { computeAspects, type Longitude } from "@/data/sampleChart";
 import { RECEIVED_BODIES, type Culture, type Planet } from "@/data/cultures";
-import {
-  getChart,
-  getPrimaryChart,
-  type SavedChartInputs,
-} from "@/lib/savedCharts";
+import { readChart, type SavedChartInputs } from "@/lib/savedCharts";
 
 const ORACLE_INVOCATION: Readonly<Record<Culture, string>> = {
   egypt: "Consult the Hall of Ma'at",
@@ -88,8 +84,8 @@ function ReadingExperienceImpl({ explicitCulture }: ReadingExperienceImplProps) 
   const resultRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Load initial form values from the URL-specified chart or the primary saved chart.
-    const meta = chartId ? getChart(chartId) : getPrimaryChart();
+    // There is one chart to edit: the reader's own.
+    const meta = readChart();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setHydrated({
       editingChart: meta,
@@ -215,10 +211,7 @@ function ReadingExperienceImpl({ explicitCulture }: ReadingExperienceImplProps) 
         {state ? (
           <SaveChartPanel
             values={state.inputs}
-            existingId={editingChart?.id}
             initialName={editingChart?.name ?? ""}
-            initialRelationship={editingChart?.relationship ?? "self"}
-            initialPrimary={editingChart?.primary ?? false}
             onSaved={(saved) => setEditingChart(saved)}
           />
         ) : null}

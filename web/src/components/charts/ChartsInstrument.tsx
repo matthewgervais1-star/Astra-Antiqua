@@ -11,7 +11,7 @@ import { InstrumentShell, type InstrumentSibling } from "@/components/chrome/Ins
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { WheelSvg } from "@/components/chrome/WheelSvg";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
-import { mirrorDeleteToServer, mirrorPrimaryToServer, useAuth } from "@/components/auth/AuthProvider";
+import { mirrorDeleteToServer, useAuth } from "@/components/auth/AuthProvider";
 import {
   CULTURE_LABELS,
   PLANETS,
@@ -20,16 +20,10 @@ import {
 } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import { computeAspects, longitudeToSign } from "@/data/sampleChart";
-import {
-  deleteChart,
-  listCharts,
-  setPrimaryChart,
-  type SavedChartInputs,
-} from "@/lib/savedCharts";
+import { clearChart, readChart, type SavedChartInputs } from "@/lib/savedCharts";
 import { resolveSavedChart } from "@/lib/savedNatal";
 import { computeWholeSignHouses, houseOfSign } from "@/lib/houses";
 import { computeMotion } from "@/lib/motion";
-import { cn } from "@/lib/classNames";
 import { SIGN_ABBR3, cityShort, formatDegMin } from "@/components/charts/chartFormat";
 
 const SIBLINGS: readonly InstrumentSibling[] = [
@@ -48,19 +42,12 @@ export function ChartsInstrument() {
 function ChartsInstrumentInner() {
   const culture = useActivePantheon();
   const { status } = useAuth();
-  const [charts, setCharts] = useState<readonly SavedChartInputs[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [chart, setChart] = useState<SavedChartInputs | null>(null);
+  const [confirming, setConfirming] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
   const refresh = useCallback(() => {
-    const list = listCharts();
-    setCharts(list);
-    setSelectedId((curr) =>
-      curr && list.some((c) => c.id === curr)
-        ? curr
-        : (list.find((c) => c.primary)?.id ?? list[0]?.id ?? null),
-    );
+    setChart(readChart());
   }, []);
 
   useEffect(() => {
@@ -69,17 +56,11 @@ function ChartsInstrumentInner() {
     setHydrated(true);
   }, [refresh, status]);
 
-  const handleDelete = async (id: string) => {
-    deleteChart(id);
-    setConfirmId(null);
+  const handleDelete = async () => {
+    clearChart();
+    setConfirming(false);
     refresh();
-    await mirrorDeleteToServer(id, status);
-  };
-
-  const handleSetPrimary = async (id: string) => {
-    setPrimaryChart(id);
-    refresh();
-    await mirrorPrimaryToServer(id, status);
+    await mirrorDeleteToServer(status);
   };
 
   if (!culture) return null;
@@ -94,7 +75,7 @@ function ChartsInstrumentInner() {
     );
   }
 
-  if (charts.length === 0) {
+  if (chart === null) {
     return (
       <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
         <div className="mx-auto flex max-w-[560px] flex-col items-center px-5 py-16 text-center min-[720px]:col-span-3">
@@ -120,10 +101,9 @@ function ChartsInstrumentInner() {
     );
   }
 
-  const selectedChart = charts.find((c) => c.id === selectedId) ?? charts[0] ?? null;
-  const natal = selectedChart ? resolveSavedChart(selectedChart) : null;
+  const natal = resolveSavedChart(chart);
 
-  if (!selectedChart || !natal) {
+  if (!natal) {
     return (
       <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
         <div className="mx-auto flex max-w-[480px] flex-col items-center px-5 py-16 text-center min-[720px]:col-span-3">
@@ -147,7 +127,7 @@ function ChartsInstrumentInner() {
     <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
       <aside className="border-rule border-b px-7 py-6 min-[720px]:border-b-0 min-[720px]:border-r">
         <div className="font-mono text-data-xs tracking-label text-dim">
-          PLACEMENTS · B. {selectedChart.date} · {cityShort(selectedChart.cityLabel)}
+          PLACEMENTS · B. {chart.date} · {cityShort(chart.cityLabel)}
         </div>
         <div className="mt-3 flex flex-col font-mono text-data-xs">
           <DataRowHead />
@@ -157,7 +137,7 @@ function ChartsInstrumentInner() {
             return (
               <DataRow
                 key={planet}
-                href={`/charts/${selectedChart.id}/${planet}`}
+                href={`/charts/${chart.id}/${planet}`}
                 received={isReceived(planet)}
                 body={
                   <>
@@ -205,74 +185,49 @@ function ChartsInstrumentInner() {
 
       <aside className="border-rule flex flex-col border-t px-7 py-6 min-[720px]:border-t-0 min-[720px]:border-l">
         <div className="font-mono text-data-xs tracking-label text-dim">
-          SAVED CHARTS · ON THIS DEVICE
+          YOUR CHART · ON THIS DEVICE
         </div>
-        <ul className="mt-3 flex flex-col gap-[var(--space-2)]">
-          {charts.map((chart) => (
-            <li key={chart.id}>
-              <div
-                className={cn(
-                  "border px-[var(--space-3)] py-[var(--space-2)]",
-                  chart.id === selectedChart.id ? "border-rule-active" : "border-rule",
-                )}
-              >
+        <div className="mt-3 border border-rule-active px-[var(--space-3)] py-[var(--space-2)]">
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="font-display text-[13px] tracking-[0.08em] text-bone">
+              {chart.name.toUpperCase()}
+            </span>
+            <span className="font-mono text-data-xs text-dim">
+              {chart.date.slice(0, 4)} · {cityShort(chart.cityLabel)}
+            </span>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-4 font-mono text-data-xs tracking-data">
+            <Badge tone="accent">YOURS</Badge>
+            {confirming ? (
+              <>
+                <button type="button" onClick={handleDelete} className="text-conflict">
+                  CONFIRM REMOVE
+                </button>
                 <button
                   type="button"
-                  onClick={() => setSelectedId(chart.id)}
-                  className="flex w-full items-baseline justify-between gap-3 text-left"
+                  onClick={() => setConfirming(false)}
+                  className="text-dim hover:text-bone"
                 >
-                  <span className="font-display text-[13px] tracking-[0.08em] text-bone">
-                    {chart.name.toUpperCase()}
-                  </span>
-                  <span className="font-mono text-data-xs text-dim">
-                    {chart.date.slice(0, 4)} · {cityShort(chart.cityLabel)}
-                  </span>
+                  CANCEL
                 </button>
-                <div className="mt-2 flex flex-wrap gap-4 font-mono text-data-xs tracking-data">
-                  {chart.primary ? (
-                    <Badge tone="accent">PRIMARY</Badge>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => handleSetPrimary(chart.id)}
-                      className="text-dim hover:text-bone"
-                    >
-                      SET PRIMARY
-                    </button>
-                  )}
-                  {confirmId === chart.id ? (
-                    <>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(chart.id)}
-                        className="text-conflict"
-                      >
-                        CONFIRM REMOVE
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setConfirmId(null)}
-                        className="text-dim hover:text-bone"
-                      >
-                        CANCEL
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setConfirmId(chart.id)}
-                      className="text-dim hover:text-conflict"
-                    >
-                      REMOVE
-                    </button>
-                  )}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setConfirming(true)}
+                className="text-dim hover:text-conflict"
+              >
+                REMOVE
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="mt-3 border border-rule px-[var(--space-3)] py-[var(--space-2)] font-mono text-data-xs leading-data text-dim">
+          ONE CHART, YOUR OWN. TO WEIGH IT AGAINST SOMEONE ELSE, USE SYNASTRY: THEIR DETAILS ARE
+          COMPUTED AND DISCARDED, NEVER KEPT.
+        </div>
         <Button href="/reading" variant="votive" block className="mt-[var(--space-2)]">
-          + CAST A NEW CHART
+          RECAST MY CHART
         </Button>
 
         <div className="mt-6 font-mono text-data-xs tracking-label text-dim">

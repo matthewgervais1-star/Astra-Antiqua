@@ -1,37 +1,51 @@
 /**
- * Persistent storage for multiple saved birth charts in localStorage.
+ * The reader's own birth chart, in localStorage.
  *
- * Storage shape: `astra-antiqua.saved-charts.v2` holds a JSON array of
- * SavedChartInputs. Each entry has a stable id, a user-facing name, a
- * relationship label, and the raw birth inputs needed to recompute the chart.
+ * One chart, not a list. This app used to keep a set of charts with a
+ * relationship label on each (self, partner, family, friend, other), which
+ * meant the database held the name and exact birth moment of identifiable
+ * people who had never used the service and had never agreed to anything.
+ * That is the thing Quebec's Law 25 s. 6 is about, and no amount of policy
+ * wording fixes a schema that records it.
  *
- * Migration: on first read, if the legacy single-entry key
- * `astra-antiqua.birth-input.v1` exists and the new storage is empty, the
- * legacy entry is migrated into a primary "Me" chart.
+ * So the schema stopped recording it. You keep your own chart. Comparing
+ * against someone else is a calculation, not a record: their details are
+ * entered, used, and dropped. See ComparisonParty below, and the Android
+ * app's SynastryViewModel.compare, which has always worked this way.
+ *
+ * Storage: `astra-antiqua.chart.v3` holds one SavedChartInputs object.
  */
 
-export type ChartRelationship =
-  | "self"
-  | "partner"
-  | "family"
-  | "friend"
-  | "other";
-
-export interface SavedChartInputs {
-  id: string;
+/** Everything needed to compute a chart. Shared by the one that is kept and
+ *  the one that is not, so the astronomy code cannot tell them apart. */
+export interface BirthInputs {
   name: string;
-  relationship: ChartRelationship;
   date: string; // YYYY-MM-DD
   time: string; // HH:MM (24-hour)
   cityLabel: string;
   latitude: number;
   longitude: number;
-  primary: boolean;
+}
+
+export interface SavedChartInputs extends BirthInputs {
+  id: string;
   createdAt: string; // ISO timestamp
 }
 
-const STORAGE_KEY = "astra-antiqua.saved-charts.v2";
-const LEGACY_KEY = "astra-antiqua.birth-input.v1";
+/**
+ * A second party for a comparison. Deliberately has no id and no createdAt,
+ * because there is nowhere to put them: this never becomes a row. It exists
+ * for the length of one calculation and then it is gone.
+ */
+export type ComparisonParty = BirthInputs;
+
+export type ChartUpsertInput = Omit<SavedChartInputs, "id" | "createdAt"> &
+  Partial<Pick<SavedChartInputs, "id" | "createdAt">>;
+
+const STORAGE_KEY = "astra-antiqua.chart.v3";
+/** The multi-chart key this replaced, and the single-chart key before that. */
+const LEGACY_LIST_KEY = "astra-antiqua.saved-charts.v2";
+const LEGACY_SINGLE_KEY = "astra-antiqua.birth-input.v1";
 
 function generateId(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -49,149 +63,107 @@ function safeParse<T>(raw: string | null): T | null {
   }
 }
 
-function writeRaw(charts: SavedChartInputs[]): void {
+function writeRaw(chart: SavedChartInputs | null): void {
   if (typeof window === "undefined") return;
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(charts));
+    if (chart) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(chart));
+    else window.localStorage.removeItem(STORAGE_KEY);
   } catch {
     // localStorage may be unavailable; silently continue
   }
 }
 
-/**
- * Replace the entire local chart cache. Used by AuthProvider after a sign-in
- * to overwrite the local set with the server's source-of-truth list.
- */
-export function writeChartList(charts: SavedChartInputs[]): void {
-  writeRaw(charts);
-}
-
-interface LegacyShape {
+interface LegacyListEntry {
+  id?: string;
+  name?: string;
+  relationship?: string;
   date?: string;
   time?: string;
   cityLabel?: string;
   latitude?: number;
   longitude?: number;
-}
-
-function tryMigrateLegacy(): SavedChartInputs[] | null {
-  if (typeof window === "undefined") return null;
-  const legacy = safeParse<LegacyShape>(window.localStorage.getItem(LEGACY_KEY));
-  if (
-    !legacy ||
-    typeof legacy.date !== "string" ||
-    typeof legacy.time !== "string" ||
-    typeof legacy.latitude !== "number" ||
-    typeof legacy.longitude !== "number"
-  ) {
-    return null;
-  }
-  const migrated: SavedChartInputs = {
-    id: generateId(),
-    name: "Me",
-    relationship: "self",
-    date: legacy.date,
-    time: legacy.time,
-    cityLabel: typeof legacy.cityLabel === "string" ? legacy.cityLabel : "",
-    latitude: legacy.latitude,
-    longitude: legacy.longitude,
-    primary: true,
-    createdAt: new Date().toISOString(),
-  };
-  writeRaw([migrated]);
-  return [migrated];
-}
-
-function readRaw(): SavedChartInputs[] {
-  if (typeof window === "undefined") return [];
-  const stored = safeParse<unknown>(window.localStorage.getItem(STORAGE_KEY));
-  if (Array.isArray(stored)) return stored as SavedChartInputs[];
-  return tryMigrateLegacy() ?? [];
-}
-
-export function listCharts(): readonly SavedChartInputs[] {
-  return readRaw();
-}
-
-export function getChart(id: string): SavedChartInputs | null {
-  return readRaw().find((c) => c.id === id) ?? null;
-}
-
-export function getPrimaryChart(): SavedChartInputs | null {
-  const charts = readRaw();
-  return charts.find((c) => c.primary) ?? charts[0] ?? null;
-}
-
-export interface ChartUpsertInput {
-  id?: string;
-  name: string;
-  relationship: ChartRelationship;
-  date: string;
-  time: string;
-  cityLabel: string;
-  latitude: number;
-  longitude: number;
   primary?: boolean;
+  createdAt?: string;
 }
 
-export function upsertChart(input: ChartUpsertInput): SavedChartInputs {
-  const charts = readRaw();
-  const id = input.id ?? generateId();
-  const wantsPrimary = input.primary ?? charts.length === 0;
-  const updated: SavedChartInputs[] = wantsPrimary
-    ? charts.map((c) => ({ ...c, primary: false }))
-    : charts.slice();
-  const existing = charts.find((c) => c.id === id);
-  const entry: SavedChartInputs = {
-    id,
-    name: input.name.trim() || "Unnamed",
-    relationship: input.relationship,
+function isUsable(entry: LegacyListEntry): boolean {
+  return (
+    typeof entry.date === "string" &&
+    typeof entry.time === "string" &&
+    typeof entry.latitude === "number" &&
+    typeof entry.longitude === "number"
+  );
+}
+
+/**
+ * Brings forward the reader's OWN chart from the old multi-chart storage and
+ * discards the rest.
+ *
+ * Dropping the others is the migration, not a side effect of it: charts about
+ * other people are what this change exists to stop keeping. The primary chart
+ * wins, then the one marked self, then the first usable entry.
+ */
+function migrateFromList(): SavedChartInputs | null {
+  if (typeof window === "undefined") return null;
+  const list = safeParse<LegacyListEntry[]>(window.localStorage.getItem(LEGACY_LIST_KEY));
+  if (!Array.isArray(list) || list.length === 0) return null;
+  const usable = list.filter(isUsable);
+  const mine =
+    usable.find((c) => c.primary) ?? usable.find((c) => c.relationship === "self") ?? usable[0];
+  if (!mine) return null;
+  const migrated: SavedChartInputs = {
+    id: mine.id ?? generateId(),
+    name: mine.name?.trim() || "Me",
+    date: mine.date as string,
+    time: mine.time as string,
+    cityLabel: mine.cityLabel ?? "",
+    latitude: mine.latitude as number,
+    longitude: mine.longitude as number,
+    createdAt: mine.createdAt ?? new Date().toISOString(),
+  };
+  writeRaw(migrated);
+  try {
+    window.localStorage.removeItem(LEGACY_LIST_KEY);
+    window.localStorage.removeItem(LEGACY_SINGLE_KEY);
+  } catch {
+    // Nothing to do; the new key is written either way.
+  }
+  return migrated;
+}
+
+/** The reader's chart, or null if they have not cast one. */
+export function readChart(): SavedChartInputs | null {
+  if (typeof window === "undefined") return null;
+  const stored = safeParse<SavedChartInputs>(window.localStorage.getItem(STORAGE_KEY));
+  if (stored && typeof stored.date === "string" && typeof stored.latitude === "number") {
+    return stored;
+  }
+  return migrateFromList();
+}
+
+/**
+ * Records the reader's chart, replacing whatever was there.
+ *
+ * Casting again replaces rather than adds, which is what one chart per reader
+ * means. The Android app has always behaved this way.
+ */
+export function writeChart(input: ChartUpsertInput): SavedChartInputs {
+  const existing = readChart();
+  const chart: SavedChartInputs = {
+    id: input.id ?? existing?.id ?? generateId(),
+    name: input.name.trim() || "Me",
     date: input.date,
     time: input.time,
-    cityLabel: input.cityLabel.trim(),
+    cityLabel: input.cityLabel,
     latitude: input.latitude,
     longitude: input.longitude,
-    primary: wantsPrimary,
-    createdAt: existing?.createdAt ?? new Date().toISOString(),
+    createdAt: input.createdAt ?? existing?.createdAt ?? new Date().toISOString(),
   };
-  const idx = updated.findIndex((c) => c.id === id);
-  if (idx >= 0) {
-    updated[idx] = entry;
-  } else {
-    updated.push(entry);
-  }
-  if (!updated.some((c) => c.primary) && updated.length > 0) {
-    const first = updated[0];
-    if (first) first.primary = true;
-  }
-  writeRaw(updated);
-  return entry;
+  writeRaw(chart);
+  return chart;
 }
 
-export function deleteChart(id: string): boolean {
-  const charts = readRaw();
-  const filtered = charts.filter((c) => c.id !== id);
-  if (filtered.length === charts.length) return false;
-  if (filtered.length > 0 && !filtered.some((c) => c.primary)) {
-    const first = filtered[0];
-    if (first) first.primary = true;
-  }
-  writeRaw(filtered);
-  return true;
+/** Forgets the reader's chart on this device. */
+export function clearChart(): void {
+  writeRaw(null);
 }
-
-export function setPrimaryChart(id: string): boolean {
-  const charts = readRaw();
-  if (!charts.some((c) => c.id === id)) return false;
-  const updated = charts.map((c) => ({ ...c, primary: c.id === id }));
-  writeRaw(updated);
-  return true;
-}
-
-export const RELATIONSHIP_LABELS: Readonly<Record<ChartRelationship, string>> = {
-  self: "Myself",
-  partner: "Partner",
-  family: "Family",
-  friend: "Friend",
-  other: "Other",
-};

@@ -17,3 +17,6 @@ Thumbs.db
 # are extracted and committed under docs/design/handoff/, so the archive
 # itself is redundant history.
 /*.zip
+
+# A nested clone left behind by a worktree recycle. Not part of this repo.
+/astra-antiqua/

@@ -71,21 +71,45 @@ const SCHEMA = `
     created_at BIGINT NOT NULL
   );
 
-  CREATE TABLE IF NOT EXISTS charts (
+  -- Retention needs to know when the account was last used, and whether the
+  -- reader has already been warned that it is about to go. Added rather than
+  -- baked into the CREATE above so an existing database picks them up.
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS last_seen_at BIGINT;
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS deletion_warned_at BIGINT;
+
+  -- The two statutory holds. s. 11 keeps information used to make a decision
+  -- about a person for at least a year after that decision; s. 36 keeps
+  -- information that is the subject of an access or rectification request
+  -- until the applicant's recourses are exhausted. A scheduled deletion that
+  -- ignored these would destroy evidence the Act requires be kept, so the
+  -- sweep reads this table rather than trusting anyone to remember.
+  CREATE TABLE IF NOT EXISTS legal_holds (
     id TEXT PRIMARY KEY,
     user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    reason TEXT NOT NULL,
+    placed_at BIGINT NOT NULL,
+    -- NULL means the hold has no end date yet, which is the s. 36 case while
+    -- recourses are still open. An open hold blocks deletion indefinitely.
+    expires_at BIGINT
+  );
+
+  CREATE INDEX IF NOT EXISTS legal_holds_user_id_idx ON legal_holds (user_id);
+
+  -- One chart per account, the account holder's own. The unique constraint is
+  -- not an optimization: it is the schema refusing to hold a second person's
+  -- birth data. A chart about anyone else is computed in the browser and
+  -- never sent here. See src/lib/savedCharts.ts.
+  CREATE TABLE IF NOT EXISTS charts (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
-    relationship TEXT NOT NULL,
     date TEXT NOT NULL,
     time TEXT NOT NULL,
     city_label TEXT NOT NULL,
     latitude DOUBLE PRECISION NOT NULL,
     longitude DOUBLE PRECISION NOT NULL,
-    is_primary BOOLEAN NOT NULL DEFAULT FALSE,
     created_at BIGINT NOT NULL
   );
-
-  CREATE INDEX IF NOT EXISTS charts_user_id_idx ON charts (user_id);
 
   CREATE TABLE IF NOT EXISTS wait_list (
     email TEXT PRIMARY KEY,
