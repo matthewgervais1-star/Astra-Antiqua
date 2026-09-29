@@ -78,7 +78,6 @@ export default async function OpengraphImage({ params }: OpengraphImageProps) {
             fontFamily: "Cinzel",
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element -- Satori draws a plain img; next/image has no place in an ImageResponse */}
           <img src={emblemSrc} width={168} height={168} alt="" />
           <div style={{ width: 64, height: 1, background: accent, marginTop: 30 }} />
           <div
