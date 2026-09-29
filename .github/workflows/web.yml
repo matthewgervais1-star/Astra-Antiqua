@@ -1,0 +1,50 @@
+# The web surface's CI. One job: install with the frozen lockfile, then
+# typecheck, lint, run the gates, run the database tests (pnpm test:db starts
+# its own PGlite, so no service is needed), and build.
+# shared/** is a trigger because the web build reads the generated content.
+name: web
+
+on:
+  push:
+    paths:
+      - "web/**"
+      - "shared/**"
+      - ".github/workflows/web.yml"
+  pull_request:
+    paths:
+      - "web/**"
+      - "shared/**"
+      - ".github/workflows/web.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      # pnpm 11 wrote the lockfile, and package.json has no packageManager field.
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: web/.nvmrc
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Lint
+        run: pnpm lint
+      - name: Gates
+        run: pnpm gates
+      - name: Database tests
+        run: pnpm test:db
+      - name: Build
+        run: pnpm build
