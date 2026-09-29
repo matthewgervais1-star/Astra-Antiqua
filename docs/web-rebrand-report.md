@@ -117,6 +117,8 @@ unless the name says otherwise. "Seeded" means a reader with the Rome 1990-06-15
 | Not found | `not-found-rome-1280.png` | `/this-route-does-not-exist` |
 | Five voices | `voices-home-{egypt,greece,canaan,carthage,rome}-1280.png` | seeded, same day |
 | Responsive | `{home,week,charts-seeded,transits-saturn-opposition-asc}-rome-{375,768}.png` | seeded |
+| Instrument, tablet | `{synastry,forecast}-seeded-rome-768.png`, `charts-seeded-rome-768.png` (re-captured) | seeded, stacked to one column |
+| Instrument, 1024 | `{charts,synastry,forecast}-seeded-rome-1024.png` | seeded, three columns resume |
 
 The Next dev indicator (the "N" badge, bottom left) appears in every capture. It is a dev-server
 overlay and does not ship.
@@ -155,22 +157,31 @@ documents it.
 `web/scripts/screenshot.mjs --report-scroll` compares `document.documentElement.scrollWidth`
 with the viewport width after load.
 
-| Page (seeded) | 375 | 768 | 1280 |
-|---------------|-----|-----|------|
-| `/` | 375 / 375, pass | 768 / 768, pass | pass |
-| `/week` | 375 / 375, pass | 768 / 768, pass | pass |
-| `/charts` | 375 / 375, pass | **1023 / 768, scrolls** | pass |
-| `/transits/saturn-opposition-asc` | 375 / 375, pass | 768 / 768, pass | pass |
+| Page (seeded) | 375 | 768 | 1024 | 1280 |
+|---------------|-----|-----|------|------|
+| `/` | 375 / 375, pass | 768 / 768, pass | n/a | pass |
+| `/week` | 375 / 375, pass | 768 / 768, pass | n/a | pass |
+| `/charts` | 375 / 375, pass | 768 / 768, pass | 1024 / 1024, pass | 1280 / 1280, pass |
+| `/synastry` | n/a | 768 / 768, pass | 1024 / 1024, pass | 1280 / 1280, pass |
+| `/forecast` | n/a | 768 / 768, pass | 1024 / 1024, pass | 1280 / 1280, pass |
+| `/transits/saturn-opposition-asc` | 375 / 375, pass | 768 / 768, pass | n/a | pass |
 
-No page scrolls sideways at 375, which is the bar the plan set.
+No page scrolls sideways at 375, which is the bar the plan set. The three instrument rows were
+measured with `?culture=rome` at 768x1024 and 1024x800, scale 1, and `--report-scroll` printed
+"no horizontal scroll" for all six. A 1280x800 run of each printed the same, and the layout at
+1280 is unchanged: the breakpoint sits below 1280, so the three columns already applied there.
 
-**Finding: the instrument pages overflow between 720 and about 1024.** `InstrumentShell`
-switches to three columns at 720px with
+**Found and fixed: the instrument overflowed between 720 and about 1024.** These captures
+found it. `InstrumentShell` switched to three columns at 720px with
 `min-[720px]:grid-cols-[minmax(340px,360px)_1fr_minmax(380px,470px)]`. The two side columns
-alone need 720px, so the centre column has no room. At 768 `/charts` measures 1023 wide,
-`/synastry` 904 and `/forecast` 881. At 1024 all three fit. `charts-seeded-rome-768.png` shows
-the right rail cut off and the placement names clipped. This task records the defect and does
-not fix it.
+alone need 720px, so the centre column had no room. At 768 `/charts` measured 1023 wide,
+`/synastry` 904 and `/forecast` 881, and `charts-seeded-rome-768.png` showed the right rail
+cut off and the placement names clipped. The commit `fix(web): the instrument stacks until its
+three columns fit` moves the three `min-[720px]:` utilities to `min-[1024px]:`. Below 1024 the
+instrument is one column, centre first, and at 768 all three pages measure 768. The 1024
+captures show the three columns resume there. At exactly 1024 the centre column is narrow and
+the placement table clips its body names, so a later pass could raise the breakpoint or narrow
+the rails; the page does not scroll sideways.
 
 ## Redirects
 
