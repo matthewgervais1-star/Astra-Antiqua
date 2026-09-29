@@ -74,7 +74,10 @@ import com.astra.antiqua.ui.theme.AstraAntiquaTheme
  * and the accent is never applied twice on one screen.
  */
 private fun figuresFor(culture: AncientCulture): List<TileMark> = when (culture) {
-    AncientCulture.EGYPT -> listOf(TileMark.Sign(TypesetSign.ANKH))
+    AncientCulture.EGYPT -> listOf(
+        TileMark.Sign(TypesetSign.ANKH),
+        TileMark.Sign(TypesetSign.BALANCE),
+    )
     AncientCulture.GREECE -> listOf(TileMark.Sign(TypesetSign.OMEGA))
     AncientCulture.CANAAN -> listOf(
         TileMark.Sign(TypesetSign.IL),

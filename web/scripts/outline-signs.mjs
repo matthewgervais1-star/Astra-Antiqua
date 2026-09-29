@@ -1,16 +1,18 @@
 /**
- * Converts the three typeset launcher signs to outlines, once, at build time.
+ * Converts the typeset signs to outlines, once, at build time.
  *
  *   cd web && node scripts/outline-signs.mjs
  *
  * Egypt's mark is the ankh U+2625, Greece's is omega U+03A9, and Canaan's is
  * the two Ugaritic letters U+1039B U+1038D (docs/design/culture-marks.md).
+ * The fourth sign is not a launcher mark: the balance, Gardiner U38 U+1335D,
+ * is the second figure on Egypt's doorway beside the ankh.
  * Each exists as an encoded character rather than a drawing, so palaeographers
  * have already cut it and the design system sets it as type rather than
  * redrawing it (docs/design/system/readme.md, Iconography). Neither platform
  * may depend on those fonts at runtime for an icon, so each sign becomes a
  * path here and ships as
- * docs/design/system/assets/marks/ts-{ankh,omega,il}.svg on the same 512 grid
+ * docs/design/system/assets/marks/ts-{ankh,omega,il,balance}.svg on the same 512 grid
  * and the same fill="currentColor" convention as the drawn marks.
  *
  * The glyph geometry is the font's own, scaled and centred and nothing else.
@@ -39,7 +41,7 @@ const CANVAS = 512;
 const FIT = 0.66;
 
 /**
- * The three signs. Each names the family that actually carries its codepoint.
+ * The four signs. Each names the family that actually carries its codepoint.
  * The design system's tokens/fonts.css names Noto Sans Symbols 2 for the ankh;
  * that family has no U+2625 on Google Fonts, so the outline is cut from Noto
  * Sans Symbols, which does. Nothing else departs from the design system.
@@ -68,6 +70,14 @@ const SIGNS = [
     family: "Noto Sans Ugaritic",
     css: "family=Noto+Sans+Ugaritic",
     codepoints: [0x1039b, 0x1038d],
+  },
+  {
+    file: "ts-balance.svg",
+    culture: "Egypt",
+    label: "The balance",
+    family: "Noto Sans Egyptian Hieroglyphs",
+    css: "family=Noto+Sans+Egyptian+Hieroglyphs",
+    codepoints: [0x1335d],
   },
 ];
 

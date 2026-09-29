@@ -54,6 +54,7 @@ const EMBLEMS = [
 /** The signs that exist as encoded characters, outlined for this surface. */
 const TYPESET = [
   { key: "ANKH", file: "ts-ankh.svg", name: "The ankh", codepoints: "U+2625" },
+  { key: "BALANCE", file: "ts-balance.svg", name: "The balance", codepoints: "U+1335D" },
   { key: "IL", file: "ts-il.svg", name: "The name of El in Ugaritic", codepoints: "U+1039B U+1038D" },
   { key: "OMEGA", file: "ts-omega.svg", name: "Omega", codepoints: "U+03A9" },
 ];
