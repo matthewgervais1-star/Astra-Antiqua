@@ -19,11 +19,12 @@ export interface InstrumentShellProps {
  * sibling-tool links) over a 3-column grid. Children are expected to be the
  * three column elements in DOM order (data rail, visualization, reading
  * rail). Below the `instrument` breakpoint (--breakpoint-instrument in
- * globals.css, 1200px) the grid stacks to one column and re-orders the
- * children center-first, so the reading never sits under two rails' worth of
- * scroll. The rails' minimum widths sum to 720px, and the placements table
- * needs the center column wider than that leaves, so the three columns wait
- * for 1200px, the smallest width measured that shows every body name whole.
+ * globals.css, 68.75rem = 1100px) the grid stacks to one column and the
+ * `max-instrument:` order utilities put the center first, so the reading never
+ * sits under two rails' worth of scroll. At and above the breakpoint no order
+ * rule applies, so the columns keep DOM order. The placements table needs the
+ * data rail at its 360px maximum, and 1100px is the smallest width measured
+ * that gives it that and shows every body name whole.
  * ChartsInstrument keys off the same token.
  */
 export function InstrumentShell({ children, context, siblings }: InstrumentShellProps) {
@@ -51,8 +52,7 @@ export function InstrumentShell({ children, context, siblings }: InstrumentShell
         className={[
           "grid grid-cols-1",
           "instrument:grid-cols-[minmax(340px,360px)_1fr_minmax(380px,470px)]",
-          "[&>*:nth-child(1)]:order-2 [&>*:nth-child(2)]:order-1 [&>*:nth-child(3)]:order-3",
-          "instrument:[&>*]:order-none",
+          "max-instrument:[&>*:nth-child(1)]:order-2 max-instrument:[&>*:nth-child(2)]:order-1 max-instrument:[&>*:nth-child(3)]:order-3",
         ].join(" ")}
       >
         {children}

@@ -2,7 +2,7 @@
 
 @theme {
   /* The instrument's one breakpoint (instrument: variant); see InstrumentShell. */
-  --breakpoint-instrument: 1200px;
+  --breakpoint-instrument: 68.75rem;
 
   /* "The Instrument in the Temple" tokens (docs/design/handoff/tokens.css). */
 

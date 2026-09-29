@@ -17,7 +17,7 @@ drawn: nothing here was redrawn, restyled or replaced.
 | `c707b40` | The tier-2 emblems on the doorways, the chip and the matrix |
 | `eba8d47` | The shared components, and the scale on every surface |
 | `a47a778` | `DeityGlyph` takes a `decorative` prop, set where the deity's name sits beside the glyph |
-| `f62c971`, `a810581` | One `--breakpoint-instrument: 1200px` token; the instrument stacks below it |
+| `f62c971`, `a810581` | One `--breakpoint-instrument` token; the instrument stacks below it (now `68.75rem`, 1100px) |
 
 **The glyphs.** `web/scripts/export-glyphs.mjs` copies the fifty SVGs into
 `web/src/glyphs` and generates the typed module the app reads, asserting the 24
@@ -240,9 +240,13 @@ motion is unavoidable, so the fade stays.
 
 **The instrument stacks below one breakpoint.** At tablet widths the
 three-column instrument scrolled sideways. `f62c971` and `a810581` add one
-`--breakpoint-instrument: 1200px` token in `globals.css`, read as the
-`instrument:` variant by `InstrumentShell` and `ChartsInstrument`. The value is
-the measured width at which the placements table shows full body names.
+`--breakpoint-instrument` token in `globals.css`, read as the `instrument:`
+variant by `InstrumentShell` and `ChartsInstrument`. Those commits set it to
+1200px, measured while a specificity bug put the placements in the centre
+column. With the columns in the handoff's order (data, visualization, reading),
+the re-measured value is `68.75rem` (1100px): the smallest trial width at
+which the data rail shows every body name whole and no instrument page scrolls
+sideways. `docs/web-rebrand-report.md` records the trials.
 
 **The zodiac notation needed a fourth face.** None of the three product faces
 carries those codepoints, so Android's font chain fell through to the colour

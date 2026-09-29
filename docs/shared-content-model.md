@@ -135,7 +135,7 @@ as product commitments (whole-sign houses are named on `/learn`).
    Nun/Poseidon/Yammu/Yam/Neptunus, Osiris/Plouton/Motu/Mot/Dis Pater), each
    carrying a note that opens "Received:" and a `/method` statement that the
    extension is modern work made in the ancient manner. ~~Android is still
-   7-planet~~ — resolved: `Planet` carries all ten with an
+   7-planet~~. Resolved: `Planet` carries all ten with an
    `isReceived` flag, `DeityRegistry` holds the fifteen receptions ported from
    `shared/content/deities.json`, and the placement text comes from the same
    generated corpus rather than being re-authored.

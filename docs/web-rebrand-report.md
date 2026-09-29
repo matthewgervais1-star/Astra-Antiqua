@@ -118,8 +118,8 @@ unless the name says otherwise. "Seeded" means a reader with the Rome 1990-06-15
 | Five voices | `voices-home-{egypt,greece,canaan,carthage,rome}-1280.png` | seeded, same day |
 | Responsive | `{home,week,charts-seeded,transits-saturn-opposition-asc}-rome-{375,768}.png` | seeded |
 | Instrument, tablet | `{charts,synastry,forecast}-seeded-rome-768.png` | seeded, stacked to one column |
-| Instrument, breakpoint | `{charts,synastry,forecast}-seeded-rome-1200.png` | seeded, three columns, names whole |
-| Charts, empty, responsive | `charts-empty-rome-{768,1200}.png` | onboarded, no chart |
+| Instrument, breakpoint | `{charts,synastry,forecast}-seeded-rome-1100.png` | seeded, three columns (data, visualization, reading), names whole |
+| Charts, empty, responsive | `charts-empty-rome-{768,1100}.png` | onboarded, no chart |
 
 The Next dev indicator (the "N" badge, bottom left) appears in every capture. It is a dev-server
 overlay and does not ship.
@@ -158,33 +158,47 @@ documents it.
 `web/scripts/screenshot.mjs --report-scroll` compares `document.documentElement.scrollWidth`
 with the viewport width after load.
 
-| Page (seeded) | 375 | 768 | 1200 | 1280 |
+| Page (seeded) | 375 | 768 | 1100 | 1280 |
 |---------------|-----|-----|------|------|
 | `/` | 375 / 375, pass | 768 / 768, pass | n/a | pass |
 | `/week` | 375 / 375, pass | 768 / 768, pass | n/a | pass |
-| `/charts` | 375 / 375, pass | 768 / 768, pass | 1200 / 1200, pass | 1280 / 1280, pass |
-| `/synastry` | n/a | 768 / 768, pass | 1200 / 1200, pass | 1280 / 1280, pass |
-| `/forecast` | n/a | 768 / 768, pass | 1200 / 1200, pass | 1280 / 1280, pass |
-| `/charts`, empty (onboarded, no chart) | n/a | 768 / 768, pass | 1200 / 1200, pass | n/a |
+| `/charts` | 375 / 375, pass | 768 / 768, pass | 1100 / 1100, pass | 1280 / 1280, pass |
+| `/synastry` | n/a | 768 / 768, pass | 1100 / 1100, pass | 1280 / 1280, pass |
+| `/forecast` | n/a | 768 / 768, pass | 1100 / 1100, pass | 1280 / 1280, pass |
+| `/charts`, empty (onboarded, no chart) | n/a | 768 / 768, pass | 1100 / 1100, pass | n/a |
 | `/transits/saturn-opposition-asc` | 375 / 375, pass | 768 / 768, pass | n/a | pass |
 
 No page scrolls sideways at 375, which is the bar the plan set. The instrument rows were
-measured with `?culture=rome` at 768x1024 and 1200x800, scale 1, and `--report-scroll` printed
-"no horizontal scroll" for every run. The 1280 layout is unchanged, since 1280 is above the
-breakpoint. The empty `/charts` state renders its message centred at full width at 768 and at
-1200, so the `col-span-3` states span the whole grid when three columns are active.
+measured with `?culture=rome` at 768x1024 and 1100x800, scale 1, and `--report-scroll` printed
+"no horizontal scroll" for every run. The 1280 captures (1280x900) were retaken after the
+column-order fix below. The empty `/charts` state renders its message centred at full width at
+768 and at 1100, so the `col-span-3` states span the whole grid when three columns are active.
 
-**Found and fixed: the instrument overflowed between 720 and about 1200.** These captures
+**Found and fixed: the instrument overflowed between 720 and its breakpoint.** These captures
 found it in two steps. `InstrumentShell` switched to three columns at 720px, but the two side
 columns alone need 720px, so at 768 `/charts` measured 1023 wide, `/synastry` 904 and
 `/forecast` 881. A first fix moved the switch to 1024px, which stopped the scroll but left the
-placements table with one letter per body name and a clipped "BODY" header. Trial captures at
-1100 and 1152 still clipped the names ("SOL", "LU...", "ME..."); 1200 shows every name whole.
-The commit `fix(web): one instrument breakpoint, wide enough for the placements` defines the
-width once as `--breakpoint-instrument: 1200px` in `globals.css`, and `InstrumentShell` and
+placements table with one letter per body name and a clipped "BODY" header. The commit
+`fix(web): one instrument breakpoint, wide enough for the placements` then defined the width
+once as `--breakpoint-instrument` in `globals.css`, at 1200px, and `InstrumentShell` and
 `ChartsInstrument` both use the `instrument:` variant, so the asides' stacked separators and
-the full-width empty states follow the same width as the grid. Below 1200 the instrument is one
-column, centre first; at 768 all three pages measure 768.
+the full-width empty states follow the same width as the grid.
+
+**Found and fixed: the column order was wrong at every desktop width.** The whole-branch review
+found that the three columns rendered visualization, data, reading at 1280 and above, where
+the handoff draws data, visualization, reading. The stacked view's reorder utilities
+(`[&>*:nth-child(n)]:order-*`, specificity 0,2,0) outranked the desktop reset
+(`instrument:[&>*]:order-none`, 0,1,0), so the reset never applied. The 1200px measurement
+above was taken on that wrong layout, with the placements table in the centre column. The fix
+scopes the reorder to `max-instrument:`, so the built CSS wraps it in
+`@media (width < 68.75rem)` and the desktop keeps DOM order. The breakpoint was then measured
+again with the placements in the 340 to 360px data rail: `/charts` seeded at 1024, 1100, 1152
+and 1200 with the token lowered so all four rendered three columns. At 1024 the rail sits
+near its 340px minimum and clips "MERCUR...", "IUPPIT...", "SATURN...", "NEPTUN..." and
+"DIS PA...", and `/forecast` measures 1037 wide. At 1100, 1152 and 1200 every body name shows
+whole and `/charts`, `/synastry` and `/forecast` all measure their viewport width. The token
+is now `68.75rem` (1100px), in rem so it orders against Tailwind's rem breakpoints. Below 1100
+the instrument is one column, centre first; at 768 all three pages measure 768.
 
 ## Redirects
 
