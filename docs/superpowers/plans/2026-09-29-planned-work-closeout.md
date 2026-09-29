@@ -132,6 +132,19 @@ Every edit states what is true in the tree today, with the commit that made it t
 - [ ] `docs/deploy.md`: the hosting decision in `603af3e` (recorded in `docs/law25-checklist.md`) is a Supabase `ca-central-1` (Montreal) Postgres for the database and Vercel for the app, with the s. 17 assessment still owed because the app tier leaves Quebec. Rewrite the "A database" step and the opening paragraph to match; keep the environment-variable table; add that the legal pages return 404 until `web/src/lib/legal/policyFacts.ts` is filled (the build prints this).
 - [ ] Every touched file: no em dashes (`rg "—" <file>` must return nothing new). Commit `docs: the plans say what the tree does`.
 
+---
+
+### Task 10: The instrument stacks until it fits
+
+**Files:** Modify `web/src/components/chrome/InstrumentShell.tsx` (breakpoint and its comment), re-capture three PNGs in `docs/design/screenshots/phase10-verification/`, update `docs/web-rebrand-report.md` (responsive table and the defect line).
+
+Found by Task 8's captures: `InstrumentShell` switches to three columns at 720px (`min-[720px]:grid-cols-[minmax(340px,360px)_1fr_minmax(380px,470px)]`), and its two rails alone need 720px, so at 768 wide `/charts` measures 1023, `/synastry` 904 and `/forecast` 881, all scrolling sideways. All three fit at 1024. The brief's verification bar requires no horizontal scroll at tablet width.
+
+- [ ] Change the three `min-[720px]:` utilities in `InstrumentShell.tsx` to `min-[1024px]:` so the instrument keeps its single, reading-first column until the three columns can fit; update the component's comment (it says "below 720px") to say the same in words, and say why (the rails' minimum widths sum to 720). Do not touch column widths, order, or any other component. The nave (`NaveShell`) and the home grid are untouched.
+- [ ] Start the dev server, re-capture `charts-seeded-rome-768.png`, `synastry-seeded-rome-768.png` (or whichever 768 names Task 8 used for those three pages) and `forecast-seeded-rome-768.png` with `--report-scroll`, confirm each reports a scroll width equal to 768, and capture the same three at 1024 as `<route>-seeded-rome-1024.png` to show the three-column layout resumes. Stop the server.
+- [ ] Update `docs/web-rebrand-report.md`: the responsive table shows the new 768 numbers, the defect paragraph says the fault was found by these captures and fixed in this commit (name the breakpoint change), and the 1024 captures join the index.
+- [ ] Web checks green. Commit `fix(web): the instrument stacks until its three columns fit`.
+
 ## Rulings made while writing this plan
 
 - The `/account` "SYNC ON/OFF" row the rebrand plan asked for is satisfied by the `SyncFlag` badge the page already renders at its head; no row is added.
