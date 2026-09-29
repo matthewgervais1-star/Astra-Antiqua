@@ -75,10 +75,26 @@ its own stated check. Do not start a phase before its predecessor's gate passes.
 >   this plan.
 > - **`getDeitiesFor` and `getOfficerName`.** Listed as dead; both are covered
 >   by tests, so they are API rather than debris.
-> - **Long transits and the week / season / year horizons.** These are feature
->   work rather than parity work. Android is in step with web on the domain,
->   the identity and the honesty commitments; these are what it needs to keep
->   up as web grows.
+> - **Long transits and the week / season / year horizons.** Done after this
+>   status was written: `4f23517` ports the long transits as spans, `050844c`
+>   the week, and `36581e5` the season and the year, so all four horizons exist
+>   on Android.
+
+> ## Update, 2026-09-29
+>
+> - **The Room migration gate could not be met as written.** Phase 7's gate
+>   asks for a passing migration test. The database has been at version 2
+>   since the import commit `02efea4`, and no version 1 schema was ever
+>   exported, so there is nothing to migrate from. `57c066f` turned schema
+>   export on (`android/app/schemas/`) and removed the destructive fallback.
+>   The first real schema change adds the migration and its test.
+> - **All seven ViewModels have unit tests against fakes** (`7222c01`). The
+>   Android suite runs 65 unit tests.
+> - **The notification corpus no longer exists as fixed lines.** `67d67db`
+>   deleted the 160 lines in `web/src/data/notifications.ts`, and
+>   `web/src/lib/dailyMessage.ts` composes the day's line from the sky
+>   instead. The bullet under "What this plan does not cover" describes the
+>   old corpus.
 
 ## Verified facts (checked, not assumed)
 
@@ -688,4 +704,5 @@ test passes.
 - **The notification corpus.** 160 authored lines exist in
   `web/src/data/notifications.ts` with no delivery mechanism on either surface.
   Android is the natural home for it, and it is a good first candidate after
-  Phase 7.
+  Phase 7. (2026-09-29: those fixed lines are gone. `67d67db` replaced them
+  with the sky-composed `web/src/lib/dailyMessage.ts`.)

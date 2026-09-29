@@ -16,6 +16,8 @@ drawn: nothing here was redrawn, restyled or replaced.
 | `073c7de` | The type and spacing scales connected |
 | `c707b40` | The tier-2 emblems on the doorways, the chip and the matrix |
 | `eba8d47` | The shared components, and the scale on every surface |
+| `a47a778` | `DeityGlyph` takes a `decorative` prop, set where the deity's name sits beside the glyph |
+| `f62c971`, `a810581` | One `--breakpoint-instrument: 1200px` token; the instrument stacks below it |
 
 **The glyphs.** `web/scripts/export-glyphs.mjs` copies the fifty SVGs into
 `web/src/glyphs` and generates the typed module the app reads, asserting the 24
@@ -82,6 +84,7 @@ Screenshots: `docs/design/screenshots/phase7`, `phase8`.
 | `c4ec1ca` | The seven Learn sections |
 | `9219b0e` | The forecast, casting again, and an offline birthplace picker |
 | `e0aff05` | Synastry |
+| `95e0180` | The balance beside the ankh on Egypt's doorway, outlined from Noto Sans Egyptian Hieroglyphs as `TypesetSign.BALANCE` |
 
 **Launcher icons.** Six adaptive icons generated from the design-system marks by
 `web/scripts/gen-android-launchers.mjs`, each mark rasterised and measured
@@ -111,8 +114,8 @@ matrix and the placements table. `4f23517`, `050844c` and `36581e5` port the
 transit spans, the week and the sky-event finders, so the long transits and
 all four horizons exist.
 
-**The reading corpus is generated, not retyped.** The fifty deity charges and
-the twenty-five rulings reach Kotlin through
+**The reading corpus is generated, not retyped.** The fifty deity charges, the
+twenty-five ruling frames and the five ingress frames reach Kotlin through
 `web/scripts/gen-android-reading-banks.mjs`, reading
 `web/src/data/deityCharges.ts` and `aspectFrames.ts`. The same figure prints
 the same sentence on both surfaces, and a change to the prose lands on both
@@ -131,7 +134,8 @@ second party entered for the reading and never stored.
 
 **Four generators keep the two surfaces on one corpus.**
 `gen-android-emblems.mjs` carries the marks, `gen-android-reading-banks.mjs`
-the fifty charges and the thirty rulings, `gen-android-learn.mjs` the
+the fifty charges, the twenty-five ruling frames, the five ingress frames and
+the aspect verbs (`2a43515`), `gen-android-learn.mjs` the
 explainer prose and its reference tables, and `gen-android-cities.mjs` the
 birthplace list. Nothing in that corpus is retyped, so neither surface can
 drift from the other by a sentence.
@@ -144,6 +148,9 @@ pass after every wave, the second included. Android: `./gradlew assembleDebug` a
 were walked on a Pixel 9 emulator with the network unreachable. `node scripts/check-svgs.mjs docs/design/system` passes on all 75 files.
 The launcher icons and the glyphs were checked on a Pixel emulator, not inferred
 from a green build.
+
+2026-09-29: the Android suite now runs 65 unit tests, and all seven ViewModels
+run against fakes (`7222c01`).
 
 ## What was decided along the way
 
@@ -226,6 +233,17 @@ reader into the birth form, which a test now guards. The birth form had only
 the platform Geocoder, so a reader offline could not finish the first run at
 all; it now leads with the packaged city list.
 
+**`ReadingDisplay`'s fade stands.** The reading fades in on opacity alone,
+over 0.55 seconds, and drops to 0.01 seconds when the reader asks for reduced
+motion. `docs/design/system/readme.md` permits a plain opacity fade where
+motion is unavoidable, so the fade stays.
+
+**The instrument stacks below one breakpoint.** At tablet widths the
+three-column instrument scrolled sideways. `f62c971` and `a810581` add one
+`--breakpoint-instrument: 1200px` token in `globals.css`, read as the
+`instrument:` variant by `InstrumentShell` and `ChartsInstrument`. The value is
+the measured width at which the placements table shows full body names.
+
 **The zodiac notation needed a fourth face.** None of the three product faces
 carries those codepoints, so Android's font chain fell through to the colour
 emoji font and painted them as orange pictographs. Noto Sans Symbols ships in
@@ -258,11 +276,6 @@ decision, not a parity gap". Three of web's twenty-six routes are therefore
 deliberately absent, and they are the three that do nothing without an
 account.
 
-**Android keeps one birth record where web keeps many.** That is why casting
-a chart replaces the one on the device, and why synastry enters the second
-party rather than choosing a saved one. Multiple charts mean a Room migration
-and a chart list, which is a feature rather than a port.
-
 **The Learn hub's sample wheel did not cross.** It is the one block the
 extractor deliberately leaves behind: the day screen already draws a wheel
 from a real chart, so a fixed illustration of one would be the weaker of the
@@ -282,13 +295,23 @@ round. Alpha rules shift with the culture ground, which may be the better
 behaviour; the design system is canonical, so this is a decision rather than a
 bug to fix silently.
 
-**The glyph names its deity twice for a screen reader.** `DeityGlyph` sets the
-deity's name as the image's label and the visible name follows it, so a row
-reads as "Sol SOL 24°09′ GEM". The Unicode sign it replaced had the same shape,
-so this is not a regression, but an `aria-hidden` option for name-adjacent sites
-would fix it.
-
 **The Ugaritic codepoints.** `docs/design/culture-marks.md` gives U+1039B U+1038D
 for the name of El, and `ts-il.svg` is cut from exactly those. Counting forward
 through the Ugaritic block puts U+1039B at SSU rather than at ʾI, so someone who
 reads Ugaritic should confirm the pair before it ships as Canaan's launcher.
+
+### Since closed
+
+Recorded 2026-09-29. The first two items stood in this section; the third was
+a gap between the two doorways. The tree has since closed all three.
+
+- **The glyph named its deity twice for a screen reader.** A row read as
+  "Sol SOL 24°09′ GEM". `a47a778` gives `DeityGlyph` a `decorative` prop that
+  sets `aria-hidden`, and the name-adjacent sites pass it.
+- **Android kept one birth record where web kept many.** Since `8796ef7` web
+  keeps one chart per account too. On both surfaces casting replaces the one
+  chart, and synastry enters the second party for the reading and never
+  stores it.
+- **Egypt's doorway on Android showed the ankh alone.** Web shows the ankh and
+  the balance. `95e0180` outlines `ts-balance.svg` from Noto Sans Egyptian
+  Hieroglyphs, adds `TypesetSign.BALANCE`, and sets it after the ankh.

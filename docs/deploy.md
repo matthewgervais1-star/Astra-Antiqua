@@ -1,10 +1,17 @@
 # Deploying the web app
 
-The target is Vercel for the app and Neon for the database. Vercel runs Next 16
-server components, image optimization and the Satori `opengraph-image` routes
-without configuration; Neon is Postgres with a free tier and branching, which
-gives local development a real database instead of a second storage engine to
-keep in step.
+The target is Vercel for the app and a Supabase Postgres in `ca-central-1`
+(Montreal) for the database. `603af3e` settled this, and
+[law25-checklist.md](law25-checklist.md) records the reasoning. Supabase is the
+one mainstream managed Postgres with a Montreal region, so the personal
+information stays in Quebec at rest. Vercel runs Next 16 server components,
+image optimization and the Satori `opengraph-image` routes without
+configuration, but it has no Canadian function region. The app tier therefore
+leaves Quebec, and the s. 17 assessment is still owed before real data goes in.
+
+Neon was the earlier target. It has no Canadian region at all and fixes a
+project's region at creation, so choosing it meant choosing the assessment for
+the database as well.
 
 The repository is a monorepo. **Vercel's root directory must be `web/`**, not
 the repository root.
@@ -13,10 +20,13 @@ the repository root.
 
 ### 1. A database
 
-Create a project at <https://neon.tech> and copy the **pooled** connection
-string, the host with `-pooler` in it. That endpoint fronts Postgres with
-PgBouncer, which is what keeps a scaled-out deploy from exhausting the
-connection limit.
+Create a project at <https://supabase.com> in the `ca-central-1` region,
+Canada (Central), which is Montreal. Pick the region at creation; the project
+stays where it starts. Copy the **pooled** connection string from the
+project's connection panel. The pooler is what keeps a scaled-out deploy from
+exhausting the connection limit. The schema bootstrap below takes a
+session-level `pg_advisory_lock`, so use the pooler's session mode, which holds
+one server connection for the client's whole session.
 
 Nothing else is needed. The app creates its own tables on first use, under an
 advisory lock so several instances starting at once cannot race.
@@ -39,16 +49,24 @@ environment variables for Production and Preview:
 
 | Variable | Value |
 | --- | --- |
-| `DATABASE_URL` | the Neon **pooled** connection string |
+| `DATABASE_URL` | the Supabase **pooled** connection string |
 | `AUTH_SECRET` | the generated secret |
 | `NEXT_PUBLIC_SITE_URL` | the site's own origin, e.g. `https://astra-antiqua.vercel.app` |
 
-Give Preview its own Neon branch rather than pointing it at production, or a
+Give Preview its own database rather than pointing it at production, or a
 preview deploy writes to real accounts.
 
 **Never set `ASTRA_ALLOW_HTTP` on a deploy.** It drops the `Secure` flag from
 the session cookie so the app can be reached over plain HTTP on a LAN. On
 anything internet-facing it hands sessions to anyone watching the network.
+
+### 4. Before the first deploy
+
+- The legal pages (`/privacy`, `/confidentialite`, `/terms`, `/conditions`)
+  return 404 until `web/src/lib/legal/policyFacts.ts` holds no
+  `TODO_SET_BEFORE_LAUNCH` values. The build prints the unset fields. Fill
+  them, and write the s. 17 assessment, per
+  [law25-checklist.md](law25-checklist.md).
 
 ## Environment variables in full
 
@@ -63,8 +81,8 @@ anything internet-facing it hands sessions to anyone watching the network.
 
 ## Local development
 
-Point `DATABASE_URL` at a Neon branch, which costs nothing and keeps
-development and production on the same engine:
+Point `DATABASE_URL` at a development Postgres, never the production
+project, so development and production run on the same engine:
 
 ```bash
 DATABASE_URL=postgres://... pnpm dev

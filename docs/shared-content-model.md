@@ -25,6 +25,7 @@ regenerates the chart-parity fixtures the C# tests assert against.
 | Houses | **12**, whole-sign, each with title/domain/arena | `HOUSE_MEANINGS` in `houses.ts` | `HouseMeanings` in `domain/HouseMeanings.kt` ✓ (ported verbatim) |
 | Aspect kinds | **5**: conjunction, sextile, square, trine, opposition | `AspectKind` in `sampleChart.ts` | `AspectType` enum, kinds and orbs match ✓ |
 | Life domains | **5**: self, bonds, work, fortune, spirit | `LIFE_DOMAINS` in `lifeDomains.ts` | none |
+| Deity matrix | **10 × 5**: one deity per body per culture, 50 records | `DEITY_MATRIX` from `buildMatrix()` in `deities.ts` | `DeityRegistry` in `model/DeityRegistry.kt`, parity-tested against `shared/content/deities.json` ✓ |
 
 ## Deity model
 
@@ -37,7 +38,8 @@ Deity { planet, culture, name, epithet, note, contested? }
 
 - Source of truth: `DEITIES` in `web/src/data/deities.ts` (+ one myth line per
   deity in `deityInscriptions.ts`, one aspect-verb table per culture in
-  `aspectVerbs.ts`).
+  `aspectVerbs.ts`). Android's `domain/AspectVerbs.kt` is generated from
+  `aspectVerbs.ts` by `web/scripts/gen-android-reading-banks.mjs` (`2a43515`).
 - Android holds the same identities, reduced to `{name, epithet}`, in
   `model/DeityRegistry.kt` — the single Android source of truth for all five
   cultures, ported from web. `data/DeityManager.getDeity` and
@@ -81,6 +83,13 @@ spine bank (5 cultures × 5 slow bodies), the culture voice config (surface
 names and structural variants), domain readings (15), week readings (12),
 planet areas/domains, sign registers, aspect reflections, pair themes,
 cultural orientations, methodology sources.
+
+**Retained legacy banks (2026-09-29).** `web/src/data/domainReadings.ts`,
+`weekReadings.ts`, `seasonReadings.ts`, `oracleDecrees.ts`,
+`methodologyContent.ts` and `web/src/lib/transitReading.ts` stay in the tree,
+and no route renders them: nothing in `web/src` imports them. They are kept
+because [the rebrand brief](design/rebrand-brief.md) forbids deleting corpus
+substance, pending an owner decision.
 
 Android-only vocabulary (needed by any future shared schema): per-culture UI
 lexicon — menu titles, officer roles, priest titles, aspect labels
