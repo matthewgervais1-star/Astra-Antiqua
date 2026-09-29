@@ -36,6 +36,16 @@ import { TodaySpecimen as C31 } from "@/components/voices/TodaySpecimen";
 import { TranslationMatrix as C32 } from "@/components/matrix/TranslationMatrix";
 import { LearnTOC as C33 } from "@/components/LearnTOC";
 import { ComparisonForm as C34 } from "@/components/synastry/ComparisonForm";
+import { Button as C35 } from "@/components/chrome/Button";
+import { Badge as C36 } from "@/components/chrome/Badge";
+import { IconTile as C37 } from "@/components/chrome/IconTile";
+import { DataRow as C38 } from "@/components/chrome/DataRow";
+import { DeityGlyph } from "@/components/chrome/DeityGlyph";
+import { CultureSwitch as C39 } from "@/components/chrome/CultureSwitch";
+import { Monogram as C40 } from "@/components/chrome/Monogram";
+import { Wordmark as C41 } from "@/components/chrome/Wordmark";
+import { DeityGlyph as C42 } from "@/components/chrome/DeityGlyph";
+import { CultureEmblem as C43 } from "@/components/chrome/CultureEmblem";
 
 export type Specimen = { name: string; culture: string; viewport: string; role: string; spec: string; render: () => React.ReactElement };
 
@@ -75,4 +85,13 @@ export const SPECIMENS: Specimen[] = [
   { name: "TranslationMatrix", culture: "canaan", viewport: "700x520", role: "The ten-by-five reference table: every tracked body beside its deity name in each of the five cultures, with a gold rule where the received bodies begin and a mono note linking to /method.", spec: "DataRow", render: () => <C32 {...({})} /> },
   { name: "LearnTOC", culture: "carthage", viewport: "700x420", role: "Every Learn page's footer: the ALL SECTIONS divider and the full table of contents as numbered, bordered rows, the current page in the accent color.", spec: "DataRow", render: () => <C33 {...({ current: "/learn/houses" })} /> },
   { name: "ComparisonForm", culture: "rome", viewport: "700x520", role: "The second party on the synastry instrument: name, birth date, birth time and a birth place searched on an explicit press, with the note that the details are computed and discarded rather than saved.", spec: "Card", render: () => <C34 {...({ onCompare: () => {}, onClear: () => {}, active: false })} /> },
+  { name: "Button", culture: "egypt", viewport: "700x220", role: "The mono-caps action button in three weights: primary (hairline on the incised rule), ghost (no rule) and votive (the accent rule, one per screen).", spec: "Button", render: () => <div className="flex flex-wrap items-center gap-4"><C35 variant="primary">PRIMARY</C35><C35 variant="ghost">GHOST</C35><C35 variant="votive">VOTIVE</C35></div> },
+  { name: "Badge", culture: "greece", viewport: "700x220", role: "The small mono-caps label chip in its four tones: outline, accent, dim and conflict.", spec: "Badge", render: () => <div className="flex flex-wrap items-center gap-4"><C36 tone="outline">OUTLINE</C36><C36 tone="accent">ACCENT</C36><C36 tone="dim">DIM</C36><C36 tone="conflict">CONFLICT</C36></div> },
+  { name: "IconTile", culture: "egypt", viewport: "700x260", role: "The square culture tile: an attested sign set as type (the ankh) beside a traced alpha-mask figure (the Baal stele) in the accent.", spec: "none", render: () => <div className="flex flex-wrap items-center gap-4"><C37 mark="ankh" size="md" ink="bone" /><C37 mark="baal-stele" size="md" ink="accent" /></div> },
+  { name: "DataRow", culture: "egypt", viewport: "700x260", role: "One ephemeris row: body with its glyph, position, sign, whole-sign house and motion (D direct, R retrograde), with an optional quality square; a received body takes the accent.", spec: "DataRow", render: () => <div className="font-mono text-data-s"><C38 body={<><DeityGlyph body="sun" culture="egypt" size={16} decorative /><span>RA</span></>} position="14°22'" sign="SCO" house={10} motion="direct" received quality="harmony" /><C38 body={<><DeityGlyph body="saturn" culture="egypt" size={16} decorative /><span>SOBEK</span></>} position="02°05'" sign="PIS" house={6} motion="retrograde" quality="conflict" /></div> },
+  { name: "CultureSwitch", culture: "rome", viewport: "700x300", role: "The five-culture picker: each row is the culture's emblem beside its name and institution, and only the active culture wears its accent.", spec: "CultureSwitch", render: () => <C39 {...({ value: "greece", onChange: () => {} })} /> },
+  { name: "Monogram", culture: "egypt", viewport: "700x220", role: "The monogram: two A's as a ruined temple front, the architrave taking the accent of the active culture.", spec: "none", render: () => <C40 {...({ height: 96 })} /> },
+  { name: "Wordmark", culture: "greece", viewport: "700x180", role: "The ASTRA ANTIQVA wordmark in its ruined-capital lettering, sized by cap height.", spec: "none", render: () => <C41 {...({ capHeight: 24 })} /> },
+  { name: "DeityGlyph", culture: "egypt", viewport: "700x260", role: "Egypt's ten deity glyphs at 16px, one per tracked body, painted in currentColor with the body name beside each.", spec: "none", render: () => <ul className="m-0 grid list-none grid-cols-2 gap-x-6 gap-y-2 p-0 font-mono text-data-s uppercase tracking-data text-bone">{["sun","moon","mercury","venus","mars","jupiter","saturn","uranus","neptune","pluto"].map((b) => (<li key={b} className="flex items-center gap-2"><C42 body={b as any} culture="egypt" size={16} /><span>{b}</span></li>))}</ul> },
+  { name: "CultureEmblem", culture: "carthage", viewport: "700x220", role: "The five culture emblems at tier 2: the wedjat, Athena's owl, the name of El, the sign of Tanit and the aquila.", spec: "none", render: () => <div className="flex flex-wrap items-center gap-6 text-bone">{["egypt","greece","canaan","carthage","rome"].map((c) => (<C43 key={c} culture={c as any} size={48} />))}</div> },
 ];

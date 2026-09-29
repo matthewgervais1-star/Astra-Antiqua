@@ -597,6 +597,9 @@
   .resize {
     resize: both;
   }
+  .list-none {
+    list-style-type: none;
+  }
   .appearance-none {
     appearance: none;
   }
@@ -899,6 +902,9 @@
   }
   .fill-rule {
     fill: var(--color-rule);
+  }
+  .p-0 {
+    padding: calc(var(--spacing) * 0);
   }
   .p-6 {
     padding: calc(var(--spacing) * 6);

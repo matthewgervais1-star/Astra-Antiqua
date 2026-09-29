@@ -330,5 +330,98 @@
     "spec": "Card",
     "viewport": "700x520",
     "sampleProps": "{ onCompare: () => {}, onClear: () => {}, active: false }"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x220",
+    "sampleProps": "{}",
+    "file": "components/chrome/Button.tsx",
+    "name": "Button",
+    "role": "The mono-caps action button in three weights: primary (hairline on the incised rule), ghost (no rule) and votive (the accent rule, one per screen).",
+    "spec": "Button",
+    "sampleJsx": "<div className=\"flex flex-wrap items-center gap-4\"><{C} variant=\"primary\">PRIMARY</{C}><{C} variant=\"ghost\">GHOST</{C}><{C} variant=\"votive\">VOTIVE</{C}></div>"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x220",
+    "sampleProps": "{}",
+    "file": "components/chrome/Badge.tsx",
+    "name": "Badge",
+    "role": "The small mono-caps label chip in its four tones: outline, accent, dim and conflict.",
+    "spec": "Badge",
+    "sampleJsx": "<div className=\"flex flex-wrap items-center gap-4\"><{C} tone=\"outline\">OUTLINE</{C}><{C} tone=\"accent\">ACCENT</{C}><{C} tone=\"dim\">DIM</{C}><{C} tone=\"conflict\">CONFLICT</{C}></div>"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x260",
+    "sampleProps": "{}",
+    "file": "components/chrome/IconTile.tsx",
+    "name": "IconTile",
+    "role": "The square culture tile: an attested sign set as type (the ankh) beside a traced alpha-mask figure (the Baal stele) in the accent.",
+    "spec": "none",
+    "culture": "egypt",
+    "sampleJsx": "<div className=\"flex flex-wrap items-center gap-4\"><{C} mark=\"ankh\" size=\"md\" ink=\"bone\" /><{C} mark=\"baal-stele\" size=\"md\" ink=\"accent\" /></div>"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x260",
+    "sampleProps": "{}",
+    "file": "components/chrome/DataRow.tsx",
+    "name": "DataRow",
+    "role": "One ephemeris row: body with its glyph, position, sign, whole-sign house and motion (D direct, R retrograde), with an optional quality square; a received body takes the accent.",
+    "spec": "DataRow",
+    "culture": "egypt",
+    "sampleJsx": "<div className=\"font-mono text-data-s\"><{C} body={<><DeityGlyph body=\"sun\" culture=\"egypt\" size={16} decorative /><span>RA</span></>} position=\"14°22'\" sign=\"SCO\" house={10} motion=\"direct\" received quality=\"harmony\" /><{C} body={<><DeityGlyph body=\"saturn\" culture=\"egypt\" size={16} decorative /><span>SOBEK</span></>} position=\"02°05'\" sign=\"PIS\" house={6} motion=\"retrograde\" quality=\"conflict\" /></div>",
+    "extraImports": [
+      "import { DeityGlyph } from \"@/components/chrome/DeityGlyph\";"
+    ]
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x300",
+    "sampleProps": "{ value: \"greece\", onChange: () => {} }",
+    "file": "components/chrome/CultureSwitch.tsx",
+    "name": "CultureSwitch",
+    "role": "The five-culture picker: each row is the culture's emblem beside its name and institution, and only the active culture wears its accent.",
+    "spec": "CultureSwitch"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x220",
+    "sampleProps": "{ height: 96 }",
+    "file": "components/chrome/Monogram.tsx",
+    "name": "Monogram",
+    "role": "The monogram: two A's as a ruined temple front, the architrave taking the accent of the active culture.",
+    "spec": "none"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x180",
+    "sampleProps": "{ capHeight: 24 }",
+    "file": "components/chrome/Wordmark.tsx",
+    "name": "Wordmark",
+    "role": "The ASTRA ANTIQVA wordmark in its ruined-capital lettering, sized by cap height.",
+    "spec": "none"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x260",
+    "sampleProps": "{}",
+    "file": "components/chrome/DeityGlyph.tsx",
+    "name": "DeityGlyph",
+    "role": "Egypt's ten deity glyphs at 16px, one per tracked body, painted in currentColor with the body name beside each.",
+    "spec": "none",
+    "culture": "egypt",
+    "sampleJsx": "<ul className=\"m-0 grid list-none grid-cols-2 gap-x-6 gap-y-2 p-0 font-mono text-data-s uppercase tracking-data text-bone\">{[\"sun\",\"moon\",\"mercury\",\"venus\",\"mars\",\"jupiter\",\"saturn\",\"uranus\",\"neptune\",\"pluto\"].map((b) => (<li key={b} className=\"flex items-center gap-2\"><{C} body={b as any} culture=\"egypt\" size={16} /><span>{b}</span></li>))}</ul>"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x220",
+    "sampleProps": "{}",
+    "file": "components/chrome/CultureEmblem.tsx",
+    "name": "CultureEmblem",
+    "role": "The five culture emblems at tier 2: the wedjat, Athena's owl, the name of El, the sign of Tanit and the aquila.",
+    "spec": "none",
+    "sampleJsx": "<div className=\"flex flex-wrap items-center gap-6 text-bone\">{[\"egypt\",\"greece\",\"canaan\",\"carthage\",\"rome\"].map((c) => (<{C} key={c} culture={c as any} size={48} />))}</div>"
   }
 ]
