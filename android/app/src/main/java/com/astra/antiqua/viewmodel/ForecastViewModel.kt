@@ -15,7 +15,7 @@ import com.astra.antiqua.domain.TransitSpan
 import com.astra.antiqua.domain.TransitSpans
 import com.astra.antiqua.domain.ZodiacSign
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import java.util.Date
 import kotlin.math.floor
 import kotlinx.coroutines.Dispatchers
@@ -78,8 +78,8 @@ class ForecastViewModel(
                 val ready = withContext(Dispatchers.Default) {
                     val chart = CalculateNatalChartUseCase(astronomy).execute(profile)
                     val points = buildList {
-                        chart.planets[ClassicalPlanet.SUN]?.let { add(NatalPoint("sun", it.longitude)) }
-                        chart.planets[ClassicalPlanet.MOON]?.let { add(NatalPoint("moon", it.longitude)) }
+                        chart.planets[Planet.SUN]?.let { add(NatalPoint("sun", it.longitude)) }
+                        chart.planets[Planet.MOON]?.let { add(NatalPoint("moon", it.longitude)) }
                         chart.houseCusps.getOrNull(1)?.let { add(NatalPoint("asc", it)) }
                     }
                     // A span open at any point in the coming year belongs in
@@ -94,7 +94,7 @@ class ForecastViewModel(
                     ).filter { it.end.time >= now.time && it.start.time <= now.time + YEAR_MS }
 
                     val stations = SkyEvents.stations(astronomy, now, YEAR_DAYS)
-                    val natalSun = chart.planets[ClassicalPlanet.SUN]?.longitude
+                    val natalSun = chart.planets[Planet.SUN]?.longitude
                     val solarReturn = natalSun?.let { solarReturnAfter(it, now) }
 
                     ForecastState.Ready(now, culture, solarReturn, spans, stations)

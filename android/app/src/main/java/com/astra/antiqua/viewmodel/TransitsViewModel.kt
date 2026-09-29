@@ -10,7 +10,7 @@ import com.astra.antiqua.domain.NatalPoint
 import com.astra.antiqua.domain.SLOW_BODIES
 import com.astra.antiqua.domain.TransitSpan
 import com.astra.antiqua.domain.TransitSpans
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import java.util.Date
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -63,8 +63,8 @@ class TransitsViewModel(
                 val spans = withContext(Dispatchers.Default) {
                     val chart = CalculateNatalChartUseCase(astronomy).execute(profile)
                     val points = buildList {
-                        chart.planets[ClassicalPlanet.SUN]?.let { add(NatalPoint("sun", it.longitude)) }
-                        chart.planets[ClassicalPlanet.MOON]?.let { add(NatalPoint("moon", it.longitude)) }
+                        chart.planets[Planet.SUN]?.let { add(NatalPoint("sun", it.longitude)) }
+                        chart.planets[Planet.MOON]?.let { add(NatalPoint("moon", it.longitude)) }
                         chart.houseCusps.getOrNull(1)?.let { add(NatalPoint("asc", it)) }
                     }
                     TransitSpans.compute(

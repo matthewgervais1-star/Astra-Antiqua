@@ -2,7 +2,7 @@ package com.astra.antiqua.domain
 
 import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.data.local.room.UserProfile
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import io.github.cosinekitty.astronomy.Body
 import java.util.Calendar
 import java.util.Date
@@ -22,9 +22,9 @@ class CalculateNatalChartUseCase(private val astronomyEngine: AstronomyEngine) {
         val ascendant = astronomyEngine.getAscendant(jd, userProfile.latitude, userProfile.longitude)
         val houseCusps = WholeSignHouses.cusps(ascendant)
 
-        val planets = mutableMapOf<ClassicalPlanet, AccuratePlanetPosition>()
+        val planets = mutableMapOf<Planet, AccuratePlanetPosition>()
         
-        ClassicalPlanet.values().forEach { planet ->
+        Planet.values().forEach { planet ->
             val body = mapPlanetToBody(planet)
             val data = astronomyEngine.getPlanetPosition(jd, body)
             val sign = ZodiacUtils.getZodiacSign(data.longitude)
@@ -59,21 +59,21 @@ class CalculateNatalChartUseCase(private val astronomyEngine: AstronomyEngine) {
         )
     }
 
-    private fun calculateAspects(planets: Map<ClassicalPlanet, AccuratePlanetPosition>): List<Aspect> =
+    private fun calculateAspects(planets: Map<Planet, AccuratePlanetPosition>): List<Aspect> =
         AspectDetector.detect(planets.mapValues { (_, position) -> position.longitude })
 
-    private fun mapPlanetToBody(planet: ClassicalPlanet): Body {
+    private fun mapPlanetToBody(planet: Planet): Body {
         return when (planet) {
-            ClassicalPlanet.SUN -> Body.Sun
-            ClassicalPlanet.MOON -> Body.Moon
-            ClassicalPlanet.MERCURY -> Body.Mercury
-            ClassicalPlanet.VENUS -> Body.Venus
-            ClassicalPlanet.MARS -> Body.Mars
-            ClassicalPlanet.JUPITER -> Body.Jupiter
-            ClassicalPlanet.SATURN -> Body.Saturn
-            ClassicalPlanet.URANUS -> Body.Uranus
-            ClassicalPlanet.NEPTUNE -> Body.Neptune
-            ClassicalPlanet.PLUTO -> Body.Pluto
+            Planet.SUN -> Body.Sun
+            Planet.MOON -> Body.Moon
+            Planet.MERCURY -> Body.Mercury
+            Planet.VENUS -> Body.Venus
+            Planet.MARS -> Body.Mars
+            Planet.JUPITER -> Body.Jupiter
+            Planet.SATURN -> Body.Saturn
+            Planet.URANUS -> Body.Uranus
+            Planet.NEPTUNE -> Body.Neptune
+            Planet.PLUTO -> Body.Pluto
         }
     }
 }

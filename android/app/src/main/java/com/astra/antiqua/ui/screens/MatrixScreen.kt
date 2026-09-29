@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.model.label
 import com.astra.antiqua.ui.components.CultureEmblem
@@ -54,8 +54,8 @@ fun MatrixScreen(
     onNavigate: (String) -> Unit,
 ) {
     val scroll = rememberScrollState()
-    val classical = ClassicalPlanet.entries.filterNot { it.isReceived }
-    val received = ClassicalPlanet.entries.filter { it.isReceived }
+    val classical = Planet.entries.filterNot { it.isReceived }
+    val received = Planet.entries.filter { it.isReceived }
 
     NaveShell(
         context = "The translation matrix",
@@ -131,7 +131,7 @@ fun MatrixScreen(
 }
 
 @Composable
-private fun MatrixRow(body: ClassicalPlanet) {
+private fun MatrixRow(body: Planet) {
     Column {
         Box(
             Modifier

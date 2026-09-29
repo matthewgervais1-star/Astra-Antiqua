@@ -20,7 +20,7 @@ regenerates the chart-parity fixtures the C# tests assert against.
 | Concept | Canonical set | Web | Android |
 |---------|---------------|-----|---------|
 | Cultures | **5**: egypt, greece, canaan, carthage, rome | `CULTURES` in `cultures.ts` | `AncientCulture` enum ✓ |
-| Bodies | **10**: the classical seven + Uranus, Neptune, Pluto as received bodies | `PLANETS` in `cultures.ts` (+ `RECEIVED_BODIES`, `isReceived`) | `ClassicalPlanet` enum, 10 with `isReceived` ✓ |
+| Bodies | **10**: the classical seven + Uranus, Neptune, Pluto as received bodies | `PLANETS` in `cultures.ts` (+ `RECEIVED_BODIES`, `isReceived`) | `Planet` enum, 10 with `isReceived` ✓ |
 | Zodiac signs | **12**, with element, modality, traits, date range | `ZODIAC_SIGN_INFO` in `zodiacSigns.ts` | `ZodiacSign` enum (names only) |
 | Houses | **12**, whole-sign, each with title/domain/arena | `HOUSE_MEANINGS` in `houses.ts` | `HouseMeanings` in `domain/HouseMeanings.kt` ✓ (ported verbatim) |
 | Aspect kinds | **5**: conjunction, sextile, square, trine, opposition | `AspectKind` in `sampleChart.ts` | `AspectType` enum, kinds and orbs match ✓ |
@@ -126,7 +126,7 @@ as product commitments (whole-sign houses are named on `/learn`).
    Nun/Poseidon/Yammu/Yam/Neptunus, Osiris/Plouton/Motu/Mot/Dis Pater), each
    carrying a note that opens "Received:" and a `/method` statement that the
    extension is modern work made in the ancient manner. ~~Android is still
-   7-planet~~ — resolved: `ClassicalPlanet` carries all ten with an
+   7-planet~~ — resolved: `Planet` carries all ten with an
    `isReceived` flag, `DeityRegistry` holds the fifteen receptions ported from
    `shared/content/deities.json`, and the placement text comes from the same
    generated corpus rather than being re-authored.

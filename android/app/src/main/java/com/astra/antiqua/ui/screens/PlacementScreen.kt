@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.domain.HouseMeanings
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.ui.components.ActionButton
 import com.astra.antiqua.ui.components.ActionWeight
@@ -59,10 +59,10 @@ import com.astra.antiqua.viewmodel.DashboardViewModel
  */
 @Composable
 fun PlacementScreen(
-    body: ClassicalPlanet,
+    body: Planet,
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
-    onOpenPlacement: (ClassicalPlanet) -> Unit,
+    onOpenPlacement: (Planet) -> Unit,
 ) {
     val viewModel: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
     val state by viewModel.chartState.collectAsState()
@@ -71,7 +71,7 @@ fun PlacementScreen(
 
     LaunchedEffect(Unit) { viewModel.calculateChart() }
 
-    val bodies = ClassicalPlanet.entries
+    val bodies = Planet.entries
     val index = bodies.indexOf(body)
     val previous = bodies[(index - 1 + bodies.size) % bodies.size]
     val next = bodies[(index + 1) % bodies.size]
@@ -222,7 +222,7 @@ fun PlacementScreen(
  * the shared corpus covers all of them; the fallback exists so a hole in the
  * corpus drops one paragraph rather than the screen.
  */
-private fun placementTextFor(state: ChartState.Success, body: ClassicalPlanet): String =
+private fun placementTextFor(state: ChartState.Success, body: Planet): String =
     state.placements[body]?.placementText
         ?: "The position is computed and stated above. Its paragraph could not be read."
 

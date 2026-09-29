@@ -13,7 +13,7 @@ fun spanTone(span: TransitSpan): SpanTone = when (span.aspect) {
     AspectType.TRINE, AspectType.SEXTILE -> SpanTone.EASE
     AspectType.SQUARE, AspectType.OPPOSITION -> SpanTone.TENSION
     AspectType.CONJUNCTION ->
-        if (span.transitPlanet == com.astra.antiqua.model.ClassicalPlanet.JUPITER) {
+        if (span.transitPlanet == com.astra.antiqua.model.Planet.JUPITER) {
             SpanTone.EASE
         } else {
             SpanTone.TENSION

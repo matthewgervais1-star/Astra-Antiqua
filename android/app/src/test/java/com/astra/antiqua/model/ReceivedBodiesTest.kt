@@ -16,29 +16,29 @@ class ReceivedBodiesTest {
 
     @Test
     fun `the spine carries ten bodies`() {
-        assertEquals(10, ClassicalPlanet.values().size)
+        assertEquals(10, Planet.values().size)
     }
 
     @Test
     fun `the three received bodies are the outer planets, in order`() {
         assertEquals(
-            listOf(ClassicalPlanet.URANUS, ClassicalPlanet.NEPTUNE, ClassicalPlanet.PLUTO),
-            ClassicalPlanet.values().filter { it.isReceived }
+            listOf(Planet.URANUS, Planet.NEPTUNE, Planet.PLUTO),
+            Planet.values().filter { it.isReceived }
         )
     }
 
     @Test
     fun `the classical seven are not marked as received`() {
-        val classical = ClassicalPlanet.values().filterNot { it.isReceived }
+        val classical = Planet.values().filterNot { it.isReceived }
 
         assertEquals(7, classical.size)
-        assertFalse("The Sun is not a reception", ClassicalPlanet.SUN.isReceived)
+        assertFalse("The Sun is not a reception", Planet.SUN.isReceived)
     }
 
     @Test
     fun `every received body resolves a deity in every culture`() {
         for (culture in AncientCulture.values()) {
-            for (planet in ClassicalPlanet.values().filter { it.isReceived }) {
+            for (planet in Planet.values().filter { it.isReceived }) {
                 val deity = DeityRegistry.getDeity(culture, planet)
 
                 assertTrue("Blank name for $culture/$planet", deity.name.isNotBlank())
@@ -50,7 +50,7 @@ class ReceivedBodiesTest {
     @Test
     fun `no culture reuses one name across two received bodies`() {
         for (culture in AncientCulture.values()) {
-            val names = ClassicalPlanet.values()
+            val names = Planet.values()
                 .filter { it.isReceived }
                 .map { DeityRegistry.getDeity(culture, it).name }
 

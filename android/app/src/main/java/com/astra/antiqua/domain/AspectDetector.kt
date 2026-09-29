@@ -1,6 +1,6 @@
 package com.astra.antiqua.domain
 
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 
 /**
  * Aspect detection over raw ecliptic longitudes, split out of
@@ -15,7 +15,7 @@ import com.astra.antiqua.model.ClassicalPlanet
  * the missing `break` used to carry.
  */
 object AspectDetector {
-    fun detect(longitudes: Map<ClassicalPlanet, Double>): List<Aspect> {
+    fun detect(longitudes: Map<Planet, Double>): List<Aspect> {
         val aspects = mutableListOf<Aspect>()
         val planetList = longitudes.keys.toList()
 

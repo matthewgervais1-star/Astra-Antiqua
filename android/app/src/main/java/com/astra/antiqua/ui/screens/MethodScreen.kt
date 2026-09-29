@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.astra.antiqua.domain.AspectType
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.ui.components.AccentRule
 import com.astra.antiqua.ui.components.Kicker
@@ -124,7 +124,7 @@ fun MethodScreen(onBack: () -> Unit) {
         )
         Panel(modifier = Modifier.fillMaxWidth().padding(top = Spacing.Snug)) {
             Column {
-                for (planet in ClassicalPlanet.values().filter { it.isReceived }) {
+                for (planet in Planet.values().filter { it.isReceived }) {
                     Text(
                         text = planet.name.lowercase().replaceFirstChar { it.uppercase() },
                         style = MaterialTheme.typography.labelMedium,

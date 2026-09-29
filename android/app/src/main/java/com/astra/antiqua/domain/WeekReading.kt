@@ -2,7 +2,7 @@ package com.astra.antiqua.domain
 
 import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import java.util.Calendar
 import java.util.Date
 import java.util.TimeZone
@@ -51,11 +51,11 @@ object WeekReading {
 
     /** The Moon and the inner planets: the bodies that move enough to headline a day. */
     private val FAST_BODIES = setOf(
-        ClassicalPlanet.MOON,
-        ClassicalPlanet.MERCURY,
-        ClassicalPlanet.VENUS,
-        ClassicalPlanet.SUN,
-        ClassicalPlanet.MARS,
+        Planet.MOON,
+        Planet.MERCURY,
+        Planet.VENUS,
+        Planet.SUN,
+        Planet.MARS,
     )
 
     private val WEEKDAYS = listOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")
@@ -109,8 +109,8 @@ object WeekReading {
     /** "Apollo challenges Ares in the Ram." A conjunction names the sign it happens in. */
     fun composeAspectSentence(
         culture: AncientCulture,
-        a: ClassicalPlanet,
-        b: ClassicalPlanet,
+        a: Planet,
+        b: Planet,
         aspect: AspectType,
         exact: Boolean,
         signOfA: ZodiacSign,
@@ -161,7 +161,7 @@ object WeekReading {
             engine,
             start,
             INGRESS_SCAN_DAYS,
-            ClassicalPlanet.entries,
+            Planet.entries,
         )
 
         for (i in 0 until 7) {
@@ -253,8 +253,8 @@ object WeekReading {
     }
 
     private data class DayAspect(
-        val a: ClassicalPlanet,
-        val b: ClassicalPlanet,
+        val a: Planet,
+        val b: Planet,
         val aspect: AspectType,
         val orb: Double,
     )
@@ -263,7 +263,7 @@ object WeekReading {
     private fun chartAtNoonUtc(
         engine: AstronomyEngine,
         date: Date,
-    ): Map<ClassicalPlanet, Double> {
+    ): Map<Planet, Double> {
         val local = Calendar.getInstance()
         local.time = date
         val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -275,7 +275,7 @@ object WeekReading {
             12, 0, 0,
         )
         val julianDay = utc.timeInMillis / 86_400_000.0 + 2440587.5
-        return ClassicalPlanet.entries.associateWith {
+        return Planet.entries.associateWith {
             engine.getPlanetPosition(julianDay, TransitSpans.bodyOf(it)).longitude
         }
     }
@@ -285,8 +285,8 @@ object WeekReading {
      * taken once, and the first matching kind wins, exactly as the web
      * detector does, so the two surfaces cannot disagree about what is in orb.
      */
-    private fun aspectsOf(chart: Map<ClassicalPlanet, Double>): List<DayAspect> {
-        val bodies = ClassicalPlanet.entries
+    private fun aspectsOf(chart: Map<Planet, Double>): List<DayAspect> {
+        val bodies = Planet.entries
         val out = mutableListOf<DayAspect>()
         for (i in bodies.indices) {
             for (j in i + 1 until bodies.size) {

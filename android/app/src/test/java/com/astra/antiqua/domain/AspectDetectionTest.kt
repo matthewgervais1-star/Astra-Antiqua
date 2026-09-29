@@ -1,6 +1,6 @@
 package com.astra.antiqua.domain
 
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -19,7 +19,7 @@ class AspectDetectionTest {
     @Test
     fun `bodies 90 degrees apart register exactly one square aspect`() {
         val aspects = AspectDetector.detect(
-            mapOf(ClassicalPlanet.SUN to 10.0, ClassicalPlanet.MARS to 100.0)
+            mapOf(Planet.SUN to 10.0, Planet.MARS to 100.0)
         )
 
         assertEquals(1, aspects.size)
@@ -32,7 +32,7 @@ class AspectDetectionTest {
     fun `separation at the exact outer orb edge is still inclusively matched`() {
         // TRINE is 120 degrees, orb 7 (Phase 2 table) -> its outer edge is 127 degrees.
         val aspects = AspectDetector.detect(
-            mapOf(ClassicalPlanet.VENUS to 0.0, ClassicalPlanet.JUPITER to 127.0)
+            mapOf(Planet.VENUS to 0.0, Planet.JUPITER to 127.0)
         )
 
         assertEquals(1, aspects.size)
@@ -67,7 +67,7 @@ class AspectDetectionTest {
     @Test
     fun `no separation currently falls inside two orb bands`() {
         val aspects = AspectDetector.detect(
-            mapOf(ClassicalPlanet.SUN to 0.0, ClassicalPlanet.MOON to 105.0)
+            mapOf(Planet.SUN to 0.0, Planet.MOON to 105.0)
         )
 
         assertTrue(

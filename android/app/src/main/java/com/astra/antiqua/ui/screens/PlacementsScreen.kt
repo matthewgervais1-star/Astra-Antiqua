@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.ui.components.ActionButton
 import com.astra.antiqua.ui.components.ActionWeight
@@ -50,7 +50,7 @@ import com.astra.antiqua.viewmodel.DashboardViewModel
 fun PlacementsScreen(
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
-    onOpenPlacement: (ClassicalPlanet) -> Unit = {},
+    onOpenPlacement: (Planet) -> Unit = {},
     onOpenForecast: () -> Unit = {},
     onRecast: () -> Unit = {},
     onOpenSynastry: () -> Unit = {},
@@ -95,8 +95,8 @@ fun PlacementsScreen(
                     item {
                         Box(Modifier.padding(horizontal = Spacing.Gutter)) { DataRowHead() }
                     }
-                    items(ClassicalPlanet.entries.size) { index ->
-                        val body = ClassicalPlanet.entries[index]
+                    items(Planet.entries.size) { index ->
+                        val body = Planet.entries[index]
                         val position = current.chartData.planets[body]
                         if (position != null) {
                             Column(Modifier.padding(horizontal = Spacing.Gutter)) {

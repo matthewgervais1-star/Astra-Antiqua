@@ -12,7 +12,7 @@ import com.astra.antiqua.domain.LexiconDictionary
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,7 +28,7 @@ sealed class ChartState {
         /** The Sun and the Moon, the two the dashboard prints as decree cards. */
         val bigThreePlacements: List<NatalPlacementReading>,
         /** Every body's composed reading, for the placement screen. */
-        val placements: Map<ClassicalPlanet, NatalPlacementReading>,
+        val placements: Map<Planet, NatalPlacementReading>,
         val highPriestSummary: String
     ) : ChartState()
     data class Error(val message: String) : ChartState()
@@ -75,11 +75,11 @@ class DashboardViewModel(
                     readings.getReading(position, culture)?.let { body to it }
                 }.toMap()
 
-                val sunPosition = chartData.planets[ClassicalPlanet.SUN]
-                val moonPosition = chartData.planets[ClassicalPlanet.MOON]
+                val sunPosition = chartData.planets[Planet.SUN]
+                val moonPosition = chartData.planets[Planet.MOON]
                 val bigThree = listOfNotNull(
-                    placements[ClassicalPlanet.SUN],
-                    placements[ClassicalPlanet.MOON],
+                    placements[Planet.SUN],
+                    placements[Planet.MOON],
                 )
 
                 val sunSign = sunPosition?.zodiacSign?.signName ?: "the unknown"

@@ -1,6 +1,6 @@
 package com.astra.antiqua.domain
 
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 
 data class CulturalLexicon(
     val dashboardTitle: String,
@@ -9,10 +9,10 @@ data class CulturalLexicon(
     val settingsTitle: String,
     // A function rather than a `Map` so each culture's definition (see
     // LexiconDictionary) is forced to be an exhaustive `when` on
-    // ClassicalPlanet: a planet missing its cultural voice is a compile
+    // Planet: a planet missing its cultural voice is a compile
     // error instead of the old `map[planet] ?: "The Servant"` fallback,
     // which silently produced wrong copy for any lookup miss.
-    val culturalVoices: (ClassicalPlanet) -> String,
+    val culturalVoices: (Planet) -> String,
     val highPriestSummaryTitle: String,
     val officerRole: String,
     val harmoniousAspectLabel: String = "Divine Harmony",
@@ -31,7 +31,7 @@ data class CulturalLexicon(
     // vocabulary lives in exactly one place, alongside dashboardTitle et al.
     val highPriestSummary: (sunSign: String, moonSign: String) -> String
 ) {
-    fun getOfficerName(planet: ClassicalPlanet, deityName: String): String {
+    fun getOfficerName(planet: Planet, deityName: String): String {
         val voice = culturalVoices(planet)
         return "$voice of $deityName"
     }

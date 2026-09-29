@@ -1,7 +1,7 @@
 package com.astra.antiqua.ui.nav
 
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 
 /**
  * Every place this app can be, and the one place their names are written.
@@ -38,7 +38,7 @@ object Route {
     fun transitDetail(id: String) = "transits/$id"
     fun voice(culture: AncientCulture) = "voices/${culture.name.lowercase()}"
 
-    fun placement(body: ClassicalPlanet) = "placements/${body.name.lowercase()}"
+    fun placement(body: Planet) = "placements/${body.name.lowercase()}"
 
     fun learn(href: String): String {
         val slug = href.removePrefix("/learn").removePrefix("/")

@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.astra.antiqua.data.content.CultureContentStore
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.model.label
 import com.astra.antiqua.ui.components.ActionButton
@@ -108,8 +108,8 @@ private fun VoiceScreenContent(
     val store = remember(context) { CultureContentStore.forContext(context) }
     val copy = remember(voice) { runCatching { store.copyFor(voice) }.getOrNull() }
     val accent = LocalAccent.current
-    val classical = ClassicalPlanet.entries.filterNot { it.isReceived }
-    val received = ClassicalPlanet.entries.filter { it.isReceived }
+    val classical = Planet.entries.filterNot { it.isReceived }
+    val received = Planet.entries.filter { it.isReceived }
 
     NaveShell(
         context = "The ${voice.label} doorway",
@@ -223,7 +223,7 @@ private fun VoiceScreenContent(
 /** One seat in the pantheon: the body, the name this culture gives it, the epithet. */
 @Composable
 private fun DeityRow(
-    body: ClassicalPlanet,
+    body: Planet,
     voice: AncientCulture,
     accent: androidx.compose.ui.graphics.Color,
 ) {

@@ -48,7 +48,7 @@ import com.astra.antiqua.domain.AccuratePlanetPosition
 import com.astra.antiqua.domain.AspectType
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.components.DeityGlyph
 import com.astra.antiqua.ui.glyphs.deityGlyph
 import com.astra.antiqua.model.AncientCulture
@@ -381,7 +381,7 @@ fun NatalWheel(chartData: NatalChartData, culture: AncientCulture) {
     // by hue: five of them were brighter than any ink in the palette, and a
     // colour-deficient reader got nothing from them. The glyphs differ by
     // drawing hand, which is what tells them apart at this size.
-    val glyphs = ClassicalPlanet.entries.associateWith {
+    val glyphs = Planet.entries.associateWith {
         rememberVectorPainter(deityGlyph(culture, it))
     }
 
@@ -416,7 +416,7 @@ fun NatalWheel(chartData: NatalChartData, culture: AncientCulture) {
                         val center = Offset(size.width / 2f, size.height / 2f)
                         val hitRadiusPx = 20.dp.toPx()
 
-                        var tappedPlanet: ClassicalPlanet? = null
+                        var tappedPlanet: Planet? = null
                         var closestDistance = Float.MAX_VALUE
                         chartData.planets.forEach { (planet, pos) ->
                             val angle = ((pos.longitude - 90) * PI / 180).toFloat()

@@ -10,7 +10,7 @@ import com.astra.antiqua.domain.SkyEvents
 import com.astra.antiqua.domain.WeekDay
 import com.astra.antiqua.domain.WeekReading
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import java.util.Calendar
 import java.util.Date
 import kotlinx.coroutines.Dispatchers
@@ -168,13 +168,13 @@ class HorizonViewModel(
 
         /** Over ten weeks these are the bodies that actually change sign. */
         val SEASON_BODIES = listOf(
-            ClassicalPlanet.MERCURY,
-            ClassicalPlanet.VENUS,
-            ClassicalPlanet.MARS,
-            ClassicalPlanet.SUN,
+            Planet.MERCURY,
+            Planet.VENUS,
+            Planet.MARS,
+            Planet.SUN,
         )
 
         /** Every body but the Moon, whose monthly circuit would bury the rest. */
-        val YEAR_BODIES = ClassicalPlanet.entries.filter { it != ClassicalPlanet.MOON }
+        val YEAR_BODIES = Planet.entries.filter { it != Planet.MOON }
     }
 }

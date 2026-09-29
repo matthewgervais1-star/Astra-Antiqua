@@ -25,7 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.domain.AspectVerbs
 import com.astra.antiqua.domain.TransitSpan
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.ui.components.ActionButton
 import com.astra.antiqua.ui.components.ActionWeight
@@ -239,8 +239,8 @@ private fun SpanRow(
  * alone inside a Spectral sentence, where caps read as shouting.
  */
 internal fun natalPointLabel(culture: AncientCulture, key: String): String = when (key) {
-    "sun" -> DeityRegistry.getDeity(culture, ClassicalPlanet.SUN).name
-    "moon" -> DeityRegistry.getDeity(culture, ClassicalPlanet.MOON).name
+    "sun" -> DeityRegistry.getDeity(culture, Planet.SUN).name
+    "moon" -> DeityRegistry.getDeity(culture, Planet.MOON).name
     "asc" -> "your rising"
     "mc" -> "your midheaven"
     else -> key

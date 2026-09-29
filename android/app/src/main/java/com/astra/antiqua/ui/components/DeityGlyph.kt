@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.glyphs.deityGlyph
 import com.astra.antiqua.ui.glyphs.glyphDeityName
 import com.astra.antiqua.ui.theme.Bone
@@ -30,7 +30,7 @@ import com.astra.antiqua.ui.theme.accentFor
  */
 @Composable
 fun DeityGlyph(
-    body: ClassicalPlanet,
+    body: Planet,
     culture: AncientCulture?,
     modifier: Modifier = Modifier,
     size: Dp = 16.dp,

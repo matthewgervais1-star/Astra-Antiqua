@@ -33,7 +33,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.AppPhase
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.LauncherIcon
 import com.astra.antiqua.ui.components.Monogram
 import com.astra.antiqua.ui.nav.Route
@@ -216,7 +216,7 @@ fun AstraNavHost(
         }
         composable(Route.PLACEMENT) { entry ->
             val name = entry.arguments?.getString("body").orEmpty()
-            val body = runCatching { ClassicalPlanet.valueOf(name.uppercase()) }.getOrNull()
+            val body = runCatching { Planet.valueOf(name.uppercase()) }.getOrNull()
             if (body == null) {
                 PlacementsScreen(
                     culture = culture,

@@ -1,16 +1,16 @@
 package com.astra.antiqua.domain
 
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 
 data class NatalChartData(
-    val planets: Map<ClassicalPlanet, AccuratePlanetPosition>,
+    val planets: Map<Planet, AccuratePlanetPosition>,
     val houseCusps: DoubleArray,
     val julianDay: Double,
     val aspects: List<Aspect> = emptyList()
 )
 
 data class AccuratePlanetPosition(
-    val planet: ClassicalPlanet,
+    val planet: Planet,
     val longitude: Double,
     val velocity: Double,
     val isRetrograde: Boolean,
@@ -35,8 +35,8 @@ enum class AspectType(val degree: Double, val orb: Double) {
 }
 
 data class Aspect(
-    val p1: ClassicalPlanet,
-    val p2: ClassicalPlanet,
+    val p1: Planet,
+    val p2: Planet,
     val type: AspectType,
     val exactness: Double // 0.0 (exact) to 1.0 (at orb limit)
 )
