@@ -1,36 +1,48 @@
 /**
- * Generates the reading banks the horizon screens speak with.
+ * Generates the reading banks the day page and the horizon screens speak with.
  *
  *   cd web && node scripts/gen-android-reading-banks.mjs
  *
- * Reads web/src/data/deityCharges.ts and web/src/data/aspectFrames.ts and
- * writes the Kotlin equivalents (ReadingBanks.kt). It also reads
- * web/src/data/aspectVerbs.ts and writes AspectVerbs.kt. The fifty charges,
- * the twenty-five frames and the twenty-five verbs exist once in the
- * repository and Android cannot drift from web by a retyped word. Both surfaces then print the same sentence for the same
- * figure, which is the whole claim behind having one corpus.
+ * Imports the web banks directly (Node's type stripping plus the "@/" alias
+ * hook, the way the export scripts run) and writes their Kotlin equivalents:
  *
- * The frames are template literals with ${a}, ${b} and ${cap(a)} in them;
- * Kotlin's string templates take the same shapes, so the conversion is a
- * substitution rather than a parse. Anything else inside a frame is refused
- * rather than guessed at.
+ *   ReadingBanks.kt   the day page's banks (data/decreeBanks.ts), the domains
+ *                     (data/deityDomains.ts), the quiet headlines and lines,
+ *                     and the week's ingress charges, verbs and frames
+ *   AspectVerbs.kt    data/aspectVerbs.ts
+ *   DayDecreeGoldens.kt (test sources) the web composer's day page for five
+ *                     fixed instants, one per culture, which the JVM parity
+ *                     test recomputes with Android's own engine
+ *
+ * Every line exists once in the repository, so Android cannot drift from web
+ * by a retyped word, and the goldens prove the two composers agree.
  */
+import { register } from "node:module";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+register("./resolve-at-alias.mjs", import.meta.url);
+
+const { DEITY_CHARGES } = await import("../src/data/deityCharges.ts");
+const { INGRESS_FRAMES } = await import("../src/data/ingressFrames.ts");
+const { DECREE_BANKS, QUIET_LINE } = await import("../src/data/decreeBanks.ts");
+const { DEITY_DOMAINS } = await import("../src/data/deityDomains.ts");
+const { ASPECT_VERBS } = await import("../src/data/aspectVerbs.ts");
+const { QUIET_HEADLINE, composeDecree } = await import("../src/lib/decree.ts");
+const { composeDailyMessage } = await import("../src/lib/dailyMessage.ts");
+const { computeChart } = await import("../src/lib/ephemeris.ts");
+const { computeAspects } = await import("../src/data/sampleChart.ts");
+
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.join(SCRIPT_DIR, "..", "..");
-const DATA = path.join(REPO, "web", "src", "data");
-const OUT = path.join(
-  REPO, "android", "app", "src", "main", "java", "com", "astra", "antiqua", "domain",
-);
+const PKG = ["com", "astra", "antiqua", "domain"];
+const OUT = path.join(REPO, "android", "app", "src", "main", "java", ...PKG);
+const TEST_OUT = path.join(REPO, "android", "app", "src", "test", "java", ...PKG);
 
 const CULTURES = ["egypt", "greece", "canaan", "carthage", "rome"];
-const PLANETS = [
-  "sun", "moon", "mercury", "venus", "mars",
-  "jupiter", "saturn", "uranus", "neptune", "pluto",
-];
+const PLANETS = ["sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"];
+const FAST = ["sun", "moon", "mercury", "venus", "mars"];
 const KINDS = ["conjunction", "sextile", "square", "trine", "opposition"];
 
 function fail(message) {
@@ -38,111 +50,44 @@ function fail(message) {
 }
 
 const upper = (s) => s.toUpperCase();
-const kotlinString = (s) =>
-  `"${s.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\$/g, "\\$")}"`;
+const kt = (s) => {
+  if (typeof s !== "string") fail(`expected a string, got ${JSON.stringify(s)}`);
+  return `"${s.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\$/g, "\\$").replace(/\n/g, "\\n")}"`;
+};
 
-/** The body of one culture's block, from `culture: {` to its closing brace. */
-function cultureBlock(source, culture) {
-  const open = source.indexOf(`  ${culture}: {`);
-  if (open === -1) fail(`no block for ${culture}`);
-  const close = source.indexOf("\n  },", open);
-  if (close === -1) fail(`unterminated block for ${culture}`);
-  return source.slice(open, close);
+/** A `when (culture)` whose arms are produced by `arm(culture)`. */
+const byCulture = (indent, arm) =>
+  CULTURES.map((c) => `${indent}AncientCulture.${upper(c)} -> ${arm(c)}`).join("\n");
+
+/** A `when (culture) { when (inner) }` over a nested table. */
+function nested(indent, subject, keys, enumName, pick) {
+  return CULTURES.map((c) => {
+    const inner = keys.map((k) => `${indent}    ${enumName}.${upper(k)} -> ${kt(pick(c, k))}`).join("\n");
+    return `${indent}AncientCulture.${upper(c)} -> when (${subject}) {\n${inner}\n${indent}}`;
+  }).join("\n\n");
 }
 
-// --- the charges: plain single-quoted or double-quoted strings -------------
-const chargesSource = await readFile(path.join(DATA, "deityCharges.ts"), "utf8");
-const charges = {};
-for (const culture of CULTURES) {
-  const block = cultureBlock(chargesSource, culture);
-  charges[culture] = {};
-  for (const planet of PLANETS) {
-    const m = block.match(new RegExp(`\\n\\s*${planet}:\\s*"([^"]*)",`));
-    if (!m) fail(`${culture}.${planet} is missing from deityCharges.ts`);
-    charges[culture][planet] = m[1];
-  }
-}
-
-// --- the frames: (a, b) => `...` template literals -------------------------
-const framesSource = await readFile(path.join(DATA, "aspectFrames.ts"), "utf8");
-const frames = {};
-for (const culture of CULTURES) {
-  const block = cultureBlock(framesSource, culture);
-  frames[culture] = {};
-  for (const kind of KINDS) {
-    const m = block.match(new RegExp(`\\n\\s*${kind}:\\s*\\(a, b\\) =>\\s*\`([^\`]*)\`,`));
-    if (!m) fail(`${culture}.${kind} is missing from aspectFrames.ts, or is not a (a, b) template`);
-    const template = m[1];
-    // Only the three substitutions this generator understands may appear.
-    const unknown = template.replace(/\$\{cap\(a\)\}|\$\{a\}|\$\{b\}/g, "").match(/\$\{[^}]*\}/);
-    if (unknown) fail(`${culture}.${kind} uses ${unknown[0]}, which this generator does not read`);
-    frames[culture][kind] = template;
-  }
-}
-
-/** A JS template literal becomes a Kotlin one: the shapes already agree. */
-function toKotlinTemplate(template) {
-  const escaped = template.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-  return `"${escaped
-    .replace(/\$\{cap\(a\)\}/g, "\${cap(a)}")
-    .replace(/\$\{a\}/g, "\$a")
-    .replace(/\$\{b\}/g, "\$b")}"`;
-}
-
-const chargeWhen = CULTURES.map((culture) => {
-  const inner = PLANETS.map(
-    (planet) => `        Planet.${upper(planet)} -> ${kotlinString(charges[culture][planet])}`,
-  ).join("\n");
-  return `    AncientCulture.${upper(culture)} -> when (body) {\n${inner}\n    }`;
-}).join("\n\n");
-
-const frameWhen = CULTURES.map((culture) => {
-  const inner = KINDS.map(
-    (kind) => `        AspectType.${upper(kind)} -> ${toKotlinTemplate(frames[culture][kind])}`,
-  ).join("\n");
-  return `    AncientCulture.${upper(culture)} -> when (aspect) {\n${inner}\n    }`;
-}).join("\n\n");
-
-/**
- * The ingress ruling is a one-slot frame, `(c) => ...`, and the ingress verb
- * is a plain string in the week builder. Both are read the same way the
- * two-slot frames are, and anything unfamiliar inside one is refused.
- */
-function toKotlinIngress(template) {
-  const escaped = template.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-  return `"${escaped
-    .replace(/\$\{cap\(c\)\}/g, "\${cap(c)}")
-    .replace(/\$\{c\}/g, "\$c")}"`;
-}
-
+// --- the week's ingress line: charge, verb, frame --------------------------
+// The frames are functions of the charge; calling one on a marker recovers its
+// template, and the marker's capitalised form shows where the frame caps it.
+const MARK = "xchargex";
 const ingressFrames = {};
-for (const culture of CULTURES) {
-  const m = framesSource.match(
-    new RegExp(`\\n\\s*${culture}: \\(c\\) =>\\s*\`([^\`]*)\`,`),
-  );
-  if (!m) fail(`${culture} has no INGRESS_FRAMES entry, or it is not a (c) template`);
-  const template = m[1];
-  const unknown = template.replace(/\$\{cap\(c\)\}|\$\{c\}/g, "").match(/\$\{[^}]*\}/);
-  if (unknown) fail(`the ${culture} ingress frame uses ${unknown[0]}, which this generator does not read`);
-  ingressFrames[culture] = template;
+for (const c of CULTURES) {
+  const out = INGRESS_FRAMES[c](MARK);
+  const template = out.replaceAll("Xchargex", "${cap(c)}").replaceAll(MARK, "${c}");
+  if (!template.includes("${c}") && !template.includes("${cap(c)}")) fail(`${c} ingress frame drops its charge`);
+  ingressFrames[c] = template;
 }
+const toKotlinIngress = (t) => `"${t.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
 
-const weekSource = await readFile(path.join(DATA, "..", "lib", "weekReading.ts"), "utf8");
+const weekSource = await readFile(path.join(SCRIPT_DIR, "..", "src", "lib", "weekReading.ts"), "utf8");
 const verbBlock = weekSource.slice(weekSource.indexOf("const INGRESS_VERB"));
 const ingressVerbs = {};
-for (const culture of CULTURES) {
-  const m = verbBlock.match(new RegExp(`\\n\\s*${culture}:\\s*"([^"]*)",`));
-  if (!m) fail(`${culture} has no INGRESS_VERB entry in weekReading.ts`);
-  ingressVerbs[culture] = m[1];
+for (const c of CULTURES) {
+  const m = verbBlock.match(new RegExp(`\\n\\s*${c}:\\s*"([^"]*)",`));
+  if (!m) fail(`${c} has no INGRESS_VERB entry in weekReading.ts`);
+  ingressVerbs[c] = m[1];
 }
-
-const ingressFrameWhen = CULTURES.map(
-  (culture) => `    AncientCulture.${upper(culture)} -> ${toKotlinIngress(ingressFrames[culture])}`,
-).join("\n");
-
-const ingressVerbWhen = CULTURES.map(
-  (culture) => `    AncientCulture.${upper(culture)} -> ${kotlinString(ingressVerbs[culture])}`,
-).join("\n");
 
 const file = `package com.astra.antiqua.domain
 
@@ -151,13 +96,13 @@ import com.astra.antiqua.model.Planet
 
 /**
  * GENERATED by web/scripts/gen-android-reading-banks.mjs from
- * web/src/data/deityCharges.ts and web/src/data/aspectFrames.ts. Do not edit;
- * run \`cd web && node scripts/gen-android-reading-banks.mjs\`.
+ * web/src/data/decreeBanks.ts, deityDomains.ts, deityCharges.ts,
+ * ingressFrames.ts and web/src/lib/decree.ts. Do not edit; run
+ * \`cd web && node scripts/gen-android-reading-banks.mjs\`.
  *
- * The fifty charges and the twenty-five rulings the reading speaks with. They
- * live once in the repository and are generated onto this surface, so the
- * same figure prints the same sentence on both and neither can drift by a
- * retyped word.
+ * The lines the day page and the week speak with. They live once in the
+ * repository and are generated onto this surface, so the same figure prints
+ * the same sentence on both and neither can drift by a retyped word.
  */
 
 /** Capitalise a charge that opens a sentence. */
@@ -165,33 +110,93 @@ private fun cap(s: String): String =
     if (s.isEmpty()) s else s.replaceFirstChar { it.uppercase() }
 
 /**
- * What each god brings before its institution: a short noun phrase in the
- * culture's own nouns, written to sit inside a sentence as a subject or an
- * object. This is what ties a reading's ruling to the two bodies actually in
- * the figure, so Sun sextile Mars and Moon sextile Venus can never print the
- * same sentence. Lowercase by design; the frame capitalises it where it opens.
+ * What each body governs in the reader's own life, second person, in the
+ * culture's nouns. The meaning sentence joins two; the instruction takes the
+ * headline body's.
  */
-fun deityCharge(culture: AncientCulture, body: Planet): String = when (culture) {
-${chargeWhen}
+fun deityDomain(culture: AncientCulture, body: Planet): String = when (culture) {
+${nested("    ", "body", PLANETS, "Planet", (c, p) => DEITY_DOMAINS[c][p])}
+}
+
+/** A quiet day's headline, a sentence to the reader like any other. */
+fun quietDayHeadline(culture: AncientCulture): String = when (culture) {
+${byCulture("    ", (c) => kt(QUIET_HEADLINE[c]))}
+}
+
+/** A quiet day's line: no aspect invented and no reassurance offered. */
+fun quietDayLine(culture: AncientCulture): String = when (culture) {
+${byCulture("    ", (c) => kt(QUIET_LINE[c]))}
 }
 
 /**
- * The ruling, tethered to the figure: one sentence in the institution's
- * register, taking the two charges, so the sentence changes whenever the
- * bodies do.
+ * The day page's banks, per culture. Templates carry {god} (the headline
+ * body's deity), {partner} (the other body's deity) and {domain} (the
+ * headline body's domain); DayDecreeComposer fills them.
  */
-fun aspectFrame(
-    culture: AncientCulture,
-    aspect: AspectType,
-    a: String,
-    b: String,
-): String = when (culture) {
-${frameWhen}
+object DecreeBanks {
+    /** One sentence to the reader per (kind, headline body). */
+    fun headline(culture: AncientCulture, aspect: AspectType, body: Planet): String = when (culture) {
+${CULTURES.map((c) => {
+  const kinds = KINDS.map((k) => {
+    const bodies = FAST.map((b) => `                Planet.${upper(b)} -> ${kt(DECREE_BANKS[c].headlines[k][b])}`).join("\n");
+    return `            AspectType.${upper(k)} -> when (body) {\n${bodies}\n                else -> error("\$body cannot headline a day")\n            }`;
+  }).join("\n");
+  return `        AncientCulture.${upper(c)} -> when (aspect) {\n${kinds}\n        }`;
+}).join("\n\n")}
+    }
+
+    /** Plural predicate: "{domain A} and {domain B} {relation}". */
+    fun relation(culture: AncientCulture, aspect: AspectType): String = when (culture) {
+${nested("        ", "aspect", KINDS, "AspectType", (c, k) => DECREE_BANKS[c].relations[k])}
+    }
+
+    /** Appended to the meaning sentence under half a degree of orb. */
+    fun exactTail(culture: AncientCulture): String = when (culture) {
+${byCulture("        ", (c) => kt(DECREE_BANKS[c].exactTail))}
+    }
+
+    /** The consequence for the reader. Slot: {partner}. */
+    fun consequence(culture: AncientCulture, aspect: AspectType): String = when (culture) {
+${nested("        ", "aspect", KINDS, "AspectType", (c, k) => DECREE_BANKS[c].consequences[k])}
+    }
+
+    /** The institution's picture. Slot: {god}. */
+    fun image(culture: AncientCulture, aspect: AspectType): String = when (culture) {
+${nested("        ", "aspect", KINDS, "AspectType", (c, k) => DECREE_BANKS[c].images[k])}
+    }
+
+    /** The one order, always last. Slots: {god}, {domain}. */
+    fun instruction(culture: AncientCulture, aspect: AspectType): String = when (culture) {
+${nested("        ", "aspect", KINDS, "AspectType", (c, k) => DECREE_BANKS[c].instructions[k])}
+    }
+
+    /** Opens the second-figure sentence. */
+    fun secondFigure(culture: AncientCulture): String = when (culture) {
+${byCulture("        ", (c) => kt(DECREE_BANKS[c].secondFigure))}
+    }
+
+    /** Stands in for the second figure when the sky offers none. */
+    fun noSecondFigure(culture: AncientCulture): String = when (culture) {
+${byCulture("        ", (c) => kt(DECREE_BANKS[c].noSecondFigure))}
+    }
+
+    /** Closes the day page. */
+    fun comeBack(culture: AncientCulture): String = when (culture) {
+${byCulture("        ", (c) => kt(DECREE_BANKS[c].comeBack))}
+    }
+}
+
+/**
+ * What each god brings before its institution: a short noun phrase in the
+ * culture's own nouns. The week's ingress line reads it into its frame.
+ */
+fun deityCharge(culture: AncientCulture, body: Planet): String = when (culture) {
+${nested("    ", "body", PLANETS, "Planet", (c, p) => DEITY_CHARGES[c][p])}
 }
 
 /** The verb an ingress line uses: "{deity} {verb} the {sign image}." */
 fun ingressVerb(culture: AncientCulture): String = when (culture) {
-${ingressVerbWhen}
+${byCulture("    ", (c) => kt(ingressVerbs[c]))}
 }
 
 /**
@@ -200,63 +205,11 @@ ${ingressVerbWhen}
  * says that in its own institution's terms.
  */
 fun ingressFrame(culture: AncientCulture, c: String): String = when (culture) {
-${ingressFrameWhen}
+${byCulture("    ", (c) => toKotlinIngress(ingressFrames[c]))}
 }
 `;
 
-// --- the aspect verbs: ASPECT_VERBS, culture -> kind -> string --------------
-const verbsSource = await readFile(path.join(DATA, "aspectVerbs.ts"), "utf8");
-const verbsStart = verbsSource.indexOf("export const ASPECT_VERBS");
-if (verbsStart === -1) fail("ASPECT_VERBS is missing from aspectVerbs.ts");
-const verbsEnd = verbsSource.indexOf("\n};", verbsStart);
-if (verbsEnd === -1) fail("ASPECT_VERBS is unterminated in aspectVerbs.ts");
-// The table body, after the type annotation's `= {`.
-const verbsTable = verbsSource.slice(verbsStart, verbsEnd);
-const verbsBody = verbsTable.slice(verbsTable.indexOf("= {") + 3);
-
-const verbs = {};
-let currentCulture = null;
-for (const line of verbsBody.split("\n")) {
-  const trimmed = line.trim();
-  if (trimmed === "") continue;
-  const open = trimmed.match(/^(\w+): \{$/);
-  if (open) {
-    if (!CULTURES.includes(open[1])) fail(`aspectVerbs.ts holds an unknown culture ${open[1]}`);
-    if (verbs[open[1]]) fail(`aspectVerbs.ts lists ${open[1]} twice`);
-    currentCulture = open[1];
-    verbs[currentCulture] = {};
-    continue;
-  }
-  if (trimmed === "},") {
-    currentCulture = null;
-    continue;
-  }
-  const cell = trimmed.match(/^(\w+): "([^"]*)",$/);
-  if (!cell || currentCulture === null) {
-    fail(`aspectVerbs.ts has a line this generator does not read: ${trimmed}`);
-  }
-  if (!KINDS.includes(cell[1])) {
-    fail(`aspectVerbs.ts holds an unknown aspect ${currentCulture}.${cell[1]}`);
-  }
-  if (cell[1] in verbs[currentCulture]) {
-    fail(`aspectVerbs.ts lists ${currentCulture}.${cell[1]} twice`);
-  }
-  verbs[currentCulture][cell[1]] = cell[2];
-}
-for (const culture of CULTURES) {
-  if (!verbs[culture]) fail(`${culture} is missing from aspectVerbs.ts`);
-  for (const kind of KINDS) {
-    if (!(kind in verbs[culture])) fail(`${culture}.${kind} is missing from aspectVerbs.ts`);
-  }
-}
-
-const verbWhen = CULTURES.map((culture) => {
-  const inner = KINDS.map(
-    (kind) => `            AspectType.${upper(kind)} -> ${kotlinString(verbs[culture][kind])}`,
-  ).join("\n");
-  return `        AncientCulture.${upper(culture)} -> when (aspect) {\n${inner}\n        }`;
-}).join("\n\n");
-
+// --- the aspect verbs ------------------------------------------------------
 const verbsFile = `package com.astra.antiqua.domain
 
 import com.astra.antiqua.model.AncientCulture
@@ -276,16 +229,93 @@ import com.astra.antiqua.model.AncientCulture
  */
 object AspectVerbs {
     fun of(culture: AncientCulture, aspect: AspectType): String = when (culture) {
-${verbWhen}
+${nested("        ", "aspect", KINDS, "AspectType", (c, k) => ASPECT_VERBS[c][k])}
     }
 }
 `;
 
+// --- the parity goldens ----------------------------------------------------
+// One instant per culture. A day is taken only when nothing in it sits near a
+// threshold where two engines a hair apart could print different text: the
+// ranking of the headline and second figures, the exact tail at 0.5 degrees,
+// EXACT at 0.1, and the half-minute the evidence line rounds at.
+const FAST_SET = new Set(FAST);
+function robust(chart) {
+  const all = computeAspects(chart)
+    .filter((a) => FAST_SET.has(a.a) || FAST_SET.has(a.b))
+    .sort((a, b) => a.orb - b.orb);
+  const top = all[0];
+  if (!top) return false;
+  const margin = 0.03;
+  if (all[1] && all[1].orb - top.orb < margin) return false;
+  for (const edge of [0.5, 0.1]) if (Math.abs(top.orb - edge) < margin) return false;
+  const minutes = (top.orb - Math.floor(top.orb)) * 60;
+  if (Math.abs((minutes % 1) - 0.5) < 0.1) return false;
+  const rest = all.filter((a) => a !== top && a.kind !== top.kind);
+  if (rest[1] && rest[1].orb - rest[0].orb < margin) return false;
+  // A body within a few arcminutes of an orb limit could enter or leave the list.
+  return true;
+}
+
+const goldens = [];
+let day = Date.UTC(2026, 8, 29);
+while (goldens.length < CULTURES.length) {
+  const instant = new Date(day);
+  const chart = computeChart(instant);
+  if (robust(chart)) {
+    const culture = CULTURES[goldens.length];
+    const decree = composeDecree(culture, chart);
+    const message = composeDailyMessage(culture, chart);
+    goldens.push({ instant: instant.toISOString(), culture, decree, message });
+  }
+  day += 86_400_000;
+  if (day > Date.UTC(2027, 8, 29)) fail("no robust instants found in a year");
+}
+
+const goldensFile = `package com.astra.antiqua.domain
+
+import com.astra.antiqua.model.AncientCulture
+
+/**
+ * GENERATED by web/scripts/gen-android-reading-banks.mjs from the web
+ * composer (web/src/lib/decree.ts, dailyMessage.ts). Do not edit; run
+ * \`cd web && node scripts/gen-android-reading-banks.mjs\`.
+ *
+ * The web day page for one instant per culture, each chosen clear of every
+ * threshold where two engines a hair apart could print different text.
+ * DayDecreeParityTest recomputes each with Android's own engine and composer.
+ */
+internal data class DayDecreeGolden(
+    val instantUtc: String,
+    val culture: AncientCulture,
+    val headline: String,
+    val evidence: String,
+    val paragraph: String,
+    val messageBody: String,
+)
+
+internal val DAY_DECREE_GOLDENS: List<DayDecreeGolden> = listOf(
+${goldens
+  .map(
+    (g) => `    DayDecreeGolden(
+        instantUtc = ${kt(g.instant)},
+        culture = AncientCulture.${upper(g.culture)},
+        headline = ${kt(g.decree.headline)},
+        evidence = ${kt(g.decree.evidence)},
+        paragraph = ${kt(g.decree.paragraphs.join(" "))},
+        messageBody = ${kt(g.message.body)},
+    ),`,
+  )
+  .join("\n")}
+)
+`;
+
 await mkdir(OUT, { recursive: true });
+await mkdir(TEST_OUT, { recursive: true });
 await writeFile(path.join(OUT, "ReadingBanks.kt"), file);
 await writeFile(path.join(OUT, "AspectVerbs.kt"), verbsFile);
+await writeFile(path.join(TEST_OUT, "DayDecreeGoldens.kt"), goldensFile);
 console.log(
-  `gen-android-reading-banks: wrote ReadingBanks.kt ` +
-    `(${CULTURES.length * PLANETS.length} charges, ${CULTURES.length * KINDS.length} frames, ` +
-    `${file.length} bytes), AspectVerbs.kt (${CULTURES.length * KINDS.length} verbs)`,
+  `gen-android-reading-banks: wrote ReadingBanks.kt (${file.length} bytes), AspectVerbs.kt, ` +
+    `DayDecreeGoldens.kt (${goldens.map((g) => `${g.culture} ${g.instant.slice(0, 10)}`).join(", ")})`,
 );

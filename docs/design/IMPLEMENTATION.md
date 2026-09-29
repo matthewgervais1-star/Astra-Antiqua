@@ -134,8 +134,8 @@ second party entered for the reading and never stored.
 
 **Four generators keep the two surfaces on one corpus.**
 `gen-android-emblems.mjs` carries the marks, `gen-android-reading-banks.mjs`
-the fifty charges, the twenty-five ruling frames, the five ingress frames and
-the aspect verbs (`2a43515`), `gen-android-learn.mjs` the
+the day page's banks and domains, the ingress charges and frames, the aspect
+verbs (`2a43515`) and the day-page parity goldens, `gen-android-learn.mjs` the
 explainer prose and its reference tables, and `gen-android-cities.mjs` the
 birthplace list. Nothing in that corpus is retyped, so neither surface can
 drift from the other by a sentence.

@@ -23,6 +23,8 @@ data class WeekDay(
     val date: Date,
     val label: String,
     val isToday: Boolean,
+    /** The day page's headline for the day's figure, or null on an ingress day. */
+    val headline: String?,
     val line: String,
     val tone: DayTone,
     val exact: Boolean,
@@ -60,36 +62,8 @@ object WeekReading {
 
     private val WEEKDAYS = listOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")
 
-    fun quietLine(culture: AncientCulture): String = when (culture) {
-        AncientCulture.EGYPT ->
-            "Nothing on the river runs close enough to weigh. A day of ordinary work, and " +
-                "Ma'at counts it no lower than a feast."
-        AncientCulture.GREECE ->
-            "No shrine answers today. The oracle keeps its own counsel, and so should you."
-        AncientCulture.CANAAN ->
-            "Not one matter is brought forward today. An ordinary day still stands under El's tent."
-        AncientCulture.CARTHAGE ->
-            "The day's page takes no entry. The books hold steady, which is its own kind of profit."
-        AncientCulture.ROME ->
-            "Nothing is reported that the augurs would call a sign. The citadel was manned at " +
-                "dawn all the same."
-    }
-
-    /**
-     * How each culture marks a degree-exact contact. One adverb in one slot
-     * made all five voices rhyme, so each institution marks exactness with its
-     * own instrument and in its own part of the sentence: Egypt opens on the
-     * reading, Greece on an adverbial, Canaan closes on a coordinate clause,
-     * Carthage on a bare absolute, Rome breaks the subject with an appositive.
-     */
-    private fun exactForm(culture: AncientCulture, subject: String, predicate: String): String =
-        when (culture) {
-            AncientCulture.EGYPT -> "The plumb hangs true: $subject $predicate."
-            AncientCulture.GREECE -> "To the very degree, $subject $predicate."
-            AncientCulture.CANAAN -> "$subject $predicate, and the gate is full to the wall."
-            AncientCulture.CARTHAGE -> "$subject $predicate, the entry posted to the hour."
-            AncientCulture.ROME -> "$subject, at the line the augur drew, $predicate."
-        }
+    /** The culture's quiet-day line, generated from web (ReadingBanks.kt). */
+    fun quietLine(culture: AncientCulture): String = quietDayLine(culture)
 
     private fun signPhrase(sign: ZodiacSign): String = when (sign) {
         ZodiacSign.ARIES -> "Ram"
@@ -104,24 +78,6 @@ object WeekReading {
         ZodiacSign.CAPRICORN -> "Goat"
         ZodiacSign.AQUARIUS -> "Water-Bearer"
         ZodiacSign.PISCES -> "Fishes"
-    }
-
-    /** "Apollo challenges Ares in the Ram." A conjunction names the sign it happens in. */
-    fun composeAspectSentence(
-        culture: AncientCulture,
-        a: Planet,
-        b: Planet,
-        aspect: AspectType,
-        exact: Boolean,
-        signOfA: ZodiacSign,
-    ): String {
-        val deityA = com.astra.antiqua.model.DeityRegistry.getDeity(culture, a).name
-        val deityB = com.astra.antiqua.model.DeityRegistry.getDeity(culture, b).name
-        val verb = AspectVerbs.of(culture, aspect)
-        val signClause =
-            if (aspect == AspectType.CONJUNCTION) " in the ${signPhrase(signOfA)}" else ""
-        val predicate = "$verb $deityB$signClause"
-        return if (exact) exactForm(culture, deityA, predicate) else "$deityA $predicate."
     }
 
     /**
@@ -183,6 +139,7 @@ object WeekReading {
                 break
             }
 
+            var headline: String? = null
             val line: String
             val tone: DayTone
             val shorthand: String
@@ -190,17 +147,14 @@ object WeekReading {
             if (tightest != null) {
                 exact = tightest.orb < EXACT_ORB
                 tone = toneFor(tightest.aspect)
-                val signOfA = signOf(chart.getValue(tightest.a))
-                val astro = composeAspectSentence(
-                    culture, tightest.a, tightest.b, tightest.aspect, exact, signOfA,
-                )
-                val ruling = aspectFrame(
-                    culture,
-                    tightest.aspect,
-                    deityCharge(culture, tightest.a),
-                    deityCharge(culture, tightest.b),
-                )
-                line = "$astro $ruling"
+                // The headline speaks to the reader; beneath it the meaning and
+                // the consequence, both of which take the figure. No order: the
+                // week reports the figure, and the day page carries the one
+                // instruction.
+                val figure = SkyFigure(tightest.a, tightest.b, tightest.aspect, tightest.orb)
+                headline = DayDecreeComposer.composeHeadline(culture, figure)
+                line = DayDecreeComposer.composeMeaning(culture, figure) + " " +
+                    DayDecreeComposer.composeConsequence(culture, figure)
                 shorthand = "${tightest.a.name.take(3)} ${tightest.aspect.name.take(3)} " +
                     "${tightest.b.name.take(3)}${if (exact) " · EXACT" else ""}"
             } else {
@@ -223,6 +177,7 @@ object WeekReading {
                         ingress.sign.signName.take(3).uppercase()
                 } else {
                     tone = DayTone.QUIET
+                    headline = quietDayHeadline(culture)
                     line = quietLine(culture)
                     shorthand = "QUIET"
                 }
@@ -242,6 +197,7 @@ object WeekReading {
                 date = date,
                 label = "${weekdayAbbr(date)} ${calendar.get(Calendar.DAY_OF_MONTH)}",
                 isToday = sameLocalDay(date, today),
+                headline = headline,
                 line = line,
                 tone = tone,
                 exact = exact,

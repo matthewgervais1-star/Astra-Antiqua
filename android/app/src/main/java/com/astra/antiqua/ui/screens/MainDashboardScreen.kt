@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.domain.AccuratePlanetPosition
 import com.astra.antiqua.domain.AspectType
+import com.astra.antiqua.domain.DayDecree
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
 import com.astra.antiqua.model.Planet
@@ -86,6 +87,7 @@ fun MainDashboardScreen(
     val dashboardViewModel: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
 
     val chartState by dashboardViewModel.chartState.collectAsState()
+    val dayDecree by dashboardViewModel.dayDecree.collectAsState()
     val lexicon = LocalLexicon.current
     val accent = LocalAccent.current
 
@@ -116,6 +118,13 @@ fun MainDashboardScreen(
             Spacer(modifier = Modifier.height(Spacing.Snug))
             AccentRule()
             Spacer(modifier = Modifier.height(Spacing.Step))
+        }
+
+        dayDecree?.let { decree ->
+            item {
+                DayDecreeCard(decree = decree)
+                Spacer(modifier = Modifier.height(Spacing.Step))
+            }
         }
 
         item {
@@ -189,6 +198,49 @@ fun MainDashboardScreen(
             Spacer(modifier = Modifier.height(Spacing.Section))
         }
     }
+    }
+}
+
+/**
+ * The day page, as web's CenterDecree draws it: the headline to the reader,
+ * the evidence line beneath it, the paragraph, and the come-back line. The
+ * Do and Don't lists are web-only until Android has a permissions composer.
+ */
+@Composable
+fun DayDecreeCard(decree: DayDecree) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = decree.headline,
+            style = MaterialTheme.typography.headlineMedium,
+            color = Bone,
+            textAlign = TextAlign.Center,
+        )
+        if (decree.evidence.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(Spacing.Snug))
+            Text(
+                text = decree.evidence,
+                style = MaterialTheme.typography.labelSmall,
+                color = Dim,
+                textAlign = TextAlign.Center,
+            )
+        }
+        Spacer(modifier = Modifier.height(Spacing.Step))
+        Text(
+            text = decree.paragraph,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Prose,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(Spacing.Step))
+        Text(
+            text = decree.comeBack.uppercase(),
+            style = MaterialTheme.typography.labelSmall,
+            color = Dim,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 

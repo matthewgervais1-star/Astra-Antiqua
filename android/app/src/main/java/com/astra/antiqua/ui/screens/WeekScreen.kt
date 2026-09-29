@@ -148,6 +148,14 @@ private fun DayRow(day: WeekDay) {
             }
         }
         Column(modifier = Modifier.weight(1f)) {
+            day.headline?.let { headline ->
+                Text(
+                    text = headline,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Bone,
+                    modifier = Modifier.padding(bottom = Spacing.Tight),
+                )
+            }
             Text(
                 text = day.line,
                 style = MaterialTheme.typography.bodySmall,

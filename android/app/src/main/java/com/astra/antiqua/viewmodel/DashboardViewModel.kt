@@ -8,6 +8,8 @@ import com.astra.antiqua.data.NatalReadingRepository
 import com.astra.antiqua.data.ProfileRepository
 import com.astra.antiqua.data.SettingsRepository
 import com.astra.antiqua.domain.CalculateNatalChartUseCase
+import com.astra.antiqua.domain.DayDecree
+import com.astra.antiqua.domain.DayDecreeComposer
 import com.astra.antiqua.domain.LexiconDictionary
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Date
 
 sealed class ChartState {
     object Loading : ChartState()
@@ -51,9 +54,26 @@ class DashboardViewModel(
     private val _chartState = MutableStateFlow<ChartState>(ChartState.Loading)
     val chartState: StateFlow<ChartState> = _chartState.asStateFlow()
 
-    fun calculateChart() {
+    /**
+     * The day page: the sky at 00:00 UTC read in the culture in force. It
+     * needs no birth record, so it is composed before the chart and shows even
+     * when the chart fails.
+     */
+    private val _dayDecree = MutableStateFlow<DayDecree?>(null)
+    val dayDecree: StateFlow<DayDecree?> = _dayDecree.asStateFlow()
+
+    fun calculateChart(now: Date = Date()) {
         viewModelScope.launch {
             _chartState.value = ChartState.Loading
+            try {
+                val dayCulture = settings.selectedCulture.first() ?: AncientCulture.GREECE
+                _dayDecree.value = withContext(Dispatchers.Default) {
+                    val sky = DayDecreeComposer.chartAt(astronomy, DayDecreeComposer.startOfUtcDay(now))
+                    DayDecreeComposer.compose(dayCulture, sky)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error composing the day page", e)
+            }
             try {
                 val userProfile = profiles.profile.first()
                 if (userProfile == null) {

@@ -1,6 +1,7 @@
 package com.astra.antiqua.viewmodel
 
 import com.astra.antiqua.data.AstronomyEngine
+import com.astra.antiqua.domain.DecreeBanks
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.Planet
 import kotlinx.coroutines.Dispatchers
@@ -89,5 +90,20 @@ class DashboardViewModelTest {
 
         assertTrue("Expected Error but was $state", state is ChartState.Error)
         assertTrue((state as ChartState.Error).message.contains("onboarding"))
+    }
+
+    @Test
+    fun `the day page shows without a birth record, in the culture in force`() = runTest(dispatcher) {
+        val model = model(FakeProfiles(profile = null), FakeSettings(AncientCulture.CARTHAGE))
+        val now = java.util.Date.from(java.time.Instant.parse("2026-09-29T15:00:00Z"))
+
+        model.calculateChart(now)
+        advanceUntilIdle()
+        model.settled()
+        val decree = model.dayDecree.first { it != null }!!
+
+        assertEquals("Your credit is good today, so use it.", decree.headline)
+        assertEquals("SEMES △ BAAL SHAMEM · 0°19′", decree.evidence)
+        assertEquals(DecreeBanks.comeBack(AncientCulture.CARTHAGE), decree.comeBack)
     }
 }
