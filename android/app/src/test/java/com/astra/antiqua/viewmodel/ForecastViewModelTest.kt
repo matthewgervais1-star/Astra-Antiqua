@@ -79,6 +79,7 @@ class ForecastViewModelTest {
         val ready = model.settled() as ForecastState.Ready
 
         assertEquals(AncientCulture.CANAAN, ready.culture)
+        // Depends on the run date. Jupiter moves about a sign a year and aspects each of the Rome 1990 Sun, Moon and ascendant every 30 to 60 degrees, so some span opens inside any coming year.
         assertTrue(ready.spans.isNotEmpty())
         assertTrue(ready.spans.all { it.end.time >= ready.now.time })
         assertTrue(ready.spans.all { it.start.time <= ready.now.time + 365 * dayMs })

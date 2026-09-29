@@ -16,12 +16,10 @@ import kotlinx.serialization.json.Json
  * copied into Kotlin or a new JSON under `android/`, so the repo keeps
  * exactly one copy of the prose.
  *
- * `planet-in-sign.json` has 120 paragraphs across the 10 bodies web already
- * ships (7 classical + Uranus/Neptune/Pluto); [Planet] is still 7
- * (Phase 4 of the rollout plan adds the other three), so [textFor] only ever
- * queries the 7 keys this app currently has planets for -- the extra
- * uranus/neptune/pluto entries are parsed along with everything else and
- * simply never looked up until then.
+ * `planet-in-sign.json` has 120 paragraphs, one per (planet, sign) cell for
+ * the 10 bodies (7 classical + Uranus/Neptune/Pluto). [Planet] holds all ten,
+ * so [textFor] can look up every cell, and the store's completeness test
+ * asserts a paragraph for each one.
  *
  * [openStream] is injected (an `() -> InputStream` rather than a `Context`
  * directly) so a JVM test can feed this the real file straight off disk, the
