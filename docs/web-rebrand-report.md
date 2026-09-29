@@ -96,6 +96,8 @@ unless the name says otherwise. "Seeded" means a reader with the Rome 1990-06-15
 |---------|------|-------|
 | Home, anonymous | `home-anon-rome-1280.png` | no chart, Rome |
 | Home, seeded | `home-seeded-rome-1280.png` | natal modules and long-transit card |
+| Cast form, empty | `reading-empty-rome-1280.png` | onboarded, no chart |
+| Cast form, seeded | `reading-seeded-rome-1280.png` | editing the saved chart |
 | Week | `week-rome-1280.png` | seeded |
 | Season | `season-rome-1280.png` | seeded |
 | Year | `year-rome-1280.png` | seeded |
@@ -119,8 +121,11 @@ unless the name says otherwise. "Seeded" means a reader with the Rome 1990-06-15
 The Next dev indicator (the "N" badge, bottom left) appears in every capture. It is a dev-server
 overlay and does not ship.
 
-The seeded `/charts` page stands in for "cast and save a chart". The seed writes the same
-object that `/reading` saves.
+The reading flow ("cast and save a chart") runs through `/reading`, then `/charts`. With no
+chart, `/reading` opens under "ENTER YOUR HOUR OF BIRTH" with an empty birthplace and a default
+date and time (1989-08-19, 12:00) in the fields. With a saved chart, it opens under "EDITING ·
+VERIFICATION" with the chart's date, time and city filled in. The seeded `/charts` capture shows
+the result of a save. The seed writes the same object that `/reading` saves.
 
 `error.tsx` renders only on a thrown error, and no route throws on demand, so this report
 verifies it by reading. Its register reads "THE COMPUTATION FAILED", then "THE OMEN IS
