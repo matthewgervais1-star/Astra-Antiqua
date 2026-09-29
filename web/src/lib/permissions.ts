@@ -71,11 +71,17 @@ function pickN(rng: () => number, list: readonly string[], n: number): string[] 
  * Four proceed items + four refrain items for the given culture and day,
  * seeded by the date and the day's aspect tone so the list is stable across
  * reloads and only changes when the day (or the sky) does.
+ *
+ * `figures` names the day's sky figures ("sun-trine-uranus|..."). A reader
+ * with no natal chart gets the lists seeded from those, so the module speaks
+ * to everyone and its WHY THESE link still points at the figures that chose
+ * it. Omitted, the seed is the date and tone alone, as before.
  */
-export function dayPermissions(culture: Culture, date: Date, tone: Tone): DayPermissions {
+export function dayPermissions(culture: Culture, date: Date, tone: Tone, figures?: string): DayPermissions {
   const register = PERMISSIONS_REGISTER[culture];
-  const proceedRng = mulberry32(seedFor(culture, date, tone, "proceed"));
-  const refrainRng = mulberry32(seedFor(culture, date, tone, "refrain"));
+  const salt = figures ? `|${figures}` : "";
+  const proceedRng = mulberry32(seedFor(culture, date, tone, `proceed${salt}`));
+  const refrainRng = mulberry32(seedFor(culture, date, tone, `refrain${salt}`));
   return {
     proceed: pickN(proceedRng, register.proceed, 4),
     refrain: pickN(refrainRng, register.refrain, 4),

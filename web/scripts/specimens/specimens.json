@@ -153,10 +153,10 @@
     "file": "components/home/CenterDecree.tsx",
     "name": "CenterDecree",
     "exportKind": "named",
-    "role": "The day's reading: institution kicker, headline, two prose paragraphs, the votive instruction, the feedback row, and the three horizon links (week, season, year).",
+    "role": "The day's reading: institution kicker, the headline to the reader, the evidence line in mono, one five-sentence paragraph, the votive, the feedback row, the three horizon links (week, season, year), and the come-back line.",
     "spec": "Card",
     "viewport": "700x360",
-    "sampleProps": "{ institution: 'THE AUSPICES OF THE DAY', weekday: 'SUNDAY', dateLong: 'SEPTEMBER 6, 2026', reading: { headline: 'MARS SQUARES SATURNUS IN THE SCORPION', paragraphs: ['Mars at 14°22′ Scorpio meets Saturnus at 13°01′ Aquarius by square, one degree and twenty-one minutes from exact. The augurs read a wall where the road was expected.', 'Venus at 2°35′ from a trine to Iuppiter softens the afternoon. What is offered in good faith is received; what is forced is refused.'], tone: 'tension' }, votive: 'FINISH THE WORK ALREADY BEGUN.\\nSTART NOTHING NEW BEFORE DUSK.', now: new Date('2026-09-06T00:00:00Z') }",
+    "sampleProps": "{ institution: \"THE AUSPICES OF THE DAY\", weekday: \"TUESDAY\", dateLong: \"SEPTEMBER 29, 2026\", reading: { headline: \"Walk into the forum as if you own it.\", evidence: \"SOL △ CAELUS · 0°19′\", paragraphs: [\"Your public standing and your sudden orders sit on the same side of the Senate, exact to the augur's line. Your motion passes, and Caelus votes for it. The Vestals feed the hearth in Sol's name, and the flame burns clear. Elsewhere in the sky, Luna raises the spear against Dis Pater: your household affairs and your inheritance block each other's road. Push your public standing forward today, and hang a garland for Sol on the way.\"], tone: \"harmony\" }, votive: \"ASK THE FAVOR OWED YOU;\\nTHE AUSPICES ARE TAKEN ON THE RIGHT\", comeBack: \"The augur takes the auspices again at dawn, so come back tomorrow.\", now: new Date('2026-09-29T00:00:00Z') }",
     "culture": "rome"
   },
   {
@@ -203,7 +203,7 @@
     "file": "components/home/PermissionsModule.tsx",
     "name": "PermissionsModule",
     "exportKind": "named",
-    "role": "The day's permissions in the culture's own pair (PROCEED/REFRAIN, OFFER/WITHHOLD, ASK/DO NOT ASK, BRING/HOLD BACK, PAY/DEFER): two columns derived from today's aspects. Rendered only when a natal chart exists.",
+    "role": "The day's permissions in the culture's own pair (PROCEED/REFRAIN, OFFER/WITHHOLD, ASK/DO NOT ASK, BRING/HOLD BACK, PAY/DEFER): two columns derived from today's aspects. Rendered for every reader, seeded from the sky figures when no chart is saved.",
     "spec": "Card",
     "viewport": "700x300",
     "sampleProps": "{ culture: 'rome', permissions: { proceed: ['Settle a debt owed since spring', 'Repair what is already standing', 'Speak plainly to the one above you'], refrain: ['Signing what you have not read twice', 'Opening a quarrel with a neighbour', 'Beginning the journey before dusk'] }, tone: 'tension' }",

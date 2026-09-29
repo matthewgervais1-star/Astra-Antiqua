@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { composeDailyMessage } from "@/lib/dailyMessage";
-import { QUIET_LINE } from "@/lib/weekReading";
+import { QUIET_LINE } from "@/data/decreeBanks";
 import { DEITY_MATRIX } from "@/data/deities";
 import type { Planet } from "@/data/cultures";
 import type { Longitude } from "@/data/sampleChart";
@@ -27,14 +27,12 @@ test("a quiet sky yields the culture's quiet line and nothing invented", () => {
 
 test("a daily message names both gods of the headline figure", () => {
   const m = composeDailyMessage("rome", SUN_SEXTILE_MARS);
-  assert.match(m.headline, /SOL/);
-  assert.match(m.headline, /MARS/);
   assert.match(m.body, new RegExp(DEITY_MATRIX.rome.sun.name));
   assert.match(m.body, new RegExp(DEITY_MATRIX.rome.mars.name));
 });
 
-test("a daily message is at most three sentences and carries only the headline figure", () => {
+test("a daily message is three sentences and carries only the headline figure", () => {
   const m = composeDailyMessage("greece", SUN_SEXTILE_MARS);
-  assert.ok(sentences(m.body).length <= 3, m.body);
-  assert.doesNotMatch(m.body, /No second shrine/, "the second-figure closer belongs to the decree, not the message");
+  assert.equal(sentences(m.body).length, 3, m.body);
+  assert.doesNotMatch(m.body, /No other shrine|At a lesser shrine/, "the second figure belongs to the day page, not the message");
 });

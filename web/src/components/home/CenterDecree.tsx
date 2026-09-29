@@ -13,12 +13,15 @@ export interface CenterDecreeProps {
   dateLong: string;
   reading: DayDecree;
   votive: string;
+  /** The culture's come-back line, closing the day page. */
+  comeBack: string;
   now: Date;
 }
 
-/** The day's reading: institution kicker, the day's headline, two prose
- * paragraphs, the votive instruction, feedback, and the horizon links.
- * Shared between the desktop grid and the mobile stack. */
+/** The day's reading: institution kicker, the headline to the reader in
+ * display type, the evidence line in mono beneath it, the paragraph, the
+ * votive, feedback, the horizon links, and the come-back line. Shared between
+ * the desktop grid and the mobile stack. */
 export function CenterDecree({
   className,
   institution,
@@ -26,13 +29,21 @@ export function CenterDecree({
   dateLong,
   reading,
   votive,
+  comeBack,
   now,
 }: CenterDecreeProps) {
   const readingId = `day-${isoDateUtc(now)}`;
   return (
     <main className={cn("flex flex-col items-center px-6 py-11 text-center md:px-14 md:py-[var(--space-6)]", className)}>
-      <NaveHead kicker={`${weekday} · ${dateLong} · ${institution}`}>
-        <span className="uppercase">{reading.headline}</span>
+      <NaveHead
+        kicker={`${weekday} · ${dateLong} · ${institution}`}
+        sub={
+          reading.evidence ? (
+            <div className="font-mono text-data-xs tracking-data text-dim">{reading.evidence}</div>
+          ) : undefined
+        }
+      >
+        {reading.headline}
       </NaveHead>
 
       <div className="mx-auto max-w-[560px] text-left">
@@ -65,6 +76,8 @@ export function CenterDecree({
           THE YEAR →
         </Link>
       </div>
+
+      <div className="mt-8 max-w-[560px] font-mono text-data-xs uppercase tracking-label text-dim">{comeBack}</div>
     </main>
   );
 }

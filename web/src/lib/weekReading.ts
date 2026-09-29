@@ -1,12 +1,13 @@
 import type { Culture, Planet } from "@/data/cultures";
 import { PLANETS } from "@/data/cultures";
-import { computeAspects, longitudeToSign, type AspectKind, type ZodiacSign } from "@/data/sampleChart";
+import { computeAspects, type AspectKind, type ZodiacSign } from "@/data/sampleChart";
 import { computeChart } from "@/lib/ephemeris";
 import { findYearIngresses } from "@/lib/yearForecast";
 import { DEITY_MATRIX } from "@/data/deities";
-import { ASPECT_VERBS } from "@/data/aspectVerbs";
-import { ASPECT_FRAMES, INGRESS_FRAMES } from "@/data/aspectFrames";
+import { INGRESS_FRAMES } from "@/data/ingressFrames";
 import { DEITY_CHARGES } from "@/data/deityCharges";
+import { QUIET_LINE } from "@/data/decreeBanks";
+import { ASPECT_GLYPH, QUIET_HEADLINE, composeConsequence, composeHeadline, composeMeaning } from "@/lib/decree";
 import { SIGN_PHRASES } from "@/components/horizons/signPhrase";
 import { noonUTCFor, properCase, sameLocalDay, weekdayAbbr } from "@/components/horizons/format";
 import type { SavedNatal } from "@/lib/savedNatal";
@@ -29,6 +30,8 @@ export interface WeekDay {
   /** "MON 11" */
   label: string;
   isToday: boolean;
+  /** The decree's headline for the day's figure, or null on an ingress day. */
+  headline: string | null;
   line: string;
   shorthand: WeekShorthand;
   tone: WeekTone;
@@ -51,13 +54,7 @@ const EXACT_ORB = 0.35;
  */
 const FAST_BODIES: ReadonlySet<Planet> = new Set(["sun", "moon", "mercury", "venus", "mars"]);
 
-export const ASPECT_GLYPH: Readonly<Record<AspectKind, string>> = {
-  conjunction: "☌",
-  sextile: "⚹",
-  square: "□",
-  trine: "△",
-  opposition: "☍",
-};
+export { ASPECT_GLYPH, QUIET_LINE };
 
 export const SIGN_ABBR: Readonly<Record<ZodiacSign, string>> = {
   Aries: "ARI",
@@ -86,82 +83,6 @@ const INGRESS_VERB: Readonly<Record<Culture, string>> = {
   carthage: "makes port in",
   rome: "enters the augur's boundary of",
 };
-
-/** One honest quiet-day line per culture (5 variants, one per culture, not per
- *  day). These are the corpus's plain days and they stay plain: no aspect is
- *  invented and no reassurance is offered. Each opens on a different shape so
- *  the five do not read as one line with the institution swapped, and none
- *  repeats its culture's QUIET_HEADLINE in lib/decree.ts. */
-export const QUIET_LINE: Readonly<Record<Culture, string>> = {
-  egypt: "Nothing on the river runs close enough to weigh. A day of ordinary work, and Ma'at counts it no lower than a feast.",
-  greece: "No shrine answers today. The oracle keeps its own counsel, and so should you.",
-  canaan: "Not one matter is brought forward today. An ordinary day still stands under El's tent.",
-  carthage: "The day's page takes no entry. The books hold steady, which is its own kind of profit.",
-  rome: "Nothing is reported that the augurs would call a sign. The citadel was manned at dawn all the same.",
-};
-
-/**
- * How each culture marks a degree-exact contact. One adverb in one slot ("X
- * exactly {verb}s Y") made all five voices rhyme: same word, same position,
- * five pantheons. So each institution now marks exactness with its own
- * instrument AND in its own part of the sentence: Egypt opens on the reading,
- * Greece on an adverbial, Canaan closes on a coordinate clause, Carthage on a
- * bare absolute, Rome breaks the subject with an appositive.
- *
- * Each culture carries two instruments because a decree can run two exact
- * figures, and the same marker twice on one page is the seam this whole
- * arrangement exists to avoid. The position stays fixed per culture (that is
- * what keeps the five from rhyming); only the instrument varies.
- */
-const EXACT_FORMS: Readonly<
-  Record<Culture, ReadonlyArray<(subject: string, predicate: string) => string>>
-> = {
-  egypt: [
-    (subject, predicate) => `The plumb hangs true: ${subject} ${predicate}.`,
-    (subject, predicate) => `The cord is drawn tight: ${subject} ${predicate}.`,
-  ],
-  greece: [
-    (subject, predicate) => `To the very degree, ${subject} ${predicate}.`,
-    (subject, predicate) => `Within the hair, ${subject} ${predicate}.`,
-  ],
-  canaan: [
-    (subject, predicate) => `${subject} ${predicate}, and the gate is full to the wall.`,
-    (subject, predicate) => `${subject} ${predicate}, and every god has come at the summons.`,
-  ],
-  carthage: [
-    (subject, predicate) => `${subject} ${predicate}, the entry posted to the hour.`,
-    (subject, predicate) => `${subject} ${predicate}, the weight matched to its mark.`,
-  ],
-  rome: [
-    (subject, predicate) => `${subject}, at the line the augur drew, ${predicate}.`,
-    (subject, predicate) => `${subject}, inside the templum, ${predicate}.`,
-  ],
-};
-
-export function composeAspectSentence(
-  culture: Culture,
-  a: Planet,
-  b: Planet,
-  kind: AspectKind,
-  exact: boolean,
-  chart: Readonly<Record<Planet, number>>,
-  /** Which exactness instrument to use, so two exact figures in one decree
-   *  do not carry the same marker. Wraps. */
-  variant = 0,
-): string {
-  const deityA = DEITY_MATRIX[culture][a].name;
-  const deityB = DEITY_MATRIX[culture][b].name;
-  const verb = ASPECT_VERBS[culture][kind];
-  const signClause =
-    kind === "conjunction" ? ` in the ${properCase(SIGN_PHRASES[longitudeToSign(chart[a]).sign])}` : "";
-  const predicate = `${verb} ${deityB}${signClause}`;
-  if (exact) {
-    const forms = EXACT_FORMS[culture];
-    const form = forms[variant % forms.length] ?? forms[0];
-    if (form) return form(deityA, predicate);
-  }
-  return `${deityA} ${predicate}.`;
-}
 
 /**
  * Compose the seven days of the week starting `weekStart` (assumed to be a
@@ -212,6 +133,7 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
     const dayEnd = new Date(dayStart.getTime() + DAY_MS);
     const dayIngress = weekIngresses.find((e) => e.date >= dayStart && e.date < dayEnd) ?? null;
 
+    let headline: string | null = null;
     let line: string;
     let shorthand: WeekShorthand;
     let tone: WeekTone;
@@ -220,13 +142,15 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
     if (tightest) {
       exact = tightest.orb < EXACT_ORB;
       tone = toneForKind(tightest.kind);
-      const astro = composeAspectSentence(culture, tightest.a, tightest.b, tightest.kind, exact, chart);
-      // The ruling takes both gods' charges, so the day's line changes with
-      // the figure rather than with the aspect kind alone. No order: a week
-      // line reports the figure, and the decree carries the one instruction.
-      line = `${astro} ${ASPECT_FRAMES[culture][tightest.kind](
-        DEITY_CHARGES[culture][tightest.a],
-        DEITY_CHARGES[culture][tightest.b],
+      // The headline speaks to the reader; beneath it the meaning and the
+      // consequence, both of which take the figure. No order: the week reports
+      // the figure, and the day page carries the one instruction.
+      headline = composeHeadline(culture, tightest.a, tightest.b, tightest.kind);
+      line = `${composeMeaning(culture, tightest.a, tightest.b, tightest.kind, tightest.orb)} ${composeConsequence(
+        culture,
+        tightest.a,
+        tightest.b,
+        tightest.kind,
       )}`;
       shorthand = { kind: "aspect", a: tightest.a, aspect: tightest.kind, b: tightest.b, exact };
     } else if (dayIngress) {
@@ -239,6 +163,7 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       shorthand = { kind: "ingress", planet: dayIngress.planet, sign: dayIngress.toSign };
     } else {
       tone = "quiet";
+      headline = QUIET_HEADLINE[culture];
       line = QUIET_LINE[culture];
       shorthand = { kind: "quiet" };
     }
@@ -255,6 +180,7 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       date,
       label: `${weekdayAbbr(date)} ${date.getDate()}`,
       isToday: sameLocalDay(date, today),
+      headline,
       line,
       shorthand,
       tone,

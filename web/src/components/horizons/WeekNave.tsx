@@ -127,7 +127,12 @@ function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
           </>
         ) : null}
       </span>
-      <span className="font-body text-prose-s leading-prose text-bone">{day.line}</span>
+      <span className="flex flex-col gap-1">
+        {day.headline ? (
+          <span className="font-display text-prose-m leading-display text-bone">{day.headline}</span>
+        ) : null}
+        <span className="font-body text-prose-s leading-prose text-prose">{day.line}</span>
+      </span>
       <span
         className={cn(
           "inline-flex items-baseline gap-[4px] whitespace-nowrap font-mono text-data-xs",

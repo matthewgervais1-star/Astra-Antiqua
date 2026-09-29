@@ -12,7 +12,8 @@ export interface PermissionsModuleProps {
 /** Day's permissions, per 6a-permissions-rome: two columns drawn from
  * today's aspects, not a randomizer, in the culture's own permission pair
  * (PROCEED/REFRAIN, OFFER/WITHHOLD, ASK/DO NOT ASK, BRING/HOLD BACK,
- * PAY/DEFER). Only rendered when a natal chart exists. */
+ * PAY/DEFER). Rendered for every reader: seeded from the sky figures when
+ * no natal chart is saved (lib/permissions.ts). */
 export function PermissionsModule({ culture, permissions, tone }: PermissionsModuleProps) {
   const [proceedLabel, refrainLabel] = CULTURE_VOICES[culture].permissionPair;
   return (

@@ -19,7 +19,7 @@ import { toneOf } from "@/lib/tone";
  * renders children once one is chosen). Reads the saved chart (device-local,
  * so this must run client-side) and computes the whole day's bundle in one
  * pass, then renders the instrument-in-nave grid plus, when a chart exists,
- * the two below-grid modules.
+ * the day-pressure module. The permissions module shows for every reader.
  */
 export function HomeBody() {
   const culture = useActivePantheon();
@@ -61,6 +61,7 @@ export function HomeBody() {
           dateLong={bundle.dateLong}
           reading={bundle.reading}
           votive={bundle.votive}
+          comeBack={bundle.comeBack}
           now={bundle.now}
         />
 
@@ -80,9 +81,7 @@ export function HomeBody() {
         <TransitTeaser className="px-6 pb-10 min-[1100px]:hidden md:px-14" data={bundle.longTransit} />
       </div>
 
-      {bundle.natal && bundle.permissions ? (
-        <PermissionsModule culture={bundle.culture} permissions={bundle.permissions} tone={dominantTone} />
-      ) : null}
+      <PermissionsModule culture={bundle.culture} permissions={bundle.permissions} tone={dominantTone} />
 
       {bundle.natal && bundle.pressureGroups ? <DayPressureModule groups={bundle.pressureGroups} /> : null}
     </>

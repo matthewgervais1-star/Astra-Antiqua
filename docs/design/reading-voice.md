@@ -73,24 +73,44 @@ template fill and must be rewritten native.
 ## The decree, and what a daily line may say
 
 The home decree and the week's daily lines are composed, not written, and the
-composition has its own rule: **every sentence after the sky sentence takes the
-figure**. A ruling keyed on the aspect kind alone prints the same words under
-Sun sextile Mars as under Moon sextile Venus, which is a template seam by
-another route, and it lets a wide sextile issue orders it never earned.
+composition speaks to the reader. The shape, from
+`docs/superpowers/specs/2026-09-29-daily-reading-voice.md`:
 
-So each god carries a charge (`data/deityCharges.ts`), a noun phrase in its
-culture's own nouns, and each ruling is a frame that takes both charges
-(`data/aspectFrames.ts`). The line changes whenever the bodies do.
+1. **Headline.** One sentence to the reader, the kind a person could say to a
+   friend: "Start the heavy thing while the light holds." Keyed by culture,
+   aspect kind and the headline body (the fast body of the tightest figure,
+   the faster when both are). 125 lines, no two alike.
+2. **Evidence line**, in mono: the two gods, the glyph, the orb or EXACT
+   (`RA △ NUT · 0°19′`). The sky's facts sit here, under the headline, so the
+   prose does not have to recite them.
+3. **One paragraph of five sentences**: the meaning ("your day's work and your
+   sudden turns float on the same current", two plain domains and a relation,
+   with the culture's exact tail under half a degree); the consequence for the
+   reader; the institution's image, naming the headline god; the second figure
+   in one sentence; and the instruction, always last, naming the headline god
+   and its domain.
 
-One ask per screen. The home page's votive is the one line that asks something
-of the reader, so the decree body states and does not order. The single
-exception is an exact figure, which earns one instruction naming the headline
-god; a wide aspect gets none. Week lines and ingress lines never order.
+The banks live in `data/decreeBanks.ts` and `data/deityDomains.ts`. The rule
+the old charges enforced still holds: **every sentence after the evidence line
+takes the figure**. A line keyed on the aspect kind alone carries a god's name
+or a domain, so Sun sextile Mars and Moon sextile Venus never print the same
+sentence. A domain is plain second person ("your letters", "your war chest"),
+never a metonym the reader has to decode.
 
-A daily message (`lib/dailyMessage.ts`) is the decree's first paragraph and
-nothing else. There is no bank of fixed daily lines: a message that says the
-same thing whatever the ephemeris shows is the invention the method page
-disowns.
+**Two asks per screen, and both are earned.** The old rule allowed one ask, the
+votive, and let the decree order only on an exact figure. The reading-voice
+spec amends it: every day page ends on one concrete instruction, because a page
+that tells the reader what the day means and not what to do with it reads as a
+riddle. The votive stays. Week lines and ingress lines still never order: a
+week day shows its headline and the meaning and consequence beneath it.
+
+A daily message (`lib/dailyMessage.ts`) is the headline plus the meaning, the
+consequence and the instruction, every one a sentence the day page prints.
+There is no bank of fixed daily lines: a message that says the same thing
+whatever the ephemeris shows is the invention the method page disowns.
+
+The Do and Don't lists (the culture's permission pair) show for every reader,
+seeded from the day's sky figures when no chart is saved.
 
 ## The bar, stated in our own prose
 

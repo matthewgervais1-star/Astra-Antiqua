@@ -20,6 +20,7 @@ import {
 import { findRetrogradeStations, findYearIngresses, SLOW_BODIES } from "@/lib/yearForecast";
 import { computeTransitSpans, type TransitSpan } from "@/lib/transitSpans";
 import { composeDecree, type DayDecree } from "@/lib/decree";
+import { DECREE_BANKS } from "@/data/decreeBanks";
 import { toneOf, type Tone } from "@/lib/tone";
 import { dayPermissions, composeDayVotive, type DayPermissions } from "@/lib/permissions";
 import { dayPressure, type PressureGroup } from "@/lib/dayPressure";
@@ -105,7 +106,10 @@ export interface HomeBundle {
   aspectRows: readonly AspectRow[];
   longTransit: LongTransitData;
   votive: string;
-  permissions: DayPermissions | null;
+  /** The culture's come-back line, closing the day page. */
+  comeBack: string;
+  /** Every reader gets the day's lists; see dayPermissions for the seed. */
+  permissions: DayPermissions;
   pressureGroups: readonly PressureGroup[] | null;
 }
 
@@ -293,7 +297,13 @@ export function buildHomeBundle(culture: Culture, now: Date, natal: SavedNatal |
 
   const dominantTone: Tone = aspectRows[0] ? toneOf(aspectRows[0].kind) : "harmony";
   const votive = composeDayVotive(culture, dominantTone, now);
-  const permissions = natal ? dayPermissions(culture, now, dominantTone) : null;
+  // With a chart, the lists keep the seed they always had. Without one they
+  // seed from the sky figures the aspects rail shows, so WHY THESE still
+  // points at what chose them.
+  const skyFigures = aspectRows.map((row) => row.key).join("|");
+  const permissions = natal
+    ? dayPermissions(culture, now, dominantTone)
+    : dayPermissions(culture, now, dominantTone, skyFigures);
   const pressureGroups = natal ? dayPressure(natal, todayChart, culture) : null;
 
   return {
@@ -311,6 +321,7 @@ export function buildHomeBundle(culture: Culture, now: Date, natal: SavedNatal |
     aspectRows,
     longTransit,
     votive,
+    comeBack: DECREE_BANKS[culture].comeBack,
     permissions,
     pressureGroups,
   };

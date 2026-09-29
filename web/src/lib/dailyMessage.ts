@@ -1,14 +1,13 @@
 import type { Culture, Planet } from "@/data/cultures";
 import type { Longitude } from "@/data/sampleChart";
-import { composeDecree } from "@/lib/decree";
+import { composeDayMessageParts } from "@/lib/decree";
 
 /**
- * The day's message in one breath: the headline figure and its ruling, and
- * nothing the sky did not put there. This is what a push notification or a
- * widget carries. It is the decree's first paragraph, so it changes with the
- * figure and on a quiet sky says the culture's quiet line. The fixed bank of
- * per-culture aphorisms it replaces said the same thirty-two things whatever
- * the ephemeris showed, which is the invention the method page disowns.
+ * The day's message in one breath: the decree's headline, then its meaning,
+ * consequence and instruction sentences. This is what a push notification or
+ * a widget carries. It changes with the figure, and on a quiet sky it says the
+ * culture's quiet line. Every sentence is one the decree prints, so a message
+ * can never say something the day page does not.
  */
 export interface DailyMessage {
   headline: string;
@@ -20,6 +19,6 @@ export function composeDailyMessage(
   culture: Culture,
   chart: Readonly<Record<Planet, Longitude>>,
 ): DailyMessage {
-  const decree = composeDecree(culture, chart);
-  return { headline: decree.headline, body: decree.paragraphs[0] ?? "", tone: decree.tone };
+  const parts = composeDayMessageParts(culture, chart);
+  return { headline: parts.headline, body: parts.sentences.join(" "), tone: parts.tone };
 }
