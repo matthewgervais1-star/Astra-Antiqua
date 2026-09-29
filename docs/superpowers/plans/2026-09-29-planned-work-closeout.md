@@ -225,6 +225,14 @@ The owner answered the four open questions after the first wave: move the orphan
 - [ ] Tabs or an in-page list: follow the nave's existing patterns (SectionDivider and DataRow), no new chrome.
 - [ ] Android mirror; parity test extended. Screenshots of the day page's dive-deeper block in five cultures into `phase12-reading-anatomy/`. Checks green. Commits `feat(web): dive deeper, by house group` and `feat(android): dive deeper`.
 
+### Task 18: Android account sync
+
+**Spec:** `docs/superpowers/specs/2026-09-29-android-account-sync.md` (the requirement). Runs after Tasks 11 to 14. Split into three dispatches: 18a the client and repository with tests; 18b the three screens and navigation with ViewModel tests; 18c the emulator pass against `pnpm dev` with screenshots and the report.
+
+- [ ] 18a: `BuildConfig.API_ORIGIN` with the debug default and the release property; the network security config for `10.0.2.2` in debug only; the cookie session store in encrypted DataStore; the OkHttp client that sends the cookie, sends no `Origin`, stores `Set-Cookie` on signup and signin, and clears the store on a 401; `AccountRepository` interface, real implementation, fake; the chart mapping both ways; JVM tests for the repository against a fake HTTP layer. Commit `feat(android): a session, a client and a repository for the web account`.
+- [ ] 18b: THE RECORD, ACCOUNT and THE ROLL screens on the nave chassis; routes in `Destinations.kt`; the shell's account entry; sync on sign-in and sign-up by the web's merge rule; mirror on profile save; export via `ACTION_SEND`; strike with type-your-email-to-confirm; ViewModels against the fake with tests. Commit `feat(android): sign in, the account, and the roll`.
+- [ ] 18c: the emulator pass in the spec's Verification section, with screenshots into `docs/design/screenshots/phase13-android-sync/`, and `docs/web-ios-android-plan.md`'s row for Android auth and charts updated. Commit `docs(android): the sync pass on the emulator`.
+
 ## Rulings made while writing this plan
 
 - The `/account` "SYNC ON/OFF" row the rebrand plan asked for is satisfied by the `SyncFlag` badge the page already renders at its head; no row is added.
