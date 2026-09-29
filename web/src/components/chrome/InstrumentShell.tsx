@@ -18,10 +18,13 @@ export interface InstrumentShellProps {
  * The instrument chassis: one 60px bar (wordmark, context, culture chip,
  * sibling-tool links) over a 3-column grid. Children are expected to be the
  * three column elements in DOM order (data rail, visualization, reading
- * rail). Below 1024px the grid stacks to one column and re-orders the
+ * rail). Below the `instrument` breakpoint (--breakpoint-instrument in
+ * globals.css, 1200px) the grid stacks to one column and re-orders the
  * children center-first, so the reading never sits under two rails' worth of
- * scroll. The breakpoint is 1024px because the two rails' minimum widths sum
- * to 720px before gaps, which leaves the center no room at tablet widths.
+ * scroll. The rails' minimum widths sum to 720px, and the placements table
+ * needs the center column wider than that leaves, so the three columns wait
+ * for 1200px, the smallest width measured that shows every body name whole.
+ * ChartsInstrument keys off the same token.
  */
 export function InstrumentShell({ children, context, siblings }: InstrumentShellProps) {
   return (
@@ -47,9 +50,9 @@ export function InstrumentShell({ children, context, siblings }: InstrumentShell
       <div
         className={[
           "grid grid-cols-1",
-          "min-[1024px]:grid-cols-[minmax(340px,360px)_1fr_minmax(380px,470px)]",
+          "instrument:grid-cols-[minmax(340px,360px)_1fr_minmax(380px,470px)]",
           "[&>*:nth-child(1)]:order-2 [&>*:nth-child(2)]:order-1 [&>*:nth-child(3)]:order-3",
-          "min-[1024px]:[&>*]:order-none",
+          "instrument:[&>*]:order-none",
         ].join(" ")}
       >
         {children}

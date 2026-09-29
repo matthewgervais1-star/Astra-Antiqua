@@ -68,7 +68,7 @@ function ChartsInstrumentInner() {
   if (!hydrated) {
     return (
       <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
-        <div className="flex items-center justify-center px-7 py-24 min-[720px]:col-span-3">
+        <div className="flex items-center justify-center px-7 py-24 instrument:col-span-3">
           <Skeleton />
         </div>
       </InstrumentShell>
@@ -78,7 +78,7 @@ function ChartsInstrumentInner() {
   if (chart === null) {
     return (
       <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
-        <div className="mx-auto flex max-w-[560px] flex-col items-center px-5 py-16 text-center min-[720px]:col-span-3">
+        <div className="mx-auto flex max-w-[560px] flex-col items-center px-5 py-16 text-center instrument:col-span-3">
           <div className="font-mono text-data-xs tracking-microcopy text-dim">SAVED CHARTS</div>
           <div className="mx-auto my-5 h-px w-11 bg-accent" />
           <h1 className="font-display text-display-s leading-display tracking-display text-bone">
@@ -106,7 +106,7 @@ function ChartsInstrumentInner() {
   if (!natal) {
     return (
       <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
-        <div className="mx-auto flex max-w-[480px] flex-col items-center px-5 py-16 text-center min-[720px]:col-span-3">
+        <div className="mx-auto flex max-w-[480px] flex-col items-center px-5 py-16 text-center instrument:col-span-3">
           <p className="font-mono text-data-xs uppercase tracking-label text-dim">
             THIS CHART COULD NOT BE COMPUTED
           </p>
@@ -125,7 +125,7 @@ function ChartsInstrumentInner() {
 
   return (
     <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
-      <aside className="border-rule border-b px-7 py-6 min-[720px]:border-b-0 min-[720px]:border-r">
+      <aside className="border-rule border-b px-7 py-6 instrument:border-b-0 instrument:border-r">
         <div className="font-mono text-data-xs tracking-label text-dim">
           PLACEMENTS · B. {chart.date} · {cityShort(chart.cityLabel)}
         </div>
@@ -183,7 +183,7 @@ function ChartsInstrumentInner() {
         </div>
       </div>
 
-      <aside className="border-rule flex flex-col border-t px-7 py-6 min-[720px]:border-t-0 min-[720px]:border-l">
+      <aside className="border-rule flex flex-col border-t px-7 py-6 instrument:border-t-0 instrument:border-l">
         <div className="font-mono text-data-xs tracking-label text-dim">
           YOUR CHART · ON THIS DEVICE
         </div>

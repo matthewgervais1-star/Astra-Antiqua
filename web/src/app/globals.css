@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 @theme {
+  /* The instrument's one breakpoint (instrument: variant); see InstrumentShell. */
+  --breakpoint-instrument: 1200px;
+
   /* "The Instrument in the Temple" tokens (docs/design/handoff/tokens.css). */
 
   /* grounds (page background per culture; neutral where no culture is presumed) */
