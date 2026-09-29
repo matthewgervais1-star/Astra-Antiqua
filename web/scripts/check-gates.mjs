@@ -3,6 +3,8 @@
  *   1. no em dashes anywhere
  *   2. no banned terms (whole words, any case)
  *   3. no framer-motion (motion/react only)
+ *   4. no backdrop-filter
+ *   5. no non-zero border-radius (0 and 0px pass)
  * Exits 1 listing file:line for every hit. `npm run gates`.
  */
 import { readdirSync, readFileSync, statSync } from "node:fs";
@@ -15,6 +17,8 @@ const GATES = [
   { name: "em dash", pattern: /—/ },
   { name: "banned term", pattern: /\b(inter|roboto|harness|unlock your|discover your)\b/i },
   { name: "framer-motion", pattern: /framer-motion/ },
+  { name: "backdrop-filter", pattern: /backdrop-filter/i },
+  { name: "non-zero border-radius", pattern: /border-radius\s*:\s*(?!0(px)?\s*([;}]|$))\S/i },
 ];
 
 const SKIP_EXT = new Set([".woff2", ".ttf", ".png", ".ico", ".jpg", ".svg"]);

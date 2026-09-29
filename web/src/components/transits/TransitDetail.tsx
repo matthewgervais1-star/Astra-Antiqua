@@ -104,7 +104,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
   const natalWords = pointKey ? natalSide.slice(NATAL_PREFIX.length) : natalSide;
   const degreesLine = (
     <span className="inline-flex flex-wrap items-center justify-center gap-x-[var(--space-1)]">
-      <DeityGlyph body={span.transitPlanet} culture={culture} size={16} />
+      <DeityGlyph body={span.transitPlanet} culture={culture} size={16} decorative />
       <span>{transitDeity.toUpperCase()}</span>
       <span>{formatDegMin(span.transitDegree)}</span>
       <span>{span.transitSign.toUpperCase()}</span>
@@ -112,7 +112,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
       {pointKey ? (
         <>
           <span>{NATAL_PREFIX.trim()}</span>
-          <DeityGlyph body={pointKey} culture={culture} size={16} />
+          <DeityGlyph body={pointKey} culture={culture} size={16} decorative />
         </>
       ) : null}
       <span>{natalWords}</span>

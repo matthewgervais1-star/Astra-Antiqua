@@ -163,7 +163,7 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
                 ) : null}
                 <div className="grid grid-cols-[104px_1fr] items-center gap-x-4 gap-y-1 border-t border-rule-row py-3 last:border-b sm:grid-cols-[104px_150px_1fr]">
                   <span className="inline-flex items-center gap-[var(--space-1)] font-mono text-data-xs tracking-data text-dim">
-                    <DeityGlyph body={planet} culture={culture} size={16} />
+                    <DeityGlyph body={planet} culture={culture} size={16} decorative />
                     {PLANET_LABELS[planet].toUpperCase()}
                   </span>
                   <span

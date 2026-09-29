@@ -141,7 +141,7 @@ function ChartsInstrumentInner() {
                 received={isReceived(planet)}
                 body={
                   <>
-                    <DeityGlyph body={planet} culture={culture} size={16} />
+                    <DeityGlyph body={planet} culture={culture} size={16} decorative />
                     <span className="truncate">{deity.name.toUpperCase()}</span>
                   </>
                 }
@@ -242,7 +242,7 @@ function ChartsInstrumentInner() {
                 className="border-l-2 border-rule-active pl-3 font-body text-prose-s leading-prose text-prose"
               >
                 <span className="inline-flex items-center gap-[var(--space-1)] align-middle font-display text-[11px] tracking-[0.1em] text-accent">
-                  <DeityGlyph body={planet} culture={culture} size={16} />
+                  <DeityGlyph body={planet} culture={culture} size={16} decorative />
                   {deity.name.toUpperCase()}
                 </span>{" "}
                 · {deity.epithet}

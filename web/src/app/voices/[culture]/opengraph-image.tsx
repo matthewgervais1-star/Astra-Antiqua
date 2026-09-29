@@ -5,10 +5,20 @@ import { join } from "node:path";
 import { CULTURE_LABELS, CULTURE_TAGLINES, isCulture } from "@/data/cultures";
 import { CULTURE_ACCENTS, CULTURE_GROUNDS } from "@/data/palettes";
 import { CULTURE_EMBLEMS } from "@/marks";
+import { WordmarkGlyphs } from "@/components/chrome/Wordmark";
 
 export const alt = "A doorway of Astra Antiqua: one culture's reading of the computed sky";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+/**
+ * The drawn wordmark at the cap height the typed 16px Cinzel line had
+ * (16 * 0.70 = 11.2), sized the way the default card sizes its own. The A's
+ * ink is 102.25 of the viewBox's 132 units, see Wordmark.tsx.
+ */
+const WORDMARK_CAP_HEIGHT = 11.2;
+const WORDMARK_HEIGHT = (WORDMARK_CAP_HEIGHT * 132) / 102.25;
+const WORDMARK_WIDTH = (WORDMARK_HEIGHT * 1424) / 132;
 
 const BONE = "#E6DECC";
 const DIM = "#9A917D";
@@ -97,13 +107,17 @@ export default async function OpengraphImage({ params }: OpengraphImageProps) {
           <div
             style={{
               display: "flex",
+              alignItems: "center",
               marginTop: 26,
               fontSize: 16,
               letterSpacing: 4,
               color: DIM,
             }}
           >
-            ASTRA ANTIQUA · ONE SKY · FIVE ANCIENT VOICES
+            <svg viewBox="-10 -10 1424 132" width={WORDMARK_WIDTH} height={WORDMARK_HEIGHT}>
+              {WordmarkGlyphs({ stroke: DIM })}
+            </svg>
+            <div style={{ display: "flex", marginLeft: 12 }}>· ONE SKY · FIVE ANCIENT VOICES</div>
           </div>
         </div>
       </div>

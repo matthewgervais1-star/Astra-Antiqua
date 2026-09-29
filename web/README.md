@@ -204,8 +204,9 @@ npm run gates
 ```
 
 Scans `src/` for em dashes, banned terms (`inter`, `roboto`, `harness`,
-"unlock your", "discover your"), and `framer-motion` imports, and exits
-non-zero with a `file:line` list. Run it alongside `npm run typecheck` and
+"unlock your", "discover your"), `framer-motion` imports, `backdrop-filter`,
+and any `border-radius` other than `0` or `0px`, and exits non-zero with a
+`file:line` list. Run it alongside `npm run typecheck` and
 `npm run lint` before every commit.
 
 ## Routes

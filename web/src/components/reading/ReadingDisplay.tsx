@@ -129,7 +129,7 @@ export function ReadingDisplay({
                     received ? "text-accent" : "text-bone",
                   )}
                 >
-                  <DeityGlyph body={p.planet} culture={culture} size={16} />
+                  <DeityGlyph body={p.planet} culture={culture} size={16} decorative />
                   {p.deityName.toUpperCase()}
                   <span className="ml-2 font-body text-prose-s normal-case italic text-dim">
                     {p.deityEpithet}
@@ -186,7 +186,7 @@ export function ReadingDisplay({
                     received ? "text-accent" : "text-bone",
                   )}
                 >
-                  <DeityGlyph body={planet} culture={culture} size={16} />
+                  <DeityGlyph body={planet} culture={culture} size={16} decorative />
                   {deity.name.toUpperCase()} · {area.area.toUpperCase()}
                 </div>
                 <p className="mt-2 font-body text-prose-s leading-prose text-prose">{area.blurb}</p>

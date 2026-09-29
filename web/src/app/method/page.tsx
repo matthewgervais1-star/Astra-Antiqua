@@ -5,6 +5,7 @@ import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { ASPECT_RULES, type AspectKind } from "@/data/sampleChart";
 import { CULTURES, CULTURE_LABELS, RECEIVED_BODIES, PLANET_LABELS } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
+import { SPAN_ORB } from "@/lib/transitSpans";
 
 const CONTEXT = "HOW THE SKY IS COMPUTED";
 
@@ -61,7 +62,8 @@ export default function MethodPage() {
           <SectionDivider label="ORBS" />
           <p className={PROSE_CLASS}>
             An aspect counts only inside these distances. When nothing is in orb, we say the day is
-            quiet. We do not invent weather.
+            quiet. We do not invent weather. A long transit is active while the body holds within{" "}
+            {SPAN_ORB}° of exact.
           </p>
           <div className="flex flex-wrap items-center gap-x-[var(--space-3)] gap-y-2 border border-rule px-[var(--space-2)] py-[var(--space-2)] font-mono text-data-xs text-dim">
             {ORB_DISPLAY_ORDER.map((kind) => {
