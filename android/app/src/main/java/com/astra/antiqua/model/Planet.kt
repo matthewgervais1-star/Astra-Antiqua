@@ -29,8 +29,3 @@ enum class ClassicalPlanet(val isReceived: Boolean = false) {
     NEPTUNE(isReceived = true),
     PLUTO(isReceived = true)
 }
-
-data class PlanetPosition(
-    val planet: ClassicalPlanet,
-    val degree: Float // 0-360
-)

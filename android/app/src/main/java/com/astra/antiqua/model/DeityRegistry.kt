@@ -3,7 +3,7 @@ package com.astra.antiqua.model
 /**
  * Single source of truth for deity identities across all five ancient cultures.
  *
- * One [Deity] per (culture x planet) pair — the Android equivalent of web's
+ * One [Deity] per (culture x planet) pair, the Android equivalent of web's
  * `DEITY_MATRIX` (`web/src/data/deities.ts`). Other Android components
  * (`data/DeityManager`, `domain/LexiconDictionary`) should read deity names
  * and epithets from here rather than hardcoding their own copies.
