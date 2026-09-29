@@ -383,7 +383,8 @@
     "file": "components/chrome/CultureSwitch.tsx",
     "name": "CultureSwitch",
     "role": "The five-culture picker: each row is the culture's emblem beside its name and institution, and only the active culture wears its accent.",
-    "spec": "CultureSwitch"
+    "spec": "CultureSwitch",
+    "culture": "greece"
   },
   {
     "exportKind": "named",

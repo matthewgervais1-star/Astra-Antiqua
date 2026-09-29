@@ -22,7 +22,7 @@ specs.forEach((s, i) => {
   imports.push(s.exportKind === "default" ? `import ${local} from "${mod}";` : `import { ${s.name} as ${local} } from "${mod}";`);
   const culture = s.culture ?? CULTURES[i % CULTURES.length];
   const props = (s.sampleProps ?? "{}").trim() || "{}";
-  // sampleJsx renders several variants in one card: TSX source in which {C} stands for the component.
+  // sampleJsx renders several variants in one card: TSX source in which {C} stands for the component ({C} is reserved in sampleJsx).
   const body = s.sampleJsx ? s.sampleJsx.replaceAll("{C}", local) : `<${local} {...(${props})} />`;
   for (const extra of s.extraImports ?? []) if (!imports.includes(extra)) imports.push(extra);
   entries.push(`  { name: ${JSON.stringify(s.name)}, culture: ${JSON.stringify(culture)}, viewport: ${JSON.stringify(s.viewport ?? "700x220")}, role: ${JSON.stringify(s.role ?? "")}, spec: ${JSON.stringify(s.spec ?? "none")}, render: () => ${body} },`);
