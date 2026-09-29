@@ -59,7 +59,7 @@ export function TranslationMatrix() {
                 )}
               >
                 <td className="px-2 py-[var(--space-2)] text-dim">
-                  <DeityGlyph body={planet} culture={null} size={16} decorative />
+                  <DeityGlyph body={planet} culture={null} size={16} />
                 </td>
                 {CULTURES.map((culture) => (
                   <td key={culture} className="px-2 py-[var(--space-2)] text-bone">
