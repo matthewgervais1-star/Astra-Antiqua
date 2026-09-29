@@ -28,67 +28,67 @@ private fun cap(s: String): String =
 fun deityCharge(culture: AncientCulture, body: ClassicalPlanet): String = when (culture) {
     AncientCulture.EGYPT -> when (body) {
         ClassicalPlanet.SUN -> "the day's own course"
-        ClassicalPlanet.MOON -> "the count of the nights"
-        ClassicalPlanet.MERCURY -> "the quick fire at the edge of the field"
-        ClassicalPlanet.VENUS -> "what was scattered and gathered back"
-        ClassicalPlanet.MARS -> "a fight already decided"
+        ClassicalPlanet.MOON -> "the count of the months"
+        ClassicalPlanet.MERCURY -> "the storm off the red land"
+        ClassicalPlanet.VENUS -> "the gathering of the limbs"
+        ClassicalPlanet.MARS -> "the falcon's harpoon"
         ClassicalPlanet.JUPITER -> "the hidden king's hand"
         ClassicalPlanet.SATURN -> "the weight of the ground itself"
-        ClassicalPlanet.URANUS -> "the five days outside the year"
+        ClassicalPlanet.URANUS -> "the gap of five days outside the year"
         ClassicalPlanet.NEPTUNE -> "the dark water under everything"
-        ClassicalPlanet.PLUTO -> "the verdict of the hall below"
+        ClassicalPlanet.PLUTO -> "the green grain of the Duat"
     }
 
     AncientCulture.GREECE -> when (body) {
-        ClassicalPlanet.SUN -> "what the sky has seen and will tell"
-        ClassicalPlanet.MOON -> "the borrowed light"
+        ClassicalPlanet.SUN -> "the eye that misses no deed"
+        ClassicalPlanet.MOON -> "the light borrowed from Helios"
         ClassicalPlanet.MERCURY -> "the word carried through the door"
-        ClassicalPlanet.VENUS -> "the pull that needs no argument"
-        ClassicalPlanet.MARS -> "the quarrel looking for a field"
-        ClassicalPlanet.JUPITER -> "the thunder that settles it"
+        ClassicalPlanet.VENUS -> "the girdle that turns every head"
+        ClassicalPlanet.MARS -> "the slaughter looking for a field"
+        ClassicalPlanet.JUPITER -> "the nod that shakes Olympus"
         ClassicalPlanet.SATURN -> "the sickle's one question"
-        ClassicalPlanet.URANUS -> "the sky before there were names"
+        ClassicalPlanet.URANUS -> "the sky unthroned in one stroke"
         ClassicalPlanet.NEPTUNE -> "the ground that will not hold still"
-        ClassicalPlanet.PLUTO -> "the wealth kept under the floor"
+        ClassicalPlanet.PLUTO -> "the silver under the earth"
     }
 
     AncientCulture.CANAAN -> when (body) {
-        ClassicalPlanet.SUN -> "the messenger's report to the council"
-        ClassicalPlanet.MOON -> "the lamp of the night watch"
-        ClassicalPlanet.MERCURY -> "the craftsman's finished work"
-        ClassicalPlanet.VENUS -> "the name sworn on at the altar"
-        ClassicalPlanet.MARS -> "the plague-arrow already on the string"
+        ClassicalPlanet.SUN -> "the herald's message brought down from the sky"
+        ClassicalPlanet.MOON -> "the bride price paid by moonlight"
+        ClassicalPlanet.MERCURY -> "the mace forged for Baal's hand"
+        ClassicalPlanet.VENUS -> "the armed morning star"
+        ClassicalPlanet.MARS -> "the arrow of plague in flight"
         ClassicalPlanet.JUPITER -> "the rain that decides the harvest"
-        ClassicalPlanet.SATURN -> "the old father's ruling"
-        ClassicalPlanet.URANUS -> "the unnamed heavens"
+        ClassicalPlanet.SATURN -> "the word from the tent at the source of the rivers"
+        ClassicalPlanet.URANUS -> "the offering owed to Heaven itself"
         ClassicalPlanet.NEPTUNE -> "the sea's claim to the throne"
-        ClassicalPlanet.PLUTO -> "the dry mouth of death"
+        ClassicalPlanet.PLUTO -> "the open gullet of death"
     }
 
     AncientCulture.CARTHAGE -> when (body) {
-        ClassicalPlanet.SUN -> "the day's sailing light"
-        ClassicalPlanet.MOON -> "the vow entered under her sign"
-        ClassicalPlanet.MERCURY -> "the superintendent's tally"
-        ClassicalPlanet.VENUS -> "the cargo worth the voyage"
-        ClassicalPlanet.MARS -> "the pillar the city was founded on"
-        ClassicalPlanet.JUPITER -> "the store that fills"
-        ClassicalPlanet.SATURN -> "the elder's due called in"
-        ClassicalPlanet.URANUS -> "the weather no manifest allows for"
-        ClassicalPlanet.NEPTUNE -> "the open sea between ports"
+        ClassicalPlanet.SUN -> "the Tyrian sun over the new city"
+        ClassicalPlanet.MOON -> "the dedication cut into the stele beneath the crescent"
+        ClassicalPlanet.MERCURY -> "the guide's landfall on a foreign shore"
+        ClassicalPlanet.VENUS -> "the war fleet launched under the Lady of the Sea"
+        ClassicalPlanet.MARS -> "the champion's yearly tithe to Tyre"
+        ClassicalPlanet.JUPITER -> "the horned lord of the gods"
+        ClassicalPlanet.SATURN -> "the whole of the Ancient One's due"
+        ClassicalPlanet.URANUS -> "the foremost name in the city's oath"
+        ClassicalPlanet.NEPTUNE -> "the partner of every hull out of Carthage"
         ClassicalPlanet.PLUTO -> "the debt that outlives the debtor"
     }
 
     AncientCulture.ROME -> when (body) {
-        ClassicalPlanet.SUN -> "the day's light on the Forum"
-        ClassicalPlanet.MOON -> "the night's turning"
-        ClassicalPlanet.MERCURY -> "the message on the road"
-        ClassicalPlanet.VENUS -> "the treaty sealed by desire"
-        ClassicalPlanet.MARS -> "the legion in the field"
-        ClassicalPlanet.JUPITER -> "the thunder on the right"
-        ClassicalPlanet.SATURN -> "the old boundary stone"
-        ClassicalPlanet.URANUS -> "the whole sky before augury divided it"
-        ClassicalPlanet.NEPTUNE -> "the sea the fleet must cross"
-        ClassicalPlanet.PLUTO -> "the store beneath the earth"
+        ClassicalPlanet.SUN -> "the unconquered light"
+        ClassicalPlanet.MOON -> "the chariot of the moon"
+        ClassicalPlanet.MERCURY -> "the bargain struck in the market"
+        ClassicalPlanet.VENUS -> "the marriage of two houses"
+        ClassicalPlanet.MARS -> "the shield of the Salii"
+        ClassicalPlanet.JUPITER -> "the thunderbolt from the Alban Mount"
+        ClassicalPlanet.SATURN -> "the treasury at the Capitol's foot"
+        ClassicalPlanet.URANUS -> "the canopy over every army"
+        ClassicalPlanet.NEPTUNE -> "the failing spring at the Neptunalia"
+        ClassicalPlanet.PLUTO -> "the altar buried at the Tarentum"
     }
 }
 
@@ -104,43 +104,43 @@ fun aspectFrame(
     b: String,
 ): String = when (culture) {
     AncientCulture.EGYPT -> when (aspect) {
-        AspectType.CONJUNCTION -> "Two loads ride one barque today, $a and $b, and the river carries both or neither."
-        AspectType.SEXTILE -> "${cap(a)} lends its wind to $b; the sail that is raised is the one that moves."
-        AspectType.SQUARE -> "${cap(a)} pulls the beam out of true against $b, and only labor brings the pans level."
-        AspectType.TRINE -> "${cap(a)} and $b sit level on the scale, and no hand needs to touch it."
-        AspectType.OPPOSITION -> "${cap(a)} hangs in one pan and $b in the other, and the scribe writes no verdict until one descends."
+        AspectType.CONJUNCTION -> "${cap(a)} and $b enter the pylon together, and the doorkeeper slides back the bolt."
+        AspectType.SEXTILE -> "${cap(a)} sends the north wind to $b, and a boat that raises no sail drifts with the current."
+        AspectType.SQUARE -> "${cap(a)} and $b haul the sledge on opposite ropes, and the block creeps toward the stronger rope."
+        AspectType.TRINE -> "${cap(a)} and $b sit level on the scale, and Anubis does not touch the beam."
+        AspectType.OPPOSITION -> "${cap(a)} hangs in one pan and $b in the other, and Thoth waits with his reed above the papyrus."
     }
 
     AncientCulture.GREECE -> when (aspect) {
-        AspectType.CONJUNCTION -> "The tripod gives one answer for $a and $b, and neither may claim it alone."
-        AspectType.SEXTILE -> "${cap(a)} stands ready to counsel $b; the shrine answers the question that is put."
-        AspectType.SQUARE -> "${cap(a)} contests $b at the shrine, and the god will not split the difference."
-        AspectType.TRINE -> "${cap(a)} moves in step with $b, and the answer comes down the road unasked."
-        AspectType.OPPOSITION -> "${cap(a)} faces $b across the agora, and the oracle hears both voices at once."
+        AspectType.CONJUNCTION -> "The tripod gives one answer for $a and $b, and both go down the hill."
+        AspectType.SEXTILE -> "The shrine is open to $a and $b, and the Pythia answers whichever climbs to her first."
+        AspectType.SQUARE -> "${cap(a)} contests $b, and the Pythia casts lots for first place before she gives either answer."
+        AspectType.TRINE -> "The Pythia takes $a and $b ahead of the crowd and answers both from the tripod."
+        AspectType.OPPOSITION -> "${cap(a)} and $b come to the tripod by separate roads, and one by one the Pythia gives each a different answer."
     }
 
     AncientCulture.CANAAN -> when (aspect) {
-        AspectType.CONJUNCTION -> "${cap(a)} and $b come before El as one petition, and the council rules on both together."
-        AspectType.SEXTILE -> "${cap(a)} speaks in favor of $b, and the floor is open for the vow."
-        AspectType.SQUARE -> "${cap(a)} raises an objection to $b, and the matter goes twice round the floor."
-        AspectType.TRINE -> "${cap(a)} and $b are entered in the record together, unopposed."
-        AspectType.OPPOSITION -> "${cap(a)} and $b stand on their feet against each other, and the docket does not clear."
+        AspectType.CONJUNCTION -> "${cap(a)} and $b go before the assembly in both their names, and the decree falls on the pair."
+        AspectType.SEXTILE -> "Before the assembled gods, $a stands beside $b, and a vow made now binds every god who sits."
+        AspectType.SQUARE -> "${cap(a)} rises to accuse $b, and the assembly takes up nothing else at this sitting."
+        AspectType.TRINE -> "The assembly passes $a and $b without a vote, and no god requires a vow of the pair."
+        AspectType.OPPOSITION -> "The gods set down their cups as $a and $b each seek the floor of the assembly."
     }
 
     AncientCulture.CARTHAGE -> when (aspect) {
-        AspectType.CONJUNCTION -> "${cap(a)} and $b are posted to one line of the register, and one seal covers both."
-        AspectType.SEXTILE -> "${cap(a)} holds a berth for $b; the entry stands until the tide, unclaimed."
-        AspectType.SQUARE -> "${cap(a)} disputes the figure $b brings, and the column is read again line by line."
-        AspectType.TRINE -> "${cap(a)} and $b balance on the same page, and the day's sheet closes without a correction."
-        AspectType.OPPOSITION -> "${cap(a)} and $b are entered against each other, and an entry disputed is not an entry."
+        AspectType.CONJUNCTION -> "The clerk lists $a and $b as a joint line of the register, and a seal covers both."
+        AspectType.SEXTILE -> "${cap(a)} stands surety for $b until the ships come home."
+        AspectType.SQUARE -> "${cap(a)} refuses the terms written for $b, and the Hundred and Four read the roll again line by line."
+        AspectType.TRINE -> "The clerk adds $a to $b, and the sum closes the day's sheet on the first pass."
+        AspectType.OPPOSITION -> "The clerk sets $a and $b against each other, and the balance stays open."
     }
 
     AncientCulture.ROME -> when (aspect) {
-        AspectType.CONJUNCTION -> "The auspice taken for $a binds $b as well; neither acts on it alone."
-        AspectType.SEXTILE -> "${cap(a)} shows favorable to $b, and the sign waits for someone to claim it."
-        AspectType.SQUARE -> "${cap(a)} enters an objection against $b, and every step goes forward under challenge."
-        AspectType.TRINE -> "${cap(a)} and $b stand under the same fastus day, and what is done under it holds."
-        AspectType.OPPOSITION -> "${cap(a)} and $b hold one office between them, and each vetoes the other."
+        AspectType.CONJUNCTION -> "${cap(a)} and $b wait on the sacred chickens, and the keeper announces the feeding."
+        AspectType.SEXTILE -> "The haruspex finds $a favorable to $b, and the sign lasts the day."
+        AspectType.SQUARE -> "An adverse omen stands between $a and $b, and the consul defers the day's business."
+        AspectType.TRINE -> "The Vestals feed the hearth for $a and $b, and the flame burns clear."
+        AspectType.OPPOSITION -> "The tribunes split, one for $a and one for $b, and each vetoes the other."
     }
 }
 
@@ -159,9 +159,9 @@ fun ingressVerb(culture: AncientCulture): String = when (culture) {
  * says that in its own institution's terms.
  */
 fun ingressFrame(culture: AncientCulture, c: String): String = when (culture) {
-    AncientCulture.EGYPT -> "${cap(c)} crosses to a new bank of the river, and the old mark no longer measures it."
-    AncientCulture.GREECE -> "${cap(c)} comes onto new ground, and the shrine there has not yet been asked."
-    AncientCulture.CANAAN -> "${cap(c)} is brought before a new seat, and the council there has not yet ruled."
-    AncientCulture.CARTHAGE -> "${cap(c)} is entered under a new heading, and the old bearing no longer holds."
-    AncientCulture.ROME -> "${cap(c)} stands on new ground, and the auspices there have not been taken."
+    AncientCulture.EGYPT -> "The priest of the hours on the temple roof watches the sign's decans rise and reads $c in them."
+    AncientCulture.GREECE -> "The priests there begin the sacrifice for $c."
+    AncientCulture.CANAAN -> "${cap(c)} moves to the house of another god, where no envoy has announced it."
+    AncientCulture.CARTHAGE -> "The clerk carries $c onto a fresh sheet of the ledger and rules off the last one."
+    AncientCulture.ROME -> "The auspices taken for $c lapse at that boundary, and the college takes new ones beyond it."
 }

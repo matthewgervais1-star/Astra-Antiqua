@@ -26,7 +26,7 @@ object AspectVerbs {
             AspectType.SEXTILE -> "offers fair counsel to"
             AspectType.SQUARE -> "challenges"
             AspectType.TRINE -> "moves in accord with"
-            AspectType.OPPOSITION -> "stands across the agora from"
+            AspectType.OPPOSITION -> "holds the far end of the agora against"
         }
 
         AncientCulture.CANAAN -> when (aspect) {
@@ -40,17 +40,17 @@ object AspectVerbs {
         AncientCulture.CARTHAGE -> when (aspect) {
             AspectType.CONJUNCTION -> "sails under one banner with"
             AspectType.SEXTILE -> "trades safe passage with"
-            AspectType.SQUARE -> "raises a hand against"
+            AspectType.SQUARE -> "turns the prow against"
             AspectType.TRINE -> "lights the harbor for"
             AspectType.OPPOSITION -> "demands a price of"
         }
 
         AncientCulture.ROME -> when (aspect) {
             AspectType.CONJUNCTION -> "marches under the same eagle as"
-            AspectType.SEXTILE -> "offers a treaty to"
+            AspectType.SEXTILE -> "strikes a treaty with"
             AspectType.SQUARE -> "raises the spear against"
             AspectType.TRINE -> "clasps the right hand of"
-            AspectType.OPPOSITION -> "stands across the forum from"
+            AspectType.OPPOSITION -> "sits on the opposite bench from"
         }
     }
 }

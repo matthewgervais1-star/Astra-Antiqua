@@ -21,7 +21,7 @@ export const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, 
     sextile: "offers fair counsel to",
     square: "challenges",
     trine: "moves in accord with",
-    opposition: "stands across the agora from",
+    opposition: "holds the far end of the agora against",
   },
   canaan: {
     conjunction: "shares the council seat with",
@@ -33,16 +33,16 @@ export const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, 
   carthage: {
     conjunction: "sails under one banner with",
     sextile: "trades safe passage with",
-    square: "raises a hand against",
+    square: "turns the prow against",
     trine: "lights the harbor for",
     opposition: "demands a price of",
   },
   rome: {
     conjunction: "marches under the same eagle as",
-    sextile: "offers a treaty to",
+    sextile: "strikes a treaty with",
     square: "raises the spear against",
     trine: "clasps the right hand of",
-    opposition: "stands across the forum from",
+    opposition: "sits on the opposite bench from",
   },
 };
 
