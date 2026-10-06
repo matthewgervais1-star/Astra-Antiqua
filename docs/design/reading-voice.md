@@ -167,6 +167,51 @@ spoken before it (OFFER a short letter, HOLD BACK your blade at supper, DEFER
 perfume on credit), with no footnote and no inverted sense; the register is
 read through in column order that way whenever an item changes.
 
+## The figure page
+
+A reader opens one figure from the day's headline, a week row or a long
+transit, and reads it the way the reference reads its own (the spec's
+section B). The banks are `data/figureBanks.ts`; `lib/figureReading.ts`
+composes them and `lib/recurrence.ts` says how often the figure returns.
+
+1. **Headline and evidence.** A day's figure prints the day page's own
+   headline and evidence line, so the two pages agree. A long transit reads
+   one of 125 slow headlines, per (culture, kind, slow body).
+2. **The paragraph, in two moves.** Move one is the reader: the natal point
+   the figure touches, in the culture's frame, with one sentence of the
+   universal placement paragraph recast in the second person ("The augurs
+   found Iuppiter in the Maiden at your birth: increase is refinement.").
+   Rome alone takes the reference's own shape when the clause opens on you
+   ("As Mercurius in the Scales, you hold both arguments."). With no chart,
+   move one is the transiting god in its sign and the domain it keeps. Move
+   two is now: "Right now {two domains and the relation}, and {the
+   consequence}." The tight tail stays on the day page; the evidence line
+   already says how close.
+3. **What it looks like in space.** The figure drawn as two radii on one
+   ring, then the sentence taken apart into three parts, each with its fact
+   in mono: the transiting domain over `MARS NOW`, the relation over
+   `TRINE (120°)`, the second domain over `YOUR IUPPITER IN VIRGO` or
+   `NEPTUNUS NOW`. The relation's short form opens on a modal (can, must,
+   will, cannot) so it reads after a plural domain and a singular one alike.
+4. **Recurrence.** Said in words each calendar can say truthfully: Egypt
+   counts decans and its four-month seasons, the lunar calendars say twice a
+   month, and Rome, whose market week ran eight days, counts the half month
+   in days. No culture borrows a seven-day week.
+5. **How this plays out** in the institution (on the river, at the tripod,
+   in the council, on the ledger, in the forum): the god's act, then four
+   concrete things the reader will see, keyed by the house group of the
+   natal point and the tone. Without a chart the group comes from what the
+   partner body governs.
+6. **Try this.** Up to three cards: an object to consider, a text to read, a
+   rite or habit to keep, each with its source on one line. Every card is
+   attested; where nothing attested fits, the body carries two cards rather
+   than an invented third.
+7. **The lesson.** Two sentences, no comfort, one picture from the
+   institution, and no god but the one the page is about.
+
+The figure page asks once, in its cards. It gives no instruction of its own:
+the day page already ends on one.
+
 ## The bar, stated in our own prose
 
 The test is not a comparison against anyone else's page. It is whether a

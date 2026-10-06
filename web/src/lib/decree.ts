@@ -79,7 +79,7 @@ function fill(template: string, slots: Readonly<Record<string, string>>): string
   return template.replace(/\{(\w+)\}/g, (whole, key: string) => slots[key] ?? whole);
 }
 
-function toneForKind(kind: AspectKind): "harmony" | "tension" {
+export function toneForKind(kind: AspectKind): "harmony" | "tension" {
   return kind === "square" || kind === "opposition" ? "tension" : "harmony";
 }
 
@@ -118,10 +118,19 @@ export function composeEvidence(culture: Culture, f: DayFigure): string {
   return `${nameA} ${ASPECT_GLYPH[f.kind]} ${nameB} · ${measure}`;
 }
 
-/** The unpunctuated meaning clause: "your letters and your temper haul on opposite ropes". */
-function meaningClause(culture: Culture, f: DayFigure, day: number): string {
+/**
+ * Two domains and the day's relation, unpunctuated: "your letters and your
+ * temper haul on opposite ropes". The figure page joins a natal point's
+ * domain this way too.
+ */
+export function pairClause(culture: Culture, domainA: string, domainB: string, kind: AspectKind, day: number): string {
+  return `${domainA} and ${domainB} ${DECREE_BANKS[culture].relations[kind][variant(day)]}`;
+}
+
+/** The unpunctuated meaning clause for a sky figure. */
+export function meaningClause(culture: Culture, f: DayFigure, day: number): string {
   const domains = DEITY_DOMAINS[culture];
-  return `${domains[f.a]} and ${domains[f.b]} ${DECREE_BANKS[culture].relations[f.kind][variant(day)]}`;
+  return pairClause(culture, domains[f.a], domains[f.b], f.kind, day);
 }
 
 /** Sentence (a): two domains and a relation, the tight tail under half a degree. */
@@ -145,8 +154,8 @@ function godSlots(culture: Culture, f: DayFigure): Readonly<Record<string, strin
   return { god: DEITY_MATRIX[culture][body].name, partner: DEITY_MATRIX[culture][partner].name };
 }
 
-/** Sentence (c): the institution's image, naming the headline god. */
-function composeImage(culture: Culture, f: DayFigure): string {
+/** Sentence (c): the institution's image, naming the headline god. The figure page prints it as the god's act. */
+export function composeImage(culture: Culture, f: DayFigure): string {
   return fill(DECREE_BANKS[culture].images[f.kind][headlineBody(f.a, f.b).body], godSlots(culture, f));
 }
 

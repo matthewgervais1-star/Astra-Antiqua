@@ -16,10 +16,12 @@ export interface CenterDecreeProps {
   /** The culture's come-back line, closing the day page. */
   comeBack: string;
   now: Date;
+  /** The figure page for the day's headline figure; the headline links to it. Null on a quiet day. */
+  figureHref?: string | null;
 }
 
 /** The day's reading: institution kicker, the headline to the reader in
- * display type, the evidence line in mono beneath it, the paragraph, the
+ * display type (a link to the figure page for the day's headline figure), the evidence line in mono beneath it, the paragraph, the
  * votive, feedback, the horizon links, and the come-back line. Shared between
  * the desktop grid and the mobile stack. */
 export function CenterDecree({
@@ -31,6 +33,7 @@ export function CenterDecree({
   votive,
   comeBack,
   now,
+  figureHref = null,
 }: CenterDecreeProps) {
   const readingId = `day-${isoDateUtc(now)}`;
   return (
@@ -43,7 +46,13 @@ export function CenterDecree({
           ) : undefined
         }
       >
-        {reading.headline}
+        {figureHref ? (
+          <Link href={figureHref} className="hover:text-accent">
+            {reading.headline}
+          </Link>
+        ) : (
+          reading.headline
+        )}
       </NaveHead>
 
       <div className="mx-auto max-w-[560px] text-left">

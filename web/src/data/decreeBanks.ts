@@ -135,7 +135,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
         mercury: "One short letter opens a door.",
         venus: "A kind word buys more than silver.",
         mars: "A little push moves the block.",
-        jupiter: "Ask a patron once and the answer is yes.",
+        jupiter: "A patron says yes the first time you ask.",
         saturn: "An old duty gets lighter the moment you start it.",
         uranus: "A chance comes from the wrong bank of the river.",
         neptune: "A hunch is worth following as far as the next canal.",

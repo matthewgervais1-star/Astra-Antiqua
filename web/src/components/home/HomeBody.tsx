@@ -7,6 +7,8 @@ import { Skeleton } from "@/components/chrome/Skeleton";
 import { buildHomeBundle, type HomeBundle } from "@/components/home/buildHomeBundle";
 import { EphemerisRail } from "@/components/home/EphemerisRail";
 import { CenterDecree } from "@/components/home/CenterDecree";
+import { isoDateUtc } from "@/components/home/format";
+import { figureHref } from "@/lib/figureReading";
 import { AspectsRail } from "@/components/home/AspectsRail";
 import { CompactSkyTable } from "@/components/home/CompactSkyTable";
 import { TransitTeaser } from "@/components/home/TransitTeaser";
@@ -61,6 +63,7 @@ export function HomeBody() {
           votive={bundle.votive}
           comeBack={bundle.comeBack}
           now={bundle.now}
+          figureHref={bundle.reading.figures[0] ? figureHref(isoDateUtc(bundle.now), bundle.reading.figures[0]) : null}
         />
 
         <CompactSkyTable

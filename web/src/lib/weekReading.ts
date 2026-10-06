@@ -19,6 +19,7 @@ import {
 import { SIGN_PHRASES } from "@/components/horizons/signPhrase";
 import { properCase, sameLocalDay, weekdayAbbr } from "@/components/horizons/format";
 import type { SavedNatal } from "@/lib/savedNatal";
+import { figureHref, isoDateUtc } from "@/lib/figureReading";
 
 export type WeekTone = "harmony" | "tension" | "quiet";
 export type RomeDayFlag = "F" | "N" | "C";
@@ -42,6 +43,8 @@ export interface WeekDay {
    *  the figure is the row above's, or null on an ingress day. */
   headline: string | null;
   line: string;
+  /** The figure page for the row's figure, or null on an ingress or quiet day. */
+  figureHref: string | null;
   shorthand: WeekShorthand;
   tone: WeekTone;
   /** Rome only: fastus / nefastus / comitialis. */
@@ -140,6 +143,7 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
     const dayIngress = weekIngresses.find((e) => e.date >= dayStart && e.date < dayEnd) ?? null;
 
     let headline: string | null = null;
+    let figurePage: string | null = null;
     let line: string;
     let shorthand: WeekShorthand;
     let tone: WeekTone;
@@ -154,6 +158,7 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       headline = holds ? DECREE_BANKS[culture].holds : composeHeadline(culture, tightest);
       line = `${composeMeaning(culture, tightest, utcDayNumber(instant))} ${composeConsequence(culture, tightest)}`;
       shorthand = { kind: "aspect", a: tightest.a, aspect: tightest.kind, b: tightest.b, tight };
+      figurePage = figureHref(isoDateUtc(instant), tightest);
     } else if (dayIngress) {
       tone = "harmony";
       const deity = DEITY_MATRIX[culture][dayIngress.planet].name;
@@ -183,6 +188,7 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       isToday: sameLocalDay(date, today),
       headline,
       line,
+      figureHref: figurePage,
       shorthand,
       tone,
       flag,
