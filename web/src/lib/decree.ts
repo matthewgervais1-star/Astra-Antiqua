@@ -43,11 +43,15 @@ export const FAST_ORDER: readonly FastBody[] = ["moon", "sun", "mercury", "venus
 const FAST_BODIES: ReadonlySet<Planet> = new Set(FAST_ORDER);
 
 /**
- * Under half a degree a figure is exact: the evidence line prints EXACT, the
- * meaning sentence carries the culture's exact tail, and the week marks the
- * day EXACT. One threshold for every surface that says "exact".
+ * Under half a degree a figure is tight: the meaning sentence carries the
+ * culture's tight tail and the week flags the day TIGHT. One threshold for
+ * every surface that says "tight". The evidence line does not use it; it
+ * prints the measured orb, and says EXACT only under one minute of arc.
  */
-export const EXACT_ORB = 0.5;
+export const TIGHT_ORB = 0.5;
+
+/** The evidence line says EXACT only under this: one minute of arc. */
+const ONE_ARCMINUTE = 1 / 60;
 
 const DAY_MS = 86_400_000;
 
@@ -81,7 +85,7 @@ function toneForKind(kind: AspectKind): "harmony" | "tension" {
 
 /**
  * Which of a bank's three variants a day uses, by the UTC day number. A
- * figure that holds for three days prints three different relations, exact
+ * figure that holds for three days prints three different relations, tight
  * tails and second-figure openers. The sky picks the figure; the day only
  * picks among the words.
  */
@@ -106,11 +110,11 @@ function formatOrb(orb: number): string {
   return `${d}°${String(m).padStart(2, "0")}′`;
 }
 
-/** "RA △ NUT · 0°19′" or "MARS ☍ DIS PATER · EXACT". */
+/** "RA △ NUT · 0°19′", the measured orb; "MARS ☍ DIS PATER · EXACT" only under one minute of arc. */
 export function composeEvidence(culture: Culture, f: DayFigure): string {
   const nameA = DEITY_MATRIX[culture][f.a].name.toUpperCase();
   const nameB = DEITY_MATRIX[culture][f.b].name.toUpperCase();
-  const measure = f.orb < EXACT_ORB ? "EXACT" : formatOrb(f.orb);
+  const measure = f.orb < ONE_ARCMINUTE ? "EXACT" : formatOrb(f.orb);
   return `${nameA} ${ASPECT_GLYPH[f.kind]} ${nameB} · ${measure}`;
 }
 
@@ -120,9 +124,9 @@ function meaningClause(culture: Culture, f: DayFigure, day: number): string {
   return `${domains[f.a]} and ${domains[f.b]} ${DECREE_BANKS[culture].relations[f.kind][variant(day)]}`;
 }
 
-/** Sentence (a): two domains and a relation, the exact tail under half a degree. */
+/** Sentence (a): two domains and a relation, the tight tail under half a degree. */
 export function composeMeaning(culture: Culture, f: DayFigure, day = 0): string {
-  const tail = f.orb < EXACT_ORB ? DECREE_BANKS[culture].exactTails[variant(day)] : "";
+  const tail = f.orb < TIGHT_ORB ? DECREE_BANKS[culture].tightTails[variant(day)] : "";
   return `${cap(meaningClause(culture, f, day))}${tail}.`;
 }
 

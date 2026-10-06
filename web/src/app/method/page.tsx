@@ -63,7 +63,8 @@ export default function MethodPage() {
           <p className={PROSE_CLASS}>
             An aspect counts only inside these distances. When nothing is in orb, we say the day is
             quiet. We do not invent weather. A long transit is active while the body holds within{" "}
-            {SPAN_ORB}° of exact.
+            {SPAN_ORB}° of exact. A figure is tight within half a degree of exact; the day&apos;s
+            reading marks it.
           </p>
           <div className="flex flex-wrap items-center gap-x-[var(--space-3)] gap-y-2 border border-rule px-[var(--space-2)] py-[var(--space-2)] font-mono text-data-xs text-dim">
             {ORB_DISPLAY_ORDER.map((kind) => {

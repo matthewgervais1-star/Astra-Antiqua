@@ -82,21 +82,32 @@ composition speaks to the reader. The shape, from
    (the fast body of the figure, the faster when both are). 125 lines, no two
    alike, and no run of three words (other than stop words such as "the",
    "your", "and") appears in two cultures' headlines; `decreeBanks.test.ts`
-   checks it.
-2. **Evidence line**, in mono: the two gods, the glyph, and the orb, or EXACT
-   under half a degree (`RA ⚹ AMUN · 1°19′`, `MARS ☍ DIS PATER · EXACT`). Half a
-   degree is the one exact threshold for the evidence line, the exact tail and
-   the week's flag. The sky's facts sit here, under the headline, so the
-   prose does not have to recite them.
+   checks it. Five headlines that give the same advice in five worlds are the
+   product (same sky, same meaning); a headline a reader could move to another
+   culture unnoticed is a template fill, so each one carries a noun, place or
+   institution of its own world (the sledge, the Pnyx, the ram's horn, the
+   suffetes, the paterfamilias).
+2. **Evidence line**, in mono: the two gods, the glyph, and the measured orb
+   (`RA ⚹ AMUN · 1°19′`, `RA △ NUT · 0°19′`). It says EXACT only under one
+   minute of arc (`MARS ☍ DIS PATER · EXACT`) and never rounds a near miss up
+   to it. Half a degree is the tight threshold, `TIGHT_ORB` in `lib/decree.ts`
+   and one constant on both surfaces: under it the meaning sentence carries the
+   culture's tight tail and the week flags the day TIGHT. The sky's facts sit
+   here, under the headline, so the prose does not have to recite them.
 3. **One paragraph of five sentences**: the meaning ("your day's work and your
    plans for the new season float on the same current", two plain domains and
-   a relation, with one of the culture's exact tails under half a degree);
+   a relation, with one of the culture's tight tails under half a degree);
    the consequence, keyed by the kind and the partner body; the institution's
-   image, keyed by the kind and the headline body and naming the headline god;
-   the second figure in one sentence, opened by one of three phrases; and,
-   last, the instruction, keyed by the kind and the headline body and written
-   for that body's domain. Two kinds per culture close the instruction on a
-   rite to the god; the other three end on the act itself.
+   image, keyed by the kind and the headline body, naming the headline god and
+   no other, and claiming nothing about the sky: no phase, no visibility, no
+   rising or setting, no kinship to the partner (`decreeBanks.test.ts` walks
+   the image bank for every deity name and for the words that make those
+   claims); the second figure in one sentence, opened by one of three phrases;
+   and, last, the instruction, keyed by the kind and the headline body and
+   written for that body's domain. Two kinds per culture close the instruction
+   on a rite to the god, and at most four of the fifty rites pour a cup; the
+   rest lay, burn, hang or leave something. The other three kinds end on the
+   act itself.
 
 The banks live in `data/decreeBanks.ts` and `data/deityDomains.ts`. A domain is
 plain second person ("your letters", "your war chest"), never a metonym the
@@ -110,7 +121,7 @@ avoid a repeat: that would be the editorializing the method page disowns. When
 the sky changes figure, no sentence returns within seven days. When the same
 figure holds for days, the headline holds with it, because the sky did; the
 paragraph rotates its openers and tails so two days never print alike. The
-relation, the exact tail and the second-figure opener each come in three
+relation, the tight tail and the second-figure opener each come in three
 variants chosen by the UTC day number. The opener names the headline figure's
 two gods, so two different figures never print the same second sentence,
 unless the two figures share a god; then the opener names no god at all.
@@ -151,7 +162,10 @@ three of each per body, two to four words): on a day of favor the headline
 figure's bodies fill the first column and the second figure's the second; on a
 day of trial the two swap. The UTC day turns which of a body's three items
 leads, so a figure that holds from one day to the next does not print the same
-lists twice. Every item fits its column verb and needs no footnote.
+lists twice. Every item reads as the object of its column verb when the verb is
+spoken before it (OFFER a short letter, HOLD BACK your blade at supper, DEFER
+perfume on credit), with no footnote and no inverted sense; the register is
+read through in column order that way whenever an item changes.
 
 ## The bar, stated in our own prose
 

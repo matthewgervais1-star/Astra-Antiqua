@@ -76,14 +76,16 @@ test("the day page is a headline, an evidence line and one paragraph of five sen
   }
 });
 
-test("the evidence line names both gods, the glyph and the orb", () => {
+test("the evidence line names both gods, the glyph and the measured orb, and says EXACT only under one minute", () => {
   const wide = composeDecree("egypt", chartWith("sun", "mars", 61.2));
   assert.equal(wide.evidence, "RA ⚹ HORUS THE RED · 1°12′");
   const exact = composeDecree("rome", chartWith("mars", "pluto", 180));
   assert.equal(exact.evidence, "MARS ☍ DIS PATER · EXACT");
-  // One threshold: under half a degree the evidence says EXACT, as the tail does.
-  const near = composeDecree("rome", chartWith("mars", "pluto", 180.45));
-  assert.equal(near.evidence, "MARS ☍ DIS PATER · EXACT");
+  const halfMinute = composeDecree("rome", chartWith("mars", "pluto", 180.01));
+  assert.equal(halfMinute.evidence, "MARS ☍ DIS PATER · EXACT");
+  // A tight figure is not an exact one: the line prints what the sky measures.
+  const tight = composeDecree("rome", chartWith("mars", "pluto", 180.45));
+  assert.equal(tight.evidence, "MARS ☍ DIS PATER · 0°27′");
   const past = composeDecree("rome", chartWith("mars", "pluto", 180.55));
   assert.equal(past.evidence, "MARS ☍ DIS PATER · 0°33′");
 });
@@ -124,9 +126,9 @@ test("two sextiles between different gods share no sentence in the same culture"
   }
 });
 
-test("the exact tail appears only under half a degree of orb", () => {
+test("the tight tail appears only under half a degree of orb", () => {
   for (const culture of CULTURES) {
-    const tails = DECREE_BANKS[culture].exactTails;
+    const tails = DECREE_BANKS[culture].tightTails;
     const meaning = (sep: number) => composeDecree(culture, chartWith("mars", "saturn", sep)).sentences[0] ?? "";
     const hasTail = (s: string) => tails.some((t) => s.includes(t));
     assert.ok(hasTail(meaning(90)), `${culture} exact: ${meaning(90)}`);
@@ -136,12 +138,12 @@ test("the exact tail appears only under half a degree of orb", () => {
   }
 });
 
-test("the day's three variants rotate the relation, the exact tail and the second-figure opener", () => {
+test("the day's three variants rotate the relation, the tight tail and the second-figure opener", () => {
   const chart = chartWith("mars", "saturn", 90);
   for (const culture of CULTURES) {
     const days = [0, 1, 2].map((day) => composeDecree(culture, chart, { day }).sentences);
     for (let v = 0; v < 3; v += 1) {
-      assert.ok(days[v]![0]!.includes(DECREE_BANKS[culture].exactTails[v]!), `${culture} tail ${v}`);
+      assert.ok(days[v]![0]!.includes(DECREE_BANKS[culture].tightTails[v]!), `${culture} tail ${v}`);
       assert.ok(days[v]![0]!.includes(DECREE_BANKS[culture].relations.square[v]!), `${culture} relation ${v}`);
     }
     assert.equal(new Set(days.map((d) => d[0])).size, 3, culture);

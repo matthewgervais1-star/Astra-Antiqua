@@ -4,6 +4,7 @@ import { DECREE_BANKS, QUIET_LINE } from "@/data/decreeBanks";
 import { DEITY_DOMAINS } from "@/data/deityDomains";
 import { PERMISSIONS_REGISTER } from "@/data/permissionsRegister";
 import { QUIET_HEADLINE } from "@/lib/decree";
+import { DEITY_MATRIX } from "@/data/deities";
 import { CULTURES, PLANETS, type Culture } from "@/data/cultures";
 
 /** Walk a nested table of strings, yielding [path, line]. */
@@ -88,6 +89,29 @@ test("each bank carries the slots its keys call for, and only those", () => {
     }
     for (const opener of bank.secondFigure) assert.match(opener, /\{god\}.*\{partner\}/, culture);
     for (const opener of bank.secondFigurePlain) assert.doesNotMatch(opener, /\{/, culture);
+  }
+});
+
+/**
+ * Every capitalised word of every name in the deity matrix, so "Baal" catches
+ * "Baal Hadad" and "Horus" catches "Horus the Red"; then the gods outside the
+ * matrix the images once named beside the headline god.
+ */
+const GOD_WORDS = new Set<string>([
+  ...CULTURES.flatMap((c) => PLANETS.flatMap((p) => DEITY_MATRIX[c][p].name.split(" ").filter((w) => /^[A-Z]/.test(w)))),
+  "Thoth", "Anubis", "Hathor", "Seth", "Athena", "Hera", "Hephaestus", "Asherah", "Eshmun", "Juno", "Vesta", "Minerva",
+]);
+/** Claims about the sky an image may not make: phase, visibility, rising and setting, kinship. */
+const SKY_CLAIMS = /\b(full|new|crescent|evening star|morning star|rises|sets|eclipse|waxes|wanes|uncle|father|brother|sister|son|daughter)\b/i;
+
+test("an image names the headline god only and claims nothing about the sky", () => {
+  for (const culture of CULTURES) {
+    for (const [where, line] of walk("images", DECREE_BANKS[culture].images)) {
+      assert.match(line, /\{god\}/, `${culture}.${where} names no headline god`);
+      const named = (line.replaceAll("{god}", "").match(/[A-Z][a-z']+/g) ?? []).filter((w) => GOD_WORDS.has(w));
+      assert.deepEqual(named, [], `${culture}.${where} names a second god: "${line}"`);
+      assert.equal(line.match(SKY_CLAIMS), null, `${culture}.${where} claims the sky: "${line}"`);
+    }
   }
 });
 

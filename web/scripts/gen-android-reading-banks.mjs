@@ -180,9 +180,9 @@ ${byBody("headlines", FAST)}
 ${relationWhen()}
     }[variant]
 
-    /** Appended to the meaning sentence under half a degree; the day picks one of three. */
-    fun exactTail(culture: AncientCulture, variant: Int): String = when (culture) {
-${byCulture("        ", (c) => `listOf(${DECREE_BANKS[c].exactTails.map(kt).join(", ")})`)}
+    /** Appended to the meaning sentence when the figure is tight (under half a degree); the day picks one of three. */
+    fun tightTail(culture: AncientCulture, variant: Int): String = when (culture) {
+${byCulture("        ", (c) => `listOf(${DECREE_BANKS[c].tightTails.map(kt).join(", ")})`)}
     }[variant]
 
     /** The consequence for the reader, per (kind, partner body). */
@@ -190,7 +190,7 @@ ${byCulture("        ", (c) => `listOf(${DECREE_BANKS[c].exactTails.map(kt).join
 ${byBody("consequences", PARTNERS)}
     }
 
-    /** The institution's picture, per (kind, headline body). Slot: {god}. */
+    /** The institution's picture, per (kind, headline body). Slot: {god}, the only god it names. */
     fun image(culture: AncientCulture, aspect: AspectType, body: Planet): String = when (culture) {
 ${byBody("images", FAST)}
     }
@@ -292,8 +292,8 @@ ${nested("        ", "aspect", KINDS, "AspectType", (c, k) => ASPECT_VERBS[c][k]
 // --- the parity goldens ----------------------------------------------------
 // One instant per culture. A day is taken only when nothing in it sits near a
 // threshold where two engines a hair apart could print different text: the
-// ranking of the headline and second figures, the one exact threshold at 0.5 degrees,
-// and the half-minute the evidence line rounds at.
+// ranking of the headline and second figures, the tight threshold at 0.5 degrees,
+// the one-minute EXACT threshold, and the half-minute the evidence line rounds at.
 const FAST_SET = new Set(FAST);
 function robust(chart) {
   const all = computeAspects(chart)
@@ -303,7 +303,7 @@ function robust(chart) {
   if (!top) return false;
   const margin = 0.03;
   if (all[1] && all[1].orb - top.orb < margin) return false;
-  for (const edge of [0.5]) if (Math.abs(top.orb - edge) < margin) return false;
+  for (const edge of [0.5, 1 / 60]) if (Math.abs(top.orb - edge) < margin) return false;
   const minutes = (top.orb - Math.floor(top.orb)) * 60;
   if (Math.abs((minutes % 1) - 0.5) < 0.1) return false;
   const rest = all.filter((a) => a !== top && a.kind !== top.kind);

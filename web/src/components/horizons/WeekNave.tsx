@@ -88,7 +88,7 @@ function ShorthandItems({ shorthand, culture }: { shorthand: WeekShorthand; cult
         <DeityGlyph body={shorthand.a} culture={culture} size={16} className="self-center" />
         {ASPECT_GLYPH[shorthand.aspect]}
         <DeityGlyph body={shorthand.b} culture={culture} size={16} className="self-center" />
-        {shorthand.exact ? "EXACT" : null}
+        {shorthand.tight ? "TIGHT" : null}
       </>
     );
   }

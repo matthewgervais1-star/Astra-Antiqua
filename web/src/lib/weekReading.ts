@@ -9,7 +9,7 @@ import { DEITY_CHARGES } from "@/data/deityCharges";
 import { DECREE_BANKS, QUIET_LINE } from "@/data/decreeBanks";
 import {
   ASPECT_GLYPH,
-  EXACT_ORB,
+  TIGHT_ORB,
   QUIET_HEADLINE,
   composeConsequence,
   composeHeadline,
@@ -26,10 +26,10 @@ export type RomeDayFlag = "F" | "N" | "C";
 /**
  * The day's shorthand as data. WeekNave renders it: the renderer draws each
  * body as a DeityGlyph in the active culture and prints ASPECT_GLYPH,
- * SIGN_ABBR, the arrow and EXACT around the glyphs.
+ * SIGN_ABBR, the arrow and TIGHT around the glyphs.
  */
 export type WeekShorthand =
-  | { kind: "aspect"; a: Planet; aspect: AspectKind; b: Planet; exact: boolean }
+  | { kind: "aspect"; a: Planet; aspect: AspectKind; b: Planet; tight: boolean }
   | { kind: "ingress"; planet: Planet; sign: ZodiacSign }
   | { kind: "quiet" };
 
@@ -50,7 +50,7 @@ export interface WeekDay {
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-/** The day's tightest-orb threshold. Exactness is decree.ts's EXACT_ORB. */
+/** The orb inside which a figure can be a day's event. Tightness is decree.ts's TIGHT_ORB. */
 const EVENT_ORB = 1.2;
 
 /**
@@ -95,8 +95,8 @@ const INGRESS_VERB: Readonly<Record<Culture, string>> = {
 /**
  * Compose the seven days of the week starting `weekStart` (assumed to be a
  * local midnight Monday) in the given culture's voice. Each day's headline
- * event is sky-only, ranked tightest sky aspect (orb < 1.2°, "EXACT" under
- * decree.ts's EXACT_ORB) over an ingress that day over an honest quiet line, per the spec in
+ * event is sky-only, ranked tightest sky aspect (orb < 1.2°, flagged TIGHT under
+ * decree.ts's TIGHT_ORB) over an ingress that day over an honest quiet line, per the spec in
  * docs/superpowers/plans/2026-08-11-web-rebrand-phase2.md Task 7. `natal` is
  * accepted for signature parity with the season/year builders and reserved
  * for a future personal layer; the week's event selection is sky-only by
@@ -143,17 +143,17 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
     let line: string;
     let shorthand: WeekShorthand;
     let tone: WeekTone;
-    let exact = false;
+    let tight = false;
 
     if (tightest) {
-      exact = tightest.orb < EXACT_ORB;
+      tight = tightest.orb < TIGHT_ORB;
       tone = toneForKind(tightest.kind);
       // The headline speaks to the reader; beneath it the meaning and the
       // consequence. The week line itself gives no order; the headline often
       // does, and the day page carries the instruction.
       headline = holds ? DECREE_BANKS[culture].holds : composeHeadline(culture, tightest);
       line = `${composeMeaning(culture, tightest, utcDayNumber(instant))} ${composeConsequence(culture, tightest)}`;
-      shorthand = { kind: "aspect", a: tightest.a, aspect: tightest.kind, b: tightest.b, exact };
+      shorthand = { kind: "aspect", a: tightest.a, aspect: tightest.kind, b: tightest.b, tight };
     } else if (dayIngress) {
       tone = "harmony";
       const deity = DEITY_MATRIX[culture][dayIngress.planet].name;
@@ -171,7 +171,7 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
 
     const flag: RomeDayFlag | undefined = isRome
       ? tone === "tension"
-        ? exact
+        ? tight
           ? "N"
           : "C"
         : "F"
