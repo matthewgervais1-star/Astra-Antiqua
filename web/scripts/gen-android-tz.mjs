@@ -1,7 +1,7 @@
 /**
  * Generates Android's offline birthplace time-zone lookup.
  *
- *   cd web && node scripts/gen-android-tz.mjs
+ *   cd web && pnpm gen:android-tz
  *
  * Web resolves a birth's zone with the `tz-lookup` package (CC0-1.0), a
  * quadtree of IANA zone names packed into one string. This reads that

@@ -89,7 +89,7 @@ class HttpAccountRepository(
 
     override suspend fun me(): AccountResult<AccountUser?> {
         val result = call("GET", "/api/auth/me") { json.decodeFromString(UserEnvelope.serializer(), it).user }
-        if (result is AccountResult.Ok && result.value == null) forget()
+        if (result is AccountResult.Ok && result.value == null) client.forgetQuietly()
         return result
     }
 
@@ -118,7 +118,10 @@ class HttpAccountRepository(
 
     override suspend fun strike(): AccountResult<Unit> {
         val result = call("DELETE", "/api/me", requiresSession = true) { }
-        if (result is AccountResult.Ok && !forget()) return AccountResult.Failed(AccountError.DeviceWriteFailed)
+        // The account is gone once the server says so. Clearing is
+        // best-effort: a session the device cannot remove is forgotten for
+        // this process, and the server refuses it from now on.
+        if (result is AccountResult.Ok) client.forgetQuietly()
         return result
     }
 
@@ -168,12 +171,20 @@ class HttpAccountRepository(
         return putChart(device).map { SyncOutcome.DEVICE_CHART_UPLOADED }
     }
 
-    /** Clears the stored session; false when the device could not. */
-    private suspend fun forget(): Boolean = try {
-        session.clear()
-        true
-    } catch (_: SessionStorageException) {
-        false
+    /**
+     * Clears the stored session, retrying once; false when the device could
+     * not. Sign-out needs to know: the token stays valid on the server, so a
+     * session left on disk would sign the reader back in at the next launch.
+     */
+    private suspend fun forget(): Boolean {
+        repeat(2) {
+            try {
+                session.clear()
+                return true
+            } catch (_: SessionStorageException) {
+            }
+        }
+        return false
     }
 
     private fun userOf(body: String): AccountUser =

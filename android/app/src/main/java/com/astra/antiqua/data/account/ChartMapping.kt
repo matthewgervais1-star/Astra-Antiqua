@@ -3,13 +3,11 @@ package com.astra.antiqua.data.account
 import com.astra.antiqua.data.local.room.UserProfile
 import com.astra.antiqua.domain.birthZoneFor
 import com.astra.antiqua.domain.resolveWallClockMillis
+import com.astra.antiqua.domain.wallClockOf
 import java.time.DateTimeException
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.ZoneId
-import java.util.Locale
 
 /** The server's limit on a chart name (`saveSchema` in `web/src/app/api/charts/route.ts`). */
 const val CHART_NAME_MAX = 120
@@ -19,25 +17,29 @@ const val CHART_NAME_MAX = 120
  * zone the instant was resolved in) and the server's chart (a wall-clock date
  * and time at a place, with no zone).
  *
- * Up: the stored instant is read back in the profile's own `timezoneId`, so
- * the server receives the date and time the reader typed. The zone is dropped.
+ * Up: the profile's typed `birthDate` and `birthTime` go up as stored, so a
+ * time inside a daylight-saving gap reaches the server as typed. A profile
+ * without them sends its instant read back in its own `timezoneId`. The zone
+ * is dropped.
  *
  * Down: the zone is looked up from latitude and longitude with [birthZoneFor],
  * the same `tz-lookup` map web uses, and the wall-clock time is resolved with
  * [resolveWallClockMillis], web's own two-step rule. A chart therefore lands
- * on the same instant on both surfaces.
+ * on the same instant on both surfaces. The server's strings are kept on the
+ * profile as received, so saving the profile again sends them back unchanged.
  */
 fun UserProfile.toChartInputs(): ChartInputs {
-    val zone = try {
-        ZoneId.of(timezoneId)
-    } catch (_: DateTimeException) {
-        birthZoneFor(latitude, longitude)
+    val typedDate = birthDate?.takeIf { DATE.matches(it) }
+    val typedTime = birthTime?.takeIf { TIME.matches(it) }
+    val (date, time) = if (typedDate != null && typedTime != null) {
+        typedDate to typedTime
+    } else {
+        wallClockOf(birthDateUtc, timezoneId, latitude, longitude)
     }
-    val local = Instant.ofEpochMilli(birthDateUtc).atZone(zone).toLocalDateTime()
     return ChartInputs(
         name = chartNameOf(name, cityName),
-        date = local.toLocalDate().toString(),
-        time = String.format(Locale.ROOT, "%02d:%02d", local.hour, local.minute),
+        date = date,
+        time = time,
         cityLabel = cityName.trim().take(200),
         latitude = latitude,
         longitude = longitude,
@@ -75,5 +77,11 @@ fun RemoteChart.toUserProfileOrNull(id: Int = 0): UserProfile? {
         longitude = longitude,
         cityName = cityLabel,
         timezoneId = zone.id,
+        birthDate = date,
+        birthTime = time,
     )
 }
+
+/** The server's own patterns (`saveSchema` in `web/src/app/api/charts/route.ts`). */
+private val DATE = Regex("""^\d{4}-\d{2}-\d{2}$""")
+private val TIME = Regex("""^\d{2}:\d{2}(:\d{2})?$""")

@@ -4,12 +4,13 @@ import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.viewmodel.FakeProfiles
 import com.astra.antiqua.viewmodel.ROME_BIRTH_UTC_MS
 import com.astra.antiqua.viewmodel.romeProfile
+import java.time.Instant
 import java.time.ZoneOffset
 import java.util.concurrent.TimeUnit
 import java.time.ZonedDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -33,16 +34,25 @@ internal class InMemorySessionStore(
     private val failWrites: Boolean = false,
 ) : SessionStore {
     private val state = MutableStateFlow(initial)
-    override val isPresent = state.map { it != null }
-    override suspend fun read(): Session? = state.value
+    private val forgotten = MutableStateFlow(false)
+    override val isPresent = combine(state, forgotten) { s, gone -> s != null && !gone }
+    override suspend fun read(): Session? = if (forgotten.value) null else state.value
     override suspend fun write(session: Session) {
         if (failWrites) throw SessionStorageException(java.security.KeyStoreException("refused"))
         state.value = session
+        forgotten.value = false
     }
     override suspend fun clear() {
-        if (failWrites) throw SessionStorageException(java.io.IOException("read-only"))
+        clearAttempts++
+        if (failWrites) {
+            // As DataStoreSessionStore does: the bytes stay, the process forgets.
+            forgotten.value = true
+            throw SessionStorageException(java.io.IOException("read-only"))
+        }
         state.value = null
     }
+    var clearAttempts = 0
+        private set
     fun stored(): Session? = state.value
 }
 
@@ -428,5 +438,75 @@ class AccountRepositoryTest {
         repository.putChart(romeProfile(name = " "))
 
         assertEquals("Rome", server.next().json()["name"]!!.jsonPrimitive.content)
+    }
+
+    @Test
+    fun `a strike the device cannot record still succeeds and leaves no session present`() = runTest {
+        newRepository(InMemorySessionStore(Session("stored-token", far), failWrites = true), FakeProfiles(romeProfile()))
+        server.enqueue(json(body = """{"ok":true}""").addHeader("Set-Cookie", cleared))
+
+        assertEquals(AccountResult.Ok(Unit), repository.strike())
+        assertFalse(repository.isSignedIn.first())
+        assertTrue(session.clearAttempts >= 2)
+        assertEquals(romeProfile(), profiles.stored())
+    }
+
+    @Test
+    fun `a 401 whose clear fails still surfaces as the 401`() = runTest {
+        newRepository(InMemorySessionStore(Session("stored-token", far), failWrites = true), FakeProfiles())
+        server.enqueue(json(401, """{"ok":false,"error":"Not signed in."}"""))
+
+        assertEquals(AccountResult.Failed(AccountError.Server(401, "Not signed in.")), repository.getChart())
+        assertFalse(repository.isSignedIn.first())
+        assertEquals(2, session.clearAttempts)
+    }
+
+    @Test
+    fun `a gap time typed on the device goes up as typed`() = runTest {
+        signedIn()
+        server.enqueue(json(body = serverChart))
+        val zone = com.astra.antiqua.domain.birthZoneFor(40.7128, -74.006)
+        val typed = romeProfile().copy(
+            birthDateUtc = com.astra.antiqua.domain.resolveWallClockMillis(
+                java.time.LocalDateTime.of(2021, 3, 14, 2, 30), zone,
+            ),
+            latitude = 40.7128,
+            longitude = -74.006,
+            cityName = "New York",
+            timezoneId = zone.id,
+            birthDate = "2021-03-14",
+            birthTime = "02:30",
+        )
+
+        repository.putChart(typed)
+
+        val body = server.next().json()
+        assertEquals("2021-03-14", body["date"]!!.jsonPrimitive.content)
+        assertEquals("02:30", body["time"]!!.jsonPrimitive.content)
+        assertEquals(Instant.parse("2021-03-14T06:30:00Z").toEpochMilli(), typed.birthDateUtc)
+    }
+
+    @Test
+    fun `a web gap time synced down and saved again goes up unchanged`() = runTest {
+        newRepository(InMemorySessionStore(Session("stored-token", far)), FakeProfiles(romeProfile()))
+        server.enqueue(
+            json(
+                body = """{"ok":true,"chart":{"id":"c-1","name":"Aelia","date":"1995-10-29",""" +
+                    """"time":"02:30","cityLabel":"Sydney","latitude":-33.8688,"longitude":151.2093,""" +
+                    """"createdAt":"2026-09-01T10:00:00.000Z"}}""",
+            ),
+        )
+        server.enqueue(json(body = serverChart))
+
+        repository.syncAfterSignIn()
+        val synced = profiles.stored()!!
+        repository.putChart(synced)
+
+        // Web's rule puts Sydney's spring-forward 02:30 on 16:30Z the day before.
+        assertEquals(Instant.parse("1995-10-28T16:30:00Z").toEpochMilli(), synced.birthDateUtc)
+        server.next()
+        val body = server.next().json()
+        assertEquals("1995-10-29", body["date"]!!.jsonPrimitive.content)
+        assertEquals("02:30", body["time"]!!.jsonPrimitive.content)
     }
 }

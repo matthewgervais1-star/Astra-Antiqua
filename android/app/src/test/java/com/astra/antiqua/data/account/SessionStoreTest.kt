@@ -1,15 +1,24 @@
 package com.astra.antiqua.data.account
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
 import java.io.File
+import java.io.IOException
 import java.nio.file.Files
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -113,5 +122,47 @@ class SessionStoreTest {
     @Test
     fun `a session never prints its token`() {
         assertFalse(Session("secret-token", 1L).toString().contains("secret-token"))
+    }
+
+    /** A DataStore whose first read fails and whose edits can be made to fail. */
+    private class FlakyDataStore(var failNextRead: Boolean = false, var failEdits: Boolean = false) :
+        DataStore<Preferences> {
+        private val state = MutableStateFlow(emptyPreferences())
+        override val data: Flow<Preferences> = flow {
+            if (failNextRead) {
+                failNextRead = false
+                throw IOException("flaky read")
+            }
+            emitAll(state)
+        }
+
+        override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences {
+            if (failEdits) throw IOException("read-only")
+            return transform(state.value).also { state.value = it }
+        }
+    }
+
+    @Test
+    fun `a read error does not end presence, which recovers on the retry`() = runTest {
+        val flaky = FlakyDataStore()
+        val io = StandardTestDispatcher(testScheduler)
+        val store = DataStoreSessionStore(flaky, XorCipher(), io) { clock }
+        store.write(Session("t", 5_000L))
+        flaky.failNextRead = true
+
+        assertEquals(listOf(false, true), store.isPresent.take(2).toList())
+    }
+
+    @Test
+    fun `a clear the file refuses still forgets the session for this process`() = runTest {
+        val flaky = FlakyDataStore()
+        val io = StandardTestDispatcher(testScheduler)
+        val store = DataStoreSessionStore(flaky, XorCipher(), io) { clock }
+        store.write(Session("t", 5_000L))
+        flaky.failEdits = true
+
+        assertTrue(runCatching { store.clear() }.exceptionOrNull() is SessionStorageException)
+        assertNull(store.read())
+        assertFalse(store.isPresent.first())
     }
 }

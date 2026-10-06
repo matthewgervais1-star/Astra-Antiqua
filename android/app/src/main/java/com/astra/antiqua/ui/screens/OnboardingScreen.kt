@@ -51,6 +51,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.domain.birthZoneFor
+import com.astra.antiqua.domain.typedWallClock
 import com.astra.antiqua.domain.resolveBirthDateUtcMillis
 import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.components.PrimaryAction
@@ -398,12 +399,21 @@ fun OnboardingScreen(
                     minute = selectedMinute,
                     zoneId = assumedBirthZone
                 )
+                // The wall clock as typed, kept beside the instant: inside
+                // a daylight-saving gap the instant cannot give it back.
+                val (typedDate, typedTime) = typedWallClock(
+                    utcMidnightMillis = selectedDateMillis ?: 0L,
+                    hour = selectedHour,
+                    minute = selectedMinute,
+                )
                 viewModel.saveProfile(
                     name = name,
                     birthDateUtc = birthDateUtc,
                     timezoneId = assumedBirthZone.id,
                     place = addr,
-                    onSaved = onLocationSaved
+                    onSaved = onLocationSaved,
+                    birthDate = typedDate,
+                    birthTime = typedTime,
                 )
             },
         )

@@ -20,10 +20,16 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -71,7 +77,13 @@ interface SessionStore {
     /** @throws SessionStorageException when the device cannot store it. */
     suspend fun write(session: Session)
 
-    /** @throws SessionStorageException when the device cannot remove it. */
+    /**
+     * Removes the session. When the device cannot remove it, the session is
+     * still forgotten for this process ([read] null, [isPresent] false) and
+     * the call throws, so a caller that must know can retry.
+     *
+     * @throws SessionStorageException when the device cannot remove it.
+     */
     suspend fun clear()
 }
 
@@ -174,13 +186,33 @@ val Context.sessionDataStore: DataStore<Preferences> by preferencesDataStore(
 class DataStoreSessionStore(
     private val dataStore: DataStore<Preferences>,
     private val cipher: SessionCipher,
+    private val io: CoroutineDispatcher = Dispatchers.IO,
     private val now: () -> Long = System::currentTimeMillis,
 ) : SessionStore {
 
+    /**
+     * Set when a [clear] could not reach the file: the session is forgotten
+     * for this process ([read] returns null, [isPresent] is false) even
+     * though its bytes remain. A later [write] or successful [clear] resets it.
+     */
+    private val forgotten = MutableStateFlow(false)
+
+    /**
+     * Each emission is read and decrypted on [io]. A read error emits "no
+     * session" and resubscribes after a pause, so the flow stays alive for
+     * its collector instead of completing on the first failure.
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     override val isPresent: Flow<Boolean> = dataStore.data
-        .catch { e -> if (e is IOException) emit(emptyPreferences()) else throw e }
+        .retryWhen { cause, _ ->
+            if (cause !is IOException) return@retryWhen false
+            emit(emptyPreferences())
+            delay(READ_RETRY_MILLIS)
+            true
+        }
         .map { prefs -> open(prefs) }
+        .flowOn(io)
+        .combine(forgotten) { session, gone -> if (gone) null else session }
         .transformLatest { session ->
             if (session == null) {
                 emit(false)
@@ -193,13 +225,14 @@ class DataStoreSessionStore(
         .distinctUntilChanged()
 
     override suspend fun read(): Session? {
+        if (forgotten.value) return null
         val prefs = try {
             dataStore.data.first()
         } catch (_: IOException) {
             return null
         }
         if (prefs[SEALED_TOKEN] == null) return null
-        val session = open(prefs)
+        val session = withContext(io) { open(prefs) }
         if (session == null) {
             // Expired or unreadable: forget it. A failure to forget changes
             // nothing for the caller, which is signed out either way.
@@ -219,6 +252,7 @@ class DataStoreSessionStore(
                 prefs[SEALED_TOKEN] = sealed
                 prefs[EXPIRES_AT] = session.expiresAtMillis
             }
+            forgotten.value = false
         } catch (e: GeneralSecurityException) {
             throw SessionStorageException(e)
         } catch (e: ProviderException) {
@@ -234,7 +268,9 @@ class DataStoreSessionStore(
                 prefs.remove(SEALED_TOKEN)
                 prefs.remove(EXPIRES_AT)
             }
+            forgotten.value = false
         } catch (e: IOException) {
+            forgotten.value = true
             throw SessionStorageException(e)
         }
     }
@@ -259,5 +295,6 @@ class DataStoreSessionStore(
     private companion object {
         val SEALED_TOKEN = stringPreferencesKey("sealed_token")
         val EXPIRES_AT = longPreferencesKey("expires_at")
+        const val READ_RETRY_MILLIS = 1_000L
     }
 }

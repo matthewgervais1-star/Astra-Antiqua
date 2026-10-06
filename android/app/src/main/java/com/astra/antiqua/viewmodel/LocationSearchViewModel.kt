@@ -130,13 +130,16 @@ class LocationSearchViewModel(
      * caller-supplied input, not read from the device here, so the stored
      * profile stays consistent with the zone used to compute the birth
      * instant. It is the birth place's IANA zone id, or a fixed offset when
-     * the lookup found none.
+     * the lookup found none. [birthDate] and [birthTime] are the wall
+     * clock as typed (`YYYY-MM-DD`, `HH:MM`), kept beside the instant.
      */
     fun saveProfile(
         name: String,
         birthDateUtc: Long,
         timezoneId: String,
         place: Place,
+        birthDate: String? = null,
+        birthTime: String? = null,
         onSaved: () -> Unit,
     ) {
         viewModelScope.launch {
@@ -149,6 +152,8 @@ class LocationSearchViewModel(
                         longitude = place.longitude,
                         cityName = place.cityName,
                         timezoneId = timezoneId,
+                        birthDate = birthDate,
+                        birthTime = birthTime,
                     )
                 )
                 onSaved()

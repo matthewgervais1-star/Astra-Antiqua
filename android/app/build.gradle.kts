@@ -162,6 +162,9 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.okhttp.mockwebserver)
+    // A real SQLite on the JVM for the Room migration test. Pinned to the
+    // androidx.sqlite version Room 2.8.4 resolves, so its API classes match.
+    testImplementation(libs.sqlite.bundled.jvm)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

@@ -44,8 +44,8 @@ class AccountClient(
      * Sends one request and returns the reply, whatever its status. Throws
      * [java.io.IOException] for a call that got no answer (the repository
      * turns it into [AccountError.Unreachable]) and [SessionStorageException]
-     * when the session could not be stored or removed
-     * ([AccountError.DeviceWriteFailed]).
+     * when a new session from sign-up or sign-in could not be stored
+     * ([AccountError.DeviceWriteFailed]). A failure to clear never throws.
      */
     suspend fun send(
         method: String,
@@ -75,12 +75,27 @@ class AccountClient(
 
         val issued = Cookie.parseAll(url, reply.headers).lastOrNull { it.name == SESSION_COOKIE }
         when {
-            issued != null && (issued.value.isEmpty() || issued.expiresAt <= now()) -> session.clear()
+            issued != null && (issued.value.isEmpty() || issued.expiresAt <= now()) -> forgetQuietly()
             issued != null && issuesSession && reply.isSuccessful ->
                 session.write(Session(issued.value, issued.expiresAt))
-            reply.status == 401 && requiresSession -> session.clear()
+            reply.status == 401 && requiresSession -> forgetQuietly()
         }
         return reply
+    }
+
+    /**
+     * Clears the store, retrying once. A store that still cannot clear has
+     * forgotten the session for this process anyway (see [SessionStore.clear]),
+     * so the server's answer, not the device's, is what the caller sees.
+     */
+    suspend fun forgetQuietly() {
+        repeat(2) {
+            try {
+                session.clear()
+                return
+            } catch (_: SessionStorageException) {
+            }
+        }
     }
 
     companion object {

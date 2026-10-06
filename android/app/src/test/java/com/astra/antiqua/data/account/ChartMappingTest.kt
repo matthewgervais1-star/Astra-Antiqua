@@ -67,7 +67,7 @@ class ChartMappingTest {
         val back = served(device.toChartInputs()).toUserProfileOrNull(id = 3)
 
         assertEquals("America/New_York", zone.id)
-        assertEquals(device, back)
+        assertEquals(device.copy(birthDate = "1979-11-04", birthTime = "23:50"), back)
     }
 
     @Test
@@ -95,5 +95,29 @@ class ChartMappingTest {
         val chart = served(ChartInputs("A", "2024-02-31", "12:00", "Rome", 41.9, 12.5))
 
         assertNull(chart.toUserProfileOrNull())
+    }
+
+    @Test
+    fun `up - the typed strings go up as stored, even where the instant reads back differently`() {
+        // Sydney's spring-forward 02:30: the instant reads back as 03:30.
+        val profile = romeProfile().copy(
+            birthDateUtc = Instant.parse("1995-10-28T16:30:00Z").toEpochMilli(),
+            timezoneId = "Australia/Sydney",
+            birthDate = "1995-10-29",
+            birthTime = "02:30",
+        )
+
+        assertEquals("02:30", profile.toChartInputs().time)
+        assertEquals("03:30", profile.copy(birthDate = null, birthTime = null).toChartInputs().time)
+    }
+
+    @Test
+    fun `down - the server's strings are kept as received`() {
+        val profile = served(ChartInputs("A", "2000-01-01", "00:00:30", "Greenwich", 51.48, 0.0))
+            .toUserProfileOrNull()!!
+
+        assertEquals("2000-01-01", profile.birthDate)
+        assertEquals("00:00:30", profile.birthTime)
+        assertEquals("00:00:30", profile.toChartInputs().time)
     }
 }

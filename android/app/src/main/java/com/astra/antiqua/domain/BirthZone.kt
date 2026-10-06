@@ -77,3 +77,34 @@ fun resolveWallClockMillis(local: LocalDateTime, zone: ZoneId): Long {
     val second = rules.getOffset(Instant.ofEpochMilli(naive - first * 1000L)).totalSeconds
     return naive - second * 1000L
 }
+
+/**
+ * The wall clock of [instantMillis] in [timezoneId] as web's strings,
+ * `YYYY-MM-DD` and `HH:MM`. When [timezoneId] does not parse, the place's own
+ * zone ([birthZoneFor]) is used.
+ */
+fun wallClockOf(
+    instantMillis: Long,
+    timezoneId: String,
+    latitude: Double,
+    longitude: Double,
+): Pair<String, String> {
+    val zone = try {
+        ZoneId.of(timezoneId)
+    } catch (_: DateTimeException) {
+        birthZoneFor(latitude, longitude)
+    }
+    val local = Instant.ofEpochMilli(instantMillis).atZone(zone).toLocalDateTime()
+    return local.toLocalDate().toString() to
+        String.format(java.util.Locale.ROOT, "%02d:%02d", local.hour, local.minute)
+}
+
+/**
+ * The date and time as the reader picked them, as web's strings: the
+ * calendar date of a date picker's UTC-midnight [utcMidnightMillis], and
+ * [hour] and [minute] as `HH:MM`. No zone is involved; this is what was typed.
+ */
+fun typedWallClock(utcMidnightMillis: Long, hour: Int, minute: Int): Pair<String, String> {
+    val date = Instant.ofEpochMilli(utcMidnightMillis).atZone(ZoneOffset.UTC).toLocalDate()
+    return date.toString() to String.format(java.util.Locale.ROOT, "%02d:%02d", hour, minute)
+}
