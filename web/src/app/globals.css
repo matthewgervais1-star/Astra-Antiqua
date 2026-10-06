@@ -32,9 +32,10 @@
   --color-harmony: #b59a55;
   --color-conflict: #b56b71;
 
-  /* rules (1px only; no shadows, no radius, no glass) */
-  --color-rule: rgb(230 222 204 / 0.16);
-  --color-rule-row: rgb(230 222 204 / 0.11);
+  /* rules (1px only; no shadows, no radius, no glass): the design system's opaque inks,
+     --rule-hairline and --rule-incised in docs/design/system/tokens/colors.css */
+  --color-rule: #4a3e28;
+  --color-rule-row: #2a241c;
 
   --font-display: var(--font-cinzel), "Cinzel", Georgia, serif;
   --font-display-sc: var(--font-spectral-sc), "Spectral SC", Georgia, serif;

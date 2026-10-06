@@ -291,14 +291,6 @@ into the tokens or carried to Android. Its open question is Cinzel's tracking,
 set per component and loose on small caps, which wants looking at before it is
 tuned.
 
-**Two rule colours drift.** The web rules are bone with alpha (0.16 and 0.11)
-where the design system has opaque hex (`--rule-hairline` `#4A3E28`,
-`--rule-incised` `#2A241C`). Composited on the neutral ground they land at
-`#38332E` and `#2E2925`, so the web pair is darker and ordered the other way
-round. Alpha rules shift with the culture ground, which may be the better
-behaviour; the design system is canonical, so this is a decision rather than a
-bug to fix silently.
-
 **The Ugaritic codepoints.** `docs/design/culture-marks.md` gives U+1039B U+1038D
 for the name of El, and `ts-il.svg` is cut from exactly those. Counting forward
 through the Ugaritic block puts U+1039B at SSU rather than at ʾI, so someone who
@@ -319,3 +311,12 @@ a gap between the two doorways. The tree has since closed all three.
 - **Egypt's doorway on Android showed the ankh alone.** Web shows the ankh and
   the balance. `95e0180` outlines `ts-balance.svg` from Noto Sans Egyptian
   Hieroglyphs, adds `TypesetSign.BALANCE`, and sets it after the ankh.
+- **Two rule colours drifted.** The web rules were bone with alpha (0.16 and
+  0.11) where the design system has opaque hex. The rules now take
+  `--rule-hairline` `#4A3E28` and `--rule-incised` `#2A241C` on web
+  (`--color-rule`, `--color-rule-row`) and on Android (`Rule`, `RuleRow`).
+  The rules no longer shift with the culture ground. The OG cards draw their
+  own frame in literal values and never read the tokens, so they did not
+  change. Landed with the commit `feat(design): the rules take the system's
+  incised and hairline inks`; screenshots in
+  `docs/design/screenshots/phase11-design-calls/`.
