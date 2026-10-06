@@ -103,7 +103,7 @@ class DashboardViewModelTest {
         val decree = model.dayDecree.first { it != null }!!
 
         assertEquals("Your name is good for credit anywhere on the quay.", decree.headline)
-        assertEquals("SEMES △ BAAL SHAMEM · EXACT", decree.evidence)
+        assertEquals("SEMES △ BAAL SHAMEM · 0°19′", decree.evidence)
         assertEquals(DecreeBanks.comeBack(AncientCulture.CARTHAGE), decree.comeBack)
     }
 }

@@ -26,7 +26,7 @@ data class WeekDay(
     val headline: String?,
     val line: String,
     val tone: DayTone,
-    val exact: Boolean,
+    val tight: Boolean,
     val shorthand: String,
     val flag: RomeDayFlag?,
 )
@@ -36,7 +36,7 @@ data class WeekDay(
  * web/src/lib/weekReading.ts.
  *
  * Each day's headline is the tightest aspect involving a fast mover, inside
- * 1.2 degrees, marked exact under DayDecreeComposer.EXACT_ORB. The sky decides
+ * 1.2 degrees, flagged TIGHT under DayDecreeComposer.TIGHT_ORB. The sky decides
  * the figure; a figure that holds from one row to the next prints the
  * culture's holds line instead of its headline a second time. Where nothing is in orb the day says
  * so plainly rather than inventing weather, which is the honesty the method
@@ -44,7 +44,7 @@ data class WeekDay(
  */
 object WeekReading {
     private const val EVENT_ORB = 1.2
-    private const val EXACT_ORB = DayDecreeComposer.EXACT_ORB
+    private const val TIGHT_ORB = DayDecreeComposer.TIGHT_ORB
     private const val DAY_MS = 86_400_000L
 
     /** Seven days plus the buffer the coarsest sampling step needs. */
@@ -142,9 +142,9 @@ object WeekReading {
             val line: String
             val tone: DayTone
             val shorthand: String
-            var exact = false
+            var tight = false
             if (tightest != null) {
-                exact = tightest.orb < EXACT_ORB
+                tight = tightest.orb < TIGHT_ORB
                 tone = toneFor(tightest.aspect)
                 // The headline speaks to the reader; beneath it the meaning and
                 // the consequence. The week line itself gives no order.
@@ -152,7 +152,7 @@ object WeekReading {
                 line = DayDecreeComposer.composeMeaning(culture, tightest, Math.floorDiv(instant, DAY_MS)) + " " +
                     DayDecreeComposer.composeConsequence(culture, tightest)
                 shorthand = "${tightest.a.name.take(3)} ${tightest.aspect.name.take(3)} " +
-                    "${tightest.b.name.take(3)}${if (exact) " · EXACT" else ""}"
+                    "${tightest.b.name.take(3)}${if (tight) " · TIGHT" else ""}"
             } else {
                 // Nothing in orb. A body crossing into a new sign that day is
                 // still something the sky did, and it is reported before the
@@ -182,7 +182,7 @@ object WeekReading {
             val flag = if (culture == AncientCulture.ROME) {
                 when {
                     tone != DayTone.TENSION -> RomeDayFlag.F
-                    exact -> RomeDayFlag.N
+                    tight -> RomeDayFlag.N
                     else -> RomeDayFlag.C
                 }
             } else {
@@ -196,7 +196,7 @@ object WeekReading {
                 headline = headline,
                 line = line,
                 tone = tone,
-                exact = exact,
+                tight = tight,
                 shorthand = shorthand,
                 flag = flag,
             )

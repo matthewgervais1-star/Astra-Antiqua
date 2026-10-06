@@ -41,11 +41,15 @@ object DayDecreeComposer {
     val FAST_ORDER: List<Planet> = listOf(Planet.MOON, Planet.SUN, Planet.MERCURY, Planet.VENUS, Planet.MARS)
 
     /**
-     * Under half a degree a figure is exact: the evidence line prints EXACT,
-     * the meaning sentence carries the culture's exact tail, and the week
-     * marks the day EXACT. One threshold for every surface that says "exact".
+     * Under half a degree a figure is tight: the meaning sentence carries the
+     * culture's tight tail and the week flags the day TIGHT. One threshold for
+     * every surface that says "tight". The evidence line does not use it; it
+     * prints the measured orb, and says EXACT only under one minute of arc.
      */
-    const val EXACT_ORB = 0.5
+    const val TIGHT_ORB = 0.5
+
+    /** The evidence line says EXACT only under this: one minute of arc. */
+    private const val ONE_ARCMINUTE = 1.0 / 60.0
 
     private const val DAY_MS = 86_400_000L
 
@@ -98,7 +102,7 @@ object DayDecreeComposer {
     }
 
     fun composeEvidence(culture: AncientCulture, f: SkyFigure): String {
-        val measure = if (f.orb < EXACT_ORB) "EXACT" else formatOrb(f.orb)
+        val measure = if (f.orb < ONE_ARCMINUTE) "EXACT" else formatOrb(f.orb)
         return "${name(culture, f.a).uppercase()} ${glyph(f.aspect)} ${name(culture, f.b).uppercase()} · $measure"
     }
 
@@ -106,9 +110,9 @@ object DayDecreeComposer {
         "${deityDomain(culture, f.a)} and ${deityDomain(culture, f.b)} " +
             DecreeBanks.relation(culture, f.aspect, variant(day))
 
-    /** Sentence (a): two domains and a relation, the exact tail under half a degree. */
+    /** Sentence (a): two domains and a relation, the tight tail under half a degree. */
     fun composeMeaning(culture: AncientCulture, f: SkyFigure, day: Long = 0): String {
-        val tail = if (f.orb < EXACT_ORB) DecreeBanks.exactTail(culture, variant(day)) else ""
+        val tail = if (f.orb < TIGHT_ORB) DecreeBanks.tightTail(culture, variant(day)) else ""
         return "${capitalize(meaningClause(culture, f, day))}$tail."
     }
 
