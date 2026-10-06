@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { composeDiveDeeper, composeDiveDeeperForDay } from "@/lib/diveDeeper";
-import { composeDayPage, utcDayNumber } from "@/lib/decree";
+import { composeDayPage, dayFigures, utcDayNumber } from "@/lib/decree";
 import { computeChart } from "@/lib/ephemeris";
 import { DOMAIN_GROUP } from "@/lib/figureReading";
 import { natalDayFigures, natalDayPermissions, dayPermissions } from "@/lib/permissions";
@@ -40,6 +40,41 @@ function groupsNamed(culture: Culture, evidence: string): Set<number> {
   return out;
 }
 
+/** True when a group points to an earlier group that read its figure. */
+function isPointer(culture: Culture, sentences: readonly string[]): boolean {
+  const bank = DIVE_DEEPER_BANKS[culture];
+  return sentences.length === 1 && bank.titles.some((t) => {
+    const head = t.split(":")[0]!;
+    return sentences[0] === bank.shared.replace("{group}", head.charAt(0).toLowerCase() + head.slice(1));
+  });
+}
+
+test("the quiet line prints only when no figure in orb touches the group", () => {
+  for (const culture of CULTURES) {
+    for (const date of days(365)) {
+      const sky = computeChart(date);
+      const figures = dayFigures(sky);
+      const plain = composeDiveDeeperForDay(culture, date, null);
+      plain.groups.forEach((g, i) => {
+        const touched = figures.some((f) => DOMAIN_GROUP[f.a] === i || DOMAIN_GROUP[f.b] === i);
+        assert.equal(g.quiet, !touched, `${culture} ${date.toISOString().slice(0, 10)} sky ${g.title}: ${g.sentences.join(" ")}`);
+        if (touched && isPointer(culture, g.sentences)) {
+          // It names the group above that read the figure, and that group printed it.
+          const named = plain.groups.findIndex((h, j) => j < i && !h.quiet && !isPointer(culture, h.sentences) && h.evidence === g.evidence);
+          assert.ok(named >= 0, `${culture} ${g.title} points nowhere: ${g.evidence}`);
+          const head = plain.groups[named]!.title.split(":")[0]!;
+          assert.ok(g.sentences[0]!.includes(head.charAt(0).toLowerCase() + head.slice(1)), g.sentences[0]);
+        }
+      });
+      if (culture !== "rome") continue;
+      const read = composeDiveDeeperForDay(culture, date, NATAL);
+      transitsByGroup(NATAL.chart, NATAL.ascendant, sky).forEach((hits, i) => {
+        assert.equal(read.groups[i]!.quiet, hits.length === 0, `${date.toISOString().slice(0, 10)} natal ${read.groups[i]!.title}`);
+      });
+    }
+  }
+});
+
 test("four groups in the culture's order, each a quiet line or two to three sentences ending on a concrete thing", () => {
   for (const culture of CULTURES) {
     const bank = DIVE_DEEPER_BANKS[culture];
@@ -54,7 +89,12 @@ test("four groups in the culture's order, each a quiet line or two to three sent
             assert.equal(g.evidence, "");
             return;
           }
-          assert.ok(g.sentences.length >= 2 && g.sentences.length <= 3, `${culture} ${g.title}: ${g.sentences.join(" ")}`);
+          if (isPointer(culture, g.sentences)) return;
+          // The Moon on the natal Moon keys no relation and no consequence.
+          const moonOnMoon = g.evidence.startsWith(`${DEITY_MATRIX[culture].moon.name.toUpperCase()} `) &&
+            g.evidence.includes(`YOUR ${DEITY_MATRIX[culture].moon.name.toUpperCase()} ·`);
+          const least = moonOnMoon ? 1 : 2;
+          assert.ok(g.sentences.length >= least && g.sentences.length <= 3, `${culture} ${g.title}: ${g.sentences.join(" ")}`);
           const last = g.sentences.at(-1)!;
           const things = [...FIGURE_BANKS[culture].manifestations[i]!.harmony, ...FIGURE_BANKS[culture].manifestations[i]!.tension];
           assert.ok(
@@ -120,7 +160,9 @@ test("no dive deeper line repeats a line on its page, whole or inside a longer s
 test("without a chart, no two groups read one sky figure", () => {
   for (const culture of CULTURES) {
     for (const date of days(200)) {
-      const read = composeDiveDeeperForDay(culture, date, null).groups.filter((g) => !g.quiet).map((g) => g.evidence);
+      const read = composeDiveDeeperForDay(culture, date, null)
+        .groups.filter((g) => !g.quiet && !isPointer(culture, g.sentences))
+        .map((g) => g.evidence);
       assert.equal(new Set(read).size, read.length, `${culture} ${date.toISOString().slice(0, 10)}: ${read.join(" / ")}`);
     }
   }

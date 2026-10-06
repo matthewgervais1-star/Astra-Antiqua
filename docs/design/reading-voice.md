@@ -200,8 +200,12 @@ the group keeps that no earlier group reads. With a chart it reads the contact
 the day pressure module names for the group (`rankContacts` in
 `lib/dayPressure.ts`: a body that moves daily first, a body against its own
 natal place last within its speed, then by orb), so the two modules agree. A
-group with nothing left to read prints the culture's quiet line for it, one of
-four. No dive deeper line repeats a line on the page, whole or inside a longer
+group no figure touches prints the culture's quiet line for it, one of four,
+and only then. A group whose every figure is read by a group above points
+there in one line of the culture's own ("The same weight that sits on the
+House of the Ka reaches here too, and the scale reads it once."), so no group
+says the sky is empty when it is not. The Moon on the natal Moon, which keys no
+relation and no consequence, speaks through the concrete line alone. No dive deeper line repeats a line on the page, whole or inside a longer
 sentence. The come-back line closes the page under the dive deeper.
 
 ## The figure page

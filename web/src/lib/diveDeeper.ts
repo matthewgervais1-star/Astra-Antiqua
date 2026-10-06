@@ -50,7 +50,11 @@ export interface DiveGroup {
   title: string;
   /** The figure the paragraph reads, in mono: "RA △ NUT · 0°19′" or "MARS □ YOUR MERCURIUS · 0°41′"; "" when quiet. */
   evidence: string;
-  /** The paragraph's sentences, the concrete line last; the quiet line alone when quiet. */
+  /**
+   * The paragraph's sentences, the concrete line last; the quiet line alone
+   * when nothing touches the group; the pointer to an earlier group alone when
+   * every figure touching it is read above.
+   */
   sentences: readonly string[];
   quiet: boolean;
 }
@@ -70,6 +74,20 @@ interface GroupReading {
   /** The consequence keys in order of preference; the Moon keys none. */
   keys: readonly Planet[];
 }
+
+/** A group whose every touching figure is read by an earlier group: it points there. */
+interface SharedReading {
+  sharedWith: 0 | 1 | 2 | 3;
+  evidence: string;
+}
+
+type GroupSource = GroupReading | SharedReading | null;
+
+/** "the Granary" from "The Granary: your work and your rations". */
+const groupName = (title: string): string => {
+  const head = title.split(":")[0]!;
+  return head.charAt(0).toLowerCase() + head.slice(1);
+};
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const fill = (template: string, slots: Readonly<Record<string, string>>): string =>
@@ -118,13 +136,17 @@ function relationSentence(
 function composeGroup(
   culture: Culture,
   group: 0 | 1 | 2 | 3,
-  reading: GroupReading | null,
+  reading: GroupSource,
   day: number,
   printed: Set<string>,
 ): DiveGroup {
   const bank = DIVE_DEEPER_BANKS[culture];
   const title = bank.titles[group];
   if (!reading) return { title, evidence: "", sentences: [bank.quiet[group]], quiet: true };
+  if ("sharedWith" in reading) {
+    const line = fill(bank.shared, { group: groupName(bank.titles[reading.sharedWith]) });
+    return { title, evidence: reading.evidence, sentences: [line], quiet: false };
+  }
 
   const consequences = DECREE_BANKS[culture].consequences[reading.kind];
   const consequence = reading.keys
@@ -147,15 +169,17 @@ function composeGroup(
 
 /**
  * Without a chart: each group's tightest sky figure that no earlier group
- * reads. A group whose figures are all taken prints its quiet line.
+ * reads. A group nothing touches is quiet; a group whose figures are all
+ * read above points to the group that read its tightest one.
  */
-function skyReadings(culture: Culture, figures: readonly DayFigure[]): (GroupReading | null)[] {
-  const used = new Set<DayFigure>();
+function skyReadings(culture: Culture, figures: readonly DayFigure[]): GroupSource[] {
+  const usedBy = new Map<DayFigure, 0 | 1 | 2 | 3>();
   return ([0, 1, 2, 3] as const).map((group) => {
     const touching = figures.filter((f) => DOMAIN_GROUP[f.a] === group || DOMAIN_GROUP[f.b] === group);
-    const f = touching.find((x) => !used.has(x));
-    if (!f) return null;
-    used.add(f);
+    if (!touching.length) return null;
+    const f = touching.find((x) => !usedBy.has(x));
+    if (!f) return { sharedWith: usedBy.get(touching[0]!)!, evidence: composeEvidence(culture, touching[0]!) };
+    usedBy.set(f, group);
     const { body, partner } = headlineBody(f.a, f.b);
     const [first, second] = DOMAIN_GROUP[body] === group ? [body, partner] : [partner, body];
     return { first, second, kind: f.kind, evidence: composeEvidence(culture, f), keys: [first, second] };
@@ -168,9 +192,10 @@ function skyReadings(culture: Culture, figures: readonly DayFigure[]): (GroupRea
  * holds for months and belongs to the long transits, so the day page reads it
  * only when nothing faster touches the group. A body against its own natal
  * place comes after the other contacts of its speed, and the Moon against the
- * natal Moon last of all; when that is all there is, the group is quiet. The
- * ranking is the day pressure module's (rankContacts), so both name one
- * contact per group.
+ * natal Moon last of all; when that is all there is, the group reads it
+ * through its concrete line alone, since it keys no relation and no
+ * consequence. The ranking is the day pressure module's (rankContacts), so
+ * both name one contact per group.
  */
 function natalReadings(
   culture: Culture,
@@ -180,7 +205,7 @@ function natalReadings(
   return transitsByGroup(natal.chart, natal.ascendant, sky).map((hits) => {
     // The same ranking the day pressure module reads, so both name one contact.
     const h = rankContacts(hits)[0];
-    if (!h || (h.transit === "moon" && h.natal === "moon")) return null;
+    if (!h) return null;
     return {
       first: h.transit,
       second: h.natal,
@@ -189,6 +214,7 @@ function natalReadings(
       // Keyed as the figure page keys a contact: by the natal point, by the
       // transiting body when that point is the Moon.
       keys: h.natal === "moon" ? [h.transit] : [h.natal, h.transit],
+      // (The Moon on the natal Moon keys nothing: the filter in composeGroup drops it.)
     };
   });
 }

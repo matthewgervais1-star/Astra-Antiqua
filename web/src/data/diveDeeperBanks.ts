@@ -18,6 +18,12 @@ export interface DiveDeeperBank {
   /** What a group says when no figure touches it, in the group order. */
   quiet: readonly [string, string, string, string];
   /**
+   * What a group says when every figure touching it is already read by a
+   * group above: it points to that group rather than claim the sky is empty.
+   * Slot: {group}, the earlier group's name from its title ("the Granary").
+   */
+  shared: string;
+  /**
    * The paragraph's last line: one concrete thing the reader will meet,
    * drawn from the figure page's manifestations for the group and the tone.
    * Slot: {thing}, a lowercase noun phrase.
@@ -39,6 +45,7 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
       "Nothing waits at the ferry landing today. Send what you owe by the usual boat.",
       "The sealed shrine stays shut, and no figure knocks. Say the morning hymn and leave it there.",
     ],
+    shared: "The same weight that sits on {group} reaches here too, and the scale reads it once.",
     concrete: "Reckon on {thing}.",
   },
   greece: {
@@ -54,6 +61,7 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
       "The herm stands alone at the crossroads today. Send your messages by the road you always take.",
       "The adyton is silent today. Keep your question for a day when the tripod speaks.",
     ],
+    shared: "The answer given at {group} is the one this place hears too.",
     concrete: "Look for {thing}.",
   },
   canaan: {
@@ -69,6 +77,7 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
       "No one is called to the gate today. Greet the elders and go about your errands.",
       "The tent of El stays closed today. Say the evening prayer and go to sleep.",
     ],
+    shared: "The matter heard at {group} is the same matter heard here.",
     concrete: "Be ready for {thing}.",
   },
   carthage: {
@@ -84,6 +93,7 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
       "No figure touches the harbor today. Let the ships keep their posted sailings.",
       "The precinct asks nothing new of you today. Pay what you vowed, when you vowed it, and no more.",
     ],
+    shared: "The entry posted under {group} is charged here as well, and it is not entered twice.",
     concrete: "Enter it in the daybook: {thing}.",
   },
   rome: {
@@ -99,6 +109,7 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
       "The road is clear today. Send the dispatches you planned.",
       "The templum gives no sign today. Leave the auspices alone and keep your vows.",
     ],
+    shared: "The sign read in {group} falls here as well, and the augur does not take it twice.",
     concrete: "Watch for {thing}.",
   },
 };
