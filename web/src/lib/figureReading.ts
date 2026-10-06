@@ -19,7 +19,15 @@ import {
   type DayFigure,
 } from "@/lib/decree";
 import { computeChart } from "@/lib/ephemeris";
-import { ASPECT_ANGLE, composeRecurrence, natalWindow, skyWindow, type OrbWindow } from "@/lib/recurrence";
+import {
+  ASPECT_ANGLE,
+  composeRecurrence,
+  natalRecurrenceDays,
+  natalWindow,
+  skyRecurrenceDays,
+  skyWindow,
+  type OrbWindow,
+} from "@/lib/recurrence";
 import type { TransitSpan } from "@/lib/transitSpans";
 import { houseGroupIndex, signPhraseProse, spanTone, wholeSignHouse } from "@/components/transits/spanDisplay";
 
@@ -319,7 +327,7 @@ export function composeFigurePage(
         kind: contact.kind,
       },
       kind: contact.kind,
-      recurrence: composeRecurrence(culture, contact.body, contact.kind),
+      recurrence: composeRecurrence(culture, natalRecurrenceDays(contact.body, contact.kind)),
       playsOutTitle: bank.playsOutTitle,
       actLine: composeImage(culture, figure),
       manifestations: manifestationsFor(culture, group, toneForKind(contact.kind)),
@@ -345,7 +353,7 @@ export function composeFigurePage(
         kind: figure.kind,
       },
       kind: figure.kind,
-      recurrence: composeRecurrence(culture, headline, figure.kind),
+      recurrence: composeRecurrence(culture, skyRecurrenceDays(figure.a, figure.b, figure.kind)),
       playsOutTitle: bank.playsOutTitle,
       actLine: composeImage(culture, figure),
       manifestations: manifestationsFor(culture, DOMAIN_GROUP[partner], toneForKind(figure.kind)),
@@ -432,7 +440,7 @@ export function composeSpanFigure(
       kind,
     },
     kind,
-    recurrence: composeRecurrence(culture, body, kind),
+    recurrence: composeRecurrence(culture, natalRecurrenceDays(body, kind)),
     playsOutTitle: bank.playsOutTitle,
     actLine: fill(bank.slowActs[body], { god: name(culture, body) }),
     manifestations: manifestationsFor(culture, houseGroupIndex(house), tone),

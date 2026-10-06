@@ -193,7 +193,16 @@ composes them and `lib/recurrence.ts` says how often the figure returns.
    `TRINE (120°)`, the second domain over `YOUR IUPPITER IN VIRGO` or
    `NEPTUNUS NOW`. The relation's short form opens on a modal (can, must,
    will, cannot) so it reads after a plural domain and a singular one alike.
-4. **Recurrence.** Said in words each calendar can say truthfully: Egypt
+4. **Recurrence.** A figure returns when the sky brings it back: each body
+   has a mean geocentric rate (Mercury and Venus keep the Sun's), a natal
+   contact returns every 360 / rate days, and a sky figure every
+   360 / |rate a - rate b| days, or by the pair's synodic period when the two
+   rates are the same (Sun and Mercury, Sun and Venus, Mercury and Venus). A
+   conjunction or an opposition comes once in that cycle, the other kinds
+   twice. So a Mercury contact to your chart returns about once a year, Sun
+   and Mars meet about every two years, and the Moon's figures come round
+   within the month. It is said in words each calendar can say truthfully,
+   in days under sixty, months under twenty-four and years beyond: Egypt
    counts decans and its four-month seasons, the lunar calendars say twice a
    month, and Rome, whose market week ran eight days, counts the half month
    in days. No culture borrows a seven-day week.

@@ -2,63 +2,71 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   ASPECT_ANGLE,
-  CYCLE_DAYS,
+  MEAN_RATE,
   WINDOW_STEP_HOURS,
   buildTimeline,
   composeRecurrence,
+  natalRecurrenceDays,
   natalWindow,
   numberWords,
-  recurrenceDays,
   recurrenceInterval,
+  skyRecurrenceDays,
   skyWindow,
 } from "@/lib/recurrence";
 import { computeGeocentricLongitude } from "@/lib/ephemeris";
 import { orbFor } from "@/data/sampleChart";
 import { CULTURES } from "@/data/cultures";
 
-test("the cycles are the plan's: sidereal Moon, the year, synodic Mercury and Venus, sidereal Mars and beyond", () => {
-  assert.equal(CYCLE_DAYS.moon, 27.32);
-  assert.equal(CYCLE_DAYS.sun, 365.25);
-  assert.equal(CYCLE_DAYS.mercury, 115.9);
-  assert.equal(CYCLE_DAYS.venus, 583.9);
-  assert.equal(CYCLE_DAYS.mars, 687);
-  assert.equal(Math.round(CYCLE_DAYS.pluto / 365.25), 248);
+test("the rates are mean geocentric motions, Mercury and Venus keeping the Sun's pace", () => {
+  assert.equal(MEAN_RATE.moon, 13.176);
+  assert.equal(MEAN_RATE.sun, 0.9856);
+  assert.equal(MEAN_RATE.mercury, MEAN_RATE.sun);
+  assert.equal(MEAN_RATE.venus, MEAN_RATE.sun);
+  assert.equal(MEAN_RATE.mars, 0.524);
 });
 
-test("conjunction and opposition come once a cycle, the others twice", () => {
-  assert.equal(recurrenceDays("moon", "conjunction"), 27.32);
-  assert.equal(recurrenceDays("moon", "opposition"), 27.32);
-  for (const kind of ["sextile", "square", "trine"] as const) assert.equal(recurrenceDays("moon", kind), 13.66);
+test("a natal contact returns every 360 / rate days, halved for the two-per-cycle kinds", () => {
+  // Mercury and Venus against a fixed point: about a year, not their loop with the Sun.
+  assert.ok(Math.abs(natalRecurrenceDays("mercury", "conjunction") - 365.26) < 0.1);
+  assert.equal(recurrenceInterval("greece", natalRecurrenceDays("mercury", "conjunction")), "about once a year");
+  assert.equal(recurrenceInterval("rome", natalRecurrenceDays("venus", "opposition")), "about once a year");
+  // The Moon's trine to a natal point: twice a month.
+  assert.ok(Math.abs(natalRecurrenceDays("moon", "trine") - 13.66) < 0.01);
+  assert.equal(recurrenceInterval("canaan", natalRecurrenceDays("moon", "trine")), "about twice a month");
+  assert.equal(recurrenceInterval("rome", natalRecurrenceDays("moon", "trine")), "about every fourteen days");
+  assert.equal(recurrenceInterval("egypt", natalRecurrenceDays("moon", "conjunction")), "about every three decans");
+  assert.equal(recurrenceInterval("rome", natalRecurrenceDays("mars", "conjunction")), "about every twenty-three months");
+  assert.equal(recurrenceInterval("rome", natalRecurrenceDays("mars", "square")), "about every eleven months");
+  assert.equal(recurrenceInterval("rome", natalRecurrenceDays("jupiter", "trine")), "about every six years");
+  assert.equal(recurrenceInterval("rome", natalRecurrenceDays("pluto", "conjunction")), "about every two hundred and forty-six years");
 });
 
-test("the interval is said in each calendar's own words, and never as a seven-day week", () => {
-  const moonHalf = recurrenceDays("moon", "square");
-  const moonWhole = recurrenceDays("moon", "conjunction");
-  assert.equal(recurrenceInterval("egypt", moonHalf), "about every decan and a half");
-  assert.equal(recurrenceInterval("egypt", moonWhole), "about every three decans");
-  assert.equal(recurrenceInterval("greece", moonHalf), "about twice a month");
-  assert.equal(recurrenceInterval("canaan", moonWhole), "about once a month");
-  assert.equal(recurrenceInterval("rome", moonHalf), "about every fourteen days");
-  assert.equal(recurrenceInterval("rome", moonWhole), "about once a month");
-  assert.equal(recurrenceInterval("egypt", recurrenceDays("mercury", "conjunction")), "about once a season");
-  assert.equal(recurrenceInterval("greece", recurrenceDays("mercury", "conjunction")), "about every four months");
-  assert.equal(recurrenceInterval("rome", recurrenceDays("mercury", "trine")), "about every two months");
-  assert.equal(recurrenceInterval("carthage", recurrenceDays("sun", "square")), "about every six months");
-  assert.equal(recurrenceInterval("rome", recurrenceDays("venus", "sextile")), "about every ten months");
-  assert.equal(recurrenceInterval("rome", recurrenceDays("mars", "square")), "about once a year");
-  assert.equal(recurrenceInterval("rome", recurrenceDays("venus", "conjunction")), "about every nineteen months");
-  assert.equal(recurrenceInterval("rome", recurrenceDays("mars", "opposition")), "about every two years");
-  assert.equal(recurrenceInterval("rome", recurrenceDays("jupiter", "trine")), "about every six years");
-  assert.equal(recurrenceInterval("rome", recurrenceDays("pluto", "conjunction")), "about every two hundred and forty-eight years");
+test("a sky figure returns by the two bodies' relative motion, or their synodic period when they keep pace", () => {
+  // Sun conjunct Mars: the Martian synodic period, about 780 days.
+  assert.ok(Math.abs(skyRecurrenceDays("sun", "mars", "conjunction") - 780) < 2);
+  assert.equal(recurrenceInterval("rome", skyRecurrenceDays("sun", "mars", "conjunction")), "about every two years");
+  // The Moon against anything: 27 to 30 days.
+  for (const other of ["sun", "mars", "saturn", "pluto"] as const) {
+    const days = skyRecurrenceDays("moon", other, "conjunction");
+    assert.ok(days > 27 && days < 30, `${other}: ${days}`);
+  }
+  assert.equal(skyRecurrenceDays("sun", "mercury", "conjunction"), 115.9);
+  assert.equal(skyRecurrenceDays("venus", "sun", "conjunction"), 583.9);
+  assert.equal(skyRecurrenceDays("mercury", "venus", "square"), 144.6 / 2);
+  assert.equal(recurrenceInterval("egypt", skyRecurrenceDays("sun", "mercury", "conjunction")), "about once a season");
+  assert.equal(recurrenceInterval("greece", skyRecurrenceDays("sun", "venus", "conjunction")), "about every nineteen months");
+});
+
+test("no culture ever counts in seven-day weeks", () => {
   for (const culture of CULTURES) {
-    for (const days of [13.66, 27.32, 57.95, 115.9, 365.25, 687]) {
+    for (const days of [13.66, 14.8, 27.32, 29.53, 50, 72.3, 365.26, 780]) {
       assert.doesNotMatch(recurrenceInterval(culture, days), /week/, `${culture} ${days}`);
     }
   }
 });
 
 test("the recurrence sentence differs in every culture", () => {
-  const lines = CULTURES.map((c) => composeRecurrence(c, "mars", "opposition"));
+  const lines = CULTURES.map((c) => composeRecurrence(c, skyRecurrenceDays("sun", "mars", "opposition")));
   assert.equal(new Set(lines).size, 5);
   assert.equal(lines[4], "The augurs record this figure again about every two years.");
 });

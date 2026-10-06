@@ -6,31 +6,49 @@ import { computeGeocentricLongitude } from "@/lib/ephemeris";
 /**
  * How often a figure comes round, and how long it holds.
  *
- * The cycle is the transiting body's: the Moon's sidereal month, the Sun's
- * year, Mercury's and Venus's synodic periods, and the sidereal periods of
- * Mars and the slow bodies. A conjunction or an opposition comes once in a
- * cycle; a sextile, a square or a trine comes twice, once waxing and once
- * waning. The figures are the ones the plan names
- * (.superpowers/sdd/2026-09-29-planned-work-closeout/task-16-brief.md).
+ * A figure returns when the sky brings it back, so the interval comes from
+ * how fast the two ends move apart. Each body has a mean geocentric rate in
+ * degrees a day (Mercury and Venus keep pace with the Sun on average). A
+ * natal contact, a moving body against a fixed point, returns every
+ * 360 / rate days; a sky figure, two moving bodies, every 360 / |rate a -
+ * rate b| days, or by the pair's synodic period when the two rates are the
+ * same. A conjunction or an opposition comes once in that cycle; a sextile,
+ * a square or a trine twice, once waxing and once waning.
  */
-export const CYCLE_DAYS: Readonly<Record<Planet, number>> = {
-  moon: 27.32,
-  sun: 365.25,
-  mercury: 115.9,
-  venus: 583.9,
-  mars: 687,
-  jupiter: 11.86 * 365.25,
-  saturn: 29.46 * 365.25,
-  uranus: 84 * 365.25,
-  neptune: 164.8 * 365.25,
-  pluto: 248 * 365.25,
+export const MEAN_RATE: Readonly<Record<Planet, number>> = {
+  moon: 13.176,
+  sun: 0.9856,
+  mercury: 0.9856,
+  venus: 0.9856,
+  mars: 0.524,
+  jupiter: 0.0831,
+  saturn: 0.0335,
+  uranus: 0.0117,
+  neptune: 0.006,
+  pluto: 0.004,
+};
+
+/** The pairs whose mean rates are equal, so the difference says nothing: their synodic periods, in days. */
+const SYNODIC_DAYS: Readonly<Record<string, number>> = {
+  "mercury|sun": 115.9,
+  "sun|venus": 583.9,
+  "mercury|venus": 144.6,
 };
 
 const ONCE_PER_CYCLE: ReadonlySet<AspectKind> = new Set(["conjunction", "opposition"]);
 
-/** Days between two returns of the same kind of figure for this body. */
-export function recurrenceDays(body: Planet, kind: AspectKind): number {
-  return CYCLE_DAYS[body] / (ONCE_PER_CYCLE.has(kind) ? 1 : 2);
+const perKind = (cycle: number, kind: AspectKind) => cycle / (ONCE_PER_CYCLE.has(kind) ? 1 : 2);
+
+/** Days between returns of a moving body's figure to a fixed natal point. */
+export function natalRecurrenceDays(body: Planet, kind: AspectKind): number {
+  return perKind(360 / MEAN_RATE[body], kind);
+}
+
+/** Days between returns of a figure between two moving bodies. */
+export function skyRecurrenceDays(a: Planet, b: Planet, kind: AspectKind): number {
+  const synodic = SYNODIC_DAYS[[a, b].sort().join("|")];
+  const cycle = synodic ?? 360 / Math.abs(MEAN_RATE[a] - MEAN_RATE[b]);
+  return perKind(cycle, kind);
 }
 
 const UNITS = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
@@ -49,36 +67,39 @@ export function numberWords(n: number): string {
 }
 
 const MONTH_DAYS = 30.44;
+const YEAR_DAYS = 365.25;
 
 /**
  * "about every two weeks", said in words the culture's calendar can say
- * truthfully. Only the Moon's figures return inside a month, and there the
- * calendars differ: Egypt counts ten-day decans (three to the civil month),
- * the Greek, Canaanite and Carthaginian months are lunar, and Rome's market
- * week is eight days, so Rome counts the half month in days rather than
- * borrow a seven-day week it did not keep. Past a month every culture counts
- * months, then years.
+ * truthfully, at the nearest sensible unit: days under sixty, months under
+ * twenty-four, years beyond. Inside a month the calendars differ: Egypt
+ * counts ten-day decans (three to the civil month), the Greek, Canaanite and
+ * Carthaginian months are lunar, and Rome's market week is eight days, so
+ * Rome counts the half month in days rather than borrow a seven-day week it
+ * did not keep. Egypt's year ran in three seasons of four months each.
  */
 export function recurrenceInterval(culture: Culture, days: number): string {
+  if (days < 20) {
+    if (culture === "egypt") return "about every decan and a half";
+    if (culture === "rome") return `about every ${numberWords(Math.round(days))} days`;
+    return "about twice a month";
+  }
   if (days < 45) {
-    const half = days < 20;
-    if (culture === "egypt") return half ? "about every decan and a half" : "about every three decans";
-    if (culture === "rome") return half ? `about every ${numberWords(Math.round(days))} days` : "about once a month";
-    return half ? "about twice a month" : "about once a month";
+    return culture === "egypt" ? "about every three decans" : "about once a month";
   }
-  if (days < 330) {
-    // Egypt's year ran in three seasons of four months each.
-    if (culture === "egypt" && Math.abs(days - 120) < 10) return "about once a season";
-    return `about every ${numberWords(Math.round(days / MONTH_DAYS))} months`;
+  if (days < 60) return `about every ${numberWords(Math.round(days))} days`;
+  const months = Math.round(days / MONTH_DAYS);
+  if (months < 24) {
+    if (culture === "egypt" && months === 4) return "about once a season";
+    if (months === 12) return "about once a year";
+    return `about every ${numberWords(months)} months`;
   }
-  if (days < 548) return "about once a year";
-  if (days < 640) return `about every ${numberWords(Math.round(days / MONTH_DAYS))} months`;
-  return `about every ${numberWords(Math.round(days / 365.25))} years`;
+  return `about every ${numberWords(Math.round(days / YEAR_DAYS))} years`;
 }
 
 /** "This figure comes round on the river again about every three decans." */
-export function composeRecurrence(culture: Culture, body: Planet, kind: AspectKind): string {
-  return FIGURE_BANKS[culture].recurrenceFrame.replace("{interval}", recurrenceInterval(culture, recurrenceDays(body, kind)));
+export function composeRecurrence(culture: Culture, days: number): string {
+  return FIGURE_BANKS[culture].recurrenceFrame.replace("{interval}", recurrenceInterval(culture, days));
 }
 
 // --- the window in orb --------------------------------------------------------
