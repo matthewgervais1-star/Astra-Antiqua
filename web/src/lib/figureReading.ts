@@ -1,18 +1,19 @@
 import { PLANETS, type Culture, type Planet } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import { DEITY_DOMAINS } from "@/data/deityDomains";
-import { DECREE_BANKS } from "@/data/decreeBanks";
-import { FIGURE_BANKS, type TryThisCard } from "@/data/figureBanks";
-import { PLANET_IN_SIGN } from "@/data/planetInSign";
+import { DECREE_BANKS, type FastBody, type PartnerBody } from "@/data/decreeBanks";
+import { FIGURE_BANKS, PLACEMENT_CLAUSES, type TryThisCard } from "@/data/figureBanks";
 import type { SlowBody } from "@/data/transitSpine";
 import { ASPECT_RULES, longitudeToSign, type AspectKind } from "@/data/sampleChart";
 import {
+  ASPECT_GLYPH,
   composeConsequence,
   composeEvidence,
   composeHeadline,
   composeImage,
   headlineBody,
   meaningClause,
+  orbMeasure,
   pairClause,
   toneForKind,
   utcDayNumber,
@@ -90,6 +91,12 @@ export interface FigurePage extends FigureAnatomy {
   instant: Date;
   /** The stretch the displayed figure holds its orb. */
   window: OrbWindow;
+  /**
+   * With a chart, the mono line under the evidence that names the contact
+   * the rest of the page reads: "MARS ⚹ YOUR MERCURIUS · 0°40′". Null when
+   * the page reads the sky figure.
+   */
+  bridge: string | null;
   /** True when the page reads the figure against the reader's chart. */
   natal: boolean;
   feedbackId: string;
@@ -168,32 +175,14 @@ export const DOMAIN_GROUP: Readonly<Record<Planet, 0 | 1 | 2 | 3>> = {
   neptune: 3,
 };
 
-/**
- * Sentences a placement clause never opens on: the paragraph's verdict on the
- * cost or the gift (it reads as a moral, not a placement), a sentence that
- * leans on the one before it ("It", "Then"), and the verbless fragments some
- * paragraphs open with ("Identity built by climbing.").
- */
-const NOT_A_CLAUSE = /^(The (cost|gift|risk|shadow|price|bill)\b|What it costs|It |Then |Identity |Selfhood |A self )/;
-
-/**
- * One sentence of a PLANET_IN_SIGN paragraph, in the second person, ready to
- * follow a colon: the first sentence that speaks to "you", cut at its first
- * semicolon, lowercased; the first usable sentence when none does.
- */
-export function placementClause(paragraph: string): string {
-  const sentences = paragraph.split(/(?<=\.)\s+/).filter((s) => !NOT_A_CLAUSE.test(s));
-  const picked = sentences.find((s) => /\byou(r|rs)?\b/i.test(s)) ?? sentences[0] ?? paragraph;
-  return lower(picked.split(";")[0]!.replace(/\.$/, "").trim());
-}
-
-/** Move one for a natal planet: the culture's frame over the placement's clause. */
+/** Move one for a natal planet: the culture's frame around the placement's authored clause. */
 export function composeNatalMoveOne(culture: Culture, point: Planet, longitude: number): string {
   const { sign } = longitudeToSign(longitude);
-  const clause = placementClause(PLANET_IN_SIGN[point][sign]);
-  const bank = FIGURE_BANKS[culture];
-  const frame = bank.natalFrameYou && clause.startsWith("you ") ? bank.natalFrameYou : bank.natalFrame;
-  return fill(frame, { deity: name(culture, point), sign: signPhraseProse(sign), clause });
+  return fill(FIGURE_BANKS[culture].natalFrame, {
+    deity: name(culture, point),
+    sign: signPhraseProse(sign),
+    clause: PLACEMENT_CLAUSES[point][sign],
+  });
 }
 
 /** Move one with no chart: the transiting god in its sign and the domain it keeps. */
@@ -206,9 +195,13 @@ function composeSkyMoveOne(culture: Culture, body: Planet, longitude: number): s
   });
 }
 
-/** "Right now {two domains and a relation}, and {the consequence}." */
-function composeMoveTwo(clause: string, consequence: string): string {
-  return `Right now ${clause}, and ${lower(consequence)}`;
+/**
+ * "Right now {two domains and a relation}: {the consequence}." A colon
+ * rather than ", and": the relation and the consequence each carry their
+ * own "and" often enough that a third would stack.
+ */
+function composeMoveTwo(clause: string, consequence: string | null): string {
+  return consequence ? `Right now ${clause}: ${lower(consequence)}` : `Right now ${clause}.`;
 }
 
 function relationPart(culture: Culture, kind: AspectKind): FigurePart {
@@ -245,9 +238,10 @@ function separation(x: number, y: number): number {
 
 /**
  * The natal point the figure touches: the tightest aspect, inside the
- * documented orbs, from the headline body to any natal planet; from the
- * partner when the headline body touches none. Null when neither does, and
- * the page then reads the sky figure.
+ * documented orbs, from the headline body to any other natal planet; from
+ * the partner when the headline body touches none. A body against its own
+ * natal place is a return, not a contact, and is left out. Null when neither
+ * touches anything, and the page then reads the sky figure.
  */
 export function natalContact(
   sky: Readonly<Record<Planet, number>>,
@@ -258,6 +252,7 @@ export function natalContact(
   const contactsOf = (body: Planet): NatalContact[] => {
     const out: NatalContact[] = [];
     for (const point of PLANETS) {
+      if (point === body) continue;
       const angle = separation(sky[body], natal.chart[point]);
       for (const rule of ASPECT_RULES) {
         const orb = Math.abs(angle - rule.angle);
@@ -273,6 +268,23 @@ export function natalContact(
 }
 
 // --- the day's figure -------------------------------------------------------------
+
+const FAST: ReadonlySet<Planet> = new Set(["sun", "moon", "mercury", "venus", "mars"]);
+
+/** Why a figure page has nothing to read: a malformed date or id, two slow bodies, or a sky without the figure. */
+export type FigureMissing = "malformed" | "slow" | "absent";
+
+/** The reason composeFigurePage returned null, or null when it would compose. */
+export function figureMissing(date: string, id: string): FigureMissing | null {
+  const instant = parseIsoDate(date);
+  const key = parseFigureId(id);
+  if (!instant || !key) return "malformed";
+  if (!FAST.has(key.a) && !FAST.has(key.b)) return "slow";
+  const sky = computeChart(instant);
+  const angle = separation(sky[key.a], sky[key.b]);
+  const rule = ASPECT_RULES.find((r) => Math.abs(angle - r.angle) <= r.orb);
+  return rule?.kind === key.kind ? null : "absent";
+}
 
 /**
  * The figure page for one day's figure. Null when the date or the id does not
@@ -295,13 +307,11 @@ export function composeFigurePage(
   const orb = Math.abs(angle - ASPECT_ANGLE[key.kind]);
   const rule = ASPECT_RULES.find((r) => Math.abs(angle - r.angle) <= r.orb);
   if (!rule || rule.kind !== key.kind) return null;
-  const fast = new Set<Planet>(["sun", "moon", "mercury", "venus", "mars"]);
-  if (!fast.has(key.a) && !fast.has(key.b)) return null;
+  if (!FAST.has(key.a) && !FAST.has(key.b)) return null;
 
   const figure: DayFigure = { a: key.a, b: key.b, kind: key.kind, orb };
   const { body: headline, partner } = headlineBody(figure.a, figure.b);
   const day = utcDayNumber(instant);
-  const moveTwo = composeMoveTwo(meaningClause(culture, figure, day), composeConsequence(culture, figure));
   const contact = natal ? natalContact(sky, natal, headline, partner) : null;
   const bank = FIGURE_BANKS[culture];
   const domains = DEITY_DOMAINS[culture];
@@ -312,10 +322,22 @@ export function composeFigurePage(
     const natalLon = natal.chart[contact.point];
     const group = houseGroupIndex(wholeSignHouse(natalLon, natal.ascendant));
     window = natalWindow(contact.body, natalLon, contact.kind, instant);
+    // Move two reads the contact: its kind, its two domains, and the
+    // consequence keyed by the point it touches (by the transiting body when
+    // that point is the Moon, which the consequence bank never keys).
+    const consequences = DECREE_BANKS[culture].consequences[contact.kind];
+    const consequence = contact.point === "moon" ? consequences[contact.body as PartnerBody] : consequences[contact.point];
+    // The act names the god of the contact, so hero, act and cards agree.
+    const act = FAST.has(contact.body)
+      ? fill(DECREE_BANKS[culture].images[contact.kind][contact.body as FastBody], { god: name(culture, contact.body) })
+      : fill(bank.slowActs[contact.body as SlowBody], { god: name(culture, contact.body) });
     anatomy = {
       heroBody: contact.body,
       moveOne: composeNatalMoveOne(culture, contact.point, natalLon),
-      moveTwo,
+      moveTwo: composeMoveTwo(
+        pairClause(culture, domains[contact.body], domains[contact.point], contact.kind, day),
+        consequence ?? null,
+      ),
       parts: [
         { phrase: cap(domains[contact.body]), tag: nowTag(culture, contact.body), body: contact.body },
         relationPart(culture, contact.kind),
@@ -329,7 +351,7 @@ export function composeFigurePage(
       kind: contact.kind,
       recurrence: composeRecurrence(culture, natalRecurrenceDays(contact.body, contact.kind)),
       playsOutTitle: bank.playsOutTitle,
-      actLine: composeImage(culture, figure),
+      actLine: act,
       manifestations: manifestationsFor(culture, group, toneForKind(contact.kind)),
       cards: bank.tryThis[contact.body],
       lesson: lessonFor(culture, contact.kind, contact.body),
@@ -341,7 +363,7 @@ export function composeFigurePage(
     anatomy = {
       heroBody: headline,
       moveOne: composeSkyMoveOne(culture, headline, sky[headline]),
-      moveTwo,
+      moveTwo: composeMoveTwo(meaningClause(culture, figure, day), composeConsequence(culture, figure)),
       parts: [
         { phrase: cap(domains[headline]), tag: nowTag(culture, headline), body: headline },
         relationPart(culture, figure.kind),
@@ -372,6 +394,9 @@ export function composeFigurePage(
     instant,
     window,
     natal: Boolean(natal && contact),
+    bridge: natal && contact
+      ? `${name(culture, contact.body).toUpperCase()} ${ASPECT_GLYPH[contact.kind]} YOUR ${name(culture, contact.point).toUpperCase()} · ${orbMeasure(contact.orb)}`
+      : null,
     feedbackId: `figure-${date}-${canonical}`,
   };
 }

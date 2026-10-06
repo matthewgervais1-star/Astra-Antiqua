@@ -176,17 +176,24 @@ composes them and `lib/recurrence.ts` says how often the figure returns.
 
 1. **Headline and evidence.** A day's figure prints the day page's own
    headline and evidence line, so the two pages agree. A long transit reads
-   one of 125 slow headlines, per (culture, kind, slow body).
+   one of 125 slow headlines, per (culture, kind, slow body). With a chart,
+   the page reads one figure from the evidence line down: the contact
+   between a body of the sky figure and the natal planet it touches. A mono
+   bridge line under the evidence names that contact
+   (`MARS ⚹ YOUR MERCURIUS · 0°41′`), and the paragraph, the diagram, the
+   recurrence, the god's act, the cards and the lesson all read it. A body
+   against its own natal place is a return, not a contact, and is left out.
 2. **The paragraph, in two moves.** Move one is the reader: the natal point
-   the figure touches, in the culture's frame, with one sentence of the
-   universal placement paragraph recast in the second person ("The augurs
-   found Iuppiter in the Maiden at your birth: increase is refinement.").
-   Rome alone takes the reference's own shape when the clause opens on you
-   ("As Mercurius in the Scales, you hold both arguments."). With no chart,
-   move one is the transiting god in its sign and the domain it keeps. Move
-   two is now: "Right now {two domains and the relation}, and {the
-   consequence}." The tight tail stays on the day page; the evidence line
-   already says how close.
+   the contact touches, in the culture's frame, around one authored clause
+   per body and sign (`PLACEMENT_CLAUSES`, 120, universal: the frame carries
+   the culture). Each clause opens on "you" and says something the reader
+   does: "As Iuppiter in the Maiden, you weigh a thing before you bless it,
+   and you bless little." With no chart, move one is the transiting god in
+   its sign and the domain it keeps. Move two is now: "Right now {two
+   domains and the relation}: {the consequence}." The colon keeps the
+   relation's "and" and the consequence's "and" from stacking into a third.
+   The tight tail stays on the day page; the evidence line already says how
+   close.
 3. **What it looks like in space.** The figure drawn as two radii on one
    ring, then the sentence taken apart into three parts, each with its fact
    in mono: the transiting domain over `MARS NOW`, the relation over
@@ -196,10 +203,13 @@ composes them and `lib/recurrence.ts` says how often the figure returns.
 4. **Recurrence.** A figure returns when the sky brings it back: each body
    has a mean geocentric rate (Mercury and Venus keep the Sun's), a natal
    contact returns every 360 / rate days, and a sky figure every
-   360 / |rate a - rate b| days, or by the pair's synodic period when the two
-   rates are the same (Sun and Mercury, Sun and Venus, Mercury and Venus). A
-   conjunction or an opposition comes once in that cycle, the other kinds
-   twice. So a Mercury contact to your chart returns about once a year, Sun
+   360 / |rate a - rate b| days. When the two rates are the same the
+   interval is measured instead: the Sun meets Mercury about every 58 days
+   and Venus about every 292 (inferior and superior conjunction both
+   count), and Mercury and Venus meet anywhere from a few days to most of a
+   year apart, so that pair's page says it keeps no season, in the
+   culture's words. A conjunction or an opposition comes once in the cycle,
+   the other kinds twice. So a Mercury contact to your chart returns about once a year, Sun
    and Mars meet about every two years, and the Moon's figures come round
    within the month. It is said in words each calendar can say truthfully,
    in days under sixty, months under twenty-four and years beyond: Egypt
@@ -214,7 +224,8 @@ composes them and `lib/recurrence.ts` says how often the figure returns.
 6. **Try this.** Up to three cards: an object to consider, a text to read, a
    rite or habit to keep, each with its source on one line. Every card is
    attested; where nothing attested fits, the body carries two cards rather
-   than an invented third.
+   than an invented third (145 of 150; the spec's section B names the five
+   bodies).
 7. **The lesson.** Two sentences, no comfort, one picture from the
    institution, and no god but the one the page is about.
 

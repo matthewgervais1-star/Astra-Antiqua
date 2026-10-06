@@ -26,7 +26,7 @@ const C = VIEW / 2;
 const R = 78;
 const R_ARC = 26;
 
-/** 0° Aries at the left, signs running counter-clockwise, as the wheel draws them. */
+/** 0° Aries at the left; longitude grows clockwise on the page, toward the top. */
 function at(longitude: number, radius: number): { x: number; y: number } {
   const rad = ((180 - longitude) * Math.PI) / 180;
   return { x: C + Math.cos(rad) * radius, y: C - Math.sin(rad) * radius };

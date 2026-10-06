@@ -9,13 +9,14 @@ import {
   natalContact,
   parseFigureId,
   parseIsoDate,
-  placementClause,
+  figureMissing,
   type NatalPoints,
 } from "@/lib/figureReading";
 import { composeDayPage, meaningClause, utcDayNumber } from "@/lib/decree";
 import { computeChart } from "@/lib/ephemeris";
 import { FIGURE_BANKS } from "@/data/figureBanks";
-import { PLANET_IN_SIGN } from "@/data/planetInSign";
+import { DECREE_BANKS } from "@/data/decreeBanks";
+import { DEITY_DOMAINS } from "@/data/deityDomains";
 import { CULTURES, PLANETS, type Planet } from "@/data/cultures";
 
 const DATE = "2026-10-03";
@@ -41,10 +42,15 @@ test("ids and dates round-trip, and a figure id is canonical whichever way it wa
   assert.equal(composeFigurePage("rome", DATE, "neptune-trine-mars", null)?.id, ID);
 });
 
-test("a figure the sky does not hold that day, a slow pair, or a bad date opens on nothing", () => {
+test("a figure the sky does not hold that day, a slow pair, or a bad date opens on nothing, and says which", () => {
   assert.equal(composeFigurePage("rome", DATE, "mars-square-neptune", null), null);
+  assert.equal(figureMissing(DATE, "mars-square-neptune"), "absent");
   assert.equal(composeFigurePage("rome", DATE, "jupiter-trine-saturn", null), null);
+  assert.equal(figureMissing(DATE, "jupiter-trine-saturn"), "slow");
   assert.equal(composeFigurePage("rome", "2026-13-01", ID, null), null);
+  assert.equal(figureMissing("2026-13-01", ID), "malformed");
+  assert.equal(figureMissing(DATE, "mars-trine-mars"), "malformed");
+  assert.equal(figureMissing(DATE, ID), null);
 });
 
 test("without a chart the page reads the sky figure, in the day page's own headline and evidence", () => {
@@ -55,10 +61,12 @@ test("without a chart the page reads the sky figure, in the day page's own headl
     assert.equal(page.evidence, day.evidence);
     assert.equal(page.natal, false);
     assert.equal(page.heroBody, "mars");
-    assert.match(page.moveTwo, /^Right now .+, and .+\.$/);
+    assert.match(page.moveTwo, /^Right now .+: .+\.$/);
     // The meaning clause without its tight tail: the evidence line already says how close.
     const clause = meaningClause(culture, { a: "mars", b: "neptune", kind: "trine", orb: 0 }, utcDayNumber(page.instant));
-    assert.ok(page.moveTwo.startsWith(`Right now ${clause}, and `), `${culture}: ${page.moveTwo}`);
+    assert.ok(page.moveTwo.startsWith(`Right now ${clause}: `), `${culture}: ${page.moveTwo}`);
+    assert.doesNotMatch(page.moveTwo, /, and .*\band\b.*\band\b/, `${culture}: stacked and`);
+    assert.equal(page.bridge, null);
     assert.deepEqual(page.parts.map((p) => p.body), ["mars", null, "neptune"]);
     assert.equal(page.parts[1].tag, "TRINE (120°)");
     assert.match(page.parts[0].tag, / NOW$/);
@@ -82,9 +90,18 @@ test("with a chart the page reads the figure against the natal point it touches"
     assert.match(page.parts[2].tag, /^YOUR .+ IN [A-Z]+$/);
     assert.equal(page.parts[2].body, "saturn");
     assert.equal(page.moveOne, composeNatalMoveOne(culture, "saturn", natal.chart.saturn));
-    // The headline and move two still read the sky figure the reader opened.
-    assert.equal(page.headline, composeFigurePage(culture, DATE, ID, null)!.headline);
-    assert.equal(page.moveTwo, composeFigurePage(culture, DATE, ID, null)!.moveTwo);
+    // The headline and evidence still name the sky figure the reader opened;
+    // the bridge names the contact, and move two reads it.
+    const sky = composeFigurePage(culture, DATE, ID, null)!;
+    assert.equal(page.headline, sky.headline);
+    assert.equal(page.evidence, sky.evidence);
+    assert.match(page.bridge!, /^[A-Z ]+ □ YOUR [A-Z ]+ · 0°24′$/);
+    const domains = DEITY_DOMAINS[culture];
+    assert.ok(page.moveTwo.startsWith(`Right now ${domains.mars} and ${domains.saturn} `), page.moveTwo);
+    assert.ok(page.moveTwo.endsWith(DECREE_BANKS[culture].consequences.square.saturn.charAt(0).toLowerCase() + DECREE_BANKS[culture].consequences.square.saturn.slice(1)), page.moveTwo);
+    // Hero, act and cards name the same god.
+    assert.equal(page.heroBody, "mars");
+    assert.equal(page.cards, FIGURE_BANKS[culture].tryThis.mars);
   }
 });
 
@@ -125,18 +142,13 @@ test("the five-voice check: one figure, five cultures, no shared sentence", () =
   }
 });
 
-test("every placement recasts to one clean second-person clause", () => {
-  for (const planet of PLANETS) {
-    for (const [sign, paragraph] of Object.entries(PLANET_IN_SIGN[planet])) {
-      const clause = placementClause(paragraph);
-      assert.match(clause, /^[a-z]/, `${planet}.${sign}`);
-      assert.doesNotMatch(clause, /[;.]$|^(the (cost|gift|risk|shadow|price|bill)|it |then )/, `${planet}.${sign}: "${clause}"`);
-      assert.ok(clause.split(" ").length >= 3, `${planet}.${sign}: "${clause}"`);
-    }
+test("move one sets an authored clause in each culture's frame", () => {
+  assert.equal(composeNatalMoveOne("rome", "jupiter", 165), "As Iuppiter in the Maiden, you weigh a thing before you bless it, and you bless little.");
+  assert.equal(composeNatalMoveOne("rome", "mercury", 195), "As Mercurius in the Scales, you can argue both sides and hate to choose one.");
+  assert.equal(composeNatalMoveOne("egypt", "jupiter", 165), "Your birth set Amun in the Maiden: you weigh a thing before you bless it, and you bless little.");
+  for (const culture of CULTURES) {
+    for (const planet of PLANETS) assert.match(composeNatalMoveOne(culture, planet, 10), /\b(you|your)\b/);
   }
-  // Rome takes the reference's "As ..., you" shape only when the clause opens on "you".
-  assert.equal(composeNatalMoveOne("rome", "jupiter", 165), "The augurs found Iuppiter in the Maiden at your birth: increase is refinement.");
-  assert.equal(composeNatalMoveOne("rome", "mercury", 195), "As Mercurius in the Scales, you hold both arguments.");
 });
 
 test("a long transit reads its slow headline and the natal point or angle it touches", () => {

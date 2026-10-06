@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { FIGURE_BANKS } from "@/data/figureBanks";
+import { FIGURE_BANKS, PLACEMENT_CLAUSES } from "@/data/figureBanks";
 import { DECREE_BANKS } from "@/data/decreeBanks";
 import { DEITY_MATRIX } from "@/data/deities";
 import { CULTURES, PLANETS, type Culture } from "@/data/cultures";
@@ -136,6 +136,23 @@ test("a lesson is two sentences, names the headline god at most, and claims noth
   }
 });
 
+test("the 120 placement clauses open on you, stay plain, and name no god", () => {
+  const all = Object.entries(PLACEMENT_CLAUSES).flatMap(([body, bySign]) =>
+    Object.entries(bySign).map(([sign, clause]) => [`${body}.${sign}`, clause] as const),
+  );
+  assert.equal(all.length, 120);
+  assert.equal(new Set(all.map(([, c]) => c)).size, 120, "a clause repeats");
+  for (const [where, clause] of all) {
+    assert.match(clause, /^you [a-z][^.!?;]*[a-z]$/, `${where}: "${clause}"`);
+    assert.equal(clause.match(HEDGES), null, `${where} hedges: "${clause}"`);
+    assert.equal(clause.match(ABSTRACTIONS), null, `${where} abstracts: "${clause}"`);
+    assert.equal(clause.match(THERAPY), null, `${where} counsels: "${clause}"`);
+    assert.ok(!clause.includes(EM_DASH), `${where} carries an em dash`);
+    const named = (clause.match(/[A-Z][a-z']+/g) ?? []).filter((w) => GOD_WORDS.has(w));
+    assert.deepEqual(named, [], `${where} names a god: "${clause}"`);
+  }
+});
+
 test("every card names what to consider, read or keep, in that order, with a one-line source", () => {
   const order = ["consider", "read", "keep"];
   for (const culture of CULTURES) {
@@ -164,7 +181,6 @@ test("frames carry their slots, relations open on a modal, and angle domains can
   for (const culture of CULTURES) {
     const bank = FIGURE_BANKS[culture];
     assert.match(bank.natalFrame, /\{deity\}.*\{sign\}.*\{clause\}\.$/, culture);
-    if (bank.natalFrameYou) assert.match(bank.natalFrameYou, /^As \{deity\} in the \{sign\}, \{clause\}\.$/, culture);
     assert.match(bank.skyMoveOne, /\{god\}.*\{sign\}.*\{domain\}/, culture);
     assert.match(bank.recurrenceFrame, /\{interval\}\.$/, culture);
     assert.match(bank.playsOutTitle, /^HOW THIS PLAYS OUT (IN|ON|AT) THE [A-Z]+$/, culture);

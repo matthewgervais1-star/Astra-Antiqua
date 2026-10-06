@@ -16,6 +16,7 @@ import {
 import { computeGeocentricLongitude } from "@/lib/ephemeris";
 import { orbFor } from "@/data/sampleChart";
 import { CULTURES } from "@/data/cultures";
+import { FIGURE_BANKS } from "@/data/figureBanks";
 
 test("the rates are mean geocentric motions, Mercury and Venus keeping the Sun's pace", () => {
   assert.equal(MEAN_RATE.moon, 13.176);
@@ -38,23 +39,28 @@ test("a natal contact returns every 360 / rate days, halved for the two-per-cycl
   assert.equal(recurrenceInterval("rome", natalRecurrenceDays("mars", "conjunction")), "about every twenty-three months");
   assert.equal(recurrenceInterval("rome", natalRecurrenceDays("mars", "square")), "about every eleven months");
   assert.equal(recurrenceInterval("rome", natalRecurrenceDays("jupiter", "trine")), "about every six years");
-  assert.equal(recurrenceInterval("rome", natalRecurrenceDays("pluto", "conjunction")), "about every two hundred and forty-six years");
+  assert.equal(recurrenceInterval("rome", natalRecurrenceDays("pluto", "conjunction")), "about every two hundred and forty-eight years");
 });
 
-test("a sky figure returns by the two bodies' relative motion, or their synodic period when they keep pace", () => {
+test("a sky figure returns by the two bodies' relative motion, or by the measured interval when they keep pace", () => {
   // Sun conjunct Mars: the Martian synodic period, about 780 days.
-  assert.ok(Math.abs(skyRecurrenceDays("sun", "mars", "conjunction") - 780) < 2);
-  assert.equal(recurrenceInterval("rome", skyRecurrenceDays("sun", "mars", "conjunction")), "about every two years");
+  const sunMars = skyRecurrenceDays("sun", "mars", "conjunction")!;
+  assert.ok(Math.abs(sunMars - 780) < 2);
+  assert.equal(recurrenceInterval("rome", sunMars), "about every two years");
   // The Moon against anything: 27 to 30 days.
   for (const other of ["sun", "mars", "saturn", "pluto"] as const) {
-    const days = skyRecurrenceDays("moon", other, "conjunction");
+    const days = skyRecurrenceDays("moon", other, "conjunction")!;
     assert.ok(days > 27 && days < 30, `${other}: ${days}`);
   }
-  assert.equal(skyRecurrenceDays("sun", "mercury", "conjunction"), 115.9);
-  assert.equal(skyRecurrenceDays("venus", "sun", "conjunction"), 583.9);
-  assert.equal(skyRecurrenceDays("mercury", "venus", "square"), 144.6 / 2);
-  assert.equal(recurrenceInterval("egypt", skyRecurrenceDays("sun", "mercury", "conjunction")), "about once a season");
-  assert.equal(recurrenceInterval("greece", skyRecurrenceDays("sun", "venus", "conjunction")), "about every nineteen months");
+  // The Sun meets an inner planet twice a synodic period, inferior and superior.
+  assert.equal(skyRecurrenceDays("sun", "mercury", "conjunction"), 57.9);
+  assert.equal(skyRecurrenceDays("venus", "sun", "conjunction"), 291.9);
+  assert.equal(recurrenceInterval("greece", 57.9), "about every fifty-eight days");
+  assert.equal(recurrenceInterval("rome", 291.9), "about every ten months");
+  // Mercury and Venus keep no steady interval, and the page says so.
+  assert.equal(skyRecurrenceDays("mercury", "venus", "square"), null);
+  assert.equal(composeRecurrence("egypt", null), FIGURE_BANKS.egypt.recurrenceIrregular);
+  assert.equal(new Set(CULTURES.map((c) => composeRecurrence(c, null))).size, 5);
 });
 
 test("no culture ever counts in seven-day weeks", () => {
@@ -66,7 +72,7 @@ test("no culture ever counts in seven-day weeks", () => {
 });
 
 test("the recurrence sentence differs in every culture", () => {
-  const lines = CULTURES.map((c) => composeRecurrence(c, skyRecurrenceDays("sun", "mars", "opposition")));
+  const lines = CULTURES.map((c) => composeRecurrence(c, skyRecurrenceDays("sun", "mars", "opposition")!));
   assert.equal(new Set(lines).size, 5);
   assert.equal(lines[4], "The augurs record this figure again about every two years.");
 });

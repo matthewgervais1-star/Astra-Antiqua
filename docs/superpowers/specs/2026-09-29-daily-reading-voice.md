@@ -145,7 +145,11 @@ tapping a day opens that day's page with the full anatomy.
    the natal point, tone): 5 × 4 × 2 × 4 = 160 lines.
 7. **Try this**: three cards per (culture, transiting body): Consider (an attested object,
    the traced marks and glyph sources first), Read (a primary text, named), Keep (a small rite
-   or habit in the culture's practice). 150 cards, short.
+   or habit in the culture's practice). 150 cards, short. *As built (Task 16): 145.* Five
+   bodies carry two cards because nothing attested fills the third: Canaan's Shamem (no
+   object) and Yammu (no rite); Carthage's Semes (no rite: the tophet's disc-and-crescent
+   vows are paid to Baal Hammon and Tanit, not to the sun), Baal Hammon the elder (no rite
+   apart from the vow stele Tanit's card already keeps) and Baal Shamem (no object).
 8. **The lesson**: one closing reflection per (culture, kind): 25 lines, two sentences, no
    comfort, one image from the institution.
 9. **Feedback row** (exists) and the links back to the day, the week and all figures.

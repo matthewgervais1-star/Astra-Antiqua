@@ -11,9 +11,14 @@ import { computeGeocentricLongitude } from "@/lib/ephemeris";
  * degrees a day (Mercury and Venus keep pace with the Sun on average). A
  * natal contact, a moving body against a fixed point, returns every
  * 360 / rate days; a sky figure, two moving bodies, every 360 / |rate a -
- * rate b| days, or by the pair's synodic period when the two rates are the
- * same. A conjunction or an opposition comes once in that cycle; a sextile,
- * a square or a trine twice, once waxing and once waning.
+ * rate b| days. When the two rates are the same the difference says
+ * nothing, so the interval is measured instead: the Sun meets Mercury or
+ * Venus twice in each synodic period (at inferior and superior
+ * conjunction), every 57.9 and 291.9 days on average, and Mercury and Venus
+ * meet anywhere from 3.5 to 294 days apart (ephemeris, 2000 to 2040), which
+ * no "about every" can honestly round. A conjunction or an opposition comes
+ * once in the cycle; a sextile, a square or a trine twice, once waxing and
+ * once waning.
  */
 export const MEAN_RATE: Readonly<Record<Planet, number>> = {
   moon: 13.176,
@@ -23,16 +28,20 @@ export const MEAN_RATE: Readonly<Record<Planet, number>> = {
   mars: 0.524,
   jupiter: 0.0831,
   saturn: 0.0335,
-  uranus: 0.0117,
-  neptune: 0.006,
-  pluto: 0.004,
+  uranus: 0.011733,
+  neptune: 0.005981,
+  pluto: 0.003975,
 };
 
-/** The pairs whose mean rates are equal, so the difference says nothing: their synodic periods, in days. */
-const SYNODIC_DAYS: Readonly<Record<string, number>> = {
-  "mercury|sun": 115.9,
-  "sun|venus": 583.9,
-  "mercury|venus": 144.6,
+/**
+ * The pairs whose mean rates are equal: the mean days between their
+ * conjunctions, or null for Mercury and Venus, whose meetings keep no steady
+ * interval.
+ */
+const EQUAL_RATE_DAYS: Readonly<Record<string, number | null>> = {
+  "mercury|sun": 57.9,
+  "sun|venus": 291.9,
+  "mercury|venus": null,
 };
 
 const ONCE_PER_CYCLE: ReadonlySet<AspectKind> = new Set(["conjunction", "opposition"]);
@@ -44,11 +53,14 @@ export function natalRecurrenceDays(body: Planet, kind: AspectKind): number {
   return perKind(360 / MEAN_RATE[body], kind);
 }
 
-/** Days between returns of a figure between two moving bodies. */
-export function skyRecurrenceDays(a: Planet, b: Planet, kind: AspectKind): number {
-  const synodic = SYNODIC_DAYS[[a, b].sort().join("|")];
-  const cycle = synodic ?? 360 / Math.abs(MEAN_RATE[a] - MEAN_RATE[b]);
-  return perKind(cycle, kind);
+/** Days between returns of a figure between two moving bodies, or null when the pair keeps no steady interval. */
+export function skyRecurrenceDays(a: Planet, b: Planet, kind: AspectKind): number | null {
+  const key = [a, b].sort().join("|");
+  if (key in EQUAL_RATE_DAYS) {
+    const days = EQUAL_RATE_DAYS[key];
+    return days == null ? null : perKind(days, kind);
+  }
+  return perKind(360 / Math.abs(MEAN_RATE[a] - MEAN_RATE[b]), kind);
 }
 
 const UNITS = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
@@ -97,9 +109,10 @@ export function recurrenceInterval(culture: Culture, days: number): string {
   return `about every ${numberWords(Math.round(days / YEAR_DAYS))} years`;
 }
 
-/** "This figure comes round on the river again about every three decans." */
-export function composeRecurrence(culture: Culture, days: number): string {
-  return FIGURE_BANKS[culture].recurrenceFrame.replace("{interval}", recurrenceInterval(culture, days));
+/** "This figure comes round on the river again about every three decans." Null days: the culture's irregular line. */
+export function composeRecurrence(culture: Culture, days: number | null): string {
+  const bank = FIGURE_BANKS[culture];
+  return days == null ? bank.recurrenceIrregular : bank.recurrenceFrame.replace("{interval}", recurrenceInterval(culture, days));
 }
 
 // --- the window in orb --------------------------------------------------------

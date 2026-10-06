@@ -12,7 +12,7 @@ import { ReceptionNote } from "@/components/chrome/ReceptionNote";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { FigureAnatomy } from "@/components/figure/FigureAnatomy";
 import { dateLongUpper, weekdayUpper } from "@/components/home/format";
-import { composeFigurePage, parseIsoDate } from "@/lib/figureReading";
+import { composeFigurePage, figureMissing, isoDateUtc, parseIsoDate, type FigureMissing } from "@/lib/figureReading";
 import { buildTimeline, type OrbWindow } from "@/lib/recurrence";
 import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
 
@@ -28,19 +28,30 @@ function orbSpan(window: OrbWindow): string {
   return `IN ORB FROM ${fmt(window.start)} TO ${fmt(window.end)}${hours ? " UTC" : ""}`;
 }
 
-const LINKS = (
-  <div className="mt-9 flex flex-wrap justify-center gap-8 font-display text-[11.5px] tracking-[0.2em]">
-    <Link href="/" className="text-bone/65 hover:text-bone">
-      ← THE DAY
-    </Link>
-    <Link href="/week" className="text-bone/65 hover:text-bone">
-      THE WEEK
-    </Link>
-    <Link href="/transits" className="text-accent">
-      ALL TRANSITS →
-    </Link>
-  </div>
-);
+/** The way back: the figure's own day (today's page when the date is today), the week, every transit. */
+function Links({ date }: { date: string }) {
+  const today = isoDateUtc(new Date());
+  return (
+    <div className="mt-9 flex flex-wrap justify-center gap-8 font-display text-[11.5px] tracking-[0.2em]">
+      <Link href={date === today ? "/" : `/?date=${date}`} className="text-bone/65 hover:text-bone">
+        ← THE DAY
+      </Link>
+      <Link href="/week" className="text-bone/65 hover:text-bone">
+        THE WEEK
+      </Link>
+      <Link href="/transits" className="text-accent">
+        ALL TRANSITS →
+      </Link>
+    </div>
+  );
+}
+
+/** Why the page has nothing to read, said plainly. */
+const MISSING: Readonly<Record<FigureMissing, string>> = {
+  malformed: "This address does not name a day and a figure.",
+  slow: "Two slow bodies make a long transit, not a day's figure.",
+  absent: "The sky did not hold this figure that day.",
+};
 
 export interface FigureDetailProps {
   date: string;
@@ -75,11 +86,11 @@ export function FigureDetail({ date, id }: FigureDetailProps) {
   if (!page || !instant) {
     return (
       <div className="mx-auto max-w-[640px] text-center">
-        <NaveHead kicker={`${voice.institution} · THE FIGURE`}>The sky did not hold this figure that day.</NaveHead>
+        <NaveHead kicker={`${voice.institution} · THE FIGURE`}>{MISSING[figureMissing(date, id) ?? "absent"]}</NaveHead>
         <p className="font-mono text-data-xs tracking-label text-dim">
           {id.toUpperCase()} · {date}
         </p>
-        {LINKS}
+        <Links date={date} />
       </div>
     );
   }
@@ -91,7 +102,17 @@ export function FigureDetail({ date, id }: FigureDetailProps) {
     <div className="mx-auto max-w-[640px]">
       <NaveHead
         kicker={`${weekdayUpper(instant)} · ${dateLongUpper(instant)} · ${voice.institution}`}
-        sub={<div className="font-mono text-data-xs tracking-data text-dim">{page.evidence}</div>}
+        sub={
+          <div className="font-mono text-data-xs tracking-data text-dim">
+            {page.evidence}
+            {page.bridge ? (
+              <>
+                <br />
+                <span className="text-accent">{page.bridge}</span>
+              </>
+            ) : null}
+          </div>
+        }
       >
         {page.headline}
       </NaveHead>
@@ -116,7 +137,7 @@ export function FigureDetail({ date, id }: FigureDetailProps) {
         </div>
       ) : null}
 
-      {LINKS}
+      <Links date={date} />
     </div>
   );
 }

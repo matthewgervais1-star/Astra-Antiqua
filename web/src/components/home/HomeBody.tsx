@@ -8,7 +8,7 @@ import { buildHomeBundle, type HomeBundle } from "@/components/home/buildHomeBun
 import { EphemerisRail } from "@/components/home/EphemerisRail";
 import { CenterDecree } from "@/components/home/CenterDecree";
 import { isoDateUtc } from "@/components/home/format";
-import { figureHref } from "@/lib/figureReading";
+import { figureHref, parseIsoDate } from "@/lib/figureReading";
 import { AspectsRail } from "@/components/home/AspectsRail";
 import { CompactSkyTable } from "@/components/home/CompactSkyTable";
 import { TransitTeaser } from "@/components/home/TransitTeaser";
@@ -28,7 +28,10 @@ export function HomeBody() {
 
   useEffect(() => {
     if (!culture) return;
-    const now = new Date();
+    // A figure page links back to its own day as /?date=YYYY-MM-DD; noon UTC
+    // on that date reads the same UTC day the figure did.
+    const asked = parseIsoDate(new URLSearchParams(window.location.search).get("date") ?? "");
+    const now = asked ? new Date(asked.getTime() + 12 * 3_600_000) : new Date();
     const natal: SavedNatal | null = loadSavedNatal();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setBundle(buildHomeBundle(culture, now, natal));

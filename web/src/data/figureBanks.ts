@@ -1,5 +1,5 @@
 import type { Culture, Planet } from "@/data/cultures";
-import type { AspectKind } from "@/data/sampleChart";
+import type { AspectKind, ZodiacSign } from "@/data/sampleChart";
 import type { SlowBody } from "@/data/transitSpine";
 
 /**
@@ -50,17 +50,12 @@ export interface FigureBank {
    */
   shortRelations: Readonly<Record<AspectKind, string>>;
   /**
-   * Move one for a reader with a chart: the natal placement, then a colon,
-   * then one sentence of PLANET_IN_SIGN in the second person. Slots: {deity},
-   * {sign}, {clause}.
+   * Move one for a reader with a chart: the natal placement in the culture's
+   * frame around a PLACEMENT_CLAUSES clause. Rome takes the reference's own
+   * shape, "As {deity} in the {sign}, you ...". Slots: {deity}, {sign},
+   * {clause}.
    */
   natalFrame: string;
-  /**
-   * Rome alone has a second frame: when the clause opens on "you", the
-   * reference's own shape, "As {deity} in the {sign}, you ...". Empty for the
-   * other cultures.
-   */
-  natalFrameYou: string;
   /** Move one with no chart: the transiting god in its sign and the domain it keeps. Slots: {god}, {sign}, {domain}. */
   skyMoveOne: string;
   /** Move one for a long transit to the rising or the midheaven. Slot: {sign}. */
@@ -69,6 +64,11 @@ export interface FigureBank {
   angleDomains: Readonly<Record<"asc" | "mc", string>>;
   /** "This figure ... {interval}." Slot: {interval}, from lib/recurrence.ts. */
   recurrenceFrame: string;
+  /**
+   * For the one pair with no steady return, Mercury with Venus: measured over
+   * forty years, their meetings fall from a few days to most of a year apart.
+   */
+  recurrenceIrregular: string;
   /** The "how this plays out" section title, uppercase. */
   playsOutTitle: string;
   /**
@@ -138,7 +138,6 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       opposition: "must stare across the water at",
     },
     natalFrame: "Your birth set {deity} in the {sign}: {clause}.",
-    natalFrameYou: "",
     skyMoveOne: "{god} is in the {sign}, weighing {domain}.",
     angleMoveOne: {
       asc: "The {sign} stood on the eastern horizon when you were born: it is the face you show at the door.",
@@ -149,6 +148,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       mc: "your rank in the nome",
     },
     recurrenceFrame: "This figure comes round on the river again {interval}.",
+    recurrenceIrregular: "This figure keeps no season on the river: it can come back within a decan or stay away for most of a year.",
     playsOutTitle: "HOW THIS PLAYS OUT ON THE RIVER",
     slowActs: {
       jupiter: "{god} sends the flood a cubit higher, and the granary scribes call for more jars.",
@@ -322,7 +322,6 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       opposition: "will take the opposite side from",
     },
     natalFrame: "{deity} stood in the {sign} when you were born: {clause}.",
-    natalFrameYou: "",
     skyMoveOne: "{god} walks through the {sign} and answers for {domain}.",
     angleMoveOne: {
       asc: "The {sign} was coming up over the hills at your birth, and strangers meet that sign in you first.",
@@ -333,6 +332,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       mc: "your office in the city",
     },
     recurrenceFrame: "The tripod hears this figure again {interval}.",
+    recurrenceIrregular: "The tripod cannot say when this figure comes again: sometimes within days, sometimes not for most of a year.",
     playsOutTitle: "HOW THIS PLAYS OUT AT THE TRIPOD",
     slowActs: {
       jupiter: "{god} nods from Olympus, and the assembly gives you the floor.",
@@ -431,7 +431,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
         { kind: "keep", title: "Pour the third cup to Zeus Soter before the drinking ends.", source: "Plato, Philebus 66d, on the third to the Savior." },
       ],
       saturn: [
-        { kind: "consider", title: "The omphalos at Delphi, the stone Kronos swallowed for his child.", source: "Delphi Archaeological Museum." },
+        { kind: "consider", title: "The stone at Delphi said to be the one Kronos swallowed in place of his child.", source: "Pausanias, Description of Greece 10.24.6." },
         { kind: "read", title: "Kronos, his children and the swallowed stone.", source: "Hesiod, Theogony 453 to 506." },
         { kind: "keep", title: "Keep the Kronia, when masters and slaves ate at one table.", source: "Philochorus, quoted in Macrobius, Saturnalia 1.10.22." },
       ],
@@ -506,7 +506,6 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       opposition: "will bring a claim against",
     },
     natalFrame: "{deity} sat in the {sign} on the day you were named: {clause}.",
-    natalFrameYou: "",
     skyMoveOne: "{god} sits in the {sign} and speaks for {domain} before the council.",
     angleMoveOne: {
       asc: "The {sign} came up over the hills on the day you were named, and the gate knows you by it.",
@@ -517,6 +516,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       mc: "your seat among the elders",
     },
     recurrenceFrame: "This matter comes before the council again {interval}.",
+    recurrenceIrregular: "This matter keeps no calendar before the council: it can return within days or stay away for most of a year.",
     playsOutTitle: "HOW THIS PLAYS OUT IN THE COUNCIL",
     slowActs: {
       jupiter: "{god} thunders from the cloud, and the rain falls on your terraces first.",
@@ -688,7 +688,6 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       opposition: "will bid against",
     },
     natalFrame: "The roll of your birth enters {deity} under the {sign}: {clause}.",
-    natalFrameYou: "",
     skyMoveOne: "{god} trades under the {sign} and keeps the books on {domain}.",
     angleMoveOne: {
       asc: "Your birth roll opens under the {sign} rising, the first line every partner reads.",
@@ -699,6 +698,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       mc: "your standing with the suffetes",
     },
     recurrenceFrame: "This entry falls due again {interval}.",
+    recurrenceIrregular: "This entry has no fixed due date: it can fall again within days or not for most of a year.",
     playsOutTitle: "HOW THIS PLAYS OUT ON THE LEDGER",
     slowActs: {
       jupiter: "{god} opens the temple treasury, and the loans go out at a low rate.",
@@ -868,8 +868,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       trine: "can vote with",
       opposition: "will veto",
     },
-    natalFrame: "The augurs found {deity} in the {sign} at your birth: {clause}.",
-    natalFrameYou: "As {deity} in the {sign}, {clause}.",
+    natalFrame: "As {deity} in the {sign}, {clause}.",
     skyMoveOne: "{god} stands in the {sign}, in charge of {domain}.",
     angleMoveOne: {
       asc: "The {sign} came up at your birth, and it is the face you bring into the forum.",
@@ -880,6 +879,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       mc: "your career in office",
     },
     recurrenceFrame: "The augurs record this figure again {interval}.",
+    recurrenceIrregular: "The augurs cannot set this figure in the calendar: it returns within days or not for most of a year.",
     playsOutTitle: "HOW THIS PLAYS OUT IN THE FORUM",
     slowActs: {
       jupiter: "{god} thunders on the left, and the magistrate takes office under good auspices.",
@@ -914,7 +914,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
           "a quarrel over a dowry",
           "a servant who breaks the good cup",
           "an heir who expects more than his share",
-          "the household gods neglected for a week",
+          "the household gods neglected for eight days",
         ],
       },
       {
@@ -1005,5 +1005,156 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       trine: "The birds on the right are a permission. What you do with it is your own vote.",
       opposition: "A veto stops the motion and leaves the house standing. The vote comes again on another day.",
     },
+  },
+};
+
+/**
+ * Move one's clause for a reader with a chart: one per (body, sign),
+ * universal, because the frame carries the culture. Each is a concrete
+ * second-person clause opening on "you", so it reads after every frame:
+ * "As Iuppiter in the Maiden, you weigh a thing before you bless it, and you
+ * bless little." Authored to replace a cut of the PLANET_IN_SIGN paragraphs,
+ * whose verdicts ("increase is refinement") read as riddles out of context.
+ */
+export const PLACEMENT_CLAUSES: Readonly<Record<Planet, Readonly<Record<ZodiacSign, string>>>> = {
+  sun: {
+    Aries: "you move first and decide on the way",
+    Taurus: "you decide slowly, and then nothing moves you",
+    Gemini: "you find out who you are by talking it through",
+    Cancer: "you are most yourself behind your own door, feeding people",
+    Leo: "you stand where people can see you, and you warm the room",
+    Virgo: "you know yourself by the thing you have just mended",
+    Libra: "you see your own shape best across a table from someone",
+    Scorpio: "you keep the part of yourself that matters out of sight",
+    Sagittarius: "you feel most like yourself on the road, headed somewhere far",
+    Capricorn: "you are proud of what you build and slow to show it",
+    Aquarius: "you stand a little apart from the crowd and watch how it works",
+    Pisces: "you take the shape of whatever room you walk into",
+  },
+  moon: {
+    Aries: "you feel it fast and say it before you have thought",
+    Taurus: "you calm down with good bread and a chair you know",
+    Gemini: "you settle a mood by talking it out with someone",
+    Cancer: "you remember every house you lived in and who was kind there",
+    Leo: "you need someone to see what you feel",
+    Virgo: "you calm yourself by putting the house in order",
+    Libra: "you take your mood from the person across from you",
+    Scorpio: "you feel everything deeply and show little of it",
+    Sagittarius: "you get restless in a small room and want the open road",
+    Capricorn: "you get through a hard day by working through it",
+    Aquarius: "you watch your own moods from a distance before you name them",
+    Pisces: "you soak up the mood of everyone around you",
+  },
+  mercury: {
+    Aries: "you think out loud and speak first",
+    Taurus: "you make up your mind once and keep it made up",
+    Gemini: "you follow three conversations at once and enjoy all of them",
+    Cancer: "you remember what was said by how it made you feel",
+    Leo: "you speak to the whole room and watch its faces as you talk",
+    Virgo: "you spot the wrong number on the page before anyone else",
+    Libra: "you can argue both sides and hate to choose one",
+    Scorpio: "you listen for what people leave unsaid",
+    Sagittarius: "you reach for the big rule and skip the small print",
+    Capricorn: "you trust an idea only once it can carry weight",
+    Aquarius: "you see how the whole thing is wired before you see the parts",
+    Pisces: "you think in pictures and remember how a thing felt more than what it said",
+  },
+  venus: {
+    Aries: "you go after what you want before the wanting cools",
+    Taurus: "you love slowly, and you love what lasts",
+    Gemini: "you fall for a quick mind and a good conversation",
+    Cancer: "you love by feeding people and keeping them close",
+    Leo: "you love generously and like to be seen doing it",
+    Virgo: "you show love by fixing whatever is broken in front of you",
+    Libra: "you want a partner, and you would rather keep the peace than win",
+    Scorpio: "you love all the way or not at all",
+    Sagittarius: "you want someone who shows you somewhere you have never been",
+    Capricorn: "you court slowly and prove your love by staying",
+    Aquarius: "you love a friend first and keep a little distance",
+    Pisces: "you give yourself away and forget to keep some back",
+  },
+  mars: {
+    Aries: "you push straight at the wall to find out where it is",
+    Taurus: "you are slow to start and impossible to stop",
+    Gemini: "you fight with words, and on three fronts at once",
+    Cancer: "you fight hardest when your own people are threatened",
+    Leo: "you fight best with someone watching",
+    Virgo: "you work with care and finish the small parts properly",
+    Libra: "you fight by bargaining, and you hate an open quarrel",
+    Scorpio: "you hold your anger until the right moment and then strike",
+    Sagittarius: "you throw yourself at the far goal and run out of ground",
+    Capricorn: "you work long hours and outlast everyone around you",
+    Aquarius: "you go to war over the rules of the house",
+    Pisces: "you get your way by waiting and by quiet persuasion",
+  },
+  jupiter: {
+    Aries: "you are given more each time you start something new",
+    Taurus: "you grow rich by keeping what you have",
+    Gemini: "you collect friends, languages and books, and they pay you back",
+    Cancer: "you take people in, and the household grows around you",
+    Leo: "you give freely, and more comes back to you",
+    Virgo: "you weigh a thing before you bless it, and you bless little",
+    Libra: "you do better in pairs and prosper through partners",
+    Scorpio: "you gain from what other people give up or leave behind",
+    Sagittarius: "you go far and come home with more than you took",
+    Capricorn: "you build your wealth brick by brick, and it comes late",
+    Aquarius: "you prosper when you join a cause larger than yourself",
+    Pisces: "you give to anyone who asks, and the giving comes back to you",
+  },
+  saturn: {
+    Aries: "you wait before you strike, and the strike lands",
+    Taurus: "you build slowly, and what you build is still yours in twenty years",
+    Gemini: "you finish one sentence before you start the next",
+    Cancer: "you carry a family duty you did not choose",
+    Leo: "you keep working when nobody is clapping",
+    Virgo: "you keep the house in working order and know it will never be perfect",
+    Libra: "you say no to the person you love when no is the answer",
+    Scorpio: "you keep a secret until the keeping costs too much",
+    Sagittarius: "you wait a long time to reach the place you set out for",
+    Capricorn: "you take on heavy work and carry it without complaint",
+    Aquarius: "you hold to the rule and learn where it needs an exception",
+    Pisces: "you draw a line around how much help you give",
+  },
+  uranus: {
+    Aries: "you break with the old way before anyone finishes explaining it",
+    Taurus: "you hold still for years and then change everything at once",
+    Gemini: "you change the subject, and the whole room changes with it",
+    Cancer: "you leave the house you grew up in to build one that fits",
+    Leo: "you walk off the old script in front of everyone",
+    Virgo: "you tear out a whole routine to fix one broken part",
+    Libra: "you break any bargain that asks you to keep quiet",
+    Scorpio: "you bury the pressure until it blows the lid off",
+    Sagittarius: "you leave the creed you were raised in and go to see for yourself",
+    Capricorn: "you climb the ladder and then kick it away",
+    Aquarius: "you break old customs on principle",
+    Pisces: "you slip out of the old cage without a fight",
+  },
+  neptune: {
+    Aries: "you charge at causes bigger than yourself",
+    Taurus: "you make something holy of the things you can hold",
+    Gemini: "you talk in pictures and lose the plain fact on the way",
+    Cancer: "you cannot tell your own feelings from your family's",
+    Leo: "you play a better version of yourself until you believe it",
+    Virgo: "you serve others until you forget to eat",
+    Libra: "you love the person you hope your partner will become",
+    Scorpio: "you go all the way down with the people you love",
+    Sagittarius: "you believe in more than any one temple can hold",
+    Capricorn: "you climb toward a summit hidden in fog",
+    Aquarius: "you dream of a whole city that does not exist yet",
+    Pisces: "you feel every stranger's sorrow as if it were yours",
+  },
+  pluto: {
+    Aries: "you are remade by the fights you could not walk away from",
+    Taurus: "you hold hardest to the things that will be taken from you",
+    Gemini: "you dig with questions until the buried thing comes up",
+    Cancer: "you watch the house you came from torn open to its foundations",
+    Leo: "you lose your pride in public and stand up stronger",
+    Virgo: "you cut away what does not work, one piece at a time",
+    Libra: "you find what you buried in the people you bind yourself to",
+    Scorpio: "you go to the bottom of everything and expect others to follow",
+    Sagittarius: "you watch an old belief burn and keep what comes through the fire",
+    Capricorn: "you see what you built stripped back to bedrock",
+    Aquarius: "you see the gears turning behind what others call natural",
+    Pisces: "you lose things you cannot name and keep what nobody can take",
   },
 };

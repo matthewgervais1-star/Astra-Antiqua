@@ -110,12 +110,16 @@ function formatOrb(orb: number): string {
   return `${d}°${String(m).padStart(2, "0")}′`;
 }
 
+/** The measured orb, "0°19′", or "EXACT" only under one minute of arc. */
+export function orbMeasure(orb: number): string {
+  return orb < ONE_ARCMINUTE ? "EXACT" : formatOrb(orb);
+}
+
 /** "RA △ NUT · 0°19′", the measured orb; "MARS ☍ DIS PATER · EXACT" only under one minute of arc. */
 export function composeEvidence(culture: Culture, f: DayFigure): string {
   const nameA = DEITY_MATRIX[culture][f.a].name.toUpperCase();
   const nameB = DEITY_MATRIX[culture][f.b].name.toUpperCase();
-  const measure = f.orb < ONE_ARCMINUTE ? "EXACT" : formatOrb(f.orb);
-  return `${nameA} ${ASPECT_GLYPH[f.kind]} ${nameB} · ${measure}`;
+  return `${nameA} ${ASPECT_GLYPH[f.kind]} ${nameB} · ${orbMeasure(f.orb)}`;
 }
 
 /**
