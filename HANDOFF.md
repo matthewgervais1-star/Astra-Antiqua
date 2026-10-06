@@ -16,7 +16,8 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
 - FACT (`git log`): branch `claude/reading-anatomy-495257`, stacked on PR #2's head, unpushed,
   holds the second wave. Task 15 (the day page speaks to the reader) is complete after four
   fix rounds, Task 16 (figure page) and Task 17 (dive deeper) after two each; web 98 and
-  Android 78 tests green (reports in the ledger folder). Tasks 11 to 14 in progress.
+  Android 78 tests green (reports in the ledger folder). Tasks 11 to 14 (archive, rule hex,
+  display-xs 18px, Spectral SC) complete. Task 18 (Android sync) in progress.
 - FACT (`docs/superpowers/plans/2026-09-29-planned-work-closeout.md`): Tasks 16 (figure page),
   17 (dive deeper), 11 to 14 (archive, rules, display-xs, Spectral SC) and 18 (Android sync,
   three dispatches) are queued in that order.
