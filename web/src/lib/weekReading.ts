@@ -17,7 +17,7 @@ import {
   utcDayNumber,
 } from "@/lib/decree";
 import { SIGN_PHRASES } from "@/components/horizons/signPhrase";
-import { noonUTCFor, properCase, sameLocalDay, weekdayAbbr } from "@/components/horizons/format";
+import { properCase, sameLocalDay, weekdayAbbr } from "@/components/horizons/format";
 import type { SavedNatal } from "@/lib/savedNatal";
 
 export type WeekTone = "harmony" | "tension" | "quiet";
@@ -118,7 +118,10 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
   let previous: string | null = null;
   for (let i = 0; i < 7; i += 1) {
     const date = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + i);
-    const chart = computeChart(noonUTCFor(date));
+    // 00:00 UTC on the row's calendar date, the instant the day page reads,
+    // so a date shows the same figure on both pages.
+    const instant = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const chart = computeChart(instant);
     const aspects = computeAspects(chart);
 
     // The tightest fast-mover aspect inside the event orb is the day's figure,
@@ -149,7 +152,7 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       // consequence. The week line itself gives no order; the headline often
       // does, and the day page carries the instruction.
       headline = holds ? DECREE_BANKS[culture].holds : composeHeadline(culture, tightest);
-      line = `${composeMeaning(culture, tightest, utcDayNumber(noonUTCFor(date)))} ${composeConsequence(culture, tightest)}`;
+      line = `${composeMeaning(culture, tightest, utcDayNumber(instant))} ${composeConsequence(culture, tightest)}`;
       shorthand = { kind: "aspect", a: tightest.a, aspect: tightest.kind, b: tightest.b, exact };
     } else if (dayIngress) {
       tone = "harmony";

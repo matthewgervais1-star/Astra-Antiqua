@@ -47,7 +47,7 @@ export const DEITY_DOMAINS: Readonly<Record<Culture, Readonly<Record<Planet, str
     saturn: "your elders' rules",
     uranus: "your change of pasture",
     neptune: "your prayers",
-    pluto: "your grain pits",
+    pluto: "your family's land",
   },
   carthage: {
     sun: "your credit in the harbor",

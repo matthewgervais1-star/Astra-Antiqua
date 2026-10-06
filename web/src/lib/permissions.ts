@@ -32,15 +32,19 @@ function column(
   culture: Culture,
   groups: ReadonlyArray<readonly Planet[]>,
   side: "proceed" | "refrain",
+  day: number,
 ): string[] {
   const out: string[] = [];
   const used = new Set<Planet>();
+  // The day turns which of a body's three items comes first, so a figure that
+  // holds from one day to the next does not print the same lists twice.
+  const offset = ((day % 3) + 3) % 3;
   for (const group of groups) {
     const bodies = group.filter((b) => !used.has(b));
     bodies.forEach((b) => used.add(b));
     for (let rank = 0; rank < 3; rank += 1) {
       for (const body of bodies) {
-        const item = PERMISSIONS_REGISTER[culture][body][side][rank];
+        const item = PERMISSIONS_REGISTER[culture][body][side][(rank + offset) % 3];
         if (item && out.length < PER_COLUMN && !out.includes(item)) out.push(item);
       }
     }
@@ -54,20 +58,21 @@ function column(
  * figure, the second figure, then the rest by orb. On a day of favor or union
  * the headline figure's bodies fill the proceed column and the second
  * figure's bodies the refrain column; on a day of trial the two swap. Either
- * column fills to four from the figures after those two.
+ * column fills to four from the figures after those two. `day` is the UTC day
+ * number; it rotates which of each body's three items leads.
  */
-export function dayPermissions(culture: Culture, figures: readonly DayFigure[]): DayPermissions {
+export function dayPermissions(culture: Culture, figures: readonly DayFigure[], day = 0): DayPermissions {
   const [top, second, ...rest] = figures;
   if (!top) {
-    return { proceed: column(culture, [QUIET_PROCEED], "proceed"), refrain: column(culture, [QUIET_REFRAIN], "refrain") };
+    return { proceed: column(culture, [QUIET_PROCEED], "proceed", day), refrain: column(culture, [QUIET_REFRAIN], "refrain", day) };
   }
   const tail = rest.map((f) => [f.a, f.b] as const);
   const lead = [[top.a, top.b] as const, ...tail];
   const follow = [...(second ? [[second.a, second.b] as const] : []), ...tail];
   const trial = toneOf(top.kind) === "tension";
   return {
-    proceed: column(culture, trial ? follow : lead, "proceed"),
-    refrain: column(culture, trial ? lead : follow, "refrain"),
+    proceed: column(culture, trial ? follow : lead, "proceed", day),
+    refrain: column(culture, trial ? lead : follow, "refrain", day),
   };
 }
 

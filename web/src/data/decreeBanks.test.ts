@@ -65,23 +65,56 @@ test("every headline is one complete sentence, and few lean on 'so' or 'because'
   }
 });
 
-test("every sentence after the evidence line takes the figure", () => {
+test("each bank carries the slots its keys call for, and only those", () => {
   for (const culture of CULTURES) {
     const bank = DECREE_BANKS[culture];
-    // The consequence is keyed by the partner body; the image and the
-    // instruction are keyed by the headline body and name both gods.
+    // The image names the headline god; the consequence is keyed by the
+    // partner body and names no god.
     for (const [where, line] of walk("images", bank.images)) {
       assert.match(line, /\{god\}/, `${culture}.${where} names no headline god`);
-      assert.match(line, /\{partner\}/, `${culture}.${where} names no partner`);
-    }
-    for (const [where, line] of walk("instructions", bank.instructions)) {
-      assert.match(line, /\{god\}/, `${culture}.${where} names no headline god`);
-      assert.match(line, /\{partner\}/, `${culture}.${where} names no partner`);
+      assert.doesNotMatch(line, /\{partner\}/, `${culture}.${where} names the partner`);
     }
     for (const [where, line] of walk("consequences", bank.consequences)) {
-      assert.doesNotMatch(line, /\{/, `${culture}.${where} carries a slot the composer does not fill`);
+      assert.doesNotMatch(line, /\{/, `${culture}.${where} carries a slot`);
+    }
+    // At most two kinds close the instruction on a rite to the god; the rest
+    // end on the act itself. No instruction names the partner.
+    const riteKinds = Object.entries(bank.instructions).filter(([, byBody]) =>
+      Object.values(byBody).some((line) => line.includes("{god}")),
+    );
+    assert.ok(riteKinds.length <= 2, `${culture} closes ${riteKinds.length} kinds on a rite`);
+    for (const [where, line] of walk("instructions", bank.instructions)) {
+      assert.doesNotMatch(line, /\{partner\}/, `${culture}.${where} names the partner`);
+    }
+    for (const opener of bank.secondFigure) assert.match(opener, /\{god\}.*\{partner\}/, culture);
+    for (const opener of bank.secondFigurePlain) assert.doesNotMatch(opener, /\{/, culture);
+  }
+});
+
+/** Words that may repeat across cultures' headlines in any run of three. */
+const STOP_WORDS = new Set(["the", "a", "your", "you", "and", "of", "to", "in", "on", "for", "with", "before", "today"]);
+
+test("no two cultures' headlines share a run of three words", () => {
+  const owner = new Map<string, Culture>();
+  for (const culture of CULTURES) {
+    for (const [where, headline] of walk("headlines", DECREE_BANKS[culture].headlines)) {
+      const words = headline.toLowerCase().replace(/[^a-z' ]/g, "").split(/\s+/).filter(Boolean);
+      for (let i = 0; i + 3 <= words.length; i += 1) {
+        const run = words.slice(i, i + 3);
+        if (run.every((w) => STOP_WORDS.has(w))) continue;
+        const key = run.join(" ");
+        const prior = owner.get(key);
+        assert.ok(prior === undefined || prior === culture, `"${key}" is in ${prior} and ${culture}${where}`);
+        owner.set(key, culture);
+      }
     }
   }
+});
+
+test("headlines keep their tics in check", () => {
+  const all = CULTURES.flatMap((culture) => [...walk("", DECREE_BANKS[culture].headlines)].map(([, line]) => line));
+  assert.ok(all.filter((h) => /\btonight\b/i.test(h)).length <= 3, "too many headlines say tonight");
+  assert.ok(all.filter((h) => /, and you can /.test(h)).length <= 1, 'too many headlines lean on ", and you can"');
 });
 
 test("every domain is a lowercase noun phrase that can open a clause", () => {

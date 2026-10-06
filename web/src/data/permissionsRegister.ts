@@ -2,12 +2,19 @@ import type { Culture, Planet } from "@/data/cultures";
 
 /**
  * The Do and Don't items, per culture and body: three to bring forward and
- * three to hold back for each of the ten bodies, in the culture's own world.
- * Every item is a noun phrase of two to four words, so a column reads as a
- * list of things ("Fresh bread", "Short letters"), never a mix of things and
- * orders. lib/permissions.ts picks from the bodies of the day's figures, so
- * the lists change with the sky and say why: the bodies that chose them are
- * the bodies in the evidence line.
+ * three to hold back for each of the ten bodies. Every item is a noun phrase
+ * of two to four words that a reader can act on today with no footnote, and
+ * that fits the culture's column verbs (cultureVoice.permissionPair):
+ *
+ *   Egypt     OFFER / WITHHOLD      things to give, or to keep from giving
+ *   Greece    ASK / DO NOT ASK      things to ask, or to ask for
+ *   Canaan    BRING / HOLD BACK     things to bring, or to leave at home
+ *   Carthage  PAY / DEFER           things to pay, or to put off paying
+ *   Rome      PROCEED / REFRAIN     things to do, or to leave undone
+ *
+ * lib/permissions.ts picks from the bodies of the day's figures, so the lists
+ * change with the sky, and the bodies that chose them are the bodies the
+ * decree names.
  */
 export interface BodyPermissions {
   proceed: readonly [string, string, string];
@@ -16,63 +23,63 @@ export interface BodyPermissions {
 
 export const PERMISSIONS_REGISTER: Readonly<Record<Culture, Readonly<Record<Planet, BodyPermissions>>>> = {
   egypt: {
-    sun: { proceed: ["Early starts", "Mud-brick repairs", "Honest labor"], refrain: ["Late starts", "Idle boasting", "Unfinished walls"] },
-    moon: { proceed: ["Fresh bread", "Long sleep", "Family suppers"], refrain: ["Night quarrels", "Cold hearths", "Skipped meals"] },
-    mercury: { proceed: ["Short letters", "Clean papyrus", "Plain speech"], refrain: ["Market gossip", "Smudged ink", "Long excuses"] },
-    venus: { proceed: ["Shared beer", "Fresh linen", "Small gifts"], refrain: ["Jealous looks", "Haggling with lovers", "Cheap perfume"] },
-    mars: { proceed: ["Hard labor", "Canal digging", "Fair contests"], refrain: ["Hot words", "Raised fists", "Old grudges"] },
-    jupiter: { proceed: ["Open tables", "Temple offerings", "Full measures"], refrain: ["Stingy portions", "Short weights", "Empty promises"] },
-    saturn: { proceed: ["Paid debts", "Straight furrows", "Field markers kept"], refrain: ["Easy shortcuts", "Moved boundary stones", "Overdue taxes"] },
-    uranus: { proceed: ["New routes", "Changed plans", "Fresh starts"], refrain: ["Old ruts", "Stubborn habits", "Locked gates"] },
-    neptune: { proceed: ["River walks", "Quiet prayer", "Remembered dreams"], refrain: ["Too much beer", "Muddy water", "Idle daydreams"] },
-    pluto: { proceed: ["Cleared cellars", "Old stores", "Kept secrets"], refrain: ["Buried grudges", "Hoarded grain", "Tomb talk"] },
+    sun: { proceed: ["Your morning hours", "A day's honest labor", "Help with the harvest"], refrain: ["Empty boasts", "Promises you cannot keep", "Unpaid hours to strangers"] },
+    moon: { proceed: ["Bread to a neighbor", "A meal at home", "A bed for travelers"], refrain: ["Sharp words at supper", "Complaints at the table", "Your sleep to worry"] },
+    mercury: { proceed: ["A short letter", "A plain answer", "Directions to a stranger"], refrain: ["Gossip from the market", "Your seal unread", "Half the story"] },
+    venus: { proceed: ["A small gift", "Fresh linen for guests", "Beer to a friend"], refrain: ["Jealous remarks", "Gifts you cannot afford", "Easy flattery"] },
+    mars: { proceed: ["Help with heavy lifting", "Strength to a neighbor", "A fair contest"], refrain: ["Hot words", "Your fists", "An old grudge"] },
+    jupiter: { proceed: ["A seat at table", "Temple offerings", "A full measure"], refrain: ["Short weight", "Loans to gamblers", "Empty promises"] },
+    saturn: { proceed: ["What you owe", "Payment on time", "Your share of work"], refrain: ["Excuses for late work", "Shortcuts on the job", "Another delay"] },
+    uranus: { proceed: ["A new idea", "Help with a move", "A second chance"], refrain: ["Your old complaints", "Stubborn refusals", "The same old answer"] },
+    neptune: { proceed: ["A prayer for someone", "Water to the thirsty", "Patience with a dreamer"], refrain: ["A third beer", "Promises made while tired", "Trust to a stranger"] },
+    pluto: { proceed: ["Grain from old stores", "Respect to the dead", "Silence about a secret"], refrain: ["Old grievances", "Your family's secrets", "Talk of the dead"] },
   },
   greece: {
-    sun: { proceed: ["Public speaking", "Morning exercise", "Bright courtyards"], refrain: ["Vain display", "Showing off", "Idle mornings"] },
-    moon: { proceed: ["Home cooking", "Night walks", "Lamplit talk"], refrain: ["Sleepless nights", "Family feuds", "Empty larders"] },
-    mercury: { proceed: ["Clear questions", "Quick errands", "Fair trades"], refrain: ["Agora rumors", "Double meanings", "Crossed messages"] },
-    venus: { proceed: ["Good wine", "Fresh flowers", "Light flirting"], refrain: ["Envious glances", "Golden apples", "Lavish gifts"] },
-    mars: { proceed: ["The gymnasium", "Wrestling practice", "Honest rivalry"], refrain: ["Street brawls", "Drawn spears", "Long sulks"] },
-    jupiter: { proceed: ["Open hospitality", "Shared feasts", "Big questions"], refrain: ["Proud boasts", "Broken oaths", "Greedy hands"] },
-    saturn: { proceed: ["Harvest work", "Old debts paid", "Patient waiting"], refrain: ["Hasty plans", "Unripe fruit", "New debt"] },
-    uranus: { proceed: ["New ideas", "Foreign guests", "Clever inventions"], refrain: ["Tired routine", "Fixed opinions", "Old quarrels"] },
-    neptune: { proceed: ["Sea air", "Dreams written down", "Libations poured"], refrain: ["Heavy drinking", "Sea fog", "Wishful thinking"] },
-    pluto: { proceed: ["Buried silver", "Ancestor rites", "Deep cellars"], refrain: ["Old secrets", "Hoarded coin", "Underworld bargains"] },
+    sun: { proceed: ["For a public hearing", "For credit you earned", "For the floor"], refrain: ["For compliments", "Who is watching", "For the best seat"] },
+    moon: { proceed: ["For a quiet evening", "How your family is", "For a home-cooked meal"], refrain: ["Why nobody called", "Old family questions", "For an apology tonight"] },
+    mercury: { proceed: ["For directions", "For written terms", "For a clear answer"], refrain: ["For gossip", "The same question twice", "For a rumor's source"] },
+    venus: { proceed: ["For a dance", "For a second meeting", "For a kiss"], refrain: ["Whether they still care", "For a costly gift", "About their old flames"] },
+    mars: { proceed: ["For a training partner", "For a fair match", "For help lifting"], refrain: ["For a fight", "For revenge", "Who started it"] },
+    jupiter: { proceed: ["For a favor", "For a feast invitation", "For an elder's advice"], refrain: ["For an extra share", "For special treatment", "For an oath"] },
+    saturn: { proceed: ["For more time", "For the full bill", "For an honest deadline"], refrain: ["For a shortcut", "To skip the work", "For an early harvest"] },
+    uranus: { proceed: ["A stranger's opinion", "For a new task", "How it could change"], refrain: ["For a guarantee", "For nothing to change", "For the usual answer"] },
+    neptune: { proceed: ["What your dream meant", "For a quiet hour", "For a second opinion"], refrain: ["For another cup", "For a sign", "What the omens promise"] },
+    pluto: { proceed: ["What you are owed", "About your inheritance", "For the old story"], refrain: ["About the dead's money", "For someone's secrets", "What someone buried"] },
   },
   canaan: {
-    sun: { proceed: ["Field work", "Daylight bargains", "Honest weights"], refrain: ["Lazy mornings", "Sunburned tempers", "Unfinished rows"] },
-    moon: { proceed: ["Kin dinners", "Bride gifts", "New-moon feasts"], refrain: ["Kin quarrels", "Broken betrothals", "Cold suppers"] },
-    mercury: { proceed: ["Careful handiwork", "New tools", "Tight joints"], refrain: ["Shoddy work", "Blunt blades", "Rushed jobs"] },
-    venus: { proceed: ["Spoken vows", "Vineyard walks", "Love songs"], refrain: ["Broken vows", "Jealous talk", "Bride-price haggling"] },
-    mars: { proceed: ["Threshing work", "The hunt", "Honest sweat"], refrain: ["Blood feuds", "Spreading fevers", "Drawn bows"] },
-    jupiter: { proceed: ["Rain prayers", "Full granaries", "Feast days"], refrain: ["Hoarded oil", "Wasted water", "Thunderous tempers"] },
-    saturn: { proceed: ["Elders' counsel", "Kept customs", "Slow decisions"], refrain: ["Open defiance", "Broken customs", "Snap judgments"] },
-    uranus: { proceed: ["New pastures", "Fresh wells", "Bold moves"], refrain: ["Old habits", "Stuck carts", "Worn paths"] },
-    neptune: { proceed: ["Plain prayers", "Sea fishing", "Quiet nights"], refrain: ["Night fears", "Rough seas", "Strong wine"] },
-    pluto: { proceed: ["Mourning rites", "Sealed grain pits", "Ancestor graves"], refrain: ["Grief kept in", "Old curses", "Bargains with death"] },
+    sun: { proceed: ["Your best work", "A neighbor's tools back", "Water for the harvesters"], refrain: ["Unfinished work", "Boasts to the gate", "Your temper to work"] },
+    moon: { proceed: ["Bread to your kin", "A wedding gift", "Lamp oil home"], refrain: ["Old family quarrels", "Complaints to the table", "Bad news at supper"] },
+    mercury: { proceed: ["Your own tools", "A finished piece", "A fair measure"], refrain: ["Shoddy work", "A blunt blade", "Rushed repairs"] },
+    venus: { proceed: ["A spoken vow", "Flowers from the vineyard", "A love song"], refrain: ["A broken promise", "Jealous talk", "Haggling over a dowry"] },
+    mars: { proceed: ["Your full strength", "A strong back", "Sweat to the threshing"], refrain: ["A drawn bow", "Your hot temper", "A blood feud"] },
+    jupiter: { proceed: ["First fruits", "A full oil jar", "Prayers for rain"], refrain: ["Greed to the table", "Oil you have hoarded", "Wasted water"] },
+    saturn: { proceed: ["Questions to the elders", "Respect for custom", "Patience to the council"], refrain: ["Open defiance", "Quick judgments", "A broken custom"] },
+    uranus: { proceed: ["Plans for new pasture", "Well-digging tools", "A bold proposal"], refrain: ["Old habits", "Stale bread", "The same tired complaint"] },
+    neptune: { proceed: ["A plain prayer", "Fish from the sea", "A calm voice"], refrain: ["Night fears", "Strong wine", "Wild rumors"] },
+    pluto: { proceed: ["Your grief out loud", "Offerings for the dead", "Last year's grain"], refrain: ["Old curses", "Talk of death", "A funeral grudge"] },
   },
   carthage: {
-    sun: { proceed: ["Good credit", "Public contracts", "Honest scales"], refrain: ["Bad debts", "Loud boasting", "Unsigned deals"] },
-    moon: { proceed: ["Household budgets", "Family meals", "Lamp oil"], refrain: ["Household overspending", "House quarrels", "Empty jars"] },
-    mercury: { proceed: ["Written contracts", "Fast ships", "Clear manifests"], refrain: ["Handshake deals", "Fine print", "Smuggled goods"] },
-    venus: { proceed: ["Purple cloth", "Fine dinners", "Generous gifts"], refrain: ["Small bribes", "Impulse buys", "Paid flattery"] },
-    mars: { proceed: ["Bold ventures", "Hard bargains", "Long voyages"], refrain: ["Price wars", "Reckless bets", "Grudge deals"] },
-    jupiter: { proceed: ["Shared profits", "Temple tithes", "Big cargoes"], refrain: ["Greedy margins", "Dodged tariffs", "Overloaded holds"] },
-    saturn: { proceed: ["Paid dues", "Balanced books", "Long-term savings"], refrain: ["Missed payments", "Cooked books", "Fresh loans"] },
-    uranus: { proceed: ["Untried routes", "Foreign markets", "Fresh partners"], refrain: ["Stale contracts", "Worn sea lanes", "Rigid terms"] },
-    neptune: { proceed: ["Calm seas", "Insured cargo", "Night sailing"], refrain: ["Storm sailing", "Vague figures", "Wine at the table"] },
-    pluto: { proceed: ["Inheritance claims", "Old ledgers", "Deep storage"], refrain: ["Hidden debts", "Will disputes", "Buried losses"] },
+    sun: { proceed: ["Your harbor dues", "Wages on time", "The scribe's fee"], refrain: ["Fees for show", "Gifts to win favor", "Payment before delivery"] },
+    moon: { proceed: ["The household bills", "The rent", "The market account"], refrain: ["New furniture", "A bigger house", "Household luxuries"] },
+    mercury: { proceed: ["The contract deposit", "The courier", "The clerk's fee"], refrain: ["Payment on a handshake", "Unread contracts", "Advance payments"] },
+    venus: { proceed: ["A gift for family", "Dinner for two", "A fair dowry"], refrain: ["Bribes of any size", "Impulse buys", "Paid flattery"] },
+    mars: { proceed: ["The crew's shares", "Your venture stake", "Repairs to the hull"], refrain: ["Price wars", "Wagers on a race", "Damages before a ruling"] },
+    jupiter: { proceed: ["Temple tithes", "Your partner's cut", "A fair profit share"], refrain: ["Inflated commissions", "Bribes to officials", "Loans to friends"] },
+    saturn: { proceed: ["Old debts first", "Your fixed dues", "The tax collector"], refrain: ["New loans", "Optional fees", "Interest you can avoid"] },
+    uranus: { proceed: ["A new partner's stake", "Scouting a new route", "A trial cargo"], refrain: ["Renewing a stale contract", "Old route fees", "Penalties you can contest"] },
+    neptune: { proceed: ["Insurance on the cargo", "The pilot", "The harbor watch"], refrain: ["Storm-season sailings", "Vague invoices", "Wine for the table"] },
+    pluto: { proceed: ["Inherited debts", "Funeral costs", "The family's old accounts"], refrain: ["Disputed claims", "Hidden charges", "Contested will payments"] },
   },
   rome: {
-    sun: { proceed: ["Public office", "Morning calls", "Clean togas"], refrain: ["Boasting at dinner", "Late arrivals", "Bad company"] },
-    moon: { proceed: ["Atrium suppers", "Household gods", "Early nights"], refrain: ["Domestic rows", "Neglected lares", "Late revels"] },
-    mercury: { proceed: ["Brief letters", "Fair deals", "Good couriers"], refrain: ["Forged seals", "Long speeches", "Forum hearsay"] },
-    venus: { proceed: ["Rose garlands", "Dinner parties", "Proper courtship"], refrain: ["Public scandal", "Rival suitors", "Lavish banquets"] },
-    mars: { proceed: ["Daily drill", "Field campaigns", "Camp discipline"], refrain: ["Mutinous talk", "Reckless charges", "Street fights"] },
-    jupiter: { proceed: ["A patron's favor", "Good omens", "Public games"], refrain: ["Bribed votes", "Bad omens", "Overreaching claims"] },
-    saturn: { proceed: ["Steady savings", "Tax receipts", "Old laws"], refrain: ["Unpaid debts", "New taxes", "Extravagant dinners"] },
-    uranus: { proceed: ["Needed reforms", "New roads", "Fresh faces"], refrain: ["Old factions", "Rigid orders", "Stale customs"] },
-    neptune: { proceed: ["Afternoons at the baths", "Sea voyages", "Rest days"], refrain: ["Too much wine", "Wild rumors", "Idle festivals"] },
-    pluto: { proceed: ["Family tombs", "Settled estates", "Old alliances"], refrain: ["Contested wills", "Old feuds", "Secret deals"] },
+    sun: { proceed: ["Speaking in public", "Morning calls", "Taking credit honestly"], refrain: ["Boasting at dinner", "Arriving late", "Bad company"] },
+    moon: { proceed: ["Supper at home", "Tending the household shrine", "Early nights"], refrain: ["Domestic rows", "Late revels", "Neglecting home"] },
+    mercury: { proceed: ["Brief letters", "Fair bargains", "Reliable couriers"], refrain: ["Signing unread papers", "Long speeches", "Repeating hearsay"] },
+    venus: { proceed: ["Garlands for the table", "Dinner parties", "Courting properly"], refrain: ["Public scandal", "Rivalry over a suitor", "Lavish banquets"] },
+    mars: { proceed: ["Daily drill", "Physical training", "Camp discipline"], refrain: ["Mutinous talk", "Reckless charges", "Street fights"] },
+    jupiter: { proceed: ["Asking a patron's favor", "Attending the games", "Generous hosting"], refrain: ["Buying votes", "Overreaching claims", "Showing off wealth"] },
+    saturn: { proceed: ["Saving money", "Paying taxes on time", "Keeping old promises"], refrain: ["Running up debts", "New spending", "Extravagant dinners"] },
+    uranus: { proceed: ["Needed reforms", "Building new roads", "Meeting new people"], refrain: ["Factional feuds", "Rigid orders", "Refusing change"] },
+    neptune: { proceed: ["Afternoons at the baths", "A sea voyage", "Rest days"], refrain: ["Too much wine", "Spreading rumors", "Idle festivals"] },
+    pluto: { proceed: ["Visiting family tombs", "Settling estates", "Renewing old alliances"], refrain: ["Contesting wills", "Old family feuds", "Secret deals"] },
   },
 };

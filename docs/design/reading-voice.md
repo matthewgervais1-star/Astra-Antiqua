@@ -80,17 +80,23 @@ composition speaks to the reader. The shape, from
    friend, with a noun from the culture's own world: "Start the heavy thing
    while the light holds." Keyed by culture, aspect kind and the headline body
    (the fast body of the figure, the faster when both are). 125 lines, no two
-   alike, and none shares a clause with another culture's.
-2. **Evidence line**, in mono: the two gods, the glyph, the orb or EXACT
-   (`RA △ NUT · 0°19′`). The sky's facts sit here, under the headline, so the
+   alike, and no run of three words (other than stop words such as "the",
+   "your", "and") appears in two cultures' headlines; `decreeBanks.test.ts`
+   checks it.
+2. **Evidence line**, in mono: the two gods, the glyph, and the orb, or EXACT
+   under half a degree (`RA ⚹ AMUN · 1°19′`, `MARS ☍ DIS PATER · EXACT`). Half a
+   degree is the one exact threshold for the evidence line, the exact tail and
+   the week's flag. The sky's facts sit here, under the headline, so the
    prose does not have to recite them.
 3. **One paragraph of five sentences**: the meaning ("your day's work and your
    plans for the new season float on the same current", two plain domains and
    a relation, with one of the culture's exact tails under half a degree);
    the consequence, keyed by the kind and the partner body; the institution's
-   image and, last, the instruction, each keyed by the kind and the headline
-   body and naming both gods; and between them the second figure in one
-   sentence, opened by one of three phrases.
+   image, keyed by the kind and the headline body and naming the headline god;
+   the second figure in one sentence, opened by one of three phrases; and,
+   last, the instruction, keyed by the kind and the headline body and written
+   for that body's domain. Two kinds per culture close the instruction on a
+   rite to the god; the other three end on the act itself.
 
 The banks live in `data/decreeBanks.ts` and `data/deityDomains.ts`. A domain is
 plain second person ("your letters", "your war chest"), never a metonym the
@@ -105,17 +111,30 @@ the sky changes figure, no sentence returns within seven days. When the same
 figure holds for days, the headline holds with it, because the sky did; the
 paragraph rotates its openers and tails so two days never print alike. The
 relation, the exact tail and the second-figure opener each come in three
-variants chosen by the UTC day number, and the opener names the headline
-figure's two gods, so two different figures never print the same second
-sentence. One sentence falls short of the rule: the consequence is keyed by the
-kind and the partner body and names no god, so two figures that share both
-(Sun conjunct Mars, then Venus conjunct Mars) print it alike within the week.
+variants chosen by the UTC day number. The opener names the headline figure's
+two gods, so two different figures never print the same second sentence,
+unless the two figures share a god; then the opener names no god at all.
+
+The rule has exceptions, and they follow the keys. The meaning sentence names
+both domains, so it never returns under a new figure. The other sentences can:
+
+- The **headline**, the **image** and the **instruction** are keyed by the
+  kind and the headline body. Two figures with the same kind and headline body
+  (Moon square Saturn, then Moon square Pluto four days later) print the same
+  three lines within the week.
+- The **consequence** is keyed by the kind and the partner body. Two figures
+  that share both (Sun conjunct Mars, then Venus conjunct Mars) print it alike.
+- The **second-figure sentence** returns when the same second figure falls on
+  the same day variant under a headline figure that shares one of its gods.
+
+`decree.test.ts` checks that every return within seven days has one of these
+causes, and no other.
 
 **What asks.** The day page asks more than once, and each ask is earned by the
 sky. The headline is an order more often than not. The paragraph ends on one
 concrete instruction, because a page that says what the day means and not what
-to do with it reads as a riddle. The Do and Don't lists name things to bring and
-things to hold back. The votive asks once more. The week asks only in its
+to do with it reads as a riddle. The Do and Don't lists name things to do, give, ask, bring or
+pay, and things to hold back, each in the culture's own pair of verbs. The votive asks once more. The week asks only in its
 headlines; the line under each headline (the meaning and the consequence) and
 the ingress lines never order. A week row whose figure is the row above's
 prints the culture's holds line ("The auspices stand as they stood.") in place
@@ -130,7 +149,9 @@ The Do and Don't lists (the culture's permission pair) show for every reader.
 They come from the bodies of the day's figures (`data/permissionsRegister.ts`,
 three of each per body, two to four words): on a day of favor the headline
 figure's bodies fill the first column and the second figure's the second; on a
-day of trial the two swap.
+day of trial the two swap. The UTC day turns which of a body's three items
+leads, so a figure that holds from one day to the next does not print the same
+lists twice. Every item fits its column verb and needs no footnote.
 
 ## The bar, stated in our own prose
 

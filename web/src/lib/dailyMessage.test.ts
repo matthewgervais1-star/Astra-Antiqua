@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { composeDailyMessage } from "@/lib/dailyMessage";
 import { QUIET_LINE } from "@/data/decreeBanks";
-import { DEITY_MATRIX } from "@/data/deities";
+import { DEITY_DOMAINS } from "@/data/deityDomains";
 import type { Planet } from "@/data/cultures";
 import type { Longitude } from "@/data/sampleChart";
 
@@ -25,14 +25,14 @@ test("a quiet sky yields the culture's quiet line and nothing invented", () => {
   assert.equal(m.tone, "quiet");
 });
 
-test("a daily message names both gods of the headline figure", () => {
+test("a daily message names both domains of the headline figure", () => {
   const m = composeDailyMessage("rome", SUN_SEXTILE_MARS);
-  assert.match(m.body, new RegExp(DEITY_MATRIX.rome.sun.name));
-  assert.match(m.body, new RegExp(DEITY_MATRIX.rome.mars.name));
+  assert.match(m.body, new RegExp(DEITY_DOMAINS.rome.sun, "i"));
+  assert.match(m.body, new RegExp(DEITY_DOMAINS.rome.mars, "i"));
 });
 
 test("a daily message is three sentences and carries only the headline figure", () => {
   const m = composeDailyMessage("greece", SUN_SEXTILE_MARS);
   assert.equal(sentences(m.body).length, 3, m.body);
-  assert.doesNotMatch(m.body, /No other shrine|At a lesser shrine/, "the second figure belongs to the day page, not the message");
+  assert.doesNotMatch(m.body, /No other shrine|At a lesser shrine|Down the hill from|In the agora below/, "the second figure belongs to the day page, not the message");
 });

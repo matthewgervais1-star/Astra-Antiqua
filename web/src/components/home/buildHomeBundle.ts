@@ -19,7 +19,7 @@ import {
 } from "@/data/sampleChart";
 import { findRetrogradeStations, findYearIngresses, SLOW_BODIES } from "@/lib/yearForecast";
 import { computeTransitSpans, type TransitSpan } from "@/lib/transitSpans";
-import { composeDayPage, type DayDecree } from "@/lib/decree";
+import { composeDayPage, utcDayNumber, type DayDecree } from "@/lib/decree";
 import { DECREE_BANKS } from "@/data/decreeBanks";
 import { toneOf, type Tone } from "@/lib/tone";
 import { dayPermissions, composeDayVotive, type DayPermissions } from "@/lib/permissions";
@@ -303,7 +303,7 @@ export function buildHomeBundle(culture: Culture, now: Date, natal: SavedNatal |
   const top = reading.figures[0];
   const dayTone: Tone = top ? toneOf(top.kind) : "harmony";
   const votive = composeDayVotive(culture, dayTone, now);
-  const permissions = dayPermissions(culture, reading.figures);
+  const permissions = dayPermissions(culture, reading.figures, utcDayNumber(now));
   const pressureGroups = natal ? dayPressure(natal, todayChart, culture) : null;
 
   return {

@@ -43,14 +43,11 @@ export const FAST_ORDER: readonly FastBody[] = ["moon", "sun", "mercury", "venus
 const FAST_BODIES: ReadonlySet<Planet> = new Set(FAST_ORDER);
 
 /**
- * Under half a degree a figure is exact: the meaning sentence carries the
- * culture's exact tail, and the week marks the day EXACT. One threshold for
- * every surface that says "exact".
+ * Under half a degree a figure is exact: the evidence line prints EXACT, the
+ * meaning sentence carries the culture's exact tail, and the week marks the
+ * day EXACT. One threshold for every surface that says "exact".
  */
 export const EXACT_ORB = 0.5;
-
-/** Below this orb the evidence line prints EXACT instead of the orb. */
-const EXACT_EVIDENCE_ORB = 0.1;
 
 const DAY_MS = 86_400_000;
 
@@ -113,7 +110,7 @@ function formatOrb(orb: number): string {
 export function composeEvidence(culture: Culture, f: DayFigure): string {
   const nameA = DEITY_MATRIX[culture][f.a].name.toUpperCase();
   const nameB = DEITY_MATRIX[culture][f.b].name.toUpperCase();
-  const measure = f.orb < EXACT_EVIDENCE_ORB ? "EXACT" : formatOrb(f.orb);
+  const measure = f.orb < EXACT_ORB ? "EXACT" : formatOrb(f.orb);
   return `${nameA} ${ASPECT_GLYPH[f.kind]} ${nameB} · ${measure}`;
 }
 
@@ -144,7 +141,7 @@ function godSlots(culture: Culture, f: DayFigure): Readonly<Record<string, strin
   return { god: DEITY_MATRIX[culture][body].name, partner: DEITY_MATRIX[culture][partner].name };
 }
 
-/** Sentence (c): the institution's image, naming both gods. */
+/** Sentence (c): the institution's image, naming the headline god. */
 function composeImage(culture: Culture, f: DayFigure): string {
   return fill(DECREE_BANKS[culture].images[f.kind][headlineBody(f.a, f.b).body], godSlots(culture, f));
 }
@@ -154,10 +151,20 @@ function composeInstruction(culture: Culture, f: DayFigure): string {
   return fill(DECREE_BANKS[culture].instructions[f.kind][headlineBody(f.a, f.b).body], godSlots(culture, f));
 }
 
-/** Sentence (d): the second figure, opened from the headline figure's gods. */
+/**
+ * Sentence (d): the second figure. Its opener names the headline figure's two
+ * gods, unless the two figures share a god: then the plain opener, so no god
+ * is named twice in one sentence.
+ */
 function composeSecond(culture: Culture, top: DayFigure, f: DayFigure, day: number): string {
   const names = DEITY_MATRIX[culture];
-  const opener = fill(DECREE_BANKS[culture].secondFigure[variant(day)], godSlots(culture, top));
+  // Compared by name: Carthage gives Jupiter and Saturn one god.
+  const headlineGods = new Set([names[top.a].name, names[top.b].name]);
+  const shared = headlineGods.has(names[f.a].name) || headlineGods.has(names[f.b].name);
+  const bank = DECREE_BANKS[culture];
+  const opener = shared
+    ? bank.secondFigurePlain[variant(day)]
+    : fill(bank.secondFigure[variant(day)], godSlots(culture, top));
   return `${opener} ${names[f.a].name} ${ASPECT_VERBS[culture][f.kind]} ${names[f.b].name}: ${meaningClause(culture, f, day)}.`;
 }
 
