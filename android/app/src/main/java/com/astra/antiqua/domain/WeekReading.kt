@@ -6,8 +6,6 @@ import com.astra.antiqua.model.Planet
 import java.util.Calendar
 import java.util.Date
 import java.util.TimeZone
-import kotlin.math.abs
-import kotlin.math.floor
 
 /** How a day reads: the tone the design system colours a row by. */
 enum class DayTone { HARMONY, TENSION, QUIET }
@@ -23,7 +21,8 @@ data class WeekDay(
     val date: Date,
     val label: String,
     val isToday: Boolean,
-    /** The day page's headline for the day's figure, or null on an ingress day. */
+    /** The day page's headline for the day's figure, or null on an ingress day
+     *  and on a day whose figure's headline an earlier row already shows. */
     val headline: String?,
     val line: String,
     val tone: DayTone,
@@ -37,15 +36,16 @@ data class WeekDay(
  * web/src/lib/weekReading.ts.
  *
  * Each day's headline is the tightest aspect involving a fast mover, inside
- * 1.2 degrees, marked exact under 0.35. A pair that has already headlined
- * earlier in the week only speaks again when it is exact that day, so a slow
- * contact does not fill the whole strip. Where nothing is in orb the day says
+ * 1.2 degrees, marked exact under DayDecreeComposer.EXACT_ORB. A pair that has
+ * already headlined earlier in the week only speaks again when it is exact
+ * that day, so a slow contact does not fill the whole strip, and a figure whose
+ * headline an earlier row shows gives way to one with a fresh headline. Where nothing is in orb the day says
  * so plainly rather than inventing weather, which is the honesty the method
  * page promises.
  */
 object WeekReading {
     private const val EVENT_ORB = 1.2
-    private const val EXACT_ORB = 0.35
+    private const val EXACT_ORB = DayDecreeComposer.EXACT_ORB
     private const val DAY_MS = 86_400_000L
 
     /** Seven days plus the buffer the coarsest sampling step needs. */
@@ -109,6 +109,7 @@ object WeekReading {
     fun build(engine: AstronomyEngine, culture: AncientCulture, start: Date, today: Date): List<WeekDay> {
         val days = mutableListOf<WeekDay>()
         val usedPairs = mutableSetOf<String>()
+        val usedHeadlines = mutableSetOf<String>()
 
         // One ingress scan for the whole week rather than seven, buffered two
         // days past the end so the coarsest sampling step still lands beyond
@@ -125,19 +126,21 @@ object WeekReading {
             calendar.time = start
             calendar.add(Calendar.DAY_OF_MONTH, i)
             val date = calendar.time
-            val chart = chartAtNoonUtc(engine, date)
-            val candidates = aspectsOf(chart)
+            val noon = utcNoonMillis(date)
+            val chart = chartAt(engine, noon)
+            // Tightest first, with two exceptions: a pair already shown this
+            // week returns only when exact, and a figure whose headline an
+            // earlier row shows gives way to the next with a fresh one. When
+            // none has one, the tightest speaks without a headline.
+            val candidates = DayDecreeComposer.aspectsOf(chart)
                 .filter { it.orb < EVENT_ORB && (it.a in FAST_BODIES || it.b in FAST_BODIES) }
+                .filter { "${it.a}|${it.b}" !in usedPairs || it.orb < EXACT_ORB }
                 .sortedBy { it.orb }
-
-            var tightest: DayAspect? = null
-            for (candidate in candidates) {
-                val pair = "${candidate.a}|${candidate.b}"
-                if (pair in usedPairs && candidate.orb >= EXACT_ORB) continue
-                tightest = candidate
-                usedPairs += pair
-                break
+            val fresh = candidates.firstOrNull {
+                DayDecreeComposer.composeHeadline(culture, it) !in usedHeadlines
             }
+            val tightest = fresh ?: candidates.firstOrNull()
+            if (tightest != null) usedPairs += "${tightest.a}|${tightest.b}"
 
             var headline: String? = null
             val line: String
@@ -148,13 +151,10 @@ object WeekReading {
                 exact = tightest.orb < EXACT_ORB
                 tone = toneFor(tightest.aspect)
                 // The headline speaks to the reader; beneath it the meaning and
-                // the consequence, both of which take the figure. No order: the
-                // week reports the figure, and the day page carries the one
-                // instruction.
-                val figure = SkyFigure(tightest.a, tightest.b, tightest.aspect, tightest.orb)
-                headline = DayDecreeComposer.composeHeadline(culture, figure)
-                line = DayDecreeComposer.composeMeaning(culture, figure) + " " +
-                    DayDecreeComposer.composeConsequence(culture, figure)
+                // the consequence. The week line itself gives no order.
+                headline = if (fresh != null) DayDecreeComposer.composeHeadline(culture, tightest) else null
+                line = DayDecreeComposer.composeMeaning(culture, tightest, Math.floorDiv(noon, DAY_MS)) + " " +
+                    DayDecreeComposer.composeConsequence(culture, tightest)
                 shorthand = "${tightest.a.name.take(3)} ${tightest.aspect.name.take(3)} " +
                     "${tightest.b.name.take(3)}${if (exact) " · EXACT" else ""}"
             } else {
@@ -177,11 +177,13 @@ object WeekReading {
                         ingress.sign.signName.take(3).uppercase()
                 } else {
                     tone = DayTone.QUIET
-                    headline = quietDayHeadline(culture)
+                    headline = quietDayHeadline(culture).takeIf { it !in usedHeadlines }
                     line = quietLine(culture)
                     shorthand = "QUIET"
                 }
             }
+
+            headline?.let { usedHeadlines += it }
 
             val flag = if (culture == AncientCulture.ROME) {
                 when {
@@ -208,18 +210,8 @@ object WeekReading {
         return days
     }
 
-    private data class DayAspect(
-        val a: Planet,
-        val b: Planet,
-        val aspect: AspectType,
-        val orb: Double,
-    )
-
-    /** Every body's longitude at noon UTC on [date], the instant a day is read for. */
-    private fun chartAtNoonUtc(
-        engine: AstronomyEngine,
-        date: Date,
-    ): Map<Planet, Double> {
+    /** Noon UTC on the local calendar date of [date], the instant a day is read for. */
+    private fun utcNoonMillis(date: Date): Long {
         val local = Calendar.getInstance()
         local.time = date
         val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -230,46 +222,11 @@ object WeekReading {
             local.get(Calendar.DAY_OF_MONTH),
             12, 0, 0,
         )
-        val julianDay = utc.timeInMillis / 86_400_000.0 + 2440587.5
-        return Planet.entries.associateWith {
-            engine.getPlanetPosition(julianDay, TransitSpans.bodyOf(it)).longitude
-        }
+        return utc.timeInMillis
     }
 
-    /**
-     * Every aspect in the chart, using the one documented orb table. Pairs are
-     * taken once, and the first matching kind wins, exactly as the web
-     * detector does, so the two surfaces cannot disagree about what is in orb.
-     */
-    private fun aspectsOf(chart: Map<Planet, Double>): List<DayAspect> {
-        val bodies = Planet.entries
-        val out = mutableListOf<DayAspect>()
-        for (i in bodies.indices) {
-            for (j in i + 1 until bodies.size) {
-                val a = bodies[i]
-                val b = bodies[j]
-                val separation = angularSeparation(chart.getValue(a), chart.getValue(b))
-                for (aspect in AspectType.entries) {
-                    val orb = abs(separation - aspect.degree)
-                    if (orb <= aspect.orb) {
-                        out += DayAspect(a, b, aspect, orb)
-                        break
-                    }
-                }
-            }
-        }
-        return out
-    }
-
-    private fun angularSeparation(a: Double, b: Double): Double {
-        val raw = abs(a - b) % 360.0
-        return if (raw > 180.0) 360.0 - raw else raw
-    }
-
-    private fun signOf(longitude: Double): ZodiacSign {
-        val normalized = ((longitude % 360.0) + 360.0) % 360.0
-        return ZodiacSign.entries[floor(normalized / 30.0).toInt() % 12]
-    }
+    private fun chartAt(engine: AstronomyEngine, millis: Long): Map<Planet, Double> =
+        DayDecreeComposer.chartAt(engine, Date(millis))
 
     private fun weekdayAbbr(date: Date): String {
         val calendar = Calendar.getInstance()

@@ -68,8 +68,7 @@ class DashboardViewModel(
             try {
                 val dayCulture = settings.selectedCulture.first() ?: AncientCulture.GREECE
                 _dayDecree.value = withContext(Dispatchers.Default) {
-                    val sky = DayDecreeComposer.chartAt(astronomy, DayDecreeComposer.startOfUtcDay(now))
-                    DayDecreeComposer.compose(dayCulture, sky)
+                    DayDecreeComposer.composeDayPage(astronomy, dayCulture, now)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error composing the day page", e)
