@@ -45,10 +45,11 @@ export function FigureDiagram({ culture, from, to, kind, angle, centerLabel }: F
   const b = at(to.longitude, R);
   const arcA = at(from.longitude, R_ARC);
   const arcB = at(to.longitude, R_ARC);
-  // The shorter way round from `from` to `to`; in SVG's downward y, a
-  // counter-clockwise turn on the page is sweep flag 0.
+  // The shorter way round from `from` to `to`. Longitude grows from the
+  // left point toward the top, which is clockwise on the page, and SVG's
+  // sweep flag 1 is clockwise.
   const delta = (((to.longitude - from.longitude) % 360) + 360) % 360;
-  const sweep = delta <= 180 ? 0 : 1;
+  const sweep = delta <= 180 ? 1 : 0;
   const mid = at(from.longitude + (delta <= 180 ? delta / 2 : (delta - 360) / 2), R_ARC + 14);
 
   return (
