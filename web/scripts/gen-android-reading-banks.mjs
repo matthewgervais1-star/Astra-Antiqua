@@ -105,6 +105,16 @@ function byBody(bank, bodies) {
   }).join("\n\n");
 }
 
+/** The relations, three per kind, as `listOf(...)` arms the day indexes into. */
+function relationWhen() {
+  return CULTURES.map((c) => {
+    const arms = KINDS.map(
+      (k) => `            AspectType.${upper(k)} -> listOf(${DECREE_BANKS[c].relations[k].map(kt).join(", ")})`,
+    ).join("\n");
+    return `        AncientCulture.${upper(c)} -> when (aspect) {\n${arms}\n        }`;
+  }).join("\n\n");
+}
+
 function registerSide(side) {
   return CULTURES.map((c) => {
     const arms = PLANETS.map(
@@ -157,7 +167,7 @@ ${byCulture("    ", (c) => kt(QUIET_LINE[c]))}
 /**
  * The day page's banks, per culture. Templates carry {god} (the headline
  * body's deity) and {partner} (the other body's deity); DayDecreeComposer
- * fills them. The two-variant banks take the day's variant, 0 or 1.
+ * fills them. The three-variant banks take the day's variant: 0, 1 or 2.
  */
 object DecreeBanks {
     /** One sentence to the reader per (kind, headline body). */
@@ -165,15 +175,15 @@ object DecreeBanks {
 ${byBody("headlines", FAST)}
     }
 
-    /** Plural predicate: "{domain A} and {domain B} {relation}". */
-    fun relation(culture: AncientCulture, aspect: AspectType): String = when (culture) {
-${nested("        ", "aspect", KINDS, "AspectType", (c, k) => DECREE_BANKS[c].relations[k])}
-    }
+    /** Plural predicate: "{domain A} and {domain B} {relation}"; the day picks one of three. */
+    fun relation(culture: AncientCulture, aspect: AspectType, variant: Int): String = when (culture) {
+${relationWhen()}
+    }[variant]
 
-    /** Appended to the meaning sentence under half a degree of orb. */
+    /** Appended to the meaning sentence under half a degree; the day picks one of three. */
     fun exactTail(culture: AncientCulture, variant: Int): String = when (culture) {
-${byCulture("        ", (c) => `if (variant == 0) ${kt(DECREE_BANKS[c].exactTails[0])} else ${kt(DECREE_BANKS[c].exactTails[1])}`)}
-    }
+${byCulture("        ", (c) => `listOf(${DECREE_BANKS[c].exactTails.map(kt).join(", ")})`)}
+    }[variant]
 
     /** The consequence for the reader, per (kind, partner body). */
     fun consequence(culture: AncientCulture, aspect: AspectType, partner: Planet): String = when (culture) {
@@ -190,9 +200,14 @@ ${byBody("images", FAST)}
 ${byBody("instructions", FAST)}
     }
 
-    /** Opens the second-figure sentence. */
+    /** Opens the second-figure sentence; the day picks one of three. Slots: {god}, {partner}. */
     fun secondFigure(culture: AncientCulture, variant: Int): String = when (culture) {
-${byCulture("        ", (c) => `if (variant == 0) ${kt(DECREE_BANKS[c].secondFigure[0])} else ${kt(DECREE_BANKS[c].secondFigure[1])}`)}
+${byCulture("        ", (c) => `listOf(${DECREE_BANKS[c].secondFigure.map(kt).join(", ")})`)}
+    }[variant]
+
+    /** Stands in a week row's headline when the row's figure is the day before's. */
+    fun holds(culture: AncientCulture): String = when (culture) {
+${byCulture("        ", (c) => kt(DECREE_BANKS[c].holds))}
     }
 
     /** Stands in for the second figure when the sky offers none. */
@@ -316,9 +331,9 @@ import com.astra.antiqua.model.AncientCulture
  * composer (web/src/lib/decree.ts, dailyMessage.ts). Do not edit; run
  * \`cd web && node scripts/gen-android-reading-banks.mjs\`.
  *
- * The web day page for one instant per culture, read through the year's walk
- * (composeDayPage), each instant chosen clear of every threshold where two
- * engines a hair apart could print different text on that day.
+ * The web day page for one instant per culture (composeDayPage), each instant
+ * chosen clear of every threshold where two engines a hair apart could print
+ * different text.
  * DayDecreeParityTest recomputes each with Android's own engine and composer.
  */
 internal data class DayDecreeGolden(

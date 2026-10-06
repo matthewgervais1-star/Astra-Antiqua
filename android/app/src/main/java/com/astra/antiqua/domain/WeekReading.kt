@@ -21,8 +21,8 @@ data class WeekDay(
     val date: Date,
     val label: String,
     val isToday: Boolean,
-    /** The day page's headline for the day's figure, or null on an ingress day
-     *  and on a day whose figure's headline an earlier row already shows. */
+    /** The day page's headline for the day's figure, the culture's holds line
+     *  when the figure is the row above's, or null on an ingress day. */
     val headline: String?,
     val line: String,
     val tone: DayTone,
@@ -36,10 +36,9 @@ data class WeekDay(
  * web/src/lib/weekReading.ts.
  *
  * Each day's headline is the tightest aspect involving a fast mover, inside
- * 1.2 degrees, marked exact under DayDecreeComposer.EXACT_ORB. A pair that has
- * already headlined earlier in the week only speaks again when it is exact
- * that day, so a slow contact does not fill the whole strip, and a figure whose
- * headline an earlier row shows gives way to one with a fresh headline. Where nothing is in orb the day says
+ * 1.2 degrees, marked exact under DayDecreeComposer.EXACT_ORB. The sky decides
+ * the figure; a figure that holds from one row to the next prints the
+ * culture's holds line instead of its headline a second time. Where nothing is in orb the day says
  * so plainly rather than inventing weather, which is the honesty the method
  * page promises.
  */
@@ -108,8 +107,7 @@ object WeekReading {
 
     fun build(engine: AstronomyEngine, culture: AncientCulture, start: Date, today: Date): List<WeekDay> {
         val days = mutableListOf<WeekDay>()
-        val usedPairs = mutableSetOf<String>()
-        val usedHeadlines = mutableSetOf<String>()
+        var previous: SkyFigure? = null
 
         // One ingress scan for the whole week rather than seven, buffered two
         // days past the end so the coarsest sampling step still lands beyond
@@ -128,19 +126,15 @@ object WeekReading {
             val date = calendar.time
             val noon = utcNoonMillis(date)
             val chart = chartAt(engine, noon)
-            // Tightest first, with two exceptions: a pair already shown this
-            // week returns only when exact, and a figure whose headline an
-            // earlier row shows gives way to the next with a fresh one. When
-            // none has one, the tightest speaks without a headline.
-            val candidates = DayDecreeComposer.aspectsOf(chart)
+            // The tightest fast-mover aspect inside the event orb is the day's
+            // figure, always: the sky decides it. A figure that holds from one
+            // row to the next says so in the culture's holds line.
+            val tightest = DayDecreeComposer.aspectsOf(chart)
                 .filter { it.orb < EVENT_ORB && (it.a in FAST_BODIES || it.b in FAST_BODIES) }
-                .filter { "${it.a}|${it.b}" !in usedPairs || it.orb < EXACT_ORB }
-                .sortedBy { it.orb }
-            val fresh = candidates.firstOrNull {
-                DayDecreeComposer.composeHeadline(culture, it) !in usedHeadlines
-            }
-            val tightest = fresh ?: candidates.firstOrNull()
-            if (tightest != null) usedPairs += "${tightest.a}|${tightest.b}"
+                .minByOrNull { it.orb }
+            val holds = tightest != null && previous != null &&
+                tightest.a == previous.a && tightest.b == previous.b && tightest.aspect == previous.aspect
+            previous = tightest
 
             var headline: String? = null
             val line: String
@@ -152,7 +146,7 @@ object WeekReading {
                 tone = toneFor(tightest.aspect)
                 // The headline speaks to the reader; beneath it the meaning and
                 // the consequence. The week line itself gives no order.
-                headline = if (fresh != null) DayDecreeComposer.composeHeadline(culture, tightest) else null
+                headline = if (holds) DecreeBanks.holds(culture) else DayDecreeComposer.composeHeadline(culture, tightest)
                 line = DayDecreeComposer.composeMeaning(culture, tightest, Math.floorDiv(noon, DAY_MS)) + " " +
                     DayDecreeComposer.composeConsequence(culture, tightest)
                 shorthand = "${tightest.a.name.take(3)} ${tightest.aspect.name.take(3)} " +
@@ -177,13 +171,11 @@ object WeekReading {
                         ingress.sign.signName.take(3).uppercase()
                 } else {
                     tone = DayTone.QUIET
-                    headline = quietDayHeadline(culture).takeIf { it !in usedHeadlines }
+                    headline = quietDayHeadline(culture)
                     line = quietLine(culture)
                     shorthand = "QUIET"
                 }
             }
-
-            headline?.let { usedHeadlines += it }
 
             val flag = if (culture == AncientCulture.ROME) {
                 when {

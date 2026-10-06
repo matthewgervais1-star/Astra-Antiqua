@@ -7,9 +7,9 @@ import com.astra.antiqua.model.AncientCulture
  * composer (web/src/lib/decree.ts, dailyMessage.ts). Do not edit; run
  * `cd web && node scripts/gen-android-reading-banks.mjs`.
  *
- * The web day page for one instant per culture, read through the year's walk
- * (composeDayPage), each instant chosen clear of every threshold where two
- * engines a hair apart could print different text on that day.
+ * The web day page for one instant per culture (composeDayPage), each instant
+ * chosen clear of every threshold where two engines a hair apart could print
+ * different text.
  * DayDecreeParityTest recomputes each with Android's own engine and composer.
  */
 internal data class DayDecreeGolden(
@@ -25,41 +25,41 @@ internal val DAY_DECREE_GOLDENS: List<DayDecreeGolden> = listOf(
     DayDecreeGolden(
         instantUtc = "2026-09-29T00:00:00.000Z",
         culture = AncientCulture.EGYPT,
-        headline = "Do not act on the mood you wake up with before the sun is high.",
-        evidence = "KHONSU □ HORUS THE RED · 4°57′",
-        paragraph = "Your moods and your temper haul on opposite ropes. Nothing moves today without someone dragging against it. Khonsu clouds the water where Horus the Red wants to cross, and the boatman waits for dawn. On the far bank, Ra rows in time with Nut: your day's work and your plans for the new season float on the same current. Say nothing at home until you have eaten, and leave the first bite for Khonsu and Horus the Red.",
-        messageBody = "Your moods and your temper haul on opposite ropes. Nothing moves today without someone dragging against it. Say nothing at home until you have eaten, and leave the first bite for Khonsu and Horus the Red.",
+        headline = "Start the heavy thing while the light holds.",
+        evidence = "RA △ NUT · 0°19′",
+        paragraph = "Your day's work and your plans for the new season keep the same pace, and the cord is drawn tight. A sudden change works in your favor. Ra and Nut sit level on the scale, and Anubis leaves the beam alone. On the bank across from Ra and Nut, Khonsu tips the scales against Osiris: your moods and what you have buried pull the sledge two ways. Lift the heaviest stone of the week first, and call on Ra and Nut as you lift it.",
+        messageBody = "Your day's work and your plans for the new season keep the same pace, and the cord is drawn tight. A sudden change works in your favor. Lift the heaviest stone of the week first, and call on Ra and Nut as you lift it.",
     ),
     DayDecreeGolden(
         instantUtc = "2026-09-30T00:00:00.000Z",
         culture = AncientCulture.GREECE,
-        headline = "Enter the hard race and expect the laurel.",
-        evidence = "ARES △ POSEIDON · 1°47′",
-        paragraph = "Your fighting strength and your wandering thoughts keep step with each other. Your wandering mind brings back something useful. Ares takes the field with Poseidon beside him, and the line advances. At a lesser shrine, Selene challenges Zeus: your household and your standing with the powerful argue at the same gate. Go at the hardest task while your arm is fresh, and give Ares and Poseidon the first round.",
-        messageBody = "Your fighting strength and your wandering thoughts keep step with each other. Your wandering mind brings back something useful. Go at the hardest task while your arm is fresh, and give Ares and Poseidon the first round.",
+        headline = "Do not ask the oracle what you are not ready to hear.",
+        evidence = "SELENE □ ZEUS · 0°14′",
+        paragraph = "Your household and your standing with the powerful wrestle for the same prize, and the tripod answers at once. Someone powerful says no and means it. Selene hides behind cloud from Zeus, and the night sailors argue over the stars. At a lesser shrine than the one Selene and Zeus share, Helios moves in accord with Ouranos: your name in the city and your sudden notions drink from the same krater. Let the household argument end at the door, and ask Selene and Zeus for a quiet night.",
+        messageBody = "Your household and your standing with the powerful wrestle for the same prize, and the tripod answers at once. Someone powerful says no and means it. Let the household argument end at the door, and ask Selene and Zeus for a quiet night.",
     ),
     DayDecreeGolden(
         instantUtc = "2026-10-01T00:00:00.000Z",
         culture = AncientCulture.CANAAN,
-        headline = "Send a loaf to the house that needs it.",
-        evidence = "YARIKH ⚹ YAMMU · 1°03′",
-        paragraph = "Your kin at home and your prayers vouch for each other. A prayer said plainly is heard. Yarikh sends gifts to Yammu's house ahead of the wedding, and the door stands open. At the city gate, Yarikh speaks favor over Motu: your kin at home and your grain pits sit at the same table. Visit the relative you have not seen since the last feast, and say the names of Yarikh and Yammu at the door.",
-        messageBody = "Your kin at home and your prayers vouch for each other. A prayer said plainly is heard. Visit the relative you have not seen since the last feast, and say the names of Yarikh and Yammu at the door.",
+        headline = "Your house is in order, and you can sit down in it.",
+        evidence = "YARIKH △ MOTU · 0°47′",
+        paragraph = "Your kin at home and your grain pits sit at the same table. You stop grieving something old. Yarikh and Motu light the threshing floor all night, and the work finishes early. Further down the bench from Yarikh and Motu, Kothar draws the bow against Resheph: your handiwork and your hot blood quarrel at the gate. Spend the evening at home with your kin, and set a cup for Yarikh and Motu.",
+        messageBody = "Your kin at home and your grain pits sit at the same table. You stop grieving something old. Spend the evening at home with your kin, and set a cup for Yarikh and Motu.",
     ),
     DayDecreeGolden(
         instantUtc = "2026-10-02T00:00:00.000Z",
         culture = AncientCulture.CARTHAGE,
-        headline = "Affection bought at the market does not stay bought.",
-        evidence = "ASTARTE □ MOT · 5°20′",
-        paragraph = "Your pleasure fund and the debts you inherited fight over the same silver. An old debt grows new interest. Astarte recalls the fleet that Mot sent out, and the crews want their pay. Further down the page, Melqart lights the harbor for Yam: your war chest and your sea voyages add up on the first pass. Keep your purse shut tonight, and promise Astarte and Mot the difference.",
-        messageBody = "Your pleasure fund and the debts you inherited fight over the same silver. An old debt grows new interest. Keep your purse shut tonight, and promise Astarte and Mot the difference.",
+        headline = "Read the small print before you press your seal into the wax.",
+        evidence = "SAKUN □ MELQART · 0°17′",
+        paragraph = "Your contracts and your war chest foul each other's anchors, weighed to the last shekel. Someone changes the terms on you. Sakun sends Melqart's ship to the wrong shore, and the cargo sits on the beach. In the column after Sakun and Melqart, Melqart lights the harbor for Yam: your war chest and your sea voyages clear the harbor together. Ask a second clerk to read the contract, and swear by Sakun and Melqart to nothing you have not read.",
+        messageBody = "Your contracts and your war chest foul each other's anchors, weighed to the last shekel. Someone changes the terms on you. Ask a second clerk to read the contract, and swear by Sakun and Melqart to nothing you have not read.",
     ),
     DayDecreeGolden(
         instantUtc = "2026-10-03T00:00:00.000Z",
         culture = AncientCulture.ROME,
-        headline = "You do not have to force what the ground refuses.",
-        evidence = "MARS ☍ DIS PATER · 0°16′",
-        paragraph = "Your campaign and your inheritance veto each other, and the augur marks it in his book. An heir across the forum contests your claim. Mars faces Dis Pater's camp across the river, and neither side crosses. Across the forum, Mars clasps the right hand of Neptunus: your campaign and your days at the baths sit on the same side of the Senate. Hold your position without attacking, and pray to Mars and Dis Pater for patience.",
-        messageBody = "Your campaign and your inheritance veto each other, and the augur marks it in his book. An heir across the forum contests your claim. Hold your position without attacking, and pray to Mars and Dis Pater for patience.",
+        headline = "Take the field, because the auspices are on your side.",
+        evidence = "MARS △ NEPTUNUS · EXACT",
+        paragraph = "Your campaign and your days at the baths walk in the same procession, and the pontiff marks it in the calendar. Rest restores you. Mars and Neptunus give the signal from the right, and the legion advances in good order. Below the Capitol, where Mars meets Neptunus, Mercurius raises the spear against Dis Pater: your dispatches and your inheritance cut each other's supply line. Move first, and promise Mars and Neptunus a share of the spoils.",
+        messageBody = "Your campaign and your days at the baths walk in the same procession, and the pontiff marks it in the calendar. Rest restores you. Move first, and promise Mars and Neptunus a share of the spoils.",
     ),
 )

@@ -4,9 +4,7 @@ import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.model.Planet
-import java.util.Calendar
 import java.util.Date
-import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.floor
 
@@ -51,9 +49,6 @@ object DayDecreeComposer {
     /** Below this orb the evidence line prints EXACT instead of the orb. */
     private const val EXACT_EVIDENCE_ORB = 0.1
 
-    /** No sentence repeats within seven days; see [composeDayPage]. */
-    const val REPEAT_WINDOW_DAYS = 7
-    private const val LEAD_DAYS = 14
     private const val DAY_MS = 86_400_000L
 
     fun glyph(aspect: AspectType): String = when (aspect) {
@@ -78,8 +73,11 @@ object DayDecreeComposer {
     private fun toneFor(aspect: AspectType): DayTone =
         if (aspect == AspectType.SQUARE || aspect == AspectType.OPPOSITION) DayTone.TENSION else DayTone.HARMONY
 
-    /** Which of a bank's two variants a day uses: they alternate day by day. */
-    private fun variant(day: Long): Int = Math.floorMod(day, 2L).toInt()
+    /**
+     * Which of a bank's three variants a day uses, by the UTC day number. The
+     * sky picks the figure; the day only picks among the words.
+     */
+    private fun variant(day: Long): Int = Math.floorMod(day, 3L).toInt()
 
     /** The headline body of a figure and its partner. */
     fun headlineBody(a: Planet, b: Planet): Pair<Planet, Planet> {
@@ -106,13 +104,14 @@ object DayDecreeComposer {
         return "${name(culture, f.a).uppercase()} ${glyph(f.aspect)} ${name(culture, f.b).uppercase()} · $measure"
     }
 
-    private fun meaningClause(culture: AncientCulture, f: SkyFigure): String =
-        "${deityDomain(culture, f.a)} and ${deityDomain(culture, f.b)} ${DecreeBanks.relation(culture, f.aspect)}"
+    private fun meaningClause(culture: AncientCulture, f: SkyFigure, day: Long): String =
+        "${deityDomain(culture, f.a)} and ${deityDomain(culture, f.b)} " +
+            DecreeBanks.relation(culture, f.aspect, variant(day))
 
     /** Sentence (a): two domains and a relation, the exact tail under half a degree. */
     fun composeMeaning(culture: AncientCulture, f: SkyFigure, day: Long = 0): String {
         val tail = if (f.orb < EXACT_ORB) DecreeBanks.exactTail(culture, variant(day)) else ""
-        return "${capitalize(meaningClause(culture, f))}$tail."
+        return "${capitalize(meaningClause(culture, f, day))}$tail."
     }
 
     /** Sentence (b): the consequence, keyed by kind and partner body. */
@@ -133,9 +132,12 @@ object DayDecreeComposer {
     private fun composeInstruction(culture: AncientCulture, f: SkyFigure): String =
         fill(DecreeBanks.instruction(culture, f.aspect, headlineBody(f.a, f.b).first), godSlots(culture, f))
 
-    private fun composeSecond(culture: AncientCulture, f: SkyFigure, day: Long): String =
-        "${DecreeBanks.secondFigure(culture, variant(day))} ${name(culture, f.a)} " +
-            "${AspectVerbs.of(culture, f.aspect)} ${name(culture, f.b)}: ${meaningClause(culture, f)}."
+    /** Sentence (d): the second figure, opened from the headline figure's gods. */
+    private fun composeSecond(culture: AncientCulture, top: SkyFigure, f: SkyFigure, day: Long): String {
+        val opener = fill(DecreeBanks.secondFigure(culture, variant(day)), godSlots(culture, top))
+        return "$opener ${name(culture, f.a)} ${AspectVerbs.of(culture, f.aspect)} ${name(culture, f.b)}: " +
+            "${meaningClause(culture, f, day)}."
+    }
 
     /**
      * Every aspect in the chart, using the one documented orb table. Pairs are
@@ -167,31 +169,19 @@ object DayDecreeComposer {
         return if (raw > 180.0) 360.0 - raw else raw
     }
 
-    /** The orb the same pair makes in the same kind on another chart, or infinity when out of orb. */
-    private fun orbOn(chart: Map<Planet, Double>, f: SkyFigure): Double {
-        val orb = abs(separation(chart.getValue(f.a), chart.getValue(f.b)) - f.aspect.degree)
-        return if (orb <= f.aspect.orb) orb else Double.POSITIVE_INFINITY
-    }
-
     /** The day's candidates: every aspect touching a fast body, tightest first. */
     fun dayFigures(chart: Map<Planet, Double>): List<SkyFigure> =
         aspectsOf(chart).filter { it.a in FAST_ORDER || it.b in FAST_ORDER }.sortedBy { it.orb }
 
     /**
-     * The decree for one chart. [day] is the UTC day number and picks the
-     * variants; [recent] holds the sentences the six days before printed, and
-     * [tomorrow] the next day's sky, so a figure that tightens overnight waits.
+     * The decree for one chart. The headline figure is the tightest figure that
+     * touches a fast body, always: the sky decides it. [day] is the UTC day
+     * number and picks the variants.
      */
-    fun compose(
-        culture: AncientCulture,
-        chart: Map<Planet, Double>,
-        day: Long = 0,
-        recent: Set<String> = emptySet(),
-        tomorrow: Map<Planet, Double>? = null,
-    ): DayDecree {
+    fun compose(culture: AncientCulture, chart: Map<Planet, Double>, day: Long = 0): DayDecree {
         val candidates = dayFigures(chart)
-        if (candidates.isEmpty()) {
-            return DayDecree(
+        val top = candidates.firstOrNull()
+            ?: return DayDecree(
                 headline = quietDayHeadline(culture),
                 evidence = "",
                 paragraph = quietDayLine(culture),
@@ -200,33 +190,21 @@ object DayDecreeComposer {
                 sentences = listOf(quietDayLine(culture)),
                 figures = emptyList(),
             )
-        }
-
-        fun own(f: SkyFigure) = listOf(
-            composeHeadline(culture, f),
-            composeMeaning(culture, f, day),
-            composeConsequence(culture, f),
-            composeImage(culture, f),
-            composeInstruction(culture, f),
-        )
-        fun stale(f: SkyFigure) = own(f).count { it in recent }
-        fun ripening(f: SkyFigure) = tomorrow != null && orbOn(tomorrow, f) < f.orb
-
-        val fresh = candidates.filter { stale(it) == 0 }
-        val top = fresh.firstOrNull { !ripening(it) }
-            ?: fresh.firstOrNull()
-            ?: candidates.reduce { best, f -> if (stale(f) < stale(best)) f else best }
 
         // A second figure only earns its sentence if it speaks in a different
         // aspect kind, so its relation never repeats the meaning sentence's.
-        val others = candidates.filter { it.aspect != top.aspect }
-        val second = others.firstOrNull { composeSecond(culture, it, day) !in recent } ?: others.firstOrNull()
-        val secondSentence = second?.let { composeSecond(culture, it, day) } ?: DecreeBanks.noSecondFigure(culture)
-
-        val parts = own(top)
-        val sentences = listOf(parts[1], parts[2], parts[3], secondSentence, parts[4])
+        val second = candidates.firstOrNull { it.aspect != top.aspect }
+        val secondSentence = second?.let { composeSecond(culture, top, it, day) }
+            ?: DecreeBanks.noSecondFigure(culture)
+        val sentences = listOf(
+            composeMeaning(culture, top, day),
+            composeConsequence(culture, top),
+            composeImage(culture, top),
+            secondSentence,
+            composeInstruction(culture, top),
+        )
         return DayDecree(
-            headline = parts[0],
+            headline = composeHeadline(culture, top),
             evidence = composeEvidence(culture, top),
             paragraph = sentences.joinToString(" "),
             tone = toneFor(top.aspect),
@@ -236,38 +214,10 @@ object DayDecreeComposer {
         )
     }
 
-    private class Walk(val pages: MutableList<DayDecree>, var next: Map<Planet, Double>)
-
-    private val walks = mutableMapOf<String, Walk>()
-
-    /**
-     * The day page for the UTC day containing [date], as web's composeDayPage
-     * reads it: every page of a year comes from one walk that starts LEAD_DAYS
-     * before 1 January (UTC), so each day avoids the sentences the six days the
-     * reader saw before it printed. Kept for the process.
-     */
-    @Synchronized
+    /** The day page for the UTC day containing [date]: the sky at 00:00 UTC. */
     fun composeDayPage(engine: AstronomyEngine, culture: AncientCulture, date: Date): DayDecree {
-        val today = Math.floorDiv(date.time, DAY_MS)
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        calendar.timeInMillis = today * DAY_MS
-        val year = calendar.get(Calendar.YEAR)
-        calendar.clear()
-        calendar.set(year, Calendar.JANUARY, 1, 0, 0, 0)
-        val anchor = Math.floorDiv(calendar.timeInMillis, DAY_MS) - LEAD_DAYS
-        val walk = walks.getOrPut("$culture|$anchor") {
-            Walk(mutableListOf(), chartAt(engine, Date(anchor * DAY_MS)))
-        }
-        while (anchor + walk.pages.size <= today) {
-            val day = anchor + walk.pages.size
-            val tomorrow = chartAt(engine, Date((day + 1) * DAY_MS))
-            val recent = walk.pages.takeLast(REPEAT_WINDOW_DAYS - 1)
-                .flatMap { listOf(it.headline) + it.sentences }
-                .toSet()
-            walk.pages += compose(culture, walk.next, day, recent, tomorrow)
-            walk.next = tomorrow
-        }
-        return walk.pages[(today - anchor).toInt()]
+        val day = Math.floorDiv(date.time, DAY_MS)
+        return compose(culture, chartAt(engine, Date(day * DAY_MS)), day)
     }
 
     private fun messageOf(decree: DayDecree): DailyMessage {

@@ -112,7 +112,7 @@ fun quietDayLine(culture: AncientCulture): String = when (culture) {
 /**
  * The day page's banks, per culture. Templates carry {god} (the headline
  * body's deity) and {partner} (the other body's deity); DayDecreeComposer
- * fills them. The two-variant banks take the day's variant, 0 or 1.
+ * fills them. The three-variant banks take the day's variant: 0, 1 or 2.
  */
 object DecreeBanks {
     /** One sentence to the reader per (kind, headline body). */
@@ -333,57 +333,57 @@ object DecreeBanks {
         }
     }
 
-    /** Plural predicate: "{domain A} and {domain B} {relation}". */
-    fun relation(culture: AncientCulture, aspect: AspectType): String = when (culture) {
+    /** Plural predicate: "{domain A} and {domain B} {relation}"; the day picks one of three. */
+    fun relation(culture: AncientCulture, aspect: AspectType, variant: Int): String = when (culture) {
         AncientCulture.EGYPT -> when (aspect) {
-            AspectType.CONJUNCTION -> "ride in one boat"
-            AspectType.SEXTILE -> "throw each other a rope"
-            AspectType.SQUARE -> "haul on opposite ropes"
-            AspectType.TRINE -> "float on the same current"
-            AspectType.OPPOSITION -> "stand on opposite banks"
+            AspectType.CONJUNCTION -> listOf("ride in one boat", "come to the scale together", "sleep under one roof")
+            AspectType.SEXTILE -> listOf("throw each other a rope", "pass each other bread", "clear each other's canal")
+            AspectType.SQUARE -> listOf("haul on opposite ropes", "pull the sledge two ways", "dam each other's water")
+            AspectType.TRINE -> listOf("float on the same current", "keep the same pace", "share the same wind")
+            AspectType.OPPOSITION -> listOf("stand on opposite banks", "stand at opposite ends of the field", "call to each other across the river")
         }
 
         AncientCulture.GREECE -> when (aspect) {
-            AspectType.CONJUNCTION -> "go up the hill together"
-            AspectType.SEXTILE -> "clear the road for each other"
-            AspectType.SQUARE -> "argue at the same gate"
-            AspectType.TRINE -> "keep step with each other"
-            AspectType.OPPOSITION -> "take opposite sides of the question"
+            AspectType.CONJUNCTION -> listOf("go up the hill together", "ask one question together", "share one cup")
+            AspectType.SEXTILE -> listOf("clear the road for each other", "carry each other's messages", "hold the door for each other")
+            AspectType.SQUARE -> listOf("argue at the same gate", "row against each other", "wrestle for the same prize")
+            AspectType.TRINE -> listOf("keep step with each other", "sing the same hymn", "drink from the same krater")
+            AspectType.OPPOSITION -> listOf("take opposite sides of the question", "sit at opposite ends of the agora", "bring rival answers down the hill")
         }
 
         AncientCulture.CANAAN -> when (aspect) {
-            AspectType.CONJUNCTION -> "stand before the council as one"
-            AspectType.SEXTILE -> "vouch for each other"
-            AspectType.SQUARE -> "quarrel at the gate"
-            AspectType.TRINE -> "sit at the same table"
-            AspectType.OPPOSITION -> "call opposing witnesses"
+            AspectType.CONJUNCTION -> listOf("stand before the council as one", "swear one oath", "plow one furrow")
+            AspectType.SEXTILE -> listOf("vouch for each other", "trade tools", "carry water for each other")
+            AspectType.SQUARE -> listOf("quarrel at the gate", "tear at the same fence", "trample each other's rows")
+            AspectType.TRINE -> listOf("sit at the same table", "drink from one jar", "bring in the harvest together")
+            AspectType.OPPOSITION -> listOf("call opposing witnesses", "argue across the threshing floor", "pull the tent ropes two ways")
         }
 
         AncientCulture.CARTHAGE -> when (aspect) {
-            AspectType.CONJUNCTION -> "share one account"
-            AspectType.SEXTILE -> "carry each other's cargo"
-            AspectType.SQUARE -> "fight over the same silver"
-            AspectType.TRINE -> "add up on the first pass"
-            AspectType.OPPOSITION -> "bid against each other"
+            AspectType.CONJUNCTION -> listOf("share one account", "sail in one hull", "go under one seal")
+            AspectType.SEXTILE -> listOf("carry each other's cargo", "lend each other credit", "share a berth")
+            AspectType.SQUARE -> listOf("fight over the same silver", "foul each other's anchors", "haggle over one cargo")
+            AspectType.TRINE -> listOf("add up on the first pass", "clear the harbor together", "unload on the same tide")
+            AspectType.OPPOSITION -> listOf("bid against each other", "sit across the counting table", "outbid each other on the quay")
         }
 
         AncientCulture.ROME -> when (aspect) {
-            AspectType.CONJUNCTION -> "march under one standard"
-            AspectType.SEXTILE -> "lend each other troops"
-            AspectType.SQUARE -> "block each other's road"
-            AspectType.TRINE -> "sit on the same side of the Senate"
-            AspectType.OPPOSITION -> "veto each other"
+            AspectType.CONJUNCTION -> listOf("march under one standard", "sit on one bench", "answer one roll call")
+            AspectType.SEXTILE -> listOf("lend each other troops", "exchange favors", "carry each other's petitions")
+            AspectType.SQUARE -> listOf("block each other's road", "quarrel in the Senate", "cut each other's supply line")
+            AspectType.TRINE -> listOf("sit on the same side of the Senate", "vote the same way", "walk in the same procession")
+            AspectType.OPPOSITION -> listOf("veto each other", "face each other across the forum", "file suits against each other")
         }
-    }
+    }[variant]
 
-    /** Appended to the meaning sentence under half a degree of orb. */
+    /** Appended to the meaning sentence under half a degree; the day picks one of three. */
     fun exactTail(culture: AncientCulture, variant: Int): String = when (culture) {
-        AncientCulture.EGYPT -> if (variant == 0) ", true as the plumb line" else ", and the cord is drawn tight"
-        AncientCulture.GREECE -> if (variant == 0) ", to the very degree" else ", and the Pythia does not hesitate"
-        AncientCulture.CANAAN -> if (variant == 0) ", and the whole council hears it" else ", and the witnesses sign the tablet"
-        AncientCulture.CARTHAGE -> if (variant == 0) ", posted to the hour" else ", weighed to the last shekel"
-        AncientCulture.ROME -> if (variant == 0) ", exact to the augur's line" else ", and the augur marks it in his book"
-    }
+        AncientCulture.EGYPT -> listOf(", true as the plumb line", ", and the cord is drawn tight", ", and Thoth writes it to the hair")
+        AncientCulture.GREECE -> listOf(", to the very degree", ", and the Pythia does not hesitate", ", and the tripod answers at once")
+        AncientCulture.CANAAN -> listOf(", and the whole council hears it", ", and the witnesses sign the tablet", ", and the elders mark the day")
+        AncientCulture.CARTHAGE -> listOf(", posted to the hour", ", weighed to the last shekel", ", entered without a correction")
+        AncientCulture.ROME -> listOf(", exact to the augur's line", ", and the augur marks it in his book", ", and the pontiff marks it in the calendar")
+    }[variant]
 
     /** The consequence for the reader, per (kind, partner body). */
     fun consequence(culture: AncientCulture, aspect: AspectType, partner: Planet): String = when (culture) {
@@ -1139,13 +1139,22 @@ object DecreeBanks {
         }
     }
 
-    /** Opens the second-figure sentence. */
+    /** Opens the second-figure sentence; the day picks one of three. Slots: {god}, {partner}. */
     fun secondFigure(culture: AncientCulture, variant: Int): String = when (culture) {
-        AncientCulture.EGYPT -> if (variant == 0) "Lower on the river," else "On the far bank,"
-        AncientCulture.GREECE -> if (variant == 0) "At a lesser shrine," else "Down in the agora,"
-        AncientCulture.CANAAN -> if (variant == 0) "Further down the bench," else "At the city gate,"
-        AncientCulture.CARTHAGE -> if (variant == 0) "Further down the page," else "In the next column,"
-        AncientCulture.ROME -> if (variant == 0) "Elsewhere in the sky," else "Across the forum,"
+        AncientCulture.EGYPT -> listOf("Downstream of {god} and {partner},", "On the bank across from {god} and {partner},", "Lower on the river than {god} and {partner},")
+        AncientCulture.GREECE -> listOf("Down the hill from {god} and {partner},", "In the agora below {god} and {partner},", "At a lesser shrine than the one {god} and {partner} share,")
+        AncientCulture.CANAAN -> listOf("Further down the bench from {god} and {partner},", "At the gate below {god} and {partner},", "In the fields beyond {god} and {partner},")
+        AncientCulture.CARTHAGE -> listOf("Below the line for {god} and {partner},", "In the column after {god} and {partner},", "On the page facing {god} and {partner},")
+        AncientCulture.ROME -> listOf("Behind {god} and {partner} in the sky,", "Across the forum from {god} and {partner},", "Below the Capitol, where {god} meets {partner},")
+    }[variant]
+
+    /** Stands in a week row's headline when the row's figure is the day before's. */
+    fun holds(culture: AncientCulture): String = when (culture) {
+        AncientCulture.EGYPT -> "The same weight sits on the scale as yesterday."
+        AncientCulture.GREECE -> "The oracle gives the same answer as yesterday."
+        AncientCulture.CANAAN -> "The council is still sitting on yesterday's matter."
+        AncientCulture.CARTHAGE -> "Yesterday's entry stands, and the clerk carries it forward."
+        AncientCulture.ROME -> "The auspices stand as they stood."
     }
 
     /** Stands in for the second figure when the sky offers none. */
