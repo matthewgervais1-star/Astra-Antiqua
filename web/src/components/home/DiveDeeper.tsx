@@ -20,7 +20,7 @@ export function DiveDeeper({ data, comeBack = null }: DiveDeeperProps) {
       <div className="mt-6 flex flex-col">
         {data.groups.map((group) => (
           <article key={group.title} className="border-t border-rule py-6 last:border-b">
-            <h3 className="font-display text-prose-m leading-display text-bone">{group.title}</h3>
+            <h3 className="font-display text-display-xs leading-display text-bone">{group.title}</h3>
             {group.evidence ? (
               <div className="mt-1 font-mono text-data-xs tracking-data text-dim">{group.evidence}</div>
             ) : null}

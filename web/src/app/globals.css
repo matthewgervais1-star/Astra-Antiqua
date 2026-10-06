@@ -52,7 +52,7 @@
   /*
    * TYPE SCALE, verbatim from docs/design/system/tokens/typography.css.
    * The design system is canonical: where a component disagrees with these
-   * values, the component is wrong. Ten sizes, five tracking values, three
+   * values, the component is wrong. Eleven sizes, five tracking values, three
    * leadings. Do not add a size here to fit one screen, and do not set a
    * literal px font-size in a component.
    *
@@ -68,6 +68,8 @@
   --text-display-l: 40px;
   --text-display-m: 26px;
   --text-display-s: 22px;
+  /* added 2026-09-29: 22 / (26 / 22) = 18.6, held to 18 so the step ratio stays at or above the scale's smallest */
+  --text-display-xs: 18px;
 
   /* prose: Spectral */
   --text-prose-l: 19px;

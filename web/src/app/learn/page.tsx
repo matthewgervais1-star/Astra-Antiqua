@@ -126,7 +126,7 @@ export default function LearnPage() {
                   key={p.name}
                   className="flex items-baseline justify-between gap-4 border-t border-rule-row py-2.5 last:border-b"
                 >
-                  <span className="font-display text-[14px] text-bone">
+                  <span className="font-display text-display-xs text-bone">
                     <span className="mr-2 font-mono text-data-xs text-dim">{p.symbol}</span>
                     {p.name.toUpperCase()}
                   </span>
@@ -145,7 +145,7 @@ export default function LearnPage() {
                   key={s.sign}
                   className="flex items-baseline justify-between gap-4 border-t border-rule-row py-2.5 last:border-b"
                 >
-                  <span className="font-display text-[14px] text-bone">{s.sign.toUpperCase()}</span>
+                  <span className="font-display text-display-xs text-bone">{s.sign.toUpperCase()}</span>
                   <span className="font-body text-prose-s italic text-prose">{s.manner}</span>
                 </div>
               ))}
@@ -226,7 +226,7 @@ export default function LearnPage() {
             <Link
               key={c}
               href={`/voices/${c}`}
-              className="font-display text-[16px] tracking-[0.08em] text-prose hover:text-bone"
+              className="font-display text-display-xs tracking-[0.08em] text-prose hover:text-bone"
             >
               {CULTURE_LABELS[c].toUpperCase()}
             </Link>

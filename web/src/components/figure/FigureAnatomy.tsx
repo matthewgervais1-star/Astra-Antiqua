@@ -111,7 +111,7 @@ export function FigureAnatomy({ culture, anatomy, timeline, timelineCaption, cen
                 )}
               </span>
               <span className="flex flex-col gap-1">
-                <span className="font-display text-prose-m leading-display text-bone">{part.phrase}</span>
+                <span className="font-display text-display-xs leading-display text-bone">{part.phrase}</span>
                 <span className="font-mono text-data-xs tracking-label text-dim">{part.tag}</span>
               </span>
             </li>
@@ -131,7 +131,7 @@ export function FigureAnatomy({ culture, anatomy, timeline, timelineCaption, cen
 
       <section>
         <SectionDivider label={anatomy.playsOutTitle} />
-        <p className="mx-auto mt-5 max-w-[560px] text-left font-display text-prose-m leading-display text-bone">
+        <p className="mx-auto mt-5 max-w-[560px] text-left font-display text-display-xs leading-display text-bone">
           {anatomy.actLine}
         </p>
         <ul className="mx-auto mt-4 flex max-w-[560px] flex-col gap-2 text-left">
@@ -161,7 +161,7 @@ export function FigureAnatomy({ culture, anatomy, timeline, timelineCaption, cen
 
       <section>
         <SectionDivider label="THE LESSON" />
-        <p className="mx-auto mt-5 max-w-[520px] text-balance text-center font-display text-prose-m leading-display text-bone">
+        <p className="mx-auto mt-5 max-w-[520px] text-balance text-center font-display text-display-xs leading-display text-bone">
           {anatomy.lesson}
         </p>
       </section>

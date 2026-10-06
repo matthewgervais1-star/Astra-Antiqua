@@ -147,7 +147,7 @@ function SeasonContent({
         </div>
       ) : null}
 
-      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-display text-[11.5px] tracking-[0.2em]">
+      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-mono text-data-xs uppercase tracking-microcopy">
         <Link href="/" className="text-bone/65 hover:text-bone">
           ← THE DAY
         </Link>

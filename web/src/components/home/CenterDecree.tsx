@@ -75,7 +75,7 @@ export function CenterDecree({
         <FeedbackRow readingId={readingId} noun="DECREE" />
       </div>
 
-      <div className="mt-10 flex justify-center gap-[var(--space-4)] font-display text-[11.5px] tracking-[0.2em] text-dim">
+      <div className="mt-10 flex flex-wrap justify-center gap-x-[var(--space-2)] gap-y-[var(--space-2)] font-mono text-data-xs uppercase tracking-microcopy text-dim sm:gap-x-[var(--space-4)] [&>a]:whitespace-nowrap">
         <Link href="/week" className="hover:text-bone">
           THE WEEK →
         </Link>

@@ -51,8 +51,8 @@ val NotoSymbols = FontFamily(Font(R.font.noto_sans_symbols, FontWeight.Normal))
 
 /**
  * THE TYPE SCALE, from docs/design/system/tokens/typography.css, which is
- * canonical for both surfaces. Ten sizes, four tracking values, three
- * leadings, the same ten web binds in web/src/app/globals.css.
+ * canonical for both surfaces. Eleven sizes, four tracking values, three
+ * leadings, the same eleven web binds in web/src/app/globals.css.
  *
  * They are named rather than inlined so the mapping onto Material's fifteen
  * slots can be read instead of inferred, and so a screen can reach a step by
@@ -64,6 +64,8 @@ object TypeScale {
     val DisplayL = 40.sp
     val DisplayM = 26.sp
     val DisplayS = 22.sp
+    /** Added 2026-09-29 for the small labels: 22 / (26 / 22) = 18.6, held to 18. */
+    val DisplayXs = 18.sp
 
     /** prose: Spectral. */
     val ProseL = 19.sp
@@ -114,27 +116,28 @@ private fun data(
     letterSpacing = tracking,
 )
 
+/** display-xs: the smallest Cinzel step, for list names and small heads. */
+val displayXs: TextStyle = display(TypeScale.DisplayXs, FontWeight.Normal)
+
 /**
- * Material's fifteen slots on the system's ten sizes.
+ * Material's fifteen slots on the system's eleven sizes.
  *
  * The three prose slots take the three prose steps and the three label slots
- * take the three data steps, one for one. Display has four steps against
- * Material's six slots above title, so headlineMedium and headlineSmall
- * borrow display-s rather than inventing a step between.
+ * take the three data steps, one for one. Display has four steps from 22 up
+ * against Material's six slots above title, so headlineMedium and
+ * headlineSmall borrow display-s rather than inventing a step between.
  *
  * Leading follows the family: display at 1.1, prose at 1.65, and the data
  * leading of 2 on labelLarge, which is the slot that stacks into ephemeris
  * rows. The two smaller label slots are single-line chips and kickers, so
  * they take the font's own metrics instead of a number invented for them.
  *
- * The three title slots are the one place a literal size survives. Cinzel
- * sets list names and section labels at 12 to 16sp here and the display
- * scale stops at 22sp; mapping them up would break those rows, and
- * tokens/typography.css says not to add a size to fit one screen. Web left
- * the same sixty sites literal for the same reason, so both surfaces carry
- * the gap identically rather than each inventing its own fix. A display step
- * below 22, or a move to mono, is a design decision, recorded in
- * docs/design/IMPLEMENTATION.md.
+ * The three title slots carry the labels Cinzel used to set at 12 to 16sp.
+ * The two larger ones take display-xs, the step the owner added under 22 on
+ * 2026-09-29; titleSmall held section captions and the day's permission
+ * labels, which are microcopy, so it moves to the mono data scale. Web made
+ * the same split: 14 to 17px onto display-xs, 11 to 13px onto mono. The
+ * decision is recorded in docs/design/IMPLEMENTATION.md.
  */
 val Typography = Typography(
     displayLarge = display(TypeScale.DisplayXl, FontWeight.Medium),
@@ -145,9 +148,9 @@ val Typography = Typography(
     headlineMedium = display(TypeScale.DisplayS, FontWeight.Normal),
     headlineSmall = display(TypeScale.DisplayS, FontWeight.Normal),
 
-    titleLarge = TextStyle(fontFamily = Cinzel, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 22.sp, letterSpacing = TypeScale.TrackLabel),
-    titleMedium = TextStyle(fontFamily = Cinzel, fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = TypeScale.TrackLabel),
-    titleSmall = TextStyle(fontFamily = Cinzel, fontWeight = FontWeight.Normal, fontSize = 12.sp, lineHeight = 18.sp, letterSpacing = TypeScale.TrackMicrocopy),
+    titleLarge = display(TypeScale.DisplayXs, FontWeight.Medium),
+    titleMedium = displayXs,
+    titleSmall = data(TypeScale.DataS, TypeScale.TrackMicrocopy),
 
     bodyLarge = prose(TypeScale.ProseL),
     bodyMedium = prose(TypeScale.ProseM),

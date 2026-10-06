@@ -30,7 +30,7 @@ export function PermissionsModule({ culture, permissions, source = "sky", tone }
       <div className="my-4 h-px w-[34px] bg-accent" />
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-[var(--space-4)]">
         <div>
-          <div className="mb-[var(--space-2)] font-display text-[11px] tracking-[0.2em] text-harmony">{proceedLabel}</div>
+          <div className="mb-[var(--space-2)] font-mono text-data-xs uppercase tracking-microcopy text-harmony">{proceedLabel}</div>
           <div className="flex flex-col gap-[var(--space-1)] font-body text-prose-s font-light leading-prose text-prose">
             {permissions.proceed.map((item) => (
               <span key={item}>{item}</span>
@@ -38,7 +38,7 @@ export function PermissionsModule({ culture, permissions, source = "sky", tone }
           </div>
         </div>
         <div>
-          <div className="mb-[var(--space-2)] font-display text-[11px] tracking-[0.2em] text-conflict">{refrainLabel}</div>
+          <div className="mb-[var(--space-2)] font-mono text-data-xs uppercase tracking-microcopy text-conflict">{refrainLabel}</div>
           <div className="flex flex-col gap-[var(--space-1)] font-body text-prose-s font-light leading-prose text-prose">
             {permissions.refrain.map((item) => (
               <span key={item}>{item}</span>

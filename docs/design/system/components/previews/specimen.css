@@ -53,6 +53,7 @@
     --text-display-l: 40px;
     --text-display-m: 26px;
     --text-display-s: 22px;
+    --text-display-xs: 18px;
     --text-prose-m: 17px;
     --text-prose-s: 15px;
     --text-data-m: 15px;
@@ -781,8 +782,14 @@
   .gap-x-\[var\(--space-1\)\] {
     column-gap: var(--space-1);
   }
+  .gap-x-\[var\(--space-2\)\] {
+    column-gap: var(--space-2);
+  }
   .gap-x-\[var\(--space-3\)\] {
     column-gap: var(--space-3);
+  }
+  .gap-x-\[var\(--space-4\)\] {
+    column-gap: var(--space-4);
   }
   .gap-y-1 {
     row-gap: calc(var(--spacing) * 1);
@@ -795,6 +802,9 @@
   }
   .gap-y-6 {
     row-gap: calc(var(--spacing) * 6);
+  }
+  .gap-y-\[var\(--space-2\)\] {
+    row-gap: var(--space-2);
   }
   .self-center {
     align-self: center;
@@ -1142,26 +1152,14 @@
   .text-\[10px\] {
     font-size: 10px;
   }
-  .text-\[11\.5px\] {
-    font-size: 11.5px;
-  }
   .text-\[11px\] {
     font-size: 11px;
-  }
-  .text-\[12px\] {
-    font-size: 12px;
-  }
-  .text-\[13px\] {
-    font-size: 13px;
   }
   .text-\[14px\] {
     font-size: 14px;
   }
   .text-\[15px\] {
     font-size: 15px;
-  }
-  .text-\[16px\] {
-    font-size: 16px;
   }
   .text-\[17px\] {
     font-size: 17px;
@@ -1189,6 +1187,9 @@
   }
   .text-display-s {
     font-size: var(--text-display-s);
+  }
+  .text-display-xs {
+    font-size: var(--text-display-xs);
   }
   .text-prose-m {
     font-size: var(--text-prose-m);
@@ -1244,10 +1245,6 @@
     --tw-tracking: 0.1em;
     letter-spacing: 0.1em;
   }
-  .tracking-\[0\.2em\] {
-    --tw-tracking: 0.2em;
-    letter-spacing: 0.2em;
-  }
   .tracking-\[0\.3em\] {
     --tw-tracking: 0.3em;
     letter-spacing: 0.3em;
@@ -1271,22 +1268,6 @@
   .tracking-\[0\.14em\] {
     --tw-tracking: 0.14em;
     letter-spacing: 0.14em;
-  }
-  .tracking-\[0\.16em\] {
-    --tw-tracking: 0.16em;
-    letter-spacing: 0.16em;
-  }
-  .tracking-\[0\.18em\] {
-    --tw-tracking: 0.18em;
-    letter-spacing: 0.18em;
-  }
-  .tracking-\[0\.22em\] {
-    --tw-tracking: 0.22em;
-    letter-spacing: 0.22em;
-  }
-  .tracking-\[0\.24em\] {
-    --tw-tracking: 0.24em;
-    letter-spacing: 0.24em;
   }
   .tracking-\[0\.28em\] {
     --tw-tracking: 0.28em;
@@ -1754,6 +1735,11 @@
       flex-direction: row;
     }
   }
+  .sm\:gap-x-\[var\(--space-4\)\] {
+    @media (width >= 40rem) {
+      column-gap: var(--space-4);
+    }
+  }
   .sm\:px-10 {
     @media (width >= 40rem) {
       padding-inline: calc(var(--spacing) * 10);
@@ -1902,6 +1888,11 @@
       &>*:nth-child(3) {
         order: 3;
       }
+    }
+  }
+  .\[\&\>a\]\:whitespace-nowrap {
+    &>a {
+      white-space: nowrap;
     }
   }
 }

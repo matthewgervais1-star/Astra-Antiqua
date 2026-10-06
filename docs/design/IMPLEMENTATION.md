@@ -198,7 +198,8 @@ smallest is 22px. Sixty sites set Cinzel between 11 and 17px, as list names,
 nav labels and small heads. Mapping them up would break those rows, and the
 tokens file says not to add a step to fit one screen, so they stay at their
 literal size and are listed by the sweep. The buttons that were among them are
-now mono, which is what the Button spec asks for.
+now mono, which is what the Button spec asks for. (Superseded on 2026-09-29:
+the owner added `display-xs` at 18px; see "Since closed".)
 
 **Greece ships the omega, not the tripod.** The research names the tripod as
 the launcher; both icon generators cut it from `ts-omega.svg`. The reasoning
@@ -268,10 +269,6 @@ better mark and that Tanit carries a cost a launcher icon cannot disarm, having
 no label. Tracing it needs a Salammbo harbour survey, which is a document to be
 got rather than a thing to be drawn. Tanit ships meanwhile, in her outline cut.
 
-**A display step under 22px, or none.** Whether the small Cinzel labels get
-a `display-xs` step or move to mono is a design call; the sweep left them
-literal so the decision is not made by a script.
-
 **The account, sign-in and wait-list routes need a server, not a screen.**
 Web talks to `/api/auth/*`, `/api/charts` and `/api/wait-list` from the same
 origin. Android would need a base URL, a session store and a cookie client,
@@ -319,4 +316,20 @@ a gap between the two doorways. The tree has since closed all three.
   own frame in literal values and never read the tokens, so they did not
   change. Landed with the commit `feat(design): the rules take the system's
   incised and hairline inks`; screenshots in
+  `docs/design/screenshots/phase11-design-calls/`.
+- **A display step under 22px, or none.** The owner took the call on
+  2026-09-29: both. The scale's step ratios are 52/40 = 1.30, 40/26 = 1.54
+  and 26/22 = 1.18. The smallest, applied once below 22, gives
+  22 x 22 / 26 = 18.6; the step is 18px, since 19 would sit closer to 22 than
+  any step sits to the one above it. `--type-display-xs` in
+  `tokens/typography.css`, `--text-display-xs` in `globals.css` and
+  `TypeScale.DisplayXs` on Android carry it, with the display tracking and
+  leading. Cinzel sites at 14 to 17px moved onto `text-display-xs`; sites at
+  11 to 13px are microcopy and moved to mono (`text-data-s` or
+  `text-data-xs`, uppercase). On Android `titleLarge` and `titleMedium` take
+  display-xs and `titleSmall` takes mono. Three links keep a literal Cinzel
+  size: each wraps the drawn `Wordmark`, which sizes itself from
+  `capHeight`, so no Cinzel glyph renders at that size. The Satori OG cards
+  keep their literal sizes. Landed with the commit `feat(design): a
+  display-xs step, and the small labels move onto the scale`; screenshots in
   `docs/design/screenshots/phase11-design-calls/`.

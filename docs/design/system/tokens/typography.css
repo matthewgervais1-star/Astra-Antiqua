@@ -4,6 +4,8 @@
   --type-display-l: 40px;
   --type-display-m: 26px;
   --type-display-s: 22px;
+  /* the owner added this step on 2026-09-29 to house the small labels the sweep had left literal */
+  --type-display-xs: 18px;
   --track-display: 0.16em;
   --leading-display: 1.1;
 

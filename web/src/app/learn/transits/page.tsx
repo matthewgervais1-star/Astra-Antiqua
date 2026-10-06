@@ -68,7 +68,7 @@ export default function TransitsLearnPage() {
               key={rule.kind}
               className="flex items-baseline justify-between gap-4 border-t border-rule-row py-3 last:border-b"
             >
-              <span className="font-display text-[14px] tracking-[0.06em] text-bone">
+              <span className="font-display text-display-xs tracking-[0.06em] text-bone">
                 {ASPECT_GLYPHS[rule.kind]} {rule.kind.toUpperCase()}
               </span>
               <span className="font-mono text-data-xs tracking-label text-dim">

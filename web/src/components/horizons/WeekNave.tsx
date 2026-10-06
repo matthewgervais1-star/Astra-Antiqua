@@ -130,11 +130,11 @@ function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
       <span className="flex flex-col gap-1">
         {day.headline ? (
           day.figureHref ? (
-            <Link href={day.figureHref} className="font-display text-prose-m leading-display text-bone hover:text-accent">
+            <Link href={day.figureHref} className="font-display text-display-xs leading-display text-bone hover:text-accent">
               {day.headline}
             </Link>
           ) : (
-            <span className="font-display text-prose-m leading-display text-bone">{day.headline}</span>
+            <span className="font-display text-display-xs leading-display text-bone">{day.headline}</span>
           )
         ) : null}
         <span className="font-body text-prose-s leading-prose text-prose">{day.line}</span>
@@ -192,7 +192,7 @@ function WeekContent({
       <div className="mt-6 flex justify-center">
         <FeedbackRow readingId={weekReadingId(weekStart)} noun="WEEK" />
       </div>
-      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-display text-[11.5px] tracking-[0.2em]">
+      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-mono text-data-xs uppercase tracking-microcopy">
         <Link href="/" className="text-bone/65 hover:text-bone">
           ← THE DAY
         </Link>

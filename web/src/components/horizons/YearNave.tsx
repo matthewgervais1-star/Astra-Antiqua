@@ -166,7 +166,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
                     href={`/transits/${span.id}`}
                     className="flex items-baseline justify-between gap-3 text-prose no-underline hover:text-bone"
                   >
-                    <span className="font-display text-[13px] tracking-[0.08em]">
+                    <span className="font-mono text-data-s uppercase tracking-label">
                       {spanHeadline(culture, span)}
                     </span>
                     <span className="whitespace-nowrap font-mono text-data-xs text-dim">
@@ -202,7 +202,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
             </div>
           </div>
           <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-[var(--space-4)] py-[var(--space-3)] text-center">
-            <div className="font-display text-[15px] tracking-[0.1em] text-bone">
+            <div className="font-display text-display-xs tracking-[0.1em] text-bone">
               CAST A CHART TO READ THE YEAR AGAINST YOUR OWN SKY
             </div>
             <Link
@@ -219,7 +219,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
         <FeedbackRow readingId={yearReadingId(now)} noun="YEAR" />
       </div>
 
-      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-display text-[11.5px] tracking-[0.2em]">
+      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-mono text-data-xs uppercase tracking-microcopy">
         <Link href="/season" className="text-bone/65 hover:text-bone">
           ← THE SEASON
         </Link>
