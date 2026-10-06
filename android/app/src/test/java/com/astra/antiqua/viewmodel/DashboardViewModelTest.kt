@@ -50,6 +50,10 @@ class DashboardViewModelTest {
         val success = state as ChartState.Success
         assertEquals(Planet.entries.toSet(), success.chartData.planets.keys)
         assertEquals(Planet.entries.toSet(), success.placements.keys)
+        // With a chart the lists and the dive deeper read it.
+        val extras = model.dayExtras.value!!
+        assertEquals(true, extras.listsFromChart)
+        assertEquals(true, extras.diveDeeper.natal)
     }
 
     @Test
@@ -105,5 +109,10 @@ class DashboardViewModelTest {
         assertEquals("Your name is good for credit anywhere on the quay.", decree.headline)
         assertEquals("SEMES △ BAAL SHAMEM · 0°19′", decree.evidence)
         assertEquals(DecreeBanks.comeBack(AncientCulture.CARTHAGE), decree.comeBack)
+        // Without a chart the lists and the dive deeper read the sky.
+        val extras = model.dayExtras.value!!
+        assertEquals(false, extras.listsFromChart)
+        assertEquals(false, extras.diveDeeper.natal)
+        assertEquals(4, extras.diveDeeper.groups.size)
     }
 }

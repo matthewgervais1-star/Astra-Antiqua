@@ -3,6 +3,7 @@ package com.astra.antiqua.ui.screens
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -48,6 +49,9 @@ import com.astra.antiqua.domain.FigureReadingComposer
 import com.astra.antiqua.domain.AccuratePlanetPosition
 import com.astra.antiqua.domain.AspectType
 import com.astra.antiqua.domain.DayDecree
+import com.astra.antiqua.domain.DayPermissions
+import com.astra.antiqua.domain.DiveDeeper
+import com.astra.antiqua.domain.permissionPair
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
 import com.astra.antiqua.model.Planet
@@ -60,6 +64,7 @@ import com.astra.antiqua.ui.components.BadgeTone
 import com.astra.antiqua.ui.components.Kicker
 import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.components.NaveShell
+import com.astra.antiqua.ui.components.RowRule
 import com.astra.antiqua.ui.components.SectionDivider
 import com.astra.antiqua.ui.nav.Horizon
 import com.astra.antiqua.ui.nav.Route
@@ -91,6 +96,7 @@ fun MainDashboardScreen(
 
     val chartState by dashboardViewModel.chartState.collectAsState()
     val dayDecree by dashboardViewModel.dayDecree.collectAsState()
+    val dayExtras by dashboardViewModel.dayExtras.collectAsState()
     val lexicon = LocalLexicon.current
     val accent = LocalAccent.current
 
@@ -137,6 +143,25 @@ fun MainDashboardScreen(
                             )
                         }
                     },
+                )
+                Spacer(modifier = Modifier.height(Spacing.Step))
+            }
+            dayExtras?.let { extras ->
+                item {
+                    DayListsCard(culture = culture, permissions = extras.permissions, fromChart = extras.listsFromChart)
+                }
+                item {
+                    DiveDeeperSection(diveDeeper = extras.diveDeeper)
+                }
+            }
+            item {
+                // The culture's come-back line closes the day page, under the dive deeper.
+                Text(
+                    text = decree.comeBack.uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Dim,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.Step),
                 )
                 Spacer(modifier = Modifier.height(Spacing.Step))
             }
@@ -218,8 +243,8 @@ fun MainDashboardScreen(
 
 /**
  * The day page, as web's CenterDecree draws it: the headline to the reader,
- * the evidence line beneath it, the paragraph, and the come-back line. The
- * Do and Don't lists are web-only until Android has a permissions composer.
+ * the evidence line beneath it, and the paragraph. The Do and Don't lists,
+ * the dive deeper and the come-back line follow it on the dashboard.
  */
 @Composable
 fun DayDecreeCard(decree: DayDecree, onOpenFigure: (() -> Unit)? = null) {
@@ -255,13 +280,64 @@ fun DayDecreeCard(decree: DayDecree, onOpenFigure: (() -> Unit)? = null) {
             color = Prose,
             modifier = Modifier.fillMaxWidth(),
         )
-        Spacer(modifier = Modifier.height(Spacing.Step))
-        Text(
-            text = decree.comeBack.uppercase(),
-            style = MaterialTheme.typography.labelSmall,
-            color = Dim,
-            textAlign = TextAlign.Center,
+    }
+}
+
+/**
+ * The day's Do and Don't lists, as web's PermissionsModule draws them: two
+ * columns under the culture's own pair, from the day's transits to the
+ * reader's chart when there is one, from the decree's figures otherwise.
+ */
+@Composable
+fun DayListsCard(culture: AncientCulture, permissions: DayPermissions, fromChart: Boolean) {
+    val (proceedLabel, refrainLabel) = permissionPair(culture)
+    Column(modifier = Modifier.fillMaxWidth()) {
+        SectionDivider(label = "The day's permissions")
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(Spacing.Step)) {
+            listOf(Triple(proceedLabel, permissions.proceed, Harmony), Triple(refrainLabel, permissions.refrain, Conflict))
+                .forEach { (label, items, ink) ->
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(text = label, style = MaterialTheme.typography.titleSmall, color = ink)
+                        Spacer(modifier = Modifier.height(Spacing.Tight))
+                        items.forEach { item ->
+                            Text(text = item, style = MaterialTheme.typography.bodyMedium, color = Prose)
+                        }
+                    }
+                }
+        }
+        Spacer(modifier = Modifier.height(Spacing.Snug))
+        Kicker(
+            text = if (fromChart) "Derived from today's transits to your chart" else "Derived from today's aspects",
         )
+        Spacer(modifier = Modifier.height(Spacing.Step))
+    }
+}
+
+/**
+ * The dive deeper, as web's DiveDeeper draws it: the four house groups, each
+ * a title in the culture's names, the figure it reads in mono, and its
+ * paragraph, between the faint data rules.
+ */
+@Composable
+fun DiveDeeperSection(diveDeeper: DiveDeeper) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        SectionDivider(label = if (diveDeeper.natal) "Dive deeper · from your chart" else "Dive deeper")
+        diveDeeper.groups.forEach { group ->
+            RowRule()
+            Spacer(modifier = Modifier.height(Spacing.Snug))
+            Text(text = group.title, style = MaterialTheme.typography.titleMedium, color = Bone)
+            if (group.evidence.isNotEmpty()) {
+                Text(text = group.evidence, style = MaterialTheme.typography.labelSmall, color = Dim)
+            }
+            Spacer(modifier = Modifier.height(Spacing.Tight))
+            Text(
+                text = group.sentences.joinToString(" "),
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (group.quiet) Dim else Prose,
+            )
+            Spacer(modifier = Modifier.height(Spacing.Snug))
+        }
+        RowRule()
     }
 }
 

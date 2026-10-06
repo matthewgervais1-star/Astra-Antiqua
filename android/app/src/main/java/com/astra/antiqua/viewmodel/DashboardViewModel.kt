@@ -10,6 +10,11 @@ import com.astra.antiqua.data.SettingsRepository
 import com.astra.antiqua.domain.CalculateNatalChartUseCase
 import com.astra.antiqua.domain.DayDecree
 import com.astra.antiqua.domain.DayDecreeComposer
+import com.astra.antiqua.domain.DayPermissions
+import com.astra.antiqua.domain.DayPermissionsComposer
+import com.astra.antiqua.domain.DiveDeeper
+import com.astra.antiqua.domain.DiveDeeperComposer
+import com.astra.antiqua.domain.NatalPoints
 import com.astra.antiqua.domain.LexiconDictionary
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
@@ -37,6 +42,14 @@ sealed class ChartState {
     data class Error(val message: String) : ChartState()
 }
 
+/** What the day page prints under the decree: the lists and the dive deeper. */
+data class DayExtras(
+    val permissions: DayPermissions,
+    /** True when the lists come from the day's transits to the reader's chart. */
+    val listsFromChart: Boolean,
+    val diveDeeper: DiveDeeper,
+)
+
 /**
  * The day's reading against the saved chart.
  *
@@ -62,14 +75,36 @@ class DashboardViewModel(
     private val _dayDecree = MutableStateFlow<DayDecree?>(null)
     val dayDecree: StateFlow<DayDecree?> = _dayDecree.asStateFlow()
 
+    /**
+     * The day's Do and Don't lists and its dive deeper: from the sky first,
+     * then, once the chart is computed, from the day's transits to it.
+     */
+    private val _dayExtras = MutableStateFlow<DayExtras?>(null)
+    val dayExtras: StateFlow<DayExtras?> = _dayExtras.asStateFlow()
+
+    private fun extrasFor(culture: AncientCulture, decree: DayDecree, now: Date, natal: NatalPoints?): DayExtras {
+        val day = Math.floorDiv(now.time, DAY_MS)
+        val sky = DayDecreeComposer.chartAt(astronomy, Date(day * DAY_MS))
+        val natalLists = natal?.let { DayPermissionsComposer.forNatal(culture, sky, it.chart, day) }
+        return DayExtras(
+            permissions = natalLists ?: DayPermissionsComposer.forFigures(culture, decree.figures, day),
+            listsFromChart = natalLists != null,
+            diveDeeper = DiveDeeperComposer.compose(culture, decree, sky, day, natal),
+        )
+    }
+
     fun calculateChart(now: Date = Date()) {
         viewModelScope.launch {
             _chartState.value = ChartState.Loading
+            val dayCulture = settings.selectedCulture.first() ?: AncientCulture.GREECE
             try {
-                val dayCulture = settings.selectedCulture.first() ?: AncientCulture.GREECE
-                _dayDecree.value = withContext(Dispatchers.Default) {
-                    DayDecreeComposer.composeDayPage(astronomy, dayCulture, now)
+                // One hop to the background for the page, its lists and its dive deeper.
+                val (decree, extras) = withContext(Dispatchers.Default) {
+                    val page = DayDecreeComposer.composeDayPage(astronomy, dayCulture, now)
+                    page to extrasFor(dayCulture, page, now, null)
                 }
+                _dayDecree.value = decree
+                _dayExtras.value = extras
             } catch (e: Exception) {
                 Log.e(TAG, "Error composing the day page", e)
             }
@@ -82,9 +117,20 @@ class DashboardViewModel(
                     return@launch
                 }
 
-                val chartData = withContext(Dispatchers.Default) {
-                    CalculateNatalChartUseCase(astronomy).execute(userProfile)
+                // The lists and the dive deeper read the chart once it exists,
+                // composed in the same hop as the chart.
+                val decree = _dayDecree.value
+                val (chartData, natalExtras) = withContext(Dispatchers.Default) {
+                    val chart = CalculateNatalChartUseCase(astronomy).execute(userProfile)
+                    val ascendant = chart.houseCusps.getOrNull(1)
+                    val extras = if (decree != null && ascendant != null) {
+                        extrasFor(dayCulture, decree, now, NatalPoints(chart.planets.mapValues { it.value.longitude }, ascendant))
+                    } else {
+                        null
+                    }
+                    chart to extras
                 }
+                if (natalExtras != null) _dayExtras.value = natalExtras
                 val culture = settings.selectedCulture.first() ?: AncientCulture.GREECE
 
                 // Compose every body once. The corpus covers all ten, the
@@ -117,5 +163,6 @@ class DashboardViewModel(
 
     private companion object {
         const val TAG = "DashboardViewModel"
+        const val DAY_MS = 86_400_000L
     }
 }

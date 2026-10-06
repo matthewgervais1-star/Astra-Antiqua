@@ -177,6 +177,11 @@ object FigureReadingComposer {
     private fun lesson(culture: AncientCulture, aspect: AspectType, god: Planet) =
         fill(FigureBanks.lesson(culture, aspect), mapOf("god" to name(culture, god)))
 
+    /** A contact in mono, the transiting god against the reader's: "MARS ⚹ YOUR MERCURIUS · 0°41′". */
+    fun bridge(culture: AncientCulture, body: Planet, point: Planet, aspect: AspectType, orb: Double): String =
+        "${name(culture, body).uppercase()} ${DayDecreeComposer.glyph(aspect)} " +
+            "YOUR ${name(culture, point).uppercase()} · ${DayDecreeComposer.orbMeasure(orb)}"
+
     /** The tightest aspect from the headline body to a natal planet; from the partner when the headline body touches none. */
     fun natalContact(sky: Map<Planet, Double>, natal: NatalPoints, headline: Planet, partner: Planet): NatalContact? {
         // A body against itself is left out: the page reads one domain against
@@ -307,8 +312,7 @@ object FigureReadingComposer {
             instant = instant,
             natal = natal != null && contact != null,
             bridge = if (natal != null && contact != null) {
-                "${name(culture, contact.body).uppercase()} ${DayDecreeComposer.glyph(contact.aspect)} " +
-                    "YOUR ${name(culture, contact.point).uppercase()} · ${DayDecreeComposer.orbMeasure(contact.orb)}"
+                bridge(culture, contact.body, contact.point, contact.aspect, contact.orb)
             } else {
                 null
             },
