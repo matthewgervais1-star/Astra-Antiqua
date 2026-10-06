@@ -7,33 +7,33 @@ import type { Culture } from "@/data/cultures";
  */
 export const GOLDEN_2026_09_29: Readonly<Record<Culture, { headline: string; evidence: string; paragraph: string }>> = {
   egypt: {
-    headline: "Do not act on the mood you wake up with before the sun is high.",
-    evidence: "KHONSU □ HORUS THE RED · 4°57′",
+    headline: "Start the heavy thing while the light holds.",
+    evidence: "RA △ NUT · 0°19′",
     paragraph:
-      "Your moods and your temper haul on opposite ropes. Nothing moves today without someone dragging against it. Khonsu clouds the water where Horus the Red wants to cross, and the boatman waits for dawn. On the far bank, Ra rows in time with Nut: your day's work and your plans for the new season float on the same current. Say nothing at home until you have eaten, and leave the first bite for Khonsu and Horus the Red.",
+      "Your day's work and your plans for the new season keep the same pace, and the cord is drawn tight. A sudden change works in your favor. Ra and Nut sit level on the scale, and Anubis leaves the beam alone. On the bank across from Ra and Nut, Khonsu tips the scales against Osiris: your moods and what you have buried pull the sledge two ways. Lift the heaviest stone of the week first, and call on Ra and Nut as you lift it.",
   },
   greece: {
-    headline: "Do not ask the oracle what you are not ready to hear.",
-    evidence: "SELENE □ ARES · 4°57′",
+    headline: "Stand up in the assembly and be counted.",
+    evidence: "HELIOS △ OURANOS · 0°19′",
     paragraph:
-      "Your household and your fighting strength argue at the same gate. The answer you want is not the answer you get. Selene hides behind cloud from Ares, and the night sailors argue over the stars. Down in the agora, Helios moves in accord with Ouranos: your name in the city and your sudden notions keep step with each other. Let the household argument end at the door, and ask Selene and Ares for a quiet night.",
+      "Your name in the city and your sudden notions sing the same hymn, and the Pythia does not hesitate. A sudden notion turns out to be a good one. The Pythia takes Helios and Ouranos ahead of the crowd and answers from the tripod. In the agora below Helios and Ouranos, Selene challenges Plouton: your household and your hidden wealth row against each other. Speak first when the assembly opens, and pour a little wine for Helios and Ouranos at noon.",
   },
   canaan: {
-    headline: "Keep the family quarrel inside the tent.",
-    evidence: "YARIKH □ RESHEPH · 4°57′",
+    headline: "The council says yes to you today, so ask.",
+    evidence: "SHAPASH △ SHAMEM · 0°19′",
     paragraph:
-      "Your kin at home and your hot blood quarrel at the gate. Someone objects to you in front of the council. Yarikh quarrels with Resheph over the bride price, and the families leave the table. At the city gate, Shapash speaks favor over Shamem: your daily labor and your change of pasture sit at the same table. Let your kin speak tonight and answer them tomorrow, and ask Yarikh and Resheph for quiet.",
+      "Your daily labor and your change of pasture drink from one jar, and the witnesses sign the tablet. A change you did not plan works out well. The assembly waves Shapash and Shamem through, and no god asks for a vow. At the gate below Shapash and Shamem, Yarikh draws the bow against Motu: your kin at home and your grain pits tear at the same fence. Name the thing you want at the gate, and leave a share of the yield for Shapash and Shamem.",
   },
   carthage: {
-    headline: "Do not balance the house ledger in a temper.",
-    evidence: "TANIT □ MELQART · 4°57′",
+    headline: "The whole quay will take your note this week.",
+    evidence: "SEMES △ BAAL SHAMEM · 0°19′",
     paragraph:
-      "Your household accounts and your war chest fight over the same silver. Someone changes the terms on you. Tanit looks away from Melqart's altar, and the household accounts do not balance. In the next column, Semes lights the harbor for Baal Shamem: your credit in the harbor and your new routes add up on the first pass. Leave the household books shut until morning, and keep a lamp lit for Tanit and Melqart.",
+      "Your credit in the harbor and your new routes clear the harbor together, weighed to the last shekel. A new route pays on its first sailing. The clerk adds Semes's column to Baal Shamem's, and the sum closes the sheet. In the column after Semes and Baal Shamem, Tanit turns the prow against Mot: your household accounts and the debts you inherited foul each other's anchors. Ask for the larger loan, and set aside the share of Semes and Baal Shamem.",
   },
   rome: {
-    headline: "The household is quarrelsome, and the neighbors are listening.",
-    evidence: "LUNA □ MARS · 4°57′",
+    headline: "Walk into the forum as if you own it.",
+    evidence: "SOL △ CAELUS · 0°19′",
     paragraph:
-      "Your household affairs and your campaign block each other's road. Your business is put off. Luna turns red in eclipse before Mars, and the household bangs bronze pots to drive off the shadow. Across the forum, Sol clasps the right hand of Caelus: your good name and your reforms sit on the same side of the Senate. Settle household quarrels inside the walls, and give a cake to Luna and Mars at the household shrine.",
+      "Your good name and your reforms vote the same way, and the augur marks it in his book. A reform you pushed takes hold. Sol and Caelus rise over a clear sky, and the augur sees birds on the right. Across the forum from Sol and Caelus, Luna raises the spear against Dis Pater: your household affairs and your inheritance quarrel in the Senate. Take the front bench at the next meeting, and hang a garland for Sol and Caelus on the way.",
   },
 };

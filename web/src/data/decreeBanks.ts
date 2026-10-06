@@ -22,9 +22,11 @@ import type { AspectKind } from "@/data/sampleChart";
  *
  * The keys make every sentence after the evidence line change with the
  * figure: two figures that share a headline body differ in the partner, and
- * the image and the instruction name it. The composer adds the rest of the
- * rule, that no sentence repeats within seven days (lib/decree.ts). No
- * sentence repeats across two cultures.
+ * the image and the instruction name it. The three-way banks (relations,
+ * exact tails, second-figure openers) rotate by the UTC day number, so a
+ * figure that holds for days prints a different paragraph each day. The sky
+ * picks the figure; the day picks among the words. No sentence repeats across
+ * two cultures.
  */
 
 /** The bodies that move fast enough to headline a day. */
@@ -36,22 +38,26 @@ export type PartnerBody = Exclude<Planet, "moon">;
 export interface DecreeBank {
   /** One sentence to the reader per (kind, headline body). */
   headlines: Readonly<Record<AspectKind, Readonly<Record<FastBody, string>>>>;
-  /** Plural predicate: "{domain A} and {domain B} {relation}". */
-  relations: Readonly<Record<AspectKind, string>>;
-  /** Appended to the meaning sentence under half a degree; the day picks one. */
-  exactTails: readonly [string, string];
+  /** Plural predicate: "{domain A} and {domain B} {relation}"; the day picks one of three. */
+  relations: Readonly<Record<AspectKind, readonly [string, string, string]>>;
+  /** Appended to the meaning sentence under half a degree; the day picks one of three. */
+  exactTails: readonly [string, string, string];
   /** What the figure means for the reader, per (kind, partner body). */
   consequences: Readonly<Record<AspectKind, Readonly<Record<PartnerBody, string>>>>;
   /** The institution's picture, per (kind, headline body). Slots: {god}, {partner}. */
   images: Readonly<Record<AspectKind, Readonly<Record<FastBody, string>>>>;
   /** The one order, always last, per (kind, headline body). Slots: {god}, {partner}. */
   instructions: Readonly<Record<AspectKind, Readonly<Record<FastBody, string>>>>;
-  /** Opens the second-figure sentence; the day picks one. */
-  secondFigure: readonly [string, string];
+  /** Opens the second-figure sentence, naming the headline figure's gods so
+   *  two different headline figures never print the same second sentence;
+   *  the day picks one of three. Slots: {god}, {partner}. */
+  secondFigure: readonly [string, string, string];
   /** Stands in for the second figure when the sky offers none. */
   noSecondFigure: string;
   /** Closes the day page. */
   comeBack: string;
+  /** Stands in a week row's headline when the row's figure is the day before's. */
+  holds: string;
 }
 
 export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
@@ -94,13 +100,13 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       },
     },
     relations: {
-      conjunction: "ride in one boat",
-      sextile: "throw each other a rope",
-      square: "haul on opposite ropes",
-      trine: "float on the same current",
-      opposition: "stand on opposite banks",
+      conjunction: ["ride in one boat", "come to the scale together", "sleep under one roof"],
+      sextile: ["throw each other a rope", "pass each other bread", "clear each other's canal"],
+      square: ["haul on opposite ropes", "pull the sledge two ways", "dam each other's water"],
+      trine: ["float on the same current", "keep the same pace", "share the same wind"],
+      opposition: ["stand on opposite banks", "stand at opposite ends of the field", "call to each other across the river"],
     },
-    exactTails: [", true as the plumb line", ", and the cord is drawn tight"],
+    exactTails: [", true as the plumb line", ", and the cord is drawn tight", ", and Thoth writes it to the hair"],
     consequences: {
       conjunction: {
         sun: "Your work and your name go out together, and everyone sees both.",
@@ -232,9 +238,10 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
         mars: "Wait for the far bank to make the first move, and ask {god} and {partner} to keep the peace.",
       },
     },
-    secondFigure: ["Lower on the river,", "On the far bank,"],
+    secondFigure: ["Downstream of {god} and {partner},", "On the bank across from {god} and {partner},", "Lower on the river than {god} and {partner},"],
     noSecondFigure: "Nothing else on the river comes near it, so this is the one thing you weigh today.",
     comeBack: "Come back at dawn, when the scale is set again.",
+    holds: "The same weight sits on the scale as yesterday.",
   },
 
   greece: {
@@ -276,13 +283,13 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       },
     },
     relations: {
-      conjunction: "go up the hill together",
-      sextile: "clear the road for each other",
-      square: "argue at the same gate",
-      trine: "keep step with each other",
-      opposition: "take opposite sides of the question",
+      conjunction: ["go up the hill together", "ask one question together", "share one cup"],
+      sextile: ["clear the road for each other", "carry each other's messages", "hold the door for each other"],
+      square: ["argue at the same gate", "row against each other", "wrestle for the same prize"],
+      trine: ["keep step with each other", "sing the same hymn", "drink from the same krater"],
+      opposition: ["take opposite sides of the question", "sit at opposite ends of the agora", "bring rival answers down the hill"],
     },
-    exactTails: [", to the very degree", ", and the Pythia does not hesitate"],
+    exactTails: [", to the very degree", ", and the Pythia does not hesitate", ", and the tripod answers at once"],
     consequences: {
       conjunction: {
         sun: "Everyone in the agora sees what you do.",
@@ -414,9 +421,10 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
         mars: "Let the other side strike first, and ask {god} and {partner} to stay their hands.",
       },
     },
-    secondFigure: ["At a lesser shrine,", "Down in the agora,"],
+    secondFigure: ["Down the hill from {god} and {partner},", "In the agora below {god} and {partner},", "At a lesser shrine than the one {god} and {partner} share,"],
     noSecondFigure: "No other shrine speaks today, so carry this one answer home.",
     comeBack: "Bring your next question tomorrow, when the tripod is lit again.",
+    holds: "The oracle gives the same answer as yesterday.",
   },
 
   canaan: {
@@ -458,13 +466,13 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       },
     },
     relations: {
-      conjunction: "stand before the council as one",
-      sextile: "vouch for each other",
-      square: "quarrel at the gate",
-      trine: "sit at the same table",
-      opposition: "call opposing witnesses",
+      conjunction: ["stand before the council as one", "swear one oath", "plow one furrow"],
+      sextile: ["vouch for each other", "trade tools", "carry water for each other"],
+      square: ["quarrel at the gate", "tear at the same fence", "trample each other's rows"],
+      trine: ["sit at the same table", "drink from one jar", "bring in the harvest together"],
+      opposition: ["call opposing witnesses", "argue across the threshing floor", "pull the tent ropes two ways"],
     },
-    exactTails: [", and the whole council hears it", ", and the witnesses sign the tablet"],
+    exactTails: [", and the whole council hears it", ", and the witnesses sign the tablet", ", and the elders mark the day"],
     consequences: {
       conjunction: {
         sun: "Your work is seen by everyone at the gate.",
@@ -596,9 +604,10 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
         mars: "Refuse the fight you are offered, and hand the arrow to {god} and {partner}.",
       },
     },
-    secondFigure: ["Further down the bench,", "At the city gate,"],
+    secondFigure: ["Further down the bench from {god} and {partner},", "At the gate below {god} and {partner},", "In the fields beyond {god} and {partner},"],
     noSecondFigure: "No other matter reaches the floor today, so close this one before you leave.",
     comeBack: "The council sits again tomorrow, and your seat is kept.",
+    holds: "The council is still sitting on yesterday's matter.",
   },
 
   carthage: {
@@ -640,13 +649,13 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       },
     },
     relations: {
-      conjunction: "share one account",
-      sextile: "carry each other's cargo",
-      square: "fight over the same silver",
-      trine: "add up on the first pass",
-      opposition: "bid against each other",
+      conjunction: ["share one account", "sail in one hull", "go under one seal"],
+      sextile: ["carry each other's cargo", "lend each other credit", "share a berth"],
+      square: ["fight over the same silver", "foul each other's anchors", "haggle over one cargo"],
+      trine: ["add up on the first pass", "clear the harbor together", "unload on the same tide"],
+      opposition: ["bid against each other", "sit across the counting table", "outbid each other on the quay"],
     },
-    exactTails: [", posted to the hour", ", weighed to the last shekel"],
+    exactTails: [", posted to the hour", ", weighed to the last shekel", ", entered without a correction"],
     consequences: {
       conjunction: {
         sun: "Your name and your credit become one entry.",
@@ -778,9 +787,10 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
         mars: "Keep your war chest closed to other people's quarrels, and let {god} and {partner} guard it.",
       },
     },
-    secondFigure: ["Further down the page,", "In the next column,"],
+    secondFigure: ["Below the line for {god} and {partner},", "In the column after {god} and {partner},", "On the page facing {god} and {partner},"],
     noSecondFigure: "Nothing else is entered today, so rule off under this line and go home.",
     comeBack: "Come back tomorrow, when the books open at first light.",
+    holds: "Yesterday's entry stands, and the clerk carries it forward.",
   },
 
   rome: {
@@ -822,13 +832,13 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       },
     },
     relations: {
-      conjunction: "march under one standard",
-      sextile: "lend each other troops",
-      square: "block each other's road",
-      trine: "sit on the same side of the Senate",
-      opposition: "veto each other",
+      conjunction: ["march under one standard", "sit on one bench", "answer one roll call"],
+      sextile: ["lend each other troops", "exchange favors", "carry each other's petitions"],
+      square: ["block each other's road", "quarrel in the Senate", "cut each other's supply line"],
+      trine: ["sit on the same side of the Senate", "vote the same way", "walk in the same procession"],
+      opposition: ["veto each other", "face each other across the forum", "file suits against each other"],
     },
-    exactTails: [", exact to the augur's line", ", and the augur marks it in his book"],
+    exactTails: [", exact to the augur's line", ", and the augur marks it in his book", ", and the pontiff marks it in the calendar"],
     consequences: {
       conjunction: {
         sun: "You answer in public for everything you do.",
@@ -960,9 +970,10 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
         mars: "Hold your position without attacking, and pray to {god} and {partner} for patience.",
       },
     },
-    secondFigure: ["Elsewhere in the sky,", "Across the forum,"],
+    secondFigure: ["Behind {god} and {partner} in the sky,", "Across the forum from {god} and {partner},", "Below the Capitol, where {god} meets {partner},"],
     noSecondFigure: "The sky sends no second sign, so the rest of your day is yours to spend.",
     comeBack: "The augur takes the auspices again at dawn, so come back tomorrow.",
+    holds: "The auspices stand as they stood.",
   },
 };
 

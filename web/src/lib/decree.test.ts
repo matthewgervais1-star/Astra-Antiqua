@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { composeDayPage, composeDecree, headlineBody, REPEAT_WINDOW_DAYS } from "@/lib/decree";
+import { composeDayPage, composeDecree, dayFigures, headlineBody, type DayDecree } from "@/lib/decree";
+import { computeChart } from "@/lib/ephemeris";
 import { composeDailyMessage } from "@/lib/dailyMessage";
 import { dayPermissions } from "@/lib/permissions";
 import { buildWeekDays } from "@/lib/weekReading";
@@ -134,14 +135,16 @@ test("the exact tail appears only under half a degree of orb", () => {
   }
 });
 
-test("the day's two variants alternate the exact tail and the second-figure opener", () => {
+test("the day's three variants rotate the relation, the exact tail and the second-figure opener", () => {
   const chart = chartWith("mars", "saturn", 90);
   for (const culture of CULTURES) {
-    const even = composeDecree(culture, chart, { day: 0 }).sentences;
-    const odd = composeDecree(culture, chart, { day: 1 }).sentences;
-    assert.ok(even[0]!.includes(DECREE_BANKS[culture].exactTails[0]), culture);
-    assert.ok(odd[0]!.includes(DECREE_BANKS[culture].exactTails[1]), culture);
-    assert.notEqual(even[3], odd[3], culture);
+    const days = [0, 1, 2].map((day) => composeDecree(culture, chart, { day }).sentences);
+    for (let v = 0; v < 3; v += 1) {
+      assert.ok(days[v]![0]!.includes(DECREE_BANKS[culture].exactTails[v]!), `${culture} tail ${v}`);
+      assert.ok(days[v]![0]!.includes(DECREE_BANKS[culture].relations.square[v]!), `${culture} relation ${v}`);
+    }
+    assert.equal(new Set(days.map((d) => d[0])).size, 3, culture);
+    assert.equal(new Set(days.map((d) => d[3])).size, 3, culture);
   }
 });
 
@@ -165,17 +168,59 @@ test("five cultures read one figure with no sentence in common", () => {
   }
 });
 
-test("no sentence of the day page repeats within seven days, over thirty days", () => {
-  for (const culture of CULTURES) {
-    const printed: string[][] = [];
-    for (let i = 0; i < 30; i += 1) {
-      const page = composeDayPage(culture, new Date(Date.UTC(2026, 8, 29) + i * 86_400_000));
-      const lines = [page.headline, ...page.sentences];
-      const window = new Set(printed.slice(-(REPEAT_WINDOW_DAYS - 1)).flat());
-      assert.deepEqual(lines.filter((s) => window.has(s)), [], `${culture} day ${i} repeats a sentence`);
-      printed.push(lines);
+const figureKey = (d: DayDecree) => {
+  const f = d.figures[0];
+  return f ? `${f.a}|${f.b}|${f.kind}` : "quiet";
+};
+
+test("the sky picks the figure: the day page leads with the tightest figure, every day", () => {
+  for (let i = 0; i < 30; i += 1) {
+    const date = new Date(Date.UTC(2026, 8, 29) + i * 86_400_000);
+    const raw = dayFigures(computeChart(date))[0]!;
+    for (const culture of CULTURES) {
+      const top = composeDayPage(culture, date).figures[0]!;
+      assert.deepEqual([top.a, top.b, top.kind], [raw.a, raw.b, raw.kind], `${culture} day ${i}`);
     }
   }
+  const sunUranus = composeDayPage("egypt", new Date("2026-09-29T00:00:00Z")).figures[0]!;
+  assert.deepEqual([sunUranus.a, sunUranus.b, sunUranus.kind], ["sun", "uranus", "trine"]);
+});
+
+test("over thirty days, two different figures within seven days share no sentence of their own", () => {
+  for (const culture of CULTURES) {
+    const pages = Array.from({ length: 30 }, (_, i) => composeDayPage(culture, new Date(Date.UTC(2026, 8, 29) + i * 86_400_000)));
+    pages.forEach((page, i) => {
+      for (let j = Math.max(0, i - 6); j < i; j += 1) {
+        const earlier = pages[j]!;
+        if (figureKey(page) === figureKey(earlier)) continue;
+        // Sentence 1, the consequence, is keyed by kind and partner body and
+        // names no god, so two figures that share both print it alike. It may
+        // repeat only then.
+        for (const k of [0, 2, 3, 4]) {
+          assert.ok(!earlier.sentences.includes(page.sentences[k]!), `${culture} day ${j} and ${i}: "${page.sentences[k]}"`);
+        }
+        if (earlier.sentences.includes(page.sentences[1]!)) {
+          const [a, b] = [page.figures[0]!, earlier.figures[0]!];
+          assert.equal(a.kind, b.kind, `${culture}: a shared consequence needs a shared kind`);
+          assert.equal(headlineBody(a.a, a.b).partner, headlineBody(b.a, b.b).partner, culture);
+        }
+      }
+    });
+  }
+});
+
+test("a figure that holds for consecutive days prints at least two different sentences", () => {
+  let holds = 0;
+  for (const culture of CULTURES) {
+    const pages = Array.from({ length: 30 }, (_, i) => composeDayPage(culture, new Date(Date.UTC(2026, 8, 29) + i * 86_400_000)));
+    for (let i = 1; i < pages.length; i += 1) {
+      if (figureKey(pages[i]!) !== figureKey(pages[i - 1]!)) continue;
+      holds += 1;
+      const changed = pages[i]!.sentences.filter((s, k) => s !== pages[i - 1]!.sentences[k]).length;
+      assert.ok(changed >= 2, `${culture} day ${i} changes only ${changed} sentence(s)`);
+    }
+  }
+  assert.ok(holds > 0, "the window holds at least one figure across two days");
 });
 
 test("the daily message is a strict subset of the decree, in the decree's order", () => {
@@ -219,25 +264,26 @@ test("each culture's day page for 2026-09-29 matches its golden", () => {
   }
 });
 
-test("the week never shows one headline twice, and each aspect line names both domains", () => {
+test("the week leads each row with its tightest figure, and a held figure says so", () => {
   for (let week = 0; week < 8; week += 1) {
     const monday = new Date(2026, 8, 7 + week * 7);
     for (const culture of CULTURES) {
       const days = buildWeekDays(culture, monday, null);
-      const headlines = days.map((d) => d.headline).filter((h): h is string => h !== null);
-      assert.equal(new Set(headlines).size, headlines.length, `${culture}: ${headlines.join(" / ")}`);
-      for (const day of days) {
-        if (day.shorthand.kind !== "aspect") continue;
+      days.forEach((day, i) => {
+        if (day.shorthand.kind !== "aspect") return;
         const { a, aspect, b } = day.shorthand;
-        if (day.headline !== null) {
-          assert.equal(day.headline, DECREE_BANKS[culture].headlines[aspect][headlineBody(a, b).body]);
-        }
+        const prev = days[i - 1]?.shorthand;
+        const held = prev?.kind === "aspect" && prev.a === a && prev.b === b && prev.aspect === aspect;
+        assert.equal(
+          day.headline,
+          held ? DECREE_BANKS[culture].holds : DECREE_BANKS[culture].headlines[aspect][headlineBody(a, b).body],
+        );
         const line = day.line.toLowerCase();
         for (const body of [a, b]) {
           assert.ok(line.includes(DEITY_DOMAINS[culture][body].toLowerCase()), `${culture}: "${day.line}" lacks ${body}`);
         }
         assert.equal(sentences(day.line).length, 2, `${culture}: a week line is the meaning and the consequence`);
-      }
+      });
     }
   }
 });

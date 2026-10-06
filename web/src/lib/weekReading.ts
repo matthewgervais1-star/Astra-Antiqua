@@ -6,7 +6,7 @@ import { findYearIngresses } from "@/lib/yearForecast";
 import { DEITY_MATRIX } from "@/data/deities";
 import { INGRESS_FRAMES } from "@/data/ingressFrames";
 import { DEITY_CHARGES } from "@/data/deityCharges";
-import { QUIET_LINE } from "@/data/decreeBanks";
+import { DECREE_BANKS, QUIET_LINE } from "@/data/decreeBanks";
 import {
   ASPECT_GLYPH,
   EXACT_ORB,
@@ -38,8 +38,8 @@ export interface WeekDay {
   /** "MON 11" */
   label: string;
   isToday: boolean;
-  /** The decree's headline for the day's figure, or null on an ingress day
-   *  and on a day whose figure's headline an earlier row already shows. */
+  /** The decree's headline for the day's figure, the culture's holds line when
+   *  the figure is the row above's, or null on an ingress day. */
   headline: string | null;
   line: string;
   shorthand: WeekShorthand;
@@ -115,25 +115,22 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
   const weekIngresses = findYearIngresses(weekStart, 9, PLANETS);
 
   const days: WeekDay[] = [];
-  const usedPairs = new Set<string>();
-  const usedHeadlines = new Set<string>();
+  let previous: string | null = null;
   for (let i = 0; i < 7; i += 1) {
     const date = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + i);
     const chart = computeChart(noonUTCFor(date));
     const aspects = computeAspects(chart);
 
-    // Tightest fast-mover aspect wins, with two exceptions. A pair that
-    // already headlined an earlier day this week only repeats when it is
-    // exact today. And a figure whose headline an earlier row already shows
-    // gives way to the next figure with a fresh one; when no figure in orb has
-    // one, the tightest speaks without a headline rather than repeat it.
-    const candidates = aspects
-      .filter((a) => a.orb < EVENT_ORB && (FAST_BODIES.has(a.a) || FAST_BODIES.has(a.b)))
-      .filter((a) => !usedPairs.has(`${a.a}|${a.b}`) || a.orb < EXACT_ORB)
-      .sort((a, b) => a.orb - b.orb);
-    const fresh = candidates.find((a) => !usedHeadlines.has(composeHeadline(culture, a)));
-    const tightest = fresh ?? candidates[0] ?? null;
-    if (tightest) usedPairs.add(`${tightest.a}|${tightest.b}`);
+    // The tightest fast-mover aspect inside the event orb is the day's figure,
+    // always: the sky decides it. A figure that holds from one row to the
+    // next says so in the culture's holds line instead of a second headline.
+    const tightest =
+      aspects
+        .filter((a) => a.orb < EVENT_ORB && (FAST_BODIES.has(a.a) || FAST_BODIES.has(a.b)))
+        .sort((a, b) => a.orb - b.orb)[0] ?? null;
+    const figureKey = tightest ? `${tightest.a}|${tightest.b}|${tightest.kind}` : null;
+    const holds = figureKey !== null && figureKey === previous;
+    previous = figureKey;
 
     const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     const dayEnd = new Date(dayStart.getTime() + DAY_MS);
@@ -151,8 +148,7 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       // The headline speaks to the reader; beneath it the meaning and the
       // consequence. The week line itself gives no order; the headline often
       // does, and the day page carries the instruction.
-      const candidateHeadline = composeHeadline(culture, tightest);
-      headline = fresh ? candidateHeadline : null;
+      headline = holds ? DECREE_BANKS[culture].holds : composeHeadline(culture, tightest);
       line = `${composeMeaning(culture, tightest, utcDayNumber(noonUTCFor(date)))} ${composeConsequence(culture, tightest)}`;
       shorthand = { kind: "aspect", a: tightest.a, aspect: tightest.kind, b: tightest.b, exact };
     } else if (dayIngress) {
@@ -165,12 +161,10 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       shorthand = { kind: "ingress", planet: dayIngress.planet, sign: dayIngress.toSign };
     } else {
       tone = "quiet";
-      headline = usedHeadlines.has(QUIET_HEADLINE[culture]) ? null : QUIET_HEADLINE[culture];
+      headline = QUIET_HEADLINE[culture];
       line = QUIET_LINE[culture];
       shorthand = { kind: "quiet" };
     }
-
-    if (headline) usedHeadlines.add(headline);
 
     const flag: RomeDayFlag | undefined = isRome
       ? tone === "tension"
