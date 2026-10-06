@@ -126,11 +126,11 @@ class LocationSearchViewModel(
      * Saves the one birth record this app keeps.
      *
      * [timezoneId] is the zone [birthDateUtc] was resolved against (see
-     * `resolveBirthDateUtcMillis` and `estimateZoneOffsetForLongitude`): an
-     * explicit caller-supplied input, not read from the device here, so the
-     * stored profile stays consistent with the zone actually used to compute
-     * the birth instant. It is typically a fixed UTC offset derived from the
-     * birth location's longitude rather than a real IANA zone id.
+     * `resolveBirthDateUtcMillis` and `birthZoneFor`): an explicit
+     * caller-supplied input, not read from the device here, so the stored
+     * profile stays consistent with the zone used to compute the birth
+     * instant. It is the birth place's IANA zone id, or a fixed offset when
+     * the lookup found none.
      */
     fun saveProfile(
         name: String,
