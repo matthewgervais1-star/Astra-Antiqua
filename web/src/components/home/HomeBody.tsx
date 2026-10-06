@@ -8,7 +8,8 @@ import { buildHomeBundle, type HomeBundle } from "@/components/home/buildHomeBun
 import { EphemerisRail } from "@/components/home/EphemerisRail";
 import { CenterDecree } from "@/components/home/CenterDecree";
 import { isoDateUtc } from "@/components/home/format";
-import { figureHref, parseIsoDate } from "@/lib/figureReading";
+import { figureHref } from "@/lib/figureReading";
+import { useDatedDay } from "@/components/home/datedDay";
 import { AspectsRail } from "@/components/home/AspectsRail";
 import { CompactSkyTable } from "@/components/home/CompactSkyTable";
 import { TransitTeaser } from "@/components/home/TransitTeaser";
@@ -25,17 +26,17 @@ import { DayPressureModule } from "@/components/home/DayPressureModule";
 export function HomeBody() {
   const culture = useActivePantheon();
   const [bundle, setBundle] = useState<HomeBundle | null>(null);
+  // A figure page links back to its own day as /?date=YYYY-MM-DD: the day
+  // page then reads 00:00 UTC on that date, the same instant the figure read.
+  const dated = useDatedDay();
 
   useEffect(() => {
     if (!culture) return;
-    // A figure page links back to its own day as /?date=YYYY-MM-DD; noon UTC
-    // on that date reads the same UTC day the figure did.
-    const asked = parseIsoDate(new URLSearchParams(window.location.search).get("date") ?? "");
-    const now = asked ? new Date(asked.getTime() + 12 * 3_600_000) : new Date();
+    const now = dated ?? new Date();
     const natal: SavedNatal | null = loadSavedNatal();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setBundle(buildHomeBundle(culture, now, natal));
-  }, [culture]);
+  }, [culture, dated]);
 
   if (!culture) return null;
 
@@ -65,6 +66,7 @@ export function HomeBody() {
           reading={bundle.reading}
           votive={bundle.votive}
           comeBack={bundle.comeBack}
+          dated={dated !== null}
           now={bundle.now}
           figureHref={bundle.reading.figures[0] ? figureHref(isoDateUtc(bundle.now), bundle.reading.figures[0]) : null}
         />

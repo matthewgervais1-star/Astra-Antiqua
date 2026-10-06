@@ -18,6 +18,8 @@ export interface CenterDecreeProps {
   now: Date;
   /** The figure page for the day's headline figure; the headline links to it. Null on a quiet day. */
   figureHref?: string | null;
+  /** A dated view (/?date=): the come-back line gives way to a link back to today. */
+  dated?: boolean;
 }
 
 /** The day's reading: institution kicker, the headline to the reader in
@@ -34,6 +36,7 @@ export function CenterDecree({
   comeBack,
   now,
   figureHref = null,
+  dated = false,
 }: CenterDecreeProps) {
   const readingId = `day-${isoDateUtc(now)}`;
   return (
@@ -86,7 +89,13 @@ export function CenterDecree({
         </Link>
       </div>
 
-      <div className="mt-8 max-w-[560px] font-mono text-data-xs uppercase tracking-label text-dim">{comeBack}</div>
+      {dated ? (
+        <Link href="/" className="mt-8 font-mono text-data-xs uppercase tracking-label text-bone hover:text-accent">
+          ← BACK TO TODAY
+        </Link>
+      ) : (
+        <div className="mt-8 max-w-[560px] font-mono text-data-xs uppercase tracking-label text-dim">{comeBack}</div>
+      )}
     </main>
   );
 }

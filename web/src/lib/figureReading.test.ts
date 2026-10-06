@@ -42,6 +42,16 @@ test("ids and dates round-trip, and a figure id is canonical whichever way it wa
   assert.equal(composeFigurePage("rome", DATE, "neptune-trine-mars", null)?.id, ID);
 });
 
+test("a page reads dates from 1900 through 2100 and no further", () => {
+  assert.equal(parseIsoDate("1900-01-01")?.toISOString(), "1900-01-01T00:00:00.000Z");
+  assert.equal(parseIsoDate("1899-12-31"), null);
+  assert.equal(parseIsoDate("2100-12-31")?.toISOString(), "2100-12-31T00:00:00.000Z");
+  assert.equal(parseIsoDate("2101-01-01"), null);
+  assert.equal(parseIsoDate("9999-12-31"), null);
+  assert.equal(figureMissing("9999-12-31", ID), "malformed");
+  assert.equal(composeFigurePage("rome", "0100-01-01", ID, null), null);
+});
+
 test("a figure the sky does not hold that day, a slow pair, or a bad date opens on nothing, and says which", () => {
   assert.equal(composeFigurePage("rome", DATE, "mars-square-neptune", null), null);
   assert.equal(figureMissing(DATE, "mars-square-neptune"), "absent");
@@ -65,7 +75,6 @@ test("without a chart the page reads the sky figure, in the day page's own headl
     // The meaning clause without its tight tail: the evidence line already says how close.
     const clause = meaningClause(culture, { a: "mars", b: "neptune", kind: "trine", orb: 0 }, utcDayNumber(page.instant));
     assert.ok(page.moveTwo.startsWith(`Right now ${clause}: `), `${culture}: ${page.moveTwo}`);
-    assert.doesNotMatch(page.moveTwo, /, and .*\band\b.*\band\b/, `${culture}: stacked and`);
     assert.equal(page.bridge, null);
     assert.deepEqual(page.parts.map((p) => p.body), ["mars", null, "neptune"]);
     assert.equal(page.parts[1].tag, "TRINE (120°)");

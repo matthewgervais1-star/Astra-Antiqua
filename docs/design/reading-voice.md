@@ -182,7 +182,8 @@ composes them and `lib/recurrence.ts` says how often the figure returns.
    bridge line under the evidence names that contact
    (`MARS ⚹ YOUR MERCURIUS · 0°41′`), and the paragraph, the diagram, the
    recurrence, the god's act, the cards and the lesson all read it. A body
-   against its own natal place is a return, not a contact, and is left out.
+   against itself is left out: the page reads one domain against another,
+   and a body against its own natal place would read one domain twice.
 2. **The paragraph, in two moves.** Move one is the reader: the natal point
    the contact touches, in the culture's frame, around one authored clause
    per body and sign (`PLACEMENT_CLAUSES`, 120, universal: the frame carries

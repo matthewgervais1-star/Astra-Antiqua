@@ -10,8 +10,8 @@ import type { SlowBody } from "@/data/transitSpine";
  *   headline        fast bodies reuse DECREE_BANKS.headlines; a long
  *                   transit (a slow body against a natal point) reads
  *                   SLOW_HEADLINES, per (kind, slow body)
- *   move one        the natal placement in the culture's frame (NATAL_FRAME
- *                   over PLANET_IN_SIGN), the angle line for a rising or a
+ *   move one        the natal placement in the culture's frame (natalFrame
+ *                   around PLACEMENT_CLAUSES), the angle line for a rising or a
  *                   midheaven (ANGLE_MOVE_ONE), or, with no chart, the
  *                   transiting god in its sign (SKY_MOVE_ONE)
  *   space           the decomposed sentence: two domains joined by
@@ -1042,7 +1042,7 @@ export const PLACEMENT_CLAUSES: Readonly<Record<Planet, Readonly<Record<ZodiacSi
     Scorpio: "you feel everything deeply and show little of it",
     Sagittarius: "you get restless in a small room and want the open road",
     Capricorn: "you get through a hard day by working through it",
-    Aquarius: "you watch your own moods from a distance before you name them",
+    Aquarius: "you go for a long walk before you say what upset you",
     Pisces: "you soak up the mood of everyone around you",
   },
   mercury: {
@@ -1112,18 +1112,18 @@ export const PLACEMENT_CLAUSES: Readonly<Record<Planet, Readonly<Record<ZodiacSi
     Scorpio: "you keep a secret until the keeping costs too much",
     Sagittarius: "you wait a long time to reach the place you set out for",
     Capricorn: "you take on heavy work and carry it without complaint",
-    Aquarius: "you hold to the rule and learn where it needs an exception",
-    Pisces: "you draw a line around how much help you give",
+    Aquarius: "you keep the rule and know the one case where you would break it",
+    Pisces: "you give help all day and know when to bar the door for the night",
   },
   uranus: {
     Aries: "you break with the old way before anyone finishes explaining it",
     Taurus: "you hold still for years and then change everything at once",
     Gemini: "you change the subject, and the whole room changes with it",
     Cancer: "you leave the house you grew up in to build one that fits",
-    Leo: "you walk off the old script in front of everyone",
+    Leo: "you quit the part people cast you in, in front of all of them",
     Virgo: "you tear out a whole routine to fix one broken part",
     Libra: "you break any bargain that asks you to keep quiet",
-    Scorpio: "you bury the pressure until it blows the lid off",
+    Scorpio: "you keep quiet for months and then say everything in one night",
     Sagittarius: "you leave the creed you were raised in and go to see for yourself",
     Capricorn: "you climb the ladder and then kick it away",
     Aquarius: "you break old customs on principle",
@@ -1133,28 +1133,28 @@ export const PLACEMENT_CLAUSES: Readonly<Record<Planet, Readonly<Record<ZodiacSi
     Aries: "you charge at causes bigger than yourself",
     Taurus: "you make something holy of the things you can hold",
     Gemini: "you talk in pictures and lose the plain fact on the way",
-    Cancer: "you cannot tell your own feelings from your family's",
+    Cancer: "you cry when your mother cries and laugh when your brother laughs",
     Leo: "you play a better version of yourself until you believe it",
     Virgo: "you serve others until you forget to eat",
-    Libra: "you love the person you hope your partner will become",
+    Libra: "you see your partner at their best and forgive them the rest",
     Scorpio: "you go all the way down with the people you love",
-    Sagittarius: "you believe in more than any one temple can hold",
+    Sagittarius: "you pray in any temple you pass and belong to none of them",
     Capricorn: "you climb toward a summit hidden in fog",
     Aquarius: "you dream of a whole city that does not exist yet",
     Pisces: "you feel every stranger's sorrow as if it were yours",
   },
   pluto: {
-    Aries: "you are remade by the fights you could not walk away from",
+    Aries: "you carry a scar from every fight you could not walk away from",
     Taurus: "you hold hardest to the things that will be taken from you",
     Gemini: "you dig with questions until the buried thing comes up",
     Cancer: "you watch the house you came from torn open to its foundations",
-    Leo: "you lose your pride in public and stand up stronger",
+    Leo: "you take a public fall and are back on your feet by the next season",
     Virgo: "you cut away what does not work, one piece at a time",
-    Libra: "you find what you buried in the people you bind yourself to",
+    Libra: "you choose partners who make you say what you kept quiet",
     Scorpio: "you go to the bottom of everything and expect others to follow",
     Sagittarius: "you watch an old belief burn and keep what comes through the fire",
     Capricorn: "you see what you built stripped back to bedrock",
     Aquarius: "you see the gears turning behind what others call natural",
-    Pisces: "you lose things you cannot name and keep what nobody can take",
+    Pisces: "you can lose the house and the savings and still keep your nerve",
   },
 };

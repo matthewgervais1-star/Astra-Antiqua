@@ -33,7 +33,7 @@ function Links({ date }: { date: string }) {
   const today = isoDateUtc(new Date());
   return (
     <div className="mt-9 flex flex-wrap justify-center gap-8 font-display text-[11.5px] tracking-[0.2em]">
-      <Link href={date === today ? "/" : `/?date=${date}`} className="text-bone/65 hover:text-bone">
+      <Link href={date === today || !parseIsoDate(date) ? "/" : `/?date=${date}`} className="text-bone/65 hover:text-bone">
         ← THE DAY
       </Link>
       <Link href="/week" className="text-bone/65 hover:text-bone">

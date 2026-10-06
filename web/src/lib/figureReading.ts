@@ -134,10 +134,18 @@ export function isoDateUtc(date: Date): string {
   return `${date.getUTCFullYear()}-${pad2(date.getUTCMonth() + 1)}-${pad2(date.getUTCDate())}`;
 }
 
-/** 00:00 UTC on a YYYY-MM-DD date, or null if the string is not one. */
+/**
+ * The dates a page will read. Far from the present the ephemeris slows to
+ * seconds a call (Pluto at year 9999), and a window walk makes hundreds, so a
+ * date outside these two centuries is treated as no date at all.
+ */
+export const FIRST_READABLE_DATE = "1900-01-01";
+export const LAST_READABLE_DATE = "2100-12-31";
+
+/** 00:00 UTC on a YYYY-MM-DD date from 1900 to 2100, or null. */
 export function parseIsoDate(date: string): Date | null {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
-  if (!m) return null;
+  if (!m || date < FIRST_READABLE_DATE || date > LAST_READABLE_DATE) return null;
   const d = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
   return isoDateUtc(d) === date ? d : null;
 }
@@ -239,9 +247,10 @@ function separation(x: number, y: number): number {
 /**
  * The natal point the figure touches: the tightest aspect, inside the
  * documented orbs, from the headline body to any other natal planet; from
- * the partner when the headline body touches none. A body against its own
- * natal place is a return, not a contact, and is left out. Null when neither
- * touches anything, and the page then reads the sky figure.
+ * the partner when the headline body touches none. A body against itself
+ * is left out: the page reads one domain against another, and a body
+ * against its own natal place would read one domain twice. Null when
+ * neither touches anything, and the page then reads the sky figure.
  */
 export function natalContact(
   sky: Readonly<Record<Planet, number>>,

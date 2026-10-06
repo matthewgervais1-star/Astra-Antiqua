@@ -133,10 +133,12 @@ tapping a day opens that day's page with the full anatomy.
 4. **What it looks like in space**: the wheel or a two-body diagram, then the decomposed
    sentence: `{transiting domain}` tagged `{DEITY} NOW`, `{relation, short}` tagged
    `{KIND} ({angle}°)`, `{natal domain}` tagged `YOUR {DEITY} IN {SIGN}`.
-5. **Recurrence and timeline**: "This figure returns about every {period}." computed from the
-   transiting body's cycle and the kind (conjunction and opposition once per cycle, the
-   others twice; the Moon's sidereal month, the Sun's year, Mercury and Venus by their synodic
-   periods, Mars and the slow bodies by their sidereal periods); a four-tick timeline of the
+5. **Recurrence and timeline**: "This figure returns about every {period}." *As built (Task
+   16):* each body has a mean geocentric rate (Mercury and Venus keep the Sun's); a natal
+   contact returns every 360 / rate days, a sky figure every 360 / |rate a - rate b| days;
+   the Sun meets Mercury every 57.9 days and Venus every 291.9 (measured, both conjunctions
+   counted), and Mercury with Venus keeps no steady interval, which the page says in the
+   culture's words; conjunction and opposition once per cycle, the others twice. A four-tick timeline of the
    span (`computeTransitSpans` for slow bodies; the in-orb window for fast ones) with the
    present marked. `WHAT IS THIS?` links to `/learn/aspects`.
 6. **How this plays out** (the section title is the culture's: in the Forum, on the river,
