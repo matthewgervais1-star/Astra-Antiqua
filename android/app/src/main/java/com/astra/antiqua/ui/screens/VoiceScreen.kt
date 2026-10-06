@@ -51,6 +51,7 @@ import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Spacing
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
+import com.astra.antiqua.ui.theme.displayCase
 
 /**
  * One culture's doorway, the counterpart of web's /voices/[culture]: the
@@ -253,7 +254,7 @@ private fun DeityRow(
         )
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = deity.name,
+                text = displayCase(deity.name),
                 style = MaterialTheme.typography.titleMedium,
                 color = if (body.isReceived) accent else Bone,
             )

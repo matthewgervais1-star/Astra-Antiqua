@@ -57,6 +57,7 @@ import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.RuleRow
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.FigureState
 import com.astra.antiqua.viewmodel.FigureViewModel
@@ -204,7 +205,7 @@ fun FigureAnatomySection(
                     }
                 }
                 Column(Modifier.weight(1f)) {
-                    Text(part.phrase, style = MaterialTheme.typography.titleMedium, color = Bone)
+                    Text(displayCase(part.phrase), style = MaterialTheme.typography.titleMedium, color = Bone)
                     Text(part.tag, style = MaterialTheme.typography.labelSmall, color = Dim)
                 }
             }
@@ -227,7 +228,7 @@ fun FigureAnatomySection(
         )
 
         SectionDivider(label = anatomy.playsOutTitle)
-        Text(anatomy.actLine, style = MaterialTheme.typography.titleMedium, color = Bone, modifier = Modifier.fillMaxWidth())
+        Text(displayCase(anatomy.actLine), style = MaterialTheme.typography.titleMedium, color = Bone, modifier = Modifier.fillMaxWidth())
         Box(Modifier.height(Spacing.Snug))
         anatomy.manifestations.forEach { item ->
             Row(Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
@@ -249,7 +250,7 @@ fun FigureAnatomySection(
 
         SectionDivider(label = "The lesson")
         Text(
-            anatomy.lesson,
+            displayCase(anatomy.lesson),
             style = MaterialTheme.typography.titleMedium,
             color = Bone,
             textAlign = TextAlign.Center,

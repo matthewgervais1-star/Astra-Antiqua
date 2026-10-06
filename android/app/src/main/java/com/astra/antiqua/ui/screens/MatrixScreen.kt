@@ -35,6 +35,7 @@ import com.astra.antiqua.ui.theme.FaintInk
 import com.astra.antiqua.ui.theme.Harmony
 import com.astra.antiqua.ui.theme.Spacing
 import com.astra.antiqua.ui.theme.accentFor
+import com.astra.antiqua.ui.theme.displayCase
 
 private val BODY_COLUMN = 74.dp
 private val CULTURE_COLUMN = 104.dp
@@ -150,7 +151,7 @@ private fun MatrixRow(body: Planet) {
             )
             AncientCulture.entries.forEach { each ->
                 Text(
-                    text = DeityRegistry.getDeity(each, body).name,
+                    text = displayCase(DeityRegistry.getDeity(each, body).name),
                     style = MaterialTheme.typography.titleMedium,
                     color = if (body.isReceived) accentFor(each) else Bone,
                     maxLines = 1,

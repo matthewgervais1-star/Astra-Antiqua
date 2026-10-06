@@ -2,7 +2,7 @@
  * Downloads the identity's font files from Google Fonts.
  *
  * Default: latin-subset woff2 into web/src/fonts/, self-hosted via
- * next/font/local. With `--android`: the same three families as TTF into
+ * next/font/local. With `--android`: the product faces, Spectral SC and the symbols face as TTF into
  * android/app/src/main/res/font/, because Compose cannot read woff2 and
  * Android resource names allow only lowercase letters, digits and
  * underscores. One pipeline for both surfaces, so the two cannot drift onto
@@ -140,6 +140,17 @@ const ANDROID_FAMILIES = [
     picks: [
       { style: "normal", weight: "400", file: "ibm_plex_mono_regular.ttf" },
       { style: "normal", weight: "500", file: "ibm_plex_mono_medium.ttf" },
+    ],
+  },
+  // The small-caps display face for the four non-Roman cultures. It draws
+  // its small capitals on the lowercase codepoints, so the call sites pass
+  // lowercase text (see displaySc in ui/theme/Type.kt).
+  {
+    family: "Spectral SC",
+    css: "family=Spectral+SC:wght@400;500",
+    picks: [
+      { style: "normal", weight: "400", file: "spectral_sc_regular.ttf" },
+      { style: "normal", weight: "500", file: "spectral_sc_medium.ttf" },
     ],
   },
   /**

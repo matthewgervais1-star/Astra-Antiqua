@@ -27,6 +27,7 @@ import com.astra.antiqua.ui.theme.Dim
 import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 
 /**
  * How the sky is computed, said plainly.
@@ -52,7 +53,7 @@ fun MethodScreen(onBack: () -> Unit) {
     ) {
         Kicker("How the sky is computed")
         Text(
-            text = "The Method",
+            text = displayCase("The Method"),
             style = MaterialTheme.typography.displayMedium,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,

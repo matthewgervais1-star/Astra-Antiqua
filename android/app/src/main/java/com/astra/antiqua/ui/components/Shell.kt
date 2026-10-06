@@ -31,6 +31,7 @@ import com.astra.antiqua.ui.theme.FaintInk
 import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 
 /**
  * The chrome every reading screen sits inside, the Compose counterpart of
@@ -272,7 +273,7 @@ fun NaveHead(
         AccentRule()
         Box(Modifier.height(Spacing.Step))
         Text(
-            text = headline.uppercase(),
+            text = displayCase(headline.uppercase()),
             style = MaterialTheme.typography.displaySmall,
             color = Bone,
             textAlign = TextAlign.Center,

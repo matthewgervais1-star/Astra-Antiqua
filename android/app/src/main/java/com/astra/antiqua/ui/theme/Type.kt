@@ -1,6 +1,9 @@
 package com.astra.antiqua.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -33,6 +36,21 @@ val Spectral = FontFamily(
     Font(R.font.spectral_regular_italic, FontWeight.Normal, FontStyle.Italic),
 )
 
+/**
+ * Spectral SC, the display face on the four non-Roman surfaces (Egypt,
+ * Greece, Canaan, Carthage). Rome and the app shell keep Cinzel. It is the
+ * design system's --font-display-sc, and web makes the same switch in
+ * globals.css.
+ *
+ * The family draws its small capitals on the LOWERCASE codepoints and has no
+ * c2sc or smcp feature, so a capital stays a full capital. Display text must
+ * reach it lowercased; [displayCase] does that.
+ */
+val SpectralSc = FontFamily(
+    Font(R.font.spectral_sc_regular, FontWeight.Normal),
+    Font(R.font.spectral_sc_medium, FontWeight.Medium),
+)
+
 val PlexMono = FontFamily(
     Font(R.font.ibm_plex_mono_regular, FontWeight.Normal),
     Font(R.font.ibm_plex_mono_medium, FontWeight.Medium),
@@ -51,7 +69,7 @@ val NotoSymbols = FontFamily(Font(R.font.noto_sans_symbols, FontWeight.Normal))
 
 /**
  * THE TYPE SCALE, from docs/design/system/tokens/typography.css, which is
- * canonical for both surfaces. Eleven sizes, four tracking values, three
+ * canonical for both surfaces. Eleven sizes, five tracking values, three
  * leadings, the same eleven web binds in web/src/app/globals.css.
  *
  * They are named rather than inlined so the mapping onto Material's fifteen
@@ -78,6 +96,8 @@ object TypeScale {
     val DataXs = 11.sp
 
     val TrackDisplay = 0.16.em
+    /** Spectral SC sits closer than Cinzel: small caps need less air. */
+    val TrackDisplaySc = 0.06.em
     val TrackData = 0.04.em
     val TrackLabel = 0.14.em
     val TrackMicrocopy = 0.18.em
@@ -88,12 +108,12 @@ object TypeScale {
     const val LeadingData = 2f
 }
 
-private fun display(size: TextUnit, weight: FontWeight) = TextStyle(
-    fontFamily = Cinzel,
+private fun display(size: TextUnit, weight: FontWeight, smallCaps: Boolean = false) = TextStyle(
+    fontFamily = if (smallCaps) SpectralSc else Cinzel,
     fontWeight = weight,
     fontSize = size,
     lineHeight = size * TypeScale.LeadingDisplay,
-    letterSpacing = TypeScale.TrackDisplay,
+    letterSpacing = if (smallCaps) TypeScale.TrackDisplaySc else TypeScale.TrackDisplay,
 )
 
 private fun prose(size: TextUnit) = TextStyle(
@@ -119,6 +139,29 @@ private fun data(
 /** display-xs: the smallest Cinzel step, for list names and small heads. */
 val displayXs: TextStyle = display(TypeScale.DisplayXs, FontWeight.Normal)
 
+/** display-xs in Spectral SC, for the four non-Roman surfaces. */
+val displaySc: TextStyle = display(TypeScale.DisplayXs, FontWeight.Normal, smallCaps = true)
+
+/**
+ * True when the active surface sets display in Spectral SC. AstraAntiquaTheme
+ * provides it from the culture; [ShellType] turns it off for the app shell.
+ */
+val LocalSmallCapsDisplay = staticCompositionLocalOf { false }
+
+/**
+ * Display text as the active display face needs it. Spectral SC draws small
+ * capitals only on lowercase codepoints, and most call sites pass display
+ * text uppercased for Cinzel, so on the small-caps surfaces this lowercases
+ * it. The glyphs are drawn small capitals, so nothing reads as lowercase on
+ * screen. On Rome and the shell the text passes through unchanged.
+ *
+ * Web does the same with `text-transform: lowercase` in globals.css.
+ */
+@Composable
+@ReadOnlyComposable
+fun displayCase(text: String): String =
+    if (LocalSmallCapsDisplay.current) text.lowercase() else text
+
 /**
  * Material's fifteen slots on the system's eleven sizes.
  *
@@ -139,17 +182,27 @@ val displayXs: TextStyle = display(TypeScale.DisplayXs, FontWeight.Normal)
  * the same split: 14 to 17px onto display-xs, 11 to 13px onto mono. The
  * decision is recorded in docs/design/IMPLEMENTATION.md.
  */
-val Typography = Typography(
-    displayLarge = display(TypeScale.DisplayXl, FontWeight.Medium),
-    displayMedium = display(TypeScale.DisplayL, FontWeight.Medium),
-    displaySmall = display(TypeScale.DisplayM, FontWeight.Medium),
+val Typography = typographyFor(smallCaps = false)
 
-    headlineLarge = display(TypeScale.DisplayS, FontWeight.Normal),
-    headlineMedium = display(TypeScale.DisplayS, FontWeight.Normal),
-    headlineSmall = display(TypeScale.DisplayS, FontWeight.Normal),
+/**
+ * The four non-Roman surfaces: every display slot (display, headline and the
+ * two display-xs titles) moves to Spectral SC at 0.06em, on the same sizes.
+ * These are the slots web's prototype switched, since web rebinds
+ * --font-display for every heading and every `font-display` class.
+ */
+val SmallCapsTypography = typographyFor(smallCaps = true)
 
-    titleLarge = display(TypeScale.DisplayXs, FontWeight.Medium),
-    titleMedium = displayXs,
+private fun typographyFor(smallCaps: Boolean) = Typography(
+    displayLarge = display(TypeScale.DisplayXl, FontWeight.Medium, smallCaps),
+    displayMedium = display(TypeScale.DisplayL, FontWeight.Medium, smallCaps),
+    displaySmall = display(TypeScale.DisplayM, FontWeight.Medium, smallCaps),
+
+    headlineLarge = display(TypeScale.DisplayS, FontWeight.Normal, smallCaps),
+    headlineMedium = display(TypeScale.DisplayS, FontWeight.Normal, smallCaps),
+    headlineSmall = display(TypeScale.DisplayS, FontWeight.Normal, smallCaps),
+
+    titleLarge = display(TypeScale.DisplayXs, FontWeight.Medium, smallCaps),
+    titleMedium = if (smallCaps) displaySc else displayXs,
     titleSmall = data(TypeScale.DataS, TypeScale.TrackMicrocopy),
 
     bodyLarge = prose(TypeScale.ProseL),

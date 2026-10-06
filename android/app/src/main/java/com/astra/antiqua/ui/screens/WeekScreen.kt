@@ -41,6 +41,7 @@ import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.LocalLexicon
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.HorizonViewModel
 import com.astra.antiqua.viewmodel.WeekState
@@ -156,7 +157,7 @@ private fun DayRow(day: WeekDay, onOpenFigure: (String) -> Unit) {
                 // The headline opens the row's figure page, as on web.
                 val open = day.figure?.let { (date, id) -> { onOpenFigure(Route.figure(date, id)) } }
                 Text(
-                    text = headline,
+                    text = displayCase(headline),
                     style = MaterialTheme.typography.titleMedium,
                     color = Bone,
                     modifier = Modifier

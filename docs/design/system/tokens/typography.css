@@ -1,5 +1,7 @@
 :root {
-  /* display: Cinzel, caps, wide tracking. Never lowercase, never body copy. */
+  /* display: Cinzel, caps, wide tracking. Never lowercase, never body copy.
+     Rome and the shell set display in Cinzel; the four other cultures take
+     Spectral SC on the same sizes (below). */
   --type-display-xl: 52px;
   --type-display-l: 40px;
   --type-display-m: 26px;
@@ -9,7 +11,11 @@
   --track-display: 0.16em;
   --leading-display: 1.1;
 
-  /* the small-caps prototype on the four non-Roman surfaces sits closer */
+  /* display-sc: Spectral SC on Egypt, Greece, Canaan and Carthage. True small
+     capitals, drawn on the LOWERCASE codepoints, so display text is set
+     lowercased (text-transform: lowercase) and reads as small caps. Same five
+     sizes and leading as Cinzel; tracking sits closer, because small caps need
+     less air. Cinzel keeps --track-display. */
   --track-display-sc: 0.06em;
 
   /* prose: Spectral */
@@ -37,6 +43,17 @@
   --glyph-size-wheel: 24px;
 
   --text-display-font: var(--font-display);
+  --text-display-track: var(--track-display);
   --text-body-font: var(--font-prose);
   --text-data-font: var(--font-data);
+}
+
+/* The four non-Roman surfaces set display in Spectral SC. Rome and the
+   neutral shell keep Cinzel. Pairs with [data-culture] in colors.css. */
+[data-culture="egypt"],
+[data-culture="greece"],
+[data-culture="canaan"],
+[data-culture="carthage"] {
+  --text-display-font: var(--font-display-sc);
+  --text-display-track: var(--track-display-sc);
 }

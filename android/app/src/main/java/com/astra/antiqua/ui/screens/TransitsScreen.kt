@@ -41,6 +41,7 @@ import com.astra.antiqua.ui.theme.Dim
 import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.SpansState
 import com.astra.antiqua.viewmodel.TransitsViewModel
@@ -212,7 +213,7 @@ private fun SpanRow(
         }
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = "${transitDeity.uppercase()} ${verb.uppercase()} ${natalPointLabel(culture, span.natalKey).uppercase()}",
+                text = displayCase("${transitDeity.uppercase()} ${verb.uppercase()} ${natalPointLabel(culture, span.natalKey).uppercase()}"),
                 style = MaterialTheme.typography.titleMedium,
                 color = if (received) accent else Bone,
             )

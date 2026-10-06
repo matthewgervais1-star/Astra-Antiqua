@@ -59,6 +59,7 @@ import com.astra.antiqua.ui.theme.Dim
 import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.LocationSearchViewModel
 import com.astra.antiqua.viewmodel.Place
@@ -192,7 +193,7 @@ fun OnboardingScreen(
         }
 
         Text(
-            text = "Enter Your Birth Data",
+            text = displayCase("Enter Your Birth Data"),
             style = MaterialTheme.typography.displaySmall,
             color = Bone,
             modifier = Modifier.padding(bottom = Spacing.Section)

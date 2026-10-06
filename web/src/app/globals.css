@@ -82,7 +82,7 @@
   --text-data-xs: 11px;
 
   --tracking-display: 0.16em;
-  /* the small-caps prototype on the four non-Roman surfaces sits closer */
+  /* Spectral SC on the four non-Roman surfaces sits closer */
   --tracking-display-sc: 0.06em;
   --tracking-data: 0.04em;
   --tracking-label: 0.14em;
@@ -173,7 +173,9 @@ body {
 }
 
 /*
- * DISPLAY-TYPE PROTOTYPE, per docs/design/canvas-1a/DECISIONS.md.
+ * DISPLAY TYPE PER CULTURE, per docs/design/canvas-1a/DECISIONS.md and
+ * docs/design/system/tokens/typography.css (--font-display-sc,
+ * --track-display-sc). Promoted from prototype to rule on 2026-10-06.
  *
  * Cinzel is a Trajanic cap, so setting "THE COUNCIL OF EL" in it is a small act
  * of imperial typesetting, and the product's claim is that five theologies read
@@ -189,9 +191,9 @@ body {
  * `smcp` table, so browsers synthesise by scaling capitals, which thins the
  * strokes and loses the weight match against Cinzel 600.
  *
- * Still open: Cinzel's tracking (0.16em at display sizes) is set per component
- * and reads loose on small caps, which sit closer by design. Tune after this
- * has been looked at, not before.
+ * Cinzel's tracking stays as each component sets it. Spectral SC takes its own
+ * token, --tracking-display-sc, below. Sizes do not change: small caps sit on
+ * the same display scale as Cinzel.
  */
 body[data-pantheon="egypt"] {
   --ground: var(--color-ground-egypt);
@@ -240,7 +242,7 @@ body[data-pantheon="greece"] :is(h1, h2, h3, h4, h5, h6, .font-display),
 body[data-pantheon="canaan"] :is(h1, h2, h3, h4, h5, h6, .font-display),
 body[data-pantheon="carthage"] :is(h1, h2, h3, h4, h5, h6, .font-display) {
   text-transform: lowercase;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--tracking-display-sc);
 }
 
 :root {

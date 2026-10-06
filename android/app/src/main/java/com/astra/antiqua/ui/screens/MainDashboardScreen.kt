@@ -78,6 +78,7 @@ import com.astra.antiqua.ui.theme.LocalLexicon
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.ChartState
 import com.astra.antiqua.viewmodel.DashboardViewModel
@@ -118,7 +119,7 @@ fun MainDashboardScreen(
         item {
             Spacer(modifier = Modifier.height(Spacing.Step))
             Text(
-                text = lexicon.dashboardTitle,
+                text = displayCase(lexicon.dashboardTitle),
                 style = MaterialTheme.typography.displayMedium,
                 color = Bone,
                 textAlign = TextAlign.Center,
@@ -254,7 +255,7 @@ fun DayDecreeCard(decree: DayDecree, onOpenFigure: (() -> Unit)? = null) {
     ) {
         // The headline opens the figure page for the day's headline figure, as on web.
         Text(
-            text = decree.headline,
+            text = displayCase(decree.headline),
             style = MaterialTheme.typography.headlineMedium,
             color = Bone,
             textAlign = TextAlign.Center,
@@ -325,7 +326,7 @@ fun DiveDeeperSection(diveDeeper: DiveDeeper) {
         diveDeeper.groups.forEach { group ->
             RowRule()
             Spacer(modifier = Modifier.height(Spacing.Snug))
-            Text(text = group.title, style = MaterialTheme.typography.titleMedium, color = Bone)
+            Text(text = displayCase(group.title), style = MaterialTheme.typography.titleMedium, color = Bone)
             if (group.evidence.isNotEmpty()) {
                 Text(text = group.evidence, style = MaterialTheme.typography.labelSmall, color = Dim)
             }
@@ -368,7 +369,7 @@ fun OracleDecreeCard(reading: NatalPlacementReading, culture: AncientCulture) {
                     )
                     Spacer(modifier = Modifier.width(Spacing.Tight))
                     Text(
-                        text = reading.deityName.uppercase(),
+                        text = displayCase(reading.deityName.uppercase()),
                         style = MaterialTheme.typography.headlineSmall,
                         color = accent,
                     )

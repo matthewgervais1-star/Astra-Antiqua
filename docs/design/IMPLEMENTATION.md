@@ -282,12 +282,6 @@ extractor deliberately leaves behind: the day screen already draws a wheel
 from a real chart, so a fixed illustration of one would be the weaker of the
 two on a phone.
 
-**The Spectral SC display decision.** The small-caps treatment on the four
-non-Roman surfaces is still a prototype in `globals.css` and was not promoted
-into the tokens or carried to Android. Its open question is Cinzel's tracking,
-set per component and loose on small caps, which wants looking at before it is
-tuned.
-
 **The Ugaritic codepoints.** `docs/design/culture-marks.md` gives U+1039B U+1038D
 for the name of El, and `ts-il.svg` is cut from exactly those. Counting forward
 through the Ugaritic block puts U+1039B at SSU rather than at ʾI, so someone who
@@ -332,4 +326,24 @@ a gap between the two doorways. The tree has since closed all three.
   `capHeight`, so no Cinzel glyph renders at that size. The Satori OG cards
   keep their literal sizes. Landed with the commit `feat(design): a
   display-xs step, and the small labels move onto the scale`; screenshots in
+  `docs/design/screenshots/phase11-design-calls/`.
+- **The Spectral SC display decision.** The small-caps treatment on the four
+  non-Roman surfaces is the rule, recorded 2026-10-06. The open question was
+  Cinzel's tracking, set per component and loose on small caps. The answer
+  leaves Cinzel untouched and gives Spectral SC its own `--track-display-sc`
+  at 0.06em. The prototype set no sizes, so Spectral SC sits on the display
+  scale as it stands, 18px included. `tokens/typography.css` now names the
+  four surfaces (`[data-culture]` sets `--text-display-font` and
+  `--text-display-track`), and the `globals.css` block reads
+  `--tracking-display-sc`. Android fetches Spectral SC 400 and 500 as TTF
+  through `fetch-fonts.mjs --android`; `Type.kt` adds `SpectralSc`,
+  `TypeScale.TrackDisplaySc`, `displaySc` and a small-caps `Typography`, and
+  `AstraAntiquaTheme` picks it for every culture but Rome. Spectral SC draws
+  small capitals on lowercase codepoints and carries no `c2sc` or `smcp`
+  feature, and Android call sites pass display text uppercased, so each
+  display call site now goes through `displayCase()`, which lowercases on
+  the four surfaces and passes through on Rome. The culture doorway is the
+  shell and keeps Cinzel through `ShellType`. Landed with the commit
+  `feat(design): Spectral SC is the rule on the four non-Roman surfaces`;
+  screenshots `sc-home-<culture>-1280.png` in
   `docs/design/screenshots/phase11-design-calls/`.

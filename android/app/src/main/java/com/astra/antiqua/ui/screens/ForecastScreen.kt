@@ -48,6 +48,7 @@ import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.RuleRow
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.ForecastState
 import com.astra.antiqua.viewmodel.ForecastViewModel
@@ -140,7 +141,7 @@ fun ForecastScreen(
                                         color = accent,
                                     )
                                     Text(
-                                        text = fullDateOf(solarReturn.date),
+                                        text = displayCase(fullDateOf(solarReturn.date)),
                                         style = MaterialTheme.typography.headlineSmall,
                                         color = Bone,
                                         modifier = Modifier.padding(top = Spacing.Tight),
@@ -241,7 +242,7 @@ private fun ForecastSpanRow(
                 tint = if (received) accent else Bone,
             )
             Text(
-                text = "${deity.uppercase()} ${verb.uppercase()} ${natal.uppercase()}",
+                text = displayCase("${deity.uppercase()} ${verb.uppercase()} ${natal.uppercase()}"),
                 style = MaterialTheme.typography.titleMedium,
                 color = if (received) accent else Bone,
                 modifier = Modifier.weight(1f),

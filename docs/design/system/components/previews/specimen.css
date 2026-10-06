@@ -60,6 +60,7 @@
     --text-data-s: 12px;
     --text-data-xs: 11px;
     --tracking-display: 0.16em;
+    --tracking-display-sc: 0.06em;
     --tracking-data: 0.04em;
     --tracking-label: 0.14em;
     --tracking-microcopy: 0.18em;
@@ -1955,7 +1956,7 @@ body[data-pantheon="rome"] {
 }
 body[data-pantheon="egypt"] :is(h1, h2, h3, h4, h5, h6, .font-display), body[data-pantheon="greece"] :is(h1, h2, h3, h4, h5, h6, .font-display), body[data-pantheon="canaan"] :is(h1, h2, h3, h4, h5, h6, .font-display), body[data-pantheon="carthage"] :is(h1, h2, h3, h4, h5, h6, .font-display) {
   text-transform: lowercase;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--tracking-display-sc);
 }
 :root {
   color-scheme: dark;
