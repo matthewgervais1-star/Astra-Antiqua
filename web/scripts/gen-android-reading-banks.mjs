@@ -49,7 +49,10 @@ const { DIVE_DEEPER_BANKS } = await import("../src/data/diveDeeperBanks.ts");
 const { CULTURE_VOICES } = await import("../src/data/cultureVoice.ts");
 const { composeDiveDeeper } = await import("../src/lib/diveDeeper.ts");
 const { dayPermissions, natalDayPermissions } = await import("../src/lib/permissions.ts");
-const { composeDecree } = await import("../src/lib/decree.ts");
+const { composeDecree, composeEvidence, dayFigures } = await import("../src/lib/decree.ts");
+const { composeBridge } = await import("../src/lib/figureReading.ts");
+const { computeTransits } = await import("../src/lib/transits.ts");
+const { ASPECT_RULES } = await import("../src/data/sampleChart.ts");
 const { resolveSavedChart } = await import("../src/lib/savedNatal.ts");
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -663,10 +666,13 @@ ${figureGoldens
 // --- the dive deeper and the lists ----------------------------------------
 // One day per culture, read without a chart and against the screenshots'
 // seeded chart (Rome, 1990-06-15 14:30), whose longitudes travel as literals.
-// A day is taken only when the whole output holds under a nudge of every sky
-// body by a thousandth of a degree either way, so two engines a hair apart
-// print the same text: no figure sits on an orb's edge, no two candidates
-// swap rank, and no printed orb sits on a rounding boundary.
+// A day is taken only when every boundary the text depends on is at least
+// MARGIN degrees away, so two engines a hair apart print the same text: no
+// pair (sky to sky, or sky to natal) sits within MARGIN of an orb's edge, no
+// two candidates (the sky's figures, the transits to the chart) are within
+// MARGIN of each other in orb, and no printed orb is within MARGIN of the
+// half-minute it rounds at, of one minute (EXACT) or of half a degree
+// (tight). The output must also hold under nudges of every sky body.
 const seedNatal = resolveSavedChart({
   id: "seed-verify", name: "Verification", date: "1990-06-15", time: "14:30", cityLabel: "Rome, Italy",
   latitude: 41.9028, longitude: 12.4964, createdAt: "2026-09-09T00:00:00.000Z",
@@ -684,7 +690,55 @@ function diveOutput(culture, sky, day) {
   };
 }
 
+const MARGIN = 0.003;
+
+function separationOf(x, y) {
+  const raw = Math.abs(x - y) % 360;
+  return raw > 180 ? 360 - raw : raw;
+}
+
+/** Every pair clear of every orb edge. */
+function clearOfOrbEdges(pairs) {
+  for (const [x, y] of pairs) {
+    const sep = separationOf(x, y);
+    for (const rule of ASPECT_RULES) if (Math.abs(Math.abs(sep - rule.angle) - rule.orb) < MARGIN) return false;
+  }
+  return true;
+}
+
+/** Orbs sorted, each at least MARGIN from the next. */
+function ranksApart(orbs) {
+  const sorted = [...orbs].sort((a, b) => a - b);
+  return sorted.every((o, i) => i === 0 || o - sorted[i - 1] >= MARGIN);
+}
+
+/** A printed orb clear of its rounding half-minute, of EXACT and of the tight threshold. */
+function printedClear(orb) {
+  const minutes = orb * 60;
+  const frac = minutes - Math.floor(minutes);
+  return Math.abs(frac - 0.5) / 60 >= MARGIN && Math.abs(orb - 1 / 60) >= MARGIN && Math.abs(orb - 0.5) >= MARGIN;
+}
+
+function marginsHold(culture, sky, day) {
+  const skyPairs = [];
+  for (let i = 0; i < PLANETS.length; i += 1)
+    for (let j = i + 1; j < PLANETS.length; j += 1) skyPairs.push([sky[PLANETS[i]], sky[PLANETS[j]]]);
+  const natalPairs = [];
+  for (const t of PLANETS) for (const n of PLANETS) natalPairs.push([sky[t], diveNatal.chart[n]]);
+  if (!clearOfOrbEdges(skyPairs) || !clearOfOrbEdges(natalPairs)) return false;
+  const figures = dayFigures(sky);
+  const hits = computeTransits(sky, diveNatal.chart);
+  if (!ranksApart(figures.map((f) => f.orb)) || !ranksApart(hits.map((h) => h.orb))) return false;
+  const out = diveOutput(culture, sky, day);
+  const decree = composeDecree(culture, sky, { day });
+  const printed = new Set([decree.evidence, ...out.sky.groups.map((g) => g.evidence), ...out.natal.groups.map((g) => g.evidence)]);
+  for (const f of computeAspects(sky)) if (printed.has(composeEvidence(culture, f)) && !printedClear(f.orb)) return false;
+  for (const h of hits) if (printed.has(composeBridge(culture, h.transit, h.natal, h.kind, h.orb)) && !printedClear(h.orb)) return false;
+  return true;
+}
+
 function diveStable(culture, sky, day) {
+  if (!marginsHold(culture, sky, day)) return false;
   const base = JSON.stringify(diveOutput(culture, sky, day));
   let seed = day;
   const rand = () => (seed = (Math.imul(seed, 1103515245) + 12345) >>> 0) / 4294967296;
@@ -722,8 +776,8 @@ import com.astra.antiqua.model.Planet
  * composers (web/src/lib/diveDeeper.ts, permissions.ts). Do not edit; run
  * \`cd web && node scripts/gen-android-reading-banks.mjs\`.
  *
- * One day per culture, each chosen so the whole output holds under a nudge
- * of every sky body by a thousandth of a degree: the dive deeper's four
+ * One day per culture, each chosen so every orb edge, rank gap and printed
+ * orb boundary the text depends on is at least 0.003 degrees away: the dive deeper's four
  * groups as "title|evidence|paragraph", and the Do and Don't lists, without
  * a chart and against the screenshots' seeded chart (literals, so only the
  * sky is recomputed on Android). DiveDeeperParityTest recomputes each.

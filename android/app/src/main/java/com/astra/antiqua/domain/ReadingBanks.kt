@@ -502,7 +502,7 @@ object DecreeBanks {
             AspectType.OPPOSITION -> when (partner) {
                 Planet.SUN -> "Someone across the agora wants the same honor."
                 Planet.MERCURY -> "Two people tell you two different stories."
-                Planet.VENUS -> "Two desires pull you in opposite directions."
+                Planet.VENUS -> "You want two things, and the agora lets you carry home one."
                 Planet.MARS -> "Someone wants a quarrel in the open."
                 Planet.JUPITER -> "The powerful want a price for their help."
                 Planet.SATURN -> "A deadline comes the other way down your road."
@@ -1362,10 +1362,10 @@ object DiveDeeperBanks {
     /** The paragraph's last line. Slot: {thing}, a manifestation. */
     fun concrete(culture: AncientCulture): String = when (culture) {
         AncientCulture.EGYPT -> "Reckon on {thing}."
-        AncientCulture.GREECE -> "Take {thing} as Delphi's reply."
+        AncientCulture.GREECE -> "Look for {thing}."
         AncientCulture.CANAAN -> "Be ready for {thing}."
         AncientCulture.CARTHAGE -> "Enter it in the daybook: {thing}."
-        AncientCulture.ROME -> "Count {thing} as a sign."
+        AncientCulture.ROME -> "Watch for {thing}."
     }
 }
 

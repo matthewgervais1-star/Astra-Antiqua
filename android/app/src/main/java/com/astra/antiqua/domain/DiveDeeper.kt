@@ -22,12 +22,12 @@ data class DiveDeeper(val groups: List<DiveGroup>, val natal: Boolean)
  * The day page's dive deeper, ported from web/src/lib/diveDeeper.ts: four
  * paragraphs, one per house group. With a chart a group reads its tightest
  * transit to a natal point in its houses, from a body that moves daily when
- * one touches the group; without one, its tightest sky
- * figure with a body whose domain it keeps, one group to a figure while
- * another is free. Each paragraph says the two domains and the day's
- * relation, the consequence, and one concrete thing; a group nothing touches
- * prints the culture's quiet line. No sentence the page already prints is
- * printed twice. DiveDeeperParityTest pins it to web.
+ * one touches the group; without one, its tightest sky figure with a body
+ * whose domain it keeps that no earlier group reads. Each paragraph says the
+ * two domains and the day's relation, the consequence, and one concrete
+ * thing; a group with nothing left to read prints the culture's quiet line.
+ * No line the page already prints, whole or inside a longer sentence, is
+ * printed again. DiveDeeperParityTest pins it to web.
  */
 object DiveDeeperComposer {
     private const val DAY_MS = 86_400_000L
@@ -43,14 +43,21 @@ object DiveDeeperComposer {
 
     private fun capitalize(s: String): String = if (s.isEmpty()) s else s.replaceFirstChar { it.uppercase() }
 
+    /** True when a line, or a clause inside a longer sentence, is already on the page. */
+    private fun onPage(line: String, printed: Set<String>): Boolean {
+        val needle = line.removeSuffix(".").lowercase()
+        return printed.any { it.lowercase().contains(needle) }
+    }
+
     private fun longWords(line: String): Set<String> =
         Regex("[a-z']{5,}").findAll(line.lowercase()).map { it.value }.toSet()
 
     /**
      * The relation sentence for a group. Groups alternate between the two
-     * variants the decree does not use today, then the day's own variant,
-     * skipped when the sentence it makes is on the page already. Of those, the
-     * group takes the first that shares the fewest words with the consequence.
+     * variants the decree does not use today, then the day's own variant. A
+     * choice whose clause is on the page already, alone or inside a longer
+     * sentence, is skipped. Of the rest, the group takes the first that shares
+     * the fewest words with the consequence.
      */
     private fun relationSentence(
         culture: AncientCulture,
@@ -73,7 +80,7 @@ object DiveDeeperComposer {
             )
             longWords(relation).count { it in echo } to "${capitalize(clause)}."
         }
-        val fresh = choices.filter { it.second !in printed }
+        val fresh = choices.filter { !onPage(it.second, printed) }
         val pool = fresh.ifEmpty { choices }
         return pool.reduce { best, c -> if (c.first < best.first) c else best }.second
     }
@@ -90,7 +97,7 @@ object DiveDeeperComposer {
 
         val consequence = reading.keys.filter { it != Planet.MOON }
             .map { DecreeBanks.consequence(culture, reading.aspect, it) }
-            .firstOrNull { it !in printed }
+            .firstOrNull { !onPage(it, printed) }
         val sentences = mutableListOf<String>()
         // A body against its own natal place reads one domain twice; the
         // contact then speaks through its consequence alone.
@@ -111,7 +118,9 @@ object DiveDeeperComposer {
             val touching = figures.filter {
                 FigureReadingComposer.domainGroup(it.a) == group || FigureReadingComposer.domainGroup(it.b) == group
             }
-            val f = touching.firstOrNull { it !in used } ?: touching.firstOrNull() ?: return@map null
+            // A figure an earlier group reads is not read again; a group
+            // whose figures are all taken prints its quiet line.
+            val f = touching.firstOrNull { it !in used } ?: return@map null
             used += f
             val (body, partner) = DayDecreeComposer.headlineBody(f.a, f.b)
             val (first, second) = if (FigureReadingComposer.domainGroup(body) == group) body to partner else partner to body
@@ -128,17 +137,20 @@ object DiveDeeperComposer {
                         FigureReadingComposer.wholeSignHouse(natal.chart.getValue(it.b), natal.ascendant),
                     ) == group
                 }
-                .filter { !(it.a == Planet.MOON && it.b == Planet.MOON) }
-                // A body that moves daily first, then a body against its own
-                // natal place last within its speed, then by orb.
+                // web's rankContacts: the Moon on the natal Moon last of all,
+                // a body that moves daily first, a body against its own natal
+                // place last within its speed, then by orb.
                 .sortedWith(
                     compareBy<SkyFigure>(
+                        { if (it.a == Planet.MOON && it.b == Planet.MOON) 1 else 0 },
                         { if (it.a in DayDecreeComposer.FAST_ORDER) 0 else 1 },
                         { if (it.a == it.b) 1 else 0 },
                         { it.orb },
                     ),
                 )
-                .firstOrNull() ?: return@map null
+                .firstOrNull()
+                ?.takeUnless { it.a == Planet.MOON && it.b == Planet.MOON }
+                ?: return@map null
             Reading(
                 first = h.a,
                 second = h.b,
@@ -154,7 +166,7 @@ object DiveDeeperComposer {
     /** The four paragraphs for a day page: [sky] at 00:00 UTC, [day] its UTC day number, [natal] the reader's chart or null. */
     fun compose(culture: AncientCulture, decree: DayDecree, sky: Map<Planet, Double>, day: Long, natal: NatalPoints?): DiveDeeper {
         val readings = if (natal != null) natalReadings(culture, sky, natal) else skyReadings(culture, DayDecreeComposer.dayFigures(sky))
-        val printed = decree.sentences.toMutableSet()
+        val printed = (listOf(decree.headline) + decree.sentences).toMutableSet()
         return DiveDeeper(readings.mapIndexed { g, r -> composeGroup(culture, g, r, day, printed) }, natal != null)
     }
 
