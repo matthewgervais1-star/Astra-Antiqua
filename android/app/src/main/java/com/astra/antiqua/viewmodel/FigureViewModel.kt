@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.data.ProfileRepository
 import com.astra.antiqua.domain.CalculateNatalChartUseCase
+import com.astra.antiqua.domain.DayDecreeComposer
 import com.astra.antiqua.domain.FigurePage
 import com.astra.antiqua.domain.FigureReadingComposer
 import com.astra.antiqua.domain.NatalPoints
@@ -22,8 +23,8 @@ import kotlinx.coroutines.withContext
 sealed class FigureState {
     object Loading : FigureState()
 
-    /** The date or id does not parse, or the sky did not hold the figure that day. */
-    object Missing : FigureState()
+    /** The date or id does not parse, the pair is slow, or the sky did not hold the figure that day. */
+    data class Missing(val reason: FigureReadingComposer.Missing) : FigureState()
 
     data class Ready(val page: FigurePage, val now: Date) : FigureState()
 }
@@ -63,7 +64,12 @@ class FigureViewModel(
                 }
                 FigureReadingComposer.composePage(astronomy, culture, date, id, natal)
             }
-            _state.value = if (page == null) FigureState.Missing else FigureState.Ready(page, Date())
+            _state.value = if (page != null) {
+                FigureState.Ready(page, Date())
+            } else {
+                val sky = FigureReadingComposer.parseIsoDate(date)?.let { DayDecreeComposer.chartAt(astronomy, it) }
+                FigureState.Missing(FigureReadingComposer.missing(date, sky, id) ?: FigureReadingComposer.Missing.ABSENT)
+            }
         }
     }
 

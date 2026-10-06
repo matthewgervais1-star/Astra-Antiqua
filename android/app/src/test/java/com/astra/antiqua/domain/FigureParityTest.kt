@@ -21,6 +21,7 @@ class FigureParityTest {
     private fun flat(p: FigurePage) = FigureGoldenPage(
         headline = p.headline,
         evidence = p.evidence,
+        bridge = p.bridge ?: "",
         moveOne = p.anatomy.moveOne,
         moveTwo = p.anatomy.moveTwo,
         parts = p.anatomy.parts.joinToString(" / ") { "${it.phrase}|${it.tag}" },
@@ -53,18 +54,26 @@ class FigureParityTest {
         assertNull(FigureReadingComposer.composePage(engine, g.culture, g.date, "jupiter-trine-saturn", null))
         assertNull(FigureReadingComposer.composePage(engine, g.culture, "2026-02-30", g.id, null))
         assertNull(FigureReadingComposer.parseFigureId("mars-trine-mars"))
+        val sky = DayDecreeComposer.chartAt(engine, FigureReadingComposer.parseIsoDate(g.date)!!)
+        assertEquals(FigureReadingComposer.Missing.SLOW, FigureReadingComposer.missing(g.date, sky, "jupiter-trine-saturn"))
+        assertEquals(FigureReadingComposer.Missing.MALFORMED, FigureReadingComposer.missing("2026-02-30", sky, g.id))
+        assertNull(FigureReadingComposer.missing(g.date, sky, g.id))
     }
 
     @Test
     fun `a figure returns when the sky brings it back`() {
-        val sunMars = Recurrence.skyDays(Planet.SUN, Planet.MARS, AspectType.CONJUNCTION)
+        val sunMars = Recurrence.skyDays(Planet.SUN, Planet.MARS, AspectType.CONJUNCTION)!!
         assertTrue("Sun and Mars meet about every 780 days, not $sunMars", abs(sunMars - 780) < 2)
         assertEquals("about every two years", Recurrence.interval(AncientCulture.ROME, sunMars))
         assertEquals("about once a year", Recurrence.interval(AncientCulture.GREECE, Recurrence.natalDays(Planet.MERCURY, AspectType.CONJUNCTION)))
         assertEquals("about twice a month", Recurrence.interval(AncientCulture.CANAAN, Recurrence.natalDays(Planet.MOON, AspectType.TRINE)))
         assertEquals("about every fourteen days", Recurrence.interval(AncientCulture.ROME, Recurrence.natalDays(Planet.MOON, AspectType.TRINE)))
         assertEquals("about every three decans", Recurrence.interval(AncientCulture.EGYPT, Recurrence.natalDays(Planet.MOON, AspectType.CONJUNCTION)))
-        assertEquals(115.9, Recurrence.skyDays(Planet.MERCURY, Planet.SUN, AspectType.CONJUNCTION), 0.0)
+        assertEquals(57.9, Recurrence.skyDays(Planet.MERCURY, Planet.SUN, AspectType.CONJUNCTION)!!, 0.0)
+        assertEquals(291.9, Recurrence.skyDays(Planet.SUN, Planet.VENUS, AspectType.CONJUNCTION)!!, 0.0)
+        assertNull(Recurrence.skyDays(Planet.MERCURY, Planet.VENUS, AspectType.SQUARE))
+        assertEquals(FigureBanks.recurrenceIrregular(AncientCulture.ROME), Recurrence.compose(AncientCulture.ROME, null))
+        assertEquals("about every two hundred and forty-eight years", Recurrence.interval(AncientCulture.ROME, Recurrence.natalDays(Planet.PLUTO, AspectType.CONJUNCTION)))
         assertEquals("one hundred and sixty-five", Recurrence.numberWords(165))
     }
 }

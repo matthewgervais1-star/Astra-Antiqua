@@ -41,6 +41,8 @@ data class FigurePage(
     val evidence: String,
     val instant: Date,
     val natal: Boolean,
+    /** With a chart, the line under the evidence naming the contact the page reads; null for the sky reading. */
+    val bridge: String?,
     val feedbackId: String,
     val anatomy: FigureAnatomy,
     /** The natal longitude the displayed figure reads against, or null for the sky figure. */
@@ -133,13 +135,13 @@ object FigureReadingComposer {
         else -> 3
     }
 
-    /** Move one for a natal planet: the culture's frame over the placement's clause. */
+    /** Move one for a natal planet: the culture's frame around the placement's authored clause. */
     fun natalMoveOne(culture: AncientCulture, point: Planet, longitude: Double): String {
         val sign = ZodiacUtils.getZodiacSign(longitude)
-        val clause = FigureBanks.placementClause(point, sign)
-        val you = FigureBanks.natalFrameYou(culture)
-        val frame = if (you.isNotEmpty() && clause.startsWith("you ")) you else FigureBanks.natalFrame(culture)
-        return fill(frame, mapOf("deity" to name(culture, point), "sign" to FigureBanks.signPhrase(sign), "clause" to clause))
+        return fill(
+            FigureBanks.natalFrame(culture),
+            mapOf("deity" to name(culture, point), "sign" to FigureBanks.signPhrase(sign), "clause" to FigureBanks.placementClause(point, sign)),
+        )
     }
 
     private fun skyMoveOne(culture: AncientCulture, body: Planet, longitude: Double): String =
@@ -152,7 +154,9 @@ object FigureReadingComposer {
             ),
         )
 
-    private fun moveTwo(clause: String, consequence: String) = "Right now $clause, and ${lower(consequence)}"
+    /** "Right now {two domains and a relation}: {the consequence}." The colon keeps two "and"s from stacking. */
+    private fun moveTwo(clause: String, consequence: String?) =
+        if (consequence != null) "Right now $clause: ${lower(consequence)}" else "Right now $clause."
 
     private fun relationPart(culture: AncientCulture, aspect: AspectType) = FigurePart(
         FigureBanks.shortRelation(culture, aspect),
@@ -171,7 +175,8 @@ object FigureReadingComposer {
 
     /** The tightest aspect from the headline body to a natal planet; from the partner when the headline body touches none. */
     fun natalContact(sky: Map<Planet, Double>, natal: NatalPoints, headline: Planet, partner: Planet): NatalContact? {
-        fun contactsOf(body: Planet): List<NatalContact> = Planet.entries.mapNotNull { point ->
+        // A body against its own natal place is a return, not a contact.
+        fun contactsOf(body: Planet): List<NatalContact> = Planet.entries.filter { it != body }.mapNotNull { point ->
             val angle = separation(sky.getValue(body), natal.chart.getValue(point))
             AspectType.entries.firstOrNull { abs(angle - it.degree) <= it.orb }
                 ?.let { NatalContact(body, point, it, abs(angle - it.degree)) }
@@ -180,6 +185,20 @@ object FigureReadingComposer {
     }
 
     // --- the day's figure -------------------------------------------------------
+
+    /** Why a figure page has nothing to read. */
+    enum class Missing { MALFORMED, SLOW, ABSENT }
+
+    /** The reason [compose] returns null for this sky, or null when it would compose. */
+    fun missing(date: String, sky: Map<Planet, Double>?, id: String): Missing? {
+        if (parseIsoDate(date) == null) return Missing.MALFORMED
+        val (a, aspect, b) = parseFigureId(id) ?: return Missing.MALFORMED
+        if (a !in DayDecreeComposer.FAST_ORDER && b !in DayDecreeComposer.FAST_ORDER) return Missing.SLOW
+        if (sky == null) return null
+        val angle = separation(sky.getValue(a), sky.getValue(b))
+        val matched = AspectType.entries.firstOrNull { abs(angle - it.degree) <= it.orb }
+        return if (matched == aspect) null else Missing.ABSENT
+    }
 
     /**
      * The page for a day's figure from the sky at 00:00 UTC on [date]. Null
@@ -203,20 +222,37 @@ object FigureReadingComposer {
         val figure = SkyFigure(a, b, aspect, abs(angle - aspect.degree))
         val (headline, partner) = DayDecreeComposer.headlineBody(a, b)
         val day = Math.floorDiv(instant.time, DAY_MS)
-        val two = moveTwo(
-            DayDecreeComposer.meaningClause(culture, figure, day),
-            DayDecreeComposer.composeConsequence(culture, figure),
-        )
         val contact = natal?.let { natalContact(sky, it, headline, partner) }
-        val act = DayDecreeComposer.composeImage(culture, figure)
 
         val anatomy = if (natal != null && contact != null) {
             val natalLon = natal.chart.getValue(contact.point)
             val group = houseGroupIndex(wholeSignHouse(natalLon, natal.ascendant))
+            // Move two reads the contact; its consequence is keyed by the point
+            // it touches, or by the transiting body when that point is the Moon.
+            val consequence = DecreeBanks.consequence(
+                culture,
+                contact.aspect,
+                if (contact.point == Planet.MOON) contact.body else contact.point,
+            )
+            // The act names the contact's god, so hero, act and cards agree.
+            val act = if (contact.body in DayDecreeComposer.FAST_ORDER) {
+                fill(DecreeBanks.image(culture, contact.aspect, contact.body), mapOf("god" to name(culture, contact.body)))
+            } else {
+                fill(FigureBanks.slowAct(culture, contact.body), mapOf("god" to name(culture, contact.body)))
+            }
             FigureAnatomy(
                 heroBody = contact.body,
                 moveOne = natalMoveOne(culture, contact.point, natalLon),
-                moveTwo = two,
+                moveTwo = moveTwo(
+                    DayDecreeComposer.pairClause(
+                        culture,
+                        deityDomain(culture, contact.body),
+                        deityDomain(culture, contact.point),
+                        contact.aspect,
+                        day,
+                    ),
+                    consequence,
+                ),
                 parts = listOf(
                     FigurePart(cap(deityDomain(culture, contact.body)), nowTag(culture, contact.body), contact.body),
                     relationPart(culture, contact.aspect),
@@ -236,7 +272,10 @@ object FigureReadingComposer {
             FigureAnatomy(
                 heroBody = headline,
                 moveOne = skyMoveOne(culture, headline, sky.getValue(headline)),
-                moveTwo = two,
+                moveTwo = moveTwo(
+                    DayDecreeComposer.meaningClause(culture, figure, day),
+                    DayDecreeComposer.composeConsequence(culture, figure),
+                ),
                 parts = listOf(
                     FigurePart(cap(deityDomain(culture, headline)), nowTag(culture, headline), headline),
                     relationPart(culture, aspect),
@@ -247,7 +286,7 @@ object FigureReadingComposer {
                 aspect = aspect,
                 recurrence = Recurrence.compose(culture, Recurrence.skyDays(a, b, aspect)),
                 playsOutTitle = FigureBanks.playsOutTitle(culture),
-                actLine = act,
+                actLine = DayDecreeComposer.composeImage(culture, figure),
                 manifestations = FigureBanks.manifestations(culture, domainGroup(partner), harmony(aspect)),
                 cards = FigureBanks.tryThis(culture, headline),
                 lesson = lesson(culture, aspect, headline),
@@ -262,6 +301,12 @@ object FigureReadingComposer {
             evidence = DayDecreeComposer.composeEvidence(culture, figure),
             instant = instant,
             natal = natal != null && contact != null,
+            bridge = if (natal != null && contact != null) {
+                "${name(culture, contact.body).uppercase()} ${DayDecreeComposer.glyph(contact.aspect)} " +
+                    "YOUR ${name(culture, contact.point).uppercase()} · ${DayDecreeComposer.orbMeasure(contact.orb)}"
+            } else {
+                null
+            },
             feedbackId = "figure-$date-$canonical",
             anatomy = anatomy,
             natalTarget = if (natal != null && contact != null) natal.chart.getValue(contact.point) else null,

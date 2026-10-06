@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.domain.DayDecreeComposer
 import com.astra.antiqua.domain.FigureAnatomy
+import com.astra.antiqua.domain.FigureReadingComposer
 import com.astra.antiqua.domain.Recurrence
 import com.astra.antiqua.domain.Timeline
 import com.astra.antiqua.model.AncientCulture
@@ -95,8 +96,13 @@ fun FigureScreen(
                     }
                 }
 
-                FigureState.Missing -> item {
-                    NaveHead(kicker = "$institution · the figure", headline = "The sky did not hold this figure that day")
+                is FigureState.Missing -> item {
+                    val headline = when (current.reason) {
+                        FigureReadingComposer.Missing.MALFORMED -> "This address does not name a day and a figure"
+                        FigureReadingComposer.Missing.SLOW -> "Two slow bodies make a long transit, not a day's figure"
+                        FigureReadingComposer.Missing.ABSENT -> "The sky did not hold this figure that day"
+                    }
+                    NaveHead(kicker = "$institution · the figure", headline = headline)
                     FigureLinks(onNavigate)
                 }
 
@@ -109,6 +115,16 @@ fun FigureScreen(
                             headline = page.headline,
                             sub = page.evidence,
                         )
+                        page.bridge?.let { bridge ->
+                            // The contact the page reads from here down, under the sky figure's evidence.
+                            Text(
+                                text = bridge,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = accent,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth().padding(bottom = Spacing.Step),
+                            )
+                        }
                     }
                     item {
                         val timeline = window?.let { Recurrence.timeline(it, current.now, page.instant) }

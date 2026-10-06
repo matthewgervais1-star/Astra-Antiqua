@@ -22,9 +22,11 @@ data class Timeline(val ticks: List<TimelineTick>, val presentPct: Float, val pr
  * web/src/lib/recurrence.ts. A figure returns when the sky brings it back:
  * each body has a mean geocentric rate in degrees a day (Mercury and Venus
  * keep the Sun's), a natal contact returns every 360 / rate days, and a sky
- * figure every 360 / |rate a - rate b| days, or by the pair's synodic period
- * when the two rates are equal. Conjunction and opposition come once in the
- * cycle, the other kinds twice.
+ * figure every 360 / |rate a - rate b| days. When the two rates are equal
+ * the interval is measured: the Sun meets Mercury every 57.9 days and Venus
+ * every 291.9 on average (inferior and superior conjunction both count), and
+ * Mercury with Venus keeps no steady interval at all. Conjunction and
+ * opposition come once in the cycle, the other kinds twice.
  */
 object Recurrence {
     private const val YEAR = 365.25
@@ -36,21 +38,12 @@ object Recurrence {
         Planet.MARS -> 0.524
         Planet.JUPITER -> 0.0831
         Planet.SATURN -> 0.0335
-        Planet.URANUS -> 0.0117
-        Planet.NEPTUNE -> 0.006
-        Planet.PLUTO -> 0.004
+        Planet.URANUS -> 0.011733
+        Planet.NEPTUNE -> 0.005981
+        Planet.PLUTO -> 0.003975
     }
 
-    /** The pairs whose mean rates are equal: their synodic periods, in days. */
-    private fun synodic(a: Planet, b: Planet): Double? {
-        val pair = setOf(a, b)
-        return when (pair) {
-            setOf(Planet.SUN, Planet.MERCURY) -> 115.9
-            setOf(Planet.SUN, Planet.VENUS) -> 583.9
-            setOf(Planet.MERCURY, Planet.VENUS) -> 144.6
-            else -> null
-        }
-    }
+    private val INNER: Set<Planet> = setOf(Planet.SUN, Planet.MERCURY, Planet.VENUS)
 
     private fun perKind(cycle: Double, aspect: AspectType): Double =
         cycle / if (aspect == AspectType.CONJUNCTION || aspect == AspectType.OPPOSITION) 1.0 else 2.0
@@ -58,9 +51,18 @@ object Recurrence {
     /** Days between returns of a moving body's figure to a fixed natal point. */
     fun natalDays(body: Planet, aspect: AspectType): Double = perKind(360.0 / meanRate(body), aspect)
 
-    /** Days between returns of a figure between two moving bodies. */
-    fun skyDays(a: Planet, b: Planet, aspect: AspectType): Double =
-        perKind(synodic(a, b) ?: (360.0 / abs(meanRate(a) - meanRate(b))), aspect)
+    /** Days between returns of a figure between two moving bodies, or null when the pair keeps no steady interval. */
+    fun skyDays(a: Planet, b: Planet, aspect: AspectType): Double? {
+        if (a in INNER && b in INNER) {
+            val pair = setOf(a, b)
+            return when (pair) {
+                setOf(Planet.SUN, Planet.MERCURY) -> perKind(57.9, aspect)
+                setOf(Planet.SUN, Planet.VENUS) -> perKind(291.9, aspect)
+                else -> null
+            }
+        }
+        return perKind(360.0 / abs(meanRate(a) - meanRate(b)), aspect)
+    }
 
     private val UNITS = listOf(
         "", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
@@ -105,8 +107,12 @@ object Recurrence {
         return "about every ${numberWords(jsRound(days / YEAR))} years"
     }
 
-    fun compose(culture: AncientCulture, days: Double): String =
-        FigureBanks.recurrenceFrame(culture).replace("{interval}", interval(culture, days))
+    fun compose(culture: AncientCulture, days: Double?): String =
+        if (days == null) {
+            FigureBanks.recurrenceIrregular(culture)
+        } else {
+            FigureBanks.recurrenceFrame(culture).replace("{interval}", interval(culture, days))
+        }
 
     // --- the window in orb ---------------------------------------------------
 

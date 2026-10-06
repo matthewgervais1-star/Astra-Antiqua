@@ -101,8 +101,11 @@ object DayDecreeComposer {
         return "$deg°${min.toString().padStart(2, '0')}′"
     }
 
+    /** The measured orb, "0°19′", or "EXACT" only under one minute of arc. */
+    fun orbMeasure(orb: Double): String = if (orb < ONE_ARCMINUTE) "EXACT" else formatOrb(orb)
+
     fun composeEvidence(culture: AncientCulture, f: SkyFigure): String {
-        val measure = if (f.orb < ONE_ARCMINUTE) "EXACT" else formatOrb(f.orb)
+        val measure = orbMeasure(f.orb)
         return "${name(culture, f.a).uppercase()} ${glyph(f.aspect)} ${name(culture, f.b).uppercase()} · $measure"
     }
 
