@@ -1,19 +1,74 @@
-import type { Culture } from "@/data/cultures";
-import type { Tone } from "@/lib/tone";
+import type { Culture, Planet } from "@/data/cultures";
+import { toneOf, type Tone } from "@/lib/tone";
 import { PERMISSIONS_REGISTER } from "@/data/permissionsRegister";
+import type { DayFigure } from "@/lib/decree";
 
 /**
- * The day's permissions: PROCEED/REFRAIN (or the culture's own pair, see
- * cultureVoice.permissionPair) columns, four items each, drawn from the
- * per-culture verb banks in permissionsRegister.ts. Selection is a
- * deterministic pseudo-random pick seeded by the culture, the calendar day,
- * and the day's aspect tone (not Math.random, not a live shuffle) so the
- * same day always renders the same permissions until the tone genuinely
- * changes.
+ * The day's permissions: the culture's own pair (PROCEED/REFRAIN,
+ * OFFER/WITHHOLD and the rest, see cultureVoice.permissionPair), four items a
+ * column, drawn from the bodies of the day's figures (data/
+ * permissionsRegister.ts). Nothing is shuffled: the same figures always give
+ * the same lists, and a reader can trace each item to a body named in the
+ * evidence line or the second figure.
  */
 export interface DayPermissions {
   proceed: string[];
   refrain: string[];
+}
+
+const PER_COLUMN = 4;
+
+/** A quiet sky names no bodies; the Sun and Moon give and Saturn and Mars withhold. */
+const QUIET_PROCEED: readonly Planet[] = ["sun", "moon"];
+const QUIET_REFRAIN: readonly Planet[] = ["saturn", "mars"];
+
+/**
+ * Fill one column from groups of bodies, a figure's two bodies to a group:
+ * the first item of each body in the group, then the second, then the third,
+ * moving to the next group only when the column still has room. A body
+ * already used in the column is skipped.
+ */
+function column(
+  culture: Culture,
+  groups: ReadonlyArray<readonly Planet[]>,
+  side: "proceed" | "refrain",
+): string[] {
+  const out: string[] = [];
+  const used = new Set<Planet>();
+  for (const group of groups) {
+    const bodies = group.filter((b) => !used.has(b));
+    bodies.forEach((b) => used.add(b));
+    for (let rank = 0; rank < 3; rank += 1) {
+      for (const body of bodies) {
+        const item = PERMISSIONS_REGISTER[culture][body][side][rank];
+        if (item && out.length < PER_COLUMN && !out.includes(item)) out.push(item);
+      }
+    }
+    if (out.length >= PER_COLUMN) break;
+  }
+  return out;
+}
+
+/**
+ * The lists for a day, from its figures in the decree's order: the headline
+ * figure, the second figure, then the rest by orb. On a day of favor or union
+ * the headline figure's bodies fill the proceed column and the second
+ * figure's bodies the refrain column; on a day of trial the two swap. Either
+ * column fills to four from the figures after those two.
+ */
+export function dayPermissions(culture: Culture, figures: readonly DayFigure[]): DayPermissions {
+  const [top, second, ...rest] = figures;
+  if (!top) {
+    return { proceed: column(culture, [QUIET_PROCEED], "proceed"), refrain: column(culture, [QUIET_REFRAIN], "refrain") };
+  }
+  const tail = rest.map((f) => [f.a, f.b] as const);
+  const lead = [[top.a, top.b] as const, ...tail];
+  const follow = [...(second ? [[second.a, second.b] as const] : []), ...tail];
+  const trial = toneOf(top.kind) === "tension";
+  return {
+    proceed: column(culture, trial ? follow : lead, "proceed"),
+    refrain: column(culture, trial ? lead : follow, "refrain"),
+  };
 }
 
 // FNV-1a: a small, dependency-free string hash, good enough to seed a PRNG
@@ -47,45 +102,6 @@ function dayOfYear(date: Date): number {
 
 function seedFor(culture: Culture, date: Date, tone: Tone, salt: string): number {
   return fnv1a(`${culture}|${date.getUTCFullYear()}|${dayOfYear(date)}|${tone}|${salt}`);
-}
-
-function shuffledIndices(rng: () => number, length: number): number[] {
-  const order = Array.from({ length }, (_, i) => i);
-  for (let i = order.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(rng() * (i + 1));
-    const a = order[i]!;
-    const b = order[j]!;
-    order[i] = b;
-    order[j] = a;
-  }
-  return order;
-}
-
-function pickN(rng: () => number, list: readonly string[], n: number): string[] {
-  return shuffledIndices(rng, list.length)
-    .slice(0, Math.min(n, list.length))
-    .map((i) => list[i]!);
-}
-
-/**
- * Four proceed items + four refrain items for the given culture and day,
- * seeded by the date and the day's aspect tone so the list is stable across
- * reloads and only changes when the day (or the sky) does.
- *
- * `figures` names the day's sky figures ("sun-trine-uranus|..."). A reader
- * with no natal chart gets the lists seeded from those, so the module speaks
- * to everyone and its WHY THESE link still points at the figures that chose
- * it. Omitted, the seed is the date and tone alone, as before.
- */
-export function dayPermissions(culture: Culture, date: Date, tone: Tone, figures?: string): DayPermissions {
-  const register = PERMISSIONS_REGISTER[culture];
-  const salt = figures ? `|${figures}` : "";
-  const proceedRng = mulberry32(seedFor(culture, date, tone, `proceed${salt}`));
-  const refrainRng = mulberry32(seedFor(culture, date, tone, `refrain${salt}`));
-  return {
-    proceed: pickN(proceedRng, register.proceed, 4),
-    refrain: pickN(refrainRng, register.refrain, 4),
-  };
 }
 
 /**

@@ -11,7 +11,7 @@ export interface CenterDecreeProps {
   institution: string;
   weekday: string;
   dateLong: string;
-  reading: DayDecree;
+  reading: Pick<DayDecree, "headline" | "evidence" | "paragraphs" | "tone">;
   votive: string;
   /** The culture's come-back line, closing the day page. */
   comeBack: string;
@@ -34,7 +34,7 @@ export function CenterDecree({
 }: CenterDecreeProps) {
   const readingId = `day-${isoDateUtc(now)}`;
   return (
-    <main className={cn("flex flex-col items-center px-6 py-11 text-center md:px-14 md:py-[var(--space-6)]", className)}>
+    <main id="day-figure" className={cn("flex flex-col items-center px-6 py-11 text-center md:px-14 md:py-[var(--space-6)]", className)}>
       <NaveHead
         kicker={`${weekday} · ${dateLong} · ${institution}`}
         sub={

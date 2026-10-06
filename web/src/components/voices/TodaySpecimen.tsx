@@ -2,8 +2,7 @@
 
 import { useMemo } from "react";
 import type { Culture } from "@/data/cultures";
-import { computeChart } from "@/lib/ephemeris";
-import { composeDecree } from "@/lib/decree";
+import { composeDayPage } from "@/lib/decree";
 
 export interface TodaySpecimenProps {
   culture: Culture;
@@ -22,8 +21,7 @@ function firstSentence(text: string): string {
 export function TodaySpecimen({ culture }: TodaySpecimenProps) {
   const specimen = useMemo(() => {
     const now = new Date();
-    const chart = computeChart(now);
-    const reading = composeDecree(culture, chart);
+    const reading = composeDayPage(culture, now);
     return {
       headline: reading.headline,
       sentence: firstSentence(reading.paragraphs[0] ?? ""),

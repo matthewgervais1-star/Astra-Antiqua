@@ -3,9 +3,10 @@ import type { Culture, Planet } from "@/data/cultures";
 /**
  * What each body governs in the reader's own life, said plainly in the
  * second person and in the culture's own nouns. The decree's meaning sentence
- * joins two of these ("{domain A} and {domain B} {relation}"), and the
- * instruction puts the headline body's domain in its object slot, so every
- * entry has to read naturally as either.
+ * joins two of these ("{domain A} and {domain B} {relation}"), so every entry
+ * has to read naturally as the subject of every relation. The instructions are
+ * written per headline body, each for its own domain, so no domain sits in an
+ * object slot.
  *
  * Lowercase-initial by design; the composer capitalises one that opens a
  * sentence. No entry repeats across cultures: the five-voice check reads the
@@ -20,7 +21,7 @@ export const DEITY_DOMAINS: Readonly<Record<Culture, Readonly<Record<Planet, str
     mars: "your temper",
     jupiter: "your patrons",
     saturn: "your duties",
-    uranus: "your sudden turns",
+    uranus: "your plans for the new season",
     neptune: "your dreams",
     pluto: "what you have buried",
   },
@@ -44,9 +45,9 @@ export const DEITY_DOMAINS: Readonly<Record<Culture, Readonly<Record<Planet, str
     mars: "your hot blood",
     jupiter: "your harvest",
     saturn: "your elders' rules",
-    uranus: "your broken routine",
-    neptune: "your fears",
-    pluto: "your losses",
+    uranus: "your change of pasture",
+    neptune: "your prayers",
+    pluto: "your grain pits",
   },
   carthage: {
     sun: "your credit in the harbor",
@@ -56,20 +57,20 @@ export const DEITY_DOMAINS: Readonly<Record<Culture, Readonly<Record<Planet, str
     mars: "your war chest",
     jupiter: "your profits",
     saturn: "your fixed dues",
-    uranus: "your abrupt departures",
-    neptune: "your blurred figures",
+    uranus: "your new routes",
+    neptune: "your sea voyages",
     pluto: "the debts you inherited",
   },
   rome: {
-    sun: "your public standing",
+    sun: "your good name",
     moon: "your household affairs",
     mercury: "your dispatches",
     venus: "your courtship",
     mars: "your campaign",
-    jupiter: "your good omens",
+    jupiter: "your run for office",
     saturn: "your treasury",
-    uranus: "your sudden orders",
-    neptune: "the rumors about you",
+    uranus: "your reforms",
+    neptune: "your days at the baths",
     pluto: "your inheritance",
   },
 };

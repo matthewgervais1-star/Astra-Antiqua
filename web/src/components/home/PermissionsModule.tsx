@@ -9,11 +9,11 @@ export interface PermissionsModuleProps {
   tone: Tone;
 }
 
-/** Day's permissions, per 6a-permissions-rome: two columns drawn from
- * today's aspects, not a randomizer, in the culture's own permission pair
- * (PROCEED/REFRAIN, OFFER/WITHHOLD, ASK/DO NOT ASK, BRING/HOLD BACK,
- * PAY/DEFER). Rendered for every reader: seeded from the sky figures when
- * no natal chart is saved (lib/permissions.ts). */
+/** Day's permissions, per 6a-permissions-rome: two columns in the culture's
+ * own permission pair (PROCEED/REFRAIN, OFFER/WITHHOLD, ASK/DO NOT ASK,
+ * BRING/HOLD BACK, PAY/DEFER), every item drawn from a body in the decree's
+ * figures (lib/permissions.ts). Rendered for every reader. WHY THESE points
+ * at the decree, which names those bodies at every width. */
 export function PermissionsModule({ culture, permissions, tone }: PermissionsModuleProps) {
   const [proceedLabel, refrainLabel] = CULTURE_VOICES[culture].permissionPair;
   return (
@@ -45,7 +45,7 @@ export function PermissionsModule({ culture, permissions, tone }: PermissionsMod
       </div>
       <div className="mt-4 font-mono text-data-xs leading-data tracking-data text-dim">
         DERIVED FROM TODAY&rsquo;S ASPECTS, NOT A RANDOMIZER →{" "}
-        <a href="#aspects" className="text-accent">
+        <a href="#day-figure" className="text-accent">
           WHY THESE
         </a>
       </div>

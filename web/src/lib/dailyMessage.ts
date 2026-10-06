@@ -1,6 +1,6 @@
 import type { Culture, Planet } from "@/data/cultures";
 import type { Longitude } from "@/data/sampleChart";
-import { composeDayMessageParts } from "@/lib/decree";
+import { composeDayPage, composeDecree, type DayDecree, type DecreeOptions } from "@/lib/decree";
 
 /**
  * The day's message in one breath: the decree's headline, then its meaning,
@@ -15,10 +15,22 @@ export interface DailyMessage {
   tone: "harmony" | "tension" | "quiet";
 }
 
+function messageOf(decree: DayDecree): DailyMessage {
+  const [meaning, consequence, , , instruction] = decree.sentences;
+  const body = decree.tone === "quiet" ? (decree.sentences[0] ?? "") : [meaning, consequence, instruction].join(" ");
+  return { headline: decree.headline, body, tone: decree.tone };
+}
+
+/** The message for one chart, with the same options the decree takes. */
 export function composeDailyMessage(
   culture: Culture,
   chart: Readonly<Record<Planet, Longitude>>,
+  options: DecreeOptions = {},
 ): DailyMessage {
-  const parts = composeDayMessageParts(culture, chart);
-  return { headline: parts.headline, body: parts.sentences.join(" "), tone: parts.tone };
+  return messageOf(composeDecree(culture, chart, options));
+}
+
+/** The message for the day page of the UTC day containing `date`. */
+export function composeDayMessage(culture: Culture, date: Date): DailyMessage {
+  return messageOf(composeDayPage(culture, date));
 }

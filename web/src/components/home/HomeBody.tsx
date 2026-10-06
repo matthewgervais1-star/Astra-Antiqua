@@ -12,7 +12,6 @@ import { CompactSkyTable } from "@/components/home/CompactSkyTable";
 import { TransitTeaser } from "@/components/home/TransitTeaser";
 import { PermissionsModule } from "@/components/home/PermissionsModule";
 import { DayPressureModule } from "@/components/home/DayPressureModule";
-import { toneOf } from "@/lib/tone";
 
 /**
  * The home body: the culture is guaranteed non-null here (CultureGate only
@@ -43,7 +42,6 @@ export function HomeBody() {
     );
   }
 
-  const dominantTone = bundle.aspectRows[0] ? toneOf(bundle.aspectRows[0].kind) : "harmony";
 
   return (
     <>
@@ -81,7 +79,7 @@ export function HomeBody() {
         <TransitTeaser className="px-6 pb-10 min-[1100px]:hidden md:px-14" data={bundle.longTransit} />
       </div>
 
-      <PermissionsModule culture={bundle.culture} permissions={bundle.permissions} tone={dominantTone} />
+      <PermissionsModule culture={bundle.culture} permissions={bundle.permissions} tone={bundle.dayTone} />
 
       {bundle.natal && bundle.pressureGroups ? <DayPressureModule groups={bundle.pressureGroups} /> : null}
     </>

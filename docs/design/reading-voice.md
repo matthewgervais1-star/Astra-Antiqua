@@ -77,40 +77,57 @@ composition speaks to the reader. The shape, from
 `docs/superpowers/specs/2026-09-29-daily-reading-voice.md`:
 
 1. **Headline.** One sentence to the reader, the kind a person could say to a
-   friend: "Start the heavy thing while the light holds." Keyed by culture,
-   aspect kind and the headline body (the fast body of the tightest figure,
-   the faster when both are). 125 lines, no two alike.
+   friend, with a noun from the culture's own world: "Start the heavy thing
+   while the light holds." Keyed by culture, aspect kind and the headline body
+   (the fast body of the figure, the faster when both are). 125 lines, no two
+   alike, and none shares a clause with another culture's.
 2. **Evidence line**, in mono: the two gods, the glyph, the orb or EXACT
    (`RA △ NUT · 0°19′`). The sky's facts sit here, under the headline, so the
    prose does not have to recite them.
 3. **One paragraph of five sentences**: the meaning ("your day's work and your
-   sudden turns float on the same current", two plain domains and a relation,
-   with the culture's exact tail under half a degree); the consequence for the
-   reader; the institution's image, naming the headline god; the second figure
-   in one sentence; and the instruction, always last, naming the headline god
-   and its domain.
+   plans for the new season float on the same current", two plain domains and
+   a relation, with one of the culture's two exact tails under half a degree);
+   the consequence, keyed by the kind and the partner body; the institution's
+   image and, last, the instruction, each keyed by the kind and the headline
+   body and naming both gods; and between them the second figure in one
+   sentence, opened by one of two phrases.
 
-The banks live in `data/decreeBanks.ts` and `data/deityDomains.ts`. The rule
-the old charges enforced still holds: **every sentence after the evidence line
-takes the figure**. A line keyed on the aspect kind alone carries a god's name
-or a domain, so Sun sextile Mars and Moon sextile Venus never print the same
-sentence. A domain is plain second person ("your letters", "your war chest"),
-never a metonym the reader has to decode.
+The banks live in `data/decreeBanks.ts` and `data/deityDomains.ts`. A domain is
+plain second person ("your letters", "your war chest"), never a metonym the
+reader has to decode, and it reads as the subject of every relation. The
+instructions are written per headline body, so no domain sits in an object
+slot.
 
-**Two asks per screen, and both are earned.** The old rule allowed one ask, the
-votive, and let the decree order only on an exact figure. The reading-voice
-spec amends it: every day page ends on one concrete instruction, because a page
-that tells the reader what the day means and not what to do with it reads as a
-riddle. The votive stays. Week lines and ingress lines still never order: a
-week day shows its headline and the meaning and consequence beneath it.
+**No sentence repeats within seven days.** The keys make every sentence after
+the evidence line change with the figure. The days make it change with time: a
+day's page (`composeDayPage`) avoids every headline and sentence the six days
+before it printed, and a figure that tightens overnight waits for its tightest
+day. The six days have to be the ones the reader saw, so every page of a year
+comes from one walk that starts two weeks before 1 January. Two costs come with
+the rule, and both are stated here so nobody mistakes them for bugs. The
+headline figure is the tightest one about a third of the time; on the other
+days a figure that would repeat a sentence yields to the next, and the evidence
+line still prints its true orb. And on about ten days a year every figure in
+orb repeats something; then the one that repeats least speaks.
+
+**What asks.** The day page asks more than once, and each ask is earned by the
+sky. The headline is an order more often than not. The paragraph ends on one
+concrete instruction, because a page that says what the day means and not what
+to do with it reads as a riddle. The Do and Don't lists name things to bring and
+things to hold back. The votive asks once more. The week asks only in its
+headlines; the line under each headline (the meaning and the consequence) and
+the ingress lines never order.
 
 A daily message (`lib/dailyMessage.ts`) is the headline plus the meaning, the
 consequence and the instruction, every one a sentence the day page prints.
 There is no bank of fixed daily lines: a message that says the same thing
 whatever the ephemeris shows is the invention the method page disowns.
 
-The Do and Don't lists (the culture's permission pair) show for every reader,
-seeded from the day's sky figures when no chart is saved.
+The Do and Don't lists (the culture's permission pair) show for every reader.
+They come from the bodies of the day's figures (`data/permissionsRegister.ts`,
+three of each per body, two to four words): on a day of favor the headline
+figure's bodies fill the first column and the second figure's the second; on a
+day of trial the two swap.
 
 ## The bar, stated in our own prose
 

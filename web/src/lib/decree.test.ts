@@ -1,15 +1,17 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { composeDecree, headlineBody } from "@/lib/decree";
+import { composeDayPage, composeDecree, headlineBody, REPEAT_WINDOW_DAYS } from "@/lib/decree";
 import { composeDailyMessage } from "@/lib/dailyMessage";
+import { dayPermissions } from "@/lib/permissions";
 import { buildWeekDays } from "@/lib/weekReading";
-import { computeChart } from "@/lib/ephemeris";
 import { DEITY_CHARGES } from "@/data/deityCharges";
 import { DEITY_DOMAINS } from "@/data/deityDomains";
 import { DECREE_BANKS } from "@/data/decreeBanks";
+import { PERMISSIONS_REGISTER } from "@/data/permissionsRegister";
 import { DEITY_MATRIX } from "@/data/deities";
 import { CULTURES, PLANETS, type Culture, type Planet } from "@/data/cultures";
 import { computeAspects, type Longitude } from "@/data/sampleChart";
+import { GOLDEN_2026_09_29 } from "@/lib/decree.golden";
 
 const FAST: ReadonlySet<Planet> = new Set(["sun", "moon", "mercury", "venus", "mars"]);
 
@@ -65,7 +67,8 @@ test("the day page is a headline, an evidence line and one paragraph of five sen
   for (const culture of CULTURES) {
     const d = composeDecree(culture, chartWith("sun", "mars", 60.3));
     assert.equal(d.paragraphs.length, 1);
-    assert.equal(sentences(bodyOf(d)).length, 5, bodyOf(d));
+    assert.deepEqual(sentences(bodyOf(d)), d.sentences);
+    assert.equal(d.sentences.length, 5, bodyOf(d));
     assert.match(d.headline, /^[A-Z].*[.!?]$/, "the headline is a sentence");
     assert.notEqual(d.headline, d.headline.toUpperCase(), "the headline is sentence case, not a banner");
     assert.notEqual(d.evidence, "");
@@ -79,13 +82,13 @@ test("the evidence line names both gods, the glyph and the orb", () => {
   assert.equal(exact.evidence, "MARS ☍ DIS PATER · EXACT");
 });
 
-test("the instruction is always last and names the headline god and its domain", () => {
+test("the instruction is always last and names both gods of the figure", () => {
   for (const culture of CULTURES) {
     const d = composeDecree(culture, chartWith("moon", "venus", 120.8));
-    const last = sentences(bodyOf(d)).at(-1) ?? "";
+    const last = d.sentences.at(-1) ?? "";
     // Both bodies are fast; the Moon is faster, so the Moon speaks.
     assert.ok(last.includes(DEITY_MATRIX[culture].moon.name), `${culture}: ${last}`);
-    assert.ok(last.includes(DEITY_DOMAINS[culture].moon), `${culture}: ${last}`);
+    assert.ok(last.includes(DEITY_MATRIX[culture].venus.name), `${culture}: ${last}`);
     assert.equal(d.headline, DECREE_BANKS[culture].headlines.trine.moon);
   }
 });
@@ -97,25 +100,48 @@ test("the headline body is the fast body, the faster when both are", () => {
   assert.deepEqual(headlineBody("jupiter", "venus"), { body: "venus", partner: "jupiter" });
 });
 
+test("one headline body with two partners differs in every sentence after the evidence line", () => {
+  for (const culture of CULTURES) {
+    const withMars = composeDecree(culture, chartWith("venus", "mars", 90.2));
+    const withPluto = composeDecree(culture, chartWith("venus", "pluto", 90.2));
+    assert.equal(withMars.headline, withPluto.headline, "the headline is keyed by the headline body");
+    // Sentence 3 is the second figure, which comes from the rest of the sky;
+    // the four that belong to the headline figure must each differ.
+    for (const i of [0, 1, 2, 4]) {
+      assert.notEqual(withMars.sentences[i], withPluto.sentences[i], `${culture} sentence ${i} ignores the partner`);
+    }
+  }
+});
+
 test("two sextiles between different gods share no sentence in the same culture", () => {
   for (const culture of CULTURES) {
     const sunMars = composeDecree(culture, chartWith("sun", "mars", 60));
     const moonVenus = composeDecree(culture, chartWith("moon", "venus", 60));
-    const first = new Set(sentences(bodyOf(sunMars)));
-    const shared = sentences(bodyOf(moonVenus)).filter((s) => first.has(s));
-    assert.deepEqual(shared, [], `${culture}: kind-keyed boilerplate leaked across figures`);
+    const first = new Set(sunMars.sentences);
+    assert.deepEqual(moonVenus.sentences.filter((s) => first.has(s)), [], culture);
   }
 });
 
 test("the exact tail appears only under half a degree of orb", () => {
   for (const culture of CULTURES) {
-    const tail = DECREE_BANKS[culture].exactTail;
-    const meaning = (sep: number) =>
-      sentences(bodyOf(composeDecree(culture, chartWith("mars", "saturn", sep))))[0] ?? "";
-    assert.ok(meaning(90).includes(tail), `${culture} exact: ${meaning(90)}`);
-    assert.ok(meaning(90.45).includes(tail), `${culture} at 0.45: ${meaning(90.45)}`);
-    assert.ok(!meaning(90.55).includes(tail), `${culture} at 0.55: ${meaning(90.55)}`);
-    assert.ok(!meaning(93).includes(tail), `${culture} wide: ${meaning(93)}`);
+    const tails = DECREE_BANKS[culture].exactTails;
+    const meaning = (sep: number) => composeDecree(culture, chartWith("mars", "saturn", sep)).sentences[0] ?? "";
+    const hasTail = (s: string) => tails.some((t) => s.includes(t));
+    assert.ok(hasTail(meaning(90)), `${culture} exact: ${meaning(90)}`);
+    assert.ok(hasTail(meaning(90.45)), `${culture} at 0.45: ${meaning(90.45)}`);
+    assert.ok(!hasTail(meaning(90.55)), `${culture} at 0.55: ${meaning(90.55)}`);
+    assert.ok(!hasTail(meaning(93)), `${culture} wide: ${meaning(93)}`);
+  }
+});
+
+test("the day's two variants alternate the exact tail and the second-figure opener", () => {
+  const chart = chartWith("mars", "saturn", 90);
+  for (const culture of CULTURES) {
+    const even = composeDecree(culture, chart, { day: 0 }).sentences;
+    const odd = composeDecree(culture, chart, { day: 1 }).sentences;
+    assert.ok(even[0]!.includes(DECREE_BANKS[culture].exactTails[0]), culture);
+    assert.ok(odd[0]!.includes(DECREE_BANKS[culture].exactTails[1]), culture);
+    assert.notEqual(even[3], odd[3], culture);
   }
 });
 
@@ -130,11 +156,24 @@ test("five cultures read one figure with no sentence in common", () => {
     const seen = new Map<string, Culture>();
     for (const culture of CULTURES) {
       const d = composeDecree(culture, chart);
-      for (const s of [d.headline, ...sentences(bodyOf(d))]) {
+      for (const s of [d.headline, ...d.sentences]) {
         const prior = seen.get(s);
         assert.equal(prior, undefined, `"${s}" appears in both ${prior} and ${culture}`);
         seen.set(s, culture);
       }
+    }
+  }
+});
+
+test("no sentence of the day page repeats within seven days, over thirty days", () => {
+  for (const culture of CULTURES) {
+    const printed: string[][] = [];
+    for (let i = 0; i < 30; i += 1) {
+      const page = composeDayPage(culture, new Date(Date.UTC(2026, 8, 29) + i * 86_400_000));
+      const lines = [page.headline, ...page.sentences];
+      const window = new Set(printed.slice(-(REPEAT_WINDOW_DAYS - 1)).flat());
+      assert.deepEqual(lines.filter((s) => window.has(s)), [], `${culture} day ${i} repeats a sentence`);
+      printed.push(lines);
     }
   }
 });
@@ -145,54 +184,34 @@ test("the daily message is a strict subset of the decree, in the decree's order"
     const decree = composeDecree(culture, chart);
     const message = composeDailyMessage(culture, chart);
     assert.equal(message.headline, decree.headline);
-    const all = sentences(bodyOf(decree));
     const some = sentences(message.body);
-    assert.ok(some.length < all.length, "a message is shorter than the page");
-    assert.deepEqual(some, all.filter((s) => some.includes(s)), `${culture}: ${message.body}`);
+    assert.ok(some.length < decree.sentences.length, "a message is shorter than the page");
+    assert.deepEqual(some, decree.sentences.filter((s) => some.includes(s)), `${culture}: ${message.body}`);
   }
 });
 
-/**
- * The golden: one date, the chart the home page computes at 00:00 UTC, read
- * five ways. Rewritten deliberately when a bank line changes.
- */
-const GOLDEN_2026_09_29: Readonly<Record<Culture, { headline: string; evidence: string; paragraph: string }>> = {
-  egypt: {
-    headline: "Start the heavy thing while the light holds.",
-    evidence: "RA △ NUT · 0°19′",
-    paragraph:
-      "Your day's work and your sudden turns float on the same current, true as the plumb line. What you start today reaches the far bank, and Nut does not call it back. Ra sits level on the scale, and Anubis leaves the beam alone. Lower on the river, Khonsu tips the scales against Osiris: your moods and what you have buried haul on opposite ropes. Trust your day's work to the current today, and call on Ra as the barge casts off.",
-  },
-  greece: {
-    headline: "Stand up and be counted today.",
-    evidence: "HELIOS △ OURANOS · 0°19′",
-    paragraph:
-      "Your name in the city and your sudden notions keep step with each other, to the very degree. You get a straight answer today, and Ouranos gives it without a riddle. The Pythia takes Helios ahead of the crowd and answers from the tripod. At a lesser shrine, Selene challenges Plouton: your household and your hidden wealth argue at the same gate. Spend your morning on your name in the city, and pour a little wine for Helios at noon.",
-  },
-  canaan: {
-    headline: "The council says yes to you today, so ask.",
-    evidence: "SHAPASH △ SHAMEM · 0°19′",
-    paragraph:
-      "Your daily labor and your broken routine sit at the same table, and the whole council hears it. What you ask for passes, and Shamem raises no hand against it. The assembly waves Shapash through, and no god asks for a vow. Further down the bench, Yarikh draws the bow against Motu: your kin at home and your losses quarrel at the gate. Take your daily labor to the threshing floor today, and leave a share for Shapash.",
-  },
-  carthage: {
-    headline: "Your credit is good today, so use it.",
-    evidence: "SEMES △ BAAL SHAMEM · 0°19′",
-    paragraph:
-      "Your credit in the harbor and your abrupt departures add up on the first pass, posted to the hour. Your figures come out right today, and Baal Shamem initials the total. The clerk adds Semes's column once, and the sum closes the sheet. Further down the page, Tanit turns the prow against Mot: your household accounts and the debts you inherited fight over the same silver. Draw on your credit in the harbor today, and set aside Semes's share.",
-  },
-  rome: {
-    headline: "Walk into the forum as if you own it.",
-    evidence: "SOL △ CAELUS · 0°19′",
-    paragraph:
-      "Your public standing and your sudden orders sit on the same side of the Senate, exact to the augur's line. Your motion passes, and Caelus votes for it. The Vestals feed the hearth in Sol's name, and the flame burns clear. Elsewhere in the sky, Luna raises the spear against Dis Pater: your household affairs and your inheritance block each other's road. Push your public standing forward today, and hang a garland for Sol on the way.",
-  },
-};
+test("the Do and Don't lists come from the bodies of the day's figures", () => {
+  for (const culture of CULTURES) {
+    const reg = PERMISSIONS_REGISTER[culture];
+    // A day of favor: the headline figure's bodies lead the proceed column,
+    // the second figure's lead the refrain column.
+    const favor = composeDecree(culture, chartWith("sun", "mars", 60));
+    const lists = dayPermissions(culture, favor.figures);
+    assert.equal(lists.proceed.length, 4);
+    assert.equal(lists.refrain.length, 4);
+    assert.deepEqual(lists.proceed.slice(0, 2), [reg.sun.proceed[0], reg.mars.proceed[0]]);
+    const second = favor.figures[1]!;
+    assert.deepEqual(lists.refrain.slice(0, 2), [reg[second.a].refrain[0], reg[second.b].refrain[0]]);
+    // A day of trial swaps them.
+    const trial = composeDecree(culture, chartWith("sun", "mars", 90));
+    const swapped = dayPermissions(culture, trial.figures);
+    assert.deepEqual(swapped.refrain.slice(0, 2), [reg.sun.refrain[0], reg.mars.refrain[0]]);
+  }
+});
 
 test("each culture's day page for 2026-09-29 matches its golden", () => {
-  const chart = computeChart(new Date("2026-09-29T00:00:00Z"));
   for (const culture of CULTURES) {
-    const d = composeDecree(culture, chart);
+    const d = composeDayPage(culture, new Date("2026-09-29T00:00:00Z"));
     const golden = GOLDEN_2026_09_29[culture];
     assert.equal(d.headline, golden.headline, culture);
     assert.equal(d.evidence, golden.evidence, culture);
@@ -200,21 +219,25 @@ test("each culture's day page for 2026-09-29 matches its golden", () => {
   }
 });
 
-test("every aspect day in the week carries its headline and both domains", () => {
-  const monday = new Date(2026, 8, 7);
-  for (const culture of CULTURES) {
-    for (const day of buildWeekDays(culture, monday, null)) {
-      if (day.shorthand.kind !== "aspect") continue;
-      const { a, aspect, b } = day.shorthand;
-      assert.equal(day.headline, DECREE_BANKS[culture].headlines[aspect][headlineBody(a, b).body]);
-      const line = day.line.toLowerCase();
-      for (const body of [a, b]) {
-        assert.ok(
-          line.includes(DEITY_DOMAINS[culture][body].toLowerCase()),
-          `${culture}: "${day.line}" lacks ${body}'s domain`,
-        );
+test("the week never shows one headline twice, and each aspect line names both domains", () => {
+  for (let week = 0; week < 8; week += 1) {
+    const monday = new Date(2026, 8, 7 + week * 7);
+    for (const culture of CULTURES) {
+      const days = buildWeekDays(culture, monday, null);
+      const headlines = days.map((d) => d.headline).filter((h): h is string => h !== null);
+      assert.equal(new Set(headlines).size, headlines.length, `${culture}: ${headlines.join(" / ")}`);
+      for (const day of days) {
+        if (day.shorthand.kind !== "aspect") continue;
+        const { a, aspect, b } = day.shorthand;
+        if (day.headline !== null) {
+          assert.equal(day.headline, DECREE_BANKS[culture].headlines[aspect][headlineBody(a, b).body]);
+        }
+        const line = day.line.toLowerCase();
+        for (const body of [a, b]) {
+          assert.ok(line.includes(DEITY_DOMAINS[culture][body].toLowerCase()), `${culture}: "${day.line}" lacks ${body}`);
+        }
+        assert.equal(sentences(day.line).length, 2, `${culture}: a week line is the meaning and the consequence`);
       }
-      assert.equal(sentences(day.line).length, 2, `${culture}: a week line is the meaning and the consequence`);
     }
   }
 });

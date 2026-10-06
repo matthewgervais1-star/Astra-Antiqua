@@ -7,7 +7,15 @@ import { DEITY_MATRIX } from "@/data/deities";
 import { INGRESS_FRAMES } from "@/data/ingressFrames";
 import { DEITY_CHARGES } from "@/data/deityCharges";
 import { QUIET_LINE } from "@/data/decreeBanks";
-import { ASPECT_GLYPH, QUIET_HEADLINE, composeConsequence, composeHeadline, composeMeaning } from "@/lib/decree";
+import {
+  ASPECT_GLYPH,
+  EXACT_ORB,
+  QUIET_HEADLINE,
+  composeConsequence,
+  composeHeadline,
+  composeMeaning,
+  utcDayNumber,
+} from "@/lib/decree";
 import { SIGN_PHRASES } from "@/components/horizons/signPhrase";
 import { noonUTCFor, properCase, sameLocalDay, weekdayAbbr } from "@/components/horizons/format";
 import type { SavedNatal } from "@/lib/savedNatal";
@@ -30,7 +38,8 @@ export interface WeekDay {
   /** "MON 11" */
   label: string;
   isToday: boolean;
-  /** The decree's headline for the day's figure, or null on an ingress day. */
+  /** The decree's headline for the day's figure, or null on an ingress day
+   *  and on a day whose figure's headline an earlier row already shows. */
   headline: string | null;
   line: string;
   shorthand: WeekShorthand;
@@ -41,9 +50,8 @@ export interface WeekDay {
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-/** The day's tightest-orb threshold and the exact-degree threshold within it. */
+/** The day's tightest-orb threshold. Exactness is decree.ts's EXACT_ORB. */
 const EVENT_ORB = 1.2;
-const EXACT_ORB = 0.35;
 
 /**
  * Only aspects touching a fast mover count as a DAY's event. Slow-slow
@@ -88,7 +96,7 @@ const INGRESS_VERB: Readonly<Record<Culture, string>> = {
  * Compose the seven days of the week starting `weekStart` (assumed to be a
  * local midnight Monday) in the given culture's voice. Each day's headline
  * event is sky-only, ranked tightest sky aspect (orb < 1.2°, "EXACT" under
- * 0.35°) over an ingress that day over an honest quiet line, per the spec in
+ * decree.ts's EXACT_ORB) over an ingress that day over an honest quiet line, per the spec in
  * docs/superpowers/plans/2026-08-11-web-rebrand-phase2.md Task 7. `natal` is
  * accepted for signature parity with the season/year builders and reserved
  * for a future personal layer; the week's event selection is sky-only by
@@ -108,26 +116,24 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
 
   const days: WeekDay[] = [];
   const usedPairs = new Set<string>();
+  const usedHeadlines = new Set<string>();
   for (let i = 0; i < 7; i += 1) {
     const date = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + i);
     const chart = computeChart(noonUTCFor(date));
     const aspects = computeAspects(chart);
 
-    // Tightest fast-mover aspect wins, but a pair that already headlined an
-    // earlier day this week only repeats when it is exact today; otherwise
-    // the next distinct candidate speaks. Moon aspects change daily, so the
-    // dedupe mostly guards Sun and inner-planet contacts to slow bodies.
+    // Tightest fast-mover aspect wins, with two exceptions. A pair that
+    // already headlined an earlier day this week only repeats when it is
+    // exact today. And a figure whose headline an earlier row already shows
+    // gives way to the next figure with a fresh one; when no figure in orb has
+    // one, the tightest speaks without a headline rather than repeat it.
     const candidates = aspects
       .filter((a) => a.orb < EVENT_ORB && (FAST_BODIES.has(a.a) || FAST_BODIES.has(a.b)))
+      .filter((a) => !usedPairs.has(`${a.a}|${a.b}`) || a.orb < EXACT_ORB)
       .sort((a, b) => a.orb - b.orb);
-    let tightest: (typeof aspects)[number] | null = null;
-    for (const aspect of candidates) {
-      const pair = `${aspect.a}|${aspect.b}`;
-      if (usedPairs.has(pair) && aspect.orb >= EXACT_ORB) continue;
-      tightest = aspect;
-      usedPairs.add(pair);
-      break;
-    }
+    const fresh = candidates.find((a) => !usedHeadlines.has(composeHeadline(culture, a)));
+    const tightest = fresh ?? candidates[0] ?? null;
+    if (tightest) usedPairs.add(`${tightest.a}|${tightest.b}`);
 
     const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     const dayEnd = new Date(dayStart.getTime() + DAY_MS);
@@ -143,15 +149,11 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       exact = tightest.orb < EXACT_ORB;
       tone = toneForKind(tightest.kind);
       // The headline speaks to the reader; beneath it the meaning and the
-      // consequence, both of which take the figure. No order: the week reports
-      // the figure, and the day page carries the one instruction.
-      headline = composeHeadline(culture, tightest.a, tightest.b, tightest.kind);
-      line = `${composeMeaning(culture, tightest.a, tightest.b, tightest.kind, tightest.orb)} ${composeConsequence(
-        culture,
-        tightest.a,
-        tightest.b,
-        tightest.kind,
-      )}`;
+      // consequence. The week line itself gives no order; the headline often
+      // does, and the day page carries the instruction.
+      const candidateHeadline = composeHeadline(culture, tightest);
+      headline = fresh ? candidateHeadline : null;
+      line = `${composeMeaning(culture, tightest, utcDayNumber(noonUTCFor(date)))} ${composeConsequence(culture, tightest)}`;
       shorthand = { kind: "aspect", a: tightest.a, aspect: tightest.kind, b: tightest.b, exact };
     } else if (dayIngress) {
       tone = "harmony";
@@ -163,10 +165,12 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       shorthand = { kind: "ingress", planet: dayIngress.planet, sign: dayIngress.toSign };
     } else {
       tone = "quiet";
-      headline = QUIET_HEADLINE[culture];
+      headline = usedHeadlines.has(QUIET_HEADLINE[culture]) ? null : QUIET_HEADLINE[culture];
       line = QUIET_LINE[culture];
       shorthand = { kind: "quiet" };
     }
+
+    if (headline) usedHeadlines.add(headline);
 
     const flag: RomeDayFlag | undefined = isRome
       ? tone === "tension"
