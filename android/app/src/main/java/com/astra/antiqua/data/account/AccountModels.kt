@@ -36,7 +36,11 @@ sealed interface AccountError {
     /** No answer: no network, the host is down, or the call timed out. */
     data object Unreachable : AccountError
 
-    /** The server's chart arrived but could not be written to the device. */
+    /**
+     * The device could not store what it had to: the session (the Keystore
+     * or the session file refused it, even after a fresh key) or the server's
+     * chart (the profile database refused it).
+     */
     data object DeviceWriteFailed : AccountError
 }
 

@@ -8,6 +8,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -30,8 +32,14 @@ class SessionStoreTest {
     private var clock = 1_000L
 
     /** XOR with a fixed byte: reversible, and the plain token never appears. */
-    private class XorCipher(private val fail: Boolean = false) : SessionCipher {
-        override fun encrypt(plain: ByteArray) = ByteArray(plain.size) { (plain[it].toInt() xor 0x5A).toByte() }
+    private class XorCipher(
+        private val fail: Boolean = false,
+        private val failSealing: Boolean = false,
+    ) : SessionCipher {
+        override fun encrypt(plain: ByteArray): ByteArray {
+            if (failSealing) throw java.security.KeyStoreException("keystore refused")
+            return ByteArray(plain.size) { (plain[it].toInt() xor 0x5A).toByte() }
+        }
         override fun decrypt(sealed: ByteArray): ByteArray {
             if (fail) throw javax.crypto.AEADBadTagException("key is gone")
             return ByteArray(sealed.size) { (sealed[it].toInt() xor 0x5A).toByte() }
@@ -73,6 +81,33 @@ class SessionStoreTest {
 
         assertNull(afterRestore.read())
         assertFalse(afterRestore.isPresent.first())
+    }
+
+    @Test
+    fun `a cipher that cannot seal surfaces as SessionStorageException and stores nothing`() = runTest {
+        val store = DataStoreSessionStore(dataStore, XorCipher(failSealing = true)) { clock }
+
+        val thrown = runCatching { store.write(Session("t", 5_000L)) }.exceptionOrNull()
+
+        assertTrue(thrown is SessionStorageException)
+        assertNull(store.read())
+        assertFalse(store.isPresent.first())
+    }
+
+    @Test
+    fun `presence turns false when the session expires, with no write in between`() = runTest {
+        val store = DataStoreSessionStore(dataStore, XorCipher()) { clock }
+        store.write(Session("t", clock + 1_000L))
+
+        assertEquals(listOf(true, false), store.isPresent.take(2).toList())
+    }
+
+    @Test
+    fun `a blob that will not decrypt is never reported as present`() = runTest {
+        DataStoreSessionStore(dataStore, XorCipher()) { clock }.write(Session("t", 5_000L))
+        val afterReset = DataStoreSessionStore(dataStore, XorCipher(fail = true)) { clock }
+
+        assertFalse(afterReset.isPresent.first())
     }
 
     @Test

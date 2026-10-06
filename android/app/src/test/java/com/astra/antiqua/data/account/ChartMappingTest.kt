@@ -1,9 +1,10 @@
 package com.astra.antiqua.data.account
 
 import com.astra.antiqua.data.local.room.UserProfile
-import com.astra.antiqua.domain.estimateZoneOffsetForLongitude
+import com.astra.antiqua.domain.birthZoneFor
 import com.astra.antiqua.domain.resolveBirthDateUtcMillis
 import com.astra.antiqua.viewmodel.romeProfile
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
 import org.junit.Assert.assertEquals
@@ -31,17 +32,27 @@ class ChartMappingTest {
     }
 
     @Test
-    fun `up - an unreadable zone id falls back to the longitude estimate`() {
+    fun `up - an unreadable zone id falls back to the place's own zone`() {
         val profile = romeProfile().copy(timezoneId = "Not/AZone")
 
-        // 14:30 CEST is 12:30 UTC; the estimate for 12.5 E is UTC+1.
-        assertEquals("13:30", profile.toChartInputs().time)
+        assertEquals("14:30", profile.toChartInputs().time)
+    }
+
+    @Test
+    fun `up - a blank name falls back to the city, then to My chart`() {
+        assertEquals("Rome", romeProfile(name = "  ").toChartInputs().name)
+        assertEquals("My chart", romeProfile(name = "").copy(cityName = " ").toChartInputs().name)
+    }
+
+    @Test
+    fun `up - a long name is cut to the server's 120 characters`() {
+        assertEquals(120, romeProfile(name = "L".repeat(300)).toChartInputs().name.length)
     }
 
     @Test
     fun `a chart cast on the device survives the round trip through the server`() {
-        // Onboarding stores the longitude estimate as the zone; this is that row.
-        val zone = estimateZoneOffsetForLongitude(-73.97)
+        // Onboarding stores the place's own zone; this is that row.
+        val zone = birthZoneFor(40.78, -73.97)
         val midnight = LocalDate.of(1979, 11, 4).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
         val device = UserProfile(
             id = 3,
@@ -55,15 +66,26 @@ class ChartMappingTest {
 
         val back = served(device.toChartInputs()).toUserProfileOrNull(id = 3)
 
+        assertEquals("America/New_York", zone.id)
         assertEquals(device, back)
     }
 
     @Test
-    fun `down - seconds in the server's time are kept`() {
+    fun `down - New York in July lands on daylight time, as on web`() {
+        val chart = served(ChartInputs("A", "1990-07-04", "14:30", "New York", 40.7128, -74.006))
+
+        val profile = chart.toUserProfileOrNull()!!
+
+        assertEquals("America/New_York", profile.timezoneId)
+        assertEquals(Instant.parse("1990-07-04T18:30:00Z").toEpochMilli(), profile.birthDateUtc)
+    }
+
+    @Test
+    fun `down - seconds in the server's time are dropped, as web drops them`() {
         val chart = served(ChartInputs("A", "2000-01-01", "00:00:30", "Greenwich", 51.48, 0.0))
 
         assertEquals(
-            LocalDate.of(2000, 1, 1).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli() + 30_000,
+            Instant.parse("2000-01-01T00:00:00Z").toEpochMilli(),
             chart.toUserProfileOrNull()!!.birthDateUtc,
         )
     }

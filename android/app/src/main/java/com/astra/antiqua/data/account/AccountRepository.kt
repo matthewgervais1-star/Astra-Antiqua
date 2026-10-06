@@ -82,14 +82,14 @@ class HttpAccountRepository(
         ) { userOf(it) }
 
     override suspend fun signOut(): AccountResult<Unit> {
-        session.clear()
+        if (!forget()) return AccountResult.Failed(AccountError.DeviceWriteFailed)
         call("POST", "/api/auth/signout") { }
         return AccountResult.Ok(Unit)
     }
 
     override suspend fun me(): AccountResult<AccountUser?> {
         val result = call("GET", "/api/auth/me") { json.decodeFromString(UserEnvelope.serializer(), it).user }
-        if (result is AccountResult.Ok && result.value == null) session.clear()
+        if (result is AccountResult.Ok && result.value == null) forget()
         return result
     }
 
@@ -118,7 +118,7 @@ class HttpAccountRepository(
 
     override suspend fun strike(): AccountResult<Unit> {
         val result = call("DELETE", "/api/me", requiresSession = true) { }
-        if (result is AccountResult.Ok) session.clear()
+        if (result is AccountResult.Ok && !forget()) return AccountResult.Failed(AccountError.DeviceWriteFailed)
         return result
     }
 
@@ -168,6 +168,14 @@ class HttpAccountRepository(
         return putChart(device).map { SyncOutcome.DEVICE_CHART_UPLOADED }
     }
 
+    /** Clears the stored session; false when the device could not. */
+    private suspend fun forget(): Boolean = try {
+        session.clear()
+        true
+    } catch (_: SessionStorageException) {
+        false
+    }
+
     private fun userOf(body: String): AccountUser =
         json.decodeFromString(UserEnvelope.serializer(), body).user ?: throw SerializationException("no user")
 
@@ -194,6 +202,8 @@ class HttpAccountRepository(
             throw e
         } catch (_: IOException) {
             return AccountResult.Failed(AccountError.Unreachable)
+        } catch (_: SessionStorageException) {
+            return AccountResult.Failed(AccountError.DeviceWriteFailed)
         }
         if (!reply.isSuccessful) return AccountResult.Failed(errorOf(reply))
         return try {

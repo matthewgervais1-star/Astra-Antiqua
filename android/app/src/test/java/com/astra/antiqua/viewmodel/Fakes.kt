@@ -155,7 +155,25 @@ internal class FakeAccount(
 
     override suspend fun getChart() = answer("getChart") { serverChart }
 
-    override suspend fun putChart(profile: UserProfile) = answer("putChart") {
+    /**
+     * Applies the server's rule on `name` (trimmed, 1 to 120 characters) to
+     * what the mapping sends, so a ViewModel test sees the 400 the server
+     * would give.
+     */
+    override suspend fun putChart(profile: UserProfile): AccountResult<RemoteChart> {
+        val name = profile.toChartInputs().name.trim()
+        if (failWith == null && name.isEmpty()) {
+            calls += "putChart"
+            return AccountResult.Failed(AccountError.Server(400, "String must contain at least 1 character(s)"))
+        }
+        if (failWith == null && name.length > 120) {
+            calls += "putChart"
+            return AccountResult.Failed(AccountError.Server(400, "String must contain at most 120 character(s)"))
+        }
+        return storeChart(profile)
+    }
+
+    private fun storeChart(profile: UserProfile) = answer("putChart") {
         uploaded = profile
         val inputs = profile.toChartInputs()
         RemoteChart("c-1", inputs.name, inputs.date, inputs.time, inputs.cityLabel, inputs.latitude, inputs.longitude, "2026-01-01T00:00:00.000Z")

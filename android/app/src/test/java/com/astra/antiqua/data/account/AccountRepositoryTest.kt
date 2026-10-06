@@ -5,6 +5,7 @@ import com.astra.antiqua.viewmodel.FakeProfiles
 import com.astra.antiqua.viewmodel.ROME_BIRTH_UTC_MS
 import com.astra.antiqua.viewmodel.romeProfile
 import java.time.ZoneOffset
+import java.util.concurrent.TimeUnit
 import java.time.ZonedDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -27,14 +28,19 @@ import org.junit.Before
 import org.junit.Test
 
 /** A session store in memory, for the JVM. */
-internal class InMemorySessionStore(initial: Session? = null) : SessionStore {
+internal class InMemorySessionStore(
+    initial: Session? = null,
+    private val failWrites: Boolean = false,
+) : SessionStore {
     private val state = MutableStateFlow(initial)
     override val isPresent = state.map { it != null }
     override suspend fun read(): Session? = state.value
     override suspend fun write(session: Session) {
+        if (failWrites) throw SessionStorageException(java.security.KeyStoreException("refused"))
         state.value = session
     }
     override suspend fun clear() {
+        if (failWrites) throw SessionStorageException(java.io.IOException("read-only"))
         state.value = null
     }
     fun stored(): Session? = state.value
@@ -76,6 +82,10 @@ class AccountRepositoryTest {
         )
     }
 
+    /** The next request the server saw, waiting at most a second for it. */
+    private fun MockWebServer.next(): RecordedRequest =
+        takeRequest(1, TimeUnit.SECONDS) ?: error("The server saw no request")
+
     private fun json(status: Int = 200, body: String) =
         MockResponse().setResponseCode(status).setHeader("Content-Type", "application/json").setBody(body)
 
@@ -98,7 +108,7 @@ class AccountRepositoryTest {
         assertEquals(AccountResult.Ok(AccountUser("u-1", "livia@example.com", null)), result)
         assertEquals("header.payload.signature", session.stored()?.token)
         assertTrue(repository.isSignedIn.first())
-        val request = server.takeRequest()
+        val request = server.next()
         assertEquals("POST", request.method)
         assertEquals("/api/auth/signin", request.path)
         assertNull(request.getHeader("Origin"))
@@ -115,7 +125,7 @@ class AccountRepositoryTest {
         repository.signUp("livia@example.com", "hunter22", displayName = "  ")
 
         assertEquals("header.payload.signature", session.stored()?.token)
-        assertFalse(server.takeRequest().json().containsKey("displayName"))
+        assertFalse(server.next().json().containsKey("displayName"))
     }
 
     @Test
@@ -125,7 +135,7 @@ class AccountRepositoryTest {
 
         assertEquals(AccountResult.Ok(null), repository.getChart())
 
-        val request = server.takeRequest()
+        val request = server.next()
         assertEquals("astra_session=stored-token", request.getHeader("Cookie"))
         assertNull(request.getHeader("Origin"))
     }
@@ -160,7 +170,7 @@ class AccountRepositoryTest {
         val result = repository.putChart(romeProfile())
 
         assertTrue(result is AccountResult.Ok)
-        val request = server.takeRequest()
+        val request = server.next()
         assertEquals("PUT", request.method)
         assertEquals("/api/charts", request.path)
         val body = request.json()
@@ -185,8 +195,8 @@ class AccountRepositoryTest {
         assertEquals(1, stored.id)
         assertEquals("Aelia", stored.name)
         assertEquals("Athens", stored.cityName)
-        // Athens at 23.73 E estimates to UTC+2, so 06:15 there is 04:15 UTC.
-        assertEquals("+02:00", stored.timezoneId)
+        // Athens keeps Eastern European Time, UTC+2 in March, so 06:15 there is 04:15 UTC.
+        assertEquals("Europe/Athens", stored.timezoneId)
         assertEquals(
             ZonedDateTime.of(1985, 3, 2, 4, 15, 0, 0, ZoneOffset.UTC).toInstant().toEpochMilli(),
             stored.birthDateUtc,
@@ -203,8 +213,8 @@ class AccountRepositoryTest {
         val result = repository.syncAfterSignIn()
 
         assertEquals(AccountResult.Ok(SyncOutcome.DEVICE_CHART_UPLOADED), result)
-        assertEquals("GET", server.takeRequest().method)
-        val put = server.takeRequest()
+        assertEquals("GET", server.next().method)
+        val put = server.next()
         assertEquals("PUT", put.method)
         assertEquals("Livia", put.json()["name"]!!.jsonPrimitive.content)
         assertEquals(ROME_BIRTH_UTC_MS, profiles.stored()!!.birthDateUtc)
@@ -228,7 +238,7 @@ class AccountRepositoryTest {
         val result = repository.strike()
 
         assertEquals(AccountResult.Ok(Unit), result)
-        val request = server.takeRequest()
+        val request = server.next()
         assertEquals("DELETE", request.method)
         assertEquals("/api/me", request.path)
         assertNull(session.stored())
@@ -275,7 +285,7 @@ class AccountRepositoryTest {
         )
 
         assertEquals(AccountResult.Ok(WaitListPlace(position = 7, duplicate = false, persisted = true)), result)
-        val body = server.takeRequest().json()
+        val body = server.next().json()
         assertEquals("rome", body["pantheon"]!!.jsonPrimitive.content)
         assertFalse(body.containsKey("name"))
         assertFalse(body.containsKey("background"))
@@ -337,6 +347,86 @@ class AccountRepositoryTest {
         server.enqueue(json(body = """{"ok":true,"removed":true}"""))
 
         assertEquals(AccountResult.Ok(true), repository.deleteChart())
-        assertEquals("DELETE", server.takeRequest().method)
+        assertEquals("DELETE", server.next().method)
+    }
+
+    @Test
+    fun `a 401 from sign-in keeps an existing session`() = runTest {
+        signedIn()
+        server.enqueue(json(401, """{"ok":false,"error":"Email or password is incorrect."}"""))
+
+        repository.signIn("livia@example.com", "wrong")
+
+        assertEquals("stored-token", session.stored()?.token)
+    }
+
+    @Test
+    fun `a clearing Set-Cookie on any route clears the store`() = runTest {
+        signedIn()
+        server.enqueue(json(body = user).addHeader("Set-Cookie", cleared))
+
+        repository.me()
+
+        assertNull(session.stored())
+    }
+
+    @Test
+    fun `a 401 on PUT clears the session`() = runTest {
+        signedIn()
+        server.enqueue(json(401, """{"ok":false,"error":"Not signed in."}"""))
+
+        assertEquals(
+            AccountResult.Failed(AccountError.Server(401, "Not signed in.")),
+            repository.putChart(romeProfile()),
+        )
+        assertNull(session.stored())
+    }
+
+    @Test
+    fun `a 401 on export clears the session`() = runTest {
+        signedIn()
+        server.enqueue(json(401, """{"ok":false,"error":"Not signed in."}"""))
+
+        assertEquals(AccountResult.Failed(AccountError.Server(401, "Not signed in.")), repository.export())
+        assertNull(session.stored())
+    }
+
+    @Test
+    fun `a fresh cookie on a route that does not issue sessions is ignored`() = runTest {
+        signedIn()
+        server.enqueue(json(body = """{"ok":true,"chart":null}""").addHeader("Set-Cookie", issued))
+
+        repository.getChart()
+
+        assertEquals("stored-token", session.stored()?.token)
+    }
+
+    @Test
+    fun `a session the device cannot store maps to DeviceWriteFailed`() = runTest {
+        newRepository(InMemorySessionStore(failWrites = true), FakeProfiles())
+        server.enqueue(json(body = user).addHeader("Set-Cookie", issued))
+
+        assertEquals(
+            AccountResult.Failed(AccountError.DeviceWriteFailed),
+            repository.signIn("livia@example.com", "hunter22"),
+        )
+    }
+
+    @Test
+    fun `a sign-out the device cannot record maps to DeviceWriteFailed`() = runTest {
+        newRepository(InMemorySessionStore(Session("stored-token", far), failWrites = true), FakeProfiles())
+
+        assertEquals(AccountResult.Failed(AccountError.DeviceWriteFailed), repository.signOut())
+        assertEquals(0, server.requestCount)
+    }
+
+    @Test
+    fun `PUT gives a blank-named profile the city's name`() = runTest {
+        signedIn()
+        server.enqueue(json(body = serverChart))
+
+        repository.putChart(romeProfile(name = " "))
+
+        assertEquals("Rome", server.next().json()["name"]!!.jsonPrimitive.content)
     }
 }

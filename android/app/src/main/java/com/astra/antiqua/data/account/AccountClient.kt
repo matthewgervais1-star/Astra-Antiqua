@@ -42,8 +42,10 @@ class AccountClient(
 
     /**
      * Sends one request and returns the reply, whatever its status. Throws
-     * only [java.io.IOException] for a call that got no answer; the
-     * repository turns that into [AccountError.Unreachable].
+     * [java.io.IOException] for a call that got no answer (the repository
+     * turns it into [AccountError.Unreachable]) and [SessionStorageException]
+     * when the session could not be stored or removed
+     * ([AccountError.DeviceWriteFailed]).
      */
     suspend fun send(
         method: String,
