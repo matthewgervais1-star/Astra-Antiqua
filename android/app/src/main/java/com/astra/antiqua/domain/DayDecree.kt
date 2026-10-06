@@ -41,13 +41,11 @@ object DayDecreeComposer {
     val FAST_ORDER: List<Planet> = listOf(Planet.MOON, Planet.SUN, Planet.MERCURY, Planet.VENUS, Planet.MARS)
 
     /**
-     * Under half a degree a figure is exact: the meaning sentence carries the
-     * culture's exact tail, and the week marks the day EXACT.
+     * Under half a degree a figure is exact: the evidence line prints EXACT,
+     * the meaning sentence carries the culture's exact tail, and the week
+     * marks the day EXACT. One threshold for every surface that says "exact".
      */
     const val EXACT_ORB = 0.5
-
-    /** Below this orb the evidence line prints EXACT instead of the orb. */
-    private const val EXACT_EVIDENCE_ORB = 0.1
 
     private const val DAY_MS = 86_400_000L
 
@@ -100,7 +98,7 @@ object DayDecreeComposer {
     }
 
     fun composeEvidence(culture: AncientCulture, f: SkyFigure): String {
-        val measure = if (f.orb < EXACT_EVIDENCE_ORB) "EXACT" else formatOrb(f.orb)
+        val measure = if (f.orb < EXACT_ORB) "EXACT" else formatOrb(f.orb)
         return "${name(culture, f.a).uppercase()} ${glyph(f.aspect)} ${name(culture, f.b).uppercase()} · $measure"
     }
 
@@ -132,9 +130,19 @@ object DayDecreeComposer {
     private fun composeInstruction(culture: AncientCulture, f: SkyFigure): String =
         fill(DecreeBanks.instruction(culture, f.aspect, headlineBody(f.a, f.b).first), godSlots(culture, f))
 
-    /** Sentence (d): the second figure, opened from the headline figure's gods. */
+    /**
+     * Sentence (d): the second figure. Its opener names the headline figure's
+     * two gods, unless the two figures share a god (compared by name: Carthage
+     * gives Jupiter and Saturn one god); then the plain opener.
+     */
     private fun composeSecond(culture: AncientCulture, top: SkyFigure, f: SkyFigure, day: Long): String {
-        val opener = fill(DecreeBanks.secondFigure(culture, variant(day)), godSlots(culture, top))
+        val headlineGods = setOf(name(culture, top.a), name(culture, top.b))
+        val shared = name(culture, f.a) in headlineGods || name(culture, f.b) in headlineGods
+        val opener = if (shared) {
+            DecreeBanks.secondFigurePlain(culture, variant(day))
+        } else {
+            fill(DecreeBanks.secondFigure(culture, variant(day)), godSlots(culture, top))
+        }
         return "$opener ${name(culture, f.a)} ${AspectVerbs.of(culture, f.aspect)} ${name(culture, f.b)}: " +
             "${meaningClause(culture, f, day)}."
     }

@@ -61,7 +61,7 @@ fun deityDomain(culture: AncientCulture, body: Planet): String = when (culture) 
         Planet.SATURN -> "your elders' rules"
         Planet.URANUS -> "your change of pasture"
         Planet.NEPTUNE -> "your prayers"
-        Planet.PLUTO -> "your grain pits"
+        Planet.PLUTO -> "your family's land"
     }
 
     AncientCulture.CARTHAGE -> when (body) {
@@ -122,13 +122,13 @@ object DecreeBanks {
                 Planet.SUN -> "Lay the first brick of the thing you keep talking about."
                 Planet.MOON -> "Say what you feel over bread at your own table."
                 Planet.MERCURY -> "Write the letter on fresh papyrus and seal it yourself."
-                Planet.VENUS -> "Bring the one you love down to the riverbank and say it plainly."
+                Planet.VENUS -> "Bring the one you love down to the riverbank and tell them."
                 Planet.MARS -> "Aim your anger at one field and clear it."
                 else -> error("$body has no headlines line")
             }
             AspectType.SEXTILE -> when (body) {
                 Planet.SUN -> "Ask a neighbor to take the other end of the sledge."
-                Planet.MOON -> "Share your bread with someone at home tonight."
+                Planet.MOON -> "Share your bread with someone at home."
                 Planet.MERCURY -> "Send the short message by the next boat."
                 Planet.VENUS -> "Offer the first loaf, and keep the gift small."
                 Planet.MARS -> "Put your strength into the canal in front of you."
@@ -146,16 +146,16 @@ object DecreeBanks {
                 Planet.SUN -> "Start the heavy thing while the light holds."
                 Planet.MOON -> "Rest tonight without counting the grain."
                 Planet.MERCURY -> "Say it plainly and the river carries it."
-                Planet.VENUS -> "Let someone pour your beer tonight."
+                Planet.VENUS -> "Let someone else pour the beer."
                 Planet.MARS -> "Push the barge off the mud while your arms are strong."
                 else -> error("$body has no headlines line")
             }
             AspectType.OPPOSITION -> when (body) {
                 Planet.SUN -> "You cannot stand on both banks, so pick one."
-                Planet.MOON -> "What you want and what the household wants are on opposite banks tonight."
+                Planet.MOON -> "What you want and what the household wants are on opposite banks."
                 Planet.MERCURY -> "Someone on the far bank reads your words backward."
                 Planet.VENUS -> "Love asks you to cross the river this time."
-                Planet.MARS -> "Someone across the river wants a fight, and you can let them wait."
+                Planet.MARS -> "Let whoever is shouting across the river shout until they tire."
                 else -> error("$body has no headlines line")
             }
         }
@@ -172,7 +172,7 @@ object DecreeBanks {
             AspectType.SEXTILE -> when (body) {
                 Planet.SUN -> "Show your work in the agora to someone who can help it."
                 Planet.MOON -> "Open your door to the friend who knocks after supper."
-                Planet.MERCURY -> "A short message sent by the next ship opens the road."
+                Planet.MERCURY -> "Give the next traveler on the road a letter to carry."
                 Planet.VENUS -> "Say one kind thing at the table and mean it."
                 Planet.MARS -> "Spend your strength in the gymnasium, where it builds something."
                 else -> error("$body has no headlines line")
@@ -189,7 +189,7 @@ object DecreeBanks {
                 Planet.SUN -> "Stand up in the assembly and be counted."
                 Planet.MOON -> "Your own hearth gives a better answer than any oracle."
                 Planet.MERCURY -> "Ask now, while the road to Delphi is clear."
-                Planet.VENUS -> "Drink the wine that is poured for you."
+                Planet.VENUS -> "Accept the invitation to the symposium."
                 Planet.MARS -> "Enter the hard race and expect the laurel."
                 else -> error("$body has no headlines line")
             }
@@ -206,10 +206,10 @@ object DecreeBanks {
         AncientCulture.CANAAN -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
                 Planet.SUN -> "Put your hand to the plow and keep it there until sundown."
-                Planet.MOON -> "Settle one family matter at the table before the lamps go out."
+                Planet.MOON -> "Settle one family matter before the lamps go out."
                 Planet.MERCURY -> "Forge the thing yourself instead of buying it."
                 Planet.VENUS -> "Make the vow you have been holding back."
-                Planet.MARS -> "Aim every arrow you have at one target."
+                Planet.MARS -> "Pick one enemy and forget the rest."
                 else -> error("$body has no headlines line")
             }
             AspectType.SEXTILE -> when (body) {
@@ -223,25 +223,25 @@ object DecreeBanks {
             AspectType.SQUARE -> when (body) {
                 Planet.SUN -> "Someone at the gate wants your work stopped."
                 Planet.MOON -> "Keep the family quarrel inside the tent."
-                Planet.MERCURY -> "Check the joint before you set the beam."
+                Planet.MERCURY -> "Take apart the joint that sits crooked."
                 Planet.VENUS -> "Do not swear a vow of love in the middle of a fight."
-                Planet.MARS -> "Stay out of the fight at your neighbor's gate."
+                Planet.MARS -> "Keep clear of the fight at your neighbor's gate."
                 else -> error("$body has no headlines line")
             }
             AspectType.TRINE -> when (body) {
                 Planet.SUN -> "The council says yes to you today, so ask."
-                Planet.MOON -> "Your house is in order, and you can sit down in it."
-                Planet.MERCURY -> "Your hands know the work, and you can trust them."
+                Planet.MOON -> "Sit in your own doorway and enjoy the evening."
+                Planet.MERCURY -> "Trust your hands with the hard part of the job."
                 Planet.VENUS -> "Love comes to the door without being called."
                 Planet.MARS -> "Thresh the whole floor before the heat goes out of you."
                 else -> error("$body has no headlines line")
             }
             AspectType.OPPOSITION -> when (body) {
                 Planet.SUN -> "Your field and your family both want the whole day."
-                Planet.MOON -> "Your family wants one thing at the table and you want the other."
+                Planet.MOON -> "The tent is divided, and your kin expect you to pick a side."
                 Planet.MERCURY -> "Someone at the gate takes your words and argues the other side."
-                Planet.VENUS -> "The one you love stands on the far side of the council floor."
-                Planet.MARS -> "Someone is spoiling for a fight, and you owe them nothing."
+                Planet.VENUS -> "Your beloved stands across the council floor from you."
+                Planet.MARS -> "Someone is spoiling for a quarrel, and you owe them nothing."
                 else -> error("$body has no headlines line")
             }
         }
@@ -249,30 +249,30 @@ object DecreeBanks {
         AncientCulture.CARTHAGE -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
                 Planet.SUN -> "Let the whole harbor know which deal is yours."
-                Planet.MOON -> "Tonight the household money is everyone's business."
+                Planet.MOON -> "The household money is everyone's business today."
                 Planet.MERCURY -> "Put the handshake in writing before the ships sail."
                 Planet.VENUS -> "Buy the length of purple you keep looking at."
-                Planet.MARS -> "Back one ship with everything you have."
+                Planet.MARS -> "Put the whole war chest behind one voyage."
                 else -> error("$body has no headlines line")
             }
             AspectType.SEXTILE -> when (body) {
                 Planet.SUN -> "Your name opens one more door on the quay."
-                Planet.MOON -> "One coin at home now saves ten in the spring."
+                Planet.MOON -> "Clear the small debt at home this week."
                 Planet.MERCURY -> "The harbor is open to your offer."
-                Planet.VENUS -> "A small gift goes further than a large promise."
+                Planet.VENUS -> "Buy the gift at the market and deliver it yourself."
                 Planet.MARS -> "Partners follow the trader who pays in first."
                 else -> error("$body has no headlines line")
             }
             AspectType.SQUARE -> when (body) {
                 Planet.SUN -> "Someone is checking your figures, so make them right."
                 Planet.MOON -> "Do not balance the house ledger in a temper."
-                Planet.MERCURY -> "Read the small print before you press your seal into the wax."
+                Planet.MERCURY -> "Nothing gets your seal until a second clerk has read it."
                 Planet.VENUS -> "Affection bought at the market does not stay bought."
                 Planet.MARS -> "Pay nothing out of the war chest in anger."
                 else -> error("$body has no headlines line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "The whole quay will take your note this week."
+                Planet.SUN -> "Your name is good for credit anywhere on the quay."
                 Planet.MOON -> "The household runs itself today, so let it."
                 Planet.MERCURY -> "The deal you are drafting closes cleanly."
                 Planet.VENUS -> "Enjoy the things you have already paid for."
@@ -280,10 +280,10 @@ object DecreeBanks {
                 else -> error("$body has no headlines line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "The quay has a new bidder for your berth."
+                Planet.SUN -> "A rival trader wants your berth at the quay."
                 Planet.MOON -> "Home and trade want the same silver."
-                Planet.MERCURY -> "The other side reads the contract differently than you do."
-                Planet.VENUS -> "What you want costs what you need."
+                Planet.MERCURY -> "Your partners read the contract differently than you do."
+                Planet.VENUS -> "Your purse cannot cover both of the things you want."
                 Planet.MARS -> "Someone wants you to fund their fight."
                 else -> error("$body has no headlines line")
             }
@@ -300,7 +300,7 @@ object DecreeBanks {
             }
             AspectType.SEXTILE -> when (body) {
                 Planet.SUN -> "Call in the favor a client owes you."
-                Planet.MOON -> "Invite a neighbor to dinner in the triclinium."
+                Planet.MOON -> "Fill the triclinium with neighbors for dinner."
                 Planet.MERCURY -> "A short note to the right magistrate gets results."
                 Planet.VENUS -> "Pay the visit you keep postponing."
                 Planet.MARS -> "Drill today, and the Campus Martius is yours tomorrow."
@@ -309,13 +309,13 @@ object DecreeBanks {
             AspectType.SQUARE -> when (body) {
                 Planet.SUN -> "Your rivals in the Senate are watching, so give them nothing."
                 Planet.MOON -> "The household is quarrelsome, and the neighbors are listening."
-                Planet.MERCURY -> "Hold the letter until you can read it cold."
+                Planet.MERCURY -> "Hold the letter until your temper cools."
                 Planet.VENUS -> "Keep courtship out of forum business."
                 Planet.MARS -> "Stay in camp and keep your sword sheathed."
                 else -> error("$body has no headlines line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "Walk into the forum as if you own it."
+                Planet.SUN -> "Speak in the forum, because they are ready to listen."
                 Planet.MOON -> "Stay home tonight and let the household fuss over you."
                 Planet.MERCURY -> "Make your case to the praetor while it reads well."
                 Planet.VENUS -> "Say yes to the dinner invitation."
@@ -324,7 +324,7 @@ object DecreeBanks {
             }
             AspectType.OPPOSITION -> when (body) {
                 Planet.SUN -> "A rival in the Senate wants your seat."
-                Planet.MOON -> "Your household and your duties pull against each other tonight."
+                Planet.MOON -> "Your household and your duties pull against each other."
                 Planet.MERCURY -> "Your message and theirs cannot both carry the vote."
                 Planet.VENUS -> "One of the two families will be disappointed in you."
                 Planet.MARS -> "You do not have to force what the ground refuses."
@@ -336,43 +336,43 @@ object DecreeBanks {
     /** Plural predicate: "{domain A} and {domain B} {relation}"; the day picks one of three. */
     fun relation(culture: AncientCulture, aspect: AspectType, variant: Int): String = when (culture) {
         AncientCulture.EGYPT -> when (aspect) {
-            AspectType.CONJUNCTION -> listOf("ride in one boat", "come to the scale together", "sleep under one roof")
-            AspectType.SEXTILE -> listOf("throw each other a rope", "pass each other bread", "clear each other's canal")
-            AspectType.SQUARE -> listOf("haul on opposite ropes", "pull the sledge two ways", "dam each other's water")
-            AspectType.TRINE -> listOf("float on the same current", "keep the same pace", "share the same wind")
-            AspectType.OPPOSITION -> listOf("stand on opposite banks", "stand at opposite ends of the field", "call to each other across the river")
+            AspectType.CONJUNCTION -> listOf("ride in one boat", "move together", "come to the scale together")
+            AspectType.SEXTILE -> listOf("throw each other a rope", "help each other along", "lighten each other's load")
+            AspectType.SQUARE -> listOf("haul on opposite ropes", "get in each other's way", "pull against each other")
+            AspectType.TRINE -> listOf("float on the same current", "keep the same pace", "go easily together")
+            AspectType.OPPOSITION -> listOf("stand on opposite banks", "want opposite things", "face each other across the river")
         }
 
         AncientCulture.GREECE -> when (aspect) {
-            AspectType.CONJUNCTION -> listOf("go up the hill together", "ask one question together", "share one cup")
-            AspectType.SEXTILE -> listOf("clear the road for each other", "carry each other's messages", "hold the door for each other")
-            AspectType.SQUARE -> listOf("argue at the same gate", "row against each other", "wrestle for the same prize")
-            AspectType.TRINE -> listOf("keep step with each other", "sing the same hymn", "drink from the same krater")
-            AspectType.OPPOSITION -> listOf("take opposite sides of the question", "sit at opposite ends of the agora", "bring rival answers down the hill")
+            AspectType.CONJUNCTION -> listOf("go up the hill together", "arrive together", "come as a pair")
+            AspectType.SEXTILE -> listOf("clear the road for each other", "help each other out", "open doors for each other")
+            AspectType.SQUARE -> listOf("argue at the same gate", "work against each other", "cross each other")
+            AspectType.TRINE -> listOf("keep step with each other", "agree without argument", "fit together")
+            AspectType.OPPOSITION -> listOf("take opposite sides of the question", "pull in opposite directions", "give opposite answers")
         }
 
         AncientCulture.CANAAN -> when (aspect) {
-            AspectType.CONJUNCTION -> listOf("stand before the council as one", "swear one oath", "plow one furrow")
-            AspectType.SEXTILE -> listOf("vouch for each other", "trade tools", "carry water for each other")
-            AspectType.SQUARE -> listOf("quarrel at the gate", "tear at the same fence", "trample each other's rows")
-            AspectType.TRINE -> listOf("sit at the same table", "drink from one jar", "bring in the harvest together")
-            AspectType.OPPOSITION -> listOf("call opposing witnesses", "argue across the threshing floor", "pull the tent ropes two ways")
+            AspectType.CONJUNCTION -> listOf("rise and fall together", "answer to one ruling", "come as one")
+            AspectType.SEXTILE -> listOf("help each other", "stand by each other", "lend each other a hand")
+            AspectType.SQUARE -> listOf("quarrel with each other", "trip each other up", "block each other at the gate")
+            AspectType.TRINE -> listOf("go well together", "keep pace with each other", "agree")
+            AspectType.OPPOSITION -> listOf("make opposite demands", "make claims against each other", "pull the household two ways")
         }
 
         AncientCulture.CARTHAGE -> when (aspect) {
-            AspectType.CONJUNCTION -> listOf("share one account", "sail in one hull", "go under one seal")
-            AspectType.SEXTILE -> listOf("carry each other's cargo", "lend each other credit", "share a berth")
-            AspectType.SQUARE -> listOf("fight over the same silver", "foul each other's anchors", "haggle over one cargo")
-            AspectType.TRINE -> listOf("add up on the first pass", "clear the harbor together", "unload on the same tide")
-            AspectType.OPPOSITION -> listOf("bid against each other", "sit across the counting table", "outbid each other on the quay")
+            AspectType.CONJUNCTION -> listOf("share one account", "move as one", "go under one seal")
+            AspectType.SEXTILE -> listOf("carry each other's cargo", "lend each other credit", "back each other")
+            AspectType.SQUARE -> listOf("fight over the same silver", "eat into each other", "undercut each other")
+            AspectType.TRINE -> listOf("add up on the first pass", "pay off together", "balance easily")
+            AspectType.OPPOSITION -> listOf("bid against each other", "pull the accounts two ways", "compete for the same coin")
         }
 
         AncientCulture.ROME -> when (aspect) {
-            AspectType.CONJUNCTION -> listOf("march under one standard", "sit on one bench", "answer one roll call")
-            AspectType.SEXTILE -> listOf("lend each other troops", "exchange favors", "carry each other's petitions")
-            AspectType.SQUARE -> listOf("block each other's road", "quarrel in the Senate", "cut each other's supply line")
-            AspectType.TRINE -> listOf("sit on the same side of the Senate", "vote the same way", "walk in the same procession")
-            AspectType.OPPOSITION -> listOf("veto each other", "face each other across the forum", "file suits against each other")
+            AspectType.CONJUNCTION -> listOf("march under one standard", "act as one", "go together")
+            AspectType.SEXTILE -> listOf("lend each other troops", "do each other favors", "support each other")
+            AspectType.SQUARE -> listOf("block each other's road", "clash", "obstruct each other")
+            AspectType.TRINE -> listOf("sit on the same side of the Senate", "see eye to eye", "work well together")
+            AspectType.OPPOSITION -> listOf("veto each other", "oppose each other", "pull in different directions")
         }
     }[variant]
 
@@ -703,437 +703,437 @@ object DecreeBanks {
         }
     }
 
-    /** The institution's picture, per (kind, headline body). Slots: {god}, {partner}. */
+    /** The institution's picture, per (kind, headline body). Slot: {god}. */
     fun image(culture: AncientCulture, aspect: AspectType, body: Planet): String = when (culture) {
         AncientCulture.EGYPT -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
-                Planet.SUN -> "{god} walks through the pylon with {partner}, and the doorkeeper slides back the bolt."
-                Planet.MOON -> "{god} brings {partner} into the temple at night, and the priests light one lamp for both."
-                Planet.MERCURY -> "{god} and {partner} share one sheet of papyrus, and the scribe writes both names."
-                Planet.VENUS -> "{god} gathers what was scattered with {partner}'s help, and the pieces are bound in one cloth."
-                Planet.MARS -> "{god} and {partner} throw in one motion, and the hippopotamus does not rise again."
+                Planet.SUN -> "{god} walks through the pylon with a guest, and the doorkeeper slides back the bolt."
+                Planet.MOON -> "{god} brings a guest into the temple at night, and the priests light one lamp for both."
+                Planet.MERCURY -> "{god} writes two names on one sheet of papyrus, and the scribe seals it."
+                Planet.VENUS -> "{god} gathers what was scattered, and the pieces are bound in one cloth."
+                Planet.MARS -> "{god} throws two harpoons in one motion, and the hippopotamus does not rise again."
                 else -> error("$body has no images line")
             }
             AspectType.SEXTILE -> when (body) {
-                Planet.SUN -> "{god} sends the north wind behind {partner}, and even a boat with no sail moves upstream."
-                Planet.MOON -> "{god} lights the path between the fields for {partner}, and the night watchman waves you through."
-                Planet.MERCURY -> "{god} lends the scribe a fresh reed at {partner}'s request, and the letter is finished before noon."
-                Planet.VENUS -> "{god} sets bread on the offering table and {partner} brings the beer."
-                Planet.MARS -> "{god} hands {partner} the lighter oar, and the barge still makes headway."
+                Planet.SUN -> "{god} sends the north wind, and even a boat with no sail moves upstream."
+                Planet.MOON -> "{god} lights the path between the fields, and the night watchman waves you through."
+                Planet.MERCURY -> "{god} lends the scribe a fresh reed, and the letter is finished before noon."
+                Planet.VENUS -> "{god} sets bread on the offering table, and the neighbors bring the beer."
+                Planet.MARS -> "{god} takes the lighter oar, and the barge still makes headway."
                 else -> error("$body has no images line")
             }
             AspectType.SQUARE -> when (body) {
-                Planet.SUN -> "{god} and {partner} take opposite ropes at the sledge, and the overseer calls a halt."
-                Planet.MOON -> "{god} clouds the water where {partner} wants to cross, and the boatman waits for dawn."
-                Planet.MERCURY -> "{god} and {partner} both reach for the ink, and the scribe starts the sheet again."
-                Planet.VENUS -> "{god} leans on the balance against {partner}, and Thoth writes down which way it tips."
-                Planet.MARS -> "{god} raises the harpoon at {partner}, and the priests call him back."
+                Planet.SUN -> "{god} takes the weaker rope at the sledge, and the overseer calls a halt."
+                Planet.MOON -> "{god} clouds the water at the crossing, and the boatman waits for dawn."
+                Planet.MERCURY -> "{god} spills the ink across the sheet, and the scribe starts again."
+                Planet.VENUS -> "{god} leans on the balance, and Thoth writes down which way it tips."
+                Planet.MARS -> "{god} raises the harpoon, and the priests call him back."
                 else -> error("$body has no images line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "{god} and {partner} sit level on the scale, and Anubis leaves the beam alone."
-                Planet.MOON -> "{god} and {partner} fill the cistern by night, and the household wakes to water."
-                Planet.MERCURY -> "{god} carries the letter on {partner}'s wind, and it lands before the sender sleeps."
-                Planet.VENUS -> "{god} anoints the doorpost with {partner}'s oil, and everyone who passes is welcome."
-                Planet.MARS -> "{god} drives the hippopotamus off the field with {partner} beside him, and the farmers plant again."
+                Planet.SUN -> "{god} sits level on the scale, and Anubis leaves the beam alone."
+                Planet.MOON -> "{god} fills the cistern by night, and the household wakes to water."
+                Planet.MERCURY -> "{god} carries the letter on a fair wind, and it lands before the sender sleeps."
+                Planet.VENUS -> "{god} anoints the doorpost, and everyone who passes is welcome."
+                Planet.MARS -> "{god} drives the hippopotamus off the field, and the farmers plant again."
                 else -> error("$body has no images line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "{god} hangs in one pan of the scale and {partner} in the other, and Thoth waits with his reed raised."
-                Planet.MOON -> "{god} looks across the river at {partner}, and the far bank sees every lamp you light."
-                Planet.MERCURY -> "{god} reads the letter aloud on one bank and {partner} on the other, and each side hears a different word."
-                Planet.VENUS -> "{god} stands at one end of the hall and {partner} at the other, and the bride's family waits between them."
-                Planet.MARS -> "{god} faces {partner} across the water, and the gods wait to see who strikes."
+                Planet.SUN -> "{god} hangs in one pan of the scale, and Thoth waits with his reed raised."
+                Planet.MOON -> "{god} looks across the river at full face, and the far bank sees every lamp you light."
+                Planet.MERCURY -> "{god} reads the letter aloud on both banks, and each side hears a different word."
+                Planet.VENUS -> "{god} stands at one end of the hall, and the bride's family waits at the other."
+                Planet.MARS -> "{god} faces his uncle across the water, and the gods wait to see who strikes."
                 else -> error("$body has no images line")
             }
         }
 
         AncientCulture.GREECE -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
-                Planet.SUN -> "{god} stands at the tripod with {partner}, and the Pythia answers them in one breath."
-                Planet.MOON -> "{god} brings {partner} to the night rites, and the priestess pours for two."
-                Planet.MERCURY -> "{god} carries {partner}'s message in his own satchel, and both doors open."
-                Planet.VENUS -> "{god} ties her girdle around {partner}, and the whole symposium watches."
-                Planet.MARS -> "{god} locks shields with {partner}, and the line holds."
+                Planet.SUN -> "{god} stands at the tripod with a companion, and the Pythia answers them in one breath."
+                Planet.MOON -> "{god} brings a guest to the night rites, and the priestess pours for two."
+                Planet.MERCURY -> "{god} carries two messages in one satchel, and both doors open."
+                Planet.VENUS -> "{god} lends her girdle to a bride, and the whole symposium watches."
+                Planet.MARS -> "{god} locks shields with a comrade, and the line holds."
                 else -> error("$body has no images line")
             }
             AspectType.SEXTILE -> when (body) {
-                Planet.SUN -> "The shrine is open to {god} and {partner}, and the Pythia answers whoever climbs to her first."
-                Planet.MOON -> "{god} lights {partner}'s road home from the symposium, and nobody stumbles."
-                Planet.MERCURY -> "{god} sets a herm for {partner} at the crossroads, and travelers take the right turn."
-                Planet.VENUS -> "{god} sends a dove to {partner} in the agora, and two strangers start talking."
-                Planet.MARS -> "{god} drills beside {partner} at dawn, and the shield wall closes faster."
+                Planet.SUN -> "The shrine is open to {god}, and the Pythia answers whoever climbs to her first."
+                Planet.MOON -> "{god} lights the road home from the symposium, and nobody stumbles."
+                Planet.MERCURY -> "{god} sets a herm at the crossroads, and travelers take the right turn."
+                Planet.VENUS -> "{god} sends a dove into the agora, and two strangers start talking."
+                Planet.MARS -> "{god} drills the young men at dawn, and the shield wall closes faster."
                 else -> error("$body has no images line")
             }
             AspectType.SQUARE -> when (body) {
-                Planet.SUN -> "{god} fights {partner} for first place in the line, and the Pythia draws lots before she speaks."
-                Planet.MOON -> "{god} hides behind cloud from {partner}, and the night sailors argue over the stars."
-                Planet.MERCURY -> "{god} switches {partner}'s tablets, and the assembly hears the wrong decree."
-                Planet.VENUS -> "{god} throws the golden apple at {partner}'s feet, and the table goes quiet."
-                Planet.MARS -> "{god} breaks the truce with {partner} at the games, and the judges stop the race."
+                Planet.SUN -> "{god} fights for first place in the line, and the Pythia draws lots before she speaks."
+                Planet.MOON -> "{god} hides behind cloud, and the night sailors argue over the stars."
+                Planet.MERCURY -> "{god} switches the herald's tablets, and the assembly hears the wrong decree."
+                Planet.VENUS -> "{god} throws the golden apple onto the table, and three guests stop speaking."
+                Planet.MARS -> "{god} breaks the truce at the games, and the judges stop the race."
                 else -> error("$body has no images line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "The Pythia takes {god} and {partner} ahead of the crowd and answers from the tripod."
-                Planet.MOON -> "{god} and {partner} pour light on the harbor, and every ship finds its mooring."
-                Planet.MERCURY -> "{god} runs the road to Delphi with {partner}'s blessing, and the answer arrives before noon."
-                Planet.VENUS -> "{god} walks through the agora on {partner}'s arm, and the flower sellers give their roses away."
-                Planet.MARS -> "{god} takes the field with {partner} beside him, and the line advances."
+                Planet.SUN -> "The Pythia takes {god} ahead of the crowd and answers from the tripod."
+                Planet.MOON -> "{god} pours light on the harbor, and every ship finds its mooring."
+                Planet.MERCURY -> "{god} runs the road to Delphi without stopping, and the answer arrives before noon."
+                Planet.VENUS -> "{god} walks through the agora, and the flower sellers give their roses away."
+                Planet.MARS -> "{god} takes the field beside Athena, and the line advances."
                 else -> error("$body has no images line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "{god} comes up the hill by one road and {partner} by another, and the Pythia gives each a different answer."
-                Planet.MOON -> "{god} stands full across the sky from {partner}, and the tides run high."
-                Planet.MERCURY -> "{god} argues one side of the case and {partner} the other, and the jurors cannot decide."
-                Planet.VENUS -> "{god} turns her back on {partner} at the feast, and the guests take sides."
-                Planet.MARS -> "{god} meets {partner} across the plain, and both armies wait for the first spear."
+                Planet.SUN -> "{god} comes up the hill by a separate road, and the Pythia gives a different answer at each door."
+                Planet.MOON -> "{god} stands full across the sky from the sun, and the tides run high."
+                Planet.MERCURY -> "{god} argues both sides of the case, and the jurors cannot decide."
+                Planet.VENUS -> "{god} turns her back on her husband at the feast, and the guests take sides."
+                Planet.MARS -> "{god} meets his rival across the plain, and both armies wait for the first spear."
                 else -> error("$body has no images line")
             }
         }
 
         AncientCulture.CANAAN -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
-                Planet.SUN -> "{god} goes before the assembly with {partner}, and the council's decree falls on the pair."
-                Planet.MOON -> "{god} pays the bride price to {partner} in full, and both families drink from one cup."
-                Planet.MERCURY -> "{god} forges a weapon with {partner} at the bellows, and the blade comes out true."
-                Planet.VENUS -> "{god} rides out with {partner}, and the city opens both gates."
-                Planet.MARS -> "{god} and {partner} draw their bows together, and the gate guards step back."
+                Planet.SUN -> "{god} goes before the assembly with a companion, and the council's decree falls on the pair."
+                Planet.MOON -> "{god} pays the bride price in full, and both families drink from one cup."
+                Planet.MERCURY -> "{god} forges a weapon at the bellows, and the blade comes out true."
+                Planet.VENUS -> "{god} rides out with a companion, and the city opens both gates."
+                Planet.MARS -> "{god} draws two arrows at once, and the gate guards step back."
                 else -> error("$body has no images line")
             }
             AspectType.SEXTILE -> when (body) {
-                Planet.SUN -> "{god} brings {partner} before the gods, and the cupbearer pours for both."
-                Planet.MOON -> "{god} sends gifts to {partner}'s house ahead of the wedding, and the door stands open."
-                Planet.MERCURY -> "{god} lends his tongs to {partner}'s forge, and the work goes faster."
-                Planet.VENUS -> "{god} sets a lamp in the window for {partner}, and the guest finds the house."
-                Planet.MARS -> "{god} lowers his bow when {partner} comes to the gate, and the traders come in."
+                Planet.SUN -> "{god} brings a friend before the gods, and the cupbearer pours for both."
+                Planet.MOON -> "{god} sends gifts ahead of the wedding, and the door stands open."
+                Planet.MERCURY -> "{god} lends his tongs to a neighbor's forge, and the work goes faster."
+                Planet.VENUS -> "{god} sets a lamp in the window, and the guest finds the house."
+                Planet.MARS -> "{god} lowers his bow at the gate, and the traders come in."
                 else -> error("$body has no images line")
             }
             AspectType.SQUARE -> when (body) {
-                Planet.SUN -> "{god} rises to accuse {partner}, and the assembly hears nothing else at this sitting."
-                Planet.MOON -> "{god} quarrels with {partner} over the bride price, and the families leave the table."
-                Planet.MERCURY -> "{god}'s fire goes out when {partner} opens the door, and the blade cools half made."
-                Planet.VENUS -> "{god} draws her sword on {partner} at the feast, and the cups go down."
-                Planet.MARS -> "{god} shoots into {partner}'s crowd at the gate, and the elders call for order."
+                Planet.SUN -> "{god} rises to accuse, and the assembly hears nothing else at this sitting."
+                Planet.MOON -> "{god} quarrels over the bride price, and the families leave the table."
+                Planet.MERCURY -> "{god}'s fire goes out under the anvil, and the blade cools half made."
+                Planet.VENUS -> "{god} draws her sword at the feast, and the cups go down."
+                Planet.MARS -> "{god} shoots into the crowd at the gate, and the elders call for order."
                 else -> error("$body has no images line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "The assembly waves {god} and {partner} through, and no god asks for a vow."
-                Planet.MOON -> "{god} and {partner} light the threshing floor all night, and the work finishes early."
-                Planet.MERCURY -> "{god} builds a palace with {partner}'s cedar, and it stands."
-                Planet.VENUS -> "{god} comes down from the hills with {partner} in peace, and the vineyards fill."
-                Planet.MARS -> "{god} unstrings his bow at {partner}'s word, and the city sleeps without fever."
+                Planet.SUN -> "The assembly waves {god} through, and no god asks for a vow."
+                Planet.MOON -> "{god} lights the threshing floor all night, and the work finishes early."
+                Planet.MERCURY -> "{god} builds a palace of cedar in seven days, and it stands."
+                Planet.VENUS -> "{god} comes down from the hills in peace, and the vineyards fill."
+                Planet.MARS -> "{god} unstrings his bow, and the city sleeps without fever."
                 else -> error("$body has no images line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "The gods put down their cups as {god} takes the floor against {partner}."
-                Planet.MOON -> "{god} stands across the sky from {partner}, and the night court sits until dawn."
-                Planet.MERCURY -> "{god} argues for windows in the palace and {partner} argues against, and the work stops."
-                Planet.VENUS -> "{god} faces {partner} across the beach, and the sailors wait for a sign."
-                Planet.MARS -> "{god} sets his arrow against {partner} at the gate, and the gate stays shut."
+                Planet.SUN -> "The gods put down their cups as {god} takes the floor against a rival."
+                Planet.MOON -> "{god} rises full as the sun sets, and the night court sits until dawn."
+                Planet.MERCURY -> "{god} argues for windows in the palace, Baal argues against, and the work stops."
+                Planet.VENUS -> "{god} faces the sea across the beach, and the sailors wait for a sign."
+                Planet.MARS -> "{god} sets his arrow against the gatekeeper, and the gate stays shut."
                 else -> error("$body has no images line")
             }
         }
 
         AncientCulture.CARTHAGE -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
-                Planet.SUN -> "The clerk writes {god} and {partner} on one line, and one seal covers both."
-                Planet.MOON -> "{god}'s sign and {partner}'s are cut on one stele, and two families pay for it together."
-                Planet.MERCURY -> "{god} guides {partner}'s ship into port on the same tide, and the harbor master logs both."
-                Planet.VENUS -> "{god} launches the fleet with {partner} aboard, and every captain knows the plan."
-                Planet.MARS -> "{god} carries {partner}'s cargo with his own to Tyre, and the temple takes its tithe from both."
+                Planet.SUN -> "The clerk writes {god} and a partner on one line, and one seal covers both."
+                Planet.MOON -> "{god}'s sign is cut on a new stele, and two families pay for it together."
+                Planet.MERCURY -> "{god} guides two ships into port on one tide, and the harbor master logs both."
+                Planet.VENUS -> "{god} launches the fleet with a full crew, and every captain knows the plan."
+                Planet.MARS -> "{god} carries two cargoes to Tyre, and the temple takes its tithe from both."
                 else -> error("$body has no images line")
             }
             AspectType.SEXTILE -> when (body) {
-                Planet.SUN -> "{god} stands surety with {partner} until the ships come home."
-                Planet.MOON -> "{god} lights the harbor mouth for {partner}, and the late ship finds the channel."
-                Planet.MERCURY -> "{god} points {partner} to a new landing, and the trade begins there."
-                Planet.VENUS -> "{god} sends {partner} a fair wind, and the cargo arrives early."
-                Planet.MARS -> "{god} opens his storehouse to {partner}, and both profit."
+                Planet.SUN -> "{god} stands surety for you until the ships come home."
+                Planet.MOON -> "{god} lights the harbor mouth, and the late ship finds the channel."
+                Planet.MERCURY -> "{god} points a captain to a new landing, and the trade begins there."
+                Planet.VENUS -> "{god} sends a fair wind to the merchant fleet, and the cargo arrives early."
+                Planet.MARS -> "{god} opens his storehouse to a partner, and both profit."
                 else -> error("$body has no images line")
             }
             AspectType.SQUARE -> when (body) {
-                Planet.SUN -> "{god} refuses {partner}'s terms, and the Hundred and Four read the roll again line by line."
-                Planet.MOON -> "{god} looks away from {partner}'s altar, and the household accounts do not balance."
-                Planet.MERCURY -> "{god} sends {partner}'s ship to the wrong shore, and the cargo sits on the beach."
-                Planet.VENUS -> "{god} recalls the fleet that {partner} sent out, and the crews want their pay."
-                Planet.MARS -> "{god} demands the full tithe from {partner} at once, and the warehouse empties."
+                Planet.SUN -> "{god} refuses the terms, and the Hundred and Four read the roll again line by line."
+                Planet.MOON -> "{god} looks away from the household altar, and the accounts do not balance."
+                Planet.MERCURY -> "{god} sends the ship to the wrong shore, and the cargo sits on the beach."
+                Planet.VENUS -> "{god} recalls the fleet halfway out, and the crews want their pay."
+                Planet.MARS -> "{god} demands the full tithe at once, and the warehouse empties."
                 else -> error("$body has no images line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "The clerk adds {god}'s column to {partner}'s, and the sum closes the sheet."
-                Planet.MOON -> "{god} and {partner} bless the household stele, and the family's books close clean."
-                Planet.MERCURY -> "{god} guides {partner}'s ships to their berths, and the harbor clears by noon."
-                Planet.VENUS -> "{god} brings the fleet home with {partner}'s wind behind it, and the city lights its lamps."
-                Planet.MARS -> "{god} wins the contest at Tyre with {partner} watching, and the tithe comes back doubled."
+                Planet.SUN -> "The clerk adds {god}'s column once, and the sum closes the sheet."
+                Planet.MOON -> "{god} blesses the household stele, and the family's books close clean."
+                Planet.MERCURY -> "{god} guides every ship to its berth, and the harbor clears by noon."
+                Planet.VENUS -> "{god} sends the fleet home full, and the city lights its lamps."
+                Planet.MARS -> "{god} wins the contest at Tyre, and the tithe comes back doubled."
                 else -> error("$body has no images line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "The clerk sets {god} against {partner} in the other column, and the balance stays open."
-                Planet.MOON -> "{god} rises full opposite {partner}, and the fishermen stay ashore."
-                Planet.MERCURY -> "{god} guides one ship in while {partner} sends another out, and the berth is disputed."
-                Planet.VENUS -> "{god} faces {partner} across the harbor, and the merchants wait to see who yields."
-                Planet.MARS -> "{god} meets {partner} on the quay as rival champions, and the city takes sides."
+                Planet.SUN -> "The clerk sets {god} against the other column, and the balance stays open."
+                Planet.MOON -> "{god} rises full over the harbor, and the fishermen stay ashore."
+                Planet.MERCURY -> "{god} guides one ship in while another sails out, and the berth is disputed."
+                Planet.VENUS -> "{god} faces Yam across the harbor, and the merchants wait to see who yields."
+                Planet.MARS -> "{god} meets a rival champion on the quay, and the city takes sides."
                 else -> error("$body has no images line")
             }
         }
 
         AncientCulture.ROME -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
-                Planet.SUN -> "{god} and {partner} wait on the sacred chickens, and the keeper announces that they have eaten."
-                Planet.MOON -> "{god} hangs beside {partner} in the evening sky, and the household gods are fed early."
-                Planet.MERCURY -> "{god} closes a bargain with {partner} on one market day, and the aediles record it."
-                Planet.VENUS -> "{god} joins her house to {partner}'s at the altar, and the pontifex ties the knot."
-                Planet.MARS -> "{god} gathers his legion with {partner}'s under one eagle, and the camp moves at dawn."
+                Planet.SUN -> "{god} waits on the sacred chickens, and the keeper announces that they have eaten."
+                Planet.MOON -> "{god} hangs beside the evening star, and the household gods are fed early."
+                Planet.MERCURY -> "{god} closes two bargains on one market day, and the aediles record both."
+                Planet.VENUS -> "{god} joins two houses at the altar, and the pontifex ties the knot."
+                Planet.MARS -> "{god} gathers two legions under one eagle, and the camp moves at dawn."
                 else -> error("$body has no images line")
             }
             AspectType.SEXTILE -> when (body) {
-                Planet.SUN -> "The haruspex finds the liver favorable to {god} and {partner}, and the sign holds until dusk."
-                Planet.MOON -> "{god} lights {partner}'s road out of the city, and the travelers leave early."
-                Planet.MERCURY -> "{god} speeds {partner}'s courier along the Via Appia, and the reply comes back in a day."
-                Planet.VENUS -> "{god} sends a garland to {partner}'s door, and the family invites you in."
-                Planet.MARS -> "{god} sends a cohort to relieve {partner}'s line, and the soldiers eat a hot meal."
+                Planet.SUN -> "The haruspex finds the liver favorable to {god}, and the sign holds until dusk."
+                Planet.MOON -> "{god} lights the road out of the city, and the travelers leave early."
+                Planet.MERCURY -> "{god} speeds the courier along the Via Appia, and the reply comes back in a day."
+                Planet.VENUS -> "{god} sends a garland to the right door, and the family invites you in."
+                Planet.MARS -> "{god} sends a cohort to relieve the line, and the soldiers eat a hot meal."
                 else -> error("$body has no images line")
             }
             AspectType.SQUARE -> when (body) {
-                Planet.SUN -> "An adverse omen stands between {god} and {partner}, and the consul adjourns the Senate."
-                Planet.MOON -> "{god} turns red in eclipse before {partner}, and the household bangs bronze pots to drive off the shadow."
-                Planet.MERCURY -> "{god} loses {partner}'s dispatch at the river crossing, and the legate waits for orders."
-                Planet.VENUS -> "{god} quarrels with {partner} over the match, and the wedding is postponed."
-                Planet.MARS -> "{god} finds the sacred shields moved by {partner}, and the Salii refuse to dance."
+                Planet.SUN -> "An adverse omen stands in {god}'s path, and the consul adjourns the Senate."
+                Planet.MOON -> "{god} turns red in eclipse, and the household bangs bronze pots to drive off the shadow."
+                Planet.MERCURY -> "{god} loses the dispatch at the river crossing, and the legate waits for orders."
+                Planet.VENUS -> "{god} quarrels with Juno over the match, and the wedding is postponed."
+                Planet.MARS -> "{god} finds the sacred shields moved, and the Salii refuse to dance."
                 else -> error("$body has no images line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "{god} and {partner} rise over a clear sky, and the augur sees birds on the right."
-                Planet.MOON -> "{god} shines on the atrium with {partner}, and the lares get an extra cake."
-                Planet.MERCURY -> "{god} carries {partner}'s letters on time, and the forum hears your case first."
-                Planet.VENUS -> "{god} smiles on the wedding procession beside {partner}, and the torches stay lit all the way home."
-                Planet.MARS -> "{god} and {partner} give the signal from the right, and the legion advances in good order."
+                Planet.SUN -> "{god} rises over a clear sky, and the augur sees birds on the right."
+                Planet.MOON -> "{god} shines on the atrium, and the lares get an extra cake."
+                Planet.MERCURY -> "{god} carries every letter on time, and the forum hears your case first."
+                Planet.VENUS -> "{god} smiles on the wedding procession, and the torches stay lit all the way home."
+                Planet.MARS -> "{god} gives the signal from the right, and the legion advances in good order."
                 else -> error("$body has no images line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "The tribunes are divided between {god} and {partner}, and the assembly goes home without a vote."
-                Planet.MOON -> "{god} stands full against {partner}, and the night watch doubles at the gates."
-                Planet.MERCURY -> "{god} argues one side before the praetor and {partner} the other, and the case is adjourned."
-                Planet.VENUS -> "{god} stands with one family and {partner} with the other, and the betrothal stalls."
-                Planet.MARS -> "{god} faces {partner}'s camp across the river, and neither side crosses."
+                Planet.SUN -> "The tribunes are divided over {god}, and the assembly goes home without a vote."
+                Planet.MOON -> "{god} stands full against the sun, and the night watch doubles at the gates."
+                Planet.MERCURY -> "{god} takes the case for both parties before the praetor, and the hearing is adjourned."
+                Planet.VENUS -> "{god} stands with one family and Juno with the other, and the betrothal stalls."
+                Planet.MARS -> "{god} faces an enemy camp across the river, and neither side crosses."
                 else -> error("$body has no images line")
             }
         }
     }
 
-    /** The one order, always last, per (kind, headline body). Slots: {god}, {partner}. */
+    /** The one order, always last, per (kind, headline body); two kinds close on a rite to {god}. */
     fun instruction(culture: AncientCulture, aspect: AspectType, body: Planet): String = when (culture) {
         AncientCulture.EGYPT -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
-                Planet.SUN -> "Put one task at the head of your day, and name it to {god} and {partner} at sunrise."
-                Planet.MOON -> "Eat with the people you live with tonight, and leave a lamp burning for {god} and {partner}."
-                Planet.MERCURY -> "Answer no one else until that letter is sent, and seal it in the names of {god} and {partner}."
-                Planet.VENUS -> "Hold nothing back from your beloved tonight, and set a cup aside for {god} and {partner}."
-                Planet.MARS -> "Give your temper to the hardest chore in the house, and give {god} the first stroke and {partner} the last."
+                Planet.SUN -> "Put one task at the head of your day, and name it to {god} at sunrise."
+                Planet.MOON -> "Eat with the people you live with, and leave a lamp burning for {god}."
+                Planet.MERCURY -> "Answer no one else until that letter is sent, and seal it in {god}'s name."
+                Planet.VENUS -> "Hold nothing back from your beloved, and set a cup aside for {god}."
+                Planet.MARS -> "Give your temper to the hardest chore in the house, and give {god} the first stroke."
                 else -> error("$body has no instructions line")
             }
             AspectType.SEXTILE -> when (body) {
-                Planet.SUN -> "Accept the help that is offered before noon, and thank {god} and {partner} for it."
-                Planet.MOON -> "Mend one small thing in the house, and say the names of {god} and {partner} over it."
-                Planet.MERCURY -> "Put the answer you owe into three lines, and let {god} and {partner} carry it."
-                Planet.VENUS -> "Ask your beloved what they need this week, and say the names of {god} and {partner} over the bread."
-                Planet.MARS -> "Finish one job with your hands before dark, and let {god} and {partner} count the strokes."
+                Planet.SUN -> "Accept the help that is offered before noon."
+                Planet.MOON -> "Mend one small thing in the house."
+                Planet.MERCURY -> "Put the answer you owe into three lines and send it."
+                Planet.VENUS -> "Ask your beloved what they need this week."
+                Planet.MARS -> "Finish one job with your hands before dark."
                 else -> error("$body has no instructions line")
             }
             AspectType.SQUARE -> when (body) {
-                Planet.SUN -> "Drop the least important task, and tell {god} and {partner} which one you dropped."
-                Planet.MOON -> "Say nothing at home until you have eaten, and leave the first bite for {god} and {partner}."
-                Planet.MERCURY -> "Have someone else read your answer before it leaves, and ask {god} and {partner} to check the seal."
-                Planet.VENUS -> "Leave the household accounts for another night, and let {god} and {partner} hold the purse."
-                Planet.MARS -> "Walk the length of the canal before you answer an insult, and let {god} and {partner} hold the harpoon."
+                Planet.SUN -> "Drop the least important task on your list."
+                Planet.MOON -> "Say nothing at home until you have eaten."
+                Planet.MERCURY -> "Have someone else read your answer before it leaves."
+                Planet.VENUS -> "Leave the household accounts for another night."
+                Planet.MARS -> "Walk the length of the canal before you answer an insult."
                 else -> error("$body has no instructions line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "Lift the heaviest stone of the week first, and call on {god} and {partner} as you lift it."
-                Planet.MOON -> "Go to bed early, and leave a cup of water for {god} and {partner}."
-                Planet.MERCURY -> "Speak to the person you have been avoiding, and trust {god} and {partner} to carry the words."
-                Planet.VENUS -> "Let your beloved do something for you, and thank {god} and {partner} aloud."
-                Planet.MARS -> "Take on the heavy labor before noon, and raise your arm to {god} and {partner} when it is done."
+                Planet.SUN -> "Lift the heaviest stone of the week first, and call on {god} as you lift it."
+                Planet.MOON -> "Go to bed early, and leave a cup of water for {god}."
+                Planet.MERCURY -> "Speak to the person you have been avoiding, and trust {god} to carry the words."
+                Planet.VENUS -> "Let your beloved do something for you, and thank {god} aloud."
+                Planet.MARS -> "Take on the heavy labor before noon, and raise your arm to {god} when it is done."
                 else -> error("$body has no instructions line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "Give the evening to home or to work, and tell {god} and {partner} which."
-                Planet.MOON -> "Keep your moods on your own side of the river, and hail {god} and {partner} from there."
-                Planet.MERCURY -> "Ask the other side to repeat what they heard, and let {god} and {partner} witness it."
-                Planet.VENUS -> "Give up one small thing for your beloved, and lay it before {god} and {partner}."
-                Planet.MARS -> "Wait for the far bank to make the first move, and ask {god} and {partner} to keep the peace."
+                Planet.SUN -> "Choose home or work for the evening and keep to it."
+                Planet.MOON -> "Keep your moods on your own side of the river."
+                Planet.MERCURY -> "Ask the other side to repeat what they heard."
+                Planet.VENUS -> "Give up one small thing for your beloved."
+                Planet.MARS -> "Wait for the far bank to make the first move."
                 else -> error("$body has no instructions line")
             }
         }
 
         AncientCulture.GREECE -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
-                Planet.SUN -> "Put your own name to one public act, and let {god} and {partner} see it done."
-                Planet.MOON -> "Sit down with your household after supper, and pour a drop for {god} and {partner}."
-                Planet.MERCURY -> "Run your errands in one trip, and leave a coin at the herm for {god} and {partner}."
-                Planet.VENUS -> "Say it to them in person, and burn incense to {god} and {partner}."
-                Planet.MARS -> "Give one contest everything you have, and pledge the effort to {god} and {partner}."
+                Planet.SUN -> "Put your own name to one public act, and let {god} see it done."
+                Planet.MOON -> "Sit down with your household after supper, and pour a drop for {god}."
+                Planet.MERCURY -> "Run your errands in one trip, and leave a coin at the herm for {god}."
+                Planet.VENUS -> "Say it to them in person, and burn incense to {god}."
+                Planet.MARS -> "Give one contest everything you have, and pledge the effort to {god}."
                 else -> error("$body has no instructions line")
             }
             AspectType.SEXTILE -> when (body) {
-                Planet.SUN -> "Ask one person whose work you respect to look at yours, and thank {god} and {partner} at noon."
-                Planet.MOON -> "Invite a friend in for the evening, and leave the lamp lit for {god} and {partner}."
-                Planet.MERCURY -> "Ask about your errands in the fewest words, and thank {god} and {partner} at the crossroads."
-                Planet.VENUS -> "Pay the person you want one honest compliment, and offer {god} and {partner} a flower."
-                Planet.MARS -> "Run, lift or dig for an hour, and dedicate the sweat to {god} and {partner}."
+                Planet.SUN -> "Ask one person whose work you respect to look at yours."
+                Planet.MOON -> "Invite a friend in for the evening."
+                Planet.MERCURY -> "Ask about each errand in the fewest words."
+                Planet.VENUS -> "Pay the person you want one honest compliment."
+                Planet.MARS -> "Run, lift or dig for an hour."
                 else -> error("$body has no instructions line")
             }
             AspectType.SQUARE -> when (body) {
-                Planet.SUN -> "Give your answer in the agora tomorrow, and ask {god} and {partner} for a clear head tonight."
-                Planet.MOON -> "Let the household argument end at the door, and ask {god} and {partner} for a quiet night."
-                Planet.MERCURY -> "Repeat nothing you heard secondhand, and keep the names of {god} and {partner} out of any lie."
-                Planet.VENUS -> "Wait a day before you ask for what you want, and let {god} and {partner} cool your blood."
-                Planet.MARS -> "Keep your fists at your sides, and let {god} and {partner} find another field."
+                Planet.SUN -> "Hold your public answer until tomorrow."
+                Planet.MOON -> "Let the household argument end at the door."
+                Planet.MERCURY -> "Repeat nothing you heard secondhand."
+                Planet.VENUS -> "Wait a day before you ask for what you want."
+                Planet.MARS -> "Keep your fists at your sides."
                 else -> error("$body has no instructions line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "Speak first when the assembly opens, and pour a little wine for {god} and {partner} at noon."
-                Planet.MOON -> "Keep tonight for your own house, and set out honey for {god} and {partner}."
-                Planet.MERCURY -> "Put the question you have been saving into words, and thank {god} and {partner} when the answer comes."
-                Planet.VENUS -> "Accept the pleasure in front of you, and spill the first drop for {god} and {partner}."
-                Planet.MARS -> "Go at the hardest task while your arm is fresh, and give {god} and {partner} the first round."
+                Planet.SUN -> "Speak first when the assembly opens, and pour a little wine for {god} at noon."
+                Planet.MOON -> "Keep the evening for your own house, and set out honey for {god}."
+                Planet.MERCURY -> "Put the question you have been saving into words, and thank {god} when the answer comes."
+                Planet.VENUS -> "Accept the pleasure in front of you, and spill the first drop for {god}."
+                Planet.MARS -> "Go at the hardest task while your arm is fresh, and give {god} the first round."
                 else -> error("$body has no instructions line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "Let someone else take the credit once, and tell {god} and {partner} you noticed."
-                Planet.MOON -> "Hear what your family needs before you say what you need, and let {god} and {partner} hear both."
-                Planet.MERCURY -> "Ask both people to repeat what they said, and let {god} and {partner} judge the difference."
-                Planet.VENUS -> "Give up one of the two things you want, and offer it to {god} and {partner}."
-                Planet.MARS -> "Let the other side strike first, and ask {god} and {partner} to stay their hands."
+                Planet.SUN -> "Let someone else take the credit once."
+                Planet.MOON -> "Hear what your family needs before you say what you need."
+                Planet.MERCURY -> "Ask both people to repeat what they said."
+                Planet.VENUS -> "Give up one of the two things you want."
+                Planet.MARS -> "Let the other side strike first."
                 else -> error("$body has no instructions line")
             }
         }
 
         AncientCulture.CANAAN -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
-                Planet.SUN -> "Put your whole day into one job, and say its name to {god} and {partner} at the gate."
-                Planet.MOON -> "Ask the eldest at your table for a ruling, and pour a drink for {god} and {partner}."
-                Planet.MERCURY -> "Finish the piece you started and show it to {god} and {partner} with your mark on it."
-                Planet.VENUS -> "Say the vow in front of a witness, and let {god} and {partner} hear it."
-                Planet.MARS -> "Spend your heat on the field before evening, and let {god} and {partner} keep the arrows."
+                Planet.SUN -> "Put your whole day into one job, and say its name to {god} at the gate."
+                Planet.MOON -> "Ask the eldest at your table for a ruling, and pour a drink for {god}."
+                Planet.MERCURY -> "Finish the piece you started, and show it to {god} with your mark on it."
+                Planet.VENUS -> "Say the vow in front of a witness, and let {god} hear it."
+                Planet.MARS -> "Spend your heat on the field before evening, and let {god} keep the arrows."
                 else -> error("$body has no instructions line")
             }
             AspectType.SEXTILE -> when (body) {
-                Planet.SUN -> "Lend your hands to a neighbor's work first, in the hearing of {god} and {partner}."
-                Planet.MOON -> "Visit the relative you have not seen since the last feast, and say the names of {god} and {partner} at the door."
-                Planet.MERCURY -> "Teach someone younger one thing you know, and let {god} and {partner} witness it."
-                Planet.VENUS -> "Speak kindly of the one you love in front of others, and leave a lamp for {god} and {partner}."
-                Planet.MARS -> "Take the hardest job in the field before noon, and offer the sweat to {god} and {partner}."
+                Planet.SUN -> "Lend your hands to a neighbor's work first."
+                Planet.MOON -> "Visit the relative you have not seen since the last feast."
+                Planet.MERCURY -> "Teach someone younger one thing you know."
+                Planet.VENUS -> "Speak kindly of the one you love in front of others."
+                Planet.MARS -> "Take the hardest job in the field before noon."
                 else -> error("$body has no instructions line")
             }
             AspectType.SQUARE -> when (body) {
-                Planet.SUN -> "Write down who blocks your work and why, and let {god} and {partner} keep the tablet."
-                Planet.MOON -> "Let your kin speak tonight and answer them tomorrow, and ask {god} and {partner} for quiet."
-                Planet.MERCURY -> "Measure the work again before you finish it, and let {god} and {partner} check the line."
-                Planet.VENUS -> "Let the argument end before either of you speaks of love, and let {god} and {partner} hold the oath."
-                Planet.MARS -> "Lock your own gate tonight, and leave the quarrel to {god} and {partner}."
+                Planet.SUN -> "Write down who blocks your work and why."
+                Planet.MOON -> "Let your kin speak first and answer them tomorrow."
+                Planet.MERCURY -> "Measure the work again before you finish it."
+                Planet.VENUS -> "Let the argument end before either of you speaks of love."
+                Planet.MARS -> "Lock your own gate and stay inside it."
                 else -> error("$body has no instructions line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "Name the thing you want at the gate, and leave a share of the yield for {god} and {partner}."
-                Planet.MOON -> "Spend the evening at home with your kin, and set a cup for {god} and {partner}."
-                Planet.MERCURY -> "Start the hard part of the work first, and lay the first piece before {god} and {partner}."
-                Planet.VENUS -> "Make room at your table for one more, and thank {god} and {partner} at the threshold."
-                Planet.MARS -> "Carry the heavy sacks yourself, and leave a sheaf for {god} and {partner}."
+                Planet.SUN -> "Name the thing you want at the gate, and leave a share of the yield for {god}."
+                Planet.MOON -> "Spend the evening at home with your kin, and set a cup for {god}."
+                Planet.MERCURY -> "Start the hard part of the work first, and lay the first piece before {god}."
+                Planet.VENUS -> "Make room at your table for one more, and thank {god} at the threshold."
+                Planet.MARS -> "Carry the heavy sacks yourself, and leave a sheaf for {god}."
                 else -> error("$body has no instructions line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "Split the day between field and family, and tell {god} and {partner} how you split it."
-                Planet.MOON -> "Let your family speak first, and keep your answer until {god} and {partner} have heard them."
-                Planet.MERCURY -> "Ask the one arguing with you to say your words back, and let {god} and {partner} judge."
-                Planet.VENUS -> "Cross the floor to the one you love, and let {god} and {partner} see you go."
-                Planet.MARS -> "Refuse the fight you are offered, and hand the arrow to {god} and {partner}."
+                Planet.SUN -> "Split the day between field and family, and say out loud how you split it."
+                Planet.MOON -> "Hear your family out before you answer."
+                Planet.MERCURY -> "Ask the one arguing with you to say your words back."
+                Planet.VENUS -> "Cross the floor to the one you love."
+                Planet.MARS -> "Refuse the fight you are offered."
                 else -> error("$body has no instructions line")
             }
         }
 
         AncientCulture.CARTHAGE -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
-                Planet.SUN -> "Put your name on one deal and see it through, and seal the page in the names of {god} and {partner}."
-                Planet.MOON -> "Agree on one household budget with everyone at the table, and set aside the share of {god} and {partner} first."
-                Planet.MERCURY -> "Draft the contract and sign it before you sleep, with {god} and {partner} as witnesses."
-                Planet.VENUS -> "Spend on what you love without keeping score, and pour a cup for {god} and {partner}."
-                Planet.MARS -> "Name one venture as the only call on your war chest, and enter {god} and {partner} as its patrons."
+                Planet.SUN -> "Put your name on one deal and see it through, and seal the page in {god}'s name."
+                Planet.MOON -> "Agree on one household budget with everyone at the table, and set {god}'s share aside first."
+                Planet.MERCURY -> "Draft the contract and sign it before you sleep, with {god} as witness."
+                Planet.VENUS -> "Spend on what you love without keeping score, and pour a cup for {god}."
+                Planet.MARS -> "Name one venture as the only call on your war chest, and enter {god} as its patron."
                 else -> error("$body has no instructions line")
             }
             AspectType.SEXTILE -> when (body) {
-                Planet.SUN -> "Ask one trader you trust to speak for you, and name {god} and {partner} as witnesses."
-                Planet.MOON -> "Pay one household debt before the market opens, and light a lamp for {god} and {partner}."
-                Planet.MERCURY -> "Put your price in writing before the next sailing, under the marks of {god} and {partner}."
-                Planet.VENUS -> "Hand over the gift yourself, and burn incense for {god} and {partner}."
-                Planet.MARS -> "Put some of your own silver into the venture, and enter {god} and {partner} in the books as partners."
+                Planet.SUN -> "Ask one trader you trust to speak for you."
+                Planet.MOON -> "Pay one household debt before the market opens."
+                Planet.MERCURY -> "Put your price in writing before the next sailing."
+                Planet.VENUS -> "Hand over the gift yourself."
+                Planet.MARS -> "Put some of your own silver into the venture."
                 else -> error("$body has no instructions line")
             }
             AspectType.SQUARE -> when (body) {
-                Planet.SUN -> "Go through last month's entries tonight, and hand the tally to the temple clerk in the names of {god} and {partner}."
-                Planet.MOON -> "Leave the household books shut until morning, and keep a lamp lit for {god} and {partner}."
-                Planet.MERCURY -> "Ask a second clerk to read the contract, and swear by {god} and {partner} to nothing you have not read."
-                Planet.VENUS -> "Keep your purse shut tonight, and promise {god} and {partner} the difference."
-                Planet.MARS -> "Lock the war chest until your blood cools, and let {god} and {partner} hold the key."
+                Planet.SUN -> "Go through last month's entries line by line."
+                Planet.MOON -> "Leave the household books shut until morning."
+                Planet.MERCURY -> "Ask a second clerk to read the contract."
+                Planet.VENUS -> "Keep your purse shut until the week's books close."
+                Planet.MARS -> "Lock the war chest until your blood cools."
                 else -> error("$body has no instructions line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "Ask for the larger loan, and set aside the share of {god} and {partner}."
-                Planet.MOON -> "Take the evening off from the household books, and thank {god} and {partner} at the meal."
-                Planet.MERCURY -> "Sign before the week is out, and file a copy at the temple of {god} and {partner}."
-                Planet.VENUS -> "Use the good cups tonight, and pour the first one for {god} and {partner}."
-                Planet.MARS -> "Ask for the better price, and tithe the profit to {god} and {partner}."
+                Planet.SUN -> "Ask for the larger loan, and set aside {god}'s share."
+                Planet.MOON -> "Take the evening off from the household books, and thank {god} at the meal."
+                Planet.MERCURY -> "Sign before the week is out, and file a copy at {god}'s temple."
+                Planet.VENUS -> "Use the good cups at supper, and pour the first one for {god}."
+                Planet.MARS -> "Ask for the better price, and tithe the profit to {god}."
                 else -> error("$body has no instructions line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "Name your price before the other side names theirs, and let {god} and {partner} set the scale."
-                Planet.MOON -> "Decide whether the silver goes to the house or the ship, and tell {god} and {partner} which."
-                Planet.MERCURY -> "Read the contract aloud with the other side, and let {god} and {partner} hear where you differ."
-                Planet.VENUS -> "Pick the need over the want this once, and tell {god} and {partner} what it cost."
-                Planet.MARS -> "Keep your war chest closed to other people's quarrels, and let {god} and {partner} guard it."
+                Planet.SUN -> "Name your price before the other side names theirs."
+                Planet.MOON -> "Decide whether the silver goes to the house or the ship."
+                Planet.MERCURY -> "Read the contract aloud with the other side."
+                Planet.VENUS -> "Pick the need over the want this once."
+                Planet.MARS -> "Keep your war chest closed to other people's quarrels."
                 else -> error("$body has no instructions line")
             }
         }
 
         AncientCulture.ROME -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
-                Planet.SUN -> "Stand behind one decision in public, and burn incense to {god} and {partner}."
-                Planet.MOON -> "Bring the household together for one meal, and set out a cake for {god} and {partner}."
-                Planet.MERCURY -> "Write the dispatch in your own hand, and pour a drop for {god} and {partner}."
-                Planet.VENUS -> "Send a go-between to the family, and tie a ribbon at the shrine of {god} and {partner}."
-                Planet.MARS -> "Name one objective to your officers, and vow a shield to {god} and {partner}."
+                Planet.SUN -> "Stand behind one decision in public, and burn incense to {god}."
+                Planet.MOON -> "Bring the household together for one meal, and set out a cake for {god}."
+                Planet.MERCURY -> "Write the dispatch in your own hand, and pour a drop for {god}."
+                Planet.VENUS -> "Send a go-between to the family, and tie a ribbon at {god}'s shrine."
+                Planet.MARS -> "Name one objective to your officers, and vow a shield to {god}."
                 else -> error("$body has no instructions line")
             }
             AspectType.SEXTILE -> when (body) {
-                Planet.SUN -> "Visit your patron in the morning, and pour a libation to {god} and {partner}."
-                Planet.MOON -> "Set an extra place at dinner, and leave it for {god} and {partner}."
-                Planet.MERCURY -> "Find out which clerk handles your matter, and thank {god} and {partner} at the crossroads."
-                Planet.VENUS -> "Send a gift ahead of your visit, and bring a rose for {god} and {partner}."
-                Planet.MARS -> "Spend an hour at drill, and hang your shield where {god} and {partner} can see it."
+                Planet.SUN -> "Visit your patron in the morning."
+                Planet.MOON -> "Set an extra place at dinner."
+                Planet.MERCURY -> "Find out which clerk handles your matter."
+                Planet.VENUS -> "Send a gift ahead of your visit."
+                Planet.MARS -> "Spend an hour at drill."
                 else -> error("$body has no instructions line")
             }
             AspectType.SQUARE -> when (body) {
-                Planet.SUN -> "Say less than you know in public, and atone to {god} and {partner} with a small offering."
-                Planet.MOON -> "Settle household quarrels inside the walls, and give a cake to {god} and {partner} at the household shrine."
-                Planet.MERCURY -> "Show the letter to a friend before you send it, and leave a lamp burning for {god} and {partner}."
-                Planet.VENUS -> "Let the courtship rest a week, and leave a dish of honey for {god} and {partner}."
-                Planet.MARS -> "Post sentries and hold your ground, and atone to {god} and {partner} with a lamb."
+                Planet.SUN -> "Say less than you know in public."
+                Planet.MOON -> "Settle household quarrels inside the walls."
+                Planet.MERCURY -> "Show the letter to a friend before you send it."
+                Planet.VENUS -> "Let the courtship rest a week."
+                Planet.MARS -> "Post sentries and hold your ground."
                 else -> error("$body has no instructions line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.SUN -> "Take the front bench at the next meeting, and hang a garland for {god} and {partner} on the way."
-                Planet.MOON -> "Eat with your family, and give the first cup to {god} and {partner}."
-                Planet.MERCURY -> "Get your argument into writing, and leave a coin at the shrine of {god} and {partner}."
-                Planet.VENUS -> "Go where you are invited, and wear a sprig of myrtle for {god} and {partner}."
-                Planet.MARS -> "Move first, and promise {god} and {partner} a share of the spoils."
+                Planet.SUN -> "Take the front bench at the next meeting, and hang a garland for {god} on the way."
+                Planet.MOON -> "Eat with your family, and give the first cup to {god}."
+                Planet.MERCURY -> "Get your argument into writing, and leave a coin at {god}'s shrine."
+                Planet.VENUS -> "Go where you are invited, and wear a sprig of myrtle for {god}."
+                Planet.MARS -> "Move first, and promise {god} a share of the spoils."
                 else -> error("$body has no instructions line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "Let your rival speak first in the forum, and say the prayer to {god} and {partner} once."
-                Planet.MOON -> "Tell your household tonight whether duty or home comes first, and burn a lamp for {god} and {partner}."
-                Planet.MERCURY -> "Ask for both reports in writing, and let {god} and {partner} weigh them."
-                Planet.VENUS -> "Choose one family's favor over the other's, and offer a garland to {god} and {partner}."
-                Planet.MARS -> "Hold your position without attacking, and pray to {god} and {partner} for patience."
+                Planet.SUN -> "Let your rival speak first in the forum."
+                Planet.MOON -> "Tell your household whether duty or home comes first."
+                Planet.MERCURY -> "Ask for both reports in writing."
+                Planet.VENUS -> "Choose one family's favor over the other's."
+                Planet.MARS -> "Hold your position without attacking."
                 else -> error("$body has no instructions line")
             }
         }
@@ -1146,6 +1146,15 @@ object DecreeBanks {
         AncientCulture.CANAAN -> listOf("Further down the bench from {god} and {partner},", "At the gate below {god} and {partner},", "In the fields beyond {god} and {partner},")
         AncientCulture.CARTHAGE -> listOf("Below the line for {god} and {partner},", "In the column after {god} and {partner},", "On the page facing {god} and {partner},")
         AncientCulture.ROME -> listOf("Behind {god} and {partner} in the sky,", "Across the forum from {god} and {partner},", "Below the Capitol, where {god} meets {partner},")
+    }[variant]
+
+    /** The opener when the second figure shares a god with the headline figure. */
+    fun secondFigurePlain(culture: AncientCulture, variant: Int): String = when (culture) {
+        AncientCulture.EGYPT -> listOf("Lower on the river,", "On the far bank,", "Downstream,")
+        AncientCulture.GREECE -> listOf("At a lesser shrine,", "Down in the agora,", "On the road below,")
+        AncientCulture.CANAAN -> listOf("Further down the bench,", "At the city gate,", "Out in the fields,")
+        AncientCulture.CARTHAGE -> listOf("Further down the page,", "In the next column,", "On the facing page,")
+        AncientCulture.ROME -> listOf("Elsewhere in the sky,", "Across the forum,", "On the Capitol,")
     }[variant]
 
     /** Stands in a week row's headline when the row's figure is the day before's. */
@@ -1184,135 +1193,135 @@ object DecreeBanks {
 object PermissionsRegister {
     fun proceed(culture: AncientCulture, body: Planet): List<String> = when (culture) {
         AncientCulture.EGYPT -> when (body) {
-            Planet.SUN -> listOf("Early starts", "Mud-brick repairs", "Honest labor")
-            Planet.MOON -> listOf("Fresh bread", "Long sleep", "Family suppers")
-            Planet.MERCURY -> listOf("Short letters", "Clean papyrus", "Plain speech")
-            Planet.VENUS -> listOf("Shared beer", "Fresh linen", "Small gifts")
-            Planet.MARS -> listOf("Hard labor", "Canal digging", "Fair contests")
-            Planet.JUPITER -> listOf("Open tables", "Temple offerings", "Full measures")
-            Planet.SATURN -> listOf("Paid debts", "Straight furrows", "Field markers kept")
-            Planet.URANUS -> listOf("New routes", "Changed plans", "Fresh starts")
-            Planet.NEPTUNE -> listOf("River walks", "Quiet prayer", "Remembered dreams")
-            Planet.PLUTO -> listOf("Cleared cellars", "Old stores", "Kept secrets")
+            Planet.SUN -> listOf("Your morning hours", "A day's honest labor", "Help with the harvest")
+            Planet.MOON -> listOf("Bread to a neighbor", "A meal at home", "A bed for travelers")
+            Planet.MERCURY -> listOf("A short letter", "A plain answer", "Directions to a stranger")
+            Planet.VENUS -> listOf("A small gift", "Fresh linen for guests", "Beer to a friend")
+            Planet.MARS -> listOf("Help with heavy lifting", "Strength to a neighbor", "A fair contest")
+            Planet.JUPITER -> listOf("A seat at table", "Temple offerings", "A full measure")
+            Planet.SATURN -> listOf("What you owe", "Payment on time", "Your share of work")
+            Planet.URANUS -> listOf("A new idea", "Help with a move", "A second chance")
+            Planet.NEPTUNE -> listOf("A prayer for someone", "Water to the thirsty", "Patience with a dreamer")
+            Planet.PLUTO -> listOf("Grain from old stores", "Respect to the dead", "Silence about a secret")
         }
 
         AncientCulture.GREECE -> when (body) {
-            Planet.SUN -> listOf("Public speaking", "Morning exercise", "Bright courtyards")
-            Planet.MOON -> listOf("Home cooking", "Night walks", "Lamplit talk")
-            Planet.MERCURY -> listOf("Clear questions", "Quick errands", "Fair trades")
-            Planet.VENUS -> listOf("Good wine", "Fresh flowers", "Light flirting")
-            Planet.MARS -> listOf("The gymnasium", "Wrestling practice", "Honest rivalry")
-            Planet.JUPITER -> listOf("Open hospitality", "Shared feasts", "Big questions")
-            Planet.SATURN -> listOf("Harvest work", "Old debts paid", "Patient waiting")
-            Planet.URANUS -> listOf("New ideas", "Foreign guests", "Clever inventions")
-            Planet.NEPTUNE -> listOf("Sea air", "Dreams written down", "Libations poured")
-            Planet.PLUTO -> listOf("Buried silver", "Ancestor rites", "Deep cellars")
+            Planet.SUN -> listOf("For a public hearing", "For credit you earned", "For the floor")
+            Planet.MOON -> listOf("For a quiet evening", "How your family is", "For a home-cooked meal")
+            Planet.MERCURY -> listOf("For directions", "For written terms", "For a clear answer")
+            Planet.VENUS -> listOf("For a dance", "For a second meeting", "For a kiss")
+            Planet.MARS -> listOf("For a training partner", "For a fair match", "For help lifting")
+            Planet.JUPITER -> listOf("For a favor", "For a feast invitation", "For an elder's advice")
+            Planet.SATURN -> listOf("For more time", "For the full bill", "For an honest deadline")
+            Planet.URANUS -> listOf("A stranger's opinion", "For a new task", "How it could change")
+            Planet.NEPTUNE -> listOf("What your dream meant", "For a quiet hour", "For a second opinion")
+            Planet.PLUTO -> listOf("What you are owed", "About your inheritance", "For the old story")
         }
 
         AncientCulture.CANAAN -> when (body) {
-            Planet.SUN -> listOf("Field work", "Daylight bargains", "Honest weights")
-            Planet.MOON -> listOf("Kin dinners", "Bride gifts", "New-moon feasts")
-            Planet.MERCURY -> listOf("Careful handiwork", "New tools", "Tight joints")
-            Planet.VENUS -> listOf("Spoken vows", "Vineyard walks", "Love songs")
-            Planet.MARS -> listOf("Threshing work", "The hunt", "Honest sweat")
-            Planet.JUPITER -> listOf("Rain prayers", "Full granaries", "Feast days")
-            Planet.SATURN -> listOf("Elders' counsel", "Kept customs", "Slow decisions")
-            Planet.URANUS -> listOf("New pastures", "Fresh wells", "Bold moves")
-            Planet.NEPTUNE -> listOf("Plain prayers", "Sea fishing", "Quiet nights")
-            Planet.PLUTO -> listOf("Mourning rites", "Sealed grain pits", "Ancestor graves")
+            Planet.SUN -> listOf("Your best work", "A neighbor's tools back", "Water for the harvesters")
+            Planet.MOON -> listOf("Bread to your kin", "A wedding gift", "Lamp oil home")
+            Planet.MERCURY -> listOf("Your own tools", "A finished piece", "A fair measure")
+            Planet.VENUS -> listOf("A spoken vow", "Flowers from the vineyard", "A love song")
+            Planet.MARS -> listOf("Your full strength", "A strong back", "Sweat to the threshing")
+            Planet.JUPITER -> listOf("First fruits", "A full oil jar", "Prayers for rain")
+            Planet.SATURN -> listOf("Questions to the elders", "Respect for custom", "Patience to the council")
+            Planet.URANUS -> listOf("Plans for new pasture", "Well-digging tools", "A bold proposal")
+            Planet.NEPTUNE -> listOf("A plain prayer", "Fish from the sea", "A calm voice")
+            Planet.PLUTO -> listOf("Your grief out loud", "Offerings for the dead", "Last year's grain")
         }
 
         AncientCulture.CARTHAGE -> when (body) {
-            Planet.SUN -> listOf("Good credit", "Public contracts", "Honest scales")
-            Planet.MOON -> listOf("Household budgets", "Family meals", "Lamp oil")
-            Planet.MERCURY -> listOf("Written contracts", "Fast ships", "Clear manifests")
-            Planet.VENUS -> listOf("Purple cloth", "Fine dinners", "Generous gifts")
-            Planet.MARS -> listOf("Bold ventures", "Hard bargains", "Long voyages")
-            Planet.JUPITER -> listOf("Shared profits", "Temple tithes", "Big cargoes")
-            Planet.SATURN -> listOf("Paid dues", "Balanced books", "Long-term savings")
-            Planet.URANUS -> listOf("Untried routes", "Foreign markets", "Fresh partners")
-            Planet.NEPTUNE -> listOf("Calm seas", "Insured cargo", "Night sailing")
-            Planet.PLUTO -> listOf("Inheritance claims", "Old ledgers", "Deep storage")
+            Planet.SUN -> listOf("Your harbor dues", "Wages on time", "The scribe's fee")
+            Planet.MOON -> listOf("The household bills", "The rent", "The market account")
+            Planet.MERCURY -> listOf("The contract deposit", "The courier", "The clerk's fee")
+            Planet.VENUS -> listOf("A gift for family", "Dinner for two", "A fair dowry")
+            Planet.MARS -> listOf("The crew's shares", "Your venture stake", "Repairs to the hull")
+            Planet.JUPITER -> listOf("Temple tithes", "Your partner's cut", "A fair profit share")
+            Planet.SATURN -> listOf("Old debts first", "Your fixed dues", "The tax collector")
+            Planet.URANUS -> listOf("A new partner's stake", "Scouting a new route", "A trial cargo")
+            Planet.NEPTUNE -> listOf("Insurance on the cargo", "The pilot", "The harbor watch")
+            Planet.PLUTO -> listOf("Inherited debts", "Funeral costs", "The family's old accounts")
         }
 
         AncientCulture.ROME -> when (body) {
-            Planet.SUN -> listOf("Public office", "Morning calls", "Clean togas")
-            Planet.MOON -> listOf("Atrium suppers", "Household gods", "Early nights")
-            Planet.MERCURY -> listOf("Brief letters", "Fair deals", "Good couriers")
-            Planet.VENUS -> listOf("Rose garlands", "Dinner parties", "Proper courtship")
-            Planet.MARS -> listOf("Daily drill", "Field campaigns", "Camp discipline")
-            Planet.JUPITER -> listOf("A patron's favor", "Good omens", "Public games")
-            Planet.SATURN -> listOf("Steady savings", "Tax receipts", "Old laws")
-            Planet.URANUS -> listOf("Needed reforms", "New roads", "Fresh faces")
-            Planet.NEPTUNE -> listOf("Afternoons at the baths", "Sea voyages", "Rest days")
-            Planet.PLUTO -> listOf("Family tombs", "Settled estates", "Old alliances")
+            Planet.SUN -> listOf("Speaking in public", "Morning calls", "Taking credit honestly")
+            Planet.MOON -> listOf("Supper at home", "Tending the household shrine", "Early nights")
+            Planet.MERCURY -> listOf("Brief letters", "Fair bargains", "Reliable couriers")
+            Planet.VENUS -> listOf("Garlands for the table", "Dinner parties", "Courting properly")
+            Planet.MARS -> listOf("Daily drill", "Physical training", "Camp discipline")
+            Planet.JUPITER -> listOf("Asking a patron's favor", "Attending the games", "Generous hosting")
+            Planet.SATURN -> listOf("Saving money", "Paying taxes on time", "Keeping old promises")
+            Planet.URANUS -> listOf("Needed reforms", "Building new roads", "Meeting new people")
+            Planet.NEPTUNE -> listOf("Afternoons at the baths", "A sea voyage", "Rest days")
+            Planet.PLUTO -> listOf("Visiting family tombs", "Settling estates", "Renewing old alliances")
         }
     }
 
     fun refrain(culture: AncientCulture, body: Planet): List<String> = when (culture) {
         AncientCulture.EGYPT -> when (body) {
-            Planet.SUN -> listOf("Late starts", "Idle boasting", "Unfinished walls")
-            Planet.MOON -> listOf("Night quarrels", "Cold hearths", "Skipped meals")
-            Planet.MERCURY -> listOf("Market gossip", "Smudged ink", "Long excuses")
-            Planet.VENUS -> listOf("Jealous looks", "Haggling with lovers", "Cheap perfume")
-            Planet.MARS -> listOf("Hot words", "Raised fists", "Old grudges")
-            Planet.JUPITER -> listOf("Stingy portions", "Short weights", "Empty promises")
-            Planet.SATURN -> listOf("Easy shortcuts", "Moved boundary stones", "Overdue taxes")
-            Planet.URANUS -> listOf("Old ruts", "Stubborn habits", "Locked gates")
-            Planet.NEPTUNE -> listOf("Too much beer", "Muddy water", "Idle daydreams")
-            Planet.PLUTO -> listOf("Buried grudges", "Hoarded grain", "Tomb talk")
+            Planet.SUN -> listOf("Empty boasts", "Promises you cannot keep", "Unpaid hours to strangers")
+            Planet.MOON -> listOf("Sharp words at supper", "Complaints at the table", "Your sleep to worry")
+            Planet.MERCURY -> listOf("Gossip from the market", "Your seal unread", "Half the story")
+            Planet.VENUS -> listOf("Jealous remarks", "Gifts you cannot afford", "Easy flattery")
+            Planet.MARS -> listOf("Hot words", "Your fists", "An old grudge")
+            Planet.JUPITER -> listOf("Short weight", "Loans to gamblers", "Empty promises")
+            Planet.SATURN -> listOf("Excuses for late work", "Shortcuts on the job", "Another delay")
+            Planet.URANUS -> listOf("Your old complaints", "Stubborn refusals", "The same old answer")
+            Planet.NEPTUNE -> listOf("A third beer", "Promises made while tired", "Trust to a stranger")
+            Planet.PLUTO -> listOf("Old grievances", "Your family's secrets", "Talk of the dead")
         }
 
         AncientCulture.GREECE -> when (body) {
-            Planet.SUN -> listOf("Vain display", "Showing off", "Idle mornings")
-            Planet.MOON -> listOf("Sleepless nights", "Family feuds", "Empty larders")
-            Planet.MERCURY -> listOf("Agora rumors", "Double meanings", "Crossed messages")
-            Planet.VENUS -> listOf("Envious glances", "Golden apples", "Lavish gifts")
-            Planet.MARS -> listOf("Street brawls", "Drawn spears", "Long sulks")
-            Planet.JUPITER -> listOf("Proud boasts", "Broken oaths", "Greedy hands")
-            Planet.SATURN -> listOf("Hasty plans", "Unripe fruit", "New debt")
-            Planet.URANUS -> listOf("Tired routine", "Fixed opinions", "Old quarrels")
-            Planet.NEPTUNE -> listOf("Heavy drinking", "Sea fog", "Wishful thinking")
-            Planet.PLUTO -> listOf("Old secrets", "Hoarded coin", "Underworld bargains")
+            Planet.SUN -> listOf("For compliments", "Who is watching", "For the best seat")
+            Planet.MOON -> listOf("Why nobody called", "Old family questions", "For an apology tonight")
+            Planet.MERCURY -> listOf("For gossip", "The same question twice", "For a rumor's source")
+            Planet.VENUS -> listOf("Whether they still care", "For a costly gift", "About their old flames")
+            Planet.MARS -> listOf("For a fight", "For revenge", "Who started it")
+            Planet.JUPITER -> listOf("For an extra share", "For special treatment", "For an oath")
+            Planet.SATURN -> listOf("For a shortcut", "To skip the work", "For an early harvest")
+            Planet.URANUS -> listOf("For a guarantee", "For nothing to change", "For the usual answer")
+            Planet.NEPTUNE -> listOf("For another cup", "For a sign", "What the omens promise")
+            Planet.PLUTO -> listOf("About the dead's money", "For someone's secrets", "What someone buried")
         }
 
         AncientCulture.CANAAN -> when (body) {
-            Planet.SUN -> listOf("Lazy mornings", "Sunburned tempers", "Unfinished rows")
-            Planet.MOON -> listOf("Kin quarrels", "Broken betrothals", "Cold suppers")
-            Planet.MERCURY -> listOf("Shoddy work", "Blunt blades", "Rushed jobs")
-            Planet.VENUS -> listOf("Broken vows", "Jealous talk", "Bride-price haggling")
-            Planet.MARS -> listOf("Blood feuds", "Spreading fevers", "Drawn bows")
-            Planet.JUPITER -> listOf("Hoarded oil", "Wasted water", "Thunderous tempers")
-            Planet.SATURN -> listOf("Open defiance", "Broken customs", "Snap judgments")
-            Planet.URANUS -> listOf("Old habits", "Stuck carts", "Worn paths")
-            Planet.NEPTUNE -> listOf("Night fears", "Rough seas", "Strong wine")
-            Planet.PLUTO -> listOf("Grief kept in", "Old curses", "Bargains with death")
+            Planet.SUN -> listOf("Unfinished work", "Boasts to the gate", "Your temper to work")
+            Planet.MOON -> listOf("Old family quarrels", "Complaints to the table", "Bad news at supper")
+            Planet.MERCURY -> listOf("Shoddy work", "A blunt blade", "Rushed repairs")
+            Planet.VENUS -> listOf("A broken promise", "Jealous talk", "Haggling over a dowry")
+            Planet.MARS -> listOf("A drawn bow", "Your hot temper", "A blood feud")
+            Planet.JUPITER -> listOf("Greed to the table", "Oil you have hoarded", "Wasted water")
+            Planet.SATURN -> listOf("Open defiance", "Quick judgments", "A broken custom")
+            Planet.URANUS -> listOf("Old habits", "Stale bread", "The same tired complaint")
+            Planet.NEPTUNE -> listOf("Night fears", "Strong wine", "Wild rumors")
+            Planet.PLUTO -> listOf("Old curses", "Talk of death", "A funeral grudge")
         }
 
         AncientCulture.CARTHAGE -> when (body) {
-            Planet.SUN -> listOf("Bad debts", "Loud boasting", "Unsigned deals")
-            Planet.MOON -> listOf("Household overspending", "House quarrels", "Empty jars")
-            Planet.MERCURY -> listOf("Handshake deals", "Fine print", "Smuggled goods")
-            Planet.VENUS -> listOf("Small bribes", "Impulse buys", "Paid flattery")
-            Planet.MARS -> listOf("Price wars", "Reckless bets", "Grudge deals")
-            Planet.JUPITER -> listOf("Greedy margins", "Dodged tariffs", "Overloaded holds")
-            Planet.SATURN -> listOf("Missed payments", "Cooked books", "Fresh loans")
-            Planet.URANUS -> listOf("Stale contracts", "Worn sea lanes", "Rigid terms")
-            Planet.NEPTUNE -> listOf("Storm sailing", "Vague figures", "Wine at the table")
-            Planet.PLUTO -> listOf("Hidden debts", "Will disputes", "Buried losses")
+            Planet.SUN -> listOf("Fees for show", "Gifts to win favor", "Payment before delivery")
+            Planet.MOON -> listOf("New furniture", "A bigger house", "Household luxuries")
+            Planet.MERCURY -> listOf("Payment on a handshake", "Unread contracts", "Advance payments")
+            Planet.VENUS -> listOf("Bribes of any size", "Impulse buys", "Paid flattery")
+            Planet.MARS -> listOf("Price wars", "Wagers on a race", "Damages before a ruling")
+            Planet.JUPITER -> listOf("Inflated commissions", "Bribes to officials", "Loans to friends")
+            Planet.SATURN -> listOf("New loans", "Optional fees", "Interest you can avoid")
+            Planet.URANUS -> listOf("Renewing a stale contract", "Old route fees", "Penalties you can contest")
+            Planet.NEPTUNE -> listOf("Storm-season sailings", "Vague invoices", "Wine for the table")
+            Planet.PLUTO -> listOf("Disputed claims", "Hidden charges", "Contested will payments")
         }
 
         AncientCulture.ROME -> when (body) {
-            Planet.SUN -> listOf("Boasting at dinner", "Late arrivals", "Bad company")
-            Planet.MOON -> listOf("Domestic rows", "Neglected lares", "Late revels")
-            Planet.MERCURY -> listOf("Forged seals", "Long speeches", "Forum hearsay")
-            Planet.VENUS -> listOf("Public scandal", "Rival suitors", "Lavish banquets")
+            Planet.SUN -> listOf("Boasting at dinner", "Arriving late", "Bad company")
+            Planet.MOON -> listOf("Domestic rows", "Late revels", "Neglecting home")
+            Planet.MERCURY -> listOf("Signing unread papers", "Long speeches", "Repeating hearsay")
+            Planet.VENUS -> listOf("Public scandal", "Rivalry over a suitor", "Lavish banquets")
             Planet.MARS -> listOf("Mutinous talk", "Reckless charges", "Street fights")
-            Planet.JUPITER -> listOf("Bribed votes", "Bad omens", "Overreaching claims")
-            Planet.SATURN -> listOf("Unpaid debts", "New taxes", "Extravagant dinners")
-            Planet.URANUS -> listOf("Old factions", "Rigid orders", "Stale customs")
-            Planet.NEPTUNE -> listOf("Too much wine", "Wild rumors", "Idle festivals")
-            Planet.PLUTO -> listOf("Contested wills", "Old feuds", "Secret deals")
+            Planet.JUPITER -> listOf("Buying votes", "Overreaching claims", "Showing off wealth")
+            Planet.SATURN -> listOf("Running up debts", "New spending", "Extravagant dinners")
+            Planet.URANUS -> listOf("Factional feuds", "Rigid orders", "Refusing change")
+            Planet.NEPTUNE -> listOf("Too much wine", "Spreading rumors", "Idle festivals")
+            Planet.PLUTO -> listOf("Contesting wills", "Old family feuds", "Secret deals")
         }
     }
 }

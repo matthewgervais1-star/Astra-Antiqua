@@ -124,8 +124,10 @@ object WeekReading {
             calendar.time = start
             calendar.add(Calendar.DAY_OF_MONTH, i)
             val date = calendar.time
-            val noon = utcNoonMillis(date)
-            val chart = chartAt(engine, noon)
+            // 00:00 UTC on the row's calendar date, the instant the day page
+            // reads, so a date shows the same figure on both screens.
+            val instant = utcMidnightMillis(date)
+            val chart = chartAt(engine, instant)
             // The tightest fast-mover aspect inside the event orb is the day's
             // figure, always: the sky decides it. A figure that holds from one
             // row to the next says so in the culture's holds line.
@@ -147,7 +149,7 @@ object WeekReading {
                 // The headline speaks to the reader; beneath it the meaning and
                 // the consequence. The week line itself gives no order.
                 headline = if (holds) DecreeBanks.holds(culture) else DayDecreeComposer.composeHeadline(culture, tightest)
-                line = DayDecreeComposer.composeMeaning(culture, tightest, Math.floorDiv(noon, DAY_MS)) + " " +
+                line = DayDecreeComposer.composeMeaning(culture, tightest, Math.floorDiv(instant, DAY_MS)) + " " +
                     DayDecreeComposer.composeConsequence(culture, tightest)
                 shorthand = "${tightest.a.name.take(3)} ${tightest.aspect.name.take(3)} " +
                     "${tightest.b.name.take(3)}${if (exact) " · EXACT" else ""}"
@@ -202,8 +204,8 @@ object WeekReading {
         return days
     }
 
-    /** Noon UTC on the local calendar date of [date], the instant a day is read for. */
-    private fun utcNoonMillis(date: Date): Long {
+    /** 00:00 UTC on the local calendar date of [date], the instant a day is read for. */
+    private fun utcMidnightMillis(date: Date): Long {
         val local = Calendar.getInstance()
         local.time = date
         val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -212,7 +214,7 @@ object WeekReading {
             local.get(Calendar.YEAR),
             local.get(Calendar.MONTH),
             local.get(Calendar.DAY_OF_MONTH),
-            12, 0, 0,
+            0, 0, 0,
         )
         return utc.timeInMillis
     }

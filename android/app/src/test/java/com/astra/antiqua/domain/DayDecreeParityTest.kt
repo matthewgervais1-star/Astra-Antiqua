@@ -11,9 +11,9 @@ import org.junit.Test
 
 /**
  * The two surfaces print the same day page for the same instant. Each golden
- * (DayDecreeGoldens.kt) is web's composeDayPage run on web's ephemeris; this
- * test walks the same year with Android's own engine and the Kotlin port, and
- * compares the strings.
+ * (DayDecreeGoldens.kt) is web's composeDayPage run on web's ephemeris for
+ * one instant; this test reads the same instant with Android's own engine and
+ * the Kotlin port, and compares the strings.
  */
 class DayDecreeParityTest {
     private val engine = AstronomyEngine()
