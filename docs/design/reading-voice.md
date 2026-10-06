@@ -167,6 +167,40 @@ spoken before it (OFFER a short letter, HOLD BACK your blade at supper, DEFER
 perfume on credit), with no footnote and no inverted sense; the register is
 read through in column order that way whenever an item changes.
 
+A reader with a chart gets lists from the day's transits to it instead: the
+tightest contact (a transiting body to a natal planet) and the tightest
+contact of another kind fill the columns by the same rule, and the day turns
+the items the same way. Only the bodies that move daily (Sun, Moon, Mercury,
+Venus, Mars) are read while one touches the chart, because a slow body's
+contact holds for months and belongs to the long transits. A body against its
+own natal place is left out.
+
+## Dive deeper
+
+Under the lists, four titled paragraphs, one per house group in the culture's
+names (`data/diveDeeperBanks.ts`, composed by `lib/diveDeeper.ts`). The title
+is the group's name and its concern in plain words ("The Forum: your standing
+and your coin"); a mono line under it names the figure the paragraph reads.
+The paragraph is composed, not written, from banks the page already has:
+
+1. **The two domains and a relation**, the group's own domain first. The
+   relation is one of the two variants the decree does not use that day, so
+   the paragraph never repeats the decree's meaning sentence; a variant that
+   shares a word with the consequence gives way to another.
+2. **The consequence**, keyed as the decree and the figure page key it. One
+   already printed on the page gives way to the other body's, or to none.
+3. **One concrete thing**, from the figure page's manifestations for the group
+   and the tone, turned by the UTC day, in the culture's frame ("Reckon on
+   ...", "Take ... as Delphi's reply", "Be ready for ...", "Enter it in the
+   daybook: ...", "Count ... as a sign.").
+
+Without a chart a group reads the tightest sky figure with a body whose domain
+the group keeps, one group to a figure while another figure is free. With a
+chart it reads the tightest transit to a natal point in its houses (the day
+pressure module's buckets), from a body that moves daily when one touches the
+group. A group nothing touches prints the culture's quiet line for it, one of
+four. The come-back line closes the page under the dive deeper.
+
 ## The figure page
 
 A reader opens one figure from the day's headline, a week row or a long

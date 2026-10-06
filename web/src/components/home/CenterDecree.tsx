@@ -13,19 +13,18 @@ export interface CenterDecreeProps {
   dateLong: string;
   reading: Pick<DayDecree, "headline" | "evidence" | "paragraphs" | "tone">;
   votive: string;
-  /** The culture's come-back line, closing the day page. */
-  comeBack: string;
   now: Date;
   /** The figure page for the day's headline figure; the headline links to it. Null on a quiet day. */
   figureHref?: string | null;
-  /** A dated view (/?date=): the come-back line gives way to a link back to today. */
+  /** A dated view (/?date=): a link back to today closes the column. */
   dated?: boolean;
 }
 
 /** The day's reading: institution kicker, the headline to the reader in
  * display type (a link to the figure page for the day's headline figure), the evidence line in mono beneath it, the paragraph, the
- * votive, feedback, the horizon links, and the come-back line. Shared between
- * the desktop grid and the mobile stack. */
+ * votive, feedback, the horizon links, and on a dated view the way back to
+ * today. The come-back line closes the whole page, under the dive deeper
+ * (DiveDeeper.tsx). Shared between the desktop grid and the mobile stack. */
 export function CenterDecree({
   className,
   institution,
@@ -33,7 +32,6 @@ export function CenterDecree({
   dateLong,
   reading,
   votive,
-  comeBack,
   now,
   figureHref = null,
   dated = false,
@@ -93,9 +91,7 @@ export function CenterDecree({
         <Link href="/" className="mt-8 font-mono text-data-xs uppercase tracking-label text-bone hover:text-accent">
           ← BACK TO TODAY
         </Link>
-      ) : (
-        <div className="mt-8 max-w-[560px] font-mono text-data-xs uppercase tracking-label text-dim">{comeBack}</div>
-      )}
+      ) : null}
     </main>
   );
 }

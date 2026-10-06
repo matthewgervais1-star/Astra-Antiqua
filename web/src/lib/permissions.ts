@@ -1,7 +1,9 @@
 import type { Culture, Planet } from "@/data/cultures";
 import { toneOf, type Tone } from "@/lib/tone";
 import { PERMISSIONS_REGISTER } from "@/data/permissionsRegister";
-import type { DayFigure } from "@/lib/decree";
+import { FAST_ORDER, type DayFigure } from "@/lib/decree";
+import type { Longitude } from "@/data/sampleChart";
+import { computeTransits } from "@/lib/transits";
 
 /**
  * The day's permissions: the culture's own pair (PROCEED/REFRAIN,
@@ -74,6 +76,51 @@ export function dayPermissions(culture: Culture, figures: readonly DayFigure[], 
     proceed: column(culture, trial ? follow : lead, "proceed", day),
     refrain: column(culture, trial ? lead : follow, "refrain", day),
   };
+}
+
+const FAST: ReadonlySet<Planet> = new Set(FAST_ORDER);
+
+/**
+ * The day's transits to a reader's chart in the decree's order, as figures
+ * whose first body moves and whose second is the natal point: the tightest
+ * contact, the tightest of another kind, then the rest by orb. Only the
+ * bodies that move daily (the decree's fast bodies) are read while one of
+ * them touches the chart: a slow body's contact holds for months, belongs to
+ * the long transits, and would fix the lists for a season. A body against
+ * its own natal place is left out, as the figure page leaves it out: it
+ * would give one body's items where a contact gives two.
+ */
+export function natalDayFigures(
+  sky: Readonly<Record<Planet, Longitude>>,
+  natalChart: Readonly<Record<Planet, Longitude>>,
+): DayFigure[] {
+  const all = computeTransits(sky, natalChart)
+    .filter((h) => h.transit !== h.natal)
+    .map(({ transit, natal, kind, orb }) => ({ a: transit, b: natal, kind, orb }))
+    .sort((x, y) => x.orb - y.orb);
+  const fast = all.filter((f) => FAST.has(f.a));
+  const contacts = fast.length ? fast : all;
+  const [top] = contacts;
+  if (!top) return [];
+  const second = contacts.find((f) => f.kind !== top.kind);
+  return [top, ...(second ? [second] : []), ...contacts.filter((f) => f !== top && f !== second)];
+}
+
+/**
+ * The lists for a reader with a chart: the day's transits to the natal
+ * points, by the rule dayPermissions applies to sky figures (the tightest
+ * contact's bodies fill the proceed column on a day of favor and the refrain
+ * column on a day of trial), with the same day rotation. Null when nothing
+ * touches the chart, and the reader then gets the sky's lists.
+ */
+export function natalDayPermissions(
+  culture: Culture,
+  sky: Readonly<Record<Planet, Longitude>>,
+  natalChart: Readonly<Record<Planet, Longitude>>,
+  day = 0,
+): DayPermissions | null {
+  const figures = natalDayFigures(sky, natalChart);
+  return figures.length ? dayPermissions(culture, figures, day) : null;
 }
 
 // FNV-1a: a small, dependency-free string hash, good enough to seed a PRNG

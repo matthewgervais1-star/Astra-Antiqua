@@ -81,8 +81,25 @@ function levelFor(hits: readonly TransitAspect[]): PressureLevel {
 }
 
 /**
- * Buckets today's transits (computeTransits against the natal chart) by the
- * whole-sign house of the natal point each hit touches, and composes one
+ * Today's transits (computeTransits against the natal chart), bucketed by the
+ * whole-sign house of the natal point each hit touches, in the four groups'
+ * fixed order. Each hit lands in exactly one group. The day pressure module
+ * and the day page's dive deeper (lib/diveDeeper.ts) read the same buckets.
+ */
+export function transitsByGroup(
+  natalChart: Readonly<Record<Planet, Longitude>>,
+  ascendant: Longitude,
+  todayChart: Readonly<Record<Planet, Longitude>>,
+): readonly (readonly TransitAspect[])[] {
+  const houses = computeWholeSignHouses(ascendant);
+  const hits = computeTransits(todayChart, natalChart);
+  return HOUSE_GROUPS.map((houseNumbers) =>
+    hits.filter((h) => houseNumbers.includes(houseOfLongitude(natalChart[h.natal], houses.ascendantSignIndex))),
+  );
+}
+
+/**
+ * Buckets today's transits by group (transitsByGroup) and composes one
  * honest sentence per group: the tightest hit in the culture's own aspect
  * register when the group is live, or a plain "nothing exact" line when it
  * truly is quiet.
@@ -93,14 +110,12 @@ export function dayPressure(
   culture: Culture,
 ): readonly PressureGroup[] {
   const houses = computeWholeSignHouses(natal.angles.ascendant);
-  const hits = computeTransits(todayChart, natal.chart);
+  const buckets = transitsByGroup(natal.chart, natal.angles.ascendant, todayChart);
   const voiceGroups = CULTURE_VOICES[culture].houseGroups;
 
   return HOUSE_GROUPS.map((houseNumbers, i) => {
     const voice = voiceGroups[i] ?? { name: `GROUP ${i + 1}`, sub: "" };
-    const groupHits = hits.filter((h) =>
-      houseNumbers.includes(houseOfLongitude(natal.chart[h.natal], houses.ascendantSignIndex)),
-    );
+    const groupHits = buckets[i] ?? [];
     const level = levelFor(groupHits);
 
     if (groupHits.length === 0) {

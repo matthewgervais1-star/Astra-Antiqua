@@ -6,15 +6,18 @@ import type { DayPermissions } from "@/lib/permissions";
 export interface PermissionsModuleProps {
   culture: Culture;
   permissions: DayPermissions;
+  /** "natal" when the lists come from the day's transits to the reader's chart. */
+  source?: "sky" | "natal";
   tone: Tone;
 }
 
 /** Day's permissions, per 6a-permissions-rome: two columns in the culture's
  * own permission pair (PROCEED/REFRAIN, OFFER/WITHHOLD, ASK/DO NOT ASK,
- * BRING/HOLD BACK, PAY/DEFER), every item drawn from a body in the decree's
- * figures (lib/permissions.ts). Rendered for every reader. WHY THESE points
- * at the decree, which names those bodies at every width. */
-export function PermissionsModule({ culture, permissions, tone }: PermissionsModuleProps) {
+ * BRING/HOLD BACK, PAY/DEFER), every item drawn from a body in the day's
+ * transits to the reader's chart, or in the decree's figures when there is no
+ * chart (lib/permissions.ts). Rendered for every reader. WHY THESE points at
+ * what names those bodies: the dive deeper's contacts, or the decree. */
+export function PermissionsModule({ culture, permissions, source = "sky", tone }: PermissionsModuleProps) {
   const [proceedLabel, refrainLabel] = CULTURE_VOICES[culture].permissionPair;
   return (
     <section className="mx-auto max-w-[720px] px-5 py-10 md:px-14">
@@ -44,8 +47,9 @@ export function PermissionsModule({ culture, permissions, tone }: PermissionsMod
         </div>
       </div>
       <div className="mt-4 font-mono text-data-xs leading-data tracking-data text-dim">
-        DERIVED FROM TODAY&rsquo;S ASPECTS, NOT A RANDOMIZER →{" "}
-        <a href="#day-figure" className="text-accent">
+        {source === "natal" ? "DERIVED FROM TODAY’S TRANSITS TO YOUR CHART" : "DERIVED FROM TODAY’S ASPECTS"}
+        , NOT A RANDOMIZER →{" "}
+        <a href={source === "natal" ? "#dive-deeper" : "#day-figure"} className="text-accent">
           WHY THESE
         </a>
       </div>

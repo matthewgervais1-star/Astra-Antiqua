@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { DECREE_BANKS, QUIET_LINE } from "@/data/decreeBanks";
 import { DEITY_DOMAINS } from "@/data/deityDomains";
 import { PERMISSIONS_REGISTER } from "@/data/permissionsRegister";
+import { DIVE_DEEPER_BANKS } from "@/data/diveDeeperBanks";
 import { QUIET_HEADLINE } from "@/lib/decree";
 import { DEITY_MATRIX } from "@/data/deities";
 import { CULTURES, PLANETS, type Culture } from "@/data/cultures";
@@ -24,6 +25,7 @@ function bankLines(culture: Culture): Array<[string, string]> {
     ["QUIET_LINE", QUIET_LINE[culture]],
     ...walk("domains", DEITY_DOMAINS[culture]),
     ...walk("permissions", PERMISSIONS_REGISTER[culture]),
+    ...walk("diveDeeper", DIVE_DEEPER_BANKS[culture]),
   ];
 }
 

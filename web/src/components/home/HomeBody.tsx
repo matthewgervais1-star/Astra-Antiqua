@@ -15,13 +15,15 @@ import { CompactSkyTable } from "@/components/home/CompactSkyTable";
 import { TransitTeaser } from "@/components/home/TransitTeaser";
 import { PermissionsModule } from "@/components/home/PermissionsModule";
 import { DayPressureModule } from "@/components/home/DayPressureModule";
+import { DiveDeeper } from "@/components/home/DiveDeeper";
 
 /**
  * The home body: the culture is guaranteed non-null here (CultureGate only
  * renders children once one is chosen). Reads the saved chart (device-local,
  * so this must run client-side) and computes the whole day's bundle in one
  * pass, then renders the instrument-in-nave grid plus, when a chart exists,
- * the day-pressure module. The permissions module shows for every reader.
+ * the day-pressure module. The permissions module and the dive deeper show
+ * for every reader, and the come-back line closes the page.
  */
 export function HomeBody() {
   const culture = useActivePantheon();
@@ -65,7 +67,6 @@ export function HomeBody() {
           dateLong={bundle.dateLong}
           reading={bundle.reading}
           votive={bundle.votive}
-          comeBack={bundle.comeBack}
           dated={dated !== null}
           now={bundle.now}
           figureHref={bundle.reading.figures[0] ? figureHref(isoDateUtc(bundle.now), bundle.reading.figures[0]) : null}
@@ -87,9 +88,16 @@ export function HomeBody() {
         <TransitTeaser className="px-6 pb-10 min-[1100px]:hidden md:px-14" data={bundle.longTransit} />
       </div>
 
-      <PermissionsModule culture={bundle.culture} permissions={bundle.permissions} tone={bundle.dayTone} />
+      <PermissionsModule
+        culture={bundle.culture}
+        permissions={bundle.permissions}
+        source={bundle.permissionsSource}
+        tone={bundle.dayTone}
+      />
 
       {bundle.natal && bundle.pressureGroups ? <DayPressureModule groups={bundle.pressureGroups} /> : null}
+
+      <DiveDeeper data={bundle.diveDeeper} comeBack={dated ? null : bundle.comeBack} />
     </>
   );
 }

@@ -22,7 +22,8 @@ import { computeTransitSpans, type TransitSpan } from "@/lib/transitSpans";
 import { composeDayPage, utcDayNumber, type DayDecree } from "@/lib/decree";
 import { DECREE_BANKS } from "@/data/decreeBanks";
 import { toneOf, type Tone } from "@/lib/tone";
-import { dayPermissions, composeDayVotive, type DayPermissions } from "@/lib/permissions";
+import { dayPermissions, natalDayPermissions, composeDayVotive, type DayPermissions } from "@/lib/permissions";
+import { composeDiveDeeper, type DiveDeeper } from "@/lib/diveDeeper";
 import { dayPressure, type PressureGroup } from "@/lib/dayPressure";
 import type { SavedNatal } from "@/lib/savedNatal";
 import type { OrbTone } from "@/components/chrome/OrbBar";
@@ -110,8 +111,12 @@ export interface HomeBundle {
   comeBack: string;
   /** The tone of the decree's headline figure. */
   dayTone: Tone;
-  /** Every reader gets the day's lists, drawn from the decree's figures. */
+  /** Every reader gets the day's lists: from the day's transits to the chart when there is one, from the decree's figures otherwise. */
   permissions: DayPermissions;
+  /** Where the lists came from. */
+  permissionsSource: "sky" | "natal";
+  /** Four paragraphs, one per house group (spec A.6). */
+  diveDeeper: DiveDeeper;
   pressureGroups: readonly PressureGroup[] | null;
 }
 
@@ -303,7 +308,11 @@ export function buildHomeBundle(culture: Culture, now: Date, natal: SavedNatal |
   const top = reading.figures[0];
   const dayTone: Tone = top ? toneOf(top.kind) : "harmony";
   const votive = composeDayVotive(culture, dayTone, now);
-  const permissions = dayPermissions(culture, reading.figures, utcDayNumber(now));
+  const day = utcDayNumber(now);
+  const natalPermissions = natal ? natalDayPermissions(culture, todayChart, natal.chart, day) : null;
+  const permissions = natalPermissions ?? dayPermissions(culture, reading.figures, day);
+  const natalPoints = natal ? { chart: natal.chart, ascendant: natal.angles.ascendant } : null;
+  const diveDeeper = composeDiveDeeper(culture, reading, todayChart, day, natalPoints);
   const pressureGroups = natal ? dayPressure(natal, todayChart, culture) : null;
 
   return {
@@ -324,6 +333,8 @@ export function buildHomeBundle(culture: Culture, now: Date, natal: SavedNatal |
     comeBack: DECREE_BANKS[culture].comeBack,
     dayTone,
     permissions,
+    permissionsSource: natalPermissions ? "natal" : "sky",
+    diveDeeper,
     pressureGroups,
   };
 }

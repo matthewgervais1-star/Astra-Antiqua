@@ -1,0 +1,187 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { composeDiveDeeper, composeDiveDeeperForDay } from "@/lib/diveDeeper";
+import { composeDayPage, utcDayNumber } from "@/lib/decree";
+import { computeChart } from "@/lib/ephemeris";
+import { DOMAIN_GROUP } from "@/lib/figureReading";
+import { natalDayFigures, natalDayPermissions, dayPermissions } from "@/lib/permissions";
+import { DIVE_DEEPER_BANKS } from "@/data/diveDeeperBanks";
+import { FIGURE_BANKS } from "@/data/figureBanks";
+import { CULTURE_VOICES } from "@/data/cultureVoice";
+import { DEITY_MATRIX } from "@/data/deities";
+import { PERMISSIONS_REGISTER } from "@/data/permissionsRegister";
+import { CULTURES, PLANETS, type Culture, type Planet } from "@/data/cultures";
+import { toneOf } from "@/lib/tone";
+import { transitsByGroup } from "@/lib/dayPressure";
+
+const DAY_MS = 86_400_000;
+const FAST: ReadonlySet<Planet> = new Set(["sun", "moon", "mercury", "venus", "mars"]);
+const START = Date.UTC(2026, 8, 29);
+
+/** A fixed chart, in longitudes, of the kind a reader saves: every body in its own place. */
+const NATAL = {
+  chart: {
+    sun: 84.2, moon: 301.7, mercury: 70.9, venus: 47.3, mars: 12.6,
+    jupiter: 95.1, saturn: 294.4, uranus: 278.0, neptune: 283.9, pluto: 226.5,
+  } as Record<Planet, number>,
+  ascendant: 183.4,
+};
+
+const days = (n: number) => Array.from({ length: n }, (_, i) => new Date(START + i * DAY_MS));
+
+/** The group (0 to 3) of a god's name, by DOMAIN_GROUP, for each body the culture names so. */
+function groupsNamed(culture: Culture, evidence: string): Set<number> {
+  const out = new Set<number>();
+  for (const p of PLANETS) {
+    const n = DEITY_MATRIX[culture][p].name.toUpperCase();
+    if (evidence.startsWith(`${n} `) || evidence.includes(` ${n} ·`)) out.add(DOMAIN_GROUP[p]);
+  }
+  return out;
+}
+
+test("four groups in the culture's order, each a quiet line or two to three sentences ending on a concrete thing", () => {
+  for (const culture of CULTURES) {
+    const bank = DIVE_DEEPER_BANKS[culture];
+    for (const date of days(14)) {
+      for (const natal of [null, NATAL]) {
+        const dd = composeDiveDeeperForDay(culture, date, natal);
+        assert.equal(dd.groups.length, 4);
+        dd.groups.forEach((g, i) => {
+          assert.equal(g.title, bank.titles[i]);
+          if (g.quiet) {
+            assert.deepEqual(g.sentences, [bank.quiet[i]]);
+            assert.equal(g.evidence, "");
+            return;
+          }
+          assert.ok(g.sentences.length >= 2 && g.sentences.length <= 3, `${culture} ${g.title}: ${g.sentences.join(" ")}`);
+          const last = g.sentences.at(-1)!;
+          const things = [...FIGURE_BANKS[culture].manifestations[i]!.harmony, ...FIGURE_BANKS[culture].manifestations[i]!.tension];
+          assert.ok(
+            things.some((t) => last === bank.concrete.replace("{thing}", t)),
+            `${culture} ${g.title} ends on "${last}"`,
+          );
+        });
+      }
+    }
+  }
+});
+
+test("every group title opens on the culture's own name for the group", () => {
+  for (const culture of CULTURES) {
+    DIVE_DEEPER_BANKS[culture].titles.forEach((title, i) => {
+      const name = CULTURE_VOICES[culture].houseGroups[i]!.name.replace(/^THE /, "");
+      assert.match(title.toUpperCase(), new RegExp(`^(THE )?${name}: `), `${culture} title ${i}: ${title}`);
+    });
+  }
+});
+
+test("the concrete frame shares no word with the things it carries", () => {
+  for (const culture of CULTURES) {
+    const frameWords = DIVE_DEEPER_BANKS[culture].concrete
+      .replace("{thing}", "")
+      .toLowerCase()
+      .match(/[a-z']{4,}/g) ?? [];
+    for (const group of FIGURE_BANKS[culture].manifestations) {
+      for (const thing of [...group.harmony, ...group.tension]) {
+        const words = new Set(thing.toLowerCase().match(/[a-z']+/g) ?? []);
+        for (const w of frameWords) {
+          assert.ok(!words.has(w) && !words.has(w.replace(/'s$/, "")), `${culture}: "${w}" in "${thing}"`);
+        }
+      }
+    }
+  }
+});
+
+test("no sentence prints twice on one day page, the decree included", () => {
+  for (const culture of CULTURES) {
+    for (const date of days(60)) {
+      for (const natal of [null, NATAL]) {
+        const decree = composeDayPage(culture, date);
+        const dd = composeDiveDeeperForDay(culture, date, natal);
+        const all = [...decree.sentences, ...dd.groups.filter((g) => !g.quiet).flatMap((g) => g.sentences)];
+        const seen = new Set<string>();
+        for (const s of all) {
+          assert.ok(!seen.has(s), `${culture} ${date.toISOString().slice(0, 10)} ${natal ? "natal" : "sky"}: "${s}" twice`);
+          seen.add(s);
+        }
+      }
+    }
+  }
+});
+
+test("without a chart, a group reads a sky figure with a body the group keeps", () => {
+  for (const culture of CULTURES) {
+    for (const date of days(30)) {
+      const dd = composeDiveDeeperForDay(culture, date, null);
+      dd.groups.forEach((g, i) => {
+        if (g.quiet) return;
+        // Carthage gives Jupiter and Saturn one name; both keep group 0.
+        assert.ok(groupsNamed(culture, g.evidence).has(i), `${culture} ${g.title}: ${g.evidence}`);
+      });
+    }
+  }
+});
+
+test("with a chart, a group reads a contact to a natal point in its houses", () => {
+  const houseGroup = (lon: number) => {
+    const house = ((Math.floor(lon / 30) - Math.floor(NATAL.ascendant / 30) + 12) % 12) + 1;
+    if ([2, 6, 10].includes(house)) return 0;
+    if ([4, 8].includes(house)) return 1;
+    if ([3, 7, 11].includes(house)) return 2;
+    return 3;
+  };
+  for (const culture of CULTURES) {
+    for (const date of days(14)) {
+      const dd = composeDiveDeeperForDay(culture, date, NATAL);
+      assert.equal(dd.natal, true);
+      dd.groups.forEach((g, i) => {
+        if (g.quiet) return;
+        const point = PLANETS.find((p) => g.evidence.includes(`YOUR ${DEITY_MATRIX[culture][p].name.toUpperCase()} ·`) && houseGroup(NATAL.chart[p]) === i);
+        assert.ok(point, `${culture} ${g.title}: ${g.evidence}`);
+        // A body that moves daily speaks for the group whenever one touches it.
+        const bucket = transitsByGroup(NATAL.chart, NATAL.ascendant, computeChart(date))[i]!;
+        const transiting = PLANETS.filter((p) => g.evidence.startsWith(`${DEITY_MATRIX[culture][p].name.toUpperCase()} `));
+        if (bucket.some((h) => FAST.has(h.transit) && !(h.transit === "moon" && h.natal === "moon"))) {
+          assert.ok(transiting.some((p) => FAST.has(p)), `${culture} ${g.title}: ${g.evidence}`);
+        }
+      });
+    }
+  }
+});
+
+test("a group with no natal point in its houses prints the culture's quiet line", () => {
+  // Every natal body in the second house (Taurus, from a rising in Aries): only the first group has a point.
+  const crowded = { chart: Object.fromEntries(PLANETS.map((p, i) => [p, 31 + i * 2.5])) as Record<Planet, number>, ascendant: 5 };
+  for (const culture of CULTURES) {
+    const date = new Date(START);
+    const dd = composeDiveDeeper(culture, composeDayPage(culture, date), computeChart(date), utcDayNumber(date), crowded);
+    assert.deepEqual(
+      dd.groups.slice(1).map((g) => g.sentences),
+      DIVE_DEEPER_BANKS[culture].quiet.slice(1).map((q) => [q]),
+    );
+  }
+});
+
+test("a reader with a chart gets lists from the day's transits to it, by the sky lists' rule", () => {
+  for (const culture of CULTURES) {
+    const reg = PERMISSIONS_REGISTER[culture];
+    let differs = 0;
+    for (const date of days(10)) {
+      const sky = computeChart(date);
+      const day = utcDayNumber(date);
+      const figures = natalDayFigures(sky, NATAL.chart);
+      const top = figures[0]!;
+      assert.ok(figures.every((f) => f.a !== f.b), "a body against itself is left out");
+      assert.ok(figures.every((f) => FAST.has(f.a)), "the bodies that move daily speak while one touches the chart");
+      assert.ok(figures.slice(2).every((f, i, rest) => i === 0 || f.orb >= rest[i - 1]!.orb), "the rest by orb");
+      assert.ok(!figures[1] || figures[1].kind !== top.kind, "the second figure is of another kind");
+      const lists = natalDayPermissions(culture, sky, NATAL.chart, day)!;
+      assert.deepEqual(lists, dayPermissions(culture, figures, day));
+      const column = toneOf(top.kind) === "tension" ? "refrain" : "proceed";
+      const lead = ((day % 3) + 3) % 3;
+      assert.deepEqual(lists[column].slice(0, 2), [reg[top.a][column][lead], reg[top.b][column][lead]]);
+      if (JSON.stringify(lists) !== JSON.stringify(dayPermissions(culture, composeDayPage(culture, date).figures, day))) differs += 1;
+    }
+    assert.ok(differs >= 8, `${culture}: the chart changes the lists on ${differs} of 10 days`);
+  }
+});

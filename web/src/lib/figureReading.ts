@@ -230,6 +230,11 @@ function lessonFor(culture: Culture, kind: AspectKind, god: Planet): string {
 
 // --- the natal contact ----------------------------------------------------------
 
+/** A contact in mono, the transiting god against the reader's: "MARS ⚹ YOUR MERCURIUS · 0°41′". */
+export function composeBridge(culture: Culture, body: Planet, point: Planet, kind: AspectKind, orb: number): string {
+  return `${name(culture, body).toUpperCase()} ${ASPECT_GLYPH[kind]} YOUR ${name(culture, point).toUpperCase()} · ${orbMeasure(orb)}`;
+}
+
 export interface NatalContact {
   /** The transiting body, one of the sky figure's two. */
   body: Planet;
@@ -403,9 +408,7 @@ export function composeFigurePage(
     instant,
     window,
     natal: Boolean(natal && contact),
-    bridge: natal && contact
-      ? `${name(culture, contact.body).toUpperCase()} ${ASPECT_GLYPH[contact.kind]} YOUR ${name(culture, contact.point).toUpperCase()} · ${orbMeasure(contact.orb)}`
-      : null,
+    bridge: natal && contact ? composeBridge(culture, contact.body, contact.point, contact.kind, contact.orb) : null,
     feedbackId: `figure-${date}-${canonical}`,
   };
 }
