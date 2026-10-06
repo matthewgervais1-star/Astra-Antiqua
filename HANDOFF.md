@@ -1,57 +1,59 @@
-# HANDOFF, 2026-10-06
+# HANDOFF, Astra Antiqua, state at 2026-10-06
 
-## What this is
-Astra Antiqua: one computed sky read through five ancient theologies (Egypt, Greece, Canaan,
-Carthage, Rome). Three surfaces share a domain: `web/` (Next.js 16, canonical), `android/`
-(Kotlin, Compose), `dotnet/` (C# chart core; MAUI iOS head built only in CI). `shared/content`
-is generated from the web data; never hand-edit it. Start with `CLAUDE.md`.
+Read first. Where this file and an older line in `CLAUDE.md` or any index disagree, this
+file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
 
-## Where things stand (facts)
-- PR #2, `claude/planner-buildout-completion-495257` to master: 22 commits, CI green on web,
-  Android and dotnet, mergeable. It closed every plan gap that needed no owner decision and
-  refreshed the plan documents. Not merged yet.
-- Second wave on `claude/reading-anatomy-495257` (stacked on PR #2's head, unpushed):
-  Task 15 (the day page speaks to the reader) landed on both surfaces, 47 web and 68 Android
-  tests green; its review is in progress. Tasks 16, 17, 11 to 14 and 18 queued.
-- Claude Design project "Astra Antiqua" (`24e2b41c-9c28-47de-88ce-e515b647b2bf`) refreshed on
-  2026-09-29 with the 44 preview cards and the four outlined signs.
+## What this is (FACT, `CLAUDE.md`)
+- One computed sky read through five ancient theologies on three surfaces sharing a domain:
+  `web/` (Next.js 16, canonical), `android/` (Kotlin, Compose), `dotnet/` (C# core; MAUI iOS
+  head built only in CI). `shared/content/*.json` is generated from web; never hand-edit it.
+
+## Where things stand
+- FACT (`git log`, GitHub PR #2): branch `claude/planner-buildout-completion-495257` is PR #2
+  to `master`, 22 commits, CI green on web, Android and dotnet, mergeable, not merged. It
+  closed every plan gap that needed no owner decision and refreshed the plan documents
+  (`docs/web-ios-android-plan.md` status table dated 2026-09-29, `docs/web-rebrand-report.md`).
+- FACT (`git log`): branch `claude/reading-anatomy-495257`, stacked on PR #2's head, unpushed,
+  holds the second wave. Task 15 (the day page speaks to the reader) and two fix rounds landed
+  on both surfaces; web 54 tests and Android 70 tests pass (`task-15-report.md` in the ledger
+  folder). Its scoped re-review is in progress.
+- FACT (`docs/superpowers/plans/2026-09-29-planned-work-closeout.md`): Tasks 16 (figure page),
+  17 (dive deeper), 11 to 14 (archive, rules, display-xs, Spectral SC) and 18 (Android sync,
+  three dispatches) are queued in that order.
+- FACT (DesignSync, 2026-09-29): Claude Design project `24e2b41c-9c28-47de-88ce-e515b647b2bf`
+  holds the 44 preview cards and the four outlined signs.
+- INFERENCE: the live checkout `L:\Claude Projects\astra-antiqua` carries an uncommitted
+  bootstrap `HANDOFF.md` (dated 2026-10-06, pre-PR #2 state) plus a `CLAUDE.md` section and a
+  `.gitignore` line; this worktree committed the same section and line, so this file should
+  replace the live one when the branches merge.
 
 ## Decisions taken, and why
-- 2026-09-29, owner: the daily readings "flow poorly"; rebuild them to the anatomy of the
-  Co-Star screens in `docs/design/references/costar-2026-09-29/`, keeping the five voices.
-  Spec: `docs/superpowers/specs/2026-09-29-daily-reading-voice.md` (three phases).
-- 2026-09-29, owner: archive the six unwired web content banks to `docs/archive/`; apply
-  all three design calls (rules to the system's opaque hex, a display-xs step from the
-  scale's ratio, Spectral SC promoted and carried to Android); build Android account sync
-  with export, strike and the wait list (spec `2026-09-29-android-account-sync.md`).
-- 2026-09-29, controller rulings (in the plan's "Rulings" section and the ledger): no Room
-  migration (version 2 since import, no version 1 exists); no retention cron until a mail
-  sender exists; instrument breakpoint is one token, measured at 1100px on the corrected
-  column order; natal-transit Do/Don't and Android Do/Don't belong to Task 17.
+- 2026-09-29, owner: the daily readings "flow poorly"; rebuild to the anatomy of the Co-Star
+  screens filed in `docs/design/references/costar-2026-09-29/` (README with hashes), keeping
+  the five voices. Spec `docs/superpowers/specs/2026-09-29-daily-reading-voice.md`, 3 phases.
+- 2026-09-29, owner: archive the six unwired web banks to `docs/archive/`; apply all three
+  design calls; build Android account sync with export, strike and the wait list (spec
+  `docs/superpowers/specs/2026-09-29-android-account-sync.md`); open PR #2 (done).
+- 2026-10-06, controller: the sky picks the figure (always the tightest), the day picks the
+  words (variants rotate); a persisting figure keeps its headline and the week prints a
+  "holds" line. Reason: spec A.2 and the method page's "nothing is estimated" outrank the
+  no-repeat rule. All rulings: the plan's "Rulings" section and the ledger.
 
 ## Pending
-- Task 15 review and fix round. Known from reading the dump: same-kind days share a
-  paragraph skeleton (consequence and instruction keyed by kind only); the Do/Don't items are
-  still the old cryptic register; no phase12 screenshots yet.
-- Task 16 (figure page), Task 17 (dive deeper), Tasks 11 to 14 (archive, rules, display-xs,
-  Spectral SC), Task 18 (Android sync, three dispatches). Then a PR for the second branch.
-- Owner inputs still needed before code: a mail vendor; a deployed API origin for Android
+- Task 15 re-review; then Tasks 16, 17, 11 to 14, 18; then a PR for the second branch.
+- Owner inputs before code can proceed: a mail vendor; the deployed API origin for Android
   release builds; `web/src/lib/legal/policyFacts.ts` values (legal pages build as 404 until
-  filled); the Law 25 s. 17 and s. 3.3 assessments; a Play keystore and listing; French UI.
+  filled, FACT from the build log); the Law 25 assessments; a Play keystore; French UI.
 
 ## Deadlines
-None recorded in this repo. (Inference: none exist; the owner has named none.)
+CANNOT CONFIRM: none are recorded in this repo, and the owner has named none in session.
 
 ## Files that matter
-- Plan and ledger: `docs/superpowers/plans/2026-09-29-planned-work-closeout.md`;
-  `.superpowers/sdd/2026-09-29-planned-work-closeout/progress.md` (git-ignored; every task,
-  ruling and deferred minor).
-- Specs: `docs/superpowers/specs/2026-09-29-daily-reading-voice.md`,
-  `docs/superpowers/specs/2026-09-29-android-account-sync.md`.
-- State of the plans: `docs/web-ios-android-plan.md` (status table dated 2026-09-29),
-  `docs/android-rollout-plan.md`, `docs/design/IMPLEMENTATION.md`, `docs/web-rebrand-report.md`.
+- Plan: `docs/superpowers/plans/2026-09-29-planned-work-closeout.md`. Ledger (git-ignored):
+  `.superpowers/sdd/2026-09-29-planned-work-closeout/progress.md`, every task, ruling and
+  deferred minor; `task-15-report.md` beside it holds the rendered readings.
 - Composition under rework: `web/src/lib/decree.ts`, `web/src/data/decreeBanks.ts`,
-  `web/src/data/deityDomains.ts`, `web/src/lib/permissions.ts`,
-  `android/app/src/main/java/com/astra/antiqua/domain/ReadingBanks.kt` (generated by
-  `web/scripts/gen-android-reading-banks.mjs`).
-- Deploy: `docs/deploy.md` (Supabase ca-central-1 for the database, Vercel for the app).
+  `web/src/data/deityDomains.ts`, `web/src/data/permissionsRegister.ts`,
+  `web/src/lib/permissions.ts`, `web/src/lib/weekReading.ts`, generated
+  `android/.../domain/ReadingBanks.kt` (via `web/scripts/gen-android-reading-banks.mjs`).
+- Entry documents are listed in `CLAUDE.md` under "Session files and entry documents".
