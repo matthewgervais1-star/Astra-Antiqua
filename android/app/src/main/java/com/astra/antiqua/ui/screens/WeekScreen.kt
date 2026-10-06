@@ -1,6 +1,7 @@
 package com.astra.antiqua.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,6 +32,7 @@ import com.astra.antiqua.ui.components.NaveHead
 import com.astra.antiqua.ui.components.NaveShell
 import com.astra.antiqua.ui.components.RowRule
 import com.astra.antiqua.ui.nav.Horizon
+import com.astra.antiqua.ui.nav.Route
 import com.astra.antiqua.ui.nav.Section
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.Conflict
@@ -56,6 +59,7 @@ import java.util.Date
 fun WeekScreen(
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
+    onOpenFigure: (String) -> Unit = {},
 ) {
     val viewModel: HorizonViewModel = viewModel(factory = AstraViewModelFactory)
     val state by viewModel.week.collectAsState()
@@ -98,7 +102,7 @@ fun WeekScreen(
                                 "${year(current.end)}",
                         )
                     }
-                    items(current.days, key = { it.date.time }) { day -> DayRow(day) }
+                    items(current.days, key = { it.date.time }) { day -> DayRow(day, onOpenFigure) }
                     item {
                         Text(
                             text = "EACH DAY TAKES THE TIGHTEST FIGURE THE SKY MAKES INSIDE " +
@@ -116,7 +120,7 @@ fun WeekScreen(
 }
 
 @Composable
-private fun DayRow(day: WeekDay) {
+private fun DayRow(day: WeekDay, onOpenFigure: (String) -> Unit) {
     val accent = LocalAccent.current
     RowRule()
     Row(
@@ -149,11 +153,15 @@ private fun DayRow(day: WeekDay) {
         }
         Column(modifier = Modifier.weight(1f)) {
             day.headline?.let { headline ->
+                // The headline opens the row's figure page, as on web.
+                val open = day.figure?.let { (date, id) -> { onOpenFigure(Route.figure(date, id)) } }
                 Text(
                     text = headline,
                     style = MaterialTheme.typography.titleMedium,
                     color = Bone,
-                    modifier = Modifier.padding(bottom = Spacing.Tight),
+                    modifier = Modifier
+                        .padding(bottom = Spacing.Tight)
+                        .then(if (open != null) Modifier.clickable(onClickLabel = "Read the figure", role = Role.Button, onClick = open) else Modifier),
                 )
             }
             Text(

@@ -29,6 +29,8 @@ data class WeekDay(
     val tight: Boolean,
     val shorthand: String,
     val flag: RomeDayFlag?,
+    /** The row's figure page (UTC date, figure id), or null on an ingress or quiet day. */
+    val figure: Pair<String, String>? = null,
 )
 
 /**
@@ -139,6 +141,7 @@ object WeekReading {
             previous = tightest
 
             var headline: String? = null
+            var figure: Pair<String, String>? = null
             val line: String
             val tone: DayTone
             val shorthand: String
@@ -151,6 +154,7 @@ object WeekReading {
                 headline = if (holds) DecreeBanks.holds(culture) else DayDecreeComposer.composeHeadline(culture, tightest)
                 line = DayDecreeComposer.composeMeaning(culture, tightest, Math.floorDiv(instant, DAY_MS)) + " " +
                     DayDecreeComposer.composeConsequence(culture, tightest)
+                figure = FigureReadingComposer.isoDateUtc(Date(instant)) to FigureReadingComposer.figureId(tightest)
                 shorthand = "${tightest.a.name.take(3)} ${tightest.aspect.name.take(3)} " +
                     "${tightest.b.name.take(3)}${if (tight) " · TIGHT" else ""}"
             } else {
@@ -199,6 +203,7 @@ object WeekReading {
                 tight = tight,
                 shorthand = shorthand,
                 flag = flag,
+                figure = figure,
             )
         }
         return days

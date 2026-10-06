@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.astra.antiqua.domain.FigureReadingComposer
 import com.astra.antiqua.domain.AccuratePlanetPosition
 import com.astra.antiqua.domain.AspectType
 import com.astra.antiqua.domain.DayDecree
@@ -61,6 +62,7 @@ import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.components.NaveShell
 import com.astra.antiqua.ui.components.SectionDivider
 import com.astra.antiqua.ui.nav.Horizon
+import com.astra.antiqua.ui.nav.Route
 import com.astra.antiqua.ui.nav.Section
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.Conflict
@@ -83,6 +85,7 @@ fun MainDashboardScreen(
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
     onOpenMethod: () -> Unit = {},
+    onOpenFigure: (String) -> Unit = {},
 ) {
     val dashboardViewModel: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
 
@@ -122,7 +125,19 @@ fun MainDashboardScreen(
 
         dayDecree?.let { decree ->
             item {
-                DayDecreeCard(decree = decree)
+                DayDecreeCard(
+                    decree = decree,
+                    onOpenFigure = decree.figures.firstOrNull()?.let { top ->
+                        {
+                            onOpenFigure(
+                                Route.figure(
+                                    FigureReadingComposer.isoDateUtc(java.util.Date()),
+                                    FigureReadingComposer.figureId(top),
+                                ),
+                            )
+                        }
+                    },
+                )
                 Spacer(modifier = Modifier.height(Spacing.Step))
             }
         }
@@ -207,16 +222,22 @@ fun MainDashboardScreen(
  * Do and Don't lists are web-only until Android has a permissions composer.
  */
 @Composable
-fun DayDecreeCard(decree: DayDecree) {
+fun DayDecreeCard(decree: DayDecree, onOpenFigure: (() -> Unit)? = null) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        // The headline opens the figure page for the day's headline figure, as on web.
         Text(
             text = decree.headline,
             style = MaterialTheme.typography.headlineMedium,
             color = Bone,
             textAlign = TextAlign.Center,
+            modifier = if (onOpenFigure != null) {
+                Modifier.clickable(onClickLabel = "Read the figure", role = Role.Button, onClick = onOpenFigure)
+            } else {
+                Modifier
+            },
         )
         if (decree.evidence.isNotEmpty()) {
             Spacer(modifier = Modifier.height(Spacing.Snug))

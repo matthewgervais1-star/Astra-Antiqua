@@ -17,6 +17,8 @@ object Route {
     const val YEAR = "year"
     const val TRANSITS = "transits"
     const val TRANSIT_DETAIL = "transits/{id}"
+    /** One day's figure, web's /day/[date]/figure/[id]: date is YYYY-MM-DD (UTC). */
+    const val FIGURE = "day/{date}/figure/{id}"
     const val VOICES = "voices"
     const val VOICE = "voices/{culture}"
     const val MATRIX = "matrix"
@@ -36,6 +38,7 @@ object Route {
     const val LEARN = "learn/{slug}"
 
     fun transitDetail(id: String) = "transits/$id"
+    fun figure(date: String, id: String) = "day/$date/figure/$id"
     fun voice(culture: AncientCulture) = "voices/${culture.name.lowercase()}"
 
     fun placement(body: Planet) = "placements/${body.name.lowercase()}"

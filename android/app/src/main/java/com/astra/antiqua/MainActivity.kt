@@ -49,6 +49,7 @@ import com.astra.antiqua.ui.screens.PlacementsScreen
 import com.astra.antiqua.ui.screens.SynastryScreen
 import com.astra.antiqua.ui.screens.SeasonScreen
 import com.astra.antiqua.ui.screens.YearScreen
+import com.astra.antiqua.ui.screens.FigureScreen
 import com.astra.antiqua.ui.screens.TransitDetailScreen
 import com.astra.antiqua.ui.screens.TransitsScreen
 import com.astra.antiqua.ui.screens.VoiceScreen
@@ -154,10 +155,11 @@ fun AstraNavHost(
                 culture = culture,
                 onNavigate = go,
                 onOpenMethod = { open(Route.METHOD) },
+                onOpenFigure = open,
             )
         }
         composable(Route.WEEK) {
-            WeekScreen(culture = culture, onNavigate = go)
+            WeekScreen(culture = culture, onNavigate = go, onOpenFigure = open)
         }
         composable(Route.SEASON) {
             SeasonScreen(culture = culture, onNavigate = go)
@@ -199,6 +201,15 @@ fun AstraNavHost(
                 culture = culture,
                 onNavigate = go,
                 onBack = { navController.popBackStack() },
+            )
+        }
+        composable(Route.FIGURE) { entry ->
+            FigureScreen(
+                date = entry.arguments?.getString("date").orEmpty(),
+                id = entry.arguments?.getString("id").orEmpty(),
+                culture = culture,
+                onNavigate = go,
+                onOpen = open,
             )
         }
         composable(Route.MATRIX) {

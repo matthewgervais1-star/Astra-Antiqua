@@ -405,7 +405,7 @@ object DecreeBanks {
                 Planet.MERCURY -> "One short letter opens a door."
                 Planet.VENUS -> "A kind word buys more than silver."
                 Planet.MARS -> "A little push moves the block."
-                Planet.JUPITER -> "Ask a patron once and the answer is yes."
+                Planet.JUPITER -> "A patron says yes the first time you ask."
                 Planet.SATURN -> "An old duty gets lighter the moment you start it."
                 Planet.URANUS -> "A chance comes from the wrong bank of the river."
                 Planet.NEPTUNE -> "A hunch is worth following as far as the next canal."

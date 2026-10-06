@@ -21,6 +21,7 @@ val AstraViewModelFactory: ViewModelProvider.Factory = viewModelFactory {
     initializer { LocationSearchViewModel(container().profiles) }
     initializer { DashboardViewModel(container().astronomy, container().profiles, container().settings, container().readings) }
     initializer { TransitsViewModel(container().astronomy, container().profiles) }
+    initializer { FigureViewModel(container().astronomy, container().profiles) }
     initializer { HorizonViewModel(container().astronomy, container().settings) }
     initializer { ForecastViewModel(container().astronomy, container().profiles, container().settings) }
     initializer { SynastryViewModel(container().astronomy, container().profiles, container().settings) }

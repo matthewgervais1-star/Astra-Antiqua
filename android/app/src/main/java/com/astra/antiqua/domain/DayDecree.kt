@@ -72,7 +72,7 @@ object DayDecreeComposer {
             slots[match.groupValues[1]] ?: match.value
         }
 
-    private fun toneFor(aspect: AspectType): DayTone =
+    fun toneFor(aspect: AspectType): DayTone =
         if (aspect == AspectType.SQUARE || aspect == AspectType.OPPOSITION) DayTone.TENSION else DayTone.HARMONY
 
     /**
@@ -106,9 +106,13 @@ object DayDecreeComposer {
         return "${name(culture, f.a).uppercase()} ${glyph(f.aspect)} ${name(culture, f.b).uppercase()} · $measure"
     }
 
-    private fun meaningClause(culture: AncientCulture, f: SkyFigure, day: Long): String =
-        "${deityDomain(culture, f.a)} and ${deityDomain(culture, f.b)} " +
-            DecreeBanks.relation(culture, f.aspect, variant(day))
+    /** Two domains and the day's relation, unpunctuated; the figure page joins a natal point's domain this way too. */
+    fun pairClause(culture: AncientCulture, domainA: String, domainB: String, aspect: AspectType, day: Long): String =
+        "$domainA and $domainB ${DecreeBanks.relation(culture, aspect, variant(day))}"
+
+    /** The unpunctuated meaning clause for a sky figure. */
+    fun meaningClause(culture: AncientCulture, f: SkyFigure, day: Long): String =
+        pairClause(culture, deityDomain(culture, f.a), deityDomain(culture, f.b), f.aspect, day)
 
     /** Sentence (a): two domains and a relation, the tight tail under half a degree. */
     fun composeMeaning(culture: AncientCulture, f: SkyFigure, day: Long = 0): String {
@@ -128,7 +132,8 @@ object DayDecreeComposer {
         return mapOf("god" to name(culture, body), "partner" to name(culture, partner))
     }
 
-    private fun composeImage(culture: AncientCulture, f: SkyFigure): String =
+    /** Sentence (c), the institution's image; the figure page prints it as the god's act. */
+    fun composeImage(culture: AncientCulture, f: SkyFigure): String =
         fill(DecreeBanks.image(culture, f.aspect, headlineBody(f.a, f.b).first), godSlots(culture, f))
 
     private fun composeInstruction(culture: AncientCulture, f: SkyFigure): String =

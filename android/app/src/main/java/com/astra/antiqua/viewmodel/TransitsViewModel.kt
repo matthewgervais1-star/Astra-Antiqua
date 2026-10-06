@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.data.ProfileRepository
 import com.astra.antiqua.domain.CalculateNatalChartUseCase
+import com.astra.antiqua.domain.DayDecreeComposer
 import com.astra.antiqua.domain.NatalPoint
+import com.astra.antiqua.domain.NatalPoints
 import com.astra.antiqua.domain.SLOW_BODIES
 import com.astra.antiqua.domain.TransitSpan
 import com.astra.antiqua.domain.TransitSpans
@@ -26,7 +28,16 @@ sealed class SpansState {
     /** No birth record, so there is nothing to read a transit against. */
     object NoChart : SpansState()
 
-    data class Ready(val spans: List<TransitSpan>, val now: Date) : SpansState()
+    /**
+     * [natal] and [skyNow] feed the figure anatomy the detail screen wraps
+     * around a span: the reader's points, and where every body stands now.
+     */
+    data class Ready(
+        val spans: List<TransitSpan>,
+        val now: Date,
+        val natal: NatalPoints? = null,
+        val skyNow: Map<Planet, Double> = emptyMap(),
+    ) : SpansState()
     data class Error(val message: String) : SpansState()
 }
 
@@ -60,8 +71,14 @@ class TransitsViewModel(
                     return@launch
                 }
                 val now = Date()
+                var natal: NatalPoints? = null
+                var skyNow: Map<Planet, Double> = emptyMap()
                 val spans = withContext(Dispatchers.Default) {
                     val chart = CalculateNatalChartUseCase(astronomy).execute(profile)
+                    natal = chart.houseCusps.getOrNull(1)?.let { asc ->
+                        NatalPoints(chart.planets.mapValues { it.value.longitude }, asc)
+                    }
+                    skyNow = DayDecreeComposer.chartAt(astronomy, now)
                     val points = buildList {
                         chart.planets[Planet.SUN]?.let { add(NatalPoint("sun", it.longitude)) }
                         chart.planets[Planet.MOON]?.let { add(NatalPoint("moon", it.longitude)) }
@@ -75,7 +92,7 @@ class TransitsViewModel(
                         days = WINDOW_DAYS,
                     )
                 }
-                _state.value = SpansState.Ready(spans, now)
+                _state.value = SpansState.Ready(spans, now, natal, skyNow)
             } catch (e: Exception) {
                 Log.e(TAG, "Could not compute the long transits", e)
                 _state.value = SpansState.Error(
