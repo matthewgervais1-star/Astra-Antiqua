@@ -2,6 +2,8 @@ package com.astra.antiqua.domain
 
 import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.model.AncientCulture
+import com.astra.antiqua.model.Planet
+import kotlin.math.abs
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -54,10 +56,15 @@ class FigureParityTest {
     }
 
     @Test
-    fun `recurrence speaks each calendar's words`() {
-        assertEquals("about every fourteen days", Recurrence.interval(AncientCulture.ROME, Recurrence.days(com.astra.antiqua.model.Planet.MOON, AspectType.SQUARE)))
-        assertEquals("about every three decans", Recurrence.interval(AncientCulture.EGYPT, Recurrence.days(com.astra.antiqua.model.Planet.MOON, AspectType.CONJUNCTION)))
-        assertEquals("about every two years", Recurrence.interval(AncientCulture.ROME, Recurrence.days(com.astra.antiqua.model.Planet.MARS, AspectType.OPPOSITION)))
+    fun `a figure returns when the sky brings it back`() {
+        val sunMars = Recurrence.skyDays(Planet.SUN, Planet.MARS, AspectType.CONJUNCTION)
+        assertTrue("Sun and Mars meet about every 780 days, not $sunMars", abs(sunMars - 780) < 2)
+        assertEquals("about every two years", Recurrence.interval(AncientCulture.ROME, sunMars))
+        assertEquals("about once a year", Recurrence.interval(AncientCulture.GREECE, Recurrence.natalDays(Planet.MERCURY, AspectType.CONJUNCTION)))
+        assertEquals("about twice a month", Recurrence.interval(AncientCulture.CANAAN, Recurrence.natalDays(Planet.MOON, AspectType.TRINE)))
+        assertEquals("about every fourteen days", Recurrence.interval(AncientCulture.ROME, Recurrence.natalDays(Planet.MOON, AspectType.TRINE)))
+        assertEquals("about every three decans", Recurrence.interval(AncientCulture.EGYPT, Recurrence.natalDays(Planet.MOON, AspectType.CONJUNCTION)))
+        assertEquals(115.9, Recurrence.skyDays(Planet.MERCURY, Planet.SUN, AspectType.CONJUNCTION), 0.0)
         assertEquals("one hundred and sixty-five", Recurrence.numberWords(165))
     }
 }

@@ -19,29 +19,48 @@ data class Timeline(val ticks: List<TimelineTick>, val presentPct: Float, val pr
 
 /**
  * How often a figure comes round, and how long it holds. Ported from
- * web/src/lib/recurrence.ts: the transiting body's cycle (the Moon's sidereal
- * month, the Sun's year, Mercury's and Venus's synodic periods, the sidereal
- * periods beyond), once a cycle for a conjunction or an opposition and twice
- * for the others, said in words each calendar can say truthfully.
+ * web/src/lib/recurrence.ts. A figure returns when the sky brings it back:
+ * each body has a mean geocentric rate in degrees a day (Mercury and Venus
+ * keep the Sun's), a natal contact returns every 360 / rate days, and a sky
+ * figure every 360 / |rate a - rate b| days, or by the pair's synodic period
+ * when the two rates are equal. Conjunction and opposition come once in the
+ * cycle, the other kinds twice.
  */
 object Recurrence {
     private const val YEAR = 365.25
+    private const val MONTH_DAYS = 30.44
 
-    fun cycleDays(body: Planet): Double = when (body) {
-        Planet.MOON -> 27.32
-        Planet.SUN -> YEAR
-        Planet.MERCURY -> 115.9
-        Planet.VENUS -> 583.9
-        Planet.MARS -> 687.0
-        Planet.JUPITER -> 11.86 * YEAR
-        Planet.SATURN -> 29.46 * YEAR
-        Planet.URANUS -> 84.0 * YEAR
-        Planet.NEPTUNE -> 164.8 * YEAR
-        Planet.PLUTO -> 248.0 * YEAR
+    fun meanRate(body: Planet): Double = when (body) {
+        Planet.MOON -> 13.176
+        Planet.SUN, Planet.MERCURY, Planet.VENUS -> 0.9856
+        Planet.MARS -> 0.524
+        Planet.JUPITER -> 0.0831
+        Planet.SATURN -> 0.0335
+        Planet.URANUS -> 0.0117
+        Planet.NEPTUNE -> 0.006
+        Planet.PLUTO -> 0.004
     }
 
-    fun days(body: Planet, aspect: AspectType): Double =
-        cycleDays(body) / if (aspect == AspectType.CONJUNCTION || aspect == AspectType.OPPOSITION) 1.0 else 2.0
+    /** The pairs whose mean rates are equal: their synodic periods, in days. */
+    private fun synodic(a: Planet, b: Planet): Double? {
+        val pair = setOf(a, b)
+        return when (pair) {
+            setOf(Planet.SUN, Planet.MERCURY) -> 115.9
+            setOf(Planet.SUN, Planet.VENUS) -> 583.9
+            setOf(Planet.MERCURY, Planet.VENUS) -> 144.6
+            else -> null
+        }
+    }
+
+    private fun perKind(cycle: Double, aspect: AspectType): Double =
+        cycle / if (aspect == AspectType.CONJUNCTION || aspect == AspectType.OPPOSITION) 1.0 else 2.0
+
+    /** Days between returns of a moving body's figure to a fixed natal point. */
+    fun natalDays(body: Planet, aspect: AspectType): Double = perKind(360.0 / meanRate(body), aspect)
+
+    /** Days between returns of a figure between two moving bodies. */
+    fun skyDays(a: Planet, b: Planet, aspect: AspectType): Double =
+        perKind(synodic(a, b) ?: (360.0 / abs(meanRate(a) - meanRate(b))), aspect)
 
     private val UNITS = listOf(
         "", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
@@ -66,29 +85,28 @@ object Recurrence {
     /** JavaScript's Math.round: half rounds up. */
     private fun jsRound(x: Double): Int = Math.floor(x + 0.5).toInt()
 
-    private const val MONTH_DAYS = 30.44
-
-    /** "about every two months", in the culture's calendar words; see recurrence.ts. */
+    /** "about every two months", in the culture's calendar words: days under sixty, months under twenty-four, years beyond. */
     fun interval(culture: AncientCulture, days: Double): String {
-        if (days < 45) {
-            val half = days < 20
+        if (days < 20) {
             return when (culture) {
-                AncientCulture.EGYPT -> if (half) "about every decan and a half" else "about every three decans"
-                AncientCulture.ROME -> if (half) "about every ${numberWords(jsRound(days))} days" else "about once a month"
-                else -> if (half) "about twice a month" else "about once a month"
+                AncientCulture.EGYPT -> "about every decan and a half"
+                AncientCulture.ROME -> "about every ${numberWords(jsRound(days))} days"
+                else -> "about twice a month"
             }
         }
-        if (days < 330) {
-            if (culture == AncientCulture.EGYPT && abs(days - 120) < 10) return "about once a season"
-            return "about every ${numberWords(jsRound(days / MONTH_DAYS))} months"
+        if (days < 45) return if (culture == AncientCulture.EGYPT) "about every three decans" else "about once a month"
+        if (days < 60) return "about every ${numberWords(jsRound(days))} days"
+        val months = jsRound(days / MONTH_DAYS)
+        if (months < 24) {
+            if (culture == AncientCulture.EGYPT && months == 4) return "about once a season"
+            if (months == 12) return "about once a year"
+            return "about every ${numberWords(months)} months"
         }
-        if (days < 548) return "about once a year"
-        if (days < 640) return "about every ${numberWords(jsRound(days / MONTH_DAYS))} months"
         return "about every ${numberWords(jsRound(days / YEAR))} years"
     }
 
-    fun compose(culture: AncientCulture, body: Planet, aspect: AspectType): String =
-        FigureBanks.recurrenceFrame(culture).replace("{interval}", interval(culture, days(body, aspect)))
+    fun compose(culture: AncientCulture, days: Double): String =
+        FigureBanks.recurrenceFrame(culture).replace("{interval}", interval(culture, days))
 
     // --- the window in orb ---------------------------------------------------
 
