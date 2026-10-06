@@ -54,6 +54,12 @@ class FigureParityTest {
         assertNull(FigureReadingComposer.composePage(engine, g.culture, g.date, "jupiter-trine-saturn", null))
         assertNull(FigureReadingComposer.composePage(engine, g.culture, "2026-02-30", g.id, null))
         assertNull(FigureReadingComposer.parseFigureId("mars-trine-mars"))
+        // Dates are read from 1900 through 2100 and no further.
+        assertEquals(-2208988800000L, FigureReadingComposer.parseIsoDate("1900-01-01")!!.time)
+        assertNull(FigureReadingComposer.parseIsoDate("1899-12-31"))
+        assertEquals(4133894400000L, FigureReadingComposer.parseIsoDate("2100-12-31")!!.time)
+        assertNull(FigureReadingComposer.parseIsoDate("2101-01-01"))
+        assertNull(FigureReadingComposer.composePage(engine, g.culture, "9999-12-31", g.id, null))
         val sky = DayDecreeComposer.chartAt(engine, FigureReadingComposer.parseIsoDate(g.date)!!)
         assertEquals(FigureReadingComposer.Missing.SLOW, FigureReadingComposer.missing(g.date, sky, "jupiter-trine-saturn"))
         assertEquals(FigureReadingComposer.Missing.MALFORMED, FigureReadingComposer.missing("2026-02-30", sky, g.id))

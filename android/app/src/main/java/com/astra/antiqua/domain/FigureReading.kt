@@ -102,9 +102,13 @@ object FigureReadingComposer {
     /** YYYY-MM-DD of the UTC day containing [date]. */
     fun isoDateUtc(date: Date): String = date.toInstant().atZone(ZoneOffset.UTC).toLocalDate().toString()
 
-    /** 00:00 UTC on a YYYY-MM-DD date, or null. */
+    /** The dates a page will read; far from the present the ephemeris is too slow to walk. */
+    const val FIRST_READABLE_DATE = "1900-01-01"
+    const val LAST_READABLE_DATE = "2100-12-31"
+
+    /** 00:00 UTC on a YYYY-MM-DD date from 1900 to 2100, or null. */
     fun parseIsoDate(date: String): Date? = try {
-        if (!Regex("""\d{4}-\d{2}-\d{2}""").matches(date)) null
+        if (!Regex("""\d{4}-\d{2}-\d{2}""").matches(date) || date < FIRST_READABLE_DATE || date > LAST_READABLE_DATE) null
         else Date.from(LocalDate.parse(date).atStartOfDay(ZoneOffset.UTC).toInstant())
     } catch (_: DateTimeParseException) {
         null
@@ -175,7 +179,8 @@ object FigureReadingComposer {
 
     /** The tightest aspect from the headline body to a natal planet; from the partner when the headline body touches none. */
     fun natalContact(sky: Map<Planet, Double>, natal: NatalPoints, headline: Planet, partner: Planet): NatalContact? {
-        // A body against its own natal place is a return, not a contact.
+        // A body against itself is left out: the page reads one domain against
+        // another, and a body against its own natal place would read one domain twice.
         fun contactsOf(body: Planet): List<NatalContact> = Planet.entries.filter { it != body }.mapNotNull { point ->
             val angle = separation(sky.getValue(body), natal.chart.getValue(point))
             AspectType.entries.firstOrNull { abs(angle - it.degree) <= it.orb }
