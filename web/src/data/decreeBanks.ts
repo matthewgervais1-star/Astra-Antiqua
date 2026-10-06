@@ -350,7 +350,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       opposition: {
         sun: "Someone across the agora wants the same honor.",
         mercury: "Two people tell you two different stories.",
-        venus: "Two desires pull you in opposite directions.",
+        venus: "You want two things, and the agora lets you carry home one.",
         mars: "Someone wants a quarrel in the open.",
         jupiter: "The powerful want a price for their help.",
         saturn: "A deadline comes the other way down your road.",

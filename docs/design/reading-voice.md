@@ -191,15 +191,18 @@ The paragraph is composed, not written, from banks the page already has:
    already printed on the page gives way to the other body's, or to none.
 3. **One concrete thing**, from the figure page's manifestations for the group
    and the tone, turned by the UTC day, in the culture's frame ("Reckon on
-   ...", "Take ... as Delphi's reply", "Be ready for ...", "Enter it in the
-   daybook: ...", "Count ... as a sign.").
+   ...", "Look for ...", "Be ready for ...", "Enter it in the daybook: ...",
+   "Watch for ..."). Every frame reads any manifestation as a plain thing to
+   meet, and shares no word with one.
 
 Without a chart a group reads the tightest sky figure with a body whose domain
-the group keeps, one group to a figure while another figure is free. With a
-chart it reads the tightest transit to a natal point in its houses (the day
-pressure module's buckets), from a body that moves daily when one touches the
-group. A group nothing touches prints the culture's quiet line for it, one of
-four. The come-back line closes the page under the dive deeper.
+the group keeps that no earlier group reads. With a chart it reads the contact
+the day pressure module names for the group (`rankContacts` in
+`lib/dayPressure.ts`: a body that moves daily first, a body against its own
+natal place last within its speed, then by orb), so the two modules agree. A
+group with nothing left to read prints the culture's quiet line for it, one of
+four. No dive deeper line repeats a line on the page, whole or inside a longer
+sentence. The come-back line closes the page under the dive deeper.
 
 ## The figure page
 

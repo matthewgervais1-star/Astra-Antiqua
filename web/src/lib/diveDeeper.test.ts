@@ -12,7 +12,8 @@ import { DEITY_MATRIX } from "@/data/deities";
 import { PERMISSIONS_REGISTER } from "@/data/permissionsRegister";
 import { CULTURES, PLANETS, type Culture, type Planet } from "@/data/cultures";
 import { toneOf } from "@/lib/tone";
-import { transitsByGroup } from "@/lib/dayPressure";
+import { dayPressure, rankContacts, transitsByGroup } from "@/lib/dayPressure";
+import type { SavedNatal } from "@/lib/savedNatal";
 
 const DAY_MS = 86_400_000;
 const FAST: ReadonlySet<Planet> = new Set(["sun", "moon", "mercury", "venus", "mars"]);
@@ -92,20 +93,56 @@ test("the concrete frame shares no word with the things it carries", () => {
   }
 });
 
-test("no sentence prints twice on one day page, the decree included", () => {
+test("no dive deeper line repeats a line on its page, whole or inside a longer sentence", () => {
+  // Over the window the two known repeats fell in (2026-11-26 Egypt, 2027-03-11 Rome).
+  const window = Array.from({ length: 200 }, (_, i) => new Date(START + i * DAY_MS));
+  const saved = { chart: NATAL.chart, angles: { ascendant: NATAL.ascendant } } as unknown as SavedNatal;
   for (const culture of CULTURES) {
-    for (const date of days(60)) {
+    for (const date of window) {
+      const day = utcDayNumber(date);
+      const sky = computeChart(new Date(day * DAY_MS));
+      const decree = composeDayPage(culture, date);
       for (const natal of [null, NATAL]) {
-        const decree = composeDayPage(culture, date);
-        const dd = composeDiveDeeperForDay(culture, date, natal);
-        const all = [...decree.sentences, ...dd.groups.filter((g) => !g.quiet).flatMap((g) => g.sentences)];
-        const seen = new Set<string>();
-        for (const s of all) {
-          assert.ok(!seen.has(s), `${culture} ${date.toISOString().slice(0, 10)} ${natal ? "natal" : "sky"}: "${s}" twice`);
-          seen.add(s);
+        const pressure = natal ? dayPressure(saved, sky, culture).map((g) => g.sentence) : [];
+        const dd = composeDiveDeeper(culture, decree, sky, day, natal, pressure);
+        const own = dd.groups.filter((g) => !g.quiet).flatMap((g) => g.sentences);
+        const page = [decree.headline, ...decree.sentences, ...pressure, ...own];
+        for (const line of own) {
+          const needle = line.replace(/\.$/, "").toLowerCase();
+          const holders = page.filter((s) => s.toLowerCase().includes(needle));
+          assert.equal(holders.length, 1, `${culture} ${date.toISOString().slice(0, 10)} ${natal ? "natal" : "sky"}: "${line}" also in ${JSON.stringify(holders.filter((h) => h !== line))}`);
         }
       }
     }
+  }
+});
+
+test("without a chart, no two groups read one sky figure", () => {
+  for (const culture of CULTURES) {
+    for (const date of days(200)) {
+      const read = composeDiveDeeperForDay(culture, date, null).groups.filter((g) => !g.quiet).map((g) => g.evidence);
+      assert.equal(new Set(read).size, read.length, `${culture} ${date.toISOString().slice(0, 10)}: ${read.join(" / ")}`);
+    }
+  }
+});
+
+test("the day pressure module and the dive deeper name one contact per group", () => {
+  const saved = { chart: NATAL.chart, angles: { ascendant: NATAL.ascendant } } as unknown as SavedNatal;
+  for (const date of days(120)) {
+    const sky = computeChart(date);
+    const buckets = transitsByGroup(NATAL.chart, NATAL.ascendant, sky);
+    const pressure = dayPressure(saved, sky, "rome");
+    const dd = composeDiveDeeperForDay("rome", date, NATAL);
+    buckets.forEach((hits, i) => {
+      const top = rankContacts(hits)[0];
+      if (!top) return;
+      const t = DEITY_MATRIX.rome[top.transit].name;
+      const n = DEITY_MATRIX.rome[top.natal].name;
+      assert.ok(pressure[i]!.sentence.startsWith(`${t} `) && pressure[i]!.sentence.includes(`your ${n} in`), pressure[i]!.sentence);
+      if (!(top.transit === "moon" && top.natal === "moon")) {
+        assert.ok(dd.groups[i]!.evidence.startsWith(`${t.toUpperCase()} `) && dd.groups[i]!.evidence.includes(`YOUR ${n.toUpperCase()} ·`), dd.groups[i]!.evidence);
+      }
+    });
   }
 });
 

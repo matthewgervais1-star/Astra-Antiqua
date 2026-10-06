@@ -70,10 +70,32 @@ function ordinal(house: number): string {
   return ORDINAL_WORDS[house] ?? `${house}th`;
 }
 
+const FAST_TRANSITS: ReadonlySet<Planet> = new Set(["moon", "sun", "mercury", "venus", "mars"]);
+
+/**
+ * A group's contacts in the order the day page reads them, so the day
+ * pressure module and the dive deeper name the same contact: a body that
+ * moves daily before a slow one (a slow body's contact holds for months and
+ * belongs to the long transits), a body against its own natal place after
+ * the other contacts of its speed, then by orb. The Moon against the natal
+ * Moon comes last of all: it keys no consequence, so the dive deeper reads
+ * the group as quiet when nothing else touches it.
+ */
+export function rankContacts(hits: readonly TransitAspect[]): TransitAspect[] {
+  const key = (h: TransitAspect): [number, number, number] => [
+    h.transit === "moon" && h.natal === "moon" ? 1 : 0,
+    FAST_TRANSITS.has(h.transit) ? 0 : 1,
+    h.transit === h.natal ? 1 : 0,
+  ];
+  return hits
+    .map((h, i) => ({ h, i, k: key(h) }))
+    .sort((x, y) => x.k[0] - y.k[0] || x.k[1] - y.k[1] || x.k[2] - y.k[2] || x.h.orb - y.h.orb || x.i - y.i)
+    .map(({ h }) => h);
+}
+
 function levelFor(hits: readonly TransitAspect[]): PressureLevel {
   if (hits.length === 0) return "quiet";
-  const sorted = [...hits].sort((a, b) => a.orb - b.orb);
-  const tightest = sorted[0]!;
+  const tightest = rankContacts(hits)[0]!;
   if (tightest.orb < 1.5) return "loud";
   const tensionCount = hits.filter((h) => toneOf(h.kind) === "tension").length;
   if (tightest.orb < 4 && tensionCount > hits.length / 2) return "strained";
@@ -132,7 +154,8 @@ export function dayPressure(
       };
     }
 
-    const tightest = [...groupHits].sort((a, b) => a.orb - b.orb)[0]!;
+    // The contact the dive deeper reads for this group (rankContacts).
+    const tightest = rankContacts(groupHits)[0]!;
     const tDeity = DEITY_MATRIX[culture][tightest.transit];
     const nDeity = DEITY_MATRIX[culture][tightest.natal];
     const verb = ASPECT_VERBS[culture][tightest.kind];

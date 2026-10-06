@@ -8,7 +8,6 @@ import {
   composeDayPage,
   composeEvidence,
   dayFigures,
-  FAST_ORDER,
   headlineBody,
   pairClause,
   toneForKind,
@@ -17,7 +16,7 @@ import {
   type DayFigure,
 } from "@/lib/decree";
 import { composeBridge, DOMAIN_GROUP, type NatalPoints } from "@/lib/figureReading";
-import { transitsByGroup } from "@/lib/dayPressure";
+import { rankContacts, transitsByGroup } from "@/lib/dayPressure";
 import { computeChart } from "@/lib/ephemeris";
 
 /**
@@ -76,17 +75,25 @@ const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const fill = (template: string, slots: Readonly<Record<string, string>>): string =>
   template.replace(/\{(\w+)\}/g, (whole, key: string) => slots[key] ?? whole);
 
-const FAST: ReadonlySet<Planet> = new Set(FAST_ORDER);
+/**
+ * True when a line, or a clause inside a longer sentence (the second-figure
+ * sentence carries a meaning clause after its colon), is already on the page.
+ */
+function onPage(line: string, printed: ReadonlySet<string>): boolean {
+  const needle = line.replace(/\.$/, "").toLowerCase();
+  for (const s of printed) if (s.toLowerCase().includes(needle)) return true;
+  return false;
+}
 
 /** The words of five letters or more in a line, lowercased. */
 const longWords = (line: string): Set<string> => new Set(line.toLowerCase().match(/[a-z']{5,}/g) ?? []);
 
 /**
  * The relation sentence for a group. Groups alternate between the two
- * variants the decree does not use today, then the day's own variant, which
- * is skipped when the sentence it makes is on the page already (the decree's
- * meaning sentence names the same two domains in that variant). Of those, the
- * group takes the first that shares the fewest words with the consequence.
+ * variants the decree does not use today, then the day's own variant. A
+ * choice whose clause is on the page already, alone or inside a longer
+ * sentence, is skipped. Of the rest, the group takes the first that shares
+ * the fewest words with the consequence.
  */
 function relationSentence(
   culture: Culture,
@@ -103,7 +110,7 @@ function relationSentence(
     shared: [...longWords(relations[((d % 3) + 3) % 3]!)].filter((w) => echo.has(w)).length,
     sentence: `${cap(pairClause(culture, domains[reading.first], domains[reading.second], reading.kind, d))}.`,
   }));
-  const fresh = choices.filter((c) => !printed.has(c.sentence));
+  const fresh = choices.filter((c) => !onPage(c.sentence, printed));
   const pool = fresh.length ? fresh : choices;
   return pool.reduce((best, c) => (c.shared < best.shared ? c : best)).sentence;
 }
@@ -123,7 +130,7 @@ function composeGroup(
   const consequence = reading.keys
     .filter((k): k is PartnerBody => k !== "moon")
     .map((k) => consequences[k])
-    .find((line) => !printed.has(line));
+    .find((line) => !onPage(line, printed));
   const sentences: string[] = [];
   // A body against its own natal place reads one domain twice; the contact
   // then speaks through its consequence alone.
@@ -138,12 +145,15 @@ function composeGroup(
   return { title, evidence: reading.evidence, sentences, quiet: false };
 }
 
-/** Without a chart: each group's tightest sky figure, one group to a figure while another is free. */
+/**
+ * Without a chart: each group's tightest sky figure that no earlier group
+ * reads. A group whose figures are all taken prints its quiet line.
+ */
 function skyReadings(culture: Culture, figures: readonly DayFigure[]): (GroupReading | null)[] {
   const used = new Set<DayFigure>();
   return ([0, 1, 2, 3] as const).map((group) => {
     const touching = figures.filter((f) => DOMAIN_GROUP[f.a] === group || DOMAIN_GROUP[f.b] === group);
-    const f = touching.find((x) => !used.has(x)) ?? touching[0];
+    const f = touching.find((x) => !used.has(x));
     if (!f) return null;
     used.add(f);
     const { body, partner } = headlineBody(f.a, f.b);
@@ -158,7 +168,9 @@ function skyReadings(culture: Culture, figures: readonly DayFigure[]): (GroupRea
  * holds for months and belongs to the long transits, so the day page reads it
  * only when nothing faster touches the group. A body against its own natal
  * place comes after the other contacts of its speed, and the Moon against the
- * natal Moon is left out, since neither keys a consequence.
+ * natal Moon last of all; when that is all there is, the group is quiet. The
+ * ranking is the day pressure module's (rankContacts), so both name one
+ * contact per group.
  */
 function natalReadings(
   culture: Culture,
@@ -166,19 +178,9 @@ function natalReadings(
   natal: NatalPoints,
 ): (GroupReading | null)[] {
   return transitsByGroup(natal.chart, natal.ascendant, sky).map((hits) => {
-    const ranked = hits
-      .filter((h) => !(h.transit === "moon" && h.natal === "moon"))
-      .map((h, i) => ({ h, i }))
-      .sort(
-        (x, y) =>
-          Number(!FAST.has(x.h.transit)) - Number(!FAST.has(y.h.transit)) ||
-          Number(x.h.transit === x.h.natal) - Number(y.h.transit === y.h.natal) ||
-          x.h.orb - y.h.orb ||
-          x.i - y.i,
-      )
-      .map(({ h }) => h);
-    const h = ranked[0];
-    if (!h) return null;
+    // The same ranking the day pressure module reads, so both name one contact.
+    const h = rankContacts(hits)[0];
+    if (!h || (h.transit === "moon" && h.natal === "moon")) return null;
     return {
       first: h.transit,
       second: h.natal,
@@ -193,18 +195,21 @@ function natalReadings(
 
 /**
  * The four paragraphs for a day page. `sky` is the chart at 00:00 UTC of the
- * day, `day` its UTC day number, `decree` the page's decree (its sentences
- * are not printed again), `natal` the reader's chart or null.
+ * day, `day` its UTC day number, `decree` the page's decree (its headline and
+ * sentences are not printed again), `natal` the reader's chart or null, and
+ * `pageLines` any other line the page prints above (the day pressure
+ * module's sentences).
  */
 export function composeDiveDeeper(
   culture: Culture,
-  decree: Pick<DayDecree, "sentences">,
+  decree: Pick<DayDecree, "headline" | "sentences">,
   sky: Readonly<Record<Planet, Longitude>>,
   day: number,
   natal: NatalPoints | null,
+  pageLines: readonly string[] = [],
 ): DiveDeeper {
   const readings = natal ? natalReadings(culture, sky, natal) : skyReadings(culture, dayFigures(sky));
-  const printed = new Set(decree.sentences);
+  const printed = new Set([decree.headline, ...decree.sentences, ...pageLines]);
   return {
     groups: readings.map((r, g) => composeGroup(culture, g as 0 | 1 | 2 | 3, r, day, printed)),
     natal: Boolean(natal),

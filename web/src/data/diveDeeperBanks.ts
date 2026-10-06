@@ -54,7 +54,7 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
       "The herm stands alone at the crossroads today. Send your messages by the road you always take.",
       "The adyton is silent today. Keep your question for a day when the tripod speaks.",
     ],
-    concrete: "Take {thing} as Delphi's reply.",
+    concrete: "Look for {thing}.",
   },
   canaan: {
     titles: [
@@ -99,6 +99,6 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
       "The road is clear today. Send the dispatches you planned.",
       "The templum gives no sign today. Leave the auspices alone and keep your vows.",
     ],
-    concrete: "Count {thing} as a sign.",
+    concrete: "Watch for {thing}.",
   },
 };

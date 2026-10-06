@@ -312,8 +312,8 @@ export function buildHomeBundle(culture: Culture, now: Date, natal: SavedNatal |
   const natalPermissions = natal ? natalDayPermissions(culture, todayChart, natal.chart, day) : null;
   const permissions = natalPermissions ?? dayPermissions(culture, reading.figures, day);
   const natalPoints = natal ? { chart: natal.chart, ascendant: natal.angles.ascendant } : null;
-  const diveDeeper = composeDiveDeeper(culture, reading, todayChart, day, natalPoints);
   const pressureGroups = natal ? dayPressure(natal, todayChart, culture) : null;
+  const diveDeeper = composeDiveDeeper(culture, reading, todayChart, day, natalPoints, pressureGroups?.map((g) => g.sentence) ?? []);
 
   return {
     now,
