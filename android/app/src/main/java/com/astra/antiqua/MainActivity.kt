@@ -58,6 +58,7 @@ import com.astra.antiqua.ui.screens.WeekScreen
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.LocalAccent
+import com.astra.antiqua.ui.theme.ShellType
 import com.astra.antiqua.viewmodel.AppViewModel
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 
@@ -314,7 +315,9 @@ private fun NavHostController.openDetail(route: String) {
 }
 
 @Composable
-fun EngineWarmupScreen() {
+fun EngineWarmupScreen() = ShellType {
+    // The warmup runs before start() loads the saved culture, while the theme
+    // holds the GREECE default, so it keeps the shell's Cinzel for every reader.
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
