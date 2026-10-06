@@ -17,12 +17,26 @@ import com.astra.antiqua.domain.wallClockOf
  * one typed inside a daylight-saving gap, where the instant reads back an
  * hour off and nothing can say what was typed.
  *
+ * Each row's fill runs inside `runCatching`. A row whose fill fails keeps
+ * null strings, and the upload rebuilds them from the instant, as it does
+ * for any profile without them. A later change to the zone code can never stop the
+ * app opening.
+ *
  * The work is written once against [SQLiteConnection]; the
  * [SupportSQLiteDatabase] entry point, which Room uses on Android without a
  * driver, wraps its database in a [SupportSQLiteConnection] and runs the same
  * code.
  */
-val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+val MIGRATION_2_3: Migration = Migration2To3(::wallClockOf)
+
+/**
+ * [MIGRATION_2_3] with its fill function injected, so a test can force the
+ * failure path. The fill takes the instant, the stored zone id, latitude and
+ * longitude, and returns the date and the time.
+ */
+internal class Migration2To3(
+    private val fill: (instantMillis: Long, timezoneId: String, latitude: Double, longitude: Double) -> Pair<String, String>,
+) : Migration(2, 3) {
     override fun migrate(db: SupportSQLiteDatabase) = migrate(SupportSQLiteConnection(db))
 
     override fun migrate(connection: SQLiteConnection) {
@@ -34,13 +48,11 @@ val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             "SELECT `id`, `birthDateUtc`, `timezoneId`, `latitude`, `longitude` FROM `user_profile`"
         ).use { select ->
             while (select.step()) {
-                val wallClock = wallClockOf(
-                    instantMillis = select.getLong(1),
-                    timezoneId = select.getText(2),
-                    latitude = select.getDouble(3),
-                    longitude = select.getDouble(4),
-                )
-                rows += select.getLong(0) to wallClock
+                val id = select.getLong(0)
+                val wallClock = runCatching {
+                    fill(select.getLong(1), select.getText(2), select.getDouble(3), select.getDouble(4))
+                }.getOrNull() ?: continue
+                rows += id to wallClock
             }
         }
         connection.prepare(

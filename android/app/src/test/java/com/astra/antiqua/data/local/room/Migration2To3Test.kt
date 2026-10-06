@@ -73,4 +73,28 @@ class Migration2To3Test {
         }
         assertEquals(declared, columns)
     }
+
+    @Test
+    fun `a row whose fill fails keeps null strings and the others are filled`() {
+        val createSql = schema(2)["createSql"]!!.jsonPrimitive.content.replace("\${TABLE_NAME}", "user_profile")
+        connection.execSQL(createSql)
+        insert(1, "1990-06-15T12:30:00Z", "Europe/Rome", 41.9028, 12.4964)
+        insert(2, "1990-07-04T19:30:00Z", "Broken/Zone", 40.7128, -74.006)
+
+        val migration = Migration2To3 { instant, zone, lat, lon ->
+            if (zone == "Broken/Zone") throw IllegalStateException("zone code failed")
+            com.astra.antiqua.domain.wallClockOf(instant, zone, lat, lon)
+        }
+        migration.migrate(connection)
+
+        val rows = mutableMapOf<Long, Pair<String?, String?>>()
+        connection.prepare("SELECT id, birthDate, birthTime FROM user_profile ORDER BY id").use {
+            while (it.step()) {
+                rows[it.getLong(0)] =
+                    (if (it.isNull(1)) null else it.getText(1)) to (if (it.isNull(2)) null else it.getText(2))
+            }
+        }
+        assertEquals("1990-06-15" to "14:30", rows[1])
+        assertEquals(null to null, rows[2])
+    }
 }
