@@ -189,7 +189,7 @@ function ChartsInstrumentInner() {
         </div>
         <div className="mt-3 border border-rule-active px-[var(--space-3)] py-[var(--space-2)]">
           <div className="flex items-baseline justify-between gap-3">
-            <span className="font-mono text-data-s uppercase tracking-label text-bone">
+            <span className="font-display text-display-xs tracking-[0.08em] text-bone">
               {chart.name.toUpperCase()}
             </span>
             <span className="font-mono text-data-xs text-dim">
@@ -241,7 +241,7 @@ function ChartsInstrumentInner() {
                 key={planet}
                 className="border-l-2 border-rule-active pl-3 font-body text-prose-s leading-prose text-prose"
               >
-                <span className="inline-flex items-center gap-[var(--space-1)] align-middle font-mono text-data-xs uppercase tracking-label text-accent">
+                <span className="inline-flex items-center gap-[var(--space-1)] align-middle font-display text-display-xs tracking-[0.1em] text-accent">
                   <DeityGlyph body={planet} culture={culture} size={16} decorative />
                   {deity.name.toUpperCase()}
                 </span>{" "}

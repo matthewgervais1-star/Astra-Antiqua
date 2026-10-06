@@ -358,7 +358,7 @@ function ForecastInstrument({ culture }: { culture: Culture }) {
                         : "block border border-rule px-[var(--space-3)] py-[var(--space-3)]"
                     }
                   >
-                    <span className="block font-mono text-data-s uppercase leading-[1.4] tracking-label text-bone">
+                    <span className="block font-display text-display-xs tracking-[0.08em] text-bone">
                       {deity} {verb} {natalName}
                     </span>
                     <span className="mt-1.5 block font-mono text-data-xs leading-data text-dim">

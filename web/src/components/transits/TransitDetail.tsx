@@ -224,7 +224,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
             </div>
           ) : null}
 
-          <div className="mt-9 flex justify-center gap-8 font-mono text-data-xs uppercase tracking-microcopy">
+          <div className="mt-9 flex justify-center gap-8 font-mono text-data-xs tracking-microcopy">
             <Link href="/year" className="text-bone/65 hover:text-bone">
               ← THE YEAR
             </Link>

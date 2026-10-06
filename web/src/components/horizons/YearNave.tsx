@@ -166,7 +166,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
                     href={`/transits/${span.id}`}
                     className="flex items-baseline justify-between gap-3 text-prose no-underline hover:text-bone"
                   >
-                    <span className="font-mono text-data-s uppercase tracking-label">
+                    <span className="font-display text-display-xs tracking-[0.08em]">
                       {spanHeadline(culture, span)}
                     </span>
                     <span className="whitespace-nowrap font-mono text-data-xs text-dim">
@@ -219,7 +219,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
         <FeedbackRow readingId={yearReadingId(now)} noun="YEAR" />
       </div>
 
-      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-mono text-data-xs uppercase tracking-microcopy">
+      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-mono text-data-xs tracking-microcopy">
         <Link href="/season" className="text-bone/65 hover:text-bone">
           ← THE SEASON
         </Link>

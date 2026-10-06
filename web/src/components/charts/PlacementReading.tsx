@@ -171,7 +171,7 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
           <FeedbackRow readingId={`placement-${chartId}-${body}`} noun="PLACEMENT" />
         </div>
 
-        <div className="mt-7 flex flex-wrap justify-center gap-x-[var(--space-4)] gap-y-[var(--space-2)] font-mono text-data-xs uppercase tracking-microcopy [&>a]:whitespace-nowrap">
+        <div className="mt-7 flex flex-wrap justify-center gap-x-[var(--space-4)] gap-y-[var(--space-2)] font-mono text-data-xs tracking-microcopy [&>a]:whitespace-nowrap">
           <Link href={`/charts/${chartId}/${prevPlanet}`} className="text-bone/65 hover:text-bone">
             ← YOUR {prevDeity.name.toUpperCase()}
           </Link>

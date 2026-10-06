@@ -16,21 +16,21 @@ export function TransitTeaser({ className, data }: TransitTeaserProps) {
         <span className="mb-[var(--space-1)] block font-mono text-data-xs tracking-label text-accent">
           THE LONG TRANSIT
         </span>
-        <span className="font-mono text-data-xs uppercase tracking-data text-bone">
+        <span className="font-mono text-data-xs tracking-data text-bone">
           CAST THE FIRST CHART TO READ ONE&nbsp;→
         </span>
       </>
     ) : data.status === "none" || !data.title1 ? (
       <>
         <span className="mb-[var(--space-1)] block font-mono text-data-xs tracking-label text-dim">THE LONG TRANSIT</span>
-        <span className="font-mono text-data-xs uppercase tracking-data text-bone">No slow body in reach right now</span>
+        <span className="font-mono text-data-xs tracking-data text-bone">NO SLOW BODY IN REACH RIGHT NOW</span>
       </>
     ) : (
       <>
         <span className="mb-[var(--space-1)] block font-mono text-data-xs tracking-label text-accent">
           THE LONG TRANSIT
         </span>
-        <span className="font-mono text-data-xs uppercase tracking-data text-bone">
+        <span className="font-mono text-data-xs tracking-data text-bone">
           {data.title1} · THROUGH {data.rangeLabel?.split(" → ")[1] ?? ""}&nbsp;→
         </span>
       </>

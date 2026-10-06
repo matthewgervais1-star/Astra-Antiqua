@@ -32,7 +32,7 @@ function orbSpan(window: OrbWindow): string {
 function Links({ date }: { date: string }) {
   const today = isoDateUtc(new Date());
   return (
-    <div className="mt-9 flex flex-wrap justify-center gap-8 font-mono text-data-xs uppercase tracking-microcopy">
+    <div className="mt-9 flex flex-wrap justify-center gap-8 font-mono text-data-xs tracking-microcopy">
       <Link href={date === today || !parseIsoDate(date) ? "/" : `/?date=${date}`} className="text-bone/65 hover:text-bone">
         ← THE DAY
       </Link>

@@ -47,7 +47,7 @@ function navLink(item: NavItem, active: LintelSection | undefined) {
 export function Lintel({ active }: LintelProps) {
   return (
     <header className="relative grid grid-cols-[1fr_auto_1fr] items-center border-b border-rule px-5 py-5 md:px-14">
-      <nav className="hidden items-center gap-[var(--space-4)] font-mono text-data-s uppercase tracking-microcopy min-[720px]:flex">
+      <nav className="hidden items-center gap-[var(--space-4)] font-mono text-data-s tracking-microcopy min-[720px]:flex">
         {LEFT_NAV.map((item) => navLink(item, active))}
       </nav>
       <Link
@@ -57,7 +57,7 @@ export function Lintel({ active }: LintelProps) {
         <Wordmark capHeight={11.9} />
       </Link>
       <div className="flex items-center justify-end">
-        <nav className="hidden items-center gap-[var(--space-4)] font-mono text-data-s uppercase tracking-microcopy min-[720px]:flex">
+        <nav className="hidden items-center gap-[var(--space-4)] font-mono text-data-s tracking-microcopy min-[720px]:flex">
           {RIGHT_NAV.map((item) => navLink(item, active))}
         </nav>
         <LintelIndexMenu active={active} className="min-[720px]:hidden" />
