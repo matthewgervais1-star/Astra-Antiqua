@@ -74,6 +74,24 @@ class DiveDeeperParityTest {
     }
 
     @Test
+    fun `a group whose figures are read above points there, as web prints it`() {
+        // On 2026-10-22 the third group's only figures are read by the second (web's dump).
+        val date = Date.from(Instant.parse("2026-10-22T00:00:00Z"))
+        val expected = mapOf(
+            AncientCulture.EGYPT to "The same weight that sits on the House of the Ka reaches here too, and the scale reads it once.",
+            AncientCulture.GREECE to "The answer given at the Oikos is the one this place hears too.",
+            AncientCulture.CANAAN to "The matter heard at the Father's House is the same matter heard here.",
+            AncientCulture.CARTHAGE to "The entry posted under the Courtyard is charged here as well, and it is not entered twice.",
+            AncientCulture.ROME to "The sign read in the Domus falls here as well, and the augur does not take it twice.",
+        )
+        for ((culture, line) in expected) {
+            val group = DiveDeeperComposer.composeForDay(engine, culture, date, null).groups[2]
+            assertEquals(culture.name, listOf(line), group.sentences)
+            assertEquals(false, group.quiet)
+        }
+    }
+
+    @Test
     fun `a group no natal point sits in prints the quiet line`() {
         val g = DIVE_DEEPER_GOLDENS.first()
         val (chart, day) = sky(g)

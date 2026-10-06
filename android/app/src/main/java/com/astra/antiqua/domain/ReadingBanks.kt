@@ -1359,6 +1359,15 @@ object DiveDeeperBanks {
         AncientCulture.ROME -> listOf("The forum shows no sign for you today. Receive your clients and keep your appointments.", "The domus is left out of the day's auspices. Feed the Lares and keep the household to its routine.", "The road is clear today. Send the dispatches you planned.", "The templum gives no sign today. Leave the auspices alone and keep your vows.")
     }[group]
 
+    /** What a group says when every figure touching it is read above. Slot: {group}, that group's name. */
+    fun shared(culture: AncientCulture): String = when (culture) {
+        AncientCulture.EGYPT -> "The same weight that sits on {group} reaches here too, and the scale reads it once."
+        AncientCulture.GREECE -> "The answer given at {group} is the one this place hears too."
+        AncientCulture.CANAAN -> "The matter heard at {group} is the same matter heard here."
+        AncientCulture.CARTHAGE -> "The entry posted under {group} is charged here as well, and it is not entered twice."
+        AncientCulture.ROME -> "The sign read in {group} falls here as well, and the augur does not take it twice."
+    }
+
     /** The paragraph's last line. Slot: {thing}, a manifestation. */
     fun concrete(culture: AncientCulture): String = when (culture) {
         AncientCulture.EGYPT -> "Reckon on {thing}."

@@ -281,6 +281,11 @@ ${byCulture("        ", (c) => `listOf(${DIVE_DEEPER_BANKS[c].titles.map(kt).joi
 ${byCulture("        ", (c) => `listOf(${DIVE_DEEPER_BANKS[c].quiet.map(kt).join(", ")})`)}
     }[group]
 
+    /** What a group says when every figure touching it is read above. Slot: {group}, that group's name. */
+    fun shared(culture: AncientCulture): String = when (culture) {
+${byCulture("        ", (c) => kt(DIVE_DEEPER_BANKS[c].shared))}
+    }
+
     /** The paragraph's last line. Slot: {thing}, a manifestation. */
     fun concrete(culture: AncientCulture): String = when (culture) {
 ${byCulture("        ", (c) => kt(DIVE_DEEPER_BANKS[c].concrete))}

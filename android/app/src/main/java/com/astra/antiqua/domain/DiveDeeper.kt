@@ -25,7 +25,8 @@ data class DiveDeeper(val groups: List<DiveGroup>, val natal: Boolean)
  * one touches the group; without one, its tightest sky figure with a body
  * whose domain it keeps that no earlier group reads. Each paragraph says the
  * two domains and the day's relation, the consequence, and one concrete
- * thing; a group with nothing left to read prints the culture's quiet line.
+ * thing. A group nothing touches prints the culture's quiet line; a group
+ * whose figures are all read above points to the group that read them.
  * No line the page already prints, whole or inside a longer sentence, is
  * printed again. DiveDeeperParityTest pins it to web.
  */
@@ -39,7 +40,13 @@ object DiveDeeperComposer {
         val evidence: String,
         /** The consequence keys in order of preference; the Moon keys none. */
         val keys: List<Planet>,
+        /** Set when every figure touching the group is read by this earlier group: the group points there. */
+        val sharedWith: Int? = null,
     )
+
+    /** "the Granary" from "The Granary: your work and your rations". */
+    private fun groupName(title: String): String =
+        title.substringBefore(":").replaceFirstChar { it.lowercase() }
 
     private fun capitalize(s: String): String = if (s.isEmpty()) s else s.replaceFirstChar { it.uppercase() }
 
@@ -94,6 +101,10 @@ object DiveDeeperComposer {
     ): DiveGroup {
         val title = DiveDeeperBanks.title(culture, group)
         if (reading == null) return DiveGroup(title, "", listOf(DiveDeeperBanks.quiet(culture, group)), true)
+        reading.sharedWith?.let { earlier ->
+            val line = DiveDeeperBanks.shared(culture).replace("{group}", groupName(DiveDeeperBanks.title(culture, earlier)))
+            return DiveGroup(title, reading.evidence, listOf(line), false)
+        }
 
         val consequence = reading.keys.filter { it != Planet.MOON }
             .map { DecreeBanks.consequence(culture, reading.aspect, it) }
@@ -113,15 +124,20 @@ object DiveDeeperComposer {
     }
 
     private fun skyReadings(culture: AncientCulture, figures: List<SkyFigure>): List<Reading?> {
-        val used = mutableSetOf<SkyFigure>()
+        val usedBy = mutableMapOf<SkyFigure, Int>()
         return (0 until 4).map { group ->
             val touching = figures.filter {
                 FigureReadingComposer.domainGroup(it.a) == group || FigureReadingComposer.domainGroup(it.b) == group
             }
-            // A figure an earlier group reads is not read again; a group
-            // whose figures are all taken prints its quiet line.
-            val f = touching.firstOrNull { it !in used } ?: return@map null
-            used += f
+            if (touching.isEmpty()) return@map null
+            // A figure an earlier group reads is not read again; a group whose
+            // figures are all taken points to the group that read its tightest.
+            val f = touching.firstOrNull { it !in usedBy }
+            if (f == null) {
+                val top = touching.first()
+                return@map Reading(top.a, top.b, top.aspect, DayDecreeComposer.composeEvidence(culture, top), emptyList(), usedBy.getValue(top))
+            }
+            usedBy[f] = group
             val (body, partner) = DayDecreeComposer.headlineBody(f.a, f.b)
             val (first, second) = if (FigureReadingComposer.domainGroup(body) == group) body to partner else partner to body
             Reading(first, second, f.aspect, DayDecreeComposer.composeEvidence(culture, f), listOf(first, second))
@@ -148,9 +164,7 @@ object DiveDeeperComposer {
                         { it.orb },
                     ),
                 )
-                .firstOrNull()
-                ?.takeUnless { it.a == Planet.MOON && it.b == Planet.MOON }
-                ?: return@map null
+                .firstOrNull() ?: return@map null
             Reading(
                 first = h.a,
                 second = h.b,
