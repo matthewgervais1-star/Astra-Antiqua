@@ -349,7 +349,12 @@ fun AccountScreen(
             AccentRule(Modifier.padding(vertical = Spacing.Step))
 
             LedgerRow(stringResource(R.string.account_culture)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(Spacing.Snug)) {
+                // CHANGE is 48dp tall for its touch target; centring keeps the
+                // culture's name on CHANGE's line instead of riding above it.
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.Snug),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Text(culture.label.uppercase(), style = MaterialTheme.typography.labelSmall, color = Bone)
                     val change = stringResource(R.string.account_change)
                     Text(
