@@ -103,10 +103,7 @@ fun PlacementsScreen(
                                 RowRule()
                                 DataRow(
                                     name = DeityRegistry.getDeity(culture, body).name,
-                                    position = "%02d°%02d′".format(
-                                        position.degreeInSign,
-                                        position.minuteInSign,
-                                    ),
+                                    position = position.degMin,
                                     sign = position.zodiacSign.signName.take(3),
                                     house = position.house,
                                     retrograde = position.isRetrograde,

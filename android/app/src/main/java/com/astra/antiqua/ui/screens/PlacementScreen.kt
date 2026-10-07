@@ -126,9 +126,8 @@ fun PlacementScreen(
                                         tint = accent,
                                     )
                                 },
-                                sub = "%02d°%02d′ %s · the %s house · fixed at your birth".format(
-                                    position.degreeInSign,
-                                    position.minuteInSign,
+                                sub = "%s %s · the %s house · fixed at your birth".format(
+                                    position.degMin,
                                     position.zodiacSign.signName,
                                     house.ordinal,
                                 ),

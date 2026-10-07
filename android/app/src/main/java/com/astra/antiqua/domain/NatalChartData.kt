@@ -19,7 +19,23 @@ data class AccuratePlanetPosition(
     val minuteInSign: Int,
     val secondInSign: Int,
     val house: Int
-)
+) {
+    /**
+     * "13°22′", the minute rounded as web's formatDegMin rounds it
+     * (web/src/components/charts/chartFormat.ts). [minuteInSign] truncates,
+     * so a table built from it read a minute short of web's.
+     */
+    val degMin: String get() = formatDegMin(longitude)
+}
+
+/** Web's formatDegMin: minutes rounded half up, held under 30°. */
+fun formatDegMin(longitude: Double): String {
+    val inSign = ((longitude % 30.0) + 30.0) % 30.0
+    val totalMinutes = kotlin.math.floor(inSign * 60.0 + 0.5).toInt()
+    val deg = minOf(29, totalMinutes / 60)
+    val min = minOf(59, totalMinutes - deg * 60)
+    return "%02d°%02d′".format(java.util.Locale.ROOT, deg, min)
+}
 
 // The one documented orb table (docs/shared-content-model.md, the web
 // /method page), mirrored from ASPECT_RULES in web/src/data/sampleChart.ts:
