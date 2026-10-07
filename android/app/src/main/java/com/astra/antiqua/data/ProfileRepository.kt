@@ -17,5 +17,5 @@ interface ProfileRepository {
 
 class RoomProfileRepository(private val dao: UserDao) : ProfileRepository {
     override val profile: Flow<UserProfile?> = dao.getUserProfile()
-    override suspend fun save(profile: UserProfile) = dao.insertUserProfile(profile)
+    override suspend fun save(profile: UserProfile) = dao.replaceUserProfile(profile)
 }
