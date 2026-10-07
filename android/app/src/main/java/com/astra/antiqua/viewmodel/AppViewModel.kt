@@ -66,7 +66,21 @@ class AppViewModel(
      */
     fun selectCulture(culture: AncientCulture) {
         switchCulture(culture)
-        _currentPhase.value = AppPhase.ONBOARDING
+        viewModelScope.launch {
+            // After a strike the reader comes back here with a chart still on
+            // the device. That chart is kept, so the birth form is skipped.
+            val kept = settings.isOnboardingCompleted.first() && profiles.profile.first() != null
+            _currentPhase.value = if (kept) AppPhase.MAIN_DASHBOARD else AppPhase.ONBOARDING
+        }
+    }
+
+    /**
+     * After the account is struck: back to culture selection. The device
+     * chart and the completed flag stay, so choosing a culture returns to
+     * the dashboard.
+     */
+    fun returnToCultureSelection() {
+        _currentPhase.value = AppPhase.CULTURE_SELECTION
     }
 
     /**

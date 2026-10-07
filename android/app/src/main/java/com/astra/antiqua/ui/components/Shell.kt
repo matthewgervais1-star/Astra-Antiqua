@@ -44,7 +44,10 @@ import com.astra.antiqua.ui.theme.displayCase
  * makes a second screen worth building.
  */
 
-/** The top bar: the drawn lockup, with the sections either side of it. */
+/**
+ * The top bar: the drawn lockup, the sections under it, and ACCOUNT at the
+ * lockup's right end, where web's lintel keeps it.
+ */
 @Composable
 fun Lintel(
     active: Section?,
@@ -60,6 +63,19 @@ fun Lintel(
             contentAlignment = Alignment.Center,
         ) {
             Wordmark(capHeight = 11.dp)
+            val account = Section.ACCOUNT
+            Text(
+                text = account.label,
+                style = MaterialTheme.typography.labelSmall,
+                color = if (account == active) accent else Dim,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .clickable(
+                        onClickLabel = account.label,
+                        role = Role.Tab,
+                        onClick = { onNavigate(account.route) },
+                    ),
+            )
         }
         Row(
             modifier = Modifier
@@ -68,7 +84,7 @@ fun Lintel(
                 .padding(bottom = Spacing.Snug),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            Section.entries.forEach { section ->
+            Section.entries.filter { it != Section.ACCOUNT }.forEach { section ->
                 val isActive = section == active
                 Text(
                     text = section.label,

@@ -30,6 +30,15 @@ object Route {
     const val SYNASTRY = "synastry"
     const val METHOD = "method"
 
+    /** The account, web's /account. Signed out, it sends the reader to [SIGN_IN]. */
+    const val ACCOUNT = "account"
+
+    /** THE RECORD, web's /signin: sign in or a first entry. */
+    const val SIGN_IN = "signin"
+
+    /** THE ROLL, web's /waitlist. */
+    const val WAIT_LIST = "waitlist"
+
     /**
      * The Learn sections. Their web hrefs are "/learn" and "/learn/<slug>";
      * a Compose route cannot hold a slash in an argument, so the slug travels
@@ -78,4 +87,10 @@ enum class Section(val label: String, val route: String) {
     LEARN("LEARN", "learn/${Route.LEARN_INDEX}"),
     MATRIX("MATRIX", Route.MATRIX),
     CHART("CHART", Route.PLACEMENTS),
+
+    /**
+     * Web's lintel sets ACCOUNT apart, at the right end. The lintel here
+     * does the same: it sits beside the wordmark, not in the row of sections.
+     */
+    ACCOUNT("ACCOUNT", Route.ACCOUNT),
 }

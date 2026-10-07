@@ -16,6 +16,10 @@ import com.astra.antiqua.data.account.KeystoreSessionCipher
 import com.astra.antiqua.data.account.sessionDataStore
 import com.astra.antiqua.data.local.datastore.DataStoreManager
 import com.astra.antiqua.data.local.room.AppDatabase
+import java.io.File
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
 /**
@@ -52,6 +56,19 @@ class AppContainer(context: Context) {
      * The ViewModels no longer see it.
      */
     val readings: NatalReadingRepository by lazy { NatalReadingRepository(appContext) }
+
+    /**
+     * Work that must outlive the screen that started it: the PUT that
+     * mirrors a profile save to the account. One failure never cancels the
+     * next.
+     */
+    val appScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    /**
+     * Where an account export is written before the share sheet reads it.
+     * `res/xml/export_paths.xml` shares this directory and nothing else.
+     */
+    val exportDir: File get() = File(appContext.cacheDir, "export")
 
     /**
      * The optional web account. Built on first use, so a reader who never

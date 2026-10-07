@@ -37,6 +37,9 @@ import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.LauncherIcon
 import com.astra.antiqua.ui.components.Monogram
 import com.astra.antiqua.ui.nav.Route
+import com.astra.antiqua.ui.screens.AccountScreen
+import com.astra.antiqua.ui.screens.SignInScreen
+import com.astra.antiqua.ui.screens.WaitListScreen
 import com.astra.antiqua.ui.screens.CultureSelectionScreen
 import com.astra.antiqua.ui.screens.ForecastScreen
 import com.astra.antiqua.ui.screens.LearnScreen
@@ -115,6 +118,7 @@ class MainActivity : ComponentActivity() {
                                 AppPhase.MAIN_DASHBOARD -> AstraNavHost(
                                     culture = selectedCulture,
                                     onChooseCulture = viewModel::switchCulture,
+                                    onStruck = viewModel::returnToCultureSelection,
                                 )
                             }
                         }
@@ -141,6 +145,7 @@ class MainActivity : ComponentActivity() {
 fun AstraNavHost(
     culture: AncientCulture,
     onChooseCulture: (AncientCulture) -> Unit,
+    onStruck: () -> Unit = {},
 ) {
     val navController = rememberNavController()
 
@@ -282,6 +287,39 @@ fun AstraNavHost(
         }
         composable(Route.METHOD) {
             MethodScreen(onBack = { navController.popBackStack() })
+        }
+        composable(Route.ACCOUNT) {
+            AccountScreen(
+                culture = culture,
+                onNavigate = go,
+                // Signed out, the account is THE RECORD, as web's /account
+                // sends an anonymous visitor to /signin. The swap replaces
+                // this entry, so back does not return to a redirect.
+                onSignIn = {
+                    navController.navigate(Route.SIGN_IN) {
+                        popUpTo(Route.ACCOUNT) { inclusive = true }
+                    }
+                },
+                onSignedOut = { go(Route.DAY) },
+                onStruck = onStruck,
+                onChangeCulture = { go(Route.VOICES) },
+            )
+        }
+        composable(Route.SIGN_IN) {
+            SignInScreen(
+                culture = culture,
+                onNavigate = go,
+                onSignedIn = {
+                    navController.navigate(Route.ACCOUNT) {
+                        popUpTo(Route.SIGN_IN) { inclusive = true }
+                    }
+                },
+                onContinue = { go(Route.DAY) },
+                onOpenRoll = { open(Route.WAIT_LIST) },
+            )
+        }
+        composable(Route.WAIT_LIST) {
+            WaitListScreen(culture = culture, onNavigate = go)
         }
     }
 }
