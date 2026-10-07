@@ -24,8 +24,12 @@ object Route {
     const val MATRIX = "matrix"
     const val PLACEMENTS = "placements"
     const val PLACEMENT = "placements/{body}"
-    /** Casting a chart again, the counterpart of web's /reading. */
-    const val READING = "reading"
+    /**
+     * Casting a chart again, the counterpart of web's birth form. Its route
+     * must differ from [DAY]'s: when it shared "reading", the NavHost kept
+     * the form under both names and TODAY opened the birth form.
+     */
+    const val READING = "cast"
     const val FORECAST = "forecast"
     const val SYNASTRY = "synastry"
     const val METHOD = "method"
