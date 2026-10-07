@@ -1,4 +1,4 @@
-# HANDOFF, Astra Antiqua, state at 2026-10-06 (evening)
+# HANDOFF, Astra Antiqua, state at 2026-10-06 (late evening)
 
 Read first. Where this file and an older line in `CLAUDE.md` or any index disagree, this
 file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
@@ -15,10 +15,12 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   the second wave. Done and reviewed: Tasks 15 to 17 (day page, figure page, dive deeper),
   11 to 14 (archive, rule hex, display-xs 18px, Spectral SC), 18a and 18b (Android sync
   client and screens; Android birth times now use a bundled tz-lookup, as web does).
-  Web 98 and Android 165 tests green.
-- FACT (ledger): Task 18c (emulator pass, ten steps, screenshots to
-  `docs/design/screenshots/phase13-android-sync/`) was running at wrap-up. CANNOT CONFIRM its
-  result; read `task-18c-report.md` in the ledger folder and `git log`.
+  Web 98 and Android 173 tests green (Android count from `task-18c-report.md`).
+- FACT (`task-18c-report.md`, commits 92c04b2 to 86eca0a): Task 18c passed all ten emulator
+  steps and fixed four device defects: TODAY opened the birth form, a recast kept the old
+  chart, placements truncated the minute, the CULTURE row sat off CHANGE's line. 27
+  screenshots, test address redacted, in `docs/design/screenshots/phase13-android-sync/`.
+  Open from it: Android prints no Ascendant; sign abbreviations differ (CAN/PIS vs CNC/PSC).
 - INFERENCE: the live checkout `L:\Claude Projects\astra-antiqua` holds an older uncommitted
   `HANDOFF.md`; this file replaces it when the branches merge.
 
@@ -32,10 +34,11 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   (Room v3). All rulings with their reasons: the ledger and the plan's Rulings section.
 
 ## Pending, in order
-1. Task 18c result; then a whole-branch review and one cleanup pass over the ledger's
+1. A whole-branch review and one cleanup pass over the ledger's
    deferred list. Largest items: no licence screen in the Android app for its five SIL OFL
    font families and tz-lookup (CC0); phone-width overflow (culture chip, /charts header,
-   /week headline column); "HORUS THE RED" truncated in the /charts table at 1280.
+   /week headline column); "HORUS THE RED" truncated in the /charts table at 1280;
+   the Android Ascendant line and sign abbreviations from 18c.
 2. Owner to approve or reword the four Android device-error sentences (Egypt, Canaan,
    Carthage, Rome) in `android/app/src/main/res/values/strings.xml`.
 3. Push the branch and open its PR; push the refreshed design-system cards to Claude Design.
