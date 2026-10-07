@@ -49,6 +49,10 @@ class SignInViewModel(
     fun submit(email: String, password: String, confirm: String = "", displayName: String = "") {
         val mode = _state.value.mode
         if (_state.value.submitting || _state.value.signedIn) return
+        if (email.isBlank() || password.isEmpty()) {
+            _state.update { it.copy(notice = AccountNotice.CredentialsMissing) }
+            return
+        }
         if (mode == RecordMode.FIRST_ENTRY && password != confirm) {
             _state.update { it.copy(notice = AccountNotice.PasswordsDisagree) }
             return
@@ -60,7 +64,11 @@ class SignInViewModel(
                 RecordMode.FIRST_ENTRY -> account.signUp(email, password, displayName.trim().ifEmpty { null })
             }
             if (result is AccountResult.Failed) {
-                _state.update { it.copy(submitting = false, notice = result.error.toNotice()) }
+                val notice = when (val notice = result.error.toNotice()) {
+                    is AccountNotice.Server -> AccountNotice.RecordRefused
+                    else -> notice
+                }
+                _state.update { it.copy(submitting = false, notice = notice) }
                 return@launch
             }
             val sync = when (val synced = account.syncAfterSignIn()) {

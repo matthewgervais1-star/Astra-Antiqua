@@ -60,6 +60,8 @@
     <!-- What an account call reports. The server's own sentence is shown as received. -->
     <string name="account_error_unreachable">The record cannot be reached. Check the connection and try again.</string>
     <string name="account_error_unreadable">The record answered in a form this device cannot read. Try again later.</string>
+    <string name="record_refused">THE RECORD DOES NOT ANSWER. CHECK THE EMAIL OR THE PASSWORD.</string>
+    <string name="record_missing">Enter an email and a password.</string>
     <string name="account_error_passwords_disagree">The two passwords do not agree.</string>
     <string name="account_error_export_not_written">This device could not write the export. Try again.</string>
 

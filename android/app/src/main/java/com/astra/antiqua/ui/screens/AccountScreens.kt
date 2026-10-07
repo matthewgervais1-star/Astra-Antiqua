@@ -18,12 +18,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -49,6 +52,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.R
 import com.astra.antiqua.model.AncientCulture
@@ -138,6 +145,17 @@ fun SignInScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = Spacing.Chapter),
         ) {
+            // The signed-out face of the badge ACCOUNT shows, as web's sub
+            // bar carries SYNC OFF until the reader signs in.
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Spacing.Gutter)
+                    .padding(top = Spacing.Step),
+                horizontalArrangement = Arrangement.End,
+            ) {
+                Badge(stringResource(R.string.account_sync_off), tone = BadgeTone.OUTLINE)
+            }
             NaveHead(
                 kicker = stringResource(R.string.record_kicker),
                 headline = stringResource(R.string.record_headline),
@@ -190,11 +208,13 @@ fun SignInScreen(
                     onValueChange = { email = it },
                     keyboardType = KeyboardType.Email,
                 )
+                val submit = { model.submit(email, password, confirm, displayName) }
                 RecordField(
                     label = stringResource(R.string.record_password),
                     value = password,
                     onValueChange = { password = it },
                     secret = true,
+                    onDone = if (firstEntry) null else submit,
                 )
                 if (firstEntry) {
                     RecordField(
@@ -208,6 +228,7 @@ fun SignInScreen(
                         value = displayName,
                         onValueChange = { displayName = it },
                         capitalization = KeyboardCapitalization.Words,
+                        onDone = submit,
                     )
                 }
                 val action = when {
@@ -218,7 +239,7 @@ fun SignInScreen(
                 }
                 ActionButton(
                     label = stringResource(action),
-                    onClick = { model.submit(email, password, confirm, displayName) },
+                    onClick = submit,
                     weight = ActionWeight.VOTIVE,
                     enabled = !state.submitting,
                 )
@@ -261,8 +282,18 @@ fun AccountScreen(
     val accent = LocalAccent.current
     val chooserTitle = stringResource(R.string.account_export_chooser)
 
-    LaunchedEffect(state.phase) {
-        if (state.phase == AccountPhase.SIGNED_OUT) onSignIn()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LifecycleEventEffect(Lifecycle.Event.ON_START) { model.onStart() }
+    // The redirect fires only while this entry is resumed. An entry on its
+    // way out (signed out, fading to the day) is no longer resumed, so it
+    // cannot push THE RECORD over where the reader went.
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            model.state
+                .map { it.phase }
+                .distinctUntilChanged()
+                .collect { phase -> if (phase == AccountPhase.SIGNED_OUT) onSignIn() }
+        }
     }
     LaunchedEffect(state.exit) {
         val exit = state.exit ?: return@LaunchedEffect
@@ -325,7 +356,9 @@ fun AccountScreen(
                         text = change,
                         style = MaterialTheme.typography.labelSmall,
                         color = accent,
-                        modifier = Modifier.clickable(onClickLabel = change, role = Role.Button, onClick = onChangeCulture),
+                        modifier = Modifier
+                            .minimumInteractiveComponentSize()
+                            .clickable(onClickLabel = change, role = Role.Button, onClick = onChangeCulture),
                     )
                 }
             }
@@ -372,6 +405,7 @@ fun AccountScreen(
                             onValueChange = { typed = it },
                             keyboardType = KeyboardType.Email,
                             placeholder = email,
+                            onDone = { model.strike(typed) },
                         )
                         ConflictAction(
                             label = stringResource(
@@ -449,6 +483,7 @@ fun WaitListScreen(
                         onValueChange = { email = it },
                         keyboardType = KeyboardType.Email,
                         placeholder = stringResource(R.string.roll_email_hint),
+                        onDone = { model.submit(email) },
                     )
                     ActionButton(
                         label = stringResource(if (state.submitting) R.string.roll_entering else R.string.roll_enter),
@@ -479,6 +514,8 @@ private fun noticeText(
     AccountNotice.Unreachable -> stringResource(unreachable)
     AccountNotice.Unreadable -> stringResource(R.string.account_error_unreadable)
     AccountNotice.DeviceWriteFailed -> stringResource(deviceWriteFailed(culture))
+    AccountNotice.RecordRefused -> stringResource(R.string.record_refused)
+    AccountNotice.CredentialsMissing -> stringResource(R.string.record_missing)
     AccountNotice.PasswordsDisagree -> stringResource(R.string.account_error_passwords_disagree)
     AccountNotice.ExportNotWritten -> stringResource(R.string.account_error_export_not_written)
 }
@@ -520,7 +557,8 @@ private fun ProseLine(text: String) {
 /**
  * A labelled field on the incised rule, square-cornered. A [secret] field
  * hides what is typed, takes the password keyboard (which offers no
- * clipboard or history suggestions) and turns autocorrect off.
+ * clipboard or history suggestions) and turns autocorrect off. The last
+ * field of a form takes [onDone], which submits it from the keyboard.
  */
 @Composable
 private fun RecordField(
@@ -532,6 +570,7 @@ private fun RecordField(
     keyboardType: KeyboardType = KeyboardType.Text,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
     placeholder: String? = null,
+    onDone: (() -> Unit)? = null,
 ) {
     val accent = LocalAccent.current
     val colors = TextFieldDefaults.colors(
@@ -567,8 +606,9 @@ private fun RecordField(
                 capitalization = capitalization,
                 autoCorrectEnabled = false,
                 keyboardType = if (secret) KeyboardType.Password else keyboardType,
-                imeAction = ImeAction.Next,
+                imeAction = if (onDone != null) ImeAction.Done else ImeAction.Next,
             ),
+            keyboardActions = KeyboardActions(onDone = onDone?.let { done -> { done() } }),
             modifier = Modifier.fillMaxWidth(),
         )
     }
@@ -579,8 +619,10 @@ private fun RecordField(
 private fun LedgerRow(label: String, last: Boolean = false, value: @Composable () -> Unit) {
     Column(Modifier.fillMaxWidth()) {
         Box(Modifier.fillMaxWidth().height(1.dp).background(RuleRow))
+        // 48dp tall, so CHANGE keeps a full touch target inside the row
+        // rather than stretching it.
         Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.Snug),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(label, style = MaterialTheme.typography.labelSmall, color = Dim, modifier = Modifier.weight(1f))

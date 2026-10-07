@@ -174,11 +174,22 @@ class AccountViewModel(
 
     /**
      * The screen has left. Navigation may keep this ViewModel in a saved
-     * back stack, so it starts over: a later visit reads the session afresh
-     * rather than finding the old exit and leaving again.
+     * back stack, so the exit is cleared and the session is read again at
+     * the next [onStart], not now. Reading it now would mark the outgoing
+     * screen signed out while it is still on its way out.
      */
     fun consumeExit() {
         _state.update { AccountState(hasChart = it.hasChart) }
+        stale = true
+    }
+
+    /**
+     * The screen has started. After an exit it reads the session afresh, so
+     * a restored screen shows the account or sends the reader to THE RECORD.
+     */
+    fun onStart() {
+        if (!stale) return
+        stale = false
         viewModelScope.launch {
             val signedIn = try {
                 account.isSignedIn.first()
@@ -190,6 +201,9 @@ class AccountViewModel(
             if (signedIn) loadUser() else _state.update { it.copy(phase = AccountPhase.SIGNED_OUT) }
         }
     }
+
+    /** True between an exit and the next start. */
+    private var stale = false
 
     /** The share sheet has the file. */
     fun consumeExport() = _state.update { it.copy(exportFile = null) }

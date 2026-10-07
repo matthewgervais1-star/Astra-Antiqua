@@ -80,7 +80,7 @@ class AccountViewModelsTest {
     }
 
     @Test
-    fun `a wrong password shows the server's error and keeps any session`() = runTest(dispatcher) {
+    fun `a wrong password shows the record's fixed line and keeps any session`() = runTest(dispatcher) {
         val account = FakeAccount(
             signedIn = true,
             failWith = AccountError.Server(401, "Email or password is incorrect."),
@@ -90,7 +90,8 @@ class AccountViewModelsTest {
         model.submit("livia@example.com", "wrong")
         advanceUntilIdle()
 
-        assertEquals(AccountNotice.Server("Email or password is incorrect."), model.state.value.notice)
+        // Web shows one fixed line, never the server's text, on THE RECORD.
+        assertEquals(AccountNotice.RecordRefused, model.state.value.notice)
         assertFalse(model.state.value.signedIn)
         assertFalse(model.state.value.submitting)
         assertTrue(account.signedIn())
@@ -98,7 +99,7 @@ class AccountViewModelsTest {
     }
 
     @Test
-    fun `a first entry with an existing email shows the server's error`() = runTest(dispatcher) {
+    fun `a first entry with an existing email shows the record's fixed line`() = runTest(dispatcher) {
         val account = FakeAccount(failWith = AccountError.Server(400, "An account with this email already exists."))
         val model = SignInViewModel(account)
         model.setMode(RecordMode.FIRST_ENTRY)
@@ -106,10 +107,40 @@ class AccountViewModelsTest {
         model.submit("livia@example.com", "long enough", confirm = "long enough", displayName = "Livia")
         advanceUntilIdle()
 
-        assertEquals(AccountNotice.Server("An account with this email already exists."), model.state.value.notice)
+        assertEquals(AccountNotice.RecordRefused, model.state.value.notice)
         assertFalse(model.state.value.signedIn)
         assertFalse(account.signedIn())
         assertEquals(listOf("signUp"), account.calls)
+    }
+
+    @Test
+    fun `a blank email or password calls nothing`() = runTest(dispatcher) {
+        val account = FakeAccount()
+        val model = SignInViewModel(account)
+
+        model.submit("  ", "correct horse")
+        advanceUntilIdle()
+        assertEquals(AccountNotice.CredentialsMissing, model.state.value.notice)
+
+        model.submit("livia@example.com", "")
+        advanceUntilIdle()
+        assertEquals(AccountNotice.CredentialsMissing, model.state.value.notice)
+        assertTrue(account.calls.isEmpty())
+    }
+
+    @Test
+    fun `a sync that fails after sign-in leaves the reader signed in`() = runTest(dispatcher) {
+        val account = FakeAccount(FakeProfiles(romeProfile()), syncFailsWith = AccountError.Unreachable)
+        val model = SignInViewModel(account)
+
+        model.submit("livia@example.com", "correct horse")
+        advanceUntilIdle()
+
+        assertEquals(listOf("signIn", "syncAfterSignIn"), account.calls)
+        assertTrue(account.signedIn())
+        assertTrue(model.state.value.signedIn)
+        assertNull(model.state.value.sync)
+        assertNull(model.state.value.notice)
     }
 
     @Test
@@ -245,7 +276,7 @@ class AccountViewModelsTest {
     }
 
     @Test
-    fun `a used exit starts over, so a restored screen does not leave again`() = runTest(dispatcher) {
+    fun `after sign-out no sign-in redirect is asked for until the screen starts again`() = runTest(dispatcher) {
         val profiles = FakeProfiles(romeProfile())
         val account = FakeAccount(profiles, signedIn = true)
         val model = accountModel(account, profiles)
@@ -253,11 +284,42 @@ class AccountViewModelsTest {
         model.signOut()
         advanceUntilIdle()
 
+        // The outgoing screen uses the exit, then fades out. Nothing may ask
+        // it to push THE RECORD over the day while it does.
         model.consumeExit()
         advanceUntilIdle()
-
         assertNull(model.state.value.exit)
+        assertEquals(AccountPhase.LOADING, model.state.value.phase)
+
+        // Restored later from the saved stack: it reads the session afresh.
+        model.onStart()
+        advanceUntilIdle()
         assertEquals(AccountPhase.SIGNED_OUT, model.state.value.phase)
+
+        // A start with nothing to refresh does not ask the server again.
+        val before = account.calls.size
+        model.onStart()
+        advanceUntilIdle()
+        assertEquals(before, account.calls.size)
+    }
+
+    @Test
+    fun `a restored screen whose reader signed in again shows the account`() = runTest(dispatcher) {
+        val profiles = FakeProfiles(romeProfile())
+        val account = FakeAccount(profiles, signedIn = true)
+        val model = accountModel(account, profiles)
+        advanceUntilIdle()
+        model.signOut()
+        advanceUntilIdle()
+        model.consumeExit()
+        account.signIn("livia@example.com", "correct horse")
+        advanceUntilIdle()
+
+        model.onStart()
+        advanceUntilIdle()
+
+        assertEquals(AccountPhase.READY, model.state.value.phase)
+        assertEquals("livia@example.com", model.state.value.email)
     }
 
     @Test

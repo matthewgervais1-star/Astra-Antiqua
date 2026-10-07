@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,17 +60,20 @@ fun Lintel(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = Spacing.Gutter, vertical = Spacing.Snug),
+                .padding(horizontal = Spacing.Gutter),
             contentAlignment = Alignment.Center,
         ) {
-            Wordmark(capHeight = 11.dp)
+            Box(Modifier.padding(vertical = Spacing.Snug)) { Wordmark(capHeight = 11.dp) }
             val account = Section.ACCOUNT
+            // A 48dp touch target around the label; the label is drawn as
+            // the sections are.
             Text(
                 text = account.label,
                 style = MaterialTheme.typography.labelSmall,
                 color = if (account == active) accent else Dim,
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
+                    .minimumInteractiveComponentSize()
                     .clickable(
                         onClickLabel = account.label,
                         role = Role.Tab,

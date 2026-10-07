@@ -22,6 +22,16 @@ sealed interface AccountNotice {
     /** The device could not keep the session or the server's chart. */
     data object DeviceWriteFailed : AccountNotice
 
+    /**
+     * THE RECORD refused the email or the password. Web shows one fixed line
+     * for every sign-in or sign-up failure the server explains, rather than
+     * the server's own text, and so does this.
+     */
+    data object RecordRefused : AccountNotice
+
+    /** THE RECORD: the email or the password is blank, so nothing was sent. */
+    data object CredentialsMissing : AccountNotice
+
     /** First entry: the password and its confirmation differ. */
     data object PasswordsDisagree : AccountNotice
 

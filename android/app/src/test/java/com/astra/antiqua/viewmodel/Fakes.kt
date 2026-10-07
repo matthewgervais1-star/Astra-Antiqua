@@ -118,6 +118,8 @@ internal class FakeAccount(
     var serverChart: RemoteChart? = null,
     var waitListPosition: Int = 1,
     var failWith: AccountError? = null,
+    /** Fails [syncAfterSignIn] alone, after a sign-in that succeeded. */
+    var syncFailsWith: AccountError? = null,
 ) : AccountRepository {
     private val session = MutableStateFlow(signedIn)
     override val isSignedIn: Flow<Boolean> = session
@@ -191,7 +193,7 @@ internal class FakeAccount(
 
     override suspend fun syncAfterSignIn(): AccountResult<SyncOutcome> {
         calls += "syncAfterSignIn"
-        failWith?.let { return AccountResult.Failed(it) }
+        (failWith ?: syncFailsWith)?.let { return AccountResult.Failed(it) }
         val device = profiles.profile.first()
         serverChart?.let { chart ->
             profiles.save(chart.toUserProfileOrNull(id = device?.id ?: 0)!!)
