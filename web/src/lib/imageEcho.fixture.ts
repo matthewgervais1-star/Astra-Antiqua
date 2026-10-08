@@ -9,6 +9,7 @@
  */
 export const BASE_440C3AB: Readonly<Record<string, number>> = {
   across: 1,
+  again: 16,
   against: 127,
   aim: 1,
   alone: 2,
@@ -18,6 +19,7 @@ export const BASE_440C3AB: Readonly<Record<string, number>> = {
   arm: 7,
   arrive: 8,
   ask: 29,
+  back: 35,
   beer: 11,
   behind: 2,
   boat: 52,
@@ -84,6 +86,7 @@ export const BASE_440C3AB: Readonly<Record<string, number>> = {
   oar: 3,
   offer: 29,
   old: 9,
+  once: 2,
   open: 6,
   opposite: 35,
   overseer: 19,

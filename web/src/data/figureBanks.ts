@@ -190,7 +190,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
         harmony: [
           "a letter that arrives before you looked for it",
           "the boatman waving you aboard without the fee",
-          "an answer that comes back at once",
+          "a messenger who returns with the answer",
           "a contract read once and signed",
         ],
         tension: [

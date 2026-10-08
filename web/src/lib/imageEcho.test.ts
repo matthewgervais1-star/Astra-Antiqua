@@ -130,11 +130,13 @@ test("over 2026, no culture's sentence names one image twice", () => {
  * function words. The stop-list is the controller's list (your through while)
  * extended only with function words: the three-letter ones (the, and, for,
  * but, not, are, was, its, his, her, our, all, can, any, has, had, out, off,
- * who, how, too, yet, nor, own, him, she, one), and some, would, should,
- * could, been, were, being, every, about, over, under, until, once, again,
- * back, down, both, and the pronouns whoever, someone, something,
- * nothing, anything, everyone. Content words such as same, side, way, path,
- * place, step, stand, end and send are counted.
+ * who, how, too, yet, nor, own, him, she), "one" as the determiner and
+ * pronoun it is in every Egypt line that uses it ("one task", "ride as one",
+ * "pick one"), the determiners some, every and both, the auxiliaries would,
+ * should, could, been, were and being, the prepositions about, over, under,
+ * until and down, and the pronouns whoever, someone, something, nothing,
+ * anything and everyone. Content words such as same, side, way, path, place,
+ * step, stand, end and send are counted, and so are back, once and again.
  */
 const STOP = new Set([
   "your", "yours", "yourself", "you", "with", "that", "this", "they", "their", "them", "when", "then", "have", "will",
@@ -142,8 +144,8 @@ const STOP = new Set([
   "here", "where", "while",
   "the", "and", "for", "but", "not", "are", "was", "its", "his", "her", "our", "all", "can", "any", "has", "had", "out",
   "off", "who", "how", "too", "yet", "nor", "own", "him", "she", "one",
-  "some", "would", "should", "could", "been", "were", "being", "every", "about", "over", "under", "until", "once",
-  "again", "back", "down", "both", "whoever", "someone", "something", "nothing", "anything", "everyone",
+  "some", "would", "should", "could", "been", "were", "being", "every", "about", "over", "under", "until",
+  "down", "both", "whoever", "someone", "something", "nothing", "anything", "everyone",
 ]);
 const IRREGULAR: Readonly<Record<string, string>> = {
   sent: "send", stood: "stand", held: "hold", told: "tell", brought: "bring", came: "come", gave: "give",

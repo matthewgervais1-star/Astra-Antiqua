@@ -35,14 +35,14 @@ internal val DIVE_DEEPER_GOLDENS: List<DiveDeeperGolden> = listOf(
         skyGroups = listOf(
             "The Granary: your work and your rations|ISIS ⚹ AMUN · 1°31′|Your patrons and your beloved throw in with each other. A kind word buys more than silver. Reckon on the foreman passing your row without a word.",
             "The House of the Ka: your home and your forebears|ISIS ⚹ HORUS THE RED · 1°32′|Your beloved and your temper help each other along. One shove is enough. Reckon on a mother's name said kindly at the table.",
-            "The Ferry: your letters and your crossings|SEBEGU □ OSIRIS · 4°53′|Your letters and what you have buried haul each other back. Your words come back to you bent. Reckon on a boat already gone from the landing.",
+            "The Ferry: your letters and your crossings|SEBEGU □ OSIRIS · 4°53′|Your letters and what you have buried haul at each other. Your words arrive bent. Reckon on a boat already gone from the landing.",
             "The Sealed Shrine: what you keep to yourself|HORUS THE RED ☌ AMUN · 3°03′|Your temper and your patrons walk as one. Your anger has a useful outlet. Reckon on a dream you remember clearly at waking.",
         ),
         natalGroups = listOf(
-            "The Granary: your work and your rations|RA △ YOUR KHONSU · 0°03′|Your day's work and your moods float as one. Your work goes smoothly. Reckon on the foreman passing your row without a word.",
-            "The House of the Ka: your home and your forebears|SEBEGU ⚹ YOUR NUT · 0°05′|Your letters and your plans for the new season help each other along. A chance comes from an odd quarter. Reckon on a mother's name said kindly at the table.",
+            "The Granary: your work and your rations|RA △ YOUR KHONSU · 0°03′|Your day's work and your moods float with the current. Your work goes smoothly. Reckon on the foreman passing your row without a word.",
+            "The House of the Ka: your home and your forebears|SEBEGU ⚹ YOUR NUT · 0°05′|Your letters and your plans for the new season help each other along. A chance comes from an unlikely quarter. Reckon on a mother's name said kindly at the table.",
             "The Ferry: your letters and your crossings|GEB ☌ YOUR HORUS THE RED · 2°11′|Your duties and your temper ride as one. Your anger has a useful outlet. Reckon on the boatman waving you aboard without the fee.",
-            "The Sealed Shrine: what you keep to yourself|ISIS △ YOUR RA · 0°33′|Your beloved and your day's work keep the same pace. What you give in love comes back with interest. Reckon on a dream you remember clearly at waking.",
+            "The Sealed Shrine: what you keep to yourself|ISIS △ YOUR RA · 0°33′|Your beloved and your day's work keep the same pace. What you give in love is repaid with interest. Reckon on a dream you remember clearly at waking.",
         ),
         skyProceed = listOf("Beer to a friend", "A full measure", "A small gift", "A seat at table"),
         skyRefrain = listOf("Bad news at bedtime", "Talk of the dead", "Sharp words at supper", "Old grievances"),

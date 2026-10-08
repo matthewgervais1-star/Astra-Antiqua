@@ -189,11 +189,11 @@ test("the sky picks the figure: the day page leads with the tightest figure, eve
   assert.deepEqual([sunUranus.a, sunUranus.b, sunUranus.kind], ["sun", "uranus", "trine"]);
 });
 
-test("over thirty days, a sentence returns within seven days only when its key returns", () => {
+test("over 2026, a sentence returns within seven days only when its key returns", () => {
   const same = (x: DayFigure | undefined, y: DayFigure | undefined) =>
     x !== undefined && y !== undefined && x.a === y.a && x.b === y.b && x.kind === y.kind;
   for (const culture of CULTURES) {
-    const pages = Array.from({ length: 30 }, (_, i) => composeDayPage(culture, new Date(Date.UTC(2026, 8, 29) + i * 86_400_000)));
+    const pages = Array.from({ length: 365 }, (_, i) => composeDayPage(culture, new Date(Date.UTC(2026, 0, 1) + i * 86_400_000)));
     pages.forEach((page, i) => {
       for (let j = Math.max(0, i - 6); j < i; j += 1) {
         const earlier = pages[j]!;

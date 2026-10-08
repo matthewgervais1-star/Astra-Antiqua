@@ -78,7 +78,7 @@ class DiveDeeperParityTest {
         // On 2026-10-22 the third group's only figures are read by the second (web's dump).
         val date = Date.from(Instant.parse("2026-10-22T00:00:00Z"))
         val expected = mapOf(
-            AncientCulture.EGYPT to "The same weight that sits on the House of the Ka reaches here too, and it is weighed once.",
+            AncientCulture.EGYPT to "The same weight that sits on the House of the Ka reaches here too, and it is reckoned there.",
             AncientCulture.GREECE to "The answer given at the Oikos is the one this place hears too.",
             AncientCulture.CANAAN to "The matter heard at the Father's House is the same matter heard here.",
             AncientCulture.CARTHAGE to "The entry posted under the Courtyard is charged here as well, and it is not entered twice.",
