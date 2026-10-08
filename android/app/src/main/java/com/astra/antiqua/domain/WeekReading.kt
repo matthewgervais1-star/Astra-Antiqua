@@ -17,6 +17,29 @@ enum class DayTone { HARMONY, TENSION, QUIET }
  */
 enum class RomeDayFlag { F, N, C }
 
+/**
+ * The day's shorthand as data, web's WeekShorthand (web/src/lib/weekReading.ts).
+ * WeekScreen draws each body as its DeityGlyph in the culture in force and
+ * prints the aspect glyph, the arrow, the sign's [ZodiacSign.abbr] and TIGHT
+ * around the glyphs.
+ */
+sealed interface WeekShorthand {
+    data class Aspect(val a: Planet, val aspect: AspectType, val b: Planet, val tight: Boolean) : WeekShorthand {
+        /** Web's ASPECT_GLYPH, printed between the two bodies. */
+        val glyph: String get() = DayDecreeComposer.glyph(aspect)
+
+        /** Printed after the second body: TIGHT under the tight orb, nothing otherwise. */
+        val tail: String? get() = if (tight) "TIGHT" else null
+    }
+
+    data class Ingress(val planet: Planet, val sign: ZodiacSign) : WeekShorthand {
+        /** Printed after the body: the arrow and the sign it enters. */
+        val tail: String get() = "→ ${sign.abbr}"
+    }
+
+    data object Quiet : WeekShorthand
+}
+
 data class WeekDay(
     val date: Date,
     val label: String,
@@ -27,7 +50,7 @@ data class WeekDay(
     val line: String,
     val tone: DayTone,
     val tight: Boolean,
-    val shorthand: String,
+    val shorthand: WeekShorthand,
     val flag: RomeDayFlag?,
     /** The row's figure page (UTC date, figure id), or null on an ingress or quiet day. */
     val figure: Pair<String, String>? = null,
@@ -144,7 +167,7 @@ object WeekReading {
             var figure: Pair<String, String>? = null
             val line: String
             val tone: DayTone
-            val shorthand: String
+            val shorthand: WeekShorthand
             var tight = false
             if (tightest != null) {
                 tight = tightest.orb < TIGHT_ORB
@@ -155,8 +178,7 @@ object WeekReading {
                 line = DayDecreeComposer.composeMeaning(culture, tightest, Math.floorDiv(instant, DAY_MS)) + " " +
                     DayDecreeComposer.composeConsequence(culture, tightest)
                 figure = FigureReadingComposer.isoDateUtc(Date(instant)) to FigureReadingComposer.figureId(tightest)
-                shorthand = "${tightest.a.name.take(3)} ${tightest.aspect.name.take(3)} " +
-                    "${tightest.b.name.take(3)}${if (tight) " · TIGHT" else ""}"
+                shorthand = WeekShorthand.Aspect(tightest.a, tightest.aspect, tightest.b, tight)
             } else {
                 // Nothing in orb. A body crossing into a new sign that day is
                 // still something the sky did, and it is reported before the
@@ -173,13 +195,12 @@ object WeekReading {
                     val verb = ingressVerb(culture)
                     val ruling = ingressFrame(culture, deityCharge(culture, ingress.body))
                     line = "$deity $verb the ${signPhrase(ingress.sign)}. $ruling"
-                    shorthand = "${ingress.body.name.take(3)} → " +
-                        ingress.sign.abbr
+                    shorthand = WeekShorthand.Ingress(ingress.body, ingress.sign)
                 } else {
                     tone = DayTone.QUIET
                     headline = quietDayHeadline(culture)
                     line = quietLine(culture)
-                    shorthand = "QUIET"
+                    shorthand = WeekShorthand.Quiet
                 }
             }
 
