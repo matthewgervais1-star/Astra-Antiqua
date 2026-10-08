@@ -15,7 +15,6 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   the second wave. Done and reviewed: Tasks 15 to 17 (day page, figure page, dive deeper),
   11 to 14 (archive, rule hex, display-xs 18px, Spectral SC), 18a and 18b (Android sync
   client and screens; Android birth times now use a bundled tz-lookup, as web does).
-  Web 98 and Android 173 tests green (Android count from `task-18c-report.md`).
 - FACT (`task-18c-report.md`, commits 92c04b2 to 86eca0a): Task 18c passed all ten emulator
   steps and fixed four device defects: TODAY opened the birth form, a recast kept the old
   chart, placements truncated the minute, the CULTURE row sat off CHANGE's line. 27
@@ -24,9 +23,12 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   scroll on day and week pages" (53addc3, PR #3 to `master`, open) is cherry-picked here as
   d22b4d6; PR #3 can merge or close, the fix reaches master through this branch either way.
 - FACT (ledger, 2026-10-08): whole-branch review of 9804a4e..1d930a3 found 0 Critical,
-  1 Important (Room 2->3 migration keeps the old guessed-zone birth instant), 7 Minor; fix
-  wave running. Cleanup C1 done: LICENCES screen (fonts, tz-lookup, Astronomy Engine MIT),
-  6292fea, review approved, 177 Android tests.
+  1 Important (Room 2->3 migration kept the guessed-zone instant); fixed 1e048b1..44bc3e3.
+  Cleanup done and reviewed: C1 LICENCES screen (6292fea); C2 /charts header, /week rows,
+  names wrap at 1280 (7638d9e); C3 Android ASC line on web's obliquity, CNC/PSC/AQR on both
+  surfaces, transit spans to the true ASC (d30dfa6..440c3ab). C4 (Egypt echo, spec A.6/B.3)
+  in re-review. Egypt and Canaan device errors follow the owner's guidance, Carthage and
+  Rome approved as written.
 - FACT (ledger): the Claude Design push waits on the owner's `/design-login` (interactive).
 - INFERENCE: the live checkout's older uncommitted `HANDOFF.md` is replaced by this file on merge.
 
@@ -40,11 +42,7 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   (Room v3). All rulings with their reasons: the ledger and the plan's Rulings section.
 
 ## Pending, in order
-1. Review fix wave; cleanup C2 (/charts header, /week column, HORUS at 1280), C3 (Android
-   ASC line, CNC/PSC), C4 (Egypt river echo, spec notes). Briefs in the ledger folder.
-2. Owner to approve or reword the four Android device-error sentences (Egypt, Canaan,
-   Carthage, Rome) in `android/app/src/main/res/values/strings.xml`.
-3. Push the branch and open its PR; push the refreshed design-system cards to Claude Design.
+1. Close C4; run every check. 2. Push the branch and open its PR; push the refreshed design-system cards to Claude Design.
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.
 
