@@ -116,7 +116,7 @@ Jupiter in Virgo:
    figures that touch that group (via `lib/dayPressure.ts`'s buckets when a natal chart
    exists; from the sky figures' body domains otherwise), ending in one concrete line. A
    group with nothing in orb gets the culture's quiet line for that group (four per culture).
-   *As built:* in two cases a group prints one sentence instead of two or three. Without a chart, each
+   *As built:* in three cases a group prints one sentence instead of two or three. Without a chart, each
    sky figure is read by one group only, so a group whose every touching figure an earlier
    group already reads prints the culture's pointer line (`DIVE_DEEPER_BANKS.shared`, naming
    the earlier group that reads its tightest figure) in place of a paragraph or a quiet
@@ -125,7 +125,10 @@ Jupiter in Virgo:
    natal place after the others of its speed, the Moon on the natal Moon last of all, then by
    orb); when the Moon on the natal Moon is the only contact, the group prints the concrete
    line alone, because that contact keys no relation and no consequence, and the day
-   pressure module names the same contact for the group.
+   pressure module names the same contact for the group. Any other body against its own
+   natal place (Mars on the natal Mars) reads one domain twice, so it prints no relation and
+   speaks through its consequence; when that consequence is already on the page, the
+   group prints the concrete line alone as well.
 7. **Closing line**: the culture's "come back tomorrow" (five lines).
 
 The daily message (`lib/dailyMessage.ts`) is the headline plus paragraph sentences (a), (b)
