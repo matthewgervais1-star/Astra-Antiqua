@@ -38,6 +38,7 @@ import com.astra.antiqua.ui.LauncherIcon
 import com.astra.antiqua.ui.components.Monogram
 import com.astra.antiqua.ui.nav.Route
 import com.astra.antiqua.ui.screens.AccountScreen
+import com.astra.antiqua.ui.screens.LicencesScreen
 import com.astra.antiqua.ui.screens.SignInScreen
 import com.astra.antiqua.ui.screens.WaitListScreen
 import com.astra.antiqua.ui.screens.CultureSelectionScreen
@@ -286,7 +287,13 @@ fun AstraNavHost(
             )
         }
         composable(Route.METHOD) {
-            MethodScreen(onBack = { navController.popBackStack() })
+            MethodScreen(
+                onBack = { navController.popBackStack() },
+                onOpenLicences = { open(Route.LICENCES) },
+            )
+        }
+        composable(Route.LICENCES) {
+            LicencesScreen(culture = culture, onNavigate = go)
         }
         composable(Route.ACCOUNT) {
             AccountScreen(
@@ -303,6 +310,7 @@ fun AstraNavHost(
                 onSignedOut = { go(Route.DAY) },
                 onStruck = onStruck,
                 onChangeCulture = { go(Route.VOICES) },
+                onOpenLicences = { open(Route.LICENCES) },
             )
         }
         composable(Route.SIGN_IN) {

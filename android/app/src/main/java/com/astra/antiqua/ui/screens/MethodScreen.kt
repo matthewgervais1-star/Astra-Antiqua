@@ -1,5 +1,6 @@
 package com.astra.antiqua.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,10 +11,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
+import com.astra.antiqua.R
 import com.astra.antiqua.domain.AspectType
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.Planet
@@ -41,7 +46,7 @@ import com.astra.antiqua.ui.theme.displayCase
  * cannot end up promising different things.
  */
 @Composable
-fun MethodScreen(onBack: () -> Unit) {
+fun MethodScreen(onBack: () -> Unit, onOpenLicences: () -> Unit) {
     val accent = LocalAccent.current
 
     Column(
@@ -147,6 +152,19 @@ fun MethodScreen(onBack: () -> Unit) {
             "Your data",
             "Everything works without an account. Your culture, chart, and readings live on " +
                 "this device.",
+        )
+
+        // The account screen is out of reach of a reader who never signs in,
+        // so the licences are also linked from here.
+        val licences = stringResource(R.string.account_licences)
+        Text(
+            text = "$licences →",
+            style = MaterialTheme.typography.labelSmall,
+            color = accent,
+            modifier = Modifier
+                .padding(top = Spacing.Step)
+                .minimumInteractiveComponentSize()
+                .clickable(onClickLabel = licences, role = Role.Button, onClick = onOpenLicences),
         )
 
         PrimaryAction(

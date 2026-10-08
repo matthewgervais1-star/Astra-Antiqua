@@ -34,6 +34,9 @@ object Route {
     const val SYNASTRY = "synastry"
     const val METHOD = "method"
 
+    /** The open-source licences the app carries, reached from the account and the method page. */
+    const val LICENCES = "licences"
+
     /** The account, web's /account. Signed out, it sends the reader to [SIGN_IN]. */
     const val ACCOUNT = "account"
 

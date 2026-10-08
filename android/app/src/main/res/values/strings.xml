@@ -71,4 +71,24 @@
     <string name="account_error_device_write_canaan">This device could not keep the tablet\'s seal on your record. Try again.</string>
     <string name="account_error_device_write_carthage">This device could not keep the merchant\'s seal on your record. Try again.</string>
     <string name="account_error_device_write_rome">This device could not keep the signet on your record. Try again.</string>
+
+    <!-- LICENCES: third-party material the app ships. Copyright lines are quoted from each font's name table (nameID 0). -->
+    <string name="account_licences">LICENCES</string>
+    <string name="account_licences_open">VIEW →</string>
+    <string name="licences_context">Licences</string>
+    <string name="licences_kicker">OPEN-SOURCE LICENCES</string>
+    <string name="licences_headline">WHAT THIS APP CARRIES</string>
+    <string name="licences_fonts">FONTS</string>
+    <string name="licences_ofl_name">SIL Open Font License 1.1</string>
+    <string name="licences_ofl_heading">SIL OPEN FONT LICENSE 1.1</string>
+    <string name="licences_data">DATA</string>
+    <string name="licences_libraries">LIBRARIES</string>
+    <string name="licences_tz_lookup">tz-lookup, CC0 1.0 Universal. The bundled birthplace timezone lookup derives from it.</string>
+    <string name="licences_astronomy">Astronomy Engine (cosinekitty/astronomy), MIT License. The ephemeris behind every position.</string>
+    <string name="licences_apache">OkHttp and the AndroidX libraries: Apache License 2.0.</string>
+    <string name="licences_font_cinzel">Copyright 2020 The Cinzel Project Authors (https://github.com/NDISCOVER/Cinzel)</string>
+    <string name="licences_font_spectral">Copyright 2017 The Spectral Project Authors (https://github.com/productiontype/Spectral)</string>
+    <string name="licences_font_spectral_sc">Copyright 2017 The Spectral Project Authors (https://github.com/productiontype/Spectral)</string>
+    <string name="licences_font_ibm_plex_mono">Copyright 2017 IBM Corp. All rights reserved.</string>
+    <string name="licences_font_noto_sans_symbols">Copyright 2022 The Noto Project Authors (https://github.com/notofonts/symbols)</string>
 </resources>

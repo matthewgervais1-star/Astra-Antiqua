@@ -275,6 +275,7 @@ fun AccountScreen(
     onSignedOut: () -> Unit,
     onStruck: () -> Unit,
     onChangeCulture: () -> Unit,
+    onOpenLicences: () -> Unit,
 ) {
     val model: AccountViewModel = viewModel(factory = AstraViewModelFactory)
     val state by model.state.collectAsState()
@@ -370,8 +371,23 @@ fun AccountScreen(
             LedgerRow(stringResource(R.string.account_your_chart)) {
                 LedgerValue(stringResource(if (state.hasChart) R.string.account_synced else R.string.account_not_cast))
             }
-            LedgerRow(stringResource(R.string.account_devices), last = true) {
+            LedgerRow(stringResource(R.string.account_devices)) {
                 LedgerValue(stringResource(R.string.account_this_one))
+            }
+            LedgerRow(stringResource(R.string.account_licences), last = true) {
+                val open = stringResource(R.string.account_licences_open)
+                Text(
+                    text = open,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = accent,
+                    modifier = Modifier
+                        .minimumInteractiveComponentSize()
+                        .clickable(
+                            onClickLabel = stringResource(R.string.account_licences),
+                            role = Role.Button,
+                            onClick = onOpenLicences,
+                        ),
+                )
             }
 
             Column(
