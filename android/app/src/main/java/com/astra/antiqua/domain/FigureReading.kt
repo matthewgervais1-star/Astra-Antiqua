@@ -51,7 +51,13 @@ data class FigurePage(
 )
 
 /** The reader's chart, as the figure page needs it. */
-data class NatalPoints(val chart: Map<Planet, Double>, val ascendant: Double)
+data class NatalPoints(val chart: Map<Planet, Double>, val ascendant: Double) {
+    companion object {
+        /** Every body's longitude and the Ascendant's degree, web's natal.chart and natal.ascendant. */
+        fun of(chart: NatalChartData): NatalPoints =
+            NatalPoints(chart.planets.mapValues { it.value.longitude }, chart.ascendant)
+    }
+}
 
 /** The natal point a figure touches: the transiting body, the natal planet, the kind and the orb. */
 data class NatalContact(val body: Planet, val point: Planet, val aspect: AspectType, val orb: Double)

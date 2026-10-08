@@ -122,9 +122,8 @@ class DashboardViewModel(
                 val decree = _dayDecree.value
                 val (chartData, natalExtras) = withContext(Dispatchers.Default) {
                     val chart = CalculateNatalChartUseCase(astronomy).execute(userProfile)
-                    val ascendant = chart.houseCusps.getOrNull(1)
-                    val extras = if (decree != null && ascendant != null) {
-                        extrasFor(dayCulture, decree, now, NatalPoints(chart.planets.mapValues { it.value.longitude }, ascendant))
+                    val extras = if (decree != null) {
+                        extrasFor(dayCulture, decree, now, NatalPoints.of(chart))
                     } else {
                         null
                     }

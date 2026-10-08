@@ -61,9 +61,7 @@ class FigureViewModel(
             val next = withContext(Dispatchers.Default) {
                 val natal = try {
                     profiles.profile.first()?.let { profile ->
-                        val chart = CalculateNatalChartUseCase(astronomy).execute(profile)
-                        val ascendant = chart.houseCusps.getOrNull(1)
-                        if (ascendant == null) null else NatalPoints(chart.planets.mapValues { it.value.longitude }, ascendant)
+                        NatalPoints.of(CalculateNatalChartUseCase(astronomy).execute(profile))
                     }
                 } catch (e: CancellationException) {
                     throw e

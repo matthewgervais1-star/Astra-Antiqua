@@ -7,7 +7,7 @@ import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.data.ProfileRepository
 import com.astra.antiqua.domain.CalculateNatalChartUseCase
 import com.astra.antiqua.domain.DayDecreeComposer
-import com.astra.antiqua.domain.NatalPoint
+import com.astra.antiqua.domain.natalPointsOf
 import com.astra.antiqua.domain.NatalPoints
 import com.astra.antiqua.domain.SLOW_BODIES
 import com.astra.antiqua.domain.TransitSpan
@@ -75,15 +75,9 @@ class TransitsViewModel(
                 var skyNow: Map<Planet, Double> = emptyMap()
                 val spans = withContext(Dispatchers.Default) {
                     val chart = CalculateNatalChartUseCase(astronomy).execute(profile)
-                    natal = chart.houseCusps.getOrNull(1)?.let { asc ->
-                        NatalPoints(chart.planets.mapValues { it.value.longitude }, asc)
-                    }
+                    natal = NatalPoints.of(chart)
                     skyNow = DayDecreeComposer.chartAt(astronomy, now)
-                    val points = buildList {
-                        chart.planets[Planet.SUN]?.let { add(NatalPoint("sun", it.longitude)) }
-                        chart.planets[Planet.MOON]?.let { add(NatalPoint("moon", it.longitude)) }
-                        chart.houseCusps.getOrNull(1)?.let { add(NatalPoint("asc", it)) }
-                    }
+                    val points = natalPointsOf(chart)
                     TransitSpans.compute(
                         engine = astronomy,
                         natalPoints = points,
