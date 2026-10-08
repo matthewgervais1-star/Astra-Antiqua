@@ -7,10 +7,10 @@ import type { Culture } from "@/data/cultures";
  */
 export const GOLDEN_2026_09_29: Readonly<Record<Culture, { headline: string; evidence: string; paragraph: string }>> = {
   egypt: {
-    headline: "Start the heavy thing while the light holds.",
+    headline: "Start the hard job while the light holds.",
     evidence: "RA △ NUT · 0°19′",
     paragraph:
-      "Your day's work and your plans for the new season keep the same pace, and the cord is drawn tight. A sudden change works in your favor. Ra weighs true against the feather, and the keeper of the balance leaves the beam alone. Behind Ra and Nut in the procession, Khonsu tips the scales against Osiris: your moods and what you have buried get in each other's way. Lift the heaviest stone of the week first, and call on Ra as you lift it.",
+      "Your day's work and your plans for the new season keep the same pace, and the cord is drawn tight. A sudden change works in your favor. Ra matches the feather in weight, and the scribe lays down his reed. Behind Ra and Nut in the procession, Khonsu tips the scales against Osiris: your moods and what you have buried get in each other's way. Lift the heaviest stone of the week first, and call on Ra as you raise it.",
   },
   greece: {
     headline: "Stand up on the Pnyx and be counted.",
