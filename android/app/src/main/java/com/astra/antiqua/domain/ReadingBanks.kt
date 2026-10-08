@@ -129,7 +129,7 @@ object DecreeBanks {
             AspectType.SEXTILE -> when (body) {
                 Planet.SUN -> "Ask a neighbor to take the other end of the sledge."
                 Planet.MOON -> "Share your emmer bread with someone at home."
-                Planet.MERCURY -> "Send the short message by a runner."
+                Planet.MERCURY -> "Send the short note by a runner."
                 Planet.VENUS -> "Set the first loaf on the altar, and make the gift small."
                 Planet.MARS -> "Put your strength into the canal in front of you."
                 else -> error("$body has no headlines line")
@@ -138,7 +138,7 @@ object DecreeBanks {
                 Planet.SUN -> "Finish the one task the overseer will check."
                 Planet.MOON -> "Do not act on the mood you wake up with before the sun is high over the Nile."
                 Planet.MERCURY -> "Read the papyrus twice before you answer it."
-                Planet.VENUS -> "Do not haggle with your beloved like a buyer of linen."
+                Planet.VENUS -> "Do not haggle with your beloved as you would over linen."
                 Planet.MARS -> "Stay still until your blood cools."
                 else -> error("$body has no headlines line")
             }
@@ -338,8 +338,8 @@ object DecreeBanks {
         AncientCulture.EGYPT -> when (aspect) {
             AspectType.CONJUNCTION -> listOf("ride as one", "walk as one", "go out together")
             AspectType.SEXTILE -> listOf("throw in with each other", "help each other along", "lighten each other's load")
-            AspectType.SQUARE -> listOf("haul at each other", "get in each other's way", "pull at each other")
-            AspectType.TRINE -> listOf("float with the current", "keep the same pace", "go easily with each other")
+            AspectType.SQUARE -> listOf("haul each other back", "get in each other's way", "pull at each other")
+            AspectType.TRINE -> listOf("like each other", "keep the same pace", "go easily with each other")
             AspectType.OPPOSITION -> listOf("face each other down", "want opposite things", "each want it all")
         }
 
@@ -405,7 +405,7 @@ object DecreeBanks {
                 Planet.MERCURY -> "One short letter wins you a hearing."
                 Planet.VENUS -> "A kind word buys more than silver."
                 Planet.MARS -> "One shove is enough."
-                Planet.JUPITER -> "A patron grants it on the spot."
+                Planet.JUPITER -> "A patron grants your request on the spot."
                 Planet.SATURN -> "An old duty eases the moment you start it."
                 Planet.URANUS -> "A chance comes from an unlikely quarter."
                 Planet.NEPTUNE -> "A hunch is worth following for a while."
@@ -426,7 +426,7 @@ object DecreeBanks {
             }
             AspectType.TRINE -> when (partner) {
                 Planet.SUN -> "Your work goes smoothly."
-                Planet.MERCURY -> "Your message reaches the right ear."
+                Planet.MERCURY -> "Your plea reaches the right ear."
                 Planet.VENUS -> "What you give in love is repaid with interest."
                 Planet.MARS -> "Your effort lands where you aim it."
                 Planet.JUPITER -> "Good fortune finds you unasked."
@@ -1361,7 +1361,7 @@ object DiveDeeperBanks {
 
     /** What a group says when every figure touching it is read above. Slot: {group}, that group's name. */
     fun shared(culture: AncientCulture): String = when (culture) {
-        AncientCulture.EGYPT -> "The same weight that sits on {group} reaches here too, and it is reckoned there."
+        AncientCulture.EGYPT -> "The same weight that sits on {group} reaches here too, so read it there."
         AncientCulture.GREECE -> "The answer given at {group} is the one this place hears too."
         AncientCulture.CANAAN -> "The matter heard at {group} is the same matter heard here."
         AncientCulture.CARTHAGE -> "The entry posted under {group} is charged here as well, and it is not entered twice."

@@ -47,10 +47,15 @@ const IMAGE_WORDS: Readonly<Record<Culture, readonly string[]>> = {
   ],
 };
 
-/** Egypt's river family, one image however it is named. */
-const RIVER = new Set(["riverbank", "riverbed", "nile", "bank", "shore", "water", "ferry", "ferryman", "downstream", "upstream"]);
+/** Egypt's river family, one image however it is named: its banks, its water, its current and its flood. */
+const RIVER = new Set([
+  "riverbank", "riverbed", "nile", "bank", "shore", "water", "ferry", "ferryman", "downstream", "upstream", "current",
+  "stream", "flood", "flow",
+]);
 /** Ma'at's scale is one image whether the line names the scale, the balance, its beam or a pan. */
 const SCALE = new Set(["scale", "balance", "beam", "pan"]);
+/** The messenger and the message he carries are one image. */
+const MESSAGE = new Set(["messenger", "message"]);
 
 function stemOf(culture: Culture, word: string): string | null {
   const vocab = new Set(IMAGE_WORDS[culture]);
@@ -58,6 +63,7 @@ function stemOf(culture: Culture, word: string): string | null {
   for (const s of [t, t.replace(/s$/, ""), t.replace(/es$/, ""), t.replace(/ing$/, ""), t.replace(/ed$/, ""), t.replace(/d$/, "")]) {
     if (culture === "egypt" && RIVER.has(s)) return "river";
     if (culture === "egypt" && SCALE.has(s)) return "scale";
+    if (culture === "egypt" && MESSAGE.has(s)) return "messenger";
     if (vocab.has(s)) return s;
   }
   return null;
@@ -121,8 +127,9 @@ test("over 2026, no culture's sentence names one image twice", () => {
  * Content words, for the Egypt paragraph check and the page ratchet. A word
  * counts when it has three letters or more and is not on the stop-list below.
  * Stems are folded ('s, plural s and es, ies to y, ed, ing) and a few
- * irregular forms are mapped to their base (sent to send, stood to stand), so
- * stand and stands, end and ends, step and steps, send and sent are one word.
+ * irregular forms are mapped to their base (sent to send, stood to stand,
+ * messenger to message), so stand and stands, end and ends, step and steps,
+ * send and sent, message and messenger are one word.
  *
  * Not counted: god names (the evidence and the second figure name them by
  * design), the domains (every meaning sentence names two), the dive deeper's
@@ -150,6 +157,8 @@ const STOP = new Set([
 const IRREGULAR: Readonly<Record<string, string>> = {
   sent: "send", stood: "stand", held: "hold", told: "tell", brought: "bring", came: "come", gave: "give",
   took: "take", taken: "take", kept: "keep", went: "go",
+  // A messenger carries a message: one word to a reader who meets both on a page.
+  messenger: "message", messengers: "message",
 };
 
 /** Words that end in "ing" and are not a verb form. */

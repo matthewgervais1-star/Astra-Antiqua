@@ -53,7 +53,7 @@ internal val FIGURE_GOLDENS: List<FigureGolden> = listOf(
             parts = "Your day's work|RA NOW / can ride the current with|TRINE (120°) / your plans for the new season.|NUT NOW",
             recurrence = "This figure comes round on the river again about every six months.",
             actLine = "Ra matches the feather in weight, and the scribe lays down his reed.",
-            manifestations = "a letter that arrives before you looked for it · the boatman waving you aboard without the fee · a messenger who returns with the answer · a contract read once and signed",
+            manifestations = "a letter that arrives before you looked for it · the boatman waving you aboard without the fee · a buyer who meets your price · a contract read once and signed",
             cards = "The obelisk of Thutmose III, a sun monument from Ra's own city. · The hymns to the rising sun in the Papyrus of Ani. · Greet the sun at dawn with both hands raised.",
             lesson = "An easy passage still goes on the scale. Ra records what you did with it.",
         ),

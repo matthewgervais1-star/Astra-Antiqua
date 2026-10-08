@@ -84,7 +84,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       sextile: {
         sun: "Ask a neighbor to take the other end of the sledge.",
         moon: "Share your emmer bread with someone at home.",
-        mercury: "Send the short message by a runner.",
+        mercury: "Send the short note by a runner.",
         venus: "Set the first loaf on the altar, and make the gift small.",
         mars: "Put your strength into the canal in front of you.",
       },
@@ -92,7 +92,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
         sun: "Finish the one task the overseer will check.",
         moon: "Do not act on the mood you wake up with before the sun is high over the Nile.",
         mercury: "Read the papyrus twice before you answer it.",
-        venus: "Do not haggle with your beloved like a buyer of linen.",
+        venus: "Do not haggle with your beloved as you would over linen.",
         mars: "Stay still until your blood cools.",
       },
       trine: {
@@ -113,8 +113,8 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
     relations: {
       conjunction: ["ride as one", "walk as one", "go out together"],
       sextile: ["throw in with each other", "help each other along", "lighten each other's load"],
-      square: ["haul at each other", "get in each other's way", "pull at each other"],
-      trine: ["float with the current", "keep the same pace", "go easily with each other"],
+      square: ["haul each other back", "get in each other's way", "pull at each other"],
+      trine: ["like each other", "keep the same pace", "go easily with each other"],
       opposition: ["face each other down", "want opposite things", "each want it all"],
     },
     tightTails: [", straight as the plumb line", ", and the cord is drawn tight", ", and Thoth records it to the hair"],
@@ -135,7 +135,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
         mercury: "One short letter wins you a hearing.",
         venus: "A kind word buys more than silver.",
         mars: "One shove is enough.",
-        jupiter: "A patron grants it on the spot.",
+        jupiter: "A patron grants your request on the spot.",
         saturn: "An old duty eases the moment you start it.",
         uranus: "A chance comes from an unlikely quarter.",
         neptune: "A hunch is worth following for a while.",
@@ -154,7 +154,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       },
       trine: {
         sun: "Your work goes smoothly.",
-        mercury: "Your message reaches the right ear.",
+        mercury: "Your plea reaches the right ear.",
         venus: "What you give in love is repaid with interest.",
         mars: "Your effort lands where you aim it.",
         jupiter: "Good fortune finds you unasked.",
