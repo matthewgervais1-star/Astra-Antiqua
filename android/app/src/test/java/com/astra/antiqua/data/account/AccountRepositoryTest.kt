@@ -287,6 +287,15 @@ class AccountRepositoryTest {
     }
 
     @Test
+    fun `me with no user and no stored session touches no store`() = runTest {
+        server.enqueue(json(body = """{"ok":true,"user":null}"""))
+
+        assertEquals(AccountResult.Ok(null), repository.me())
+        // A reader who never signed in gets no session file created by a clear.
+        assertEquals(0, session.clearAttempts)
+    }
+
+    @Test
     fun `the wait list returns the position and sends the culture in the web's form`() = runTest {
         server.enqueue(json(body = """{"ok":true,"persisted":true,"duplicate":false,"position":7}"""))
 

@@ -88,8 +88,11 @@ class HttpAccountRepository(
     }
 
     override suspend fun me(): AccountResult<AccountUser?> {
+        // Clear only a session that was there: a clear on a reader who never
+        // signed in would create the session file for nothing.
+        val hadSession = session.read() != null
         val result = call("GET", "/api/auth/me") { json.decodeFromString(UserEnvelope.serializer(), it).user }
-        if (result is AccountResult.Ok && result.value == null) client.forgetQuietly()
+        if (hadSession && result is AccountResult.Ok && result.value == null) client.forgetQuietly()
         return result
     }
 
