@@ -2,7 +2,10 @@ import type { ZodiacSign } from "@/data/sampleChart";
 
 /**
  * Three-letter mono abbreviations for the zodiac signs, used in the charts
- * instrument's placement table (BODY / LONG / SIGN column).
+ * instrument's placement table (BODY / LONG / SIGN column). Web's one sign
+ * table: the week shorthand (lib/weekReading.ts) and the home rail
+ * (components/home/format.ts) print these values, and Android's
+ * ZodiacSign.abbr is pinned to them by ZodiacSignAbbrParityTest.
  */
 export const SIGN_ABBR3: Readonly<Record<ZodiacSign, string>> = {
   Aries: "ARI",

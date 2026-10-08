@@ -17,6 +17,7 @@ import {
   utcDayNumber,
 } from "@/lib/decree";
 import { SIGN_PHRASES } from "@/components/horizons/signPhrase";
+import { SIGN_ABBR3 } from "@/components/charts/chartFormat";
 import { properCase, sameLocalDay, weekdayAbbr } from "@/components/horizons/format";
 import type { SavedNatal } from "@/lib/savedNatal";
 import { figureHref, isoDateUtc } from "@/lib/figureReading";
@@ -67,20 +68,8 @@ const FAST_BODIES: ReadonlySet<Planet> = new Set(["sun", "moon", "mercury", "ven
 
 export { ASPECT_GLYPH, QUIET_LINE };
 
-export const SIGN_ABBR: Readonly<Record<ZodiacSign, string>> = {
-  Aries: "ARI",
-  Taurus: "TAU",
-  Gemini: "GEM",
-  Cancer: "CAN",
-  Leo: "LEO",
-  Virgo: "VIR",
-  Libra: "LIB",
-  Scorpio: "SCO",
-  Sagittarius: "SAG",
-  Capricorn: "CAP",
-  Aquarius: "AQU",
-  Pisces: "PIS",
-};
+/** The /charts placements table's abbreviations: one table for every sign label on web. */
+export const SIGN_ABBR = SIGN_ABBR3;
 
 function toneForKind(kind: AspectKind): "harmony" | "tension" {
   return kind === "square" || kind === "opposition" ? "tension" : "harmony";

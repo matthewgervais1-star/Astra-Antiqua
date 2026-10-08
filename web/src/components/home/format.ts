@@ -1,5 +1,6 @@
 import type { Culture, Planet } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
+import { SIGN_ABBR3 } from "@/components/charts/chartFormat";
 import { longitudeToSign, type Longitude, type ZodiacSign } from "@/data/sampleChart";
 
 /** Pure formatting helpers local to the home route: degree/minute display,
@@ -10,20 +11,8 @@ function pad2(n: number): string {
   return Math.trunc(n).toString().padStart(2, "0");
 }
 
-export const SIGN3: Readonly<Record<ZodiacSign, string>> = {
-  Aries: "ARI",
-  Taurus: "TAU",
-  Gemini: "GEM",
-  Cancer: "CNC",
-  Leo: "LEO",
-  Virgo: "VIR",
-  Libra: "LIB",
-  Scorpio: "SCO",
-  Sagittarius: "SAG",
-  Capricorn: "CAP",
-  Aquarius: "AQU",
-  Pisces: "PSC",
-};
+/** The /charts placements table's abbreviations, the one table on web. */
+export const SIGN3 = SIGN_ABBR3;
 
 /** The classical figure each sign is named for, used in "{DEITY} IN THE
  *  {IMAGE}" headlines ("SATURNUS IN THE RAM"). */
