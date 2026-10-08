@@ -347,6 +347,52 @@ class AccountViewModelsTest {
     }
 
     @Test
+    fun `a shared export is deleted when the screen starts again`() = runTest(dispatcher) {
+        val profiles = FakeProfiles(romeProfile())
+        val account = FakeAccount(profiles, signedIn = true)
+        account.lastExport = AccountExport("{}", "astra-antiqua-data.json")
+        val model = accountModel(account, profiles)
+        advanceUntilIdle()
+        model.export()
+        advanceUntilIdle()
+        model.consumeExport()
+
+        // Back from the share sheet.
+        model.onStart()
+        advanceUntilIdle()
+
+        assertEquals(emptyList<String>(), exportDir.list()!!.toList())
+    }
+
+    @Test
+    fun `an export from an earlier run is deleted when the screen starts`() = runTest(dispatcher) {
+        val profiles = FakeProfiles(romeProfile())
+        File(exportDir, "astra-antiqua-data.json").writeText("{}")
+        val model = accountModel(FakeAccount(profiles, signedIn = true), profiles)
+
+        model.onStart()
+        advanceUntilIdle()
+
+        assertEquals(emptyList<String>(), exportDir.list()!!.toList())
+    }
+
+    @Test
+    fun `an export waiting for the share sheet survives a start`() = runTest(dispatcher) {
+        val profiles = FakeProfiles(romeProfile())
+        val account = FakeAccount(profiles, signedIn = true)
+        account.lastExport = AccountExport("{}", "astra-antiqua-data.json")
+        val model = accountModel(account, profiles)
+        advanceUntilIdle()
+        model.export()
+        advanceUntilIdle()
+
+        model.onStart()
+        advanceUntilIdle()
+
+        assertTrue(model.state.value.exportFile!!.exists())
+    }
+
+    @Test
     fun `an export name from the server cannot leave the export directory`() = runTest(dispatcher) {
         val profiles = FakeProfiles()
         val account = FakeAccount(profiles, signedIn = true)

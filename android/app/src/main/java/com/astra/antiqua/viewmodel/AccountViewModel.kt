@@ -18,6 +18,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 enum class AccountPhase {
@@ -64,7 +66,9 @@ data class AccountState(
  * class never turns that into a notice.
  *
  * [exportDir] is a directory under the app's cache that the FileProvider
- * shares. Each export replaces the last, so the cache holds one at most.
+ * shares. Each export replaces the last, so the cache holds one at most, and
+ * each [onStart] deletes any export no share sheet is waiting for, so the
+ * account's data leaves the disk once the reader is back from sharing it.
  */
 class AccountViewModel(
     private val account: AccountRepository,
@@ -188,6 +192,7 @@ class AccountViewModel(
      * a restored screen shows the account or sends the reader to THE RECORD.
      */
     fun onStart() {
+        clearSharedExports()
         if (!stale) return
         stale = false
         viewModelScope.launch {
@@ -208,14 +213,42 @@ class AccountViewModel(
     /** The share sheet has the file. */
     fun consumeExport() = _state.update { it.copy(exportFile = null) }
 
-    private fun write(fileName: String, json: String): File {
+    /** Serialises [write] and [clearSharedExports], which both empty [exportDir]. */
+    private val exportLock = Mutex()
+
+    private suspend fun write(fileName: String, json: String): File = exportLock.withLock {
         val dir = exportDir()
         if (!dir.isDirectory && !dir.mkdirs()) throw IOException("no export directory")
         dir.listFiles()?.forEach { it.delete() }
         val file = File(dir, safeName(fileName))
         file.writeText(json, Charsets.UTF_8)
-        return file
+        file
     }
+
+    /**
+     * Deletes the exports in [exportDir] unless one is being written or is
+     * waiting for the share sheet. The check runs again under the lock, as an
+     * export started after this was called owns the directory.
+     */
+    private fun clearSharedExports() {
+        if (exportPending()) return
+        viewModelScope.launch {
+            try {
+                withContext(io) {
+                    exportLock.withLock {
+                        if (!exportPending()) exportDir().listFiles()?.forEach { it.delete() }
+                    }
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SecurityException) {
+                Log.w(TAG, "The shared export could not be deleted: ${e::class.simpleName}")
+            }
+        }
+    }
+
+    private fun exportPending(): Boolean =
+        _state.value.busy == AccountAction.EXPORT || _state.value.exportFile != null
 
     private companion object {
         const val TAG = "Account"
