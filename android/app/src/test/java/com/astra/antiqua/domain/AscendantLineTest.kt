@@ -33,6 +33,29 @@ class AscendantLineTest {
         assertEquals("ASC 28°27′ LIBRA · WHOLE-SIGN HOUSES", chart.ascendantLine)
     }
 
+    /**
+     * Far from J2000 the obliquity of date and web's fixed mean obliquity
+     * (23.4392911, web/src/lib/ascendant.ts) print different minutes. London
+     * (web/src/data/cities.ts: 51.5074, -0.1278) at 1955-03-21T04:00Z: web's
+     * computeAngularPoints gives 297.36077, printed 27°22′ Capricorn; the
+     * obliquity of date gives 297.34793, which prints 27°21′.
+     */
+    @Test
+    fun `a 1955 London chart prints web's ascendant line`() {
+        val london = UserProfile(
+            name = "Golden Fixture",
+            birthDateUtc = Instant.parse("1955-03-21T04:00:00Z").toEpochMilli(),
+            latitude = 51.5074,
+            longitude = -0.1278,
+            cityName = "London",
+            timezoneId = "Europe/London",
+        )
+        val chart = CalculateNatalChartUseCase(AstronomyEngine()).execute(london)
+
+        assertEquals(297.36077, chart.ascendant, 0.001)
+        assertEquals("ASC 27°22′ CAPRICORN · WHOLE-SIGN HOUSES", chart.ascendantLine)
+    }
+
     @Test
     fun `the chart keeps the ascendant longitude, not the first house cusp`() {
         val chart = CalculateNatalChartUseCase(AstronomyEngine()).execute(newYork)
