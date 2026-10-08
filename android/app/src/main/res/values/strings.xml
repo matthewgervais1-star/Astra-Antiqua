@@ -66,9 +66,9 @@
     <string name="account_error_export_not_written">This device could not write the export. Try again.</string>
 
     <!-- The device could not keep the session or the server's chart, in each culture's register. -->
-    <string name="account_error_device_write_egypt">This device could not keep the scribe\'s seal on your record. Try again.</string>
+    <string name="account_error_device_write_egypt">The Temple rejected your Papyrus.</string>
     <string name="account_error_device_write_greece">This device could not keep the key to your record. Try again.</string>
-    <string name="account_error_device_write_canaan">This device could not keep the tablet\'s seal on your record. Try again.</string>
+    <string name="account_error_device_write_canaan">Your clay tablet was not kept in temple</string>
     <string name="account_error_device_write_carthage">This device could not keep the merchant\'s seal on your record. Try again.</string>
     <string name="account_error_device_write_rome">This device could not keep the signet on your record. Try again.</string>
 
