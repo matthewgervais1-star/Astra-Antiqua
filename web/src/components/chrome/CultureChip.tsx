@@ -11,6 +11,12 @@ import { CultureEmblem } from "@/components/chrome/CultureEmblem";
 const CHIP_CLASS =
   "whitespace-nowrap border border-[var(--accent-strong-border)] px-[var(--space-2)] py-2 font-mono text-data-xs text-accent";
 
+/** "CULTURE:" gives way below md so the sub-bar, with the horizon control
+ * beside it, fits a 375px viewport. Screen readers still hear it. */
+function ChipPrefix() {
+  return <span className="sr-only md:not-sr-only">CULTURE: </span>;
+}
+
 function CultureChipImpl() {
   const culture = useActivePantheon();
   const router = useRouter();
@@ -38,7 +44,7 @@ function CultureChipImpl() {
     };
   }, [open]);
 
-  const label = culture ? `CULTURE: ${CULTURE_LABELS[culture].toUpperCase()} ▾` : "CULTURE: CHOOSE ▾";
+  const label = culture ? `${CULTURE_LABELS[culture].toUpperCase()} ▾` : "CHOOSE ▾";
 
   const select = (next: Culture) => {
     writePersistedPantheon(next);
@@ -60,6 +66,7 @@ function CultureChipImpl() {
         className={cn(CHIP_CLASS, "inline-flex items-center gap-[var(--space-1)]")}
       >
         {culture ? <CultureEmblem culture={culture} size={14} decorative /> : null}
+        <ChipPrefix />
         {label}
       </button>
       {open ? (
@@ -95,7 +102,14 @@ function CultureChipImpl() {
  */
 export function CultureChip() {
   return (
-    <Suspense fallback={<span className={CHIP_CLASS}>CULTURE: CHOOSE ▾</span>}>
+    <Suspense
+      fallback={
+        <span className={CHIP_CLASS}>
+          <ChipPrefix />
+          CHOOSE ▾
+        </span>
+      }
+    >
       <CultureChipImpl />
     </Suspense>
   );
