@@ -142,7 +142,7 @@ function ChartsInstrumentInner() {
                 body={
                   <>
                     <DeityGlyph body={planet} culture={culture} size={16} decorative />
-                    <span className="truncate">{deity.name.toUpperCase()}</span>
+                    <span className="min-w-0 leading-snug">{deity.name.toUpperCase()}</span>
                   </>
                 }
                 position={formatDegMin(degree)}

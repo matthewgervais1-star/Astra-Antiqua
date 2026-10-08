@@ -108,7 +108,7 @@ function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
   return (
     <div
       className={cn(
-        "grid grid-cols-[104px_1fr_auto] items-baseline gap-4 border-t border-rule px-3 py-3.5 last:border-b",
+        "grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 sm:grid-cols-[104px_1fr_auto] border-t border-rule px-3 py-3.5 last:border-b",
         day.isToday && "bg-[color-mix(in_srgb,var(--accent)_7%,transparent)]",
       )}
     >
@@ -127,7 +127,7 @@ function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
           </>
         ) : null}
       </span>
-      <span className="flex flex-col gap-1">
+      <span className="order-3 col-span-2 flex flex-col gap-1 sm:order-none sm:col-span-1">
         {day.headline ? (
           day.figureHref ? (
             <Link href={day.figureHref} className="font-display text-display-xs leading-display text-bone hover:text-accent">
@@ -141,7 +141,7 @@ function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
       </span>
       <span
         className={cn(
-          "inline-flex items-baseline gap-[4px] whitespace-nowrap font-mono text-data-xs",
+          "order-2 inline-flex items-baseline gap-[4px] whitespace-nowrap font-mono text-data-xs sm:order-none",
           day.tone === "tension" ? "text-conflict" : "text-dim",
         )}
       >

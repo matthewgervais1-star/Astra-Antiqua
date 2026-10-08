@@ -53,7 +53,7 @@ export function HomeBody() {
 
   return (
     <>
-      <div className="grid grid-cols-1 min-[1100px]:grid-cols-[310px_1fr_330px]">
+      <div className="grid grid-cols-1 min-[1100px]:grid-cols-[310px_minmax(0,1fr)_330px]">
         <EphemerisRail
           className="hidden border-b border-rule min-[1100px]:block min-[1100px]:border-b-0 min-[1100px]:border-r"
           culture={bundle.culture}
