@@ -12,6 +12,7 @@ import com.astra.antiqua.domain.FigureReadingComposer
 import com.astra.antiqua.domain.NatalPoints
 import com.astra.antiqua.model.AncientCulture
 import java.util.Date
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,11 +34,14 @@ sealed class FigureState {
  * One day's figure, web's /day/[date]/figure/[id]: composed against the
  * reader's chart when there is one and the figure touches it, against the
  * sky when not. The window walk samples the ephemeris every six hours, so it
- * runs off the main thread.
+ * runs off the main thread, as does the sky read for a missing figure. A
+ * composition that throws leaves the screen on [FigureState.Missing].
  */
 class FigureViewModel(
     private val astronomy: AstronomyEngine,
     private val profiles: ProfileRepository,
+    private val composePage: (AstronomyEngine, AncientCulture, String, String, NatalPoints?) -> FigurePage? =
+        FigureReadingComposer::composePage,
 ) : ViewModel() {
     private val _state = MutableStateFlow<FigureState>(FigureState.Loading)
     val state: StateFlow<FigureState> = _state.asStateFlow()
@@ -50,25 +54,36 @@ class FigureViewModel(
         loadedKey = key
         _state.value = FigureState.Loading
         viewModelScope.launch {
-            val page = withContext(Dispatchers.Default) {
+            _state.value = withContext(Dispatchers.Default) {
                 val natal = try {
                     profiles.profile.first()?.let { profile ->
                         val chart = CalculateNatalChartUseCase(astronomy).execute(profile)
                         val ascendant = chart.houseCusps.getOrNull(1)
                         if (ascendant == null) null else NatalPoints(chart.planets.mapValues { it.value.longitude }, ascendant)
                     }
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (e: Exception) {
                     // A chart that cannot be computed reads as no chart: the sky figure still stands.
                     Log.e(TAG, "Could not compute the natal chart", e)
                     null
                 }
-                FigureReadingComposer.composePage(astronomy, culture, date, id, natal)
-            }
-            _state.value = if (page != null) {
-                FigureState.Ready(page, Date())
-            } else {
-                val sky = FigureReadingComposer.parseIsoDate(date)?.let { DayDecreeComposer.chartAt(astronomy, it) }
-                FigureState.Missing(FigureReadingComposer.missing(date, sky, id) ?: FigureReadingComposer.Missing.ABSENT)
+                try {
+                    val page = composePage(astronomy, culture, date, id, natal)
+                    if (page != null) {
+                        FigureState.Ready(page, Date())
+                    } else {
+                        val sky = FigureReadingComposer.parseIsoDate(date)?.let { DayDecreeComposer.chartAt(astronomy, it) }
+                        FigureState.Missing(FigureReadingComposer.missing(date, sky, id) ?: FigureReadingComposer.Missing.ABSENT)
+                    }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    // A page that cannot be composed reads as a figure the screen cannot show:
+                    // the address's own fault when it has one, absent otherwise.
+                    Log.e(TAG, "Could not compose the figure", e)
+                    FigureState.Missing(FigureReadingComposer.missing(date, null, id) ?: FigureReadingComposer.Missing.ABSENT)
+                }
             }
         }
     }
