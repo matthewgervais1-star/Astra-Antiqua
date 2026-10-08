@@ -74,6 +74,38 @@ class Migration2To3Test {
         assertEquals(declared, columns)
     }
 
+    private fun instantsAndZones(): Map<Long, Pair<String, String>> {
+        val rows = mutableMapOf<Long, Pair<String, String>>()
+        connection.prepare("SELECT id, birthDateUtc, timezoneId FROM user_profile ORDER BY id").use {
+            while (it.step()) {
+                rows[it.getLong(0)] = Instant.ofEpochMilli(it.getLong(1)).toString() to it.getText(2)
+            }
+        }
+        return rows
+    }
+
+    @Test
+    fun `a row stored under the longitude guess is re-resolved in the place's own zone`() {
+        val createSql = schema(2)["createSql"]!!.jsonPrimitive.content.replace("\${TABLE_NAME}", "user_profile")
+        connection.execSQL(createSql)
+        // Rome, typed 14:30 on 1990-06-15, stored before 3 under the
+        // longitude guess "+01:00": 13:30Z. Web reads the typed 14:30 in
+        // Europe/Rome (CEST) as 12:30Z, and so must the device.
+        insert(1, "1990-06-15T13:30:00Z", "+01:00", 41.9028, 12.4964)
+        // Already in the place's own zone: left as it is.
+        insert(2, "1990-06-15T12:30:00Z", "Europe/Rome", 41.9028, 12.4964)
+        // New York, typed 14:30 on 1990-07-04 under the guess "-05:00":
+        // EDT puts it at 18:30Z.
+        insert(3, "1990-07-04T19:30:00Z", "-05:00", 40.7128, -74.006)
+
+        MIGRATION_2_3.migrate(connection)
+
+        val rows = instantsAndZones()
+        assertEquals("1990-06-15T12:30:00Z" to "Europe/Rome", rows[1])
+        assertEquals("1990-06-15T12:30:00Z" to "Europe/Rome", rows[2])
+        assertEquals("1990-07-04T18:30:00Z" to "America/New_York", rows[3])
+    }
+
     @Test
     fun `a row whose fill fails keeps null strings and the others are filled`() {
         val createSql = schema(2)["createSql"]!!.jsonPrimitive.content.replace("\${TABLE_NAME}", "user_profile")
@@ -96,5 +128,6 @@ class Migration2To3Test {
         }
         assertEquals("1990-06-15" to "14:30", rows[1])
         assertEquals(null to null, rows[2])
+        assertEquals("1990-07-04T19:30:00Z" to "Broken/Zone", instantsAndZones()[2])
     }
 }
