@@ -1,4 +1,4 @@
-# HANDOFF, Astra Antiqua, state at 2026-10-06 (late evening)
+# HANDOFF, Astra Antiqua, state at 2026-10-08
 
 Read first. Where this file and an older line in `CLAUDE.md` or any index disagree, this
 file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
@@ -19,14 +19,16 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
 - FACT (`task-18c-report.md`, commits 92c04b2 to 86eca0a): Task 18c passed all ten emulator
   steps and fixed four device defects: TODAY opened the birth form, a recast kept the old
   chart, placements truncated the minute, the CULTURE row sat off CHANGE's line. 27
-  screenshots, test address redacted, in `docs/design/screenshots/phase13-android-sync/`.
-  Open from it: Android prints no Ascendant; sign abbreviations differ (CAN/PIS vs CNC/PSC).
+  shots (address redacted) in `docs/design/screenshots/phase13-android-sync/`.
 - FACT (`git log`, 2026-10-08): the 375px sub-bar fix from the session "Fix 375px horizontal
   scroll on day and week pages" (53addc3, PR #3 to `master`, open) is cherry-picked here as
-  d22b4d6. It drops the chip's "CULTURE:" prefix below md. PR #3 can merge or close; either
-  way the fix reaches master through this branch.
-- INFERENCE: the live checkout `L:\Claude Projects\astra-antiqua` holds an older uncommitted
-  `HANDOFF.md`; this file replaces it when the branches merge.
+  d22b4d6; PR #3 can merge or close, the fix reaches master through this branch either way.
+- FACT (ledger, 2026-10-08): whole-branch review of 9804a4e..1d930a3 found 0 Critical,
+  1 Important (Room 2->3 migration keeps the old guessed-zone birth instant), 7 Minor; fix
+  wave running. Cleanup C1 done: LICENCES screen (fonts, tz-lookup, Astronomy Engine MIT),
+  6292fea, review approved, 177 Android tests.
+- FACT (ledger): the Claude Design push waits on the owner's `/design-login` (interactive).
+- INFERENCE: the live checkout's older uncommitted `HANDOFF.md` is replaced by this file on merge.
 
 ## Decisions taken, and why
 - 2026-09-29, owner: rebuild the daily readings to the Co-Star anatomy in five voices (spec
@@ -38,11 +40,8 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   (Room v3). All rulings with their reasons: the ledger and the plan's Rulings section.
 
 ## Pending, in order
-1. A whole-branch review and one cleanup pass over the ledger's
-   deferred list. Largest items: no licence screen in the Android app for its five SIL OFL
-   font families and tz-lookup (CC0); phone-width overflow (culture chip, /charts header,
-   /week headline column); "HORUS THE RED" truncated in the /charts table at 1280;
-   the Android Ascendant line and sign abbreviations from 18c.
+1. Review fix wave; cleanup C2 (/charts header, /week column, HORUS at 1280), C3 (Android
+   ASC line, CNC/PSC), C4 (Egypt river echo, spec notes). Briefs in the ledger folder.
 2. Owner to approve or reword the four Android device-error sentences (Egypt, Canaan,
    Carthage, Rome) in `android/app/src/main/res/values/strings.xml`.
 3. Push the branch and open its PR; push the refreshed design-system cards to Claude Design.
