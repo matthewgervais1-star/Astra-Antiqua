@@ -174,7 +174,7 @@ object WeekReading {
                     val ruling = ingressFrame(culture, deityCharge(culture, ingress.body))
                     line = "$deity $verb the ${signPhrase(ingress.sign)}. $ruling"
                     shorthand = "${ingress.body.name.take(3)} → " +
-                        ingress.sign.signName.take(3).uppercase()
+                        ingress.sign.abbr
                 } else {
                     tone = DayTone.QUIET
                     headline = quietDayHeadline(culture)

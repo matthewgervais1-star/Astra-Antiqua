@@ -104,7 +104,7 @@ fun PlacementsScreen(
                                 DataRow(
                                     name = DeityRegistry.getDeity(culture, body).name,
                                     position = position.degMin,
-                                    sign = position.zodiacSign.signName.take(3),
+                                    sign = position.zodiacSign.abbr,
                                     house = position.house,
                                     retrograde = position.isRetrograde,
                                     received = body.isReceived,
