@@ -1308,6 +1308,10 @@
   .wrap-anywhere {
     overflow-wrap: anywhere;
   }
+  .hyphens-auto {
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
   .whitespace-nowrap {
     white-space: nowrap;
   }
