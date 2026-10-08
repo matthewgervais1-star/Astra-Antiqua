@@ -39,6 +39,9 @@ const pct = (v: number) => `${(v / VIEW) * 100}%`;
  * a radius to each body at its longitude and the arc between them marked
  * with the figure's angle. The chart wheel's rules: 1px strokes in the rule
  * ink, no fill, the deity glyphs in the bone ink, labels in mono.
+ *
+ * The figure's aria-label is what a screen reader announces; the drawn
+ * labels repeat it on the page, so they are hidden from assistive tech.
  */
 export function FigureDiagram({ culture, from, to, kind, angle, centerLabel }: FigureDiagramProps) {
   const a = at(from.longitude, R);
@@ -80,6 +83,7 @@ export function FigureDiagram({ culture, from, to, kind, angle, centerLabel }: F
       ].map(({ point, xy }, i) => (
         <div
           key={i}
+          aria-hidden="true"
           className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 bg-ground px-1"
           style={{ left: pct(xy.x), top: pct(xy.y) }}
         >
@@ -94,6 +98,7 @@ export function FigureDiagram({ culture, from, to, kind, angle, centerLabel }: F
 
       {angle > 0 ? (
         <span
+          aria-hidden="true"
           className="absolute -translate-x-1/2 -translate-y-1/2 font-mono text-[10px] text-dim"
           style={{ left: pct(mid.x), top: pct(mid.y) }}
         >
@@ -102,6 +107,7 @@ export function FigureDiagram({ culture, from, to, kind, angle, centerLabel }: F
       ) : null}
       {centerLabel ? (
         <span
+          aria-hidden="true"
           className="absolute -translate-x-1/2 font-mono text-[10px] tracking-label text-faint-ink"
           style={{ left: "50%", top: pct(C + 6) }}
         >
