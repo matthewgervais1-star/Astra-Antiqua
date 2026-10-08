@@ -1,6 +1,7 @@
 import type { Culture, Planet } from "@/data/cultures";
 import type { AspectKind } from "@/data/sampleChart";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
+import { figureDiagramLabel } from "@/components/chrome/figureDiagramLabel";
 
 export interface FigureDiagramPoint {
   /** The body drawn at this end, or null for an angle (the rising, the midheaven). */
@@ -40,8 +41,9 @@ const pct = (v: number) => `${(v / VIEW) * 100}%`;
  * with the figure's angle. The chart wheel's rules: 1px strokes in the rule
  * ink, no fill, the deity glyphs in the bone ink, labels in mono.
  *
- * The figure's aria-label is what a screen reader announces; the drawn
- * labels repeat it on the page, so they are hidden from assistive tech.
+ * The figure's aria-label is what a screen reader announces
+ * (figureDiagramLabel): it names every drawn label, the center label
+ * included, so the drawn labels are hidden from assistive tech.
  */
 export function FigureDiagram({ culture, from, to, kind, angle, centerLabel }: FigureDiagramProps) {
   const a = at(from.longitude, R);
@@ -58,7 +60,7 @@ export function FigureDiagram({ culture, from, to, kind, angle, centerLabel }: F
   return (
     <figure
       className="relative mx-auto aspect-square w-full max-w-[280px] text-bone"
-      aria-label={`${from.label} and ${to.label}, ${kind}, ${angle} degrees apart`}
+      aria-label={figureDiagramLabel({ from, to, kind, angle, centerLabel })}
     >
       <svg viewBox={`0 0 ${VIEW} ${VIEW}`} className="absolute inset-0 h-full w-full text-rule" aria-hidden="true">
         <circle cx={C} cy={C} r={R} fill="none" stroke="currentColor" strokeWidth={1} vectorEffect="non-scaling-stroke" />
