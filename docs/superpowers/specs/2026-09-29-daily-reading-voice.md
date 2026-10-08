@@ -116,6 +116,16 @@ Jupiter in Virgo:
    figures that touch that group (via `lib/dayPressure.ts`'s buckets when a natal chart
    exists; from the sky figures' body domains otherwise), ending in one concrete line. A
    group with nothing in orb gets the culture's quiet line for that group (four per culture).
+   *As built:* two groups print one sentence instead of two or three. Without a chart, each
+   sky figure is read by one group only, so a group whose every touching figure an earlier
+   group already reads prints the culture's pointer line (`DIVE_DEEPER_BANKS.shared`, naming
+   the earlier group that reads its tightest figure) in place of a paragraph or a quiet
+   line; it is not quiet, since a figure touches it. With a chart, a group reads its contacts
+   in `rankContacts` order (a body that moves daily before a slow one, a body against its own
+   natal place after the others of its speed, the Moon on the natal Moon last of all, then by
+   orb); when the Moon on the natal Moon is the only contact, the group prints the concrete
+   line alone, because that contact keys no relation and no consequence, and the day
+   pressure module names the same contact for the group.
 7. **Closing line**: the culture's "come back tomorrow" (five lines).
 
 The daily message (`lib/dailyMessage.ts`) is the headline plus paragraph sentences (a), (b)
@@ -129,7 +139,11 @@ tapping a day opens that day's page with the full anatomy.
 2. **Hero**: the transiting deity's glyph in the culture's hand, large, on the ground.
 3. **Paragraph** in two moves: "As {deity} in {sign}, you {placement}." from the natal
    placement (the universal `PLANET_IN_SIGN` paragraph recast in the culture's second
-   person, one sentence), then "Right now {sky sentence}, and {consequence}."
+   person, one sentence), then "Right now {sky sentence}: {consequence}.", the consequence
+   lowercased after the colon (`composeMoveTwo` in `lib/figureReading.ts`; a colon rather
+   than ", and", since the relation and the consequence often carry their own "and"). A
+   contact that keys no consequence (the Moon on the natal Moon) ends at "Right now {sky
+   sentence}."
 4. **What it looks like in space**: the wheel or a two-body diagram, then the decomposed
    sentence: `{transiting domain}` tagged `{DEITY} NOW`, `{relation, short}` tagged
    `{KIND} ({angle}°)`, `{natal domain}` tagged `YOUR {DEITY} IN {SIGN}`.
