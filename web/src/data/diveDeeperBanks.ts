@@ -42,7 +42,7 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
     quiet: [
       "No figure reaches the granary today. Draw your ration and work the row you were given.",
       "The house of the ka stands apart from the day's figures. Fill the ancestors' lamp and eat at home.",
-      "Nothing waits at the ferry landing today. Send what you owe by the usual boat.",
+      "Nothing waits at the landing today. Send what you owe by the usual boat.",
       "The sealed shrine stays shut, and no figure knocks. Say the morning hymn and leave it there.",
     ],
     shared: "The same weight that sits on {group} reaches here too, and the scale reads it once.",

@@ -139,7 +139,7 @@ object DecreeBanks {
                 Planet.MOON -> "Do not act on the mood you wake up with before the sun is high over the Nile."
                 Planet.MERCURY -> "Read the papyrus twice before you answer it."
                 Planet.VENUS -> "Do not haggle with your beloved like a grain seller at the granary door."
-                Planet.MARS -> "Keep your hand off the harpoon until the water clears."
+                Planet.MARS -> "Keep your hand off the harpoon until your blood cools."
                 else -> error("$body has no headlines line")
             }
             AspectType.TRINE -> when (body) {
@@ -151,11 +151,11 @@ object DecreeBanks {
                 else -> error("$body has no headlines line")
             }
             AspectType.OPPOSITION -> when (body) {
-                Planet.SUN -> "You cannot stand on both banks, so pick one."
-                Planet.MOON -> "What you want and what the household wants are on opposite banks."
-                Planet.MERCURY -> "Someone on the far bank reads your words backward."
+                Planet.SUN -> "You cannot hold the shrine door open and bolt it, so pick one."
+                Planet.MOON -> "What you want and what the household wants pull the house two ways."
+                Planet.MERCURY -> "The scribe at the other desk copies your words wrong."
                 Planet.VENUS -> "Love asks you to cross the river this time."
-                Planet.MARS -> "Let whoever is shouting across the river shout until they tire."
+                Planet.MARS -> "Let whoever is shouting in the street shout until they tire."
                 else -> error("$body has no headlines line")
             }
         }
@@ -340,7 +340,7 @@ object DecreeBanks {
             AspectType.SEXTILE -> listOf("throw each other a rope", "help each other along", "lighten each other's load")
             AspectType.SQUARE -> listOf("haul on opposite ropes", "get in each other's way", "pull against each other")
             AspectType.TRINE -> listOf("float on the same current", "keep the same pace", "go easily together")
-            AspectType.OPPOSITION -> listOf("stand on opposite banks", "want opposite things", "face each other across the river")
+            AspectType.OPPOSITION -> listOf("write in different inks", "want opposite things", "wear different crowns")
         }
 
         AncientCulture.GREECE -> when (aspect) {
@@ -407,7 +407,7 @@ object DecreeBanks {
                 Planet.MARS -> "A little push moves the block."
                 Planet.JUPITER -> "A patron says yes the first time you ask."
                 Planet.SATURN -> "An old duty gets lighter the moment you start it."
-                Planet.URANUS -> "A chance comes from the wrong bank of the river."
+                Planet.URANUS -> "A chance comes in by the side door."
                 Planet.NEPTUNE -> "A hunch is worth following as far as the next canal."
                 Planet.PLUTO -> "An old store of grain is yours to open."
                 else -> error("$partner has no consequences line")
@@ -420,12 +420,12 @@ object DecreeBanks {
                 Planet.JUPITER -> "A promise from above comes up short."
                 Planet.SATURN -> "Every task takes twice the rope."
                 Planet.URANUS -> "The plan you trusted breaks at the dike."
-                Planet.NEPTUNE -> "You cannot see the riverbed today."
-                Planet.PLUTO -> "An old grievance rises with the water."
+                Planet.NEPTUNE -> "Nobody can read the tally today."
+                Planet.PLUTO -> "An old grievance is read out again."
                 else -> error("$partner has no consequences line")
             }
             AspectType.TRINE -> when (partner) {
-                Planet.SUN -> "Your work goes downstream without a push."
+                Planet.SUN -> "Your work slides like a sledge on wetted sand."
                 Planet.MERCURY -> "Your message reaches the right ear the first time."
                 Planet.VENUS -> "What you give in love comes back with interest."
                 Planet.MARS -> "Your effort lands where you aim it."
@@ -437,15 +437,15 @@ object DecreeBanks {
                 else -> error("$partner has no consequences line")
             }
             AspectType.OPPOSITION -> when (partner) {
-                Planet.SUN -> "Home and work pull from opposite banks."
+                Planet.SUN -> "Home and work each claim the same hour."
                 Planet.MERCURY -> "Someone reads your words in reverse."
-                Planet.VENUS -> "What you love and what you need sit on opposite banks."
-                Planet.MARS -> "Someone across the water wants a fight."
+                Planet.VENUS -> "What you love and what you need ask for the same ration."
+                Planet.MARS -> "A neighbor over the wall wants a fight."
                 Planet.JUPITER -> "A favor offered asks for a favor back."
-                Planet.SATURN -> "Duty and wish face each other across the river."
+                Planet.SATURN -> "Duty and wish each want the whole day."
                 Planet.URANUS -> "You have to choose a side, and the other side will not wait."
-                Planet.NEPTUNE -> "A pleasant story is being told on the far bank."
-                Planet.PLUTO -> "Someone across the river holds something of yours."
+                Planet.NEPTUNE -> "A pleasant story is being told in the next courtyard."
+                Planet.PLUTO -> "Someone behind a sealed door holds something of yours."
                 else -> error("$partner has no consequences line")
             }
         }
@@ -715,7 +715,7 @@ object DecreeBanks {
                 else -> error("$body has no images line")
             }
             AspectType.SEXTILE -> when (body) {
-                Planet.SUN -> "{god} sends the north wind, and even a boat with no sail moves upstream."
+                Planet.SUN -> "{god} sends the north wind, and the boat with no sail comes home before dark."
                 Planet.MOON -> "{god} walks the path between the fields at night, and the watchman waves you through."
                 Planet.MERCURY -> "{god} lends the scribe a fresh reed, and the letter is finished before noon."
                 Planet.VENUS -> "{god} lays bread at the chapel door, and the neighbors bring the beer."
@@ -724,7 +724,7 @@ object DecreeBanks {
             }
             AspectType.SQUARE -> when (body) {
                 Planet.SUN -> "{god} takes the weaker rope at the sledge, and the overseer calls a halt."
-                Planet.MOON -> "{god} clouds the water at the crossing, and the boatman waits for dawn."
+                Planet.MOON -> "{god} smudges the night's tally, and the scribe waits for dawn to count again."
                 Planet.MERCURY -> "{god} spills the ink across the sheet, and the scribe starts again."
                 Planet.VENUS -> "{god} leans on the balance, and the scribe of the hall writes down which way it tips."
                 Planet.MARS -> "{god} raises the harpoon, and the priests call him back."
@@ -732,7 +732,7 @@ object DecreeBanks {
             }
             AspectType.TRINE -> when (body) {
                 Planet.SUN -> "{god} sits level on the scale, and the keeper of the balance leaves the beam alone."
-                Planet.MOON -> "{god} fills the cistern by night, and the household wakes to water."
+                Planet.MOON -> "{god} fills the cistern by night, and the household wakes to brimming jars."
                 Planet.MERCURY -> "{god} carries the letter on a fair wind, and it lands before the sender sleeps."
                 Planet.VENUS -> "{god} anoints the doorpost, and everyone who passes is welcome."
                 Planet.MARS -> "{god} drives the hippopotamus off the field, and the farmers plant again."
@@ -740,10 +740,10 @@ object DecreeBanks {
             }
             AspectType.OPPOSITION -> when (body) {
                 Planet.SUN -> "{god} hangs in one pan of the scale, and the scribe waits with his reed raised."
-                Planet.MOON -> "{god} crosses to the far bank by night, and whoever stands there counts every lamp you light."
-                Planet.MERCURY -> "{god} reads the letter aloud on both banks, and each side hears a different word."
+                Planet.MOON -> "{god} keeps the night watch at the far gate, and whoever stands there counts every lamp you light."
+                Planet.MERCURY -> "{god} reads the decree aloud in the Two Lands, and each land hears a different word."
                 Planet.VENUS -> "{god} stands at one end of the hall, and the bride's family waits at the other."
-                Planet.MARS -> "{god} faces a rival across the water, and the whole hall waits to see who strikes."
+                Planet.MARS -> "{god} faces a rival in the open court, and everyone in the hall waits to see who strikes."
                 else -> error("$body has no images line")
             }
         }
@@ -958,10 +958,10 @@ object DecreeBanks {
             }
             AspectType.OPPOSITION -> when (body) {
                 Planet.SUN -> "Choose home or work for the evening and keep to it."
-                Planet.MOON -> "Keep your moods on your own side of the river."
+                Planet.MOON -> "Keep your moods in your own room."
                 Planet.MERCURY -> "Ask the other side to repeat what they heard."
                 Planet.VENUS -> "Give up one small thing for your beloved."
-                Planet.MARS -> "Wait for the far bank to make the first move."
+                Planet.MARS -> "Let the rival make the first move."
                 else -> error("$body has no instructions line")
             }
         }
@@ -1141,7 +1141,7 @@ object DecreeBanks {
 
     /** Opens the second-figure sentence; the day picks one of three. Slots: {god}, {partner}. */
     fun secondFigure(culture: AncientCulture, variant: Int): String = when (culture) {
-        AncientCulture.EGYPT -> listOf("Downstream of {god} and {partner},", "On the bank across from {god} and {partner},", "Lower on the river than {god} and {partner},")
+        AncientCulture.EGYPT -> listOf("Lower on the scribe's roll than {god} and {partner},", "Behind {god} and {partner} in the procession,", "Past {god} and {partner}, in the next court,")
         AncientCulture.GREECE -> listOf("Down the hill from {god} and {partner},", "In the agora below {god} and {partner},", "At a lesser shrine than the one {god} and {partner} share,")
         AncientCulture.CANAAN -> listOf("Further down the bench from {god} and {partner},", "At the gate below {god} and {partner},", "In the fields beyond {god} and {partner},")
         AncientCulture.CARTHAGE -> listOf("Below the line for {god} and {partner},", "In the column after {god} and {partner},", "On the page facing {god} and {partner},")
@@ -1150,7 +1150,7 @@ object DecreeBanks {
 
     /** The opener when the second figure shares a god with the headline figure. */
     fun secondFigurePlain(culture: AncientCulture, variant: Int): String = when (culture) {
-        AncientCulture.EGYPT -> listOf("Lower on the river,", "On the far bank,", "Downstream,")
+        AncientCulture.EGYPT -> listOf("Lower on the roll,", "Further back in the procession,", "In the next court,")
         AncientCulture.GREECE -> listOf("At a lesser shrine,", "Down in the agora,", "On the road below,")
         AncientCulture.CANAAN -> listOf("Further down the bench,", "At the city gate,", "Out in the fields,")
         AncientCulture.CARTHAGE -> listOf("Further down the page,", "In the next column,", "On the facing page,")
@@ -1168,7 +1168,7 @@ object DecreeBanks {
 
     /** Stands in for the second figure when the sky offers none. */
     fun noSecondFigure(culture: AncientCulture): String = when (culture) {
-        AncientCulture.EGYPT -> "Nothing else on the river comes near it, so this is the one thing you weigh today."
+        AncientCulture.EGYPT -> "Nothing else comes near the scale, so this is the one thing you weigh today."
         AncientCulture.GREECE -> "No other shrine speaks today, so carry this one answer home."
         AncientCulture.CANAAN -> "No other matter reaches the floor today, so close this one before you leave."
         AncientCulture.CARTHAGE -> "Nothing else is entered today, so rule off under this line and go home."
@@ -1352,7 +1352,7 @@ object DiveDeeperBanks {
 
     /** What a group says when no figure touches it. */
     fun quiet(culture: AncientCulture, group: Int): String = when (culture) {
-        AncientCulture.EGYPT -> listOf("No figure reaches the granary today. Draw your ration and work the row you were given.", "The house of the ka stands apart from the day's figures. Fill the ancestors' lamp and eat at home.", "Nothing waits at the ferry landing today. Send what you owe by the usual boat.", "The sealed shrine stays shut, and no figure knocks. Say the morning hymn and leave it there.")
+        AncientCulture.EGYPT -> listOf("No figure reaches the granary today. Draw your ration and work the row you were given.", "The house of the ka stands apart from the day's figures. Fill the ancestors' lamp and eat at home.", "Nothing waits at the landing today. Send what you owe by the usual boat.", "The sealed shrine stays shut, and no figure knocks. Say the morning hymn and leave it there.")
         AncientCulture.GREECE -> listOf("The agora is empty of figures today. Sell at yesterday's price and count the silver once.", "No figure crosses the threshold of the oikos today. Bank the hearth and eat with your household.", "The herm stands alone at the crossroads today. Send your messages by the road you always take.", "The adyton is silent today. Keep your question for a day when the tripod speaks.")
         AncientCulture.CANAAN -> listOf("No matter comes to the threshing floor today. Thresh the sheaves you have and sweep the floor at dusk.", "The father's house has no case before the council today. Break bread with your kin and settle nothing.", "No one is called to the gate today. Greet the elders and go about your errands.", "The tent of El stays closed today. Say the evening prayer and go to sleep.")
         AncientCulture.CARTHAGE -> listOf("The counting house posts no new entry today. Pay the wages on the list and lock the strongbox.", "Nothing is charged to the courtyard today. Check the household book and close it.", "No figure touches the harbor today. Let the ships keep their posted sailings.", "The precinct asks nothing new of you today. Pay what you vowed, when you vowed it, and no more.")

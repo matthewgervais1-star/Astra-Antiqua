@@ -135,7 +135,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       sextile: "can lean on",
       square: "must haul against",
       trine: "can ride the current with",
-      opposition: "must stare across the water at",
+      opposition: "must be weighed against",
     },
     natalFrame: "Your birth set {deity} in the {sign}: {clause}.",
     skyMoveOne: "{god} is in the {sign}, weighing {domain}.",
@@ -189,13 +189,13 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       {
         harmony: [
           "a letter that arrives before you looked for it",
-          "the ferryman waving you aboard without the fee",
+          "the boatman waving you aboard without the fee",
           "a neighbor who carries your message across",
           "a contract read once and sealed",
         ],
         tension: [
           "a letter answered in the wrong tone",
-          "a boat that leaves the bank without you",
+          "a boat that sails without you",
           "a witness who remembers the words differently",
           "the same question put to you three times",
         ],

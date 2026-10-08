@@ -35,13 +35,13 @@ internal val DIVE_DEEPER_GOLDENS: List<DiveDeeperGolden> = listOf(
         skyGroups = listOf(
             "The Granary: your work and your rations|ISIS ⚹ AMUN · 1°31′|Your patrons and your beloved throw each other a rope. A kind word buys more than silver. Reckon on the overseer passing your row without a word.",
             "The House of the Ka: your home and your forebears|ISIS ⚹ HORUS THE RED · 1°32′|Your beloved and your temper help each other along. A little push moves the block. Reckon on a mother's name said kindly at the table.",
-            "The Ferry: your letters and your crossings|SEBEGU □ OSIRIS · 4°53′|Your letters and what you have buried haul on opposite ropes. Your words come back to you bent. Reckon on a boat that leaves the bank without you.",
+            "The Ferry: your letters and your crossings|SEBEGU □ OSIRIS · 4°53′|Your letters and what you have buried haul on opposite ropes. Your words come back to you bent. Reckon on a boat that sails without you.",
             "The Sealed Shrine: what you keep to yourself|HORUS THE RED ☌ AMUN · 3°03′|Your temper and your patrons walk in one procession. Your anger and your effort pull one oar. Reckon on a dream you remember clearly at waking.",
         ),
         natalGroups = listOf(
-            "The Granary: your work and your rations|RA △ YOUR KHONSU · 0°03′|Your day's work and your moods float on the same current. Your work goes downstream without a push. Reckon on the overseer passing your row without a word.",
-            "The House of the Ka: your home and your forebears|SEBEGU ⚹ YOUR NUT · 0°05′|Your letters and your plans for the new season help each other along. A chance comes from the wrong bank of the river. Reckon on a mother's name said kindly at the table.",
-            "The Ferry: your letters and your crossings|GEB ☌ YOUR HORUS THE RED · 2°11′|Your duties and your temper ride in one boat. Your anger and your effort pull one oar. Reckon on the ferryman waving you aboard without the fee.",
+            "The Granary: your work and your rations|RA △ YOUR KHONSU · 0°03′|Your day's work and your moods float on the same current. Your work slides like a sledge on wetted sand. Reckon on the overseer passing your row without a word.",
+            "The House of the Ka: your home and your forebears|SEBEGU ⚹ YOUR NUT · 0°05′|Your letters and your plans for the new season help each other along. A chance comes in by the side door. Reckon on a mother's name said kindly at the table.",
+            "The Ferry: your letters and your crossings|GEB ☌ YOUR HORUS THE RED · 2°11′|Your duties and your temper ride in one boat. Your anger and your effort pull one oar. Reckon on the boatman waving you aboard without the fee.",
             "The Sealed Shrine: what you keep to yourself|ISIS △ YOUR RA · 0°33′|Your beloved and your day's work keep the same pace. What you give in love comes back with interest. Reckon on a dream you remember clearly at waking.",
         ),
         skyProceed = listOf("Beer to a friend", "A full measure", "A small gift", "A seat at table"),

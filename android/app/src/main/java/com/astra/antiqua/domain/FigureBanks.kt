@@ -240,7 +240,7 @@ object FigureBanks {
             AspectType.SEXTILE -> "can lean on"
             AspectType.SQUARE -> "must haul against"
             AspectType.TRINE -> "can ride the current with"
-            AspectType.OPPOSITION -> "must stare across the water at"
+            AspectType.OPPOSITION -> "must be weighed against"
         }
 
         AncientCulture.GREECE -> when (aspect) {
@@ -434,7 +434,7 @@ object FigureBanks {
         AncientCulture.EGYPT -> when (group) {
             0 -> if (harmony) listOf("a ration of emmer measured out in full", "the overseer passing your row without a word", "a jar of oil left over at the month's end", "your tally matching the scribe's at the first count") else listOf("a short measure at the granary door", "the overseer counting your bricks twice", "a debt of grain you forgot you owed", "a sledge rope fraying halfway to the site")
             1 -> if (harmony) listOf("bread and beer shared on the roof at dusk", "a mother's name said kindly at the table", "the offering table for the ancestors swept and set", "a child who sleeps through the night") else listOf("an old argument over the family field", "the lamp in the ancestor's niche gone out", "a brother asking for his share again", "a house too small for everyone in it")
-            2 -> if (harmony) listOf("a letter that arrives before you looked for it", "the ferryman waving you aboard without the fee", "a neighbor who carries your message across", "a contract read once and sealed") else listOf("a letter answered in the wrong tone", "a boat that leaves the bank without you", "a witness who remembers the words differently", "the same question put to you three times")
+            2 -> if (harmony) listOf("a letter that arrives before you looked for it", "the boatman waving you aboard without the fee", "a neighbor who carries your message across", "a contract read once and sealed") else listOf("a letter answered in the wrong tone", "a boat that sails without you", "a witness who remembers the words differently", "the same question put to you three times")
             3 -> if (harmony) listOf("an hour alone with the door shut", "a dream you remember clearly at waking", "incense that burns down evenly", "a vow you keep without anyone watching") else listOf("a sleepless hour before the dawn hymn", "a secret that sits heavy in the chest", "an amulet worn once and then forgotten", "a fear you cannot put a name to")
             else -> error("no house group $group")
         }
