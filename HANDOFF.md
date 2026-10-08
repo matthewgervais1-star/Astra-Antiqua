@@ -21,6 +21,10 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   chart, placements truncated the minute, the CULTURE row sat off CHANGE's line. 27
   screenshots, test address redacted, in `docs/design/screenshots/phase13-android-sync/`.
   Open from it: Android prints no Ascendant; sign abbreviations differ (CAN/PIS vs CNC/PSC).
+- FACT (`git log`, 2026-10-08): the 375px sub-bar fix from the session "Fix 375px horizontal
+  scroll on day and week pages" (53addc3, PR #3 to `master`, open) is cherry-picked here as
+  d22b4d6. It drops the chip's "CULTURE:" prefix below md. PR #3 can merge or close; either
+  way the fix reaches master through this branch.
 - INFERENCE: the live checkout `L:\Claude Projects\astra-antiqua` holds an older uncommitted
   `HANDOFF.md`; this file replaces it when the branches merge.
 
