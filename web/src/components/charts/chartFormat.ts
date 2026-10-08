@@ -5,7 +5,7 @@ import type { ZodiacSign } from "@/data/sampleChart";
  * instrument's placement table (BODY / LONG / SIGN column). Web's one sign
  * table: the week shorthand (lib/weekReading.ts) and the home rail
  * (components/home/format.ts) print these values, and Android's
- * ZodiacSign.abbr is pinned to them by ZodiacSignAbbrParityTest.
+ * ZodiacSign.abbr is pinned to them by ZodiacSignAbbrTest.
  */
 export const SIGN_ABBR3: Readonly<Record<ZodiacSign, string>> = {
   Aries: "ARI",
