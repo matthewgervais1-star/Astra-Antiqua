@@ -5,6 +5,7 @@ import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.Planet
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.roundToLong
@@ -173,7 +174,7 @@ object Recurrence {
                 days < 4 -> TimelineTick(
                     pct,
                     "$month $day",
-                    "%02d:%02d".format(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE)),
+                    String.format(Locale.ROOT, "%02d:%02d", c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE)),
                 )
                 days < 60 -> TimelineTick(pct, "$month $day", if (crossesYear) c.get(Calendar.YEAR).toString() else "")
                 else -> {
