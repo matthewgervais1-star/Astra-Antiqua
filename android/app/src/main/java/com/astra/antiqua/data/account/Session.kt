@@ -246,8 +246,10 @@ class DataStoreSessionStore(
 
     override suspend fun write(session: Session) {
         try {
-            val sealed = Base64.getEncoder()
-                .encodeToString(cipher.encrypt(session.token.toByteArray(Charsets.UTF_8)))
+            // The first seal generates the Keystore key, which blocks; keep it off the caller's thread.
+            val sealed = withContext(io) {
+                Base64.getEncoder().encodeToString(cipher.encrypt(session.token.toByteArray(Charsets.UTF_8)))
+            }
             dataStore.edit { prefs ->
                 prefs[SEALED_TOKEN] = sealed
                 prefs[EXPIRES_AT] = session.expiresAtMillis

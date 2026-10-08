@@ -10,6 +10,7 @@ import java.nio.file.Files
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,6 +71,28 @@ class SessionStoreTest {
         assertEquals(Session("plain-jwt-token", 5_000L), store.read())
         assertTrue(store.isPresent.first())
         assertFalse(String(file.readBytes(), Charsets.ISO_8859_1).contains("plain-jwt-token"))
+    }
+
+    @Test
+    fun `the token is sealed on the io dispatcher, not the caller's thread`() = runTest {
+        val io = java.util.concurrent.Executors.newSingleThreadExecutor { Thread(it, "session-io") }
+        try {
+            var sealedOn: String? = null
+            val cipher = object : SessionCipher {
+                override fun encrypt(plain: ByteArray): ByteArray {
+                    sealedOn = Thread.currentThread().name
+                    return plain.copyOf()
+                }
+                override fun decrypt(sealed: ByteArray): ByteArray = sealed.copyOf()
+            }
+            val store = DataStoreSessionStore(dataStore, cipher, io.asCoroutineDispatcher()) { clock }
+
+            store.write(Session("t", 5_000L))
+
+            assertEquals("session-io", sealedOn)
+        } finally {
+            io.shutdown()
+        }
     }
 
     @Test
