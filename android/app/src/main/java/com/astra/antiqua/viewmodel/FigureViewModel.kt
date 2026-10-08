@@ -27,6 +27,9 @@ sealed class FigureState {
     /** The date or id does not parse, the pair is slow, or the sky did not hold the figure that day. */
     data class Missing(val reason: FigureReadingComposer.Missing) : FigureState()
 
+    /** Composing the page threw: nothing is known about the sky, so the screen says only that it could not draw. */
+    object Failed : FigureState()
+
     data class Ready(val page: FigurePage, val now: Date) : FigureState()
 }
 
@@ -35,7 +38,8 @@ sealed class FigureState {
  * reader's chart when there is one and the figure touches it, against the
  * sky when not. The window walk samples the ephemeris every six hours, so it
  * runs off the main thread, as does the sky read for a missing figure. A
- * composition that throws leaves the screen on [FigureState.Missing].
+ * composition that throws leaves the screen on [FigureState.Failed], or on
+ * [FigureState.Missing] when the address itself is at fault.
  */
 class FigureViewModel(
     private val astronomy: AstronomyEngine,
@@ -54,7 +58,7 @@ class FigureViewModel(
         loadedKey = key
         _state.value = FigureState.Loading
         viewModelScope.launch {
-            _state.value = withContext(Dispatchers.Default) {
+            val next = withContext(Dispatchers.Default) {
                 val natal = try {
                     profiles.profile.first()?.let { profile ->
                         val chart = CalculateNatalChartUseCase(astronomy).execute(profile)
@@ -79,12 +83,15 @@ class FigureViewModel(
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
-                    // A page that cannot be composed reads as a figure the screen cannot show:
-                    // the address's own fault when it has one, absent otherwise.
+                    // The address's own fault when it has one. Otherwise the page could not be
+                    // drawn, which says nothing about whether the sky held the figure.
                     Log.e(TAG, "Could not compose the figure", e)
-                    FigureState.Missing(FigureReadingComposer.missing(date, null, id) ?: FigureReadingComposer.Missing.ABSENT)
+                    FigureReadingComposer.missing(date, null, id)?.let { FigureState.Missing(it) } ?: FigureState.Failed
                 }
             }
+            // A page that could not be drawn is composed afresh on the next load: Try again.
+            if (next == FigureState.Failed && loadedKey == key) loadedKey = null
+            _state.value = next
         }
     }
 

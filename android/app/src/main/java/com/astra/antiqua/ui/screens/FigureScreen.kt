@@ -31,16 +31,20 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.astra.antiqua.R
 import com.astra.antiqua.domain.DayDecreeComposer
 import com.astra.antiqua.domain.FigureAnatomy
 import com.astra.antiqua.domain.FigureReadingComposer
 import com.astra.antiqua.domain.Recurrence
 import com.astra.antiqua.domain.Timeline
 import com.astra.antiqua.model.AncientCulture
+import com.astra.antiqua.ui.components.ActionButton
+import com.astra.antiqua.ui.components.ActionWeight
 import com.astra.antiqua.ui.components.DeityGlyph
 import com.astra.antiqua.ui.components.NaveHead
 import com.astra.antiqua.ui.components.NaveShell
@@ -104,6 +108,18 @@ fun FigureScreen(
                         FigureReadingComposer.Missing.ABSENT -> "The sky did not hold this figure that day"
                     }
                     NaveHead(kicker = "$institution · the figure", headline = headline)
+                    FigureLinks(onNavigate)
+                }
+
+                FigureState.Failed -> item {
+                    NaveHead(kicker = "$institution · the figure", headline = stringResource(R.string.figure_failed))
+                    Box(modifier = Modifier.padding(horizontal = Spacing.Gutter)) {
+                        ActionButton(
+                            label = stringResource(R.string.figure_try_again),
+                            weight = ActionWeight.PRIMARY,
+                            onClick = { viewModel.load(culture, date, id) },
+                        )
+                    }
                     FigureLinks(onNavigate)
                 }
 

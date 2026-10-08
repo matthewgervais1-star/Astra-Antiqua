@@ -31,7 +31,7 @@ class FigureViewModelTest {
     private suspend fun FigureViewModel.settled() = state.first { it !is FigureState.Loading }
 
     @Test
-    fun `a composer that throws leaves the screen on its missing state`() = runTest(dispatcher) {
+    fun `a composer that throws leaves the screen on its could-not-draw state`() = runTest(dispatcher) {
         val model = FigureViewModel(AstronomyEngine(), FakeProfiles()) { _, _, _, _, _ ->
             throw IllegalStateException("ephemeris failed")
         }
@@ -39,7 +39,26 @@ class FigureViewModelTest {
         model.load(AncientCulture.ROME, "2026-03-01", "mars-trine-neptune")
         advanceUntilIdle()
 
-        assertEquals(FigureState.Missing(FigureReadingComposer.Missing.ABSENT), model.settled())
+        // Not ABSENT: a page that failed to compose says nothing about the sky.
+        assertEquals(FigureState.Failed, model.settled())
+    }
+
+    @Test
+    fun `a page that could not be drawn is composed again on the next load`() = runTest(dispatcher) {
+        var calls = 0
+        val model = FigureViewModel(AstronomyEngine(), FakeProfiles()) { _, _, _, _, _ ->
+            calls += 1
+            throw IllegalStateException("ephemeris failed")
+        }
+
+        model.load(AncientCulture.ROME, "2026-03-01", "mars-trine-neptune")
+        advanceUntilIdle()
+        model.settled()
+        model.load(AncientCulture.ROME, "2026-03-01", "mars-trine-neptune")
+        advanceUntilIdle()
+        model.settled()
+
+        assertEquals(2, calls)
     }
 
     @Test
