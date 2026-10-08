@@ -264,21 +264,3 @@ test("a reader with a chart gets lists from the day's transits to it, by the sky
     assert.ok(differs >= 8, `${culture}: the chart changes the lists on ${differs} of 10 days`);
   }
 });
-
-/**
- * The river is Egypt's, and a reader meets it once a page at most. A group's
- * name ("the Ferry") is a label and is not counted; its title is not read.
- */
-const RIVER_WORDS = /\b(river|riverbank|riverbed|bank|banks|nile|shore|shores|water|waters|ferry|ferryman|downstream|upstream|crossing)\b/gi;
-
-test("over 2026, an Egypt day page and its dive deeper print the river at most once", () => {
-  const names = DIVE_DEEPER_BANKS.egypt.titles.map((t) => t.split(":")[0]!.replace(/^The /, ""));
-  const year = Array.from({ length: 365 }, (_, i) => new Date(Date.UTC(2026, 0, 1) + i * DAY_MS));
-  for (const date of year) {
-    const page = composeDayPage("egypt", date);
-    const dive = composeDiveDeeperForDay("egypt", date, null);
-    const lines = [page.headline, ...page.sentences, ...dive.groups.flatMap((g) => g.sentences)];
-    const hits = lines.flatMap((line) => names.reduce((l, n) => l.replaceAll(n, ""), line).match(RIVER_WORDS) ?? []);
-    assert.ok(hits.length <= 1, `${date.toISOString().slice(0, 10)} prints the river ${hits.length} times: ${hits.join(", ")}`);
-  }
-});

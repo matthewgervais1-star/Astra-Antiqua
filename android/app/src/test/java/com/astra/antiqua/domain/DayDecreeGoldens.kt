@@ -27,7 +27,7 @@ internal val DAY_DECREE_GOLDENS: List<DayDecreeGolden> = listOf(
         culture = AncientCulture.EGYPT,
         headline = "Start the heavy thing while the light holds.",
         evidence = "RA △ NUT · 0°19′",
-        paragraph = "Your day's work and your plans for the new season keep the same pace, and the cord is drawn tight. A sudden change works in your favor. Ra sits level on the scale, and the keeper of the balance leaves the beam alone. Behind Ra and Nut in the procession, Khonsu tips the scales against Osiris: your moods and what you have buried get in each other's way. Lift the heaviest stone of the week first, and call on Ra as you lift it.",
+        paragraph = "Your day's work and your plans for the new season keep the same pace, and the cord is drawn tight. A sudden change works in your favor. Ra weighs true against the feather, and the keeper of the balance leaves the beam alone. Behind Ra and Nut in the procession, Khonsu tips the scales against Osiris: your moods and what you have buried get in each other's way. Lift the heaviest stone of the week first, and call on Ra as you lift it.",
         messageBody = "Your day's work and your plans for the new season keep the same pace, and the cord is drawn tight. A sudden change works in your favor. Lift the heaviest stone of the week first, and call on Ra as you lift it.",
     ),
     DayDecreeGolden(

@@ -160,28 +160,28 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
     manifestations: [
       {
         harmony: [
-          "a ration of emmer measured out in full",
-          "the overseer passing your row without a word",
-          "a jar of oil left over at the month's end",
-          "your tally matching the scribe's at the first count",
+          "a ration measured out in full",
+          "the foreman passing your row without a word",
+          "oil left over at the month's end",
+          "your measure coming out even the first time",
         ],
         tension: [
-          "a short measure at the granary door",
-          "the overseer counting your bricks twice",
-          "a debt of grain you forgot you owed",
-          "a sledge rope fraying halfway to the site",
+          "a short measure at the granary",
+          "the foreman counting your bricks twice",
+          "a debt you forgot you owed",
+          "a copper chisel blunted halfway through the job",
         ],
       },
       {
         harmony: [
-          "bread and beer shared on the roof at dusk",
+          "supper shared on the roof at dusk",
           "a mother's name said kindly at the table",
           "the offering table for the ancestors swept and set",
           "a child who sleeps through the night",
         ],
         tension: [
-          "an old argument over the family field",
-          "the lamp in the ancestor's niche gone out",
+          "an old argument over the family plot",
+          "the ancestor's niche left unswept",
           "a brother asking for his share again",
           "a house too small for everyone in it",
         ],
@@ -191,18 +191,18 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
           "a letter that arrives before you looked for it",
           "the boatman waving you aboard without the fee",
           "a neighbor who carries your message across",
-          "a contract read once and sealed",
+          "a contract read once and signed",
         ],
         tension: [
           "a letter answered in the wrong tone",
-          "a boat that sails without you",
+          "a boat that leaves without you",
           "a witness who remembers the words differently",
           "the same question put to you three times",
         ],
       },
       {
         harmony: [
-          "an hour alone with the door shut",
+          "an hour alone with no one calling",
           "a dream you remember clearly at waking",
           "incense that burns down evenly",
           "a vow you keep without anyone watching",
