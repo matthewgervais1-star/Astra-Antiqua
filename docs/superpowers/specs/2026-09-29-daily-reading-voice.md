@@ -116,7 +116,7 @@ Jupiter in Virgo:
    figures that touch that group (via `lib/dayPressure.ts`'s buckets when a natal chart
    exists; from the sky figures' body domains otherwise), ending in one concrete line. A
    group with nothing in orb gets the culture's quiet line for that group (four per culture).
-   *As built:* two groups print one sentence instead of two or three. Without a chart, each
+   *As built:* in two cases a group prints one sentence instead of two or three. Without a chart, each
    sky figure is read by one group only, so a group whose every touching figure an earlier
    group already reads prints the culture's pointer line (`DIVE_DEEPER_BANKS.shared`, naming
    the earlier group that reads its tightest figure) in place of a paragraph or a quiet
