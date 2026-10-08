@@ -5,9 +5,22 @@ import com.astra.antiqua.model.Planet
 data class NatalChartData(
     val planets: Map<Planet, AccuratePlanetPosition>,
     val houseCusps: DoubleArray,
+    /** The Ascendant's ecliptic longitude. [houseCusps] holds 0 degrees of its sign, not the degree itself. */
+    val ascendant: Double,
     val julianDay: Double,
     val aspects: List<Aspect> = emptyList()
-)
+) {
+    /** The line under the placements table: "ASC 28°27′ LIBRA · WHOLE-SIGN HOUSES". */
+    val ascendantLine: String get() = ascendantLine(ascendant)
+}
+
+/**
+ * Web's /charts footer line (web/src/components/charts/ChartsInstrument.tsx):
+ * the Ascendant's degree and minute rounded by [formatDegMin], its sign's full
+ * name in capitals, and the house system.
+ */
+fun ascendantLine(longitude: Double): String =
+    "ASC ${formatDegMin(longitude)} ${ZodiacUtils.getZodiacSign(longitude).signName.uppercase(java.util.Locale.ROOT)} · WHOLE-SIGN HOUSES"
 
 data class AccuratePlanetPosition(
     val planet: Planet,

@@ -78,6 +78,7 @@ fun EgyptDashboardPreview() {
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
+                ascendant = 45.0,
                 julianDay = 2451545.0
             )
 
@@ -129,6 +130,7 @@ fun CarthageDashboardPreview() {
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
+                ascendant = 45.0,
                 julianDay = 2451545.0
             )
             
@@ -180,6 +182,7 @@ fun GreeceDashboardPreview() {
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
+                ascendant = 45.0,
                 julianDay = 2451545.0
             )
             
@@ -231,6 +234,7 @@ fun CanaanDashboardPreview() {
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
+                ascendant = 45.0,
                 julianDay = 2451545.0
             )
 
@@ -282,6 +286,7 @@ fun RomeDashboardPreview() {
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
+                ascendant = 45.0,
                 julianDay = 2451545.0
             )
 

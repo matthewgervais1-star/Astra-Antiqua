@@ -117,9 +117,10 @@ fun PlacementsScreen(
                         }
                     }
                     item {
+                        // Web's /charts footer: the Ascendant and the house system first.
                         Text(
-                            text = "WHOLE-SIGN HOUSES · R IS RETROGRADE, READ FROM THE BODY'S " +
-                                "OWN VELOCITY · NOTHING HERE IS ESTIMATED",
+                            text = current.chartData.ascendantLine + "\n" +
+                                "R IS RETROGRADE, READ FROM THE BODY'S OWN VELOCITY · NOTHING HERE IS ESTIMATED",
                             style = MaterialTheme.typography.labelSmall,
                             color = Dim,
                             modifier = Modifier.padding(Spacing.Gutter),
