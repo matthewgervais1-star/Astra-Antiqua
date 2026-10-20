@@ -33,6 +33,12 @@ If `java` isn't on PATH, point `JAVA_HOME` at the Android Studio JBR
 
 ## Notes
 
+- `dotnet/AstraAntiqua.App.Check` compiles the MAUI head's pages against the plain net8.0
+  MAUI package, so `cd dotnet && dotnet test` catches a broken page on Windows. It ships nothing;
+  the real iOS build still runs only in CI on macOS.
+- The iOS core reads every reading bank from `shared/content/` (see the 2026-10-20 section of
+  `docs/shared-content-model.md`). After changing web content run `export:content`, `export:learn`
+  and `export:goldens`, then `dotnet test`.
 - `android/local.properties` holds the machine-specific SDK path — git-ignored, never commit it.
 - This repo is **self-contained**. It has no relationship to any other project under
   `L:\Claude Projects` (competency-tracker, clearance-delivery, etc.). Do not pull context from them.

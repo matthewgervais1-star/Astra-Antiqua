@@ -6,19 +6,19 @@ using AstraAntiqua.Core.Model;
 namespace AstraAntiqua.App;
 
 /// <summary>
-/// Pipeline proof, not the product: renders the current sky over Carthage
-/// (36.8529 N, 10.3233 E) as text straight from AstraAntiqua.Core — the same
-/// chart math and content the golden tests hold to parity with web. The real
-/// identity (docs/design/handoff) is a separate design pass.
+/// The first screen this head ever drew, kept as "the sky right now" under
+/// More: the current sky over Carthage (36.8529 N, 10.3233 E) as plain text
+/// straight from AstraAntiqua.Core, the same chart math and content the
+/// golden tests hold to parity with web. It doubles as a pipeline check.
 /// </summary>
 public class MainPage : ContentPage
 {
     public MainPage()
     {
-        Title = "Astra Antiqua";
+        Title = "The sky right now";
         BackgroundColor = Color.FromArgb("#171310");
 
-        var store = ContentStore.Load();
+        var store = ContentStore.Shared;
         var utc = DateTime.UtcNow;
         var chart = Ephemeris.ComputeChart(utc);
         var (asc, _) = AscendantCalculator.Compute(utc, 36.8529, 10.3233);

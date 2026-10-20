@@ -1,0 +1,28 @@
+{
+  "neutral": {
+    "ground": "#171310",
+    "accent": "#b59a55"
+  },
+  "cultures": {
+    "egypt": {
+      "ground": "#1a1712",
+      "accent": "#b59a55"
+    },
+    "greece": {
+      "ground": "#171a1c",
+      "accent": "#7c93a6"
+    },
+    "canaan": {
+      "ground": "#1a1813",
+      "accent": "#8a9268"
+    },
+    "carthage": {
+      "ground": "#191218",
+      "accent": "#94648c"
+    },
+    "rome": {
+      "ground": "#1b1410",
+      "accent": "#a5544a"
+    }
+  }
+}

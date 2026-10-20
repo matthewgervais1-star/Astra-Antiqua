@@ -162,3 +162,11 @@ The platform plan is complete when:
 - the core astrology flow is usable on each platform
 - the content and interpretation model are documented and maintainable
 - the team has a clear path for future shared infrastructure and backend work
+
+## Delivery status, 2026-10-20 (addendum)
+
+| Plan item | Status |
+|-----------|--------|
+| iOS app (Milestone 2/3) | **Built, not yet run on a device.** The MAUI head in `dotnet/AstraAntiqua.App` carries the same journeys as Android: onboarding with the five doorways and birth entry, the day, the week, the season and the year, the long transits, the placements, synastry, the year ahead, voices, matrix, method and Learn. Every reading is composed by `AstraAntiqua.Core` from `shared/content`, held to web by the parity suite. The pages compile locally through `dotnet/AstraAntiqua.App.Check`; the iOS build itself runs only on the macOS CI runner, and no simulator or device run has happened yet. |
+| Auth and saved charts on iOS | **Deferred, as on Android.** The app keeps one birth record on the device and has no backend client. |
+| Signing and TestFlight | **Not started.** Needs an Apple Developer membership. |

@@ -30,6 +30,27 @@ public static class Ephemeris
         };
     }
 
+    /// <summary>The longitude at a JavaScript-style millisecond instant (see <see cref="Instant"/>).</summary>
+    public static double LongitudeAtMs(Planet planet, double ms)
+        => GeocentricLongitude(planet, Instant.FromMs(ms));
+
+    /// <summary>
+    /// Signed motion in degrees per day, measured as web's planetVelocity
+    /// does: the longitude an hour either side, unwrapped across 0°.
+    /// Negative means retrograde.
+    /// </summary>
+    public static double Velocity(Planet planet, double ms)
+    {
+        var before = LongitudeAtMs(planet, ms - Instant.MsPerHour);
+        var after = LongitudeAtMs(planet, ms + Instant.MsPerHour);
+        var delta = after - before;
+        if (delta > 180) delta -= 360;
+        if (delta < -180) delta += 360;
+        return delta * (24.0 / 2.0);
+    }
+
+    public static double Velocity(Planet planet, DateTime utc) => Velocity(planet, Instant.ToMs(utc));
+
     /// <summary>All ten longitudes, keyed and iterated in canonical order.</summary>
     public static IReadOnlyDictionary<Planet, double> ComputeChart(DateTime utc)
     {

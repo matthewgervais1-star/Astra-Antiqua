@@ -44,13 +44,26 @@ export interface Reading {
 }
 
 
-const SUMMARY_INTRO: Readonly<Record<Culture, string>> = {
+export const SUMMARY_INTRO: Readonly<Record<Culture, string>> = {
   egypt: "The barque of Ra has been read for the moment of your arrival in the world.",
   greece: "The Hellenistic chart for the moment of your birth has been cast in the names of Olympus.",
   canaan: "The divine council convenes around the hour of your naming.",
   carthage: "The Council's roll is opened to the day you were born into the city.",
   rome: "The chart has been read under Roman auspices for the hour of your birth.",
 };
+
+/** The summary's second sentence, by which kind of angle the chart holds more of. */
+export const SUMMARY_TONES = {
+  tension: "The hard angles outweigh the soft ones. This is a chart read as effort: what it gives, you earn.",
+  harmony: "The soft angles outweigh the hard ones. Much of what this chart promises comes without a fight.",
+  even: "Hard angles and soft fall in even number. The chart neither spares you nor blocks you; it leaves the work to you.",
+} as const;
+
+/** The closing line on conjunctions: none, one, or a count of them. */
+export const SUMMARY_FUSED = {
+  one: " One pair of powers sits fused, a single doubled force.",
+  many: (count: number): string => ` ${count} pairs of powers sit fused, each a single doubled force.`,
+} as const;
 
 export function buildReading(
   culture: Culture,
@@ -94,16 +107,16 @@ export function buildReading(
   const conjunctionCount = aspects.filter((a) => a.kind === "conjunction").length;
   const tone =
     tensionCount > harmonyCount
-      ? "The hard angles outweigh the soft ones. This is a chart read as effort: what it gives, you earn."
+      ? SUMMARY_TONES.tension
       : harmonyCount > tensionCount
-        ? "The soft angles outweigh the hard ones. Much of what this chart promises comes without a fight."
-        : "Hard angles and soft fall in even number. The chart neither spares you nor blocks you; it leaves the work to you.";
+        ? SUMMARY_TONES.harmony
+        : SUMMARY_TONES.even;
   const conjunctionLine =
     conjunctionCount === 0
       ? ""
       : conjunctionCount === 1
-        ? " One pair of powers sits fused, a single doubled force."
-        : ` ${conjunctionCount} pairs of powers sit fused, each a single doubled force.`;
+        ? SUMMARY_FUSED.one
+        : SUMMARY_FUSED.many(conjunctionCount);
   const summary = `${SUMMARY_INTRO[culture]} ${tone}${conjunctionLine}`;
 
   return {

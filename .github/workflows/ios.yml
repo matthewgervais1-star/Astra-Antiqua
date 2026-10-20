@@ -12,6 +12,7 @@ on:
     paths:
       - "dotnet/**"
       - "shared/**"
+      - "android/app/src/main/res/font/**"
       - ".github/workflows/ios.yml"
   workflow_dispatch:
 
@@ -25,6 +26,8 @@ jobs:
           dotnet-version: "8.0.x"
       - name: Test AstraAntiqua.Core
         run: dotnet test dotnet/AstraAntiqua.Core.Tests --configuration Release
+      - name: Compile-check the iOS head's pages (net8.0, no workload)
+        run: dotnet build dotnet/AstraAntiqua.App.Check --configuration Release
 
   ios-build:
     runs-on: macos-latest

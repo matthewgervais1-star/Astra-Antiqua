@@ -79,7 +79,7 @@ function toneForKind(kind: AspectKind): "harmony" | "tension" {
 }
 
 /** The verb an ingress line uses: "{deity} {verb} the {sign}." */
-const INGRESS_VERB: Readonly<Record<Culture, string>> = {
+export const INGRESS_VERB: Readonly<Record<Culture, string>> = {
   egypt: "is ferried into",
   greece: "goes on to the shrine of",
   canaan: "comes before",
@@ -113,7 +113,7 @@ export const QUIET_LINE: Readonly<Record<Culture, string>> = {
  * arrangement exists to avoid. The position stays fixed per culture (that is
  * what keeps the five from rhyming); only the instrument varies.
  */
-const EXACT_FORMS: Readonly<
+export const EXACT_FORMS: Readonly<
   Record<Culture, ReadonlyArray<(subject: string, predicate: string) => string>>
 > = {
   egypt: [

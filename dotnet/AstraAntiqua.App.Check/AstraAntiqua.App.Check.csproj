@@ -1,0 +1,43 @@
+<!--
+  A compile check for the MAUI head on a machine without the MAUI workload.
+  The iOS head (../AstraAntiqua.App) targets net10.0-ios and builds only on
+  macOS, in CI. This project compiles the same page and view code against the
+  plain net8.0 build of Microsoft.Maui.Controls, so a typo or a wrong API in a
+  page fails here, on Windows, before CI. It produces nothing that ships, and
+  the iOS-only code under Platforms/ is left out.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>AstraAntiqua.App</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AstraAntiqua.App\**\*.cs" Exclude="..\AstraAntiqua.App\Platforms\**;..\AstraAntiqua.App\obj\**;..\AstraAntiqua.App\bin\**" LinkBase="App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.Maui" />
+    <Using Include="Microsoft.Maui.Controls" />
+    <Using Include="Microsoft.Maui.Graphics" />
+    <Using Include="Microsoft.Maui.Hosting" />
+    <Using Include="Microsoft.Maui.Controls.Hosting" />
+    <Using Include="Microsoft.Maui.Storage" />
+    <Using Include="Microsoft.Maui.ApplicationModel" />
+    <Using Include="Microsoft.Maui.Devices.Sensors" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AstraAntiqua.Core\AstraAntiqua.Core.csproj" />
+  </ItemGroup>
+
+</Project>

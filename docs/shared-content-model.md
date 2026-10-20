@@ -170,3 +170,43 @@ What remains Android-only is `domain/LexiconDictionary.kt`: per-culture UI
 vocabulary (dashboard titles, officer roles, the voice epithets) with no web
 counterpart, because web names those surfaces differently. It is authored
 content and should be held to the same voice bar as the rest.
+
+## iOS parity, as of 2026-10-20
+
+The C# core (`dotnet/AstraAntiqua.Core`) now reads the whole corpus the
+readings are composed from, not only the natal tables. `pnpm export:content`
+writes six more files into `shared/content/`, every one from web's own
+modules:
+
+| File | What it carries | Web source |
+|------|-----------------|------------|
+| `reading-banks.json` | aspect verbs, deity charges, inscriptions, aspect and ingress frames, exact forms and instructions, quiet lines, summary sentences, planet domains and concerns, reflections, pair themes, sign phrases, house-group names, season house lines | `data/aspectVerbs.ts`, `data/aspectFrames.ts`, `data/deityCharges.ts`, `data/deityInscriptions.ts`, `data/interpretations.ts`, `lib/reading.ts`, `lib/weekReading.ts`, `lib/houseReading.ts`, `components/horizons/*` |
+| `cities.json` | the offline birthplace list, each city with its IANA zone resolved by tz-lookup at export time | `data/cities.ts` |
+| `palettes.json` | the neutral and per-culture ground and accent | `data/palettes.ts` |
+| `method.json` | the method sections, interpretive notes and sources | `data/methodologyContent.ts` |
+| `glyphs.json` | the fifty deity glyphs as flattened paths on the 24 grid, with deity and status (28 attested, 21 composed, 1 invented) | `docs/design/system/assets/glyphs` |
+| `learn.json` | the seven Learn sections as blocks, plus the planet verbs, house systems, aspect rulings and geometry | written by `scripts/gen-android-learn.mjs` (`pnpm export:learn`) from the same extraction that writes Android's `LearnContent.kt` |
+
+Web functions are exported as templates: the exporter calls each with
+sentinel arguments and swaps them for named slots, `{a}` for the argument as
+given and `{A}` for it capitalised (web's `cap()`). `ReadingBanks.Fill` in C#
+fills them. Four web constants gained an `export` for this
+(`SUMMARY_INTRO`, `INGRESS_VERB`, `EXACT_FORMS`, `PLANET_CONCERN`), and
+`buildReading`'s summary sentences moved into exported `SUMMARY_TONES` and
+`SUMMARY_FUSED`; web's output is byte-identical before and after.
+
+`pnpm export:goldens` also writes
+`dotnet/AstraAntiqua.Core.Tests/TestData/horizons.json`: natal readings in all
+five voices (including synthetic charts that force each summary branch), two
+weeks in all five voices, long-transit spans, ingresses, stations, moon
+quarters, eclipses, season windows and events, moon phases, solar returns,
+synastry, transits, house readings and birth resolution. The C# suite asserts
+composed text byte for byte and searched instants within one second. One
+platform caveat is recorded in the test: Windows' zone data has no daylight
+saving history for Tunis, so on Windows that one birth case is skipped; iOS
+and Linux read IANA data and run it.
+
+The iOS head (`dotnet/AstraAntiqua.App`) renders the canonical column on
+every screen Android has: the day, the week, the season, the year, the long
+transits and their detail, the placements, synastry with an unsaved second
+party, the year ahead, the five voices, the matrix, the method and Learn.

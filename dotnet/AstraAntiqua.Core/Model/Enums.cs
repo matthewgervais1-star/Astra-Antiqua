@@ -104,6 +104,12 @@ public static class PlanetInfo
 
 public static class CultureIds
 {
+    /// <summary>Web's CULTURES order.</summary>
+    public static readonly IReadOnlyList<Culture> Order = new[]
+    {
+        Culture.Egypt, Culture.Greece, Culture.Canaan, Culture.Carthage, Culture.Rome,
+    };
+
     /// <summary>The web-canonical lowercase id ("egypt" … "rome").</summary>
     public static string Id(Culture culture) => culture switch
     {
@@ -128,6 +134,10 @@ public static class CultureIds
 
 public static class ZodiacSigns
 {
+    /// <summary>The twelve, from 0° Aries.</summary>
+    public static readonly IReadOnlyList<ZodiacSign> Order =
+        (ZodiacSign[])Enum.GetValues(typeof(ZodiacSign));
+
     /// <summary>Parses web's capitalized sign name ("Aries" … "Pisces").</summary>
     public static ZodiacSign FromName(string name)
         => Enum.TryParse<ZodiacSign>(name, ignoreCase: false, out var sign)

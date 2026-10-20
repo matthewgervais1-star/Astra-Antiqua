@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "bf8d54711aa2472ef4650c10749a52b8a0c3f571",
+  "sourceCommit": "41d9839b53b7ddf7b69646ce5ce5857c01105126",
   "counts": {
     "cultures": 5,
     "planets": 10,
@@ -7,6 +7,10 @@
     "planetInSignParagraphs": 120,
     "houses": 12,
     "zodiacSigns": 12,
-    "aspectRules": 5
+    "aspectRules": 5,
+    "pairThemes": 45,
+    "cities": 60,
+    "methodSections": 3,
+    "glyphs": 50
   }
 }

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstraAntiqua.Core", "AstraA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstraAntiqua.Core.Tests", "AstraAntiqua.Core.Tests\AstraAntiqua.Core.Tests.csproj", "{D401E308-A239-43D7-B825-764432EDDF69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstraAntiqua.App.Check", "AstraAntiqua.App.Check\AstraAntiqua.App.Check.csproj", "{A9E8FF50-358D-484C-8E83-75A032ABA037}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{D401E308-A239-43D7-B825-764432EDDF69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D401E308-A239-43D7-B825-764432EDDF69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D401E308-A239-43D7-B825-764432EDDF69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9E8FF50-358D-484C-8E83-75A032ABA037}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9E8FF50-358D-484C-8E83-75A032ABA037}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9E8FF50-358D-484C-8E83-75A032ABA037}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9E8FF50-358D-484C-8E83-75A032ABA037}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

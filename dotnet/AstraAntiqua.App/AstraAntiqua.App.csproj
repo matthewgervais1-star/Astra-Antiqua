@@ -26,6 +26,14 @@
 
   <ItemGroup>
     <MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#171310" />
+    <MauiSplashScreen Include="Resources\AppIcon\appicon.svg" Color="#171310" BaseSize="128,128" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The identity's faces, the same files the Android surface ships
+         (Cinzel, Spectral, IBM Plex Mono, Noto Sans Symbols for the body
+         glyphs). Linked, not copied, so the repository holds one set. -->
+    <MauiFont Include="..\..\android\app\src\main\res\font\*.ttf" Link="Resources\Fonts\%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,612 @@
+{
+  "aspectVerbs": {
+    "egypt": {
+      "conjunction": "joins the barque of",
+      "sextile": "offers a steady hand to",
+      "square": "tips the scales against",
+      "trine": "rows in time with",
+      "opposition": "stands across the river from"
+    },
+    "greece": {
+      "conjunction": "stands shoulder to shoulder with",
+      "sextile": "offers fair counsel to",
+      "square": "challenges",
+      "trine": "moves in accord with",
+      "opposition": "stands across the agora from"
+    },
+    "canaan": {
+      "conjunction": "shares the council seat with",
+      "sextile": "exchanges tribute with",
+      "square": "draws the bow against",
+      "trine": "speaks favor over",
+      "opposition": "convenes the council against"
+    },
+    "carthage": {
+      "conjunction": "sails under one banner with",
+      "sextile": "trades safe passage with",
+      "square": "raises a hand against",
+      "trine": "lights the harbor for",
+      "opposition": "demands a price of"
+    },
+    "rome": {
+      "conjunction": "marches under the same eagle as",
+      "sextile": "offers a treaty to",
+      "square": "raises the spear against",
+      "trine": "clasps the right hand of",
+      "opposition": "stands across the forum from"
+    }
+  },
+  "plainAspectVerbs": {
+    "conjunction": "joins",
+    "sextile": "steadies",
+    "square": "grinds against",
+    "trine": "flows with",
+    "opposition": "pulls against"
+  },
+  "placementVerbs": {
+    "egypt": "stands in",
+    "greece": "walks in",
+    "canaan": "is seated in",
+    "carthage": "carries the standard into",
+    "rome": "keeps the watch in"
+  },
+  "deityCharges": {
+    "egypt": {
+      "sun": "the day's own course",
+      "moon": "the count of the nights",
+      "mercury": "the quick fire at the edge of the field",
+      "venus": "what was scattered and gathered back",
+      "mars": "a fight already decided",
+      "jupiter": "the hidden king's hand",
+      "saturn": "the weight of the ground itself",
+      "uranus": "the five days outside the year",
+      "neptune": "the dark water under everything",
+      "pluto": "the verdict of the hall below"
+    },
+    "greece": {
+      "sun": "what the sky has seen and will tell",
+      "moon": "the borrowed light",
+      "mercury": "the word carried through the door",
+      "venus": "the pull that needs no argument",
+      "mars": "the quarrel looking for a field",
+      "jupiter": "the thunder that settles it",
+      "saturn": "the sickle's one question",
+      "uranus": "the sky before there were names",
+      "neptune": "the ground that will not hold still",
+      "pluto": "the wealth kept under the floor"
+    },
+    "canaan": {
+      "sun": "the messenger's report to the council",
+      "moon": "the lamp of the night watch",
+      "mercury": "the craftsman's finished work",
+      "venus": "the name sworn on at the altar",
+      "mars": "the plague-arrow already on the string",
+      "jupiter": "the rain that decides the harvest",
+      "saturn": "the old father's ruling",
+      "uranus": "the unnamed heavens",
+      "neptune": "the sea's claim to the throne",
+      "pluto": "the dry mouth of death"
+    },
+    "carthage": {
+      "sun": "the day's sailing light",
+      "moon": "the vow entered under her sign",
+      "mercury": "the superintendent's tally",
+      "venus": "the cargo worth the voyage",
+      "mars": "the pillar the city was founded on",
+      "jupiter": "the store that fills",
+      "saturn": "the elder's due called in",
+      "uranus": "the weather no manifest allows for",
+      "neptune": "the open sea between ports",
+      "pluto": "the debt that outlives the debtor"
+    },
+    "rome": {
+      "sun": "the day's light on the Forum",
+      "moon": "the night's turning",
+      "mercury": "the message on the road",
+      "venus": "the treaty sealed by desire",
+      "mars": "the legion in the field",
+      "jupiter": "the thunder on the right",
+      "saturn": "the old boundary stone",
+      "uranus": "the whole sky before augury divided it",
+      "neptune": "the sea the fleet must cross",
+      "pluto": "the store beneath the earth"
+    }
+  },
+  "deityInscriptions": {
+    "egypt": {
+      "sun": "Ra sails the day in the barque of a million years, and at dusk goes down to fight the serpent in the dark so that morning can come at all.",
+      "moon": "Khonsu counts the months and rules the nights; the calendar walks wherever he walks, and time answers to his measure.",
+      "mercury": "Sebegu is the star Egypt gave to Set, a quick and restless fire at the edge of order, the cunning that works best in the red land.",
+      "venus": "Isis crosses as the morning star and returns as the evening, gathering what was scattered and binding the broken back into one body.",
+      "mars": "Horus the Red rises on the horizon in his fighting aspect, the falcon that fixes its eye on a war it has already decided to win.",
+      "jupiter": "Amun the Hidden moves unseen behind all things, and when he wears the sun as Amun-Ra there is no greater king among the gods.",
+      "saturn": "Geb is the earth itself, and his back bears everything raised upon it; his shifting is the earthquake, his patience the slow law of time.",
+      "uranus": "Nut arches over the earth on fingertips and toes, swallowing the sun each dusk and bearing it again each dawn; her children were born on the five days Thoth won from the moon, days outside the year entirely.",
+      "neptune": "Nun is the dark water that was everything before the first mound rose; his arms lift the sun's barque out of the deep at dawn, and at the end of days his water is all that remains.",
+      "pluto": "Osiris was drowned, dismembered, and gathered back together by Isis; now he presides in the Duat, where each heart is weighed against the feather before him."
+    },
+    "greece": {
+      "sun": "Helios drives the chariot from end to end of the sky and misses nothing. What he sees he tells the gods, and the telling is the judgment.",
+      "moon": "Selene drives the night chariot behind her brother, and the light she carries is borrowed. She waxes and wanes in the open, keeping no phase secret.",
+      "mercury": "Hermes slips through every door the other gods cannot, carrying word up to Olympus and the newly dead down to the dark.",
+      "venus": "Aphrodite, risen from the sea-foam, turns heads and topples cities; no god and no mortal is exempt from the pull of her.",
+      "mars": "Ares is the joy and the horror of the battlefield itself, the one Olympian his own family cannot bring themselves to love.",
+      "jupiter": "Zeus holds the thunderbolt and the scales of fate; a single nod from him settles what the whole council cannot.",
+      "saturn": "Kronos, who swallowed his children sooner than be overthrown, keeps the oldest debt. All that grows is reaped, and all that begins must end.",
+      "uranus": "Ouranos was the first sky and the first king, until Kronos waited in ambush with the sickle his mother forged; from that one cut came the Furies, the Giants, and Aphrodite out of the sea-foam.",
+      "neptune": "Poseidon carries the trident that splits ships and shakes cities off their footings; Odysseus paid ten years on the water for the blinding of one son.",
+      "pluto": "Plouton keeps the house every mortal enters and none leaves twice; the grain and the silver under the earth are his, and the Greeks said Wealth rather than speak his older name."
+    },
+    "canaan": {
+      "sun": "Shapash crosses the sky as herald of the divine council, and each night descends to carry the dead and judge among them.",
+      "moon": "Yarikh lights the night and pays the bride-price for Nikkal; the city of the moon was named for the god who keeps it.",
+      "mercury": "Kothar forges the weapons that win the gods their wars and speaks the incantations that make those weapons strike true.",
+      "venus": "Attart, Queen of Heaven, is desire and war in a single body, rising as the morning star and going down as the evening.",
+      "mars": "Resheph looses his arrows of plague and battle into the living world; where they fall, the strong are laid as low as the weak.",
+      "jupiter": "Baal Hadad rides the storm clouds and breaks the drought with his thunder; his rain is the whole distance between famine and life.",
+      "saturn": "El, Father of Years, presides from his mountain at the source of the waters, and the council holds its breath for his ancient word.",
+      "uranus": "Shamem stands in the god-lists of Ugarit as Heaven itself, paired with Earth and owed offerings of its own; the council convenes beneath a power no god made and none commands.",
+      "neptune": "Yammu, Prince Sea and Judge River, demanded the kingship before the assembled gods; Baal struck him down with the two maces Kothar forged, and the sea has never withdrawn its claim.",
+      "pluto": "Motu opens a gullet with one lip to the earth and one to the sky, and Baal himself goes down it; Anat cleaves him, winnows him, burns him, grinds him, and sows him in the fields, and still death comes back."
+    },
+    "carthage": {
+      "sun": "Semes is the old solar force carried west out of Tyre, the same sun that burned over Phoenicia now standing watch above a new city.",
+      "moon": "Tanit, the face of heaven over Carthage, wears the crescent above the disc; the city's fortune rises and wanes as she does.",
+      "mercury": "Sakun guides the trader through open water and foreign ports, the steady hand the Phoenicians trusted on the long sea-roads.",
+      "venus": "Astarte, Lady of the Sea, blesses the marriage bed and the war-fleet alike; in Carthage both love and naval power are hers.",
+      "mars": "Melqart, champion of the city, burns on his pyre each year and wakes again from the ash; the Greeks saw their Heracles in his labors.",
+      "jupiter": "Baal Hammon, lord of the Carthaginian sky, presides as father over the gods of the city that Rome would one day learn to fear.",
+      "saturn": "Baal Hammon, in his eldest aspect, keeps the turning of the agricultural year, the ancient one who must be given everything he is owed.",
+      "uranus": "Baal Shamem holds the open sky over Tyre and every harbor west of it; when a treaty is sworn, his name is set first among the witnesses.",
+      "neptune": "Yam is the water under every keel out of Carthage; he carries a fleet to Gades in one season and swallows it whole in the next.",
+      "pluto": "Mot waits at the bottom of the old Phoenician account of the world; the cosmogony has living things first stirring in his mud, and to his keeping every one of them returns."
+    },
+    "rome": {
+      "sun": "Sol drives the chariot of the day and rises each dawn undefeated; the Empire made his unconquered light a god of the state.",
+      "moon": "Luna drives her two-horse chariot across the dark, taking up the sky that Sol lays down at every dusk.",
+      "mercury": "Mercurius carries the message, closes the bargain, and walks the dead to the threshold; nothing in transit slips past him.",
+      "venus": "Venus, mother of the Roman line through Aeneas, makes alliances out of desire and a whole people out of love.",
+      "mars": "Mars, father of Romulus and guardian of the legions, takes the field for Rome itself; the year's first campaigns open in his name.",
+      "jupiter": "Iuppiter Optimus Maximus holds the Capitoline and the thunderbolt, and on his name the Republic swore every oath that mattered.",
+      "saturn": "Saturnus ruled the lost Golden Age and keeps the turning of the year; once each winter he frees the city into Saturnalia, then takes it back.",
+      "uranus": "Caelus spreads the canopy of heaven above gods and armies alike; Saturnus is counted his son, and every bird the augur reads flies through his house.",
+      "neptune": "Neptunus keeps the springs, the rivers, and the sea Rome learned to rule; at the Neptunalia in high summer the city raises him huts of branches against the drought.",
+      "pluto": "Dis Pater holds court below with Proserpina beside him; his altar in the Campus Martius stays buried until the Secular Games return, and no living Roman sees those Games twice."
+    }
+  },
+  "aspectFrames": {
+    "egypt": {
+      "conjunction": "Two loads ride one barque today, {a} and {b}, and the river carries both or neither.",
+      "sextile": "{A} lends its wind to {b}; the sail that is raised is the one that moves.",
+      "square": "{A} pulls the beam out of true against {b}, and only labor brings the pans level.",
+      "trine": "{A} and {b} sit level on the scale, and no hand needs to touch it.",
+      "opposition": "{A} hangs in one pan and {b} in the other, and the scribe writes no verdict until one descends."
+    },
+    "greece": {
+      "conjunction": "The tripod gives one answer for {a} and {b}, and neither may claim it alone.",
+      "sextile": "{A} stands ready to counsel {b}; the shrine answers the question that is put.",
+      "square": "{A} contests {b} at the shrine, and the god will not split the difference.",
+      "trine": "{A} moves in step with {b}, and the answer comes down the road unasked.",
+      "opposition": "{A} faces {b} across the agora, and the oracle hears both voices at once."
+    },
+    "canaan": {
+      "conjunction": "{A} and {b} come before El as one petition, and the council rules on both together.",
+      "sextile": "{A} speaks in favor of {b}, and the floor is open for the vow.",
+      "square": "{A} raises an objection to {b}, and the matter goes twice round the floor.",
+      "trine": "{A} and {b} are entered in the record together, unopposed.",
+      "opposition": "{A} and {b} stand on their feet against each other, and the docket does not clear."
+    },
+    "carthage": {
+      "conjunction": "{A} and {b} are posted to one line of the register, and one seal covers both.",
+      "sextile": "{A} holds a berth for {b}; the entry stands until the tide, unclaimed.",
+      "square": "{A} disputes the figure {b} brings, and the column is read again line by line.",
+      "trine": "{A} and {b} balance on the same page, and the day's sheet closes without a correction.",
+      "opposition": "{A} and {b} are entered against each other, and an entry disputed is not an entry."
+    },
+    "rome": {
+      "conjunction": "The auspice taken for {a} binds {b} as well; neither acts on it alone.",
+      "sextile": "{A} shows favorable to {b}, and the sign waits for someone to claim it.",
+      "square": "{A} enters an objection against {b}, and every step goes forward under challenge.",
+      "trine": "{A} and {b} stand under the same fastus day, and what is done under it holds.",
+      "opposition": "{A} and {b} hold one office between them, and each vetoes the other."
+    }
+  },
+  "ingressFrames": {
+    "egypt": "{C} crosses to a new bank of the river, and the old mark no longer measures it.",
+    "greece": "{C} comes onto new ground, and the shrine there has not yet been asked.",
+    "canaan": "{C} is brought before a new seat, and the council there has not yet ruled.",
+    "carthage": "{C} is entered under a new heading, and the old bearing no longer holds.",
+    "rome": "{C} stands on new ground, and the auspices there have not been taken."
+  },
+  "exactInstructions": {
+    "egypt": {
+      "conjunction": "Enter what {d} brings in one line, and let the scribe seal it.",
+      "sextile": "Raise the sail while {d} sends the wind.",
+      "square": "Weigh what {d} brings twice before you speak of it.",
+      "trine": "Row while {d} runs with the current.",
+      "opposition": "Stand at the balance until {d} answers, and not a moment less."
+    },
+    "greece": {
+      "conjunction": "Bring {d} one question up the road, not three.",
+      "sextile": "Put your question to {d} in as few words as you can.",
+      "square": "Reckon what {d} asks of you, then accept it or go home.",
+      "trine": "Act on what {d} gives before you are back down the road.",
+      "opposition": "Ask {d} a different question."
+    },
+    "canaan": {
+      "conjunction": "Swear it once before {d}, and before witnesses.",
+      "sextile": "Stand while {d} sits and put the matter into words.",
+      "square": "Let the objection {d} raises go into the record before you answer it.",
+      "trine": "Put the plough in before {d} calls the feast day.",
+      "opposition": "Adjourn until {d} has sat down."
+    },
+    "carthage": {
+      "conjunction": "Keep one book for what {d} posts, in your own hand.",
+      "sextile": "Get what {d} offers into the register before the day closes.",
+      "square": "Go back down the column {d} disputes before you sign.",
+      "trine": "Weigh out what {d} brings, sign the manifest, and sail.",
+      "opposition": "Strike one name from the entry {d} contests before the tide turns."
+    },
+    "rome": {
+      "conjunction": "Send one man to speak for {d}.",
+      "sextile": "Put forward what {d} shows, in your own name, while the Forum is full.",
+      "square": "Have your witnesses in the room before {d} is heard.",
+      "trine": "Get what {d} grants in front of the magistrate this morning.",
+      "opposition": "Settle the precedence with {d} before anything else is brought forward."
+    }
+  },
+  "exactForms": {
+    "egypt": [
+      "The plumb hangs true: {s} {p}.",
+      "The cord is drawn tight: {s} {p}."
+    ],
+    "greece": [
+      "To the very degree, {s} {p}.",
+      "Within the hair, {s} {p}."
+    ],
+    "canaan": [
+      "{s} {p}, and the gate is full to the wall.",
+      "{s} {p}, and not one seat stands empty."
+    ],
+    "carthage": [
+      "{s} {p}, the entry posted to the hour.",
+      "{s} {p}, the weight matched to its mark."
+    ],
+    "rome": [
+      "{s}, at the line the augur drew, {p}.",
+      "{s}, squarely inside the templum, {p}."
+    ]
+  },
+  "ingressVerbs": {
+    "egypt": "is ferried into",
+    "greece": "goes on to the shrine of",
+    "canaan": "comes before",
+    "carthage": "makes port in",
+    "rome": "enters the augur's boundary of"
+  },
+  "quietLines": {
+    "egypt": "Nothing on the river runs close enough to weigh. A day of ordinary work, and Ma'at counts it no lower than a feast.",
+    "greece": "No shrine answers today. The oracle keeps its own counsel, and so should you.",
+    "canaan": "Not one matter is brought forward today. An ordinary day still stands under El's tent.",
+    "carthage": "The day's page takes no entry. The books hold steady, which is its own kind of profit.",
+    "rome": "Nothing is reported that the augurs would call a sign. The citadel was manned at dawn all the same."
+  },
+  "summaryIntros": {
+    "egypt": "The barque of Ra has been read for the moment of your arrival in the world.",
+    "greece": "The Hellenistic chart for the moment of your birth has been cast in the names of Olympus.",
+    "canaan": "The divine council convenes around the hour of your naming.",
+    "carthage": "The Council's roll is opened to the day you were born into the city.",
+    "rome": "The chart has been read under Roman auspices for the hour of your birth."
+  },
+  "summaryTones": {
+    "tension": "The hard angles outweigh the soft ones. This is a chart read as effort: what it gives, you earn.",
+    "harmony": "The soft angles outweigh the hard ones. Much of what this chart promises comes without a fight.",
+    "even": "Hard angles and soft fall in even number. The chart neither spares you nor blocks you; it leaves the work to you."
+  },
+  "summaryFused": {
+    "one": " One pair of powers sits fused, a single doubled force.",
+    "many": " {n} pairs of powers sit fused, each a single doubled force."
+  },
+  "planetDomains": {
+    "sun": "Identity, sovereignty, the face you turn to the world.",
+    "moon": "Feeling, memory, the inner weather.",
+    "mercury": "Speech, exchange, the crossing of edges.",
+    "venus": "Drawing-toward, the binding of pairs, what you find beautiful.",
+    "mars": "Effort, friction, what you have to push against.",
+    "jupiter": "Expansion, blessing, what you trust to grow.",
+    "saturn": "Limit, weight, what asks for endurance.",
+    "uranus": "Rupture, sudden change, the pattern broken without warning.",
+    "neptune": "Dissolution, longing, the boundary that blurs into the ideal.",
+    "pluto": "Buried power, forced transformation, what returns changed."
+  },
+  "aspectReflections": {
+    "egypt": {
+      "conjunction": "Ra's barque carries both forces together; their movement is one movement.",
+      "sextile": "An open road between them, with the offering laid out at the threshold.",
+      "square": "The feather of Ma'at trembles. Acting in haste tips the scale; acting in measure holds it.",
+      "trine": "The waters of the Nile flow between them, without effort, without resistance.",
+      "opposition": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
+    },
+    "greece": {
+      "conjunction": "On Olympus they share a single throne. Whichever speaks first speaks for both.",
+      "sextile": "A treaty across the agora, with the terms still open for revision.",
+      "square": "The Pythia warns of a forced choice. Both gods are watching; neither is patient.",
+      "trine": "A song that returns to its tonic. The notes find each other without strain.",
+      "opposition": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
+    },
+    "canaan": {
+      "conjunction": "The two seats of the divine council are pulled together. One voice carries both arguments.",
+      "sextile": "A tribute is exchanged at the council mountain. The favor lasts as long as the gift remembers itself.",
+      "square": "Resheph's arrow is drawn between them. Cover what you cannot defend, or accept the wound that proves the danger.",
+      "trine": "Baal's rain falls on both at once. The council does not need to convene; the answer is already in the soil.",
+      "opposition": "The two convene the council against each other. El's silence is the test; whoever speaks first to the assembly carries the day."
+    },
+    "carthage": {
+      "conjunction": "Two standards are raised on the same mast. The wind takes them as one banner.",
+      "sextile": "Safe passage between two ports. The convoy moves while the winds hold.",
+      "square": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire.",
+      "trine": "The harbor lights both burn. The fleet enters without the lookout calling once.",
+      "opposition": "Two flags face each other across the strait. The decree of the Council is that one will be carried home and one will not."
+    },
+    "rome": {
+      "conjunction": "The two march under one eagle. The senate does not debate what the legions already carry together.",
+      "sextile": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open.",
+      "square": "Mars raises the spear. The augurs read a forced campaign; take the omens before you commit the line.",
+      "trine": "The right hands are clasped in accord. What is agreed today will stand without a contract to enforce it.",
+      "opposition": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
+    }
+  },
+  "pairThemes": {
+    "moon|sun": "Two principles meet on the wheel.",
+    "mercury|sun": "The voice that speaks and the identity it speaks for.",
+    "sun|venus": "What you want and the way you make yourself attractive enough to get it.",
+    "mars|sun": "Will and force, sovereignty and the work of pushing through.",
+    "jupiter|sun": "The throne and the blessing, identity expanded into role.",
+    "saturn|sun": "The throne and the weight, sovereignty and the cost of bearing it.",
+    "sun|uranus": "Identity and rupture, who you are and the version that is already leaving.",
+    "neptune|sun": "Identity and dissolution, the self and the tide that softens its edges.",
+    "pluto|sun": "Identity and depth, sovereignty and the power that remakes it from below.",
+    "mercury|moon": "Feeling and speech, what you sense and what you put into words.",
+    "moon|venus": "The body and the binding, instinct and the pull toward what you love.",
+    "mars|moon": "Feeling and force, instinct and the will to act on it.",
+    "jupiter|moon": "The body and the blessing, gut sense and the things that grow on faith.",
+    "moon|saturn": "The body and the limit, instinct and what asks for endurance.",
+    "moon|uranus": "Feeling and rupture, the mood and the sudden break in its weather.",
+    "moon|neptune": "Feeling and dissolution, the tide and the wider tide it merges with.",
+    "moon|pluto": "Feeling and depth, the surface mood and the old current underneath.",
+    "mercury|venus": "Speech and beauty, the words you choose to draw what you love.",
+    "mars|mercury": "Speech and force, the sentence as a weapon or a wall.",
+    "jupiter|mercury": "Speech and expansion, the meaning that wants to reach further.",
+    "mercury|saturn": "Speech and weight, what you say and what you must defend.",
+    "mercury|uranus": "Speech and rupture, the thought that arrives sideways and changes the sentence.",
+    "mercury|neptune": "Speech and dissolution, the word and the tide it cannot quite hold.",
+    "mercury|pluto": "Speech and depth, the sentence and the buried thing it names.",
+    "mars|venus": "Attraction and pursuit, the pull and the push of every desire.",
+    "jupiter|venus": "What you love and what you trust, the binding made into a creed.",
+    "saturn|venus": "What you love and what you keep, beauty placed under contract.",
+    "uranus|venus": "Desire and rupture, what you love and the sudden thing that unsettles it.",
+    "neptune|venus": "Desire and dissolution, what you love and the halo you have put on it.",
+    "pluto|venus": "Desire and depth, what you love and how far down you will go for it.",
+    "jupiter|mars": "Effort and expansion, the push toward the bigger story.",
+    "mars|saturn": "Effort and limit, the push against the wall that wants you stopped.",
+    "mars|uranus": "Force and rupture, the push and the sudden break it triggers.",
+    "mars|neptune": "Force and dissolution, the push and the fog it pushes through.",
+    "mars|pluto": "Force and depth, the fight on the surface and the power underneath.",
+    "jupiter|saturn": "Expansion and limit, the law that grows and the law that holds.",
+    "jupiter|uranus": "Growth and rupture, the lucky break and the sudden door.",
+    "jupiter|neptune": "Growth and dissolution, the expanding hope and the fog that surrounds it.",
+    "jupiter|pluto": "Expansion and depth, the growing claim and the power that backs it.",
+    "saturn|uranus": "Limit and rupture, the structure and the break it was built to resist.",
+    "neptune|saturn": "Dissolution and limit, the dream and the structure it must survive.",
+    "pluto|saturn": "Depth and limit, the buried pressure and the structure it tests.",
+    "neptune|uranus": "Dissolution and rupture, the long fog and the sudden break inside it.",
+    "pluto|uranus": "Depth and rupture, what has been building for years and the moment it breaks open.",
+    "neptune|pluto": "Dissolution and depth, the slowest tide and the deepest pressure, moving together."
+  },
+  "pairThemeFallback": "Two principles meet on the wheel.",
+  "signRegisters": {
+    "Aries": "the ram's first fire",
+    "Taurus": "the bull's deep pasture",
+    "Gemini": "the twins' restless wind",
+    "Cancer": "the crab's sheltered shore",
+    "Leo": "the lion's high noon",
+    "Virgo": "the maiden's harvest floor",
+    "Libra": "the even scales",
+    "Scorpio": "the scorpion's dark water",
+    "Sagittarius": "the archer's far road",
+    "Capricorn": "the goat's steep climb",
+    "Aquarius": "the poured waters",
+    "Pisces": "the deep tide"
+  },
+  "planetConcerns": {
+    "sun": "the work of being seen, and of ruling what is yours to rule",
+    "moon": "the tides of mood, memory, and what the body needs",
+    "mercury": "the work of the mind, the message, and the bargain",
+    "venus": "the reach toward beauty, pleasure, and union",
+    "mars": "the push to act, to cut, and to contend",
+    "jupiter": "the urge to widen, to bless, and to trust the world to grow",
+    "saturn": "the meeting with limit, weight, and the long discipline",
+    "uranus": "the sudden break, the shock that frees what was stuck",
+    "neptune": "the dissolve, the longing, the boundary that goes soft",
+    "pluto": "the pressure that strips a thing down to what is real"
+  },
+  "houseGroupNames": {
+    "egypt": {
+      "1": "THE SEALED SHRINE",
+      "2": "THE GRANARY",
+      "3": "THE FERRY",
+      "4": "THE HOUSE OF THE KA",
+      "5": "THE SEALED SHRINE",
+      "6": "THE GRANARY",
+      "7": "THE FERRY",
+      "8": "THE HOUSE OF THE KA",
+      "9": "THE SEALED SHRINE",
+      "10": "THE GRANARY",
+      "11": "THE FERRY",
+      "12": "THE SEALED SHRINE"
+    },
+    "greece": {
+      "1": "THE ADYTON",
+      "2": "THE AGORA",
+      "3": "THE HERM",
+      "4": "THE OIKOS",
+      "5": "THE ADYTON",
+      "6": "THE AGORA",
+      "7": "THE HERM",
+      "8": "THE OIKOS",
+      "9": "THE ADYTON",
+      "10": "THE AGORA",
+      "11": "THE HERM",
+      "12": "THE ADYTON"
+    },
+    "canaan": {
+      "1": "THE TENT OF EL",
+      "2": "THE THRESHING FLOOR",
+      "3": "THE GATE",
+      "4": "THE FATHER'S HOUSE",
+      "5": "THE TENT OF EL",
+      "6": "THE THRESHING FLOOR",
+      "7": "THE GATE",
+      "8": "THE FATHER'S HOUSE",
+      "9": "THE TENT OF EL",
+      "10": "THE THRESHING FLOOR",
+      "11": "THE GATE",
+      "12": "THE TENT OF EL"
+    },
+    "carthage": {
+      "1": "THE PRECINCT",
+      "2": "THE COUNTING HOUSE",
+      "3": "THE HARBOR",
+      "4": "THE COURTYARD",
+      "5": "THE PRECINCT",
+      "6": "THE COUNTING HOUSE",
+      "7": "THE HARBOR",
+      "8": "THE COURTYARD",
+      "9": "THE PRECINCT",
+      "10": "THE COUNTING HOUSE",
+      "11": "THE HARBOR",
+      "12": "THE PRECINCT"
+    },
+    "rome": {
+      "1": "TEMPLUM",
+      "2": "FORUM",
+      "3": "VIA",
+      "4": "DOMUS",
+      "5": "TEMPLUM",
+      "6": "FORUM",
+      "7": "VIA",
+      "8": "DOMUS",
+      "9": "TEMPLUM",
+      "10": "FORUM",
+      "11": "VIA",
+      "12": "TEMPLUM"
+    }
+  },
+  "seasonHouseLines": {
+    "egypt": {
+      "1": "The season sits in your first house, which this culture keeps under the sealed shrine. It works on your own body and the face you turn to the world.",
+      "2": "The season sits in your second house, which this culture keeps under the granary. It works on what you earn, hold, and count as yours.",
+      "3": "The season sits in your third house, which this culture keeps under the ferry. It works on your words, your kin, and the road close to home.",
+      "4": "The season sits in your fourth house, which this culture keeps under the house of the ka. It works on your home, your lineage, and the ground beneath you.",
+      "5": "The season sits in your fifth house, which this culture keeps under the sealed shrine. It works on what you make for joy, the play and the loves you father.",
+      "6": "The season sits in your sixth house, which this culture keeps under the granary. It works on your daily labor and the upkeep of the body.",
+      "7": "The season sits in your seventh house, which this culture keeps under the ferry. It works on the partner, the contract, and the open adversary.",
+      "8": "The season sits in your eighth house, which this culture keeps under the house of the ka. It works on what is shared, inherited, hidden, and transformed.",
+      "9": "The season sits in your ninth house, which this culture keeps under the sealed shrine. It works on the far journey, the law, and the things of the divine.",
+      "10": "The season sits in your tenth house, which this culture keeps under the granary. It works on your calling, your standing, and the work the world sees.",
+      "11": "The season sits in your eleventh house, which this culture keeps under the ferry. It works on your allies, your assembly, and the things you hope for.",
+      "12": "The season sits in your twelfth house, which this culture keeps under the sealed shrine. It works on the unseen, the retreat, and what works against you out of sight."
+    },
+    "greece": {
+      "1": "The season sits in your first house, which this culture keeps under the adyton. It works on your own body and the face you turn to the world.",
+      "2": "The season sits in your second house, which this culture keeps under the agora. It works on what you earn, hold, and count as yours.",
+      "3": "The season sits in your third house, which this culture keeps under the herm. It works on your words, your kin, and the road close to home.",
+      "4": "The season sits in your fourth house, which this culture keeps under the oikos. It works on your home, your lineage, and the ground beneath you.",
+      "5": "The season sits in your fifth house, which this culture keeps under the adyton. It works on what you make for joy, the play and the loves you father.",
+      "6": "The season sits in your sixth house, which this culture keeps under the agora. It works on your daily labor and the upkeep of the body.",
+      "7": "The season sits in your seventh house, which this culture keeps under the herm. It works on the partner, the contract, and the open adversary.",
+      "8": "The season sits in your eighth house, which this culture keeps under the oikos. It works on what is shared, inherited, hidden, and transformed.",
+      "9": "The season sits in your ninth house, which this culture keeps under the adyton. It works on the far journey, the law, and the things of the divine.",
+      "10": "The season sits in your tenth house, which this culture keeps under the agora. It works on your calling, your standing, and the work the world sees.",
+      "11": "The season sits in your eleventh house, which this culture keeps under the herm. It works on your allies, your assembly, and the things you hope for.",
+      "12": "The season sits in your twelfth house, which this culture keeps under the adyton. It works on the unseen, the retreat, and what works against you out of sight."
+    },
+    "canaan": {
+      "1": "The season sits in your first house, which this culture keeps under the tent of el. It works on your own body and the face you turn to the world.",
+      "2": "The season sits in your second house, which this culture keeps under the threshing floor. It works on what you earn, hold, and count as yours.",
+      "3": "The season sits in your third house, which this culture keeps under the gate. It works on your words, your kin, and the road close to home.",
+      "4": "The season sits in your fourth house, which this culture keeps under the father's house. It works on your home, your lineage, and the ground beneath you.",
+      "5": "The season sits in your fifth house, which this culture keeps under the tent of el. It works on what you make for joy, the play and the loves you father.",
+      "6": "The season sits in your sixth house, which this culture keeps under the threshing floor. It works on your daily labor and the upkeep of the body.",
+      "7": "The season sits in your seventh house, which this culture keeps under the gate. It works on the partner, the contract, and the open adversary.",
+      "8": "The season sits in your eighth house, which this culture keeps under the father's house. It works on what is shared, inherited, hidden, and transformed.",
+      "9": "The season sits in your ninth house, which this culture keeps under the tent of el. It works on the far journey, the law, and the things of the divine.",
+      "10": "The season sits in your tenth house, which this culture keeps under the threshing floor. It works on your calling, your standing, and the work the world sees.",
+      "11": "The season sits in your eleventh house, which this culture keeps under the gate. It works on your allies, your assembly, and the things you hope for.",
+      "12": "The season sits in your twelfth house, which this culture keeps under the tent of el. It works on the unseen, the retreat, and what works against you out of sight."
+    },
+    "carthage": {
+      "1": "The season sits in your first house, which this culture keeps under the precinct. It works on your own body and the face you turn to the world.",
+      "2": "The season sits in your second house, which this culture keeps under the counting house. It works on what you earn, hold, and count as yours.",
+      "3": "The season sits in your third house, which this culture keeps under the harbor. It works on your words, your kin, and the road close to home.",
+      "4": "The season sits in your fourth house, which this culture keeps under the courtyard. It works on your home, your lineage, and the ground beneath you.",
+      "5": "The season sits in your fifth house, which this culture keeps under the precinct. It works on what you make for joy, the play and the loves you father.",
+      "6": "The season sits in your sixth house, which this culture keeps under the counting house. It works on your daily labor and the upkeep of the body.",
+      "7": "The season sits in your seventh house, which this culture keeps under the harbor. It works on the partner, the contract, and the open adversary.",
+      "8": "The season sits in your eighth house, which this culture keeps under the courtyard. It works on what is shared, inherited, hidden, and transformed.",
+      "9": "The season sits in your ninth house, which this culture keeps under the precinct. It works on the far journey, the law, and the things of the divine.",
+      "10": "The season sits in your tenth house, which this culture keeps under the counting house. It works on your calling, your standing, and the work the world sees.",
+      "11": "The season sits in your eleventh house, which this culture keeps under the harbor. It works on your allies, your assembly, and the things you hope for.",
+      "12": "The season sits in your twelfth house, which this culture keeps under the precinct. It works on the unseen, the retreat, and what works against you out of sight."
+    },
+    "rome": {
+      "1": "The season sits in your first house, which this culture keeps under templum. It works on your own body and the face you turn to the world.",
+      "2": "The season sits in your second house, which this culture keeps under forum. It works on what you earn, hold, and count as yours.",
+      "3": "The season sits in your third house, which this culture keeps under via. It works on your words, your kin, and the road close to home.",
+      "4": "The season sits in your fourth house, which this culture keeps under domus. It works on your home, your lineage, and the ground beneath you.",
+      "5": "The season sits in your fifth house, which this culture keeps under templum. It works on what you make for joy, the play and the loves you father.",
+      "6": "The season sits in your sixth house, which this culture keeps under forum. It works on your daily labor and the upkeep of the body.",
+      "7": "The season sits in your seventh house, which this culture keeps under via. It works on the partner, the contract, and the open adversary.",
+      "8": "The season sits in your eighth house, which this culture keeps under domus. It works on what is shared, inherited, hidden, and transformed.",
+      "9": "The season sits in your ninth house, which this culture keeps under templum. It works on the far journey, the law, and the things of the divine.",
+      "10": "The season sits in your tenth house, which this culture keeps under forum. It works on your calling, your standing, and the work the world sees.",
+      "11": "The season sits in your eleventh house, which this culture keeps under via. It works on your allies, your assembly, and the things you hope for.",
+      "12": "The season sits in your twelfth house, which this culture keeps under templum. It works on the unseen, the retreat, and what works against you out of sight."
+    }
+  },
+  "signPhrases": {
+    "Aries": "RAM",
+    "Taurus": "BULL",
+    "Gemini": "TWINS",
+    "Cancer": "CRAB",
+    "Leo": "LION",
+    "Virgo": "MAIDEN",
+    "Libra": "SCALES",
+    "Scorpio": "SCORPION",
+    "Sagittarius": "ARCHER",
+    "Capricorn": "GOAT",
+    "Aquarius": "WATER-BEARER",
+    "Pisces": "FISHES"
+  },
+  "signAbbreviations": {
+    "Aries": "ARI",
+    "Taurus": "TAU",
+    "Gemini": "GEM",
+    "Cancer": "CAN",
+    "Leo": "LEO",
+    "Virgo": "VIR",
+    "Libra": "LIB",
+    "Scorpio": "SCO",
+    "Sagittarius": "SAG",
+    "Capricorn": "CAP",
+    "Aquarius": "AQU",
+    "Pisces": "PIS"
+  },
+  "aspectGlyphs": {
+    "conjunction": "☌",
+    "sextile": "⚹",
+    "square": "□",
+    "trine": "△",
+    "opposition": "☍"
+  }
+}

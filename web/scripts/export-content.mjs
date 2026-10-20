@@ -32,6 +32,34 @@ const { PLANET_IN_SIGN } = await import("../src/data/planetInSign.ts");
 const { HOUSE_MEANINGS } = await import("../src/data/houses.ts");
 const { ZODIAC_SIGN_INFO } = await import("../src/data/zodiacSigns.ts");
 const { ZODIAC_SIGNS, ASPECT_RULES } = await import("../src/data/sampleChart.ts");
+const { ASPECT_VERBS, PLAIN_ASPECT_VERBS, PLACEMENT_VERBS } = await import(
+  "../src/data/aspectVerbs.ts"
+);
+const { ASPECT_FRAMES, INGRESS_FRAMES, EXACT_INSTRUCTIONS } = await import(
+  "../src/data/aspectFrames.ts"
+);
+const { DEITY_CHARGES } = await import("../src/data/deityCharges.ts");
+const { DEITY_INSCRIPTIONS } = await import("../src/data/deityInscriptions.ts");
+const { PLANET_DOMAINS, ASPECT_REFLECTIONS, SIGN_REGISTERS, getPairTheme } = await import(
+  "../src/data/interpretations.ts"
+);
+const { SIGN_PHRASES } = await import("../src/components/horizons/signPhrase.ts");
+const { SUMMARY_INTRO, SUMMARY_TONES, SUMMARY_FUSED } = await import("../src/lib/reading.ts");
+const { QUIET_LINE, INGRESS_VERB, EXACT_FORMS, ASPECT_GLYPH, SIGN_ABBR } = await import(
+  "../src/lib/weekReading.ts"
+);
+const { CITIES } = await import("../src/data/cities.ts");
+const { PLANET_CONCERN } = await import("../src/lib/houseReading.ts");
+const { houseGroupName } = await import("../src/components/horizons/houseGroups.ts");
+const { composeWhatItTouchesNatal } = await import("../src/components/horizons/seasonContent.ts");
+const { NEUTRAL_GROUND, NEUTRAL_ACCENT, CULTURE_GROUNDS, CULTURE_ACCENTS } = await import(
+  "../src/data/palettes.ts"
+);
+const { METHODOLOGY_SECTIONS, INTERPRETIVE_NOTES, SOURCES } = await import(
+  "../src/data/methodologyContent.ts"
+);
+const { default: tzLookup } = await import("tz-lookup");
+const { flatten, parseDocument, parseElements } = await import("./svg-shapes.mjs");
 
 const OUT_DIR = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -114,6 +142,166 @@ for (const rule of ASPECT_RULES)
     `orb for ${rule.kind} is ${rule.orb}, expected ${expectedOrbs[rule.kind]}`,
   );
 
+// ---- Reading banks. --------------------------------------------------------
+// The composed readings (natal, week, decree) are built from authored
+// fragments, several of them functions. A function is exported as a template:
+// it is called with sentinel arguments and the sentinels are swapped for
+// named slots. "{a}" is the argument as given; "{A}" is the argument with its
+// first letter capitalised (web's cap()). A consumer fills the slots and gets
+// web's sentence byte for byte. Any sentinel left over, or any slot web
+// transformed some other way, fails the export rather than shipping a guess.
+
+const KINDS = ASPECT_RULES.map((r) => r.kind);
+
+function template(fn, slots) {
+  const args = slots.map((s) => `xq${s}`);
+  let out = fn(...args);
+  for (const s of slots) {
+    out = out.replaceAll(`Xq${s}`, `{${s.toUpperCase()}}`).replaceAll(`xq${s}`, `{${s}}`);
+  }
+  assert(!/xq|Xq/i.test(out), `template left a sentinel behind: ${out}`);
+  return out;
+}
+
+function perCulture(fn) {
+  return Object.fromEntries(CULTURES.map((c) => [c, fn(c)]));
+}
+
+function perKind(fn) {
+  return Object.fromEntries(KINDS.map((k) => [k, fn(k)]));
+}
+
+const pairThemes = {};
+for (let i = 0; i < PLANETS.length; i += 1) {
+  for (let j = i + 1; j < PLANETS.length; j += 1) {
+    const key = [PLANETS[i], PLANETS[j]].sort().join("|");
+    pairThemes[key] = getPairTheme(PLANETS[i], PLANETS[j]);
+  }
+}
+
+const readingBanks = {
+  aspectVerbs: ASPECT_VERBS,
+  plainAspectVerbs: PLAIN_ASPECT_VERBS,
+  placementVerbs: PLACEMENT_VERBS,
+  deityCharges: DEITY_CHARGES,
+  deityInscriptions: DEITY_INSCRIPTIONS,
+  aspectFrames: perCulture((c) => perKind((k) => template(ASPECT_FRAMES[c][k], ["a", "b"]))),
+  ingressFrames: perCulture((c) => template(INGRESS_FRAMES[c], ["c"])),
+  exactInstructions: perCulture((c) =>
+    perKind((k) => template(EXACT_INSTRUCTIONS[c][k], ["d"])),
+  ),
+  exactForms: perCulture((c) => EXACT_FORMS[c].map((form) => template(form, ["s", "p"]))),
+  ingressVerbs: INGRESS_VERB,
+  quietLines: QUIET_LINE,
+  summaryIntros: SUMMARY_INTRO,
+  summaryTones: SUMMARY_TONES,
+  summaryFused: { one: SUMMARY_FUSED.one, many: template(SUMMARY_FUSED.many, ["n"]) },
+  planetDomains: PLANET_DOMAINS,
+  aspectReflections: ASPECT_REFLECTIONS,
+  pairThemes,
+  pairThemeFallback: getPairTheme("sun", "sun"),
+  signRegisters: SIGN_REGISTERS,
+  // houseReading(): "{deity} turns {concern} toward {arena}."
+  planetConcerns: PLANET_CONCERN,
+  houseGroupNames: perCulture((c) =>
+    Object.fromEntries(HOUSE_MEANINGS.map((h) => [h.house, houseGroupName(c, h.house)])),
+  ),
+  seasonHouseLines: perCulture((c) =>
+    Object.fromEntries(HOUSE_MEANINGS.map((h) => [h.house, composeWhatItTouchesNatal(c, h)])),
+  ),
+  signPhrases: SIGN_PHRASES,
+  signAbbreviations: SIGN_ABBR,
+  aspectGlyphs: ASPECT_GLYPH,
+};
+
+for (const culture of CULTURES) {
+  for (const planet of PLANETS) {
+    assert(DEITY_CHARGES[culture]?.[planet], `deity charge missing for ${culture}/${planet}`);
+    assert(DEITY_INSCRIPTIONS[culture]?.[planet], `inscription missing for ${culture}/${planet}`);
+  }
+  for (const kind of KINDS) {
+    assert(ASPECT_VERBS[culture]?.[kind], `aspect verb missing for ${culture}/${kind}`);
+    assert(ASPECT_REFLECTIONS[culture]?.[kind], `reflection missing for ${culture}/${kind}`);
+  }
+  assert(EXACT_FORMS[culture].length >= 1, `no exact forms for ${culture}`);
+  assert(INGRESS_VERB[culture] && QUIET_LINE[culture] && SUMMARY_INTRO[culture], `${culture} bank gap`);
+}
+assert(Object.keys(pairThemes).length === 45, `expected 45 pair themes`);
+for (const sign of ZODIAC_SIGNS)
+  assert(SIGN_PHRASES[sign] && SIGN_ABBR[sign] && SIGN_REGISTERS[sign], `sign bank gap for ${sign}`);
+
+// ---- Cities, with the zone each one keeps its clocks by. -------------------
+// Web resolves a birthplace's zone with tz-lookup at runtime. A phone that has
+// picked a city from the offline list should not need a network to do the
+// same, so the zone is resolved here, once, by the same library.
+const cities = CITIES.map((c) => ({
+  name: c.name,
+  country: c.country,
+  latitude: c.latitude,
+  longitude: c.longitude,
+  popular: c.popular === true,
+  timeZone: tzLookup(c.latitude, c.longitude),
+}));
+for (const c of cities) assert(c.timeZone, `no zone for ${c.name}`);
+
+const palettes = {
+  neutral: { ground: NEUTRAL_GROUND, accent: NEUTRAL_ACCENT },
+  cultures: perCulture((c) => ({ ground: CULTURE_GROUNDS[c], accent: CULTURE_ACCENTS[c] })),
+};
+
+const method = {
+  sections: METHODOLOGY_SECTIONS,
+  notes: INTERPRETIVE_NOTES,
+  sources: SOURCES,
+};
+
+// ---- Deity glyphs. ---------------------------------------------------------
+// The fifty drawn glyphs from docs/design/system/assets/glyphs, the same
+// canonical set web copies and Android generates vectors from, flattened by
+// the same SVG reader Android's generator uses. Each keeps its honesty status;
+// no surface may present a composed or invented mark as attested.
+const GLYPH_DIR = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../../docs/design/system/assets/glyphs",
+);
+const GLYPH_STATUSES = ["attested", "composed", "invented"];
+const glyphTally = { attested: 0, composed: 0, invented: 0 };
+const glyphs = [];
+for (const culture of CULTURES) {
+  for (const planet of PLANETS) {
+    const file = path.join(GLYPH_DIR, culture, `${planet}.svg`);
+    const doc = parseDocument(fs.readFileSync(file, "utf8"));
+    assert(
+      doc.minX === 0 && doc.minY === 0 && doc.width === 24 && doc.height === 24,
+      `${culture}/${planet}.svg is not on the 24 grid`,
+    );
+    const parts = (doc.title ?? "").split("·").map((p) => p.trim());
+    const status = parts[parts.length - 1];
+    assert(GLYPH_STATUSES.includes(status), `${culture}/${planet}.svg has the status "${status}"`);
+    glyphTally[status] += 1;
+    const paths = flatten(parseElements(doc.inner)).map((p) => {
+      const a = p.attrs;
+      const fill = (a.fill ?? "none") === "currentColor";
+      const stroke = (a.stroke ?? "none") === "currentColor";
+      assert(fill || stroke, `${culture}/${planet}: a shape with neither fill nor stroke`);
+      return {
+        d: p.d,
+        fill,
+        stroke,
+        strokeWidth: stroke ? Number(a["stroke-width"] ?? 1) : 0,
+        lineCap: a["stroke-linecap"] ?? "butt",
+        lineJoin: a["stroke-linejoin"] ?? "miter",
+      };
+    });
+    assert(paths.length > 0, `${culture}/${planet}.svg has no drawn elements`);
+    glyphs.push({ culture, planet, deity: parts[0], status, paths });
+  }
+}
+assert(
+  glyphTally.attested === 28 && glyphTally.composed === 21 && glyphTally.invented === 1,
+  `glyph statuses are ${JSON.stringify(glyphTally)}, expected 28 / 21 / 1`,
+);
+
 // ---- Write atomically. ----------------------------------------------------
 
 const files = {
@@ -123,6 +311,11 @@ const files = {
   "houses.json": HOUSE_MEANINGS,
   "zodiac-signs.json": ZODIAC_SIGN_INFO,
   "aspect-rules.json": ASPECT_RULES,
+  "reading-banks.json": readingBanks,
+  "cities.json": cities,
+  "palettes.json": palettes,
+  "method.json": method,
+  "glyphs.json": glyphs,
   "manifest.json": {
     sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
     counts: {
@@ -133,6 +326,10 @@ const files = {
       houses: HOUSE_MEANINGS.length,
       zodiacSigns: ZODIAC_SIGN_INFO.length,
       aspectRules: ASPECT_RULES.length,
+      pairThemes: Object.keys(pairThemes).length,
+      cities: cities.length,
+      methodSections: METHODOLOGY_SECTIONS.length,
+      glyphs: glyphs.length,
     },
   },
 };
