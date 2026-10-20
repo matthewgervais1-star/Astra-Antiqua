@@ -32,7 +32,7 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   2d16643..65691d1, re-review Approved. At 65691d1: web 112 (95 pass, 17 skipped), Android
   200/0, dotnet 39/0. Egypt and Canaan device errors follow the owner's guidance, Carthage and
   Rome approved as written.
-- FACT (ledger): the Claude Design push waits on the owner's `/design-login` (interactive). INFERENCE: the live checkout's older `HANDOFF.md` is replaced by this one on merge.
+- INFERENCE: the live checkout's older `HANDOFF.md` is replaced by this one on merge.
 
 ## Decisions taken, and why
 - 2026-09-29, owner: rebuild the daily readings to the Co-Star anatomy in five voices (spec
@@ -44,7 +44,7 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   (Room v3). All rulings with their reasons: the ledger and the plan's Rulings section.
 
 ## Pending, in order
-1. FACT (GitHub, 2026-10-20): branch pushed, PR #4 open against PR #2's branch, CI running. Owner merges #2, then #4; #3 can close. Push the design-system cards after `/design-login`.
+1. FACT (GitHub, 2026-10-20): branch pushed, PR #4 open against PR #2's branch, CI running. Owner merges #2, then #4; #3 can close. Design-system cards pushed to Claude Design 2026-10-20 (26 files, source 4e3c1a5).
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.
 
