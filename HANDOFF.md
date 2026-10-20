@@ -44,7 +44,7 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   (Room v3). All rulings with their reasons: the ledger and the plan's Rulings section.
 
 ## Pending, in order
-1. Push the branch and open its PR (stacked on PR #2); push the refreshed design-system cards to Claude Design.
+1. FACT (GitHub, 2026-10-20): branch pushed, PR #4 open against PR #2's branch, CI running. Owner merges #2, then #4; #3 can close. Push the design-system cards after `/design-login`.
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.
 
