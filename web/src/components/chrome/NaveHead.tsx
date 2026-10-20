@@ -16,10 +16,13 @@ export interface NaveHeadProps {
  * Centered emblem, kicker, 64x1 accent rule, Cinzel headline, optional sub
  * block, closing rule. At 1100px the home page's centre column holds about
  * 350px, and Rome's "paterfamilias" and Carthage's "moneychanger" are wider than
- * that at display-xl, so unbroken they would paint into the right rail. The
- * headline may hyphenate a long word at a line end (hyphens-auto, where the
- * browser has an English dictionary), and breaks inside a word without a
- * hyphen only when the word is wider than the column (wrap-anywhere).
+ * that at display-xl, so unbroken they would paint into the right rail. From
+ * 1100px the headline may hyphenate a long word at a line end (hyphens-auto,
+ * where the browser has a dictionary for the page's language). Below 1100px it
+ * does not: at 375px, with Chrome's dictionaries, hyphens-auto split 56 of the
+ * 250 day and slow headlines at a syllable where they otherwise wrap at a
+ * space. At every width a word wider than the column breaks without a hyphen
+ * (wrap-anywhere).
  */
 export function NaveHead({ kicker, children, sub, emblem }: NaveHeadProps) {
   return (
@@ -27,7 +30,7 @@ export function NaveHead({ kicker, children, sub, emblem }: NaveHeadProps) {
       {emblem ? <div className="mb-[var(--space-3)] flex justify-center">{emblem}</div> : null}
       <div className="font-mono text-data-xs tracking-microcopy text-dim">{kicker}</div>
       <div className="mx-auto my-6 h-px w-16 bg-accent" />
-      <h1 className="mx-auto max-w-[680px] text-balance wrap-anywhere hyphens-auto font-display text-display-l leading-display tracking-display text-bone md:text-display-xl">
+      <h1 className="mx-auto max-w-[680px] text-balance wrap-anywhere min-[1100px]:hyphens-auto font-display text-display-l leading-display tracking-display text-bone md:text-display-xl">
         {children}
       </h1>
       {sub ? <div className="mt-4">{sub}</div> : null}
