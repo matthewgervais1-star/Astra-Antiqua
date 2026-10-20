@@ -113,7 +113,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
     relations: {
       conjunction: ["ride as one", "walk as one", "go out together"],
       sextile: ["throw in with each other", "help each other along", "lighten each other's load"],
-      square: ["haul each other back", "get in each other's way", "pull at each other"],
+      square: ["haul each other down", "get in each other's way", "pull at each other"],
       trine: ["like each other", "keep the same pace", "go easily with each other"],
       opposition: ["face each other down", "want opposite things", "each want it all"],
     },
