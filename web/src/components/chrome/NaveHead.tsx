@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 export interface NaveHeadProps {
-  kicker: string;
+  kicker: ReactNode;
   children: ReactNode;
   sub?: ReactNode;
   /**

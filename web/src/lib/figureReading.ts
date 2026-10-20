@@ -87,6 +87,8 @@ export interface FigurePage extends FigureAnatomy {
   id: string;
   headline: string;
   evidence: string;
+  /** The sky figure the evidence line names; EvidenceLine renders it with each name as a ScriptName. */
+  figure: DayFigure;
   /** 00:00 UTC on the date, the instant the day page reads. */
   instant: Date;
   /** The stretch the displayed figure holds its orb. */
@@ -405,6 +407,7 @@ export function composeFigurePage(
     id: canonical,
     headline: composeHeadline(culture, figure),
     evidence: composeEvidence(culture, figure),
+    figure,
     instant,
     window,
     natal: Boolean(natal && contact),

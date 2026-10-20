@@ -8,6 +8,7 @@ import { DEITY_MATRIX } from "@/data/deities";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { FeedbackRow } from "@/components/chrome/FeedbackRow";
 import { NaveHead } from "@/components/chrome/NaveHead";
+import { EvidenceLine } from "@/components/chrome/EvidenceLine";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { FigureAnatomy } from "@/components/figure/FigureAnatomy";
@@ -104,7 +105,7 @@ export function FigureDetail({ date, id }: FigureDetailProps) {
         kicker={`${weekdayUpper(instant)} · ${dateLongUpper(instant)} · ${voice.institution}`}
         sub={
           <div className="font-mono text-data-xs tracking-data text-dim">
-            {page.evidence}
+            <EvidenceLine culture={culture} figure={page.figure} />
             {page.bridge ? (
               <>
                 <br />
