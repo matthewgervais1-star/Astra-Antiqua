@@ -35,7 +35,7 @@ internal val DIVE_DEEPER_GOLDENS: List<DiveDeeperGolden> = listOf(
         skyGroups = listOf(
             "The Granary: your work and your rations|ISIS ⚹ AMUN · 1°31′|Your patrons and your beloved throw in with each other. A kind word buys more than silver. Reckon on the foreman passing your row without a word.",
             "The House of the Ka: your home and your forebears|ISIS ⚹ HORUS THE RED · 1°32′|Your beloved and your temper help each other along. One shove is enough. Reckon on a mother's name said kindly at the table.",
-            "The Ferry: your letters and your crossings|SEBEGU □ OSIRIS · 4°53′|Your letters and what you have buried haul each other back. Your words arrive bent. Reckon on a boat already gone from the landing.",
+            "The Ferry: your letters and your crossings|SEBEGU □ OSIRIS · 4°53′|Your letters and what you have buried haul each other down. Your words arrive bent. Reckon on a boat already gone from the landing.",
             "The Sealed Shrine: what you keep to yourself|HORUS THE RED ☌ AMUN · 3°03′|Your temper and your patrons walk as one. Your anger has a useful outlet. Reckon on a dream you remember clearly at waking.",
         ),
         natalGroups = listOf(

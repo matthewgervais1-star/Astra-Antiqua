@@ -122,7 +122,7 @@ object DecreeBanks {
                 Planet.SUN -> "Lay a mudbrick for the room you talk about most."
                 Planet.MOON -> "Say what you feel over bread and beer on your own reed mat."
                 Planet.MERCURY -> "Write the letter on fresh papyrus and carry it yourself."
-                Planet.VENUS -> "Bring the one you love down to the riverbank and tell them."
+                Planet.VENUS -> "Take the one you love aside and tell them."
                 Planet.MARS -> "Aim your anger at one field of reeds and clear it."
                 else -> error("$body has no headlines line")
             }
@@ -136,7 +136,7 @@ object DecreeBanks {
             }
             AspectType.SQUARE -> when (body) {
                 Planet.SUN -> "Finish the one task the overseer will check."
-                Planet.MOON -> "Do not act on the mood you wake up with before the sun is high over the Nile."
+                Planet.MOON -> "Do not act on the mood you wake up with before the sun is high."
                 Planet.MERCURY -> "Read the papyrus twice before you answer it."
                 Planet.VENUS -> "Do not haggle with your beloved as you would over linen."
                 Planet.MARS -> "Stay still until your blood cools."
@@ -145,7 +145,7 @@ object DecreeBanks {
             AspectType.TRINE -> when (body) {
                 Planet.SUN -> "Start the hard job while the light holds."
                 Planet.MOON -> "Let the scribe count the grain tomorrow, and rest tonight."
-                Planet.MERCURY -> "Say it plainly and the river carries it."
+                Planet.MERCURY -> "Say it plainly and no one can mistake it."
                 Planet.VENUS -> "Sit by the lotus pool and let someone else pour the beer."
                 Planet.MARS -> "Push the barge off the mud while your arms are strong."
                 else -> error("$body has no headlines line")
@@ -154,7 +154,7 @@ object DecreeBanks {
                 Planet.SUN -> "You cannot hold the shrine door open and bolt it, so pick one."
                 Planet.MOON -> "You and your household are at odds tonight."
                 Planet.MERCURY -> "The scribe at the other desk copies your words wrong."
-                Planet.VENUS -> "Love asks you to cross the river this once."
+                Planet.VENUS -> "Love asks you to yield this once."
                 Planet.MARS -> "Let whoever is shouting in the street wear themselves out."
                 else -> error("$body has no headlines line")
             }
@@ -338,7 +338,7 @@ object DecreeBanks {
         AncientCulture.EGYPT -> when (aspect) {
             AspectType.CONJUNCTION -> listOf("ride as one", "walk as one", "go out together")
             AspectType.SEXTILE -> listOf("throw in with each other", "help each other along", "lighten each other's load")
-            AspectType.SQUARE -> listOf("haul each other back", "get in each other's way", "pull at each other")
+            AspectType.SQUARE -> listOf("haul each other down", "get in each other's way", "pull at each other")
             AspectType.TRINE -> listOf("like each other", "keep the same pace", "go easily with each other")
             AspectType.OPPOSITION -> listOf("face each other down", "want opposite things", "each want it all")
         }
@@ -397,7 +397,7 @@ object DecreeBanks {
                 Planet.SATURN -> "A duty you put off arrives in full."
                 Planet.URANUS -> "Your plans change shape overnight."
                 Planet.NEPTUNE -> "A dream comes true by daylight."
-                Planet.PLUTO -> "Something buried comes up with the flood."
+                Planet.PLUTO -> "Something buried comes up under the hoe."
                 else -> error("$partner has no consequences line")
             }
             AspectType.SEXTILE -> when (partner) {

@@ -19,10 +19,10 @@ object FigureBanks {
     fun slowHeadline(culture: AncientCulture, aspect: AspectType, body: Planet): String = when (culture) {
         AncientCulture.EGYPT -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
-                Planet.JUPITER -> "Build the granary wider, because this year's flood runs high."
+                Planet.JUPITER -> "Build the granary wider, because this year's harvest runs heavy."
                 Planet.SATURN -> "Dig down to bedrock before you raise one more wall."
-                Planet.URANUS -> "Your old way of doing things goes out with this flood."
-                Planet.NEPTUNE -> "Keep your feet on the dike while the water covers the fields."
+                Planet.URANUS -> "Your old way of doing things goes out with the old year."
+                Planet.NEPTUNE -> "Keep your feet on the dike while the fields turn to mud."
                 Planet.PLUTO -> "Open the sealed storeroom and look at what you put there."
                 else -> error("$body has no slowHeadlines line")
             }
@@ -38,12 +38,12 @@ object FigureBanks {
                 Planet.JUPITER -> "Measure the harvest before you promise any of it away."
                 Planet.SATURN -> "The wall you built on sand has to come down."
                 Planet.URANUS -> "The canal you dug is changing course, and nobody can stop it."
-                Planet.NEPTUNE -> "Check every measure twice while the river runs high and muddy."
+                Planet.NEPTUNE -> "Check every measure twice while the dust hangs in the air."
                 Planet.PLUTO -> "Something you buried long ago is coming up with the silt."
                 else -> error("$body has no slowHeadlines line")
             }
             AspectType.TRINE -> when (body) {
-                Planet.JUPITER -> "Plant the second field, since the river is generous this year."
+                Planet.JUPITER -> "Plant the second field, since the soil is generous this year."
                 Planet.SATURN -> "Carve your name on the stone while your hand is steady."
                 Planet.URANUS -> "Change the line of your canal, and the land drinks."
                 Planet.NEPTUNE -> "Spend your evenings at the temple and sleep well after."
@@ -52,10 +52,10 @@ object FigureBanks {
             }
             AspectType.OPPOSITION -> when (body) {
                 Planet.JUPITER -> "Your patron wants a share of the harvest you grew."
-                Planet.SATURN -> "The tax assessor stands on the far bank with his measuring rope."
-                Planet.URANUS -> "A neighbor over the water is moving your boundary stone."
-                Planet.NEPTUNE -> "The field on the other bank looks richer than it is."
-                Planet.PLUTO -> "An old claim on your house comes over the river."
+                Planet.SATURN -> "The tax assessor stands at the far edge of your field with his measuring rope."
+                Planet.URANUS -> "The man who farms beside you is moving your boundary stone."
+                Planet.NEPTUNE -> "The field next door looks richer than it is."
+                Planet.PLUTO -> "An old claim on your house is carried in under seal."
                 else -> error("$body has no slowHeadlines line")
             }
         }
@@ -239,7 +239,7 @@ object FigureBanks {
             AspectType.CONJUNCTION -> "cannot be parted from"
             AspectType.SEXTILE -> "can lean on"
             AspectType.SQUARE -> "must haul against"
-            AspectType.TRINE -> "can ride the current with"
+            AspectType.TRINE -> "can keep step with"
             AspectType.OPPOSITION -> "must be weighed against"
         }
 
@@ -384,10 +384,10 @@ object FigureBanks {
     /** A long transit's act line, per slow body. Slot: {god}. */
     fun slowAct(culture: AncientCulture, body: Planet): String = when (culture) {
         AncientCulture.EGYPT -> when (body) {
-            Planet.JUPITER -> "{god} sends the flood a cubit higher, and the granary scribes call for more jars."
+            Planet.JUPITER -> "{god} heaps the threshing floor a cubit higher, and the scribes call for more jars."
             Planet.SATURN -> "{god} lies still under the field, and the surveyor walks the old boundary again."
             Planet.URANUS -> "{god} spreads her body over the roof beams, and the old plaster comes down."
-            Planet.NEPTUNE -> "{god} wells up under the fields, and the boundary stones go under water."
+            Planet.NEPTUNE -> "{god} wells up from below, and the boundary stones sink out of sight."
             Planet.PLUTO -> "{god} sits in judgment in the lower hall, and the scribe reads out what you buried."
             else -> error("$body has no slow act")
         }
@@ -480,10 +480,10 @@ object FigureBanks {
             Planet.MERCURY -> listOf(TryThisCard("consider", "The was-sceptre with the Set-animal's head, the god's own finial.", "Gardiner sign S40, and docs/design/deity-glyphs.md on the Seth-specific head."), TryThisCard("read", "The Contendings of Horus and Seth, the quarrel argued before the gods.", "Papyrus Chester Beatty I, Chester Beatty Library, Dublin."), TryThisCard("keep", "Copy one model letter twice, the way the student scribes did.", "The Late Egyptian Miscellanies, edited by Alan Gardiner (1937)."))
             Planet.VENUS -> listOf(TryThisCard("consider", "The throne sign that spells Isis's name and sits on her head.", "Gardiner sign Q1, attested in docs/design/deity-glyphs.md."), TryThisCard("read", "The songs Isis and Nephthys sing over Osiris.", "Papyrus Bremner-Rhind, British Museum EA 10188."), TryThisCard("keep", "Wear a tyet knot, the amulet called the blood of Isis.", "Book of the Dead, spell 156, for the tyet of red jasper."))
             Planet.MARS -> listOf(TryThisCard("consider", "The round zodiac of Dendera, where the planets stand among the stars.", "Louvre D 38, read in Neugebauer and Parker, Egyptian Astronomical Texts III."), TryThisCard("read", "The Triumph of Horus, the harpoon drama on the Edfu temple wall.", "Edfu, enclosure wall, translated by Blackman and Fairman (1942 to 1944)."), TryThisCard("keep", "Wear a wedjat eye, the commonest charm in Egyptian graves.", "Flinders Petrie, Amulets (1914), on the faience wedjat."))
-            Planet.JUPITER -> listOf(TryThisCard("consider", "The ram-headed sphinxes that line Amun's avenue at Karnak.", "Karnak, the western dromos of the Amun precinct."), TryThisCard("read", "The Leiden hymns, a cycle of praises to Amun.", "Papyrus Leiden I 350, Rijksmuseum van Oudheden."), TryThisCard("keep", "Bring flowers to a family tomb, as Thebans did when Amun crossed the river.", "The Beautiful Festival of the Valley, in New Kingdom Theban tomb paintings."))
+            Planet.JUPITER -> listOf(TryThisCard("consider", "The ram-headed sphinxes that line Amun's avenue at Karnak.", "Karnak, the western dromos of the Amun precinct."), TryThisCard("read", "The Leiden hymns, a cycle of praises to Amun.", "Papyrus Leiden I 350, Rijksmuseum van Oudheden."), TryThisCard("keep", "Bring flowers to a family tomb, as Thebans did at the Feast of the Valley.", "The Beautiful Festival of the Valley, in New Kingdom Theban tomb paintings."))
             Planet.SATURN -> listOf(TryThisCard("consider", "The Greenfield Papyrus, where Geb lies under the arched sky.", "British Museum EA 10554."), TryThisCard("read", "The Memphite Theology, where Geb judges between Horus and Seth.", "The Shabaka Stone, British Museum EA 498."), TryThisCard("keep", "Bury a few tools and a brick under the corner before you build.", "Foundation deposits under the corners of New Kingdom temples."))
             Planet.URANUS -> listOf(TryThisCard("consider", "The ceiling of the tomb of Ramesses VI, where Nut swallows and bears the sun.", "Valley of the Kings, KV9, the Books of the Day and the Night."), TryThisCard("read", "The Book of Nut, the course of the stars along her body.", "The cenotaph of Seti I at Abydos."), TryThisCard("keep", "Keep the five days outside the year apart, as the birthdays of Nut's children.", "The epagomenal days of the civil calendar, and Plutarch, On Isis and Osiris 12."))
-            Planet.NEPTUNE -> listOf(TryThisCard("consider", "The sacred lake at Karnak, the temple's own piece of the first water.", "Karnak, the lake of the Amun precinct."), TryThisCard("read", "The Book of the Heavenly Cow, where Ra takes counsel with Nun.", "The gilded shrine of Tutankhamun, and the tomb of Seti I (KV17)."), TryThisCard("keep", "Wash in cold water before you begin, as the priests did twice a day.", "Herodotus, Histories 2.37."))
+            Planet.NEPTUNE -> listOf(TryThisCard("consider", "The sacred lake at Karnak, the temple's own piece of Nun, the deep before creation.", "Karnak, the lake of the Amun precinct."), TryThisCard("read", "The Book of the Heavenly Cow, where Ra takes counsel with Nun.", "The gilded shrine of Tutankhamun, and the tomb of Seti I (KV17)."), TryThisCard("keep", "Rinse your hands and face before you begin, as the priests did twice a day.", "Herodotus, Histories 2.37."))
             Planet.PLUTO -> listOf(TryThisCard("consider", "A corn mummy, the grain-filled Osiris buried at the Khoiak festival.", "Late Period corn mummies, and the Khoiak rites carved at Dendera."), TryThisCard("read", "The great hymn to Osiris on the stela of Amenmose.", "Louvre C 286."), TryThisCard("keep", "Sow barley in a tray of earth and let it sprout.", "The Osiris bed found in the tomb of Tutankhamun."))
         }
 
