@@ -145,6 +145,94 @@ Found by Task 8's captures: `InstrumentShell` switches to three columns at 720px
 - [ ] Update `docs/web-rebrand-report.md`: the responsive table shows the new 768 numbers, the defect paragraph says the fault was found by these captures and fixed in this commit (name the breakpoint change), and the 1024 captures join the index.
 - [ ] Web checks green. Commit `fix(web): the instrument stacks until its three columns fit`.
 
+---
+
+## Owner decisions, 2026-09-29 (second wave)
+
+The owner answered the four open questions after the first wave: move the orphaned banks to an archive; apply all three design calls; build Android account sync; open the PR (done, #2). The daily-reading prose and the Android sync get their own specs; the four tasks below need none.
+
+### Task 11: Archive the six unwired content banks
+
+**Files:** Move `web/src/data/domainReadings.ts`, `web/src/data/weekReadings.ts`, `web/src/data/seasonReadings.ts`, `web/src/data/oracleDecrees.ts`, `web/src/data/methodologyContent.ts`, `web/src/lib/transitReading.ts` to `docs/archive/web-content/` (same file names); modify `docs/shared-content-model.md` (the retained-legacy-banks paragraph) and add `docs/archive/README.md`.
+
+- [ ] Confirm with `rg -n "domainReadings|weekReadings|seasonReadings|oracleDecrees|methodologyContent|transitReading" web/src web/scripts` that nothing imports the six (only their own files match). Move them with `git mv` so history follows. They keep their `.ts` extension so the prose stays syntax-highlighted; nothing compiles them (`tsconfig` covers `web/` only; confirm `pnpm typecheck` and `pnpm build` still pass and that no lint config walks `docs/`).
+- [ ] `docs/archive/README.md`: three sentences saying these are authored banks from before the rebrand, retained because the brief forbids deleting corpus substance, not rendered by any route, and moved here on 2026-09-29 by the owner's decision; list the six with one line each on what they held.
+- [ ] `docs/shared-content-model.md`: the retained-legacy-banks paragraph now points at `docs/archive/web-content/`.
+- [ ] Web checks green. Commit `chore(web): the six unwired banks move to the archive`.
+
+### Task 12: Rules take the design system's opaque hex
+
+**Files:** Modify `web/src/app/globals.css` (`--color-rule`, `--color-rule-row`), `android/app/src/main/java/com/astra/antiqua/ui/theme/Color.kt` (`Rule`, `RuleRow`), `docs/design/IMPLEMENTATION.md` (the "Two rule colours drift" item moves to "Since closed"); regenerate the preview cards.
+
+- [ ] Web: `--color-rule: #4A3E28` (the system's `--rule-hairline`) and `--color-rule-row: #2A241C` (`--rule-incised`), replacing the alpha bone values `rgb(230 222 204 / 0.16)` and `/ 0.11`. Keep the comment that names the system tokens. Check every consumer that relied on the rules being translucent over a culture ground (search `border-rule`, `bg-rule`, `rule-row`): an opaque hex on a lighter ground (the OG cards, any light surface) may need the `--light-*` values from `docs/design/system/tokens/colors.css`; report each such site rather than guessing.
+- [ ] Android: `Rule = Color(0xFF4A3E28)`, `RuleRow = Color(0xFF2A241C)`; the KDoc names the system tokens.
+- [ ] Run `pnpm specimens`; the cards with rules change; commit them. Capture `/` and `/charts` at 1280 for Rome and Egypt after the change and put them in `docs/design/screenshots/phase11-design-calls/` so the owner can see the rules on two grounds.
+- [ ] `IMPLEMENTATION.md`: move the drift item to "Since closed" with this commit.
+- [ ] Web and Android checks green. Commit `feat(design): the rules take the system's incised and hairline inks`.
+
+### Task 13: A display-xs step for the small Cinzel labels
+
+**Files:** Modify `docs/design/system/tokens/typography.css` (the canonical scale), `web/src/app/globals.css` (`--text-display-xs` and its utility), `android/app/src/main/java/com/astra/antiqua/ui/theme/Type.kt`, every web site that sets Cinzel at a literal size between 11 and 17px (about sixty; find them with `rg -n "font-display" web/src --glob "*.tsx"` combined with literal `text-[NNpx]` classes, and any `fontSize` on a Cinzel element), the matching Android sites (`Type.kt` lines 148 to 150 and any `fontSize =` on a Cinzel style), `docs/design/IMPLEMENTATION.md` ("A display step under 22px" moves to "Since closed"); regenerate the preview cards; the controller pushes the token file to the design project afterwards.
+
+- [ ] Derive the step from the scale in `typography.css` (52 / 40 / 26 / 22): state the ratios, take the smallest step ratio (26 to 22), apply it once below 22, and round to a whole pixel (the arithmetic gives about 18.6, so 18px unless the file's comments prescribe another rule). Add `--type-display-xs` to `typography.css` with the same tracking and leading as the display scale, and a one-line comment that the owner added the step on 2026-09-29 to house the small labels the sweep had left literal.
+- [ ] Web: add `--text-display-xs` (and tracking/leading if the scale binds them per step) to `globals.css` beside `--text-display-s`, so `text-display-xs` exists as a utility. Sweep: every Cinzel site at 14 to 17px moves to `text-display-xs`; sites at 11 to 13px are microcopy and move to the mono data scale (`text-data-s` or `text-data-xs`, `font-mono`) unless the element is a heading, in which case it also takes `display-xs`. Report the count moved to each and the list of any site left literal with the reason.
+- [ ] Android: the equivalent in `Type.kt` (a `displayXs` style) and the same sweep over Compose sites.
+- [ ] `pnpm specimens`; commit the changed cards. Capture `/`, `/week` and `/charts` at 1280 (Rome) into `docs/design/screenshots/phase11-design-calls/` and open them to confirm no row broke.
+- [ ] Web and Android checks green. Commit `feat(design): a display-xs step, and the small labels move onto the scale`.
+
+### Task 14: Spectral SC promoted to the tokens and carried to Android
+
+**Files:** Modify `docs/design/system/tokens/typography.css` and `fonts.css` (Spectral SC is already named there; add whatever the prototype in `globals.css` lines about 175 to 225 defines that the tokens lack, for example the small-caps display size, tracking `--track-display-sc` and which surfaces use it), `web/src/app/globals.css` (the prototype block becomes token-driven), `web/scripts/fetch-fonts.mjs` (TTF pass adds Spectral SC 400 and 500 for Android), `android/app/src/main/res/font/` (the two TTFs), `android/app/src/main/java/com/astra/antiqua/ui/theme/Type.kt` (a `displaySc` family and style), the four non-Roman culture themes in `ui/theme/Theme.kt` (or wherever the display face is chosen per culture), `docs/design/IMPLEMENTATION.md` ("The Spectral SC display decision" moves to "Since closed"), `docs/design/system/readme.md` (the line that says the small-caps treatment is "not yet the rule").
+
+- [ ] Read the prototype in `globals.css` first and write down, in the report, exactly what it does (which selectors, which cultures, which sizes and tracking) before moving any of it.
+- [ ] Tokens: promote the values into `typography.css` (`--track-display-sc` exists at 0.06em; add the size step(s) the prototype uses if they are not on the scale) and make the web block consume the tokens. Keep Cinzel's tracking as it is; the readme's open question about Cinzel's tracking on small caps is answered by leaving Cinzel untouched and giving Spectral SC its own `--track-display-sc`.
+- [ ] Android: extend `fetch-fonts.mjs`'s TTF mode with `family=Spectral+SC:wght@400;500`, run it, and confirm two files land in `res/font/` with lowercase underscore names; SIL OFL already covers the family (the attributions file lists Spectral; add Spectral SC beside it). In `Type.kt` add the family and a `displaySc` style; in the theme, the four non-Roman cultures (Egypt, Greece, Canaan, Carthage) take Spectral SC for the display slots the web prototype switches, and Rome and the shell keep Cinzel, exactly as the web block does.
+- [ ] Capture the five-voice home set at 1280 (`/?culture=<c>` for the five) into `docs/design/screenshots/phase11-design-calls/`. An Android screenshot is not required (no emulator in CI); state that.
+- [ ] `IMPLEMENTATION.md` and the readme updated. Web and Android checks green. Commit `feat(design): Spectral SC is the rule on the four non-Roman surfaces`.
+
+### Task 15: The day page speaks to the reader (reading anatomy, phase 1)
+
+**Spec:** `docs/superpowers/specs/2026-09-29-daily-reading-voice.md`, sections A.1 to A.5, A.7, C and D (read it first; it is the requirement). Runs before Tasks 11 to 14 because it answers the owner's first complaint. Phase 2 (the figure page, spec section B) is Task 16 and phase 3 (dive deeper, A.6) is Task 17; do not build them here, but shape the banks file so they can be added beside these.
+
+**Files:** Create `web/src/data/deityDomains.ts`, `web/src/data/decreeBanks.ts` (relations, consequences, images, instructions, no-second-figure lines, per culture and kind); modify `web/src/lib/decree.ts`, `web/src/lib/dailyMessage.ts`, `web/src/lib/weekReading.ts` (`composeAspectSentence` and the day lines), their tests (`decree.test.ts`, `dailyMessage.test.ts`, `deityCharges.test.ts` or its replacement), `web/scripts/gen-android-reading-banks.mjs` and the generated `android/.../domain/ReadingBanks.kt`, the Kotlin composer that mirrors `composeDecree` and the week line (find it: `rg -n "ReadingBanks\." android/app/src/main`), and `docs/design/reading-voice.md` (the "one ask per screen" amendment and the new shape). Delete `deityCharges.ts` and `aspectFrames.ts` only if nothing else reads them (`rg -n "deityCharges|aspectFrames|DEITY_CHARGES|ASPECT_FRAMES" web/src android web/scripts`).
+
+- [ ] Author the banks to the spec's shape and rules, the 125 headlines included. Render all 45 body pairs × 5 kinds × 5 cultures through the meaning sentence and read them; fix any domain that cannot sit in a relation's subject slot. Read the 125 headlines aloud in your head: each is a sentence to a friend, and no two share a clause.
+- [ ] Rewrite `composeDecree` to the headline + evidence line + five-sentence shape (`DayDecree` gains an `evidence` field: deity names, aspect glyph, orb or EXACT), `composeDailyMessage` to headline + sentences 1, 2 and 5, and the week day to headline + sentences 1 and 2. Update `CenterDecree.tsx` to render the headline as display type and the evidence line in mono beneath it, and `WeekNave.tsx` to show each day's headline above its line; mirror both on Android's dashboard decree card and week screen.
+- [ ] The permissions module (`PermissionsModule.tsx`, `lib/permissions.ts`) renders for readers without a natal chart, deriving from the day's sky figures; its "WHY THESE" link still targets the aspects rail. Report what the module needed to allow that.
+- [ ] Tests: the five-voice check (no shared sentence across cultures for one figure); a per-culture golden of one date; the exact tail appears only when the orb is under 0.5°; the daily message is a strict subset of the decree; no bank line contains a hedge word, an abstraction from the spec's list, or an em dash (a test walks the banks).
+- [ ] Regenerate the Android banks; port the composer change to Kotlin; add a JVM parity test that one date per culture prints the same paragraph on both surfaces (compute the chart with each surface's own engine at the same instant and compare the strings).
+- [ ] Dump six dates for five cultures to the report and read every line for flow before committing. Web and Android checks green. Commit in two: `feat(web): the daily reading speaks to the reader` and `feat(android): the daily reading speaks to the reader`.
+
+### Task 16: The figure page (reading anatomy, phase 2)
+
+**Spec:** section B of `docs/superpowers/specs/2026-09-29-daily-reading-voice.md`, plus C and D for the banks and Android. Depends on Task 15's banks and composers.
+
+**Files:** `web/src/components/transits/TransitDetail.tsx` and its spine data (`web/src/data/transitSpine.ts` stays for the slow-body spine where the spec keeps it; the new anatomy wraps it), a new route `web/src/app/day/[date]/figure/page.tsx` (or the id scheme the implementer justifies) for fast-body figures, `web/src/lib/figureReading.ts` (composition), `web/src/lib/recurrence.ts` (period per body and kind, the in-orb window for fast bodies), new banks in `web/src/data/` (slow headlines, manifestations, try-this cards, lessons), tests, the Android transit detail screen and a matching fast-figure screen, the generator, `docs/design/reading-voice.md`.
+
+- [ ] Author the banks (spec C): 125 slow headlines, 160 manifestations, 150 try-this cards, 25 lessons, the five "how this plays out" section titles. Every try-this card names a real attested object, text or rite, with a one-line source; nothing invented.
+- [ ] Build the anatomy B.1 to B.9 on web: the two-move paragraph (natal placement recast in second person from `PLANET_IN_SIGN`, then now), the decomposed sentence with its three mono tags, recurrence computed from the body's period and the kind, the four-tick timeline with the present marked, the manifestations keyed by (culture, house group of the natal point, tone), the three cards, the lesson, the feedback row and links.
+- [ ] Recurrence: state the periods used (Moon sidereal 27.32 d; Sun 365.25 d; Mercury and Venus synodic 115.9 d and 583.9 d; Mars sidereal 687 d; Jupiter 11.86 y; Saturn 29.46 y; Uranus 84 y; Neptune 164.8 y; Pluto 248 y) and divide by one for conjunction and opposition and by two for the others; render "about every {n} {unit}" in the culture's calendar words where the culture has them (a Roman nundinal week is not a seven-day week; say "about every eight days" rather than lie).
+- [ ] Android: mirror the composition and screens; regenerate the banks; extend the parity test with one figure per culture.
+- [ ] Screenshots of one figure page per culture at 1280 and 375 into `docs/design/screenshots/phase12-reading-anatomy/`. Web and Android checks green. Commits `feat(web): the figure page, read the way the reference reads it` and `feat(android): the figure page`.
+
+### Task 17: Dive deeper (reading anatomy, phase 3)
+
+**Spec:** section A.6 of the same spec. Depends on Tasks 15 and 16.
+
+**Files:** `web/src/components/home/DiveDeeper.tsx` (new), `web/src/lib/dayPressure.ts` (its buckets feed the four groups), new banks (group titles, group quiet lines, the per-group composition), the day page and the week's day pages, tests, Android's dashboard and week screens, the generator.
+
+- [ ] Four titled paragraphs per day in the culture's house-group names, two or three sentences each from the figures that touch the group (natal buckets when a chart exists, sky-figure domains otherwise), ending in one concrete line; the group quiet line when nothing is in orb; the culture's come-back line closes the page.
+- [ ] Tabs or an in-page list: follow the nave's existing patterns (SectionDivider and DataRow), no new chrome.
+- [ ] Android mirror; parity test extended. Screenshots of the day page's dive-deeper block in five cultures into `phase12-reading-anatomy/`. Checks green. Commits `feat(web): dive deeper, by house group` and `feat(android): dive deeper`.
+
+### Task 18: Android account sync
+
+**Spec:** `docs/superpowers/specs/2026-09-29-android-account-sync.md` (the requirement). Runs after Tasks 11 to 14. Split into three dispatches: 18a the client and repository with tests; 18b the three screens and navigation with ViewModel tests; 18c the emulator pass against `pnpm dev` with screenshots and the report.
+
+- [ ] 18a: `BuildConfig.API_ORIGIN` with the debug default and the release property; the network security config for `10.0.2.2` in debug only; the cookie session store in encrypted DataStore; the OkHttp client that sends the cookie, sends no `Origin`, stores `Set-Cookie` on signup and signin, and clears the store on a 401; `AccountRepository` interface, real implementation, fake; the chart mapping both ways; JVM tests for the repository against a fake HTTP layer. Commit `feat(android): a session, a client and a repository for the web account`.
+- [ ] 18b: THE RECORD, ACCOUNT and THE ROLL screens on the nave chassis; routes in `Destinations.kt`; the shell's account entry; sync on sign-in and sign-up by the web's merge rule; mirror on profile save; export via `ACTION_SEND`; strike with type-your-email-to-confirm; ViewModels against the fake with tests. Commit `feat(android): sign in, the account, and the roll`.
+- [ ] 18c: the emulator pass in the spec's Verification section, with screenshots into `docs/design/screenshots/phase13-android-sync/`, and `docs/web-ios-android-plan.md`'s row for Android auth and charts updated. Commit `docs(android): the sync pass on the emulator`.
+
 ## Rulings made while writing this plan
 
 - The `/account` "SYNC ON/OFF" row the rebrand plan asked for is satisfied by the `SyncFlag` badge the page already renders at its head; no row is added.

@@ -35,6 +35,7 @@ val FaintInk = Color(0xFF6F6B60)
 val Harmony = Color(0xFFB59A55)
 val Conflict = Color(0xFFB56B71)
 
-// Rules: 1px only, at two weights.
-val Rule = Color(0x29E6DECC)
-val RuleRow = Color(0x1CE6DECC)
+// Rules: 1px only, at two weights. Opaque, as the design system gives them:
+// Rule is --rule-hairline, RuleRow is --rule-incised (tokens/colors.css).
+val Rule = Color(0xFF4A3E28)
+val RuleRow = Color(0xFF2A241C)

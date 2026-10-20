@@ -22,7 +22,7 @@ object AspectVerbs {
             AspectType.SEXTILE -> "offers a steady hand to"
             AspectType.SQUARE -> "tips the scales against"
             AspectType.TRINE -> "rows in time with"
-            AspectType.OPPOSITION -> "stands across the river from"
+            AspectType.OPPOSITION -> "bars the door against"
         }
 
         AncientCulture.GREECE -> when (aspect) {

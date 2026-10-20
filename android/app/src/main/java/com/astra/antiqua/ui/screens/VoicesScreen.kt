@@ -33,6 +33,7 @@ import com.astra.antiqua.ui.theme.Dim
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Spacing
 import com.astra.antiqua.ui.theme.accentFor
+import com.astra.antiqua.ui.theme.displayCase
 
 /**
  * The five doorways, the counterpart of web's /voices.
@@ -91,7 +92,7 @@ fun VoicesScreen(
                     CultureEmblem(culture = each, size = 22.dp, tint = accentFor(each))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = each.label.uppercase(),
+                            text = displayCase(each.label.uppercase()),
                             style = MaterialTheme.typography.titleLarge,
                             color = Bone,
                         )

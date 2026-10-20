@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.domain.AspectVerbs
-import com.astra.antiqua.domain.estimateZoneOffsetForLongitude
+import com.astra.antiqua.domain.birthZoneFor
 import com.astra.antiqua.domain.resolveBirthDateUtcMillis
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.DeityRegistry
@@ -260,9 +260,8 @@ private fun BondRow(
  * The second party's details, entered for this reading only.
  *
  * The same birthplace picker the first run uses, so a reader offline can
- * still name a place. The birth zone is estimated from the place's longitude,
- * exactly as the first run does, and the screen says that rather than
- * implying a precision it does not have.
+ * still name a place. The birth zone is the place's own IANA zone, looked
+ * up exactly as the first run does it.
  */
 @Composable
 private fun SecondParty(
@@ -374,10 +373,8 @@ private fun SecondParty(
                 enabled = ready,
                 onClick = {
                     val chosen = place ?: return@ActionButton
-                    // The birth zone is estimated from the place's longitude,
-                    // the same stand-in the first run uses, because there is
-                    // no birth-location timezone lookup on this surface.
-                    val zone = estimateZoneOffsetForLongitude(chosen.longitude)
+                    // The place's own zone, the same lookup the first run uses.
+                    val zone = birthZoneFor(chosen.latitude, chosen.longitude)
                     val utcMidnight = utcMidnightOf(
                         year.toIntOrNull() ?: 2000,
                         (month.toIntOrNull() ?: 1).coerceIn(1, 12),
@@ -394,8 +391,7 @@ private fun SecondParty(
             )
         }
         Text(
-            text = "THE BIRTH ZONE IS ESTIMATED FROM THE PLACE'S LONGITUDE · A TRANSITION DATE " +
-                "MAY BE OFF BY UP TO AN HOUR",
+            text = "THE BIRTH TIME IS READ IN THE PLACE'S OWN TIME ZONE",
             style = MaterialTheme.typography.labelSmall,
             color = Dim,
             modifier = Modifier.padding(top = Spacing.Snug),

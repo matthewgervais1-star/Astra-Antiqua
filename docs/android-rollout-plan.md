@@ -95,6 +95,15 @@ its own stated check. Do not start a phase before its predecessor's gate passes.
 >   `web/src/lib/dailyMessage.ts` composes the day's line from the sky
 >   instead. The bullet under "What this plan does not cover" describes the
 >   old corpus.
+> - **2026-10-06: account sync walked on the emulator.** Room is at version 3
+>   (`MIGRATION_2_3`, the typed birth date and time); a version 2 install
+>   upgraded in place and kept its chart. The pass fixed four defects:
+>   TODAY opened the birth form (`92c04b2`), casting again added a row the
+>   app never read (`164c254`), the placements truncated the minute where
+>   web rounds it (`5b351e3`), and the account ledger's culture rode above
+>   CHANGE (`20c4dd6`). Screenshots in
+>   `docs/design/screenshots/phase13-android-sync/`. The suite runs 173
+>   unit tests.
 
 ## Verified facts (checked, not assumed)
 

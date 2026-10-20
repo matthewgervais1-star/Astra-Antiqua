@@ -84,12 +84,12 @@ names and structural variants), domain readings (15), week readings (12),
 planet areas/domains, sign registers, aspect reflections, pair themes,
 cultural orientations, methodology sources.
 
-**Retained legacy banks (2026-09-29).** `web/src/data/domainReadings.ts`,
-`weekReadings.ts`, `seasonReadings.ts`, `oracleDecrees.ts`,
-`methodologyContent.ts` and `web/src/lib/transitReading.ts` stay in the tree,
-and no route renders them: nothing in `web/src` imports them. They are kept
-because [the rebrand brief](design/rebrand-brief.md) forbids deleting corpus
-substance, pending an owner decision.
+**Retained legacy banks (2026-09-29).** `domainReadings.ts`, `weekReadings.ts`,
+`seasonReadings.ts`, `oracleDecrees.ts`, `methodologyContent.ts` and
+`transitReading.ts` moved to `docs/archive/web-content/`. No route renders
+them and nothing imports them. They stay because [the rebrand
+brief](design/rebrand-brief.md) forbids deleting corpus substance. See
+`docs/archive/README.md`.
 
 Android-only vocabulary (needed by any future shared schema): per-culture UI
 lexicon — menu titles, officer roles, priest titles, aspect labels

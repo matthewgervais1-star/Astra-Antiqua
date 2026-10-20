@@ -9,6 +9,13 @@ export interface NaveShellProps {
   context: ReactNode;
   horizon?: Horizon;
   active?: LintelSection;
+  /**
+   * The language of the page's own copy, when it is not the root layout's
+   * English (the French legal documents). Set on the sub-bar context and the
+   * reading column, so the browser hyphenates and reads them by that
+   * language's rules; the Lintel and the footer stay English.
+   */
+  lang?: string;
 }
 
 /**
@@ -16,15 +23,15 @@ export interface NaveShellProps {
  * MethodFooter. Pages supply their own inner max-w-[560px] prose column;
  * this shell only sets the outer 720px column and the mobile gutters.
  */
-export function NaveShell({ children, context, horizon, active }: NaveShellProps) {
+export function NaveShell({ children, context, horizon, active, lang }: NaveShellProps) {
   return (
     <>
       <Lintel active={active} />
-      <SubBar context={context} horizon={horizon} showSync />
+      <SubBar context={lang ? <span lang={lang}>{context}</span> : context} horizon={horizon} showSync />
       {/* min-w-0: as a flex item, main defaults to min-width:auto, which lets a
           wide child (the matrix table, a data row) push the page wider than the
           viewport and defeat its own overflow-x wrapper. */}
-      <main className="mx-auto w-full min-w-0 max-w-[720px] px-5 py-12 md:py-16">{children}</main>
+      <main lang={lang} className="mx-auto w-full min-w-0 max-w-[720px] px-5 py-12 md:py-16">{children}</main>
       <MethodFooter />
     </>
   );

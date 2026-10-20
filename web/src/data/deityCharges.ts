@@ -2,10 +2,10 @@ import type { Culture, Planet } from "@/data/cultures";
 
 /**
  * What each god brings before its institution: a short noun phrase in the
- * culture's own nouns, written to sit inside a sentence as a subject or an
- * object ("{charge A} lends its wind to {charge B}"). This is what ties a
- * decree's ruling to the two bodies actually in the figure, so Sun sextile
- * Mars and Moon sextile Venus can never print the same sentence.
+ * culture's own nouns. The week's ingress line reads the crossing god's
+ * charge into its frame (data/ingressFrames.ts), so the line changes with
+ * the body that moved. The day page's decree speaks through the plainer
+ * domains in data/deityDomains.ts instead.
  *
  * Lowercase-initial by design; the frame that uses one capitalises it when it
  * opens the sentence. No phrase here may be moved to another culture without

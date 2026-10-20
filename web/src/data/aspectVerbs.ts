@@ -14,7 +14,7 @@ export const ASPECT_VERBS: Readonly<Record<Culture, Readonly<Record<AspectKind, 
     sextile: "offers a steady hand to",
     square: "tips the scales against",
     trine: "rows in time with",
-    opposition: "stands across the river from",
+    opposition: "bars the door against",
   },
   greece: {
     conjunction: "stands shoulder to shoulder with",

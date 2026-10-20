@@ -31,6 +31,7 @@ import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.RuleRow
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 
 /**
  * The identity's component vocabulary, the Compose half of what
@@ -84,7 +85,7 @@ fun Votive(text: String, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
         Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
         Text(
-            text = text.uppercase(),
+            text = displayCase(text.uppercase()),
             style = MaterialTheme.typography.headlineSmall,
             color = accent,
             textAlign = TextAlign.Center,

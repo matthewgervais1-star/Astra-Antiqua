@@ -37,6 +37,10 @@ import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.LauncherIcon
 import com.astra.antiqua.ui.components.Monogram
 import com.astra.antiqua.ui.nav.Route
+import com.astra.antiqua.ui.screens.AccountScreen
+import com.astra.antiqua.ui.screens.LicencesScreen
+import com.astra.antiqua.ui.screens.SignInScreen
+import com.astra.antiqua.ui.screens.WaitListScreen
 import com.astra.antiqua.ui.screens.CultureSelectionScreen
 import com.astra.antiqua.ui.screens.ForecastScreen
 import com.astra.antiqua.ui.screens.LearnScreen
@@ -49,6 +53,7 @@ import com.astra.antiqua.ui.screens.PlacementsScreen
 import com.astra.antiqua.ui.screens.SynastryScreen
 import com.astra.antiqua.ui.screens.SeasonScreen
 import com.astra.antiqua.ui.screens.YearScreen
+import com.astra.antiqua.ui.screens.FigureScreen
 import com.astra.antiqua.ui.screens.TransitDetailScreen
 import com.astra.antiqua.ui.screens.TransitsScreen
 import com.astra.antiqua.ui.screens.VoiceScreen
@@ -57,6 +62,7 @@ import com.astra.antiqua.ui.screens.WeekScreen
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.LocalAccent
+import com.astra.antiqua.ui.theme.ShellType
 import com.astra.antiqua.viewmodel.AppViewModel
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 
@@ -113,6 +119,7 @@ class MainActivity : ComponentActivity() {
                                 AppPhase.MAIN_DASHBOARD -> AstraNavHost(
                                     culture = selectedCulture,
                                     onChooseCulture = viewModel::switchCulture,
+                                    onStruck = viewModel::returnToCultureSelection,
                                 )
                             }
                         }
@@ -139,6 +146,7 @@ class MainActivity : ComponentActivity() {
 fun AstraNavHost(
     culture: AncientCulture,
     onChooseCulture: (AncientCulture) -> Unit,
+    onStruck: () -> Unit = {},
 ) {
     val navController = rememberNavController()
 
@@ -154,10 +162,11 @@ fun AstraNavHost(
                 culture = culture,
                 onNavigate = go,
                 onOpenMethod = { open(Route.METHOD) },
+                onOpenFigure = open,
             )
         }
         composable(Route.WEEK) {
-            WeekScreen(culture = culture, onNavigate = go)
+            WeekScreen(culture = culture, onNavigate = go, onOpenFigure = open)
         }
         composable(Route.SEASON) {
             SeasonScreen(culture = culture, onNavigate = go)
@@ -199,6 +208,15 @@ fun AstraNavHost(
                 culture = culture,
                 onNavigate = go,
                 onBack = { navController.popBackStack() },
+            )
+        }
+        composable(Route.FIGURE) { entry ->
+            FigureScreen(
+                date = entry.arguments?.getString("date").orEmpty(),
+                id = entry.arguments?.getString("id").orEmpty(),
+                culture = culture,
+                onNavigate = go,
+                onOpen = open,
             )
         }
         composable(Route.MATRIX) {
@@ -269,7 +287,47 @@ fun AstraNavHost(
             )
         }
         composable(Route.METHOD) {
-            MethodScreen(onBack = { navController.popBackStack() })
+            MethodScreen(
+                onBack = { navController.popBackStack() },
+                onOpenLicences = { open(Route.LICENCES) },
+            )
+        }
+        composable(Route.LICENCES) {
+            LicencesScreen(culture = culture, onNavigate = go)
+        }
+        composable(Route.ACCOUNT) {
+            AccountScreen(
+                culture = culture,
+                onNavigate = go,
+                // Signed out, the account is THE RECORD, as web's /account
+                // sends an anonymous visitor to /signin. The swap replaces
+                // this entry, so back does not return to a redirect.
+                onSignIn = {
+                    navController.navigate(Route.SIGN_IN) {
+                        popUpTo(Route.ACCOUNT) { inclusive = true }
+                    }
+                },
+                onSignedOut = { go(Route.DAY) },
+                onStruck = onStruck,
+                onChangeCulture = { go(Route.VOICES) },
+                onOpenLicences = { open(Route.LICENCES) },
+            )
+        }
+        composable(Route.SIGN_IN) {
+            SignInScreen(
+                culture = culture,
+                onNavigate = go,
+                onSignedIn = {
+                    navController.navigate(Route.ACCOUNT) {
+                        popUpTo(Route.SIGN_IN) { inclusive = true }
+                    }
+                },
+                onContinue = { go(Route.DAY) },
+                onOpenRoll = { open(Route.WAIT_LIST) },
+            )
+        }
+        composable(Route.WAIT_LIST) {
+            WaitListScreen(culture = culture, onNavigate = go)
         }
     }
 }
@@ -303,7 +361,9 @@ private fun NavHostController.openDetail(route: String) {
 }
 
 @Composable
-fun EngineWarmupScreen() {
+fun EngineWarmupScreen() = ShellType {
+    // The warmup runs before start() loads the saved culture, while the theme
+    // holds the GREECE default, so it keeps the shell's Cinzel for every reader.
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

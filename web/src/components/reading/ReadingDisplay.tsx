@@ -208,7 +208,7 @@ export function ReadingDisplay({
           {housesWithOccupants.map((h) => (
             <div key={h.house} className="border-t border-rule-row pt-4">
               <div className="flex items-baseline justify-between gap-3">
-                <div className="font-display text-[16px] tracking-[0.04em] text-bone">
+                <div className="font-display text-display-xs tracking-[0.04em] text-bone">
                   {h.meaning.ordinal.toUpperCase()} HOUSE
                   <span className="ml-2 font-body text-prose-s italic text-prose">
                     {h.meaning.title}
@@ -262,7 +262,7 @@ export function ReadingDisplay({
                   <div className="font-mono text-data-xs uppercase tracking-microcopy text-dim">
                     {items.length} FOUND
                   </div>
-                  <h4 className="mt-2 font-display text-[16px] tracking-[0.06em] text-bone">
+                  <h4 className="mt-2 font-display text-display-xs tracking-[0.06em] text-bone">
                     {group.title}
                   </h4>
                   <p className="mt-1 font-body text-prose-s leading-prose text-dim">
@@ -283,7 +283,7 @@ export function ReadingDisplay({
                         <div className="mt-2">
                           <OrbBar orb={a.orb} maxOrb={orbFor(a.kind)} tone={toneForKind(a.kind)} />
                         </div>
-                        <p className="mt-3 font-display text-[17px] leading-[1.4] text-bone">
+                        <p className="mt-3 font-display text-display-xs leading-[1.4] text-bone">
                           {a.verbLine}
                         </p>
                         <p className="mt-2 font-body text-prose-s italic leading-prose text-prose">

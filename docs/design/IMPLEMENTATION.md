@@ -134,8 +134,8 @@ second party entered for the reading and never stored.
 
 **Four generators keep the two surfaces on one corpus.**
 `gen-android-emblems.mjs` carries the marks, `gen-android-reading-banks.mjs`
-the fifty charges, the twenty-five ruling frames, the five ingress frames and
-the aspect verbs (`2a43515`), `gen-android-learn.mjs` the
+the day page's banks and domains, the ingress charges and frames, the aspect
+verbs (`2a43515`) and the day-page parity goldens, `gen-android-learn.mjs` the
 explainer prose and its reference tables, and `gen-android-cities.mjs` the
 birthplace list. Nothing in that corpus is retyped, so neither surface can
 drift from the other by a sentence.
@@ -198,7 +198,8 @@ smallest is 22px. Sixty sites set Cinzel between 11 and 17px, as list names,
 nav labels and small heads. Mapping them up would break those rows, and the
 tokens file says not to add a step to fit one screen, so they stay at their
 literal size and are listed by the sweep. The buttons that were among them are
-now mono, which is what the Button spec asks for.
+now mono, which is what the Button spec asks for. (Superseded on 2026-09-29:
+the owner added `display-xs` at 18px; see "Since closed".)
 
 **Greece ships the omega, not the tripod.** The research names the tripod as
 the launcher; both icon generators cut it from `ts-omega.svg`. The reasoning
@@ -268,10 +269,6 @@ better mark and that Tanit carries a cost a launcher icon cannot disarm, having
 no label. Tracing it needs a Salammbo harbour survey, which is a document to be
 got rather than a thing to be drawn. Tanit ships meanwhile, in her outline cut.
 
-**A display step under 22px, or none.** Whether the small Cinzel labels get
-a `display-xs` step or move to mono is a design call; the sweep left them
-literal so the decision is not made by a script.
-
 **The account, sign-in and wait-list routes need a server, not a screen.**
 Web talks to `/api/auth/*`, `/api/charts` and `/api/wait-list` from the same
 origin. Android would need a base URL, a session store and a cookie client,
@@ -284,20 +281,6 @@ account.
 extractor deliberately leaves behind: the day screen already draws a wheel
 from a real chart, so a fixed illustration of one would be the weaker of the
 two on a phone.
-
-**The Spectral SC display decision.** The small-caps treatment on the four
-non-Roman surfaces is still a prototype in `globals.css` and was not promoted
-into the tokens or carried to Android. Its open question is Cinzel's tracking,
-set per component and loose on small caps, which wants looking at before it is
-tuned.
-
-**Two rule colours drift.** The web rules are bone with alpha (0.16 and 0.11)
-where the design system has opaque hex (`--rule-hairline` `#4A3E28`,
-`--rule-incised` `#2A241C`). Composited on the neutral ground they land at
-`#38332E` and `#2E2925`, so the web pair is darker and ordered the other way
-round. Alpha rules shift with the culture ground, which may be the better
-behaviour; the design system is canonical, so this is a decision rather than a
-bug to fix silently.
 
 **The Ugaritic codepoints.** `docs/design/culture-marks.md` gives U+1039B U+1038D
 for the name of El, and `ts-il.svg` is cut from exactly those. Counting forward
@@ -319,3 +302,48 @@ a gap between the two doorways. The tree has since closed all three.
 - **Egypt's doorway on Android showed the ankh alone.** Web shows the ankh and
   the balance. `95e0180` outlines `ts-balance.svg` from Noto Sans Egyptian
   Hieroglyphs, adds `TypesetSign.BALANCE`, and sets it after the ankh.
+- **Two rule colours drifted.** The web rules were bone with alpha (0.16 and
+  0.11) where the design system has opaque hex. The rules now take
+  `--rule-hairline` `#4A3E28` and `--rule-incised` `#2A241C` on web
+  (`--color-rule`, `--color-rule-row`) and on Android (`Rule`, `RuleRow`).
+  The rules no longer shift with the culture ground. The OG cards draw their
+  own frame in literal values and never read the tokens, so they did not
+  change. Landed with the commit `feat(design): the rules take the system's
+  incised and hairline inks`; screenshots in
+  `docs/design/screenshots/phase11-design-calls/`.
+- **A display step under 22px, or none.** The owner took the call on
+  2026-09-29: both. The scale's step ratios are 52/40 = 1.30, 40/26 = 1.54
+  and 26/22 = 1.18. The smallest, applied once below 22, gives
+  22 x 22 / 26 = 18.6; the step is 18px, since 19 would sit closer to 22 than
+  any step sits to the one above it. `--type-display-xs` in
+  `tokens/typography.css`, `--text-display-xs` in `globals.css` and
+  `TypeScale.DisplayXs` on Android carry it, with the display tracking and
+  leading. Cinzel sites at 14 to 17px moved onto `text-display-xs`; sites at
+  11 to 13px are microcopy and moved to mono (`text-data-s` or
+  `text-data-xs`, uppercase). On Android `titleLarge` and `titleMedium` take
+  display-xs and `titleSmall` takes mono. Three links keep a literal Cinzel
+  size: each wraps the drawn `Wordmark`, which sizes itself from
+  `capHeight`, so no Cinzel glyph renders at that size. The Satori OG cards
+  keep their literal sizes. Landed with the commit `feat(design): a
+  display-xs step, and the small labels move onto the scale`; screenshots in
+  `docs/design/screenshots/phase11-design-calls/`.
+- **The Spectral SC display decision.** The small-caps treatment on the four
+  non-Roman surfaces is the rule, recorded 2026-10-06. The open question was
+  Cinzel's tracking, set per component and loose on small caps. The answer
+  leaves Cinzel untouched and gives Spectral SC its own `--track-display-sc`
+  at 0.06em. The prototype set no sizes, so Spectral SC sits on the display
+  scale as it stands, 18px included. `tokens/typography.css` now names the
+  four surfaces (`[data-culture]` sets `--text-display-font` and
+  `--text-display-track`), and the `globals.css` block reads
+  `--tracking-display-sc`. Android fetches Spectral SC 400 and 500 as TTF
+  through `fetch-fonts.mjs --android`; `Type.kt` adds `SpectralSc`,
+  `TypeScale.TrackDisplaySc`, `displaySc` and a small-caps `Typography`, and
+  `AstraAntiquaTheme` picks it for every culture but Rome. Spectral SC draws
+  small capitals on lowercase codepoints and carries no `c2sc` or `smcp`
+  feature, and Android call sites pass display text uppercased, so each
+  display call site now goes through `displayCase()`, which lowercases on
+  the four surfaces and passes through on Rome. The culture doorway is the
+  shell and keeps Cinzel through `ShellType`. Landed with the commit
+  `feat(design): Spectral SC is the rule on the four non-Roman surfaces`;
+  screenshots `sc-home-<culture>-1280.png` in
+  `docs/design/screenshots/phase11-design-calls/`.

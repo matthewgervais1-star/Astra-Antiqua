@@ -35,14 +35,19 @@ import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.accentFor
 import com.astra.antiqua.ui.theme.Dim
 import com.astra.antiqua.ui.theme.Prose
+import com.astra.antiqua.ui.theme.ShellType
 import com.astra.antiqua.ui.components.Wordmark
 import com.astra.antiqua.ui.theme.Spacing
 
 
+/**
+ * The doorway is the app shell: no culture is chosen yet, so its display type
+ * stays Cinzel through [ShellType] whatever culture the theme holds.
+ */
 @Composable
 fun CultureSelectionScreen(
     onCultureSelected: (AncientCulture) -> Unit
-) {
+) = ShellType {
     Column(
         modifier = Modifier
             .fillMaxSize()

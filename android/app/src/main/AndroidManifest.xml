@@ -8,6 +8,8 @@
     <application
         android:name=".AstraApplication"
         android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -22,6 +24,21 @@
           alias was enabled, and disabling the activity to stop that would
           leave every alias pointing at a component that cannot start.
         -->
+        <!--
+          Shares an account export with the share sheet as a file. Only the
+          cache's export/ directory is exposed (res/xml/export_paths.xml),
+          and each share grants read access to that one file.
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.export"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/export_paths" />
+        </provider>
+
         <activity
             android:name=".MainActivity"
             android:exported="false"

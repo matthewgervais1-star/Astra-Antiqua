@@ -30,7 +30,7 @@ function SpanRow({ span, culture }: { span: TransitSpan; culture: Culture }) {
       <div className="min-w-0">
         <div
           className={cn(
-            "font-display text-[15px] tracking-[0.06em]",
+            "font-display text-display-xs tracking-[0.06em]",
             received ? "text-accent" : "text-bone",
           )}
         >

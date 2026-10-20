@@ -16,7 +16,8 @@
     "export:content": "node scripts/export-content.mjs",
     "export:goldens": "node scripts/export-goldens.mjs",
     "export:glyphs": "node scripts/export-glyphs.mjs",
-    "export:marks": "node scripts/export-marks.mjs"
+    "export:marks": "node scripts/export-marks.mjs",
+    "gen:android-tz": "node scripts/gen-android-tz.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

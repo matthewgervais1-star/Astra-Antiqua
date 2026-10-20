@@ -73,6 +73,29 @@ fun groundFor(culture: AncientCulture): Color = when (culture) {
     AncientCulture.ROME -> GroundRome
 }
 
+/**
+ * Egypt, Greece, Canaan and Carthage set display in Spectral SC; Rome keeps
+ * Cinzel, a Roman inscriptional cap on the Roman surface. The same split as
+ * body[data-pantheon] in web/src/app/globals.css.
+ */
+fun usesSmallCapsDisplay(culture: AncientCulture): Boolean = culture != AncientCulture.ROME
+
+/**
+ * The app shell speaks in its own name, before any culture is chosen, so it
+ * keeps Cinzel whatever culture the theme holds. Web's shell has no
+ * data-pantheon and keeps Cinzel the same way.
+ */
+@Composable
+fun ShellType(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalSmallCapsDisplay provides false) {
+        MaterialTheme(
+            colorScheme = MaterialTheme.colorScheme,
+            typography = Typography,
+            content = content,
+        )
+    }
+}
+
 @Composable
 fun AstraAntiquaTheme(
     selectedCulture: AncientCulture = AncientCulture.GREECE,
@@ -99,10 +122,15 @@ fun AstraAntiquaTheme(
         }
     }
 
-    CompositionLocalProvider(LocalLexicon provides lexicon, LocalAccent provides accent) {
+    val smallCaps = usesSmallCapsDisplay(selectedCulture)
+    CompositionLocalProvider(
+        LocalLexicon provides lexicon,
+        LocalAccent provides accent,
+        LocalSmallCapsDisplay provides smallCaps,
+    ) {
         MaterialTheme(
             colorScheme = schemeFor(ground, accent),
-            typography = Typography,
+            typography = if (smallCaps) SmallCapsTypography else Typography,
             content = content
         )
     }

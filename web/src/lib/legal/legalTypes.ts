@@ -19,6 +19,12 @@ export interface LegalSection {
 }
 
 export interface LegalCopy {
+  /**
+   * The language the copy is written in, set on the rendered document so the
+   * browser hyphenates and reads it by that language's rules. The root layout
+   * declares English for the whole site.
+   */
+  lang: "en-CA" | "fr-CA";
   metaTitle: string;
   metaDescription: string;
   context: string;

@@ -42,7 +42,7 @@ export function CultureSwitch({ value, onChange, showSurface = true }: CultureSw
             )}
           >
             <CultureEmblem culture={culture} size={20} decorative />
-            <span className="font-display text-[15px] tracking-[0.14em]">
+            <span className="font-display text-display-xs tracking-[0.14em]">
               {CULTURE_LABELS[culture].toUpperCase()}
             </span>
             {showSurface ? (

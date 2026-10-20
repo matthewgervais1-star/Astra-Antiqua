@@ -20,3 +20,5 @@ Thumbs.db
 
 # A nested clone left behind by a worktree recycle. Not part of this repo.
 /astra-antiqua/
+# Claude Code transcripts stay local
+_sessions/

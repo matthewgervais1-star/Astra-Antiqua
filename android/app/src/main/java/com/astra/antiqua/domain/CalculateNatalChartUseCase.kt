@@ -54,6 +54,7 @@ class CalculateNatalChartUseCase(private val astronomyEngine: AstronomyEngine) {
         return NatalChartData(
             planets = planets,
             houseCusps = houseCusps,
+            ascendant = ascendant,
             julianDay = jd,
             aspects = aspects
         )

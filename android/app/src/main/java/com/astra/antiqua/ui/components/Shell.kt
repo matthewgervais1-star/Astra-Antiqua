@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import com.astra.antiqua.ui.theme.FaintInk
 import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 
 /**
  * The chrome every reading screen sits inside, the Compose counterpart of
@@ -43,7 +45,10 @@ import com.astra.antiqua.ui.theme.Spacing
  * makes a second screen worth building.
  */
 
-/** The top bar: the drawn lockup, with the sections either side of it. */
+/**
+ * The top bar: the drawn lockup, the sections under it, and ACCOUNT at the
+ * lockup's right end, where web's lintel keeps it.
+ */
 @Composable
 fun Lintel(
     active: Section?,
@@ -55,10 +60,26 @@ fun Lintel(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = Spacing.Gutter, vertical = Spacing.Snug),
+                .padding(horizontal = Spacing.Gutter),
             contentAlignment = Alignment.Center,
         ) {
-            Wordmark(capHeight = 11.dp)
+            Box(Modifier.padding(vertical = Spacing.Snug)) { Wordmark(capHeight = 11.dp) }
+            val account = Section.ACCOUNT
+            // A 48dp touch target around the label; the label is drawn as
+            // the sections are.
+            Text(
+                text = account.label,
+                style = MaterialTheme.typography.labelSmall,
+                color = if (account == active) accent else Dim,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .minimumInteractiveComponentSize()
+                    .clickable(
+                        onClickLabel = account.label,
+                        role = Role.Tab,
+                        onClick = { onNavigate(account.route) },
+                    ),
+            )
         }
         Row(
             modifier = Modifier
@@ -67,7 +88,7 @@ fun Lintel(
                 .padding(bottom = Spacing.Snug),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            Section.entries.forEach { section ->
+            Section.entries.filter { it != Section.ACCOUNT }.forEach { section ->
                 val isActive = section == active
                 Text(
                     text = section.label,
@@ -272,7 +293,7 @@ fun NaveHead(
         AccentRule()
         Box(Modifier.height(Spacing.Step))
         Text(
-            text = headline.uppercase(),
+            text = displayCase(headline.uppercase()),
             style = MaterialTheme.typography.displaySmall,
             color = Bone,
             textAlign = TextAlign.Center,

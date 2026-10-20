@@ -25,7 +25,7 @@ export function LearnTOC({ current }: { current?: string }) {
                 </span>
                 <span
                   className={cn(
-                    "font-display text-[14px] tracking-[0.06em]",
+                    "font-display text-display-xs tracking-[0.06em]",
                     isActive ? "text-accent" : "text-bone",
                   )}
                 >

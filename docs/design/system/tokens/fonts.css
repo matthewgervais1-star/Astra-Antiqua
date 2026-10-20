@@ -7,7 +7,7 @@
   --font-prose: 'Spectral', Georgia, serif;             /* all running text */
   --font-data: 'IBM Plex Mono', ui-monospace, monospace;/* data, labels, microcopy */
 
-  /* the display-type prototype: true small caps for the four non-Roman surfaces */
+  /* display on the four non-Roman surfaces: true small caps, set lowercased */
   --font-display-sc: 'Spectral SC', Georgia, serif;
 
   /* epigraphic faces, used only to set attested signs, never for copy */

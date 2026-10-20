@@ -31,7 +31,7 @@ export default function HousesLearnPage() {
             className="border-t border-rule-row py-5 last:border-b"
           >
             <div className="flex flex-wrap items-baseline justify-between gap-3">
-              <div className="font-display text-[17px] tracking-[0.05em] text-bone">
+              <div className="font-display text-display-xs tracking-[0.05em] text-bone">
                 {h.ordinal.toUpperCase()} HOUSE
                 <span className="ml-3 font-body text-prose-s italic text-prose">{h.title}</span>
               </div>

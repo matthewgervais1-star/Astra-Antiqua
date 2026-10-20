@@ -1,10 +1,18 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { composeDecree } from "@/lib/decree";
+import { composeDayPage, composeDecree, dayFigures, headlineBody, type DayDecree, type DayFigure } from "@/lib/decree";
+import { computeChart } from "@/lib/ephemeris";
+import { composeDailyMessage } from "@/lib/dailyMessage";
+import { dayPermissions } from "@/lib/permissions";
 import { buildWeekDays } from "@/lib/weekReading";
 import { DEITY_CHARGES } from "@/data/deityCharges";
+import { DEITY_DOMAINS } from "@/data/deityDomains";
+import { DECREE_BANKS } from "@/data/decreeBanks";
+import { PERMISSIONS_REGISTER } from "@/data/permissionsRegister";
+import { DEITY_MATRIX } from "@/data/deities";
 import { CULTURES, PLANETS, type Culture, type Planet } from "@/data/cultures";
 import { computeAspects, type Longitude } from "@/data/sampleChart";
+import { GOLDEN_2026_09_29 } from "@/lib/decree.golden";
 
 const FAST: ReadonlySet<Planet> = new Set(["sun", "moon", "mercury", "venus", "mars"]);
 
@@ -46,6 +54,7 @@ function chartWith(a: Planet, b: Planet, separation: number): Record<Planet, Lon
 }
 
 const sentences = (text: string) => text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+const bodyOf = (d: { paragraphs: readonly string[] }) => d.paragraphs.join(" ");
 
 test("the fixture makes the named pair the tightest fast-body aspect by a degree", () => {
   const fast = computeAspects(chartWith("sun", "mars", 60))
@@ -55,45 +64,249 @@ test("the fixture makes the named pair the tightest fast-body aspect by a degree
   assert.ok(fast[1] === undefined || fast[1].orb > 1, `runner-up too close: ${JSON.stringify(fast[1])}`);
 });
 
-test("two exact sextiles between different gods share no sentence in the same culture", () => {
-  const sunMars = composeDecree("egypt", chartWith("sun", "mars", 60));
-  const moonVenus = composeDecree("egypt", chartWith("moon", "venus", 60));
-
-  const first = new Set(sentences(sunMars.paragraphs[0] ?? ""));
-  const shared = sentences(moonVenus.paragraphs[0] ?? "").filter((s) => first.has(s));
-
-  assert.deepEqual(shared, [], `kind-keyed boilerplate leaked across figures: ${JSON.stringify(shared)}`);
+test("the day page is a headline, an evidence line and one paragraph of five sentences", () => {
+  for (const culture of CULTURES) {
+    const d = composeDecree(culture, chartWith("sun", "mars", 60.3));
+    assert.equal(d.paragraphs.length, 1);
+    assert.deepEqual(sentences(bodyOf(d)), d.sentences);
+    assert.equal(d.sentences.length, 5, bodyOf(d));
+    assert.match(d.headline, /^[A-Z].*[.!?]$/, "the headline is a sentence");
+    assert.notEqual(d.headline, d.headline.toUpperCase(), "the headline is sentence case, not a banner");
+    assert.notEqual(d.evidence, "");
+  }
 });
 
-test("a decree instructs only when the headline figure is exact", () => {
-  const exact = composeDecree("rome", chartWith("mars", "saturn", 90));
-  const wide = composeDecree("rome", chartWith("mars", "saturn", 93));
+test("the evidence line names both gods, the glyph and the measured orb, and says EXACT only under one minute", () => {
+  const wide = composeDecree("egypt", chartWith("sun", "mars", 61.2));
+  assert.equal(wide.evidence, "RA ⚹ HORUS THE RED · 1°12′");
+  const exact = composeDecree("rome", chartWith("mars", "pluto", 180));
+  assert.equal(exact.evidence, "MARS ☍ DIS PATER · EXACT");
+  const halfMinute = composeDecree("rome", chartWith("mars", "pluto", 180.01));
+  assert.equal(halfMinute.evidence, "MARS ☍ DIS PATER · EXACT");
+  // A tight figure is not an exact one: the line prints what the sky measures.
+  const tight = composeDecree("rome", chartWith("mars", "pluto", 180.45));
+  assert.equal(tight.evidence, "MARS ☍ DIS PATER · 0°27′");
+  const past = composeDecree("rome", chartWith("mars", "pluto", 180.55));
+  assert.equal(past.evidence, "MARS ☍ DIS PATER · 0°33′");
+});
 
-  assert.equal(sentences(exact.paragraphs[0] ?? "").length, 3, "exact: sky sentence, ruling, instruction");
-  assert.equal(sentences(wide.paragraphs[0] ?? "").length, 2, "wide: sky sentence and ruling, no order");
+test("the instruction is always last, keyed by the kind and the headline body", () => {
+  for (const culture of CULTURES) {
+    const d = composeDecree(culture, chartWith("moon", "venus", 120.8));
+    // Both bodies are fast; the Moon is faster, so the Moon speaks.
+    const expected = DECREE_BANKS[culture].instructions.trine.moon.replaceAll("{god}", DEITY_MATRIX[culture].moon.name);
+    assert.equal(d.sentences.at(-1), expected, culture);
+    assert.equal(d.headline, DECREE_BANKS[culture].headlines.trine.moon);
+  }
+});
+
+test("the headline body is the fast body, the faster when both are", () => {
+  assert.deepEqual(headlineBody("sun", "moon"), { body: "moon", partner: "sun" });
+  assert.deepEqual(headlineBody("venus", "mercury"), { body: "mercury", partner: "venus" });
+  assert.deepEqual(headlineBody("mars", "pluto"), { body: "mars", partner: "pluto" });
+  assert.deepEqual(headlineBody("jupiter", "venus"), { body: "venus", partner: "jupiter" });
+});
+
+test("one headline body with two partners: the meaning and the consequence change, the rest is keyed by the body", () => {
+  for (const culture of CULTURES) {
+    const withMars = composeDecree(culture, chartWith("venus", "mars", 90.2));
+    const withPluto = composeDecree(culture, chartWith("venus", "pluto", 90.2));
+    assert.equal(withMars.headline, withPluto.headline, "the headline is keyed by the headline body");
+    for (const i of [0, 1]) assert.notEqual(withMars.sentences[i], withPluto.sentences[i], `${culture} sentence ${i}`);
+    for (const i of [2, 4]) assert.equal(withMars.sentences[i], withPluto.sentences[i], `${culture} sentence ${i}`);
+  }
+});
+
+test("two sextiles between different gods share no sentence in the same culture", () => {
+  for (const culture of CULTURES) {
+    const sunMars = composeDecree(culture, chartWith("sun", "mars", 60));
+    const moonVenus = composeDecree(culture, chartWith("moon", "venus", 60));
+    const first = new Set(sunMars.sentences);
+    assert.deepEqual(moonVenus.sentences.filter((s) => first.has(s)), [], culture);
+  }
+});
+
+test("the tight tail appears only under half a degree of orb", () => {
+  for (const culture of CULTURES) {
+    const tails = DECREE_BANKS[culture].tightTails;
+    const meaning = (sep: number) => composeDecree(culture, chartWith("mars", "saturn", sep)).sentences[0] ?? "";
+    const hasTail = (s: string) => tails.some((t) => s.includes(t));
+    assert.ok(hasTail(meaning(90)), `${culture} exact: ${meaning(90)}`);
+    assert.ok(hasTail(meaning(90.45)), `${culture} at 0.45: ${meaning(90.45)}`);
+    assert.ok(!hasTail(meaning(90.55)), `${culture} at 0.55: ${meaning(90.55)}`);
+    assert.ok(!hasTail(meaning(93)), `${culture} wide: ${meaning(93)}`);
+  }
+});
+
+test("the day's three variants rotate the relation, the tight tail and the second-figure opener", () => {
+  const chart = chartWith("mars", "saturn", 90);
+  for (const culture of CULTURES) {
+    const days = [0, 1, 2].map((day) => composeDecree(culture, chart, { day }).sentences);
+    for (let v = 0; v < 3; v += 1) {
+      assert.ok(days[v]![0]!.includes(DECREE_BANKS[culture].tightTails[v]!), `${culture} tail ${v}`);
+      assert.ok(days[v]![0]!.includes(DECREE_BANKS[culture].relations.square[v]!), `${culture} relation ${v}`);
+    }
+    assert.equal(new Set(days.map((d) => d[0])).size, 3, culture);
+    assert.equal(new Set(days.map((d) => d[3])).size, 3, culture);
+  }
 });
 
 test("five cultures read one figure with no sentence in common", () => {
-  const chart = chartWith("sun", "mars", 60);
-  const seen = new Map<string, Culture>();
-  for (const culture of CULTURES) {
-    for (const s of sentences(composeDecree(culture, chart).paragraphs.join(" "))) {
-      const prior = seen.get(s);
-      assert.equal(prior, undefined, `"${s}" appears in both ${prior} and ${culture}`);
-      seen.set(s, culture);
+  const figures: ReadonlyArray<readonly [Planet, Planet, number]> = [
+    ["sun", "mars", 60],
+    ["moon", "saturn", 90.2],
+    ["venus", "pluto", 180],
+  ];
+  for (const [a, b, sep] of figures) {
+    const chart = chartWith(a, b, sep);
+    const seen = new Map<string, Culture>();
+    for (const culture of CULTURES) {
+      const d = composeDecree(culture, chart);
+      for (const s of [d.headline, ...d.sentences]) {
+        const prior = seen.get(s);
+        assert.equal(prior, undefined, `"${s}" appears in both ${prior} and ${culture}`);
+        seen.set(s, culture);
+      }
     }
   }
 });
 
-test("every aspect day in the week names both gods' charges in its line", () => {
-  const monday = new Date(2026, 8, 7);
+const figureKey = (d: DayDecree) => {
+  const f = d.figures[0];
+  return f ? `${f.a}|${f.b}|${f.kind}` : "quiet";
+};
+
+test("the sky picks the figure: the day page leads with the tightest figure, every day", () => {
+  for (let i = 0; i < 30; i += 1) {
+    const date = new Date(Date.UTC(2026, 8, 29) + i * 86_400_000);
+    const raw = dayFigures(computeChart(date))[0]!;
+    for (const culture of CULTURES) {
+      const top = composeDayPage(culture, date).figures[0]!;
+      assert.deepEqual([top.a, top.b, top.kind], [raw.a, raw.b, raw.kind], `${culture} day ${i}`);
+    }
+  }
+  const sunUranus = composeDayPage("egypt", new Date("2026-09-29T00:00:00Z")).figures[0]!;
+  assert.deepEqual([sunUranus.a, sunUranus.b, sunUranus.kind], ["sun", "uranus", "trine"]);
+});
+
+test("over 2026, a sentence returns within seven days only when its key returns", () => {
+  const same = (x: DayFigure | undefined, y: DayFigure | undefined) =>
+    x !== undefined && y !== undefined && x.a === y.a && x.b === y.b && x.kind === y.kind;
   for (const culture of CULTURES) {
-    const charges = Object.values(DEITY_CHARGES[culture]).map((c) => c.toLowerCase());
-    for (const day of buildWeekDays(culture, monday, null)) {
-      if (day.shorthand.kind !== "aspect") continue;
-      const line = day.line.toLowerCase();
-      const named = charges.filter((c) => line.includes(c));
-      assert.ok(named.length >= 2, `${culture}: "${day.line}" names ${named.length} charge(s); a tethered line names both`);
+    const pages = Array.from({ length: 365 }, (_, i) => composeDayPage(culture, new Date(Date.UTC(2026, 0, 1) + i * 86_400_000)));
+    pages.forEach((page, i) => {
+      for (let j = Math.max(0, i - 6); j < i; j += 1) {
+        const earlier = pages[j]!;
+        if (figureKey(page) === figureKey(earlier)) continue;
+        const [t, u] = [page.figures[0]!, earlier.figures[0]!];
+        const [hb, hu] = [headlineBody(t.a, t.b), headlineBody(u.a, u.b)];
+        const shared = (k: number) => page.sentences[k] === earlier.sentences[k];
+        const where = `${culture} days ${j} and ${i}`;
+        // The meaning names both domains: it never returns under a new figure.
+        assert.ok(!shared(0), `${where}: ${page.sentences[0]}`);
+        // The consequence is keyed by kind and partner body.
+        if (shared(1)) assert.ok(t.kind === u.kind && hb.partner === hu.partner, where);
+        // The image and the instruction are keyed by kind and headline body.
+        for (const k of [2, 4]) if (shared(k)) assert.ok(t.kind === u.kind && hb.body === hu.body, where);
+        // The second sentence returns only with the same second figure.
+        if (shared(3)) assert.ok(same(page.figures[1], earlier.figures[1]), where);
+      }
+    });
+  }
+});
+
+test("the second-figure sentence never names a god twice", () => {
+  for (const culture of CULTURES) {
+    for (let i = 0; i < 60; i += 1) {
+      const page = composeDayPage(culture, new Date(Date.UTC(2026, 8, 29) + i * 86_400_000));
+      const second = page.sentences[3]!;
+      for (const planet of PLANETS) {
+        const name = DEITY_MATRIX[culture][planet].name;
+        assert.ok(second.split(name).length - 1 <= 1, `${culture} day ${i}: "${second}" names ${name} twice`);
+      }
+    }
+  }
+});
+
+test("a figure that holds for consecutive days prints at least two different sentences", () => {
+  let holds = 0;
+  for (const culture of CULTURES) {
+    const pages = Array.from({ length: 30 }, (_, i) => composeDayPage(culture, new Date(Date.UTC(2026, 8, 29) + i * 86_400_000)));
+    for (let i = 1; i < pages.length; i += 1) {
+      if (figureKey(pages[i]!) !== figureKey(pages[i - 1]!)) continue;
+      holds += 1;
+      const changed = pages[i]!.sentences.filter((s, k) => s !== pages[i - 1]!.sentences[k]).length;
+      assert.ok(changed >= 2, `${culture} day ${i} changes only ${changed} sentence(s)`);
+    }
+  }
+  assert.ok(holds > 0, "the window holds at least one figure across two days");
+});
+
+test("the daily message is a strict subset of the decree, in the decree's order", () => {
+  for (const culture of CULTURES) {
+    const chart = chartWith("sun", "mars", 60.3);
+    const decree = composeDecree(culture, chart);
+    const message = composeDailyMessage(culture, chart);
+    assert.equal(message.headline, decree.headline);
+    const some = sentences(message.body);
+    assert.ok(some.length < decree.sentences.length, "a message is shorter than the page");
+    assert.deepEqual(some, decree.sentences.filter((s) => some.includes(s)), `${culture}: ${message.body}`);
+  }
+});
+
+test("the Do and Don't lists come from the bodies of the day's figures", () => {
+  for (const culture of CULTURES) {
+    const reg = PERMISSIONS_REGISTER[culture];
+    // A day of favor: the headline figure's bodies lead the proceed column,
+    // the second figure's lead the refrain column.
+    const favor = composeDecree(culture, chartWith("sun", "mars", 60));
+    const lists = dayPermissions(culture, favor.figures);
+    assert.equal(lists.proceed.length, 4);
+    assert.equal(lists.refrain.length, 4);
+    assert.deepEqual(lists.proceed.slice(0, 2), [reg.sun.proceed[0], reg.mars.proceed[0]]);
+    const second = favor.figures[1]!;
+    assert.deepEqual(lists.refrain.slice(0, 2), [reg[second.a].refrain[0], reg[second.b].refrain[0]]);
+    // A day of trial swaps them.
+    const trial = composeDecree(culture, chartWith("sun", "mars", 90));
+    const swapped = dayPermissions(culture, trial.figures);
+    assert.deepEqual(swapped.refrain.slice(0, 2), [reg.sun.refrain[0], reg.mars.refrain[0]]);
+    // The day turns which of each body's three items leads.
+    const nextDay = dayPermissions(culture, favor.figures, 1);
+    assert.deepEqual(nextDay.proceed.slice(0, 2), [reg.sun.proceed[1], reg.mars.proceed[1]]);
+    assert.notDeepEqual(nextDay, lists);
+  }
+});
+
+test("each culture's day page for 2026-09-29 matches its golden", () => {
+  for (const culture of CULTURES) {
+    const d = composeDayPage(culture, new Date("2026-09-29T00:00:00Z"));
+    const golden = GOLDEN_2026_09_29[culture];
+    assert.equal(d.headline, golden.headline, culture);
+    assert.equal(d.evidence, golden.evidence, culture);
+    assert.equal(bodyOf(d), golden.paragraph, culture);
+  }
+});
+
+test("the week leads each row with its tightest figure, and a held figure says so", () => {
+  for (let week = 0; week < 8; week += 1) {
+    const monday = new Date(2026, 8, 7 + week * 7);
+    for (const culture of CULTURES) {
+      const days = buildWeekDays(culture, monday, null);
+      days.forEach((day, i) => {
+        if (day.shorthand.kind !== "aspect") return;
+        const { a, aspect, b } = day.shorthand;
+        const prev = days[i - 1]?.shorthand;
+        const held = prev?.kind === "aspect" && prev.a === a && prev.b === b && prev.aspect === aspect;
+        assert.equal(
+          day.headline,
+          held ? DECREE_BANKS[culture].holds : DECREE_BANKS[culture].headlines[aspect][headlineBody(a, b).body],
+        );
+        const line = day.line.toLowerCase();
+        for (const body of [a, b]) {
+          assert.ok(line.includes(DEITY_DOMAINS[culture][body].toLowerCase()), `${culture}: "${day.line}" lacks ${body}`);
+        }
+        assert.equal(sentences(day.line).length, 2, `${culture}: a week line is the meaning and the consequence`);
+      });
     }
   }
 });

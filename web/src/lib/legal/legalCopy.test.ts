@@ -41,6 +41,13 @@ const DOCUMENTS: readonly { name: string; en: LegalCopy; fr: LegalCopy }[] = [
 
 const tokensIn = (text: string): string[] => text.match(/\{[a-zA-Z]+\}/g) ?? [];
 
+test("each version declares its own language, so a French page is not read as English", () => {
+  for (const { name, en, fr } of DOCUMENTS) {
+    assert.equal(en.lang, "en-CA", `${name}: English version`);
+    assert.equal(fr.lang, "fr-CA", `${name}: French version`);
+  }
+});
+
 test("both versions have the same sections in the same order", () => {
   for (const { name, en: EN, fr: FR } of DOCUMENTS) {
     assert.equal(

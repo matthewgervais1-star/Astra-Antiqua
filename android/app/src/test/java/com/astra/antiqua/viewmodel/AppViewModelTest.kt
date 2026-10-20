@@ -91,6 +91,34 @@ class AppViewModelTest {
     }
 
     @Test
+    fun `choosing a culture with a kept chart and a completed flow goes to the dashboard`() = runTest(dispatcher) {
+        // The strike's return: the device chart and the flag are kept.
+        val settings = FakeSettings(AncientCulture.ROME, onboardingCompleted = true)
+        val model = AppViewModel(settings, FakeProfiles(aProfile()))
+        model.start()
+        advanceUntilIdle()
+        model.returnToCultureSelection()
+        assertEquals(AppPhase.CULTURE_SELECTION, model.currentPhase.value)
+
+        model.selectCulture(AncientCulture.CARTHAGE)
+        advanceUntilIdle()
+
+        assertEquals(AncientCulture.CARTHAGE, settings.storedCulture())
+        assertEquals(AppPhase.MAIN_DASHBOARD, model.currentPhase.value)
+    }
+
+    @Test
+    fun `choosing a culture with a chart but no completed flow goes to the birth details`() = runTest(dispatcher) {
+        val settings = FakeSettings(onboardingCompleted = false)
+        val model = AppViewModel(settings, FakeProfiles(aProfile()))
+
+        model.selectCulture(AncientCulture.EGYPT)
+        advanceUntilIdle()
+
+        assertEquals(AppPhase.ONBOARDING, model.currentPhase.value)
+    }
+
+    @Test
     fun `switching culture later does not send the reader back to the birth form`() = runTest(dispatcher) {
         val settings = FakeSettings(AncientCulture.ROME, onboardingCompleted = true)
         val model = AppViewModel(settings, FakeProfiles(aProfile()))

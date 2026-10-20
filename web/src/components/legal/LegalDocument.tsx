@@ -72,7 +72,7 @@ export function LegalDocument({
   const sections = [...copy.sections, ...extraSections];
 
   return (
-    <NaveShell context={copy.context}>
+    <NaveShell context={copy.context} lang={copy.lang}>
       <NaveHead kicker={copy.context}>{copy.heading}</NaveHead>
 
       <div className="mx-auto flex max-w-[560px] flex-col gap-11">
@@ -88,7 +88,7 @@ export function LegalDocument({
             {crossAfter}
           </p>
           <p className={PROSE}>
-            <Link href={copy.otherLanguageHref} className="underline underline-offset-4">
+            <Link href={copy.otherLanguageHref} lang={copy.lang === "fr-CA" ? "en-CA" : "fr-CA"} className="underline underline-offset-4">
               {copy.otherLanguageLabel}
             </Link>
           </p>

@@ -11,7 +11,7 @@ export interface VotiveProps {
  */
 export function Votive({ children }: VotiveProps) {
   return (
-    <div className="mx-auto max-w-[560px] whitespace-pre-line border-y border-rule py-4 text-center font-display text-[14px] leading-[1.6] tracking-[0.14em] text-accent">
+    <div className="mx-auto max-w-[560px] whitespace-pre-line border-y border-rule py-4 text-center font-display text-display-xs leading-[1.6] tracking-[0.14em] text-accent">
       {children}
     </div>
   );

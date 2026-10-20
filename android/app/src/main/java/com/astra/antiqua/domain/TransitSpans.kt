@@ -35,6 +35,13 @@ data class TransitSpan(
 /** A natal point a transit can be measured against. */
 data class NatalPoint(val key: String, val longitude: Double)
 
+/** The natal Sun, Moon and Ascendant, the points the long transits are walked against. */
+fun natalPointsOf(chart: NatalChartData): List<NatalPoint> = buildList {
+    chart.planets[Planet.SUN]?.let { add(NatalPoint("sun", it.longitude)) }
+    chart.planets[Planet.MOON]?.let { add(NatalPoint("moon", it.longitude)) }
+    add(NatalPoint("asc", chart.ascendant))
+}
+
 /**
  * The five slow bodies. Anything faster crosses a natal degree so often that
  * a span stops meaning anything.

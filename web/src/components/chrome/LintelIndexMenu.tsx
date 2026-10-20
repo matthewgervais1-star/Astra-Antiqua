@@ -58,7 +58,7 @@ export function LintelIndexMenu({
         aria-expanded={open}
         aria-controls="lintel-index-panel"
         aria-label={open ? "Close index" : "Open index"}
-        className="font-display text-[12px] tracking-[0.22em] text-bone/60 hover:text-bone"
+        className="font-mono text-data-s tracking-microcopy text-bone/60 hover:text-bone"
       >
         INDEX {open ? "▴" : "▾"}
       </button>
@@ -77,7 +77,7 @@ export function LintelIndexMenu({
                   onClick={() => setOpen(false)}
                   aria-current={isActive ? "page" : undefined}
                   className={cn(
-                    "border-b border-rule-row py-3 font-display text-[13px] tracking-[0.16em] last:border-b-0",
+                    "border-b border-rule-row py-3 font-mono text-data-s tracking-microcopy last:border-b-0",
                     isActive ? "text-accent" : "text-bone/80 hover:text-bone",
                   )}
                 >

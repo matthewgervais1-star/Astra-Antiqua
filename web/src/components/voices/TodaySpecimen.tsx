@@ -2,8 +2,7 @@
 
 import { useMemo } from "react";
 import type { Culture } from "@/data/cultures";
-import { computeChart } from "@/lib/ephemeris";
-import { composeDecree } from "@/lib/decree";
+import { composeDayPage } from "@/lib/decree";
 
 export interface TodaySpecimenProps {
   culture: Culture;
@@ -15,15 +14,14 @@ function firstSentence(text: string): string {
 }
 
 /**
- * A live specimen decree, computed on the client for the visitor's own clock:
- * today's sky read in this culture's voice, exactly the way the day's nave
- * decree is composed, cut to a headline and its first sentence.
+ * A live specimen decree, computed on the client: the sky at 00:00 UTC on the
+ * visitor's current UTC day, read in this culture's voice exactly the way the
+ * day's nave decree is composed, cut to a headline and its first sentence.
  */
 export function TodaySpecimen({ culture }: TodaySpecimenProps) {
   const specimen = useMemo(() => {
     const now = new Date();
-    const chart = computeChart(now);
-    const reading = composeDecree(culture, chart);
+    const reading = composeDayPage(culture, now);
     return {
       headline: reading.headline,
       sentence: firstSentence(reading.paragraphs[0] ?? ""),
