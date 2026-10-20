@@ -79,7 +79,7 @@ test("heading forms resolve to the strings the site prints", () => {
 test("no entry carries an em dash", () => {
   for (const { label, form } of allForms()) {
     for (const text of [form.en, form.fr, form.source, form.note ?? ""]) {
-      assert.doesNotMatch(text, /—/, `${label} carries an em dash`);
+      assert.doesNotMatch(text, /\u2014/, `${label} carries an em dash`);
     }
   }
 });
