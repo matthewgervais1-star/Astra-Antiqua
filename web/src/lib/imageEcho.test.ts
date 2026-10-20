@@ -1,12 +1,18 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { composeDayPage } from "@/lib/decree";
+import { composeDayPage, dayFigures } from "@/lib/decree";
 import { composeDiveDeeperForDay } from "@/lib/diveDeeper";
 import { DIVE_DEEPER_BANKS } from "@/data/diveDeeperBanks";
 import { DEITY_DOMAINS } from "@/data/deityDomains";
-import { CULTURES, type Culture } from "@/data/cultures";
+import { CULTURES, PLANETS, type Culture, type Planet } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import { BASE_440C3AB } from "@/lib/imageEcho.fixture";
+import { composeFigurePage, composeSpanFigure, figureId, type FigureAnatomy, type NatalPoints } from "@/lib/figureReading";
+import { computeChart } from "@/lib/ephemeris";
+import { FIGURE_BANKS } from "@/data/figureBanks";
+import { ASPECT_RULES, ZODIAC_SIGNS } from "@/data/sampleChart";
+import { signPhraseProse } from "@/components/transits/spanDisplay";
+import type { SlowBody } from "@/data/transitSpine";
 
 /**
  * Each culture's image words: the institution's nouns its banks draw on. A
@@ -211,4 +217,70 @@ test("over 2026, no content word repeats on more Egypt pages than it did at 440c
   if (process.env.ECHO_DUMP) console.log(JSON.stringify(counts));
   const over = Object.entries(counts).filter(([w, n]) => n > (BASE_440C3AB[w] ?? 0)).map(([w, n]) => `${w} ${n} > ${BASE_440C3AB[w] ?? 0}`);
   assert.deepEqual(over, []);
+});
+
+/**
+ * Every Egypt figure page prints the river twice by design: in the
+ * recurrence line ("comes round on the river again") and in the section
+ * title ("HOW THIS PLAYS OUT ON THE RIVER"). No other line on the page may
+ * name the river family, or the page names the river a third time.
+ */
+function figureLines(a: FigureAnatomy & { headline: string; evidence?: string; bridge?: string | null }): string[] {
+  return [
+    a.headline,
+    a.evidence ?? "",
+    a.bridge ?? "",
+    a.moveOne,
+    a.moveTwo,
+    ...a.parts.map((p) => p.phrase),
+    a.actLine,
+    ...a.manifestations,
+    ...a.cards.flatMap((c) => [c.title, c.source]),
+    a.lesson,
+  ];
+}
+
+/** The sign names ("the Water-Bearer") are the site's labels for the zodiac, not a bank's image, and are taken out first. */
+const SIGN_NAMES = ZODIAC_SIGNS.map(signPhraseProse);
+
+const riverWords = (lines: readonly string[]): string[] =>
+  lines.filter((line) => {
+    const bare = SIGN_NAMES.reduce((l, sign) => l.split(sign).join(""), line);
+    return (bare.match(/[A-Za-z']+/g) ?? []).some((w) => stemOf("egypt", w) === "river");
+  });
+
+test("the fixed Egypt figure-page lines name the river, and only they do", () => {
+  const bank = FIGURE_BANKS.egypt;
+  assert.equal(riverWords([bank.recurrenceFrame, bank.recurrenceIrregular, bank.playsOutTitle]).length, 3);
+});
+
+test("over 2026, an Egypt fast-figure page names the river only in its recurrence line and title", () => {
+  const found = new Set<string>();
+  for (const date of YEAR_2026) {
+    const day = date.toISOString().slice(0, 10);
+    for (const f of dayFigures(computeChart(date))) {
+      const page = composeFigurePage("egypt", day, figureId(f), null);
+      if (!page) continue;
+      for (const line of riverWords(figureLines(page))) found.add(line);
+    }
+  }
+  assert.deepEqual([...found].sort(), []);
+});
+
+test("every Egypt long-transit figure names the river only in its recurrence line and title", () => {
+  const sky = computeChart(new Date(Date.UTC(2026, 0, 1)));
+  const chart = {} as Record<Planet, number>;
+  PLANETS.forEach((p, i) => (chart[p] = (sky[p] + 17 + i * 31) % 360));
+  const natal: NatalPoints = { chart, ascendant: 200 };
+  const slow: readonly SlowBody[] = ["jupiter", "saturn", "uranus", "neptune", "pluto"];
+  const found = new Set<string>();
+  for (const body of slow) {
+    for (const { kind } of ASPECT_RULES) {
+      for (const natalKey of ["sun", "moon", "asc", "mc"]) {
+        const span = composeSpanFigure("egypt", { transitPlanet: body, natalKey, natalLongitude: 40, aspectKind: kind }, natal, 40, new Date(Date.UTC(2026, 5, 1)));
+        for (const line of riverWords(figureLines(span))) found.add(line);
+      }
+    }
+  }
+  assert.deepEqual([...found].sort(), []);
 });

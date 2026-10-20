@@ -78,7 +78,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
         sun: "Lay a mudbrick for the room you talk about most.",
         moon: "Say what you feel over bread and beer on your own reed mat.",
         mercury: "Write the letter on fresh papyrus and carry it yourself.",
-        venus: "Bring the one you love down to the riverbank and tell them.",
+        venus: "Take the one you love aside and tell them.",
         mars: "Aim your anger at one field of reeds and clear it.",
       },
       sextile: {
@@ -90,7 +90,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       },
       square: {
         sun: "Finish the one task the overseer will check.",
-        moon: "Do not act on the mood you wake up with before the sun is high over the Nile.",
+        moon: "Do not act on the mood you wake up with before the sun is high.",
         mercury: "Read the papyrus twice before you answer it.",
         venus: "Do not haggle with your beloved as you would over linen.",
         mars: "Stay still until your blood cools.",
@@ -98,7 +98,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       trine: {
         sun: "Start the hard job while the light holds.",
         moon: "Let the scribe count the grain tomorrow, and rest tonight.",
-        mercury: "Say it plainly and the river carries it.",
+        mercury: "Say it plainly and no one can mistake it.",
         venus: "Sit by the lotus pool and let someone else pour the beer.",
         mars: "Push the barge off the mud while your arms are strong.",
       },
@@ -106,7 +106,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
         sun: "You cannot hold the shrine door open and bolt it, so pick one.",
         moon: "You and your household are at odds tonight.",
         mercury: "The scribe at the other desk copies your words wrong.",
-        venus: "Love asks you to cross the river this once.",
+        venus: "Love asks you to yield this once.",
         mars: "Let whoever is shouting in the street wear themselves out.",
       },
     },
@@ -128,7 +128,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
         saturn: "A duty you put off arrives in full.",
         uranus: "Your plans change shape overnight.",
         neptune: "A dream comes true by daylight.",
-        pluto: "Something buried comes up with the flood.",
+        pluto: "Something buried comes up under the hoe.",
       },
       sextile: {
         sun: "A small effort earns full pay.",

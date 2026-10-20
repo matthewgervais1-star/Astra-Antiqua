@@ -95,10 +95,10 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
   egypt: {
     slowHeadlines: {
       conjunction: {
-        jupiter: "Build the granary wider, because this year's flood runs high.",
+        jupiter: "Build the granary wider, because this year's harvest runs heavy.",
         saturn: "Dig down to bedrock before you raise one more wall.",
-        uranus: "Your old way of doing things goes out with this flood.",
-        neptune: "Keep your feet on the dike while the water covers the fields.",
+        uranus: "Your old way of doing things goes out with the old year.",
+        neptune: "Keep your feet on the dike while the fields turn to mud.",
         pluto: "Open the sealed storeroom and look at what you put there.",
       },
       sextile: {
@@ -112,11 +112,11 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
         jupiter: "Measure the harvest before you promise any of it away.",
         saturn: "The wall you built on sand has to come down.",
         uranus: "The canal you dug is changing course, and nobody can stop it.",
-        neptune: "Check every measure twice while the river runs high and muddy.",
+        neptune: "Check every measure twice while the dust hangs in the air.",
         pluto: "Something you buried long ago is coming up with the silt.",
       },
       trine: {
-        jupiter: "Plant the second field, since the river is generous this year.",
+        jupiter: "Plant the second field, since the soil is generous this year.",
         saturn: "Carve your name on the stone while your hand is steady.",
         uranus: "Change the line of your canal, and the land drinks.",
         neptune: "Spend your evenings at the temple and sleep well after.",
@@ -124,17 +124,17 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       },
       opposition: {
         jupiter: "Your patron wants a share of the harvest you grew.",
-        saturn: "The tax assessor stands on the far bank with his measuring rope.",
-        uranus: "A neighbor over the water is moving your boundary stone.",
-        neptune: "The field on the other bank looks richer than it is.",
-        pluto: "An old claim on your house comes over the river.",
+        saturn: "The tax assessor stands at the far edge of your field with his measuring rope.",
+        uranus: "The man who farms beside you is moving your boundary stone.",
+        neptune: "The field next door looks richer than it is.",
+        pluto: "An old claim on your house is carried in under seal.",
       },
     },
     shortRelations: {
       conjunction: "cannot be parted from",
       sextile: "can lean on",
       square: "must haul against",
-      trine: "can ride the current with",
+      trine: "can keep step with",
       opposition: "must be weighed against",
     },
     natalFrame: "Your birth set {deity} in the {sign}: {clause}.",
@@ -151,10 +151,10 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
     recurrenceIrregular: "This figure keeps no season on the river: it can come back within a decan or stay away for most of a year.",
     playsOutTitle: "HOW THIS PLAYS OUT ON THE RIVER",
     slowActs: {
-      jupiter: "{god} sends the flood a cubit higher, and the granary scribes call for more jars.",
+      jupiter: "{god} heaps the threshing floor a cubit higher, and the scribes call for more jars.",
       saturn: "{god} lies still under the field, and the surveyor walks the old boundary again.",
       uranus: "{god} spreads her body over the roof beams, and the old plaster comes down.",
-      neptune: "{god} wells up under the fields, and the boundary stones go under water.",
+      neptune: "{god} wells up from below, and the boundary stones sink out of sight.",
       pluto: "{god} sits in judgment in the lower hall, and the scribe reads out what you buried.",
     },
     manifestations: [
@@ -244,7 +244,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       jupiter: [
         { kind: "consider", title: "The ram-headed sphinxes that line Amun's avenue at Karnak.", source: "Karnak, the western dromos of the Amun precinct." },
         { kind: "read", title: "The Leiden hymns, a cycle of praises to Amun.", source: "Papyrus Leiden I 350, Rijksmuseum van Oudheden." },
-        { kind: "keep", title: "Bring flowers to a family tomb, as Thebans did when Amun crossed the river.", source: "The Beautiful Festival of the Valley, in New Kingdom Theban tomb paintings." },
+        { kind: "keep", title: "Bring flowers to a family tomb, as Thebans did at the Feast of the Valley.", source: "The Beautiful Festival of the Valley, in New Kingdom Theban tomb paintings." },
       ],
       saturn: [
         { kind: "consider", title: "The Greenfield Papyrus, where Geb lies under the arched sky.", source: "British Museum EA 10554." },
@@ -257,9 +257,9 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
         { kind: "keep", title: "Keep the five days outside the year apart, as the birthdays of Nut's children.", source: "The epagomenal days of the civil calendar, and Plutarch, On Isis and Osiris 12." },
       ],
       neptune: [
-        { kind: "consider", title: "The sacred lake at Karnak, the temple's own piece of the first water.", source: "Karnak, the lake of the Amun precinct." },
+        { kind: "consider", title: "The sacred lake at Karnak, the temple's own piece of Nun, the deep before creation.", source: "Karnak, the lake of the Amun precinct." },
         { kind: "read", title: "The Book of the Heavenly Cow, where Ra takes counsel with Nun.", source: "The gilded shrine of Tutankhamun, and the tomb of Seti I (KV17)." },
-        { kind: "keep", title: "Wash in cold water before you begin, as the priests did twice a day.", source: "Herodotus, Histories 2.37." },
+        { kind: "keep", title: "Rinse your hands and face before you begin, as the priests did twice a day.", source: "Herodotus, Histories 2.37." },
       ],
       pluto: [
         { kind: "consider", title: "A corn mummy, the grain-filled Osiris buried at the Khoiak festival.", source: "Late Period corn mummies, and the Khoiak rites carved at Dendera." },
