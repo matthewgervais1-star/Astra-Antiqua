@@ -289,7 +289,7 @@ export const DEITY_SCRIPT_FORMS: Readonly<Record<Culture, Readonly<Record<Planet
       script: "𐤉𐤌",
       en: "Yam",
       fr: "Yam",
-      source: "KTU 1.2 III-IV (Ugaritic zbl ym); Philo of Byblos, via Eusebius, Praeparatio evangelica 1.10, for the Phoenician tradition",
+      source: "KTU 1.2 III-IV (Ugaritic zbl ym); Philo of Byblos, via Eusebius, Praeparatio evangelica 1.10 (Greek Pontos), for the Phoenician tradition",
       note: "No Punic text names the god. The script is the Phoenician alphabet's rendering of the Northwest Semitic name ym, as Ugarit spells it; it is not an attested Punic spelling.",
     },
     pluto: {
@@ -386,7 +386,7 @@ export const CULTURE_NAME_FORMS: Readonly<Record<Culture, ScriptForm>> = {
     en: "Canaan",
     fr: "Canaan",
     source: "No citable Ugaritic spelling of kn'n or kn'ny (checked 2026-10-20)",
-    note: "A script form must read what it resolves to, so ugrt (Ugarit) cannot stand for Canaan. The gentilic kn'ny is reported in an administrative text, but I could not confirm its KTU number or spelling, so the heading has no script form.",
+    note: "A script form must read what it resolves to, so ugrt (Ugarit) cannot stand for Canaan. The gentilic kn'ny is reported in an administrative text, but its KTU number and spelling could not be confirmed, so the heading has no script form.",
   },
   carthage: {
     script: "𐤒𐤓𐤕𐤇𐤃𐤔𐤕",
