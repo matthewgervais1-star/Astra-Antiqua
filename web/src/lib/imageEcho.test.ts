@@ -11,7 +11,8 @@ import { composeFigurePage, composeSpanFigure, figureId, type FigureAnatomy, typ
 import { computeChart } from "@/lib/ephemeris";
 import { FIGURE_BANKS } from "@/data/figureBanks";
 import { ASPECT_RULES, ZODIAC_SIGNS } from "@/data/sampleChart";
-import { signPhraseProse } from "@/components/transits/spanDisplay";
+import { signPhraseProse, spanTone } from "@/components/transits/spanDisplay";
+import { NATAL_POINT_CLOSING, TOUCHES_ASC, TOUCHES_MC, TOUCHES_REGISTER_LINE, WHERE_BEGINS_CADENCE } from "@/components/transits/spineTemplates";
 import { TRANSIT_SPINE, type SlowBody } from "@/data/transitSpine";
 
 /**
@@ -220,10 +221,10 @@ test("over 2026, no content word repeats on more Egypt pages than it did at 440c
 });
 
 /**
- * Every Egypt figure page prints the river twice by design: in the
- * recurrence line ("comes round on the river again") and in the section
- * title ("HOW THIS PLAYS OUT ON THE RIVER"). No other line on the page may
- * name the river family, or the page names the river a third time.
+ * The lines an Egypt figure page prints, as a reader hears them. The section
+ * title ("HOW THIS PLAYS OUT ON THE RIVER") is the heading the spec names and
+ * is not read. The recurrence line is read. Card titles are read; card
+ * sources cite attested practice and are not.
  */
 function figureLines(a: FigureAnatomy & { headline: string; evidence?: string; bridge?: string | null }): string[] {
   return [
@@ -233,9 +234,10 @@ function figureLines(a: FigureAnatomy & { headline: string; evidence?: string; b
     a.moveOne,
     a.moveTwo,
     ...a.parts.map((p) => p.phrase),
+    a.recurrence,
     a.actLine,
     ...a.manifestations,
-    ...a.cards.flatMap((c) => [c.title, c.source]),
+    ...a.cards.map((c) => c.title),
     a.lesson,
   ];
 }
@@ -249,60 +251,99 @@ const riverHits = (line: string): string[] => {
   return (bare.match(/[A-Za-z']+/g) ?? []).filter((w) => stemOf("egypt", w) === "river");
 };
 
-const riverWords = (lines: readonly string[]): string[] => lines.filter((line) => riverHits(line).length > 0);
-
-test("the fixed Egypt figure-page lines name the river, and only they do", () => {
-  const bank = FIGURE_BANKS.egypt;
-  assert.equal(riverWords([bank.recurrenceFrame, bank.recurrenceIrregular, bank.playsOutTitle]).length, 3);
-});
-
-test("over 2026, an Egypt fast-figure page names the river only in its recurrence line and title", () => {
-  const found = new Set<string>();
-  for (const date of YEAR_2026) {
-    const day = date.toISOString().slice(0, 10);
-    for (const f of dayFigures(computeChart(date))) {
-      const page = composeFigurePage("egypt", day, figureId(f), null);
-      if (!page) continue;
-      for (const line of riverWords(figureLines(page))) found.add(line);
-    }
-  }
-  assert.deepEqual([...found].sort(), []);
-});
-
-test("every Egypt long-transit figure names the river only in its recurrence line and title", () => {
+/** A reader's chart for the natal and long-transit pages: the 2026 sky turned by an uneven step per body. */
+const SAMPLE_NATAL: NatalPoints = (() => {
   const sky = computeChart(new Date(Date.UTC(2026, 0, 1)));
   const chart = {} as Record<Planet, number>;
   PLANETS.forEach((p, i) => (chart[p] = (sky[p] + 17 + i * 31) % 360));
-  const natal: NatalPoints = { chart, ascendant: 200 };
-  const slow: readonly SlowBody[] = ["jupiter", "saturn", "uranus", "neptune", "pluto"];
-  const found = new Set<string>();
-  for (const body of slow) {
-    for (const { kind } of ASPECT_RULES) {
-      for (const natalKey of ["sun", "moon", "asc", "mc"]) {
-        const span = composeSpanFigure("egypt", { transitPlanet: body, natalKey, natalLongitude: 40, aspectKind: kind }, natal, 40, new Date(Date.UTC(2026, 5, 1)));
-        for (const line of riverWords(figureLines(span))) found.add(line);
+  return { chart, ascendant: 200 };
+})();
+
+const SLOW: readonly SlowBody[] = ["jupiter", "saturn", "uranus", "neptune", "pluto"];
+
+/**
+ * Every Egypt figure page a reader can reach, as the lines it prints. Fast
+ * pages: each 2026 day's figures through composeFigurePage, without a chart
+ * and with SAMPLE_NATAL. Long-transit pages (TransitDetail): every slow body,
+ * kind and natal point through composeSpanFigure on three consecutive days,
+ * one per relation variant, with the spine lines the page prints beside the
+ * figure: the changing paragraph and its closing, the WHERE IT BEGINS
+ * cadence, the WHAT IT TOUCHES line, and the leaves line for the span's tone.
+ * Not read: the dated narrative and the house sentence (no bank image), and
+ * the votive closing, a small-caps label.
+ */
+function egyptFigurePages(): { kind: "fast" | "long"; where: string; lines: string[] }[] {
+  const pages: { kind: "fast" | "long"; where: string; lines: string[] }[] = [];
+  for (const date of YEAR_2026) {
+    const day = date.toISOString().slice(0, 10);
+    for (const f of dayFigures(computeChart(date))) {
+      for (const natal of [null, SAMPLE_NATAL]) {
+        const page = composeFigurePage("egypt", day, figureId(f), natal);
+        if (page) pages.push({ kind: "fast", where: `${day} ${page.id}${page.natal ? " (natal)" : ""}`, lines: figureLines(page) });
       }
     }
   }
-  assert.deepEqual([...found].sort(), []);
+  for (const body of SLOW) {
+    const spine = TRANSIT_SPINE.egypt[body];
+    for (const { kind } of ASPECT_RULES) {
+      const tone = spanTone({ aspectKind: kind, transitPlanet: body });
+      for (const natalKey of ["sun", "moon", "asc", "mc"] as const) {
+        const closing =
+          natalKey === "asc" || natalKey === "mc"
+            ? NATAL_POINT_CLOSING.egypt[natalKey]
+            : `It is set against your ${DEITY_MATRIX.egypt[natalKey].name}, ${DEITY_MATRIX.egypt[natalKey].epithet}.`;
+        const touches = natalKey === "asc" ? TOUCHES_ASC.egypt : natalKey === "mc" ? TOUCHES_MC.egypt : TOUCHES_REGISTER_LINE.egypt;
+        for (const offset of [0, 1, 2]) {
+          const now = new Date(Date.UTC(2026, 5, 1) + offset * DAY_MS);
+          const span = composeSpanFigure("egypt", { transitPlanet: body, natalKey, natalLongitude: 40, aspectKind: kind }, SAMPLE_NATAL, 40, now);
+          pages.push({
+            kind: "long",
+            where: `${body} ${kind} ${natalKey} day ${offset}`,
+            lines: [...figureLines(span), `${spine.changing} ${closing}`, WHERE_BEGINS_CADENCE.egypt, touches, spine.leaves[tone]],
+          });
+        }
+      }
+    }
+  }
+  return pages;
+}
+
+const EGYPT_FIGURE_PAGES = egyptFigurePages();
+
+/** The lines of every page that names a counted word more than once in all, each line once. */
+function pagesOver(count: (line: string) => number): string[] {
+  const found = new Set<string>();
+  for (const { kind, lines } of EGYPT_FIGURE_PAGES) {
+    if (lines.reduce((n, line) => n + count(line), 0) <= 1) continue;
+    for (const line of lines) if (count(line) > 0) found.add(`${kind}: ${line}`);
+  }
+  return [...found].sort();
+}
+
+test("the Egypt recurrence lines leave the river to the section title", () => {
+  const bank = FIGURE_BANKS.egypt;
+  assert.deepEqual([bank.recurrenceFrame, bank.recurrenceIrregular].flatMap(riverHits), []);
+  assert.ok(riverHits(bank.playsOutTitle).length > 0);
+});
+
+test("an Egypt figure page names the river family in at most one line, title excepted", () => {
+  assert.ok(EGYPT_FIGURE_PAGES.some((p) => p.kind === "fast") && EGYPT_FIGURE_PAGES.some((p) => p.kind === "long"));
+  assert.deepEqual(pagesOver((line) => riverHits(line).length), []);
 });
 
 /**
  * The long-transit page (TransitDetail) prints the spine's "changing"
  * paragraph and the tense and easeful "what it leaves behind" lines beside
- * the figure's recurrence line and title. Those lines may not name the river
- * either, with one documented exception: Neptune's paragraph sets Nun, the
- * water before creation, against the river, which gives and can be measured.
- * That contrast is the theology of the passage and keeps exactly one
- * river-family word. The votive closings are small-caps labels and are not
- * read.
+ * the figure. Those lines name no river, with one documented exception:
+ * Neptune's paragraph sets Nun, the water before creation, against the
+ * river, which gives and can be measured. That contrast is the theology of
+ * the passage and keeps exactly one river-family word, the one the Neptune
+ * page may carry; the page test above holds each page's total. The votive
+ * closings are small-caps labels and are not read.
  */
 test("every Egypt long-transit spine line names the river only where Nun is set against it", () => {
-  const bank = FIGURE_BANKS.egypt;
-  const fixed = [bank.recurrenceFrame, bank.playsOutTitle];
-  const slow: readonly SlowBody[] = ["jupiter", "saturn", "uranus", "neptune", "pluto"];
   const over: string[] = [];
-  for (const body of slow) {
+  for (const body of SLOW) {
     const spine = TRANSIT_SPINE.egypt[body];
     const allowed = body === "neptune" ? 1 : 0;
     const changing = riverHits(spine.changing);
@@ -311,9 +352,6 @@ test("every Egypt long-transit spine line names the river only where Nun is set 
       const hits = riverHits(spine.leaves[tone]);
       if (hits.length > 0) over.push(`${body}.leaves.${tone} [${hits.join(", ")}]: ${spine.leaves[tone]}`);
     }
-    const page = [...fixed, spine.changing, spine.leaves.tension, spine.leaves.ease];
-    const total = page.reduce((n, line) => n + riverHits(line).length, 0);
-    if (total !== fixed.length + allowed) over.push(`${body} page names the river ${total} times`);
   }
   assert.deepEqual(over, []);
 });

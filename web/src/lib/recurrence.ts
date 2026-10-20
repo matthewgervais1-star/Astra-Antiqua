@@ -109,7 +109,7 @@ export function recurrenceInterval(culture: Culture, days: number): string {
   return `about every ${numberWords(Math.round(days / YEAR_DAYS))} years`;
 }
 
-/** "This figure comes round on the river again about every three decans." Null days: the culture's irregular line. */
+/** "This figure comes round again about every three decans." Null days: the culture's irregular line. */
 export function composeRecurrence(culture: Culture, days: number | null): string {
   const bank = FIGURE_BANKS[culture];
   return days == null ? bank.recurrenceIrregular : bank.recurrenceFrame.replace("{interval}", recurrenceInterval(culture, days));
