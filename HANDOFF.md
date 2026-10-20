@@ -9,19 +9,14 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   head built only in CI). `shared/content/*.json` is generated from web; never hand-edit it.
 
 ## Where things stand
-- FACT (GitHub PR #2): `claude/planner-buildout-completion-495257` to `master`, CI green,
-  mergeable, not merged. It closed every plan gap that needed no owner decision.
-- FACT (`git log`): `claude/reading-anatomy-495257`, stacked on PR #2's head, unpushed, holds
+- FACT (GitHub PR #2): plan-gap branch to `master`, CI green, mergeable, not merged.
+- FACT (GitHub PR #4): `claude/reading-anatomy-495257`, stacked on PR #2's head, holds
   the second wave. Done and reviewed: Tasks 15 to 17 (day page, figure page, dive deeper),
   11 to 14 (archive, rule hex, display-xs 18px, Spectral SC), 18a and 18b (Android sync
   client and screens; Android birth times now use a bundled tz-lookup, as web does).
-- FACT (`task-18c-report.md`, commits 92c04b2 to 86eca0a): Task 18c passed all ten emulator
-  steps and fixed four device defects: TODAY opened the birth form, a recast kept the old
-  chart, placements truncated the minute, the CULTURE row sat off CHANGE's line. 27
-  shots (address redacted) in `docs/design/screenshots/phase13-android-sync/`.
+- FACT (`task-18c-report.md`): 18c passed ten emulator steps, fixed four device defects.
 - FACT (`git log`, 2026-10-08): the 375px sub-bar fix from the session "Fix 375px horizontal
-  scroll on day and week pages" (53addc3, PR #3 to `master`, open) is cherry-picked here as
-  d22b4d6; PR #3 can merge or close, the fix reaches master through this branch either way.
+  scroll on day and week pages" (53addc3, PR #3, merged to `master`) is also cherry-picked here as d22b4d6.
 - FACT (ledger, 2026-10-08): whole-branch review of 9804a4e..1d930a3 found 0 Critical,
   1 Important (Room 2->3 migration kept the guessed-zone instant); fixed 1e048b1..44bc3e3.
   Cleanup done and reviewed: C1 LICENCES screen (6292fea); C2 /charts header, /week rows,
@@ -30,9 +25,12 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   (3985cb4..53d42d5, five fix rounds). FACT (ledger, 2026-10-20): final review of
   1d930a3..53d42d5 found 1 Important (river echo in the Egypt transit spine), fixed
   2d16643..65691d1, re-review Approved. At 65691d1: web 112 (95 pass, 17 skipped), Android
-  200/0, dotnet 39/0. Egypt and Canaan device errors follow the owner's guidance, Carthage and
+  200/0, dotnet 39/0. FACT (ledger): two sessions ran this wave in parallel; the second added
+  1c28ac7..3e71306 on top (figure page: river in the title and at most one other line, the
+  recurrence line no longer names it; haul once; headlines hyphenate from 1100px; French legal
+  pages `fr-CA`), re-review clean. At 5105fd9: web 113 (96 pass, 17 skipped), Android 200/0
+  (fresh build), dotnet 39/0. Egypt and Canaan device errors follow the owner's guidance, Carthage and
   Rome approved as written.
-- INFERENCE: the live checkout's older `HANDOFF.md` is replaced by this one on merge.
 
 ## Decisions taken, and why
 - 2026-09-29, owner: rebuild the daily readings to the Co-Star anatomy in five voices (spec
@@ -44,12 +42,14 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   (Room v3). All rulings with their reasons: the ledger and the plan's Rulings section.
 
 ## Pending, in order
-1. FACT (GitHub, 2026-10-20): branch pushed, PR #4 open against PR #2's branch, CI running. Owner merges #2, then #4; #3 can close. Design-system cards pushed to Claude Design 2026-10-20 (26 files, source 4e3c1a5).
+1. FACT (GitHub, 2026-10-20): PR #4 head 3e71306, open against PR #2's branch, CI running.
+   Owner merges #2, then #4 (squash: web tests are red at 1c28ac7..429136c). Claude Design:
+   26 cards pushed from 4e3c1a5, then NaveHead, CenterDecree and specimen.css from 3e71306.
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.
 
 ## Deadlines
-CANNOT CONFIRM: none are recorded in this repo, and the owner has named none in session.
+CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 
 ## Files that matter
 - Plan: `docs/superpowers/plans/2026-09-29-planned-work-closeout.md`. Ledger (git-ignored):
