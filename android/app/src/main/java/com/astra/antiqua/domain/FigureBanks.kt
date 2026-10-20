@@ -21,7 +21,7 @@ object FigureBanks {
             AspectType.CONJUNCTION -> when (body) {
                 Planet.JUPITER -> "Build the granary wider, because this year's harvest runs heavy."
                 Planet.SATURN -> "Dig down to bedrock before you raise one more wall."
-                Planet.URANUS -> "Your old way of doing things goes out with the old year."
+                Planet.URANUS -> "Your old way of doing things goes out with the year."
                 Planet.NEPTUNE -> "Keep your feet on the dike while the fields turn to mud."
                 Planet.PLUTO -> "Open the sealed storeroom and look at what you put there."
                 else -> error("$body has no slowHeadlines line")
@@ -239,7 +239,7 @@ object FigureBanks {
             AspectType.CONJUNCTION -> "cannot be parted from"
             AspectType.SEXTILE -> "can lean on"
             AspectType.SQUARE -> "must haul against"
-            AspectType.TRINE -> "can keep step with"
+            AspectType.TRINE -> "can share a yoke with"
             AspectType.OPPOSITION -> "must be weighed against"
         }
 
@@ -384,7 +384,7 @@ object FigureBanks {
     /** A long transit's act line, per slow body. Slot: {god}. */
     fun slowAct(culture: AncientCulture, body: Planet): String = when (culture) {
         AncientCulture.EGYPT -> when (body) {
-            Planet.JUPITER -> "{god} heaps the threshing floor a cubit higher, and the scribes call for more jars."
+            Planet.JUPITER -> "{god} heaps the grain on the threshing floor a cubit higher, and the scribes call for more jars."
             Planet.SATURN -> "{god} lies still under the field, and the surveyor walks the old boundary again."
             Planet.URANUS -> "{god} spreads her body over the roof beams, and the old plaster comes down."
             Planet.NEPTUNE -> "{god} wells up from below, and the boundary stones sink out of sight."
