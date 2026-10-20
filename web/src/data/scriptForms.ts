@@ -279,8 +279,7 @@ export const DEITY_SCRIPT_FORMS: Readonly<Record<Culture, Readonly<Record<Planet
       script: "𐤁𐤏𐤋𐤟𐤔𐤌𐤌",
       en: "Baal Shamem",
       fr: "Baal Shamem",
-      source: "KAI 26 A III 18 (Karatepe, bʿl šmm); KAI 4 (Byblos, bʿlšmm)",
-      note: "Phoenician, not Punic: no Carthaginian dedication to the god could be cited.",
+      source: "KAI 78 line 2 (Carthage, lʾdn lbʿl šmm); KAI 26 A III 18 (Karatepe); KAI 4 (Byblos)",
     },
     neptune: {
       script: null,
@@ -344,7 +343,7 @@ export const DEITY_SCRIPT_FORMS: Readonly<Record<Culture, Readonly<Record<Planet
       script: "CAELVS",
       en: "Caelus",
       fr: "Caelus",
-      source: "Ennius, Annales (Saturnus quem Caelus genuit); Cicero, De natura deorum 2.63 and 3.44",
+      source: "Ennius, Annales fr. 27 Warmington (ROL I, via Nonius, who notes Ennius's masculine caelus; Skutsch number not confirmed); Cicero, De natura deorum 2.63 and 3.44",
       note: "Cicero's cases (Caelum, Caeli) do not fix the gender; the masculine nominative rests on the Ennius fragment.",
     },
     neptune: {
@@ -357,7 +356,7 @@ export const DEITY_SCRIPT_FORMS: Readonly<Record<Culture, Readonly<Record<Planet
       script: "DIS PATER",
       en: "Dis Pater",
       fr: "Dis Pater",
-      source: "Cicero, De natura deorum 2.66 (Diti patri dedicata est, qui dives)",
+      source: "Macrobius, Saturnalia 3.9.10 (devotio formula, nominative Dis pater); Cicero, De natura deorum 2.66 (Diti patri dedicata est, qui dives)",
     },
   },
 };
@@ -379,17 +378,17 @@ export const CULTURE_NAME_FORMS: Readonly<Record<Culture, ScriptForm>> = {
     note: "The script reads Hellas.",
   },
   canaan: {
-    script: "𐎜𐎂𐎗𐎚",
+    script: null,
     en: "Canaan",
     fr: "Canaan",
-    source: "KTU 1.6 VI colophon (nqmd mlk ugrt)",
-    note: "The script reads ugrt, Ugarit, the city whose tablets carry this culture. The gentilic kn'ny is too rare to set as the culture's name.",
+    source: "No citable Ugaritic spelling of kn'n or kn'ny (checked 2026-10-20)",
+    note: "A script form must read what it resolves to, so ugrt (Ugarit) cannot stand for Canaan. The gentilic kn'ny is reported in an administrative text, but I could not confirm its KTU number or spelling, so the heading has no script form.",
   },
   carthage: {
     script: "𐤒𐤓𐤕𐤇𐤃𐤔𐤕",
     en: "Carthage",
     fr: "Carthage",
-    source: "Siculo-Punic tetradrachm legend qrtḥdšt (Jenkins, Punic Sicily, SNR 1974-1978)",
+    source: "Siculo-Punic tetradrachm legend qrtḥdšt (Jenkins, Punic Sicily Part 2, SNR 53, 1974, for example no. 37)",
     note: "The script reads qrtḥdšt, Qart-hadasht, the New City.",
   },
   rome: {
