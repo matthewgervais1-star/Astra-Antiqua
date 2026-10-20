@@ -61,7 +61,7 @@ export const DEITY_SCRIPT_FORMS: Readonly<Record<Culture, Readonly<Record<Planet
       en: "Sebegu",
       fr: "Sebegou",
       source: "Neugebauer and Parker, Egyptian Astronomical Texts III (1969), planet lists",
-      note: "The planet name Sbg(w) is attested in the astronomical ceilings, but no sign sequence for it could be confirmed against Neugebauer and Parker or LGG on 2026-10-20. Left null rather than spelled from the transliteration.",
+      note: "The planet name Sbg.w is attested in the planet lists of the Senenmut ceiling, the Ramesseum and Seti I, edited in Neugebauer and Parker, EAT III. No source available on 2026-10-20 gave its signs: the Oxford Research Encyclopedia article The Planets in Ancient Egypt (body text not reachable), skyscript.co.uk Heritage of the Stars ch. 3 (transliteration Sbg only), and the Thesaurus Linguae Aegyptiae (blocks automated access). Left null rather than spelled from the transliteration.",
     },
     venus: {
       script: "𓊨𓏏𓆇𓁐",
@@ -74,7 +74,7 @@ export const DEITY_SCRIPT_FORMS: Readonly<Record<Culture, Readonly<Record<Planet
       en: "Horus the Red",
       fr: "Horus le Rouge",
       source: "Neugebauer and Parker, Egyptian Astronomical Texts III (1969), planet lists",
-      note: "Ḥr dšr is the planet name in the ceilings, but the writing of dšr in those texts (with or without the flamingo G27) could not be confirmed against a source on 2026-10-20. Left null; the falcon alone would misname the planet.",
+      note: "Ḥr dšr, Horus the Red, is mainly a late name for Mars; the earlier lists of Seti I and Ramesses II call him Horus of the Horizon, edited in Neugebauer and Parker, EAT III. No source available on 2026-10-20 gave the signs: the Oxford Research Encyclopedia article The Planets in Ancient Egypt (body text not reachable), skyscript.co.uk Heritage of the Stars ch. 3 (no spelling), and the Thesaurus Linguae Aegyptiae (no Ḥr-dšr lemma found; blocks automated access). Left null; the falcon alone would misname the planet.",
     },
     jupiter: {
       script: "𓇋𓏠𓈖𓁩",
