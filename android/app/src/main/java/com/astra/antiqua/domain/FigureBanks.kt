@@ -238,8 +238,8 @@ object FigureBanks {
         AncientCulture.EGYPT -> when (aspect) {
             AspectType.CONJUNCTION -> "cannot be parted from"
             AspectType.SEXTILE -> "can lean on"
-            AspectType.SQUARE -> "must haul against"
-            AspectType.TRINE -> "can share a yoke with"
+            AspectType.SQUARE -> "must strain against"
+            AspectType.TRINE -> "is at peace with"
             AspectType.OPPOSITION -> "must be weighed against"
         }
 
@@ -357,7 +357,7 @@ object FigureBanks {
 
     /** Slot: {interval}. */
     fun recurrenceFrame(culture: AncientCulture): String = when (culture) {
-        AncientCulture.EGYPT -> "This figure comes round on the river again {interval}."
+        AncientCulture.EGYPT -> "This figure comes round again {interval}."
         AncientCulture.GREECE -> "The tripod hears this figure again {interval}."
         AncientCulture.CANAAN -> "This matter comes before the council again {interval}."
         AncientCulture.CARTHAGE -> "This entry falls due again {interval}."
@@ -366,7 +366,7 @@ object FigureBanks {
 
     /** The line for Mercury with Venus, which keep no steady interval. */
     fun recurrenceIrregular(culture: AncientCulture): String = when (culture) {
-        AncientCulture.EGYPT -> "This figure keeps no season on the river: it can come back within a decan or stay away for most of a year."
+        AncientCulture.EGYPT -> "This figure keeps no season: it can come back within a decan or stay away for most of a year."
         AncientCulture.GREECE -> "The tripod cannot say when this figure comes again: sometimes within days, sometimes not for most of a year."
         AncientCulture.CANAAN -> "This matter keeps no calendar before the council: it can return within days or stay away for most of a year."
         AncientCulture.CARTHAGE -> "This entry has no fixed due date: it can fall again within days or not for most of a year."
