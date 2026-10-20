@@ -1,17 +1,17 @@
-using CoreLocation;
 using Foundation;
+using MapKit;
 
 namespace AstraAntiqua.App.Platforms.iOS;
 
 /// <summary>
 /// The iOS hooks the shared code asks for.
 ///
-/// Place search: one CLGeocoder forward lookup returns the placemark with its
-/// coordinates, its locality and the IANA zone the place keeps, which is what
-/// web resolves with tz-lookup. One request per search, not three, because
-/// Apple throttles geocoding and a throttled zone lookup would fall back to an
-/// estimate. It needs a network and no location permission: it geocodes a
-/// name, never the device.
+/// Place search: one MapKit local search by name. Each result is a map item
+/// carrying its coordinates and the IANA zone the place keeps, which is what
+/// web resolves with tz-lookup. One request per search, because Apple
+/// throttles these and a refused zone would fall back to an estimate. It
+/// needs a network and no location permission: it searches a name, never
+/// the device. (CLGeocoder did the same job and is obsolete from iOS 26.)
 ///
 /// Backups: the birth record's file is excluded from iCloud and device
 /// backups, so the record stays on this phone.
@@ -20,30 +20,35 @@ internal static class IosZoneLookup
 {
     public static void Register()
     {
-        ZoneLookup.Platform = ReverseAsync;
         ZoneLookup.PlatformSearch = SearchAsync;
         AppState.ExcludeFromBackup = Exclude;
     }
 
     private static async Task<PlaceHit?> SearchAsync(string query)
     {
-        using var geocoder = new CLGeocoder();
-        var mark = (await geocoder.GeocodeAddressAsync(query))?.FirstOrDefault();
-        if (mark?.Location is not { } location) return null;
-        var name = string.Join(", ", new[] { mark.Locality ?? mark.Name, mark.Country }
-            .Where(s => !string.IsNullOrWhiteSpace(s)));
-        return new PlaceHit(
-            string.IsNullOrWhiteSpace(name) ? query : name,
-            location.Coordinate.Latitude,
-            location.Coordinate.Longitude,
-            mark.TimeZone?.Name);
-    }
+        var request = new MKLocalSearchRequest { NaturalLanguageQuery = query };
+        var response = await new MKLocalSearch(request).StartAsync();
+        var item = response?.MapItems?.FirstOrDefault();
+        if (item is null) return null;
 
-    private static async Task<string?> ReverseAsync(double latitude, double longitude)
-    {
-        using var geocoder = new CLGeocoder();
-        var placemarks = await geocoder.ReverseGeocodeLocationAsync(new CLLocation(latitude, longitude));
-        return placemarks?.FirstOrDefault()?.TimeZone?.Name;
+        double latitude, longitude;
+        string? country = null;
+        if (OperatingSystem.IsIOSVersionAtLeast(26) || OperatingSystem.IsMacCatalystVersionAtLeast(26))
+        {
+            var coordinate = item.Location.Coordinate;
+            latitude = coordinate.Latitude;
+            longitude = coordinate.Longitude;
+        }
+        else
+        {
+            var placemark = item.Placemark;
+            latitude = placemark.Coordinate.Latitude;
+            longitude = placemark.Coordinate.Longitude;
+            country = placemark.Country;
+        }
+
+        var name = string.Join(", ", new[] { item.Name, country }.Where(s => !string.IsNullOrWhiteSpace(s)));
+        return new PlaceHit(string.IsNullOrWhiteSpace(name) ? query : name, latitude, longitude, item.TimeZone?.Name);
     }
 
     private static void Exclude(string path)
