@@ -14,6 +14,7 @@ import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
 import { FeedbackRow } from "@/components/chrome/FeedbackRow";
 import { NaveHead } from "@/components/chrome/NaveHead";
+import { ScriptName } from "@/components/chrome/ScriptName";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { Skeleton } from "@/components/chrome/Skeleton";
@@ -108,7 +109,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
   const degreesLine = (
     <span className="inline-flex flex-wrap items-center justify-center gap-x-[var(--space-1)]">
       <DeityGlyph body={span.transitPlanet} culture={culture} size={16} decorative />
-      <span>{transitDeity.toUpperCase()}</span>
+      <ScriptName culture={culture} planet={span.transitPlanet} upper />
       <span>{formatDegMin(span.transitDegree)}</span>
       <span>{span.transitSign.toUpperCase()}</span>
       <span>{kindGlyph}</span>
@@ -164,10 +165,14 @@ export function TransitDetail({ id }: TransitDetailProps) {
       <main className="mx-auto max-w-[720px] px-5 py-12 md:py-16">
         <div className="mx-auto max-w-[640px]">
           <NaveHead
-            kicker={`${voice.institution} · A READING SCOPED TO THE TRANSIT'S WHOLE SPAN`}
+            kicker={
+              <>
+                <ScriptName culture={culture} heading="institution" /> · A READING SCOPED TO THE TRANSIT&apos;S WHOLE SPAN
+              </>
+            }
             sub={
               <div className="font-mono text-data-xs leading-data tracking-label text-dim">
-                {transitDeity.toUpperCase()} {verb.toUpperCase()} {natalLabel}
+                <ScriptName culture={culture} planet={span.transitPlanet} upper /> {verb.toUpperCase()} {natalLabel}
                 <br />
                 {degreesLine}
                 <br />

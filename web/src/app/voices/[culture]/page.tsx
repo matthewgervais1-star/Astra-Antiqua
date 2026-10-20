@@ -23,6 +23,7 @@ import { IconTile, type IconTileMark } from "@/components/chrome/IconTile";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
+import { ScriptName } from "@/components/chrome/ScriptName";
 import { VoiceScope } from "@/components/voices/VoiceScope";
 import { TodaySpecimen } from "@/components/voices/TodaySpecimen";
 import { EnterVoiceCta } from "@/components/voices/EnterVoiceCta";
@@ -115,12 +116,16 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
     <VoiceScope culture={culture}>
       <NaveShell context={`THE ${label} DOORWAY`} active="voices">
         <NaveHead
-          kicker={`THE ${label} DOORWAY · ${voice.institution}`}
+          kicker={
+            <>
+              THE {label} DOORWAY · <ScriptName culture={culture} heading="institution" />
+            </>
+          }
           emblem={
             <CultureEmblem culture={culture} size={72} decorative className="text-accent" />
           }
         >
-          {label}
+          <ScriptName culture={culture} heading="culture" upper />
         </NaveHead>
 
         <div className="mx-auto flex max-w-[560px] flex-col gap-5">
@@ -172,7 +177,7 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
                       isReceived(planet) ? "text-accent" : "text-bone",
                     )}
                   >
-                    {deities[planet].name}
+                    <ScriptName culture={culture} planet={planet} />
                   </span>
                   <span className="col-span-2 font-body text-prose-s italic leading-prose text-prose sm:col-span-1">
                     {deities[planet].epithet}

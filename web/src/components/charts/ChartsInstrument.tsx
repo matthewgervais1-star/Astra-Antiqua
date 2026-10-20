@@ -7,6 +7,7 @@ import { Button } from "@/components/chrome/Button";
 import { CultureGate } from "@/components/chrome/CultureGate";
 import { DataRow, DataRowHead } from "@/components/chrome/DataRow";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
+import { ScriptName } from "@/components/chrome/ScriptName";
 import { InstrumentShell, type InstrumentSibling } from "@/components/chrome/InstrumentShell";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { WheelSvg } from "@/components/chrome/WheelSvg";
@@ -133,7 +134,6 @@ function ChartsInstrumentInner() {
           <DataRowHead />
           {PLANETS.map((planet) => {
             const { sign, degree } = longitudeToSign(natal.chart[planet]);
-            const deity = DEITY_MATRIX[culture][planet];
             return (
               <DataRow
                 key={planet}
@@ -142,7 +142,9 @@ function ChartsInstrumentInner() {
                 body={
                   <>
                     <DeityGlyph body={planet} culture={culture} size={16} decorative />
-                    <span className="min-w-0 leading-snug">{deity.name.toUpperCase()}</span>
+                    <span className="min-w-0 leading-snug">
+                      <ScriptName culture={culture} planet={planet} upper />
+                    </span>
                   </>
                 }
                 position={formatDegMin(degree)}
@@ -243,7 +245,7 @@ function ChartsInstrumentInner() {
               >
                 <span className="inline-flex items-center gap-[var(--space-1)] align-middle font-display text-display-xs tracking-[0.1em] text-accent">
                   <DeityGlyph body={planet} culture={culture} size={16} decorative />
-                  {deity.name.toUpperCase()}
+                  <ScriptName culture={culture} planet={planet} upper />
                 </span>{" "}
                 · {deity.epithet}
               </div>

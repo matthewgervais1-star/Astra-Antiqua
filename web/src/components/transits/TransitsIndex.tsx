@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { isReceived, type Culture } from "@/data/cultures";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
-import { DEITY_MATRIX } from "@/data/deities";
 import { ASPECT_VERBS } from "@/data/aspectVerbs";
 import type { TransitSpan } from "@/lib/transitSpans";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { NaveHead } from "@/components/chrome/NaveHead";
+import { ScriptName } from "@/components/chrome/ScriptName";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { TransitEmptyState } from "@/components/transits/TransitEmptyState";
@@ -16,7 +16,6 @@ import { monthYear, natalPointLabel } from "@/components/transits/spanDisplay";
 import { cn } from "@/lib/classNames";
 
 function SpanRow({ span, culture }: { span: TransitSpan; culture: Culture }) {
-  const transitDeity = DEITY_MATRIX[culture][span.transitPlanet].name;
   const verb = ASPECT_VERBS[culture][span.aspectKind];
   const natalLabel = natalPointLabel(culture, span.natalKey);
   const received = isReceived(span.transitPlanet);
@@ -34,7 +33,7 @@ function SpanRow({ span, culture }: { span: TransitSpan; culture: Culture }) {
             received ? "text-accent" : "text-bone",
           )}
         >
-          {transitDeity.toUpperCase()} {verb.toUpperCase()} {natalLabel}
+          <ScriptName culture={culture} planet={span.transitPlanet} upper /> {verb.toUpperCase()} {natalLabel}
         </div>
         <div className="mt-1.5 font-mono text-data-xs text-dim">
           {monthYear(span.start)} → {monthYear(span.end)} · {span.passes.length} EXACT {passLabel}

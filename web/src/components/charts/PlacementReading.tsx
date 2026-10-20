@@ -7,6 +7,7 @@ import { Button } from "@/components/chrome/Button";
 import { CultureGate } from "@/components/chrome/CultureGate";
 import { CultureChip } from "@/components/chrome/CultureChip";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
+import { ScriptName } from "@/components/chrome/ScriptName";
 import { MethodFooter } from "@/components/chrome/MethodFooter";
 import { NaveHead } from "@/components/chrome/NaveHead";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
@@ -121,7 +122,11 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
       <TopBar body={body} />
       <main className="mx-auto max-w-[560px] px-5 py-11 text-center md:py-[var(--space-6)]">
         <NaveHead
-          kicker={`${voice.institution} · YOUR STANDING PLACEMENT`}
+          kicker={
+            <>
+              <ScriptName culture={culture} heading="institution" /> · YOUR STANDING PLACEMENT
+            </>
+          }
           sub={
             <div className="inline-flex items-center gap-[var(--space-1)] font-mono text-data-xs uppercase leading-data tracking-label text-dim">
               <DeityGlyph body={body} culture={culture} size={16} />
@@ -133,7 +138,9 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
             </div>
           }
         >
-          <span className="whitespace-pre-line">{`YOUR ${deity.name.toUpperCase()}\nIN THE ${SIGN_PHRASE[sign]}`}</span>
+          YOUR <ScriptName culture={culture} planet={body} upper />
+          <br />
+          IN THE {SIGN_PHRASE[sign]}
         </NaveHead>
 
         <div className="flex flex-col gap-[var(--space-4)] text-left">
