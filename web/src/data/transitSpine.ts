@@ -21,10 +21,10 @@ export const TRANSIT_SPINE: Readonly<Record<Culture, Readonly<Record<SlowBody, T
   egypt: {
     jupiter: {
       changing:
-        "Amun has moored his barque against this point. He is the hidden one, king in Thebes, and his gift is increase. Where he sits the river rises, the granary fills, and the field asks for a wider boundary stone. But Amun gives as a king gives; the offering is expected back, exact and on time. What grows under this passage must be measured as it grows, or it will grow past the scale.",
+        "Amun has moored his barque against this point. He is the hidden one, king in Thebes, and his gift is increase. Where he sits the barley stands thick, the granary fills, and the field asks for a wider boundary stone. But Amun gives as a king gives; the offering is expected back, exact and on time. What grows under this passage must be measured as it grows, or it will grow past the scale.",
       leaves: {
         tension: "The granary built taller than the harvest that filled it.",
-        ease: "The habit of asking small while the river was already rising.",
+        ease: "The habit of asking small while the emmer was already ripening.",
       },
       votive: {
         tension: "TAKE NO MORE THAN THE SCALE CAN WEIGH;\nRETURN THE FIRST SHARE AS OFFERING",
@@ -57,9 +57,9 @@ export const TRANSIT_SPINE: Readonly<Record<Culture, Readonly<Record<SlowBody, T
     },
     neptune: {
       changing:
-        "Nun has closed around this point. The water before the first mound has no bank and no season. What was solid here is being softened; the edges you trusted no longer mark where you end. This is not the river, which gives and can be measured. This is the water under everything, which takes no shape and keeps no record.",
+        "Nun has closed around this point. The void before the first mound has no floor and no season. What was solid here is being softened; the edges you trusted no longer mark where you end. This is not the river, which gives and can be measured. This is the dark under everything, which takes no shape and keeps no record.",
       leaves: {
-        tension: "The map that showed a shore where there was none.",
+        tension: "The map that showed solid ground where there was none.",
         ease: "The dry certainty that nothing lay past the marked fields.",
       },
       votive: {

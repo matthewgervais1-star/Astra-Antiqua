@@ -12,7 +12,7 @@ import { computeChart } from "@/lib/ephemeris";
 import { FIGURE_BANKS } from "@/data/figureBanks";
 import { ASPECT_RULES, ZODIAC_SIGNS } from "@/data/sampleChart";
 import { signPhraseProse } from "@/components/transits/spanDisplay";
-import type { SlowBody } from "@/data/transitSpine";
+import { TRANSIT_SPINE, type SlowBody } from "@/data/transitSpine";
 
 /**
  * Each culture's image words: the institution's nouns its banks draw on. A
@@ -243,11 +243,13 @@ function figureLines(a: FigureAnatomy & { headline: string; evidence?: string; b
 /** The sign names ("the Water-Bearer") are the site's labels for the zodiac, not a bank's image, and are taken out first. */
 const SIGN_NAMES = ZODIAC_SIGNS.map(signPhraseProse);
 
-const riverWords = (lines: readonly string[]): string[] =>
-  lines.filter((line) => {
-    const bare = SIGN_NAMES.reduce((l, sign) => l.split(sign).join(""), line);
-    return (bare.match(/[A-Za-z']+/g) ?? []).some((w) => stemOf("egypt", w) === "river");
-  });
+/** The river-family words of a line, sign names taken out. */
+const riverHits = (line: string): string[] => {
+  const bare = SIGN_NAMES.reduce((l, sign) => l.split(sign).join(""), line);
+  return (bare.match(/[A-Za-z']+/g) ?? []).filter((w) => stemOf("egypt", w) === "river");
+};
+
+const riverWords = (lines: readonly string[]): string[] => lines.filter((line) => riverHits(line).length > 0);
 
 test("the fixed Egypt figure-page lines name the river, and only they do", () => {
   const bank = FIGURE_BANKS.egypt;
@@ -283,4 +285,35 @@ test("every Egypt long-transit figure names the river only in its recurrence lin
     }
   }
   assert.deepEqual([...found].sort(), []);
+});
+
+/**
+ * The long-transit page (TransitDetail) prints the spine's "changing"
+ * paragraph and the tense and easeful "what it leaves behind" lines beside
+ * the figure's recurrence line and title. Those lines may not name the river
+ * either, with one documented exception: Neptune's paragraph sets Nun, the
+ * water before creation, against the river, which gives and can be measured.
+ * That contrast is the theology of the passage and keeps exactly one
+ * river-family word. The votive closings are small-caps labels and are not
+ * read.
+ */
+test("every Egypt long-transit spine line names the river only where Nun is set against it", () => {
+  const bank = FIGURE_BANKS.egypt;
+  const fixed = [bank.recurrenceFrame, bank.playsOutTitle];
+  const slow: readonly SlowBody[] = ["jupiter", "saturn", "uranus", "neptune", "pluto"];
+  const over: string[] = [];
+  for (const body of slow) {
+    const spine = TRANSIT_SPINE.egypt[body];
+    const allowed = body === "neptune" ? 1 : 0;
+    const changing = riverHits(spine.changing);
+    if (changing.length !== allowed) over.push(`${body}.changing [${changing.join(", ")}]: ${spine.changing}`);
+    for (const tone of ["tension", "ease"] as const) {
+      const hits = riverHits(spine.leaves[tone]);
+      if (hits.length > 0) over.push(`${body}.leaves.${tone} [${hits.join(", ")}]: ${spine.leaves[tone]}`);
+    }
+    const page = [...fixed, spine.changing, spine.leaves.tension, spine.leaves.ease];
+    const total = page.reduce((n, line) => n + riverHits(line).length, 0);
+    if (total !== fixed.length + allowed) over.push(`${body} page names the river ${total} times`);
+  }
+  assert.deepEqual(over, []);
 });
