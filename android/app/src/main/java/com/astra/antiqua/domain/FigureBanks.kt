@@ -239,7 +239,7 @@ object FigureBanks {
             AspectType.CONJUNCTION -> "cannot be parted from"
             AspectType.SEXTILE -> "can lean on"
             AspectType.SQUARE -> "must strain against"
-            AspectType.TRINE -> "is at peace with"
+            AspectType.TRINE -> "can be at peace with"
             AspectType.OPPOSITION -> "must be weighed against"
         }
 
