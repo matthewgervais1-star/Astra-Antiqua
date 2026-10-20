@@ -39,13 +39,14 @@ jobs:
       # .NET for iOS checks its Xcode by major.minor. The newest workload
       # (10.0.402.1, iOS SDK 27.1) needs Xcode 27.1, which macos-latest does
       # not carry yet (it tops out at 26.6). Workload set 10.0.401 ships iOS
-      # SDK 26.5, so the workload and Xcode are pinned as a pair. Move both
+      # SDK 26.5.10318, which itself requires Xcode 26.6, so the workload and
+      # Xcode are pinned as a pair. Move both
       # together once the runner image gains a newer Xcode.
-      - name: Select Xcode 26.5
+      - name: Select Xcode 26.6
         run: |
-          sudo xcode-select -s /Applications/Xcode_26.5.app/Contents/Developer
+          sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
           xcodebuild -version
-      - name: Install MAUI workload (pinned to the set that matches Xcode 26.5)
+      - name: Install MAUI workload (pinned to the set that matches Xcode 26.6)
         run: dotnet workload install maui --version 10.0.401
       - name: Build iOS head (unsigned, simulator)
         run: >
