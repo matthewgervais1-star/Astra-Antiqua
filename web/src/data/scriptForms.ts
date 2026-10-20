@@ -8,6 +8,10 @@ import type { Culture, Planet } from "@/data/cultures";
  * English. A name with no citable spelling carries script: null and a note
  * saying why, and the reveal shows no effect for it.
  *
+ * One ruled exception (owner, 2026-10-20): Carthage's Yam and Mot carry the
+ * Phoenician alphabet's rendering of the Northwest Semitic names ym and mt,
+ * which no Punic text spells; their notes say so.
+ *
  * Blocks: Egypt, Egyptian Hieroglyphs U+13000-U+1342F. Greece, Greek and
  * Greek Extended, polytonic as the texts print it. Canaan, Ugaritic
  * U+10380-U+1039F, with the tablets' word divider U+1039F between words.
@@ -282,18 +286,18 @@ export const DEITY_SCRIPT_FORMS: Readonly<Record<Culture, Readonly<Record<Planet
       source: "KAI 78 line 2 (Carthage, lʾdn lbʿl šmm); KAI 26 A III 18 (Karatepe); KAI 4 (Byblos)",
     },
     neptune: {
-      script: null,
+      script: "𐤉𐤌",
       en: "Yam",
       fr: "Yam",
-      source: "KTU 1.2 (Ugaritic ym, not Punic)",
-      note: "No Phoenician or Punic inscription that names Yam as a god could be cited. The Ugaritic spelling ym belongs to Canaan, not Carthage.",
+      source: "KTU 1.2 III-IV (Ugaritic zbl ym); Philo of Byblos, via Eusebius, Praeparatio evangelica 1.10, for the Phoenician tradition",
+      note: "No Punic text names the god. The script is the Phoenician alphabet's rendering of the Northwest Semitic name ym, as Ugarit spells it; it is not an attested Punic spelling.",
     },
     pluto: {
-      script: null,
+      script: "𐤌𐤕",
       en: "Mot",
       fr: "Mot",
-      source: "Philo of Byblos, via Eusebius, Praeparatio evangelica 1.10 (Greek Μώθ)",
-      note: "Mot survives for Phoenicia only in Philo of Byblos's Greek; no Phoenician or Punic inscription that names him could be cited.",
+      source: "KTU 1.5 and 1.6 (Ugaritic bn ilm mt); Philo of Byblos, via Eusebius, Praeparatio evangelica 1.10 (Greek Μώθ), for the Phoenician tradition",
+      note: "No Punic text names the god. The script is the Phoenician alphabet's rendering of the Northwest Semitic name mt, as Ugarit spells it; it is not an attested Punic spelling.",
     },
   },
   rome: {
