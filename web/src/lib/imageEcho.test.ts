@@ -331,6 +331,10 @@ test("an Egypt figure page names the river family in at most one line, title exc
   assert.deepEqual(pagesOver((line) => riverHits(line).length), []);
 });
 
+test("an Egypt figure page hauls at most once", () => {
+  assert.deepEqual(pagesOver((line) => contentWords("egypt", line).filter((w) => w === "haul").length), []);
+});
+
 /**
  * The long-transit page (TransitDetail) prints the spine's "changing"
  * paragraph and the tense and easeful "what it leaves behind" lines beside

@@ -133,7 +133,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
     shortRelations: {
       conjunction: "cannot be parted from",
       sextile: "can lean on",
-      square: "must haul against",
+      square: "must strain against",
       trine: "is at peace with",
       opposition: "must be weighed against",
     },
