@@ -83,3 +83,53 @@ test("no entry carries an em dash", () => {
     }
   }
 });
+
+/**
+ * The seats whose French form differs from the English, each because French
+ * scholarly usage spells the name its own way. Every other seat must carry
+ * fr equal to en, and every seat listed here must differ.
+ */
+const FRENCH_DIFFERS: ReadonlySet<string> = new Set([
+  "egypt.sun", // Rê
+  "egypt.moon", // Khonsou
+  "egypt.mercury", // Sebegou
+  "egypt.mars", // Horus le Rouge
+  "egypt.jupiter", // Amon
+  "egypt.uranus", // Nout
+  "egypt.neptune", // Noun
+  "greece.sun", // Hélios
+  "greece.moon", // Séléné
+  "greece.mercury", // Hermès
+  "greece.mars", // Arès
+  "greece.saturn", // Cronos
+  "greece.neptune", // Poséidon
+  "greece.pluto", // Ploutôn
+  "canaan.venus", // Athtart
+  "canaan.neptune", // Yam
+  "canaan.pluto", // Mot
+  "carthage.venus", // Astarté
+  "rome.mercury", // Mercure
+  "rome.venus", // Vénus
+  "rome.jupiter", // Jupiter
+  "rome.saturn", // Saturne
+  "rome.neptune", // Neptune
+  "egypt culture name", // Égypte
+  "greece culture name", // Grèce
+  // The institution headings are English phrases, so every French one differs.
+  ...CULTURES.map((c) => `${c} institution`),
+]);
+
+test("French forms differ from English only where French usage differs", () => {
+  const rows = allForms();
+  const labels = new Set(rows.map((r) => r.label));
+  for (const listed of FRENCH_DIFFERS) {
+    assert.ok(labels.has(listed), `${listed} in FRENCH_DIFFERS names no entry`);
+  }
+  for (const { label, form } of rows) {
+    if (FRENCH_DIFFERS.has(label)) {
+      assert.notEqual(form.fr, form.en, `${label} is listed as differing but fr equals en`);
+    } else {
+      assert.equal(form.fr, form.en, `${label} fr "${form.fr}" differs from en "${form.en}" without being listed`);
+    }
+  }
+});
