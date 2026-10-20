@@ -1702,6 +1702,12 @@
       border-left-width: 1px;
     }
   }
+  .min-\[1100px\]\:hyphens-auto {
+    @media (width >= 1100px) {
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
+  }
   .sm\:order-none {
     @media (width >= 40rem) {
       order: 0;
@@ -1918,6 +1924,12 @@
     @media (width >= 68.75rem) {
       border-left-style: var(--tw-border-style);
       border-left-width: 1px;
+    }
+  }
+  .\[\&\:lang\(fr\)\]\:hyphens-auto {
+    &:lang(fr) {
+      -webkit-hyphens: auto;
+      hyphens: auto;
     }
   }
   .\[\&\:not\(\:last-child\)\]\:mb-\[var\(--space-3\)\] {
