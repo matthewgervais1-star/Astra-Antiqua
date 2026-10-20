@@ -27,10 +27,12 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   Cleanup done and reviewed: C1 LICENCES screen (6292fea); C2 /charts header, /week rows,
   names wrap at 1280 (7638d9e); C3 Android ASC line on web's obliquity, CNC/PSC/AQR on both
   surfaces, transit spans to the true ASC (d30dfa6..440c3ab). C4 Egypt echo tests and rewording, spec A.6/B.3
-  (3985cb4..41b0479, four fix rounds). Egypt and Canaan device errors follow the owner's guidance, Carthage and
+  (3985cb4..53d42d5, five fix rounds). FACT (ledger, 2026-10-20): final review of
+  1d930a3..53d42d5 found 1 Important (river echo in the Egypt transit spine), fixed
+  2d16643..65691d1, re-review Approved. At 65691d1: web 112 (95 pass, 17 skipped), Android
+  200/0, dotnet 39/0. Egypt and Canaan device errors follow the owner's guidance, Carthage and
   Rome approved as written.
-- FACT (ledger): the Claude Design push waits on the owner's `/design-login` (interactive).
-- INFERENCE: the live checkout's older uncommitted `HANDOFF.md` is replaced by this file on merge.
+- FACT (ledger): the Claude Design push waits on the owner's `/design-login` (interactive). INFERENCE: the live checkout's older `HANDOFF.md` is replaced by this one on merge.
 
 ## Decisions taken, and why
 - 2026-09-29, owner: rebuild the daily readings to the Co-Star anatomy in five voices (spec
@@ -42,7 +44,7 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   (Room v3). All rulings with their reasons: the ledger and the plan's Rulings section.
 
 ## Pending, in order
-1. Final review of 1d930a3..41b0479 (running), one fix wave; run every check. 2. Push the branch and open its PR; push the refreshed design-system cards to Claude Design.
+1. Push the branch and open its PR (stacked on PR #2); push the refreshed design-system cards to Claude Design.
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.
 
