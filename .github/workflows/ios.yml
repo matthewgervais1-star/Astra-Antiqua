@@ -36,6 +36,15 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
+      # The MAUI workload pins the Xcode its iOS SDK needs (10.0.402.1 needs
+      # Xcode 27.1). The runner's default Xcode can lag that, so select the
+      # newest one installed and print the list for when it is not enough.
+      - name: Select the newest Xcode
+        run: |
+          ls -d /Applications/Xcode*.app
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest/Contents/Developer"
+          xcodebuild -version
       - name: Install MAUI workload
         run: dotnet workload install maui
       - name: Build iOS head (unsigned, simulator)
