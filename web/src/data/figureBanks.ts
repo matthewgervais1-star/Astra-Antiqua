@@ -97,7 +97,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       conjunction: {
         jupiter: "Build the granary wider, because this year's harvest runs heavy.",
         saturn: "Dig down to bedrock before you raise one more wall.",
-        uranus: "Your old way of doing things goes out with the old year.",
+        uranus: "Your old way of doing things goes out with the year.",
         neptune: "Keep your feet on the dike while the fields turn to mud.",
         pluto: "Open the sealed storeroom and look at what you put there.",
       },
@@ -134,7 +134,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       conjunction: "cannot be parted from",
       sextile: "can lean on",
       square: "must haul against",
-      trine: "can keep step with",
+      trine: "can share a yoke with",
       opposition: "must be weighed against",
     },
     natalFrame: "Your birth set {deity} in the {sign}: {clause}.",
@@ -151,7 +151,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
     recurrenceIrregular: "This figure keeps no season on the river: it can come back within a decan or stay away for most of a year.",
     playsOutTitle: "HOW THIS PLAYS OUT ON THE RIVER",
     slowActs: {
-      jupiter: "{god} heaps the threshing floor a cubit higher, and the scribes call for more jars.",
+      jupiter: "{god} heaps the grain on the threshing floor a cubit higher, and the scribes call for more jars.",
       saturn: "{god} lies still under the field, and the surveyor walks the old boundary again.",
       uranus: "{god} spreads her body over the roof beams, and the old plaster comes down.",
       neptune: "{god} wells up from below, and the boundary stones sink out of sight.",
