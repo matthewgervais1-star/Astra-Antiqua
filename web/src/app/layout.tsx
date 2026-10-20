@@ -66,6 +66,13 @@ const notoUgaritic = localFont({
   src: [{ path: "../fonts/noto-sans-ugaritic-400.woff2", weight: "400", style: "normal" }],
 });
 
+const notoPhoenician = localFont({
+  variable: "--font-noto-phoenician",
+  display: "swap",
+  preload: false,
+  src: [{ path: "../fonts/noto-sans-phoenician-400.woff2", weight: "400", style: "normal" }],
+});
+
 const notoSymbols = localFont({
   variable: "--font-noto-symbols",
   display: "swap",
@@ -131,7 +138,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cinzel.variable} ${spectral.variable} ${spectralSc.variable} ${plexMono.variable} ${notoHieroglyphs.variable} ${notoUgaritic.variable} ${notoSymbols.variable} ${gfsDidot.variable}`}
+      className={`${cinzel.variable} ${spectral.variable} ${spectralSc.variable} ${plexMono.variable} ${notoHieroglyphs.variable} ${notoUgaritic.variable} ${notoPhoenician.variable} ${notoSymbols.variable} ${gfsDidot.variable}`}
     >
       <body className="flex min-h-screen flex-col text-bone">
         <AuthProvider>

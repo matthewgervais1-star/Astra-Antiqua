@@ -44,6 +44,7 @@
   /* epigraphic faces: attested signs only, never copy (docs/design/system/readme.md, Type) */
   --font-hieroglyph: var(--font-noto-hieroglyphs), "Noto Sans Egyptian Hieroglyphs", serif;
   --font-ugaritic: var(--font-noto-ugaritic), "Noto Sans Ugaritic", serif;
+  --font-phoenician: var(--font-noto-phoenician), "Noto Sans Phoenician", serif;
   --font-symbols: var(--font-noto-symbols), "Noto Sans Symbols", serif;
   --font-greek-display: var(--font-gfs-didot), "GFS Didot", serif;
 
