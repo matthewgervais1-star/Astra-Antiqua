@@ -134,7 +134,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
       conjunction: "cannot be parted from",
       sextile: "can lean on",
       square: "must strain against",
-      trine: "is at peace with",
+      trine: "can be at peace with",
       opposition: "must be weighed against",
     },
     natalFrame: "Your birth set {deity} in the {sign}: {clause}.",
