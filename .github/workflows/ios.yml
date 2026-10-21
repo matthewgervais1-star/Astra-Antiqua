@@ -1,7 +1,8 @@
 # The .NET surface's CI. Three jobs:
 #   core-tests — the parity + completeness suite, on Linux (mirrors what the
 #                Windows workstation runs locally with `dotnet test`).
-#   ios-build  — the MAUI head against the iOS 26.5 SDK, on macos-latest.
+#   ios-build  — the MAUI head against the iOS 26.5 SDK, on macos-latest,
+#                then the same screen run on an iOS 26 simulator.
 #   ios27      — the MAUI head against the iOS 27.1 SDK on the xcode-27
 #                image, then booted on an iOS 27 simulator with every screen
 #                photographed (.github/scripts/ios-smoke.sh). The pictures
@@ -35,6 +36,7 @@ jobs:
 
   ios-build:
     runs-on: macos-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -58,6 +60,17 @@ jobs:
           -f net10.0-ios
           -c Release
           -p:RuntimeIdentifier=iossimulator-arm64
+      - name: Run every screen on an iOS 26 simulator
+        run: |
+          APP=$(find dotnet/AstraAntiqua.App/bin/Release/net10.0-ios/iossimulator-arm64 -maxdepth 1 -name "*.app" | head -1)
+          bash .github/scripts/ios-smoke.sh "$APP" smoke 26
+      - name: Upload the screenshots and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios26-screens
+          path: smoke/
+          if-no-files-found: warn
 
   ios27:
     # GitHub's Xcode 27 image (public preview): macOS 27, Xcode 27.0, 27.1
@@ -85,7 +98,7 @@ jobs:
       - name: Run every screen on an iOS 27 simulator
         run: |
           APP=$(find dotnet/AstraAntiqua.App/bin/Release/net10.0-ios/iossimulator-arm64 -maxdepth 1 -name "*.app" | head -1)
-          bash .github/scripts/ios-smoke.sh "$APP" smoke
+          bash .github/scripts/ios-smoke.sh "$APP" smoke 27
       - name: Upload the screenshots and logs
         if: always()
         uses: actions/upload-artifact@v4
