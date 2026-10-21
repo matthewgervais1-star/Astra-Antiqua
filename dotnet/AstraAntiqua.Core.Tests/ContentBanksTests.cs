@@ -84,4 +84,42 @@ public class ContentBanksTests
         var tables = Store.Learn.Sections.Select(s => s.Table).Where(t => t is not null).ToHashSet();
         Assert.Equal(new HashSet<string?> { "PLANET_VERBS", "ZODIAC_SIGNS", "HOUSES", "HOUSE_SYSTEMS", "ASPECTS" }, tables);
     }
+
+    /// <summary>
+    /// Every glyph path reaches the renderers in explicit form: one command
+    /// letter per segment, followed by exactly that command's count of
+    /// separated numbers. Microsoft.Maui.Graphics drew nothing for SVG's
+    /// implicit line-to ("M1 2 3 4"), which blanked Carthage's Mercury on iOS.
+    /// </summary>
+    [Fact]
+    public void Every_glyph_path_is_in_explicit_form()
+    {
+        var arity = new Dictionary<char, int>
+        {
+            ['m'] = 2, ['l'] = 2, ['h'] = 1, ['v'] = 1, ['c'] = 6, ['s'] = 4,
+            ['q'] = 4, ['t'] = 2, ['a'] = 7, ['z'] = 0,
+        };
+        var segment = new System.Text.RegularExpressions.Regex(
+            @"^([MmLlHhVvCcSsQqTtAaZz])((?: ?-?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)*)$");
+        foreach (var culture in CultureIds.Order)
+        foreach (var planet in PlanetInfo.Order)
+        foreach (var path in Store.GetGlyph(culture, planet).Paths)
+        {
+            var segments = path.Data.Split(' ')
+                .Aggregate(new List<string>(), (acc, token) =>
+                {
+                    if (token.Length > 0 && char.IsLetter(token[0])) acc.Add(token);
+                    else acc[acc.Count - 1] += " " + token;
+                    return acc;
+                });
+            foreach (var s in segments)
+            {
+                var m = segment.Match(s);
+                Assert.True(m.Success, $"{culture}/{planet}: malformed segment '{s}'");
+                var numbers = m.Groups[2].Value.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length;
+                Assert.True(arity[char.ToLowerInvariant(m.Groups[1].Value[0])] == numbers,
+                    $"{culture}/{planet}: '{s}' has {numbers} numbers");
+            }
+        }
+    }
 }

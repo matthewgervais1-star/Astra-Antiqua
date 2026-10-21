@@ -266,6 +266,65 @@ const GLYPH_DIR = path.resolve(
 );
 const GLYPH_STATUSES = ["attested", "composed", "invented"];
 const glyphTally = { attested: 0, composed: 0, invented: 0 };
+
+// SVG path data allows shorthand that not every renderer reads: coordinate
+// pairs after M that mean "line to", repeated segments under one command
+// letter, numbers run together ("1.5.5" is 1.5 and .5) and arc flags with
+// no separator ("0 011 1"). Microsoft.Maui.Graphics' PathBuilder drew
+// Carthage's Mercury as nothing because of the first. Every glyph path is
+// therefore rewritten into explicit form, one command letter per segment and
+// every number separated, which draws the same shape in any SVG renderer.
+const PATH_ARITY = { m: 2, l: 2, h: 1, v: 1, c: 6, s: 4, q: 4, t: 2, a: 7, z: 0 };
+const NUMBER = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/;
+let glyphPathsRewritten = 0;
+
+function explicitPath(d, where) {
+  let i = 0;
+  const skip = () => {
+    while (i < d.length && /[\s,]/.test(d[i])) i += 1;
+  };
+  const number = () => {
+    skip();
+    const m = NUMBER.exec(d.slice(i));
+    assert(m, `${where}: expected a number at ${i} in "${d}"`);
+    i += m[0].length;
+    return Number(m[0]);
+  };
+  const flag = () => {
+    skip();
+    assert(d[i] === "0" || d[i] === "1", `${where}: expected an arc flag at ${i} in "${d}"`);
+    i += 1;
+    return Number(d[i - 1]);
+  };
+  const out = [];
+  let command = null;
+  for (;;) {
+    skip();
+    if (i >= d.length) break;
+    if (/[MmLlHhVvCcSsQqTtAaZz]/.test(d[i])) {
+      command = d[i];
+      i += 1;
+      if (command === "z" || command === "Z") {
+        out.push(command);
+        continue;
+      }
+    } else {
+      assert(command && !/[Zz]/.test(command), `${where}: coordinates without a command in "${d}"`);
+      // A repeated segment: after a move it means "line to", otherwise the
+      // same command again.
+      if (command === "M") command = "L";
+      else if (command === "m") command = "l";
+    }
+    const arity = PATH_ARITY[command.toLowerCase()];
+    const args = command.toLowerCase() === "a"
+      ? [number(), number(), number(), flag(), flag(), number(), number()]
+      : Array.from({ length: arity }, number);
+    out.push(`${command}${args.join(" ")}`);
+  }
+  const explicit = out.join(" ");
+  if (explicit.replace(/\s+/g, "") !== d.replace(/[\s,]+/g, "")) glyphPathsRewritten += 1;
+  return explicit;
+}
 const glyphs = [];
 for (const culture of CULTURES) {
   for (const planet of PLANETS) {
@@ -285,7 +344,7 @@ for (const culture of CULTURES) {
       const stroke = (a.stroke ?? "none") === "currentColor";
       assert(fill || stroke, `${culture}/${planet}: a shape with neither fill nor stroke`);
       return {
-        d: p.d,
+        d: explicitPath(p.d, `${culture}/${planet}`),
         fill,
         stroke,
         strokeWidth: stroke ? Number(a["stroke-width"] ?? 1) : 0,
@@ -301,6 +360,7 @@ assert(
   glyphTally.attested === 28 && glyphTally.composed === 21 && glyphTally.invented === 1,
   `glyph statuses are ${JSON.stringify(glyphTally)}, expected 28 / 21 / 1`,
 );
+console.log(`export-content: ${glyphPathsRewritten} glyph paths rewritten into explicit commands`);
 
 // ---- Write atomically. ----------------------------------------------------
 

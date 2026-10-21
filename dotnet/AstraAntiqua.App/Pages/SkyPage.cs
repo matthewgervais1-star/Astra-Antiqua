@@ -59,7 +59,8 @@ public abstract class SkyPage : ContentPage
             column.Add(Ui.Failure(e));
         }
         if (generation != _generation) return;
-        column.Add(new BoxView { HeightRequest = Ui.Chapter, Color = Colors.Transparent });
+        // Room for the tab bar, which floats over the content from iOS 26 on.
+        column.Add(new BoxView { HeightRequest = Ui.Chapter + 96, Color = Colors.Transparent });
     }
 
     /// <summary>Appends the page's views. Long work belongs in Task.Run, awaited here.</summary>
