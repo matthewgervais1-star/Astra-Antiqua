@@ -1,0 +1,506 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0AD904A8F14E4FC85EEF5AB9 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C39D42D38DB2BD58348A68 /* AppState.swift */; };
+		0ED5C95710524C0947D919DF /* PlacementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F192942A6EFB5D92738FF /* PlacementsView.swift */; };
+		1661D2072534AE6AF4D151CA /* content in Resources */ = {isa = PBXBuildFile; fileRef = B5BF64B20E6D4CBB2EA808BD /* content */; };
+		18C852B649C45F0AB676798A /* VoicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11A2186006C5AE76D21A18E /* VoicesView.swift */; };
+		1EEDCFB93BA2CF0F211FAD7E /* ForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E35E411E2E947CFD1C7B1F /* ForecastView.swift */; };
+		3BDC6B111703EA3EA7685BD5 /* CultureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA6D10FBDBD514B139207F9 /* CultureView.swift */; };
+		4069431696895D2111DC635E /* LearnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F3527094792F0C96053C88 /* LearnView.swift */; };
+		4F89DC3FB103A2A66BAB2A02 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D0E4A6889E0327D3C5B5F8 /* DayView.swift */; };
+		54AD67AE3E9B42FDCE565CE1 /* TransitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DC857C6793ECF5E38AB613 /* TransitsView.swift */; };
+		5AF45B1DF055B10E331059DD /* font in Resources */ = {isa = PBXBuildFile; fileRef = 510F4FB16F716A93E6982533 /* font */; };
+		5E84738B06E2DDEDB94E775E /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EC0A7D67F138F21165A18B /* Words.swift */; };
+		6B1DEB8F4BA1BEF34B0DAAF3 /* SynastryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA14F6784EC40A539642D1C0 /* SynastryView.swift */; };
+		6DCBB4888ABCF060CAC2FAED /* MethodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1BE5D16A1BA91A238F1F9C /* MethodView.swift */; };
+		6E011C1B1471678211128209 /* HorizonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B308FBCF1A7BC63F776CF7EC /* HorizonsView.swift */; };
+		84D65648D69E186E298DD957 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B122F981BB7B7803B14BC535 /* MoreView.swift */; };
+		993F24DE02550FA87A660F2E /* Ink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE4D28506273F41E339C630 /* Ink.swift */; };
+		A75EEAEF7B7AC30D4A024397 /* PlacementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AE57556791954C112AC6E3 /* PlacementView.swift */; };
+		D20D12F0B02F9847C53959C7 /* AstraAntiquaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CDFB96FBF12C98AA2597C9 /* AstraAntiquaApp.swift */; };
+		DD16FF21896B652580D4C875 /* GlyphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D887920D91E303A84632F1 /* GlyphView.swift */; };
+		DF08F2A982134BF2EC3288B2 /* AstraCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8BFB03E4A0DCB2EA9EB4DA51 /* AstraCore */; };
+		E151D41FAB33079813BCB36B /* ScreenshotMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E42C54305A6D77466B7136F /* ScreenshotMode.swift */; };
+		E2193137CE96086EB4B5707D /* BirthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577D118E96920217B75FB194 /* BirthView.swift */; };
+		E56F98E0019750462641BA11 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F42285167B807060D36DE5 /* Components.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		01C39D42D38DB2BD58348A68 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		07D0E4A6889E0327D3C5B5F8 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
+		0E42C54305A6D77466B7136F /* ScreenshotMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotMode.swift; sourceTree = "<group>"; };
+		21CDFB96FBF12C98AA2597C9 /* AstraAntiquaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstraAntiquaApp.swift; sourceTree = "<group>"; };
+		2A1BE5D16A1BA91A238F1F9C /* MethodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodView.swift; sourceTree = "<group>"; };
+		30AE57556791954C112AC6E3 /* PlacementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacementView.swift; sourceTree = "<group>"; };
+		37E5600605E845D55F0715DB /* AstraCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = AstraCore; path = AstraCore; sourceTree = SOURCE_ROOT; };
+		43F42285167B807060D36DE5 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		510F4FB16F716A93E6982533 /* font */ = {isa = PBXFileReference; lastKnownFileType = folder; name = font; path = ../android/app/src/main/res/font; sourceTree = SOURCE_ROOT; };
+		56D887920D91E303A84632F1 /* GlyphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphView.swift; sourceTree = "<group>"; };
+		577D118E96920217B75FB194 /* BirthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthView.swift; sourceTree = "<group>"; };
+		64EC0A7D67F138F21165A18B /* Words.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
+		6DE4D28506273F41E339C630 /* Ink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ink.swift; sourceTree = "<group>"; };
+		6FA87CFE0E2DF7B4F97599BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		79DC857C6793ECF5E38AB613 /* TransitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitsView.swift; sourceTree = "<group>"; };
+		7C4F192942A6EFB5D92738FF /* PlacementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacementsView.swift; sourceTree = "<group>"; };
+		9AFFB77E09AD1ED282D17E99 /* AstraAntiqua.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AstraAntiqua.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6F3527094792F0C96053C88 /* LearnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnView.swift; sourceTree = "<group>"; };
+		B122F981BB7B7803B14BC535 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
+		B308FBCF1A7BC63F776CF7EC /* HorizonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizonsView.swift; sourceTree = "<group>"; };
+		B5BF64B20E6D4CBB2EA808BD /* content */ = {isa = PBXFileReference; lastKnownFileType = folder; name = content; path = ../shared/content; sourceTree = SOURCE_ROOT; };
+		C6E35E411E2E947CFD1C7B1F /* ForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastView.swift; sourceTree = "<group>"; };
+		CA14F6784EC40A539642D1C0 /* SynastryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynastryView.swift; sourceTree = "<group>"; };
+		E11A2186006C5AE76D21A18E /* VoicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicesView.swift; sourceTree = "<group>"; };
+		EBA6D10FBDBD514B139207F9 /* CultureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CultureView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6938484FE422DC54C0B5F587 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF08F2A982134BF2EC3288B2 /* AstraCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0450E166E8348FF8C18FAB64 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				43F42285167B807060D36DE5 /* Components.swift */,
+				56D887920D91E303A84632F1 /* GlyphView.swift */,
+				6DE4D28506273F41E339C630 /* Ink.swift */,
+				64EC0A7D67F138F21165A18B /* Words.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		16672E114B3C428539703B77 /* AstraAntiqua */ = {
+			isa = PBXGroup;
+			children = (
+				01C39D42D38DB2BD58348A68 /* AppState.swift */,
+				21CDFB96FBF12C98AA2597C9 /* AstraAntiquaApp.swift */,
+				6FA87CFE0E2DF7B4F97599BF /* Info.plist */,
+				0E42C54305A6D77466B7136F /* ScreenshotMode.swift */,
+				964EABD79C07C27FF41E74DD /* Screens */,
+				0450E166E8348FF8C18FAB64 /* Theme */,
+			);
+			path = AstraAntiqua;
+			sourceTree = "<group>";
+		};
+		33F8A54E8BF3386B235713DC /* main */ = {
+			isa = PBXGroup;
+			children = (
+				CA09C6C8254B71551926D4F5 /* res */,
+			);
+			path = main;
+			sourceTree = "<group>";
+		};
+		40FE7C2FB5C78F5E975DF310 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				37E5600605E845D55F0715DB /* AstraCore */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		423CAA566B1432F8BCB93216 /* android */ = {
+			isa = PBXGroup;
+			children = (
+				E171A8B2413E9951CEADB873 /* app */,
+			);
+			path = android;
+			sourceTree = "<group>";
+		};
+		6FFC4A64FB2F776FB0D20196 /* shared */ = {
+			isa = PBXGroup;
+			children = (
+				B5BF64B20E6D4CBB2EA808BD /* content */,
+			);
+			path = shared;
+			sourceTree = "<group>";
+		};
+		964EABD79C07C27FF41E74DD /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				577D118E96920217B75FB194 /* BirthView.swift */,
+				EBA6D10FBDBD514B139207F9 /* CultureView.swift */,
+				07D0E4A6889E0327D3C5B5F8 /* DayView.swift */,
+				C6E35E411E2E947CFD1C7B1F /* ForecastView.swift */,
+				B308FBCF1A7BC63F776CF7EC /* HorizonsView.swift */,
+				A6F3527094792F0C96053C88 /* LearnView.swift */,
+				2A1BE5D16A1BA91A238F1F9C /* MethodView.swift */,
+				B122F981BB7B7803B14BC535 /* MoreView.swift */,
+				7C4F192942A6EFB5D92738FF /* PlacementsView.swift */,
+				30AE57556791954C112AC6E3 /* PlacementView.swift */,
+				CA14F6784EC40A539642D1C0 /* SynastryView.swift */,
+				79DC857C6793ECF5E38AB613 /* TransitsView.swift */,
+				E11A2186006C5AE76D21A18E /* VoicesView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		A34E894E0DD437AF18D827C3 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				33F8A54E8BF3386B235713DC /* main */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		C1A8BC90908B67B9C438646C /* astra-antiqua */ = {
+			isa = PBXGroup;
+			children = (
+				423CAA566B1432F8BCB93216 /* android */,
+				6FFC4A64FB2F776FB0D20196 /* shared */,
+			);
+			name = "astra-antiqua";
+			path = ..;
+			sourceTree = "<group>";
+		};
+		C4EA6683EFB35FFF1F41A817 = {
+			isa = PBXGroup;
+			children = (
+				C1A8BC90908B67B9C438646C /* astra-antiqua */,
+				16672E114B3C428539703B77 /* AstraAntiqua */,
+				40FE7C2FB5C78F5E975DF310 /* Packages */,
+				F88F468AB3804101294532DA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CA09C6C8254B71551926D4F5 /* res */ = {
+			isa = PBXGroup;
+			children = (
+				510F4FB16F716A93E6982533 /* font */,
+			);
+			path = res;
+			sourceTree = "<group>";
+		};
+		E171A8B2413E9951CEADB873 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				A34E894E0DD437AF18D827C3 /* src */,
+			);
+			path = app;
+			sourceTree = "<group>";
+		};
+		F88F468AB3804101294532DA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9AFFB77E09AD1ED282D17E99 /* AstraAntiqua.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		84E70E0E5C9780A41F7177AC /* AstraAntiqua */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F90105C12B7D5D37759CEDC /* Build configuration list for PBXNativeTarget "AstraAntiqua" */;
+			buildPhases = (
+				FF111C8A7E2D1F3966D5C1F4 /* Sources */,
+				538822DFCAF74125AC3E8192 /* Resources */,
+				6938484FE422DC54C0B5F587 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AstraAntiqua;
+			packageProductDependencies = (
+				8BFB03E4A0DCB2EA9EB4DA51 /* AstraCore */,
+			);
+			productName = AstraAntiqua;
+			productReference = 9AFFB77E09AD1ED282D17E99 /* AstraAntiqua.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FC80A5DEF2631E169E332015 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					84E70E0E5C9780A41F7177AC = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = C549D40C41F847B0E465582D /* Build configuration list for PBXProject "AstraAntiqua" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C4EA6683EFB35FFF1F41A817;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1FF21A84CC5C94EF236ACA52 /* XCLocalSwiftPackageReference "AstraCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = F88F468AB3804101294532DA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				84E70E0E5C9780A41F7177AC /* AstraAntiqua */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		538822DFCAF74125AC3E8192 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1661D2072534AE6AF4D151CA /* content in Resources */,
+				5AF45B1DF055B10E331059DD /* font in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FF111C8A7E2D1F3966D5C1F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0AD904A8F14E4FC85EEF5AB9 /* AppState.swift in Sources */,
+				D20D12F0B02F9847C53959C7 /* AstraAntiquaApp.swift in Sources */,
+				E2193137CE96086EB4B5707D /* BirthView.swift in Sources */,
+				E56F98E0019750462641BA11 /* Components.swift in Sources */,
+				3BDC6B111703EA3EA7685BD5 /* CultureView.swift in Sources */,
+				4F89DC3FB103A2A66BAB2A02 /* DayView.swift in Sources */,
+				1EEDCFB93BA2CF0F211FAD7E /* ForecastView.swift in Sources */,
+				DD16FF21896B652580D4C875 /* GlyphView.swift in Sources */,
+				6E011C1B1471678211128209 /* HorizonsView.swift in Sources */,
+				993F24DE02550FA87A660F2E /* Ink.swift in Sources */,
+				4069431696895D2111DC635E /* LearnView.swift in Sources */,
+				6DCBB4888ABCF060CAC2FAED /* MethodView.swift in Sources */,
+				84D65648D69E186E298DD957 /* MoreView.swift in Sources */,
+				A75EEAEF7B7AC30D4A024397 /* PlacementView.swift in Sources */,
+				0ED5C95710524C0947D919DF /* PlacementsView.swift in Sources */,
+				E151D41FAB33079813BCB36B /* ScreenshotMode.swift in Sources */,
+				6B1DEB8F4BA1BEF34B0DAAF3 /* SynastryView.swift in Sources */,
+				54AD67AE3E9B42FDCE565CE1 /* TransitsView.swift in Sources */,
+				18C852B649C45F0AB676798A /* VoicesView.swift in Sources */,
+				5E84738B06E2DDEDB94E775E /* Words.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		12AED40DFA19C4C548B67627 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = AstraAntiqua/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.astra.antiqua.swift;
+				PRODUCT_NAME = AstraAntiqua;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		23524408169EECF066B9B955 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		DC1C4D8C7ACCAEA6A66D762B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F946DD5570320A2CA98B4C3A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = AstraAntiqua/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.astra.antiqua.swift;
+				PRODUCT_NAME = AstraAntiqua;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4F90105C12B7D5D37759CEDC /* Build configuration list for PBXNativeTarget "AstraAntiqua" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12AED40DFA19C4C548B67627 /* Debug */,
+				F946DD5570320A2CA98B4C3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C549D40C41F847B0E465582D /* Build configuration list for PBXProject "AstraAntiqua" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23524408169EECF066B9B955 /* Debug */,
+				DC1C4D8C7ACCAEA6A66D762B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		1FF21A84CC5C94EF236ACA52 /* XCLocalSwiftPackageReference "AstraCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = AstraCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8BFB03E4A0DCB2EA9EB4DA51 /* AstraCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AstraCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = FC80A5DEF2631E169E332015 /* Project object */;
+}

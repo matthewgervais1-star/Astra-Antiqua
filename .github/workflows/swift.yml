@@ -2,11 +2,11 @@
 #   core-linux — AstraCore's parity suite (swift test) in the official Swift
 #                container: the quick check that the Swift port composes what
 #                web composes, against the same fixtures the C# core uses.
-#   ios27-app  — the SwiftUI app on GitHub's Xcode 27 image: generates the
-#                Xcode project from ios/project.yml, builds it for the
-#                simulator with Xcode 27.1, boots an iOS 27 iPhone simulator
-#                and photographs every screen (.github/scripts/ios-smoke.sh).
-#                Uploads the screenshots and the generated project.
+#   ios27-app  — the SwiftUI app on GitHub's Xcode 27 image: builds the
+#                committed ios/AstraAntiqua.xcodeproj for the simulator with
+#                Xcode 27.1, boots an iOS 27 iPhone simulator, photographs
+#                every screen (.github/scripts/ios-smoke.sh), then checks the
+#                committed project still matches ios/project.yml.
 name: swift
 
 on:
@@ -43,11 +43,6 @@ jobs:
         run: |
           sudo xcode-select -s /Applications/Xcode_27.1.app/Contents/Developer
           xcodebuild -version
-      - name: Generate the Xcode project
-        working-directory: ios
-        run: |
-          brew install xcodegen
-          xcodegen generate
       - name: Build for the simulator (unsigned)
         working-directory: ios
         shell: bash
@@ -74,10 +69,23 @@ jobs:
           name: swift-ios27-screens
           path: smoke/
           if-no-files-found: warn
-      - name: Upload the generated Xcode project
+      # The build above used the committed project, exactly as a borrowed Mac
+      # opens it. Regenerate it from ios/project.yml and report any drift, so
+      # a spec change that was not committed as a project shows up here.
+      - name: Check the committed project matches ios/project.yml
+        working-directory: ios
+        continue-on-error: true
+        run: |
+          brew install xcodegen
+          xcodegen generate
+          git status --short -- AstraAntiqua.xcodeproj AstraAntiqua/Info.plist
+          git diff --exit-code -- AstraAntiqua.xcodeproj AstraAntiqua/Info.plist
+      - name: Upload the regenerated Xcode project
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: swift-xcodeproj
-          path: ios/AstraAntiqua.xcodeproj
+          path: |
+            ios/AstraAntiqua.xcodeproj
+            ios/AstraAntiqua/Info.plist
           if-no-files-found: warn
