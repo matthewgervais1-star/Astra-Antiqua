@@ -32,6 +32,12 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   (fresh build), dotnet 39/0. Egypt and Canaan device errors follow the owner's guidance, Carthage and
   Rome approved as written.
 
+- FACT (ledger `.superpowers/sdd/2026-10-20-script-reveal/progress.md`, 2026-10-20): branch
+  `claude/script-reveal` (stacked on PR #4, unpushed) holds the owner's script reveal: names in
+  attested script resolve to English or French on scroll (spec `2026-10-20-script-reveal.md`).
+  Tasks 1 (data, 56 of 60 sourced) and 2 (web, large culture names, picker) done and reviewed.
+  Task 3 (Android) was running at handoff; Task 4 (source check, shots), PR, design push remain.
+
 ## Decisions taken, and why
 - 2026-09-29, owner: rebuild the daily readings to the Co-Star anatomy in five voices (spec
   `docs/superpowers/specs/2026-09-29-daily-reading-voice.md`); archive six unwired banks;
