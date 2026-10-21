@@ -421,9 +421,45 @@ samp {
   opacity: 0;
 }
 
+/*
+ * The load-time resolve for a name near the top of the page (ScriptName's
+ * intro prop): script from the first paint, held for the delay, then the same
+ * 400ms cross-fade to Latin. ScriptName removes the class when the animation
+ * ends, or at once on hover or focus, and the band rule takes over.
+ */
+.script-name--intro > .script-name__latin {
+  animation: script-name-latin-in 400ms ease-in-out var(--script-name-intro-delay, 1200ms) both;
+}
+
+.script-name--intro > .script-name__script {
+  animation: script-name-script-out 400ms ease-in-out var(--script-name-intro-delay, 1200ms) both;
+}
+
+@keyframes script-name-latin-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes script-name-script-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .script-name__script {
     display: none;
+  }
+  .script-name--intro > .script-name__latin,
+  .script-name--intro > .script-name__script {
+    animation: none;
   }
 }
 

@@ -20,6 +20,17 @@ test("pickLanguage gives French for fr and its regional tags only", () => {
   }
 });
 
+test("pickLanguage gives French when the browser's first language is French", () => {
+  assert.equal(pickLanguage("en", "fr-CA"), "fr");
+  assert.equal(pickLanguage(null, "fr"), "fr");
+  assert.equal(pickLanguage(undefined, "FR-fr"), "fr");
+  assert.equal(pickLanguage("fr-CA", "en-US"), "fr");
+  assert.equal(pickLanguage("en", "en-CA"), "en");
+  assert.equal(pickLanguage("en", "fro"), "en");
+  assert.equal(pickLanguage("en", null), "en");
+  assert.equal(pickLanguage("en", undefined), "en");
+});
+
 test("scriptFormFor finds the deity seat and both headings", () => {
   assert.equal(scriptFormFor("egypt", { planet: "sun" }).script, "𓂋𓂝𓇳");
   assert.equal(scriptFormFor("rome", { planet: "jupiter" }).script, "IVPPITER");
