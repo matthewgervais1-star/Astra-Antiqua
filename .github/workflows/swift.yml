@@ -43,7 +43,10 @@ jobs:
         run: |
           sudo xcode-select -s /Applications/Xcode_27.1.app/Contents/Developer
           xcodebuild -version
-      - name: Build for the simulator (unsigned)
+      # Release, for both simulator architectures (Apple silicon and Intel):
+      # the build a browser-hosted simulator service such as Appetize takes,
+      # and the same binary the screen run below exercises.
+      - name: Build for the simulator (Release, unsigned, arm64 and x86_64)
         working-directory: ios
         shell: bash
         run: >
@@ -53,15 +56,30 @@ jobs:
           -sdk iphonesimulator
           -destination "generic/platform=iOS Simulator"
           -derivedDataPath build
-          -configuration Debug
+          -configuration Release
+          ARCHS="arm64 x86_64"
+          ONLY_ACTIVE_ARCH=NO
           CODE_SIGNING_ALLOWED=NO
           build 2>&1 | grep -E "error:|warning:|BUILD" | tail -120
       - name: Run every screen on an iOS 27 simulator
         shell: bash
         run: >
           bash .github/scripts/ios-smoke.sh
-          ios/build/Build/Products/Debug-iphonesimulator/AstraAntiqua.app smoke 27
+          ios/build/Build/Products/Release-iphonesimulator/AstraAntiqua.app smoke 27
           com.astra.antiqua.swift "Library/Application Support/birth.v1.json"
+      - name: Package the simulator build
+        shell: bash
+        run: |
+          cd ios/build/Build/Products/Release-iphonesimulator
+          lipo -info AstraAntiqua.app/AstraAntiqua
+          ditto -c -k --sequesterRsrc --keepParent AstraAntiqua.app "$GITHUB_WORKSPACE/Astra Antiqua simulator build.zip"
+          ls -la "$GITHUB_WORKSPACE/Astra Antiqua simulator build.zip"
+      - name: Upload the simulator build
+        uses: actions/upload-artifact@v4
+        with:
+          name: swift-simulator-build
+          path: Astra Antiqua simulator build.zip
+          if-no-files-found: error
       - name: Upload the screenshots and logs
         if: always()
         uses: actions/upload-artifact@v4
