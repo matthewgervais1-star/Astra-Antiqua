@@ -1,10 +1,13 @@
-# The .NET surface's CI. Two jobs:
+# The .NET surface's CI. Three jobs:
 #   core-tests — the parity + completeness suite, on Linux (mirrors what the
 #                Windows workstation runs locally with `dotnet test`).
-#   ios-build  — the MAUI head, on macOS, because compiling iOS requires
-#                Apple's build tools. Unsigned simulator build for now;
-#                signing + TestFlight need an Apple Developer membership
-#                and come later.
+#   ios-build  — the MAUI head against the iOS 26.5 SDK, on macos-latest.
+#   ios27      — the MAUI head against the iOS 27.1 SDK on the xcode-27
+#                image, then booted on an iOS 27 simulator with every screen
+#                photographed (.github/scripts/ios-smoke.sh). The pictures
+#                are uploaded as the "ios27-screens" artifact.
+# Unsigned simulator builds only; signing and TestFlight need an Apple
+# Developer membership and come later.
 name: dotnet
 
 on:
@@ -14,6 +17,7 @@ on:
       - "shared/**"
       - "android/app/src/main/res/font/**"
       - ".github/workflows/ios.yml"
+      - ".github/scripts/ios-smoke.sh"
   workflow_dispatch:
 
 jobs:
@@ -54,3 +58,38 @@ jobs:
           -f net10.0-ios
           -c Release
           -p:RuntimeIdentifier=iossimulator-arm64
+
+  ios27:
+    # GitHub's Xcode 27 image (public preview): macOS 27, Xcode 27.0, 27.1
+    # and 27.2 beta, iOS 27 simulators. Workload set 10.0.402.1 ships iOS SDK
+    # 27.1.10018, which requires Xcode 27.1.
+    runs-on: xcode-27
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Select Xcode 27.1
+        run: |
+          sudo xcode-select -s /Applications/Xcode_27.1.app/Contents/Developer
+          xcodebuild -version
+      - name: Install MAUI workload (the set that ships the iOS 27.1 SDK)
+        run: dotnet workload install maui --version 10.0.402.1
+      - name: Build iOS head (unsigned, simulator, iOS 27.1 SDK)
+        run: >
+          dotnet build dotnet/AstraAntiqua.App/AstraAntiqua.App.csproj
+          -f net10.0-ios
+          -c Release
+          -p:RuntimeIdentifier=iossimulator-arm64
+      - name: Run every screen on an iOS 27 simulator
+        run: |
+          APP=$(find dotnet/AstraAntiqua.App/bin/Release/net10.0-ios/iossimulator-arm64 -maxdepth 1 -name "*.app" | head -1)
+          bash .github/scripts/ios-smoke.sh "$APP" smoke
+      - name: Upload the screenshots and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios27-screens
+          path: smoke/
+          if-no-files-found: warn

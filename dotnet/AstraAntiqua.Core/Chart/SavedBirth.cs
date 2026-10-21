@@ -25,8 +25,11 @@ public sealed record SavedBirth(
     string TimeZone,
     bool ZoneEstimated)
 {
+    // Computed from the fields above, so never written to the record.
+    [JsonIgnore]
     public BirthInput Input => new(Year, Month, Day, Hour, Minute, Latitude, Longitude);
 
+    [JsonIgnore]
     public TimeZoneInfo Zone => ZoneEstimated
         ? BirthResolver.EstimateZoneForLongitude(Longitude)
         : BirthResolver.FindZone(TimeZone);

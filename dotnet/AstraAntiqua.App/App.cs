@@ -12,9 +12,13 @@ public class App : Application
     protected override Window CreateWindow(IActivationState? activationState)
         => new(Root());
 
-    private static Page Root() => AppState.Current.Birth is null && AppState.Current.Culture is null
-        ? Onboarding()
-        : new AppShell();
+    private static Page Root()
+    {
+        if (AppState.Current.Birth is null && AppState.Current.Culture is null) return Onboarding();
+        var shell = new AppShell();
+        ScreenshotMode.Apply(shell);
+        return shell;
+    }
 
     private static Page Onboarding() => new NavigationPage(new CulturePage(onboarding: true))
     {

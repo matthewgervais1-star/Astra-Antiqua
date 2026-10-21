@@ -419,6 +419,22 @@ public class HorizonParityTests
         Assert.Null(SavedBirth.FromJson(null));
     }
 
+    /// <summary>
+    /// The CI smoke run seeds this file into the iOS simulator's app container,
+    /// so its format is pinned here: if SavedBirth's JSON shape changes, this
+    /// fails on Windows before the simulator run silently shows onboarding.
+    /// </summary>
+    [Fact]
+    public void The_smoke_run_s_seed_record_reads_as_the_rome_1990_birth()
+    {
+        var json = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "TestData", "smoke-birth.v1.json"));
+        var birth = SavedBirth.FromJson(json);
+        Assert.NotNull(birth);
+        Assert.Equal(Culture.Egypt, birth!.Culture);
+        Assert.Equal(new DateTime(1990, 1, 15, 4, 30, 0, DateTimeKind.Utc), birth.Resolve().Utc);
+        Assert.Equal(json.Trim(), birth.ToJson());
+    }
+
     [Fact]
     public void A_zone_estimated_from_longitude_is_a_whole_hour_band()
     {
