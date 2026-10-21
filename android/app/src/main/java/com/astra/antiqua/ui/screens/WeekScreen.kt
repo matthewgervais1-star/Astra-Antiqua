@@ -103,6 +103,7 @@ fun WeekScreen(
                     item {
                         NaveHead(
                             kicker = "${lexicon.dashboardTitle} · the week",
+                            culture = culture,
                             headline = "Seven days",
                             sub = "${dayMonth(current.start)} – ${dayMonth(current.end)} " +
                                 "${year(current.end)}",

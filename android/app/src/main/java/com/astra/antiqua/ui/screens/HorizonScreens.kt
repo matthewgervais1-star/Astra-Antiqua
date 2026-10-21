@@ -88,6 +88,7 @@ fun SeasonScreen(
                     item {
                         NaveHead(
                             kicker = "${lexicon.dashboardTitle} · the season",
+                            culture = culture,
                             headline = "The Sun in ${window.sign.signName}",
                             sub = "Day ${window.dayOfSeason} of ${window.totalDays} · " +
                                 "${dayMonthYear(window.start)} to ${dayMonthYear(window.end)}",
@@ -150,6 +151,7 @@ fun YearScreen(
                     item {
                         NaveHead(
                             kicker = "${lexicon.dashboardTitle} · the year",
+                            culture = culture,
                             headline = "The year ahead",
                             sub = "${dayMonthYear(current.start)} onward · " +
                                 "${current.events.size} turnings",
