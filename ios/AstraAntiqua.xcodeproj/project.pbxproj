@@ -30,12 +30,14 @@
 		E151D41FAB33079813BCB36B /* ScreenshotMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E42C54305A6D77466B7136F /* ScreenshotMode.swift */; };
 		E2193137CE96086EB4B5707D /* BirthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577D118E96920217B75FB194 /* BirthView.swift */; };
 		E56F98E0019750462641BA11 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F42285167B807060D36DE5 /* Components.swift */; };
+		EB52DE6F9880A0FCE998B293 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12C80B13503EE10A9CA31CDE /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		01C39D42D38DB2BD58348A68 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		07D0E4A6889E0327D3C5B5F8 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		0E42C54305A6D77466B7136F /* ScreenshotMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotMode.swift; sourceTree = "<group>"; };
+		12C80B13503EE10A9CA31CDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21CDFB96FBF12C98AA2597C9 /* AstraAntiquaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstraAntiquaApp.swift; sourceTree = "<group>"; };
 		2A1BE5D16A1BA91A238F1F9C /* MethodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodView.swift; sourceTree = "<group>"; };
 		30AE57556791954C112AC6E3 /* PlacementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacementView.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				01C39D42D38DB2BD58348A68 /* AppState.swift */,
+				12C80B13503EE10A9CA31CDE /* Assets.xcassets */,
 				21CDFB96FBF12C98AA2597C9 /* AstraAntiquaApp.swift */,
 				6FA87CFE0E2DF7B4F97599BF /* Info.plist */,
 				0E42C54305A6D77466B7136F /* ScreenshotMode.swift */,
@@ -264,6 +267,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB52DE6F9880A0FCE998B293 /* Assets.xcassets in Resources */,
 				1661D2072534AE6AF4D151CA /* content in Resources */,
 				5AF45B1DF055B10E331059DD /* font in Resources */,
 			);
