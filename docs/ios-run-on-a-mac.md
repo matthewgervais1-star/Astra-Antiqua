@@ -68,6 +68,14 @@ The repository is private. Pick one:
 The first build takes a minute or two. The simulator opens and launches the
 app on the five doorways.
 
+**"Signing for AstraAntiqua requires a development team"** means the
+destination is a real device ("Any iOS Device" or a plugged-in iPhone), not
+a simulator. A simulator needs no team: click the device name in the bar at
+the top centre and choose an iPhone under iOS 27 Simulators. If none are
+listed, the simulator is not downloaded yet: Xcode, Settings, Components,
+Get next to iOS 27, then choose it. A team is needed only for a real iPhone
+(section 5).
+
 ## 5. Optional: run it on an iPhone with iOS 27
 
 A free Apple ID is enough; the install expires after seven days.
