@@ -14,7 +14,13 @@
  *   - no name's box moves or changes size between those three states;
  *   - the page never scrolls sideways;
  *   - under prefers-reduced-motion: reduce no name swaps and no script layer shows.
- * With --out it saves the script and resolved states per culture as PNGs.
+ * The large culture name in the head (NaveHead) and the five names of the
+ * culture picker (CultureSwitch on /welcome) and the day page's head carry ScriptName's intro: the
+ * check pauses their animations at the start to see the script, reads each
+ * delay (1200 ms, the picker staggered by 200), plays them out to Latin,
+ * hovers a picker row to resolve it early, and checks 375 for sideways scroll.
+ * With --out it saves the script and resolved states per culture as PNGs,
+ * and the head and the picker in both states at each width.
  * The dev server must already be running. Exits 1 on any failure.
  */
 import { spawn } from "node:child_process";
@@ -62,6 +68,7 @@ const PROBE = `(() => {
       visible: r.width > 0 && r.height > 0,
       inBand: r.bottom > h * 0.3 && r.top < h * 0.7,
       reveal: el.dataset.reveal ?? null,
+      intro: el.hasAttribute("data-intro"),
       layerShown: script ? getComputedStyle(script).display !== "none" : false,
     };
   });
@@ -82,6 +89,79 @@ const listScroll = (f) => `(() => {
   window.scrollTo(0, Math.max(0, y));
   return window.scrollY;
 })()`;
+
+// Pause every intro animation at its start (the hold, script showing) or play them out.
+const INTRO_PAUSE = `(() => {
+  const els = [...document.querySelectorAll("[data-intro]")];
+  for (const el of els) for (const a of el.getAnimations({ subtree: true })) { a.pause(); a.currentTime = 0; }
+  return els.length;
+})()`;
+const INTRO_PLAY = `(() => {
+  for (const el of document.querySelectorAll("[data-intro]")) for (const a of el.getAnimations({ subtree: true })) a.play();
+  return true;
+})()`;
+// Each intro name: its delay, whether the intro is still running, and the two layers' opacity.
+const INTRO_PROBE = `(() => [...document.querySelectorAll("[data-intro]")].map((el) => {
+  const latin = el.querySelector(".script-name__latin");
+  const script = el.querySelector(".script-name__script");
+  const r = el.getBoundingClientRect();
+  return {
+    text: latin.textContent,
+    delay: getComputedStyle(latin).animationDelay,
+    running: el.classList.contains("script-name--intro"),
+    latin: Number(getComputedStyle(latin).opacity),
+    script: getComputedStyle(script).display === "none" ? 0 : Number(getComputedStyle(script).opacity),
+    x: r.left + r.width / 2,
+    y: r.top + r.height / 2,
+  };
+}))()`;
+const SCROLL_WIDTH = `({ scrollWidth: document.documentElement.scrollWidth, innerWidth: window.innerWidth })`;
+
+/**
+ * The intro on one page: script while held, the expected delays, Latin and
+ * the class gone once played out, no sideways scroll in either state.
+ */
+async function checkIntro(cdp, label, delays, out, prefix, hoverIndex = null) {
+  // Client-computed pages (the day page) mount their head after load.
+  for (let i = 0; i < 100; i += 1) {
+    if ((await cdp.evaluate(`document.querySelectorAll("[data-intro]").length`)) >= delays.length) break;
+    await sleep(100);
+  }
+  const count = await cdp.evaluate(INTRO_PAUSE);
+  if (count !== delays.length) fail(`${label}: ${count} intro names, expected ${delays.length}`);
+  // Let the band swaps of the other names finish their 400 ms fade before the capture.
+  await sleep(600);
+  const held = await cdp.evaluate(INTRO_PROBE);
+  held.forEach((n, i) => {
+    if (n.script < 0.99 || n.latin > 0.01) fail(`${label} held: "${n.text}" latin ${n.latin} script ${n.script}`);
+    if (n.delay !== `${delays[i] / 1000}s`) fail(`${label}: "${n.text}" delay ${n.delay}, expected ${delays[i]}ms`);
+  });
+  const w1 = await cdp.evaluate(SCROLL_WIDTH);
+  if (w1.scrollWidth > w1.innerWidth) fail(`${label} held: horizontal scroll (${w1.scrollWidth} > ${w1.innerWidth})`);
+  await shoot(cdp, out, `${prefix}-script.png`);
+  if (hoverIndex !== null && held[hoverIndex]) {
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: held[hoverIndex].x, y: held[hoverIndex].y });
+    await sleep(150);
+    const hovered = (await cdp.evaluate(INTRO_PROBE))[hoverIndex];
+    if (hovered.running || hovered.latin < 0.99) fail(`${label}: hovering "${hovered.text}" did not resolve it`);
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 1, y: 1 });
+  }
+  await cdp.evaluate(INTRO_PLAY);
+  await sleep(Math.max(0, ...delays) + 900);
+  const done = await cdp.evaluate(INTRO_PROBE);
+  for (const n of done) {
+    if (n.running || n.latin < 0.99 || n.script > 0.01) fail(`${label} resolved: "${n.text}" running ${n.running} latin ${n.latin} script ${n.script}`);
+  }
+  const w2 = await cdp.evaluate(SCROLL_WIDTH);
+  if (w2.scrollWidth > w2.innerWidth) fail(`${label} resolved: horizontal scroll (${w2.scrollWidth} > ${w2.innerWidth})`);
+  await shoot(cdp, out, `${prefix}-resolved.png`);
+  console.log(`${label}: ${held.length} intro names held in script, resolved to Latin; scrollWidth ${w2.scrollWidth}/${w2.innerWidth}`);
+}
+
+// The stagger runs by list position; Canaan (third) has no script form, so no intro.
+const PICKER_DELAYS = [1200, 1400, 1800, 2000];
+// Canaan's own name has no attested script form, so its head carries no intro.
+const HEAD_INTROS = { egypt: 1, greece: 1, canaan: 0, carthage: 1, rome: 1 };
 
 function parseArgs(argv) {
   const opts = { base: null, out: null, chrome: null };
@@ -147,7 +227,7 @@ class Cdp {
   }
   async evaluate(expression) {
     const res = await this.send("Runtime.evaluate", { expression, returnByValue: true, awaitPromise: true });
-    if (res.exceptionDetails) throw new Error(`evaluate failed: ${res.exceptionDetails.text}`);
+    if (res.exceptionDetails) throw new Error(`evaluate failed: ${res.exceptionDetails.exception?.description ?? res.exceptionDetails.text}`);
     return res.result?.value;
   }
 }
@@ -170,7 +250,8 @@ function checkStates(label, probe) {
   let script = 0;
   let latin = 0;
   for (const n of probe.names) {
-    if (!n.visible) continue;
+    // An intro name resolves on load and then follows crossings only; the head checks cover it.
+    if (!n.visible || n.intro) continue;
     const want = n.inBand ? "latin" : "script";
     if (n.reveal !== want) fail(`${label}: "${n.text}" reads ${n.reveal}, expected ${want}`);
     if (n.reveal === "script") script += 1;
@@ -228,6 +309,7 @@ const proc = spawn(
     `--remote-debugging-port=${port}`,
     `--user-data-dir=${profile}`,
     "--hide-scrollbars",
+    "--disable-lcd-text",
     "--no-first-run",
     "--no-default-browser-check",
     "--disable-gpu",
@@ -264,7 +346,13 @@ try {
     for (const culture of vp.cultures) {
       const label = `${culture} @${vp.width}`;
       await navigate(cdp, new URL(`/voices/${culture}`, args.base).toString());
-      await sleep(1500);
+      await checkIntro(
+        cdp,
+        `${label} head`,
+        Array(HEAD_INTROS[culture]).fill(1200),
+        args.out,
+        `${culture}-${vp.width}-head`,
+      );
 
       if ((await cdp.evaluate(listScroll(0.85))) === null) {
         fail(`${label}: no pantheon list names found`);
@@ -294,6 +382,14 @@ try {
       );
     }
 
+    // The day page: the culture's name above the decree.
+    await navigate(cdp, new URL("/?culture=egypt", args.base).toString());
+    await checkIntro(cdp, `day page @${vp.width} head`, [1200], args.out, `day-${vp.width}-head`);
+
+    // The culture picker on /welcome: five large names, staggered.
+    await navigate(cdp, new URL("/welcome", args.base).toString());
+    await checkIntro(cdp, `picker @${vp.width}`, PICKER_DELAYS, args.out, `picker-${vp.width}`, 2);
+
     // Reduced motion: Latin only, no swap, no layer.
     await cdp.send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
     await navigate(cdp, new URL("/voices/egypt", args.base).toString());
@@ -305,6 +401,9 @@ try {
     const layers = reduced.names.filter((n) => n.layerShown).length;
     if (swapped > 0) fail(`egypt @${vp.width} reduced motion: ${swapped} names carry data-reveal`);
     if (layers > 0) fail(`egypt @${vp.width} reduced motion: ${layers} script layers shown`);
+    for (const n of await cdp.evaluate(INTRO_PROBE)) {
+      if (n.latin < 0.99) fail(`egypt @${vp.width} reduced motion: intro "${n.text}" not Latin at once (${n.latin})`);
+    }
     console.log(`egypt @${vp.width} reduced motion: ${reduced.names.length} names, ${swapped} swapped, ${layers} layers shown`);
   }
   ws.close();
