@@ -75,6 +75,9 @@ export function ScriptName({ culture, upper = false, intro, className, ...key }:
       latinLayer?.addEventListener("animationend", finishIntro);
       hoverTarget.addEventListener("pointerenter", finishIntro);
       hoverTarget.addEventListener("focusin", finishIntro);
+      // Hydration can land after the CSS intro has ended, when animationend has already fired.
+      const running = latinLayer?.getAnimations().some((a) => a.playState === "running") ?? false;
+      if (!running) finishIntro();
     }
     const stop = observeBand(el, (inBand) => {
       // During the intro the band waits; afterwards only a crossing applies.

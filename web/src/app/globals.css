@@ -435,6 +435,20 @@ samp {
   animation: script-name-script-out 400ms ease-in-out var(--script-name-intro-delay, 1200ms) both;
 }
 
+/* Hover or focus during the intro resolves at once, before hydration too:
+   stopping the animation lets the resting opacities below apply. */
+.script-name--intro:hover > .script-name__latin,
+:is(a, button):is(:hover, :focus-visible) .script-name--intro > .script-name__latin {
+  animation: none;
+  opacity: 1;
+}
+
+.script-name--intro:hover > .script-name__script,
+:is(a, button):is(:hover, :focus-visible) .script-name--intro > .script-name__script {
+  animation: none;
+  opacity: 0;
+}
+
 @keyframes script-name-latin-in {
   from {
     opacity: 0;
