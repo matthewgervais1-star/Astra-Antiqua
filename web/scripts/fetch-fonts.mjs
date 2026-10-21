@@ -112,6 +112,14 @@ const FAMILIES = [
     subset: "greek",
     picks: [{ style: "normal", weight: "400", file: "gfs-didot-400.woff2" }],
   },
+  {
+    // Polytonic Greek (breathings and accents, U+1F00-1FFF) ships in its own
+    // subset; the font stack falls through to it for the attested deity names.
+    family: "GFS Didot",
+    css: "family=GFS+Didot",
+    subset: "greek-ext",
+    picks: [{ style: "normal", weight: "400", file: "gfs-didot-greek-ext-400.woff2" }],
+  },
 ];
 
 const ANDROID_OUT_DIR = path.join(

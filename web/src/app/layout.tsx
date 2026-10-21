@@ -87,6 +87,13 @@ const gfsDidot = localFont({
   src: [{ path: "../fonts/gfs-didot-400.woff2", weight: "400", style: "normal" }],
 });
 
+const gfsDidotExt = localFont({
+  variable: "--font-gfs-didot-ext",
+  display: "swap",
+  preload: false,
+  src: [{ path: "../fonts/gfs-didot-greek-ext-400.woff2", weight: "400", style: "normal" }],
+});
+
 const SITE_DESCRIPTION =
   "One computed sky, read through the theologies of ancient Egypt, Greece, Canaan, Carthage, and Rome.";
 
@@ -138,7 +145,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cinzel.variable} ${spectral.variable} ${spectralSc.variable} ${plexMono.variable} ${notoHieroglyphs.variable} ${notoUgaritic.variable} ${notoPhoenician.variable} ${notoSymbols.variable} ${gfsDidot.variable}`}
+      className={`${cinzel.variable} ${spectral.variable} ${spectralSc.variable} ${plexMono.variable} ${notoHieroglyphs.variable} ${notoUgaritic.variable} ${notoPhoenician.variable} ${notoSymbols.variable} ${gfsDidot.variable} ${gfsDidotExt.variable}`}
     >
       <body className="flex min-h-screen flex-col text-bone">
         <AuthProvider>

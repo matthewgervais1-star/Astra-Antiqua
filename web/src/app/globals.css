@@ -46,7 +46,7 @@
   --font-ugaritic: var(--font-noto-ugaritic), "Noto Sans Ugaritic", serif;
   --font-phoenician: var(--font-noto-phoenician), "Noto Sans Phoenician", serif;
   --font-symbols: var(--font-noto-symbols), "Noto Sans Symbols", serif;
-  --font-greek-display: var(--font-gfs-didot), "GFS Didot", serif;
+  --font-greek-display: var(--font-gfs-didot), var(--font-gfs-didot-ext), "GFS Didot", serif;
 
   --radius: 0px;
 
