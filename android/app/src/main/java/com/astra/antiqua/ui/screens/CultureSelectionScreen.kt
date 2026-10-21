@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +27,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.astra.antiqua.domain.LexiconDictionary
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.domain.ScriptReveal
+import com.astra.antiqua.ui.components.ScriptName
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.label
 import com.astra.antiqua.ui.components.CultureEmblem
@@ -77,7 +80,7 @@ fun CultureSelectionScreen(
         Spacer(modifier = Modifier.height(Spacing.Chapter))
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(AncientCulture.values(), key = { it.name }) { culture ->
+            itemsIndexed(AncientCulture.entries, key = { _, it -> it.name }) { index, culture ->
                 val institution = LexiconDictionary.forCulture(culture).dashboardTitle
                 Panel(
                     modifier = Modifier
@@ -101,10 +104,17 @@ fun CultureSelectionScreen(
                         )
                         Spacer(modifier = Modifier.width(Spacing.Step))
                         Column {
-                            Text(
-                                text = culture.label.uppercase(),
-                                style = MaterialTheme.typography.titleLarge,
+                            // The culture's own name, large, in its script first; the five
+                            // resolve in turn (1.2 s, then 200 ms apart) and a tap resolves one
+                            // at once. Canaan has no attested script for its name and stays Latin.
+                            ScriptName(
+                                culture = culture,
+                                key = ScriptNameKey.CultureName,
+                                style = MaterialTheme.typography.displaySmall,
                                 color = Bone,
+                                intro = true,
+                                introDelayMillis = ScriptReveal.introDelayFor(index),
+                                upper = true,
                             )
                             Spacer(modifier = Modifier.height(Spacing.Tight))
                             Text(
