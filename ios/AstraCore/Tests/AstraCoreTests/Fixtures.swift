@@ -1,0 +1,423 @@
+import AstraCore
+import Foundation
+import XCTest
+
+/// The fixtures the C# core's tests read, read where they live
+/// (dotnet/AstraAntiqua.Core.Tests/TestData), and the shared corpus loaded
+/// once. goldens.json and horizons.json are written by
+/// web/scripts/export-goldens.mjs from web's own functions, so a test that
+/// passes against them shows the Swift port computes what web computes.
+enum Fixtures {
+    /// The repository root. This file is
+    /// ios/AstraCore/Tests/AstraCoreTests/Fixtures.swift: drop the file name,
+    /// then climb four directories.
+    static let repositoryRoot: URL = {
+        var url = URL(fileURLWithPath: #filePath)
+        url.deleteLastPathComponent()
+        for _ in 0..<4 { url.deleteLastPathComponent() }
+        return url
+    }()
+
+    static let testData: URL = repositoryRoot
+        .appendingPathComponent("dotnet")
+        .appendingPathComponent("AstraAntiqua.Core.Tests")
+        .appendingPathComponent("TestData")
+
+    static let contentDirectory: URL = repositoryRoot
+        .appendingPathComponent("shared")
+        .appendingPathComponent("content")
+
+    /// The week and season fixtures are read on the UTC wall clock.
+    static let utc = TimeZone(identifier: "UTC")!
+
+    private static let loadedStore: Result<ContentStore, Error> = Result {
+        try ContentStore(directory: contentDirectory)
+    }
+
+    private static let loadedGoldens: Result<GoldenFile, Error> = Result {
+        try decode(GoldenFile.self, "goldens.json")
+    }
+
+    private static let loadedHorizons: Result<HorizonFile, Error> = Result {
+        try decode(HorizonFile.self, "horizons.json")
+    }
+
+    /// The shared corpus, loaded once for the whole run. A load failure is
+    /// reported by every test that asks for it, instead of crashing the run.
+    static func store() throws -> ContentStore { try loadedStore.get() }
+
+    static func goldens() throws -> GoldenFile { try loadedGoldens.get() }
+
+    static func horizons() throws -> HorizonFile { try loadedHorizons.get() }
+
+    /// A TestData file's text, exactly as stored.
+    static func text(_ name: String) throws -> String {
+        let url = testData.appendingPathComponent(name)
+        do {
+            return try String(contentsOf: url, encoding: .utf8)
+        } catch {
+            throw FixtureError.unreadable(url.path, String(describing: error))
+        }
+    }
+
+    private static func decode<T: Decodable>(_ type: T.Type, _ name: String) throws -> T {
+        let url = testData.appendingPathComponent(name)
+        let data: Data
+        do {
+            data = try Data(contentsOf: url)
+        } catch {
+            throw FixtureError.unreadable(url.path, String(describing: error))
+        }
+        do {
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch {
+            throw FixtureError.unreadable(url.path, String(describing: error))
+        }
+    }
+
+    /// One of web's ISO instants, to the millisecond.
+    static func instant(_ iso: String) throws -> Date {
+        guard let date = Instant.parseISO(iso) else { throw FixtureError.badInstant(iso) }
+        return date
+    }
+
+    /// An instant as web prints it, for failure messages.
+    static func iso(_ date: Date) -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter.string(from: date)
+    }
+
+    /// A fixture's longitudes keyed by web's planet ids, as a chart.
+    static func chart(_ longitudes: [String: Double]) throws -> [Planet: Double] {
+        var chart: [Planet: Double] = [:]
+        for (id, longitude) in longitudes {
+            let planet = try Planet.fromId(id)
+            chart[planet] = longitude
+        }
+        return chart
+    }
+
+    /// The longitudes of the one golden case with this name.
+    static func goldenChart(_ name: String) throws -> [Planet: Double] {
+        let matches = try goldens().cases.filter { $0.name == name }
+        guard matches.count == 1 else { throw FixtureError.missingCase(name, matches.count) }
+        return try chart(matches[0].longitudes)
+    }
+
+    /// "a|b|kind" for a contact between two bodies, so ordered lists and sets
+    /// of contacts compare as strings.
+    static func contactKey(_ a: Planet, _ b: Planet, _ kind: AspectKind) -> String {
+        "\(a.id)|\(b.id)|\(kind.id)"
+    }
+
+    /// The same key from a fixture's ids, each checked against the domain's.
+    static func contactKey(ids a: String, _ b: String, _ kind: String) throws -> String {
+        let from = try Planet.fromId(a)
+        let to = try Planet.fromId(b)
+        let aspect = try AspectKind.fromId(kind)
+        return contactKey(from, to, aspect)
+    }
+}
+
+/// A fixture that could not be read, or a value in one that does not parse.
+enum FixtureError: Error, CustomStringConvertible {
+    case unreadable(String, String)
+    case badInstant(String)
+    case missingCase(String, Int)
+
+    var description: String {
+        switch self {
+        case let .unreadable(path, detail): return "fixture \(path) could not be read: \(detail)"
+        case let .badInstant(text): return "fixture instant does not parse: '\(text)'"
+        case let .missingCase(name, count): return "expected one golden case named \(name), found \(count)"
+        }
+    }
+}
+
+/// Both surfaces run the same searches on the same upstream engine, so a
+/// found instant agrees to well under a second. Anything wider means a
+/// search went down a different branch, which is a real disagreement.
+let instantTolerance: TimeInterval = 1
+
+/// For degrees within a sign, phase angles and solar-return degrees.
+let degreeTolerance = 1e-6
+
+/// Asserts a searched instant lands within `instantTolerance` of web's.
+func assertNear(_ expected: Date, _ actual: Date, _ what: String, file: StaticString = #filePath, line: UInt = #line) {
+    let delta = actual.timeIntervalSince(expected)
+    XCTAssertLessThanOrEqual(
+        abs(delta), instantTolerance,
+        "\(what): web \(Fixtures.iso(expected)), core \(Fixtures.iso(actual)) (\(delta) s)",
+        file: file, line: line)
+}
+
+/// Asserts two instants are the same millisecond.
+func assertSameInstant(_ expected: Date, _ actual: Date, _ what: String, file: StaticString = #filePath, line: UInt = #line) {
+    XCTAssertEqual(
+        Instant.toMs(actual), Instant.toMs(expected),
+        "\(what): web \(Fixtures.iso(expected)), core \(Fixtures.iso(actual))",
+        file: file, line: line)
+}
+
+// MARK: goldens.json
+
+struct GoldenFile: Decodable {
+    let tolerance: Double
+    let cases: [GoldenCase]
+}
+
+struct GoldenCase: Decodable {
+    let name: String
+    let utc: String
+    let lat: Double
+    let lon: Double
+    let longitudes: [String: Double]
+    let ascendant: Double
+    let midheaven: Double
+    let ascendantSign: String
+    let houses: [String: Int]
+    let aspects: [ContactRow]
+}
+
+/// A contact between two bodies. `orb` is present where web printed it.
+struct ContactRow: Decodable {
+    let a: String
+    let b: String
+    let kind: String
+    let orb: Double?
+}
+
+// MARK: horizons.json
+
+struct HorizonFile: Decodable {
+    let readings: [ReadingCase]
+    let houseReadings: [HouseReadingRow]
+    let weeks: [WeekCase]
+    let spans: SpansCase
+    let ingresses: EventWindow<IngressRow>
+    let stations: EventWindow<StationRow>
+    let moonQuarters: EventWindow<QuarterRow>
+    let seasons: [SeasonRow]
+    let seasonEvents: SeasonEventsCase
+    let eclipses: EventWindow<EclipseRow>
+    let moonPhases: [MoonPhaseRow]
+    let solarReturns: [SolarReturnRow]
+    let synastry: SynastryCase
+    let transits: TransitsCase
+    let births: [BirthRow]
+}
+
+struct ReadingCase: Decodable {
+    let chart: String
+    let culture: String
+    let longitudes: [String: Double]
+    let placements: [PlacementRow]
+    let aspects: [ReadingAspectRow]
+    let summary: String
+}
+
+struct PlacementRow: Decodable {
+    let planet: String
+    let sign: String
+    let degreeInSign: Double
+    let deityName: String
+    let deityEpithet: String
+    let domain: String
+    let culturalLine: String
+    let signReading: String
+}
+
+struct ReadingAspectRow: Decodable {
+    let a: String
+    let b: String
+    let kind: String
+    let verbLine: String
+    let pairTheme: String
+    let culturalReflection: String
+}
+
+struct HouseReadingRow: Decodable {
+    let culture: String
+    let planet: String
+    let house: Int
+    let line: String
+}
+
+struct WeekCase: Decodable {
+    let weekStart: String
+    let culture: String
+    let days: [DayRow]
+}
+
+struct DayRow: Decodable {
+    let date: String
+    let label: String
+    let line: String
+    let tone: String
+    let flag: String?
+    let shorthand: ShorthandRow
+}
+
+struct ShorthandRow: Decodable {
+    let kind: String
+    let a: String?
+    let aspect: String?
+    let b: String?
+    let exact: Bool?
+    let planet: String?
+    let sign: String?
+}
+
+/// A finder's window and what web found in it.
+struct EventWindow<Event: Decodable>: Decodable {
+    let start: String
+    let days: Int
+    let events: [Event]
+}
+
+struct IngressRow: Decodable {
+    let planet: String
+    let date: String
+    let fromSign: String
+    let toSign: String
+}
+
+struct StationRow: Decodable {
+    let planet: String
+    let kind: String
+    let date: String
+    let sign: String
+    let degree: Double
+}
+
+struct QuarterRow: Decodable {
+    let name: String
+    let date: String
+    let sign: String
+    let degree: Double
+}
+
+struct EclipseRow: Decodable {
+    let date: String
+    let scope: String
+    let kind: String
+    let obscuration: Double
+    let sign: String
+    let degree: Double
+}
+
+struct SeasonRow: Decodable {
+    let at: String
+    let sign: String
+    let start: String
+    let end: String
+    let dayOfSeason: Int
+    let totalDays: Int
+    let daysRemaining: Int
+}
+
+struct SeasonEventsCase: Decodable {
+    let at: String
+    let moonPhases: [NamedDateRow]
+    let eclipses: [IgnoredRow]
+    let retrogrades: [PlanetDateRow]
+    let ingresses: [PlanetDateRow]
+}
+
+struct NamedDateRow: Decodable {
+    let name: String
+    let date: String
+}
+
+struct PlanetDateRow: Decodable {
+    let planet: String
+    let date: String
+}
+
+/// A row that is only counted, whatever it holds.
+struct IgnoredRow: Decodable {
+    init(from decoder: Decoder) throws {}
+}
+
+struct MoonPhaseRow: Decodable {
+    let at: String
+    let angle: Double
+    let illuminationFraction: Double
+    let name: String
+    let isWaxing: Bool
+    let nextQuarterName: String
+    let nextQuarterDate: String
+}
+
+struct SolarReturnRow: Decodable {
+    let natal: String
+    let natalSunLongitude: Double
+    let from: String
+    let date: String
+    let sign: String
+    let degree: Double
+}
+
+struct SpansCase: Decodable {
+    let natal: String
+    let natalPoints: [PointRow]
+    let start: String
+    let days: Int
+    let spans: [SpanRow]
+}
+
+struct PointRow: Decodable {
+    let key: String
+    let longitude: Double
+}
+
+struct SpanRow: Decodable {
+    let id: String
+    let transitPlanet: String
+    let natalKey: String
+    let aspectKind: String
+    let start: String
+    let end: String
+    let passes: [String]
+    let transitSign: String
+    let transitDegree: Double
+}
+
+struct SynastryCase: Decodable {
+    let chartA: String
+    let chartB: String
+    let aspects: [ContactRow]
+    let top5: [ContactRow]
+}
+
+struct TransitsCase: Decodable {
+    let transitChart: String
+    let natalChart: String
+    let hits: [TransitRow]
+    let top5: [TransitRow]
+}
+
+struct TransitRow: Decodable {
+    let transit: String
+    let natal: String
+    let kind: String
+    let orb: Double?
+}
+
+struct BirthRow: Decodable {
+    let input: BirthInputRow
+    let utc: String
+    let timezone: String
+    let offsetMinutes: Int
+}
+
+struct BirthInputRow: Decodable {
+    let year: Int
+    let month: Int
+    let day: Int
+    let hour: Int
+    let minute: Int
+    let latitude: Double
+    let longitude: Double
+}

@@ -1,0 +1,8 @@
+# Swift build products and editor state
+.build/
+.swiftpm/
+AstraCore/.build/
+AstraCore/.swiftpm/
+xcuserdata/
+*.xcuserstate
+DerivedData/

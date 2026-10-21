@@ -1,0 +1,28 @@
+# The Swift surface's CI.
+#   core-linux — AstraCore's parity suite (swift test) in the official Swift
+#                container: the quick check that the Swift port composes what
+#                web composes, against the same fixtures the C# core uses.
+name: swift
+
+on:
+  push:
+    paths:
+      - "ios/**"
+      - "shared/**"
+      - "dotnet/AstraAntiqua.Core.Tests/TestData/**"
+      - ".github/workflows/swift.yml"
+  workflow_dispatch:
+
+jobs:
+  core-linux:
+    runs-on: ubuntu-latest
+    container: swift:6.4
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift version
+        run: swift --version
+      - name: Test AstraCore
+        working-directory: ios/AstraCore
+        run: swift test --parallel 2>&1 | tail -200
+        shell: bash
