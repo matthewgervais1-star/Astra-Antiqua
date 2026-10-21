@@ -32,7 +32,7 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   `claude/script-reveal` (stacked on PR #4, unpushed) holds the owner's script reveal: names in
   attested script resolve to English or French on scroll (spec `2026-10-20-script-reveal.md`).
   Tasks 1 (data, 56 of 60 sourced) and 2 (web, large culture names, picker) done and reviewed.
-  Task 3 (Android) was running at handoff; Task 4 (source check, shots), PR, design push remain.
+  Task 3 (Android) built, 078a60e..ee9e774, 215 tests green, NOT yet reviewed. Then Task 4, PR.
 
 ## Decisions taken, and why
 - 2026-09-29, owner: rebuild the daily readings to the Co-Star anatomy in five voices (spec
