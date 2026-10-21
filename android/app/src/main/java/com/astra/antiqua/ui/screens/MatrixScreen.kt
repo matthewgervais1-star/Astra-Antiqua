@@ -1,5 +1,7 @@
 package com.astra.antiqua.ui.screens
 
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.ui.components.ScriptName
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -94,12 +96,13 @@ fun MatrixScreen(
                                     size = 14.dp,
                                     tint = accentFor(each),
                                 )
-                                Text(
-                                    text = each.label.uppercase(),
+                                ScriptName(
+                                    culture = each,
+                                    key = ScriptNameKey.CultureName,
                                     style = MaterialTheme.typography.labelSmall,
                                     color = accentFor(each),
+                                    upper = true,
                                     maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
@@ -150,12 +153,13 @@ private fun MatrixRow(body: Planet) {
                 modifier = Modifier.width(BODY_COLUMN),
             )
             AncientCulture.entries.forEach { each ->
-                Text(
-                    text = displayCase(DeityRegistry.getDeity(each, body).name),
+                ScriptName(
+                    culture = each,
+                    key = ScriptNameKey.Deity(body),
                     style = MaterialTheme.typography.titleMedium,
                     color = if (body.isReceived) accentFor(each) else Bone,
+                    displayFace = true,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.width(CULTURE_COLUMN),
                 )
             }

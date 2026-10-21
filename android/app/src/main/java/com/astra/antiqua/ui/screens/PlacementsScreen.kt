@@ -1,5 +1,7 @@
 package com.astra.antiqua.ui.screens
 
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.ui.components.ScriptName
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -110,6 +112,16 @@ fun PlacementsScreen(
                                     received = body.isReceived,
                                     leading = {
                                         DeityGlyph(body = body, culture = culture, size = 14.dp)
+                                    },
+                                    nameContent = { style, ink ->
+                                        ScriptName(
+                                            culture = culture,
+                                            key = ScriptNameKey.Deity(body),
+                                            style = style,
+                                            color = ink,
+                                            upper = true,
+                                            maxLines = 1,
+                                        )
                                     },
                                     onClick = { onOpenPlacement(body) },
                                 )

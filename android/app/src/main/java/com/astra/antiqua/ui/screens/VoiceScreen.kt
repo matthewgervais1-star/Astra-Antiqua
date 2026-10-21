@@ -1,5 +1,7 @@
 package com.astra.antiqua.ui.screens
 
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.ui.components.ScriptName
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -128,6 +130,21 @@ private fun VoiceScreenContent(
                     headline = voice.label,
                     emblem = { CultureEmblem(culture = voice, size = 64.dp, tint = accent) },
                     sub = copy?.subtitle,
+                    // The title is the culture's own name, so it takes the intro and no second name.
+                    headlineContent = {
+                        ScriptName(
+                            culture = voice,
+                            key = ScriptNameKey.CultureName,
+                            style = MaterialTheme.typography.displaySmall,
+                            color = Bone,
+                            intro = true,
+                            upper = true,
+                            displayFace = true,
+                            textAlign = TextAlign.Center,
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.padding(horizontal = Spacing.Gutter),
+                        )
+                    },
                 )
             }
             val figures = figuresFor(voice)
@@ -253,10 +270,12 @@ private fun DeityRow(
             modifier = Modifier.width(62.dp),
         )
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = displayCase(deity.name),
+            ScriptName(
+                culture = voice,
+                key = ScriptNameKey.Deity(body),
                 style = MaterialTheme.typography.titleMedium,
                 color = if (body.isReceived) accent else Bone,
+                displayFace = true,
             )
             Text(
                 text = deity.epithet,
