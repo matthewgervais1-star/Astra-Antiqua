@@ -173,7 +173,7 @@ function WeekContent({
 
   return (
     <div className="mx-auto max-w-[640px]">
-      <NaveHead kicker={`${voice.institution} · THE WEEK`}>{voice.weekTitle}</NaveHead>
+      <NaveHead culture={culture} kicker={`${voice.institution} · THE WEEK`}>{voice.weekTitle}</NaveHead>
       <p className="mx-auto max-w-[560px] text-left font-body text-prose-m leading-prose text-prose">
         {voice.weekThesis}
       </p>

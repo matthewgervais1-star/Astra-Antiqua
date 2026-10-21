@@ -43,6 +43,7 @@ export function CenterDecree({
   return (
     <main id="day-figure" className={cn("flex flex-col items-center px-6 py-11 text-center md:px-14 md:py-[var(--space-6)]", className)}>
       <NaveHead
+        culture={culture}
         kicker={
           <>
             {weekday} · {dateLong} · <ScriptName culture={culture} heading="institution" />

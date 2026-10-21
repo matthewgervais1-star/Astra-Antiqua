@@ -109,6 +109,7 @@ export function FigureDetail({ date, id }: FigureDetailProps) {
   return (
     <div className="mx-auto max-w-[640px]">
       <NaveHead
+        culture={culture}
         kicker={
           <>
             {weekdayUpper(instant)} · {dateLongUpper(instant)} · <ScriptName culture={culture} heading="institution" />

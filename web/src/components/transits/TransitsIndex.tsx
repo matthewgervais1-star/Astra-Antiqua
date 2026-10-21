@@ -74,7 +74,7 @@ export function TransitsIndex() {
 
   return (
     <>
-      <NaveHead kicker={`${voice.institution} · THE LONG TRANSITS`}>WHAT DOES NOT PASS IN A DAY</NaveHead>
+      <NaveHead culture={culture} kicker={`${voice.institution} · THE LONG TRANSITS`}>WHAT DOES NOT PASS IN A DAY</NaveHead>
       <div className="mt-10 flex flex-col gap-12">
         <section>
           <SectionDivider label="ACTIVE NOW" />
