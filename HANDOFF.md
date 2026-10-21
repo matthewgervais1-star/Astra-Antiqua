@@ -1,7 +1,6 @@
 # HANDOFF, Astra Antiqua, state at 2026-10-20
 
-Read first. Where this file and an older line in `CLAUDE.md` or any index disagree, this
-file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
+Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFERENCE / CANNOT CONFIRM.
 
 ## What this is (FACT, `CLAUDE.md`)
 - One computed sky read through five ancient theologies on three surfaces sharing a domain:
@@ -14,10 +13,7 @@ file wins. Tags: FACT (with its source file) / INFERENCE / CANNOT CONFIRM.
   the second wave. Done and reviewed: Tasks 15 to 17 (day page, figure page, dive deeper),
   11 to 14 (archive, rule hex, display-xs 18px, Spectral SC), 18a and 18b (Android sync
   client and screens; Android birth times now use a bundled tz-lookup, as web does).
-- FACT (`task-18c-report.md`): 18c passed ten emulator steps, fixed four device defects.
-- FACT (`git log`, 2026-10-08): the 375px sub-bar fix from the session "Fix 375px horizontal
-  scroll on day and week pages" (53addc3, PR #3, merged to `master`) is also cherry-picked here as d22b4d6.
-- FACT (ledger, 2026-10-08): whole-branch review of 9804a4e..1d930a3 found 0 Critical,
+- FACT (ledger, 2026-10-08): 18c passed on the emulator; whole-branch review of 9804a4e..1d930a3 found 0 Critical,
   1 Important (Room 2->3 migration kept the guessed-zone instant); fixed 1e048b1..44bc3e3.
   Cleanup done and reviewed: C1 LICENCES screen (6292fea); C2 /charts header, /week rows,
   names wrap at 1280 (7638d9e); C3 Android ASC line on web's obliquity, CNC/PSC/AQR on both
@@ -60,6 +56,5 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 ## Files that matter
 - Plan: `docs/superpowers/plans/2026-09-29-planned-work-closeout.md`. Ledger (git-ignored):
   `.superpowers/sdd/2026-09-29-planned-work-closeout/progress.md` and the task reports.
-- Composition: `web/src/lib/decree.ts`, `figureReading.ts`, `diveDeeper.ts`;
-  `web/src/data/decreeBanks.ts`, `figureBanks.ts`, `diveDeeperBanks.ts`; Android mirrors via
-  `web/scripts/gen-android-reading-banks.mjs`. Android sync: `android/.../data/account/`.
+- Composition: `web/src/lib/decree.ts`, `figureReading.ts`; banks in `web/src/data/`, mirrored
+  to Android by `web/scripts/gen-android-*.mjs`. Script forms: `web/src/data/scriptForms.ts`.
