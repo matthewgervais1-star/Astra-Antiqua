@@ -303,6 +303,23 @@ await writeIcon("icon-maskable-512.png", neutral512);
 await writeIcon("launcher-neutral-512.png", neutral512);
 await writeIcon("launcher-neutral-192.png", neutral192);
 
+// The native iOS app's icon: the same neutral launcher, one 1024 square in the
+// app's asset catalog (iOS cuts its own corners and derives every other size).
+// Flattened with no alpha channel, which App Store Connect requires.
+const IOS_ASSETS = path.join(WEB_DIR, "..", "ios", "AstraAntiqua", "Assets.xcassets");
+const IOS_ICONSET = path.join(IOS_ASSETS, "AppIcon.appiconset");
+await mkdir(IOS_ICONSET, { recursive: true });
+await writeFile(
+  path.join(IOS_ICONSET, "AppIcon-1024.png"),
+  await sharp(Buffer.from(neutral), { density: DENSITY * 2 }).resize(1024, 1024).flatten({ background: NEUTRAL_GROUND }).removeAlpha().png().toBuffer(),
+);
+await writeFile(
+  path.join(IOS_ICONSET, "Contents.json"),
+  `${JSON.stringify({ images: [{ filename: "AppIcon-1024.png", idiom: "universal", platform: "ios", size: "1024x1024" }], info: { author: "xcode", version: 1 } }, null, 2)}\n`,
+);
+await writeFile(path.join(IOS_ASSETS, "Contents.json"), `${JSON.stringify({ info: { author: "xcode", version: 1 } }, null, 2)}\n`);
+console.log("wrote ios/AstraAntiqua/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png (1024, no alpha)");
+
 for (const { culture, file } of [...LAUNCHERS, ...TYPESET_LAUNCHERS]) {
   const source = path.join(MARKS, file);
   if (!existsSync(source)) {
