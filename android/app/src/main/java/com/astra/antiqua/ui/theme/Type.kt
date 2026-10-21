@@ -68,6 +68,18 @@ val PlexMono = FontFamily(
 val NotoSymbols = FontFamily(Font(R.font.noto_sans_symbols, FontWeight.Normal))
 
 /**
+ * The script-reveal faces (docs/superpowers/specs/2026-10-20-script-reveal.md),
+ * the design system's epigraphic faces: they set the attested names in
+ * domain/ScriptForms.kt and nothing else. GFS Didot's single TTF carries both
+ * Greek and Greek Extended, so polytonic names need no fallback family.
+ * ScriptFontCoverageTest checks every script code point against these files.
+ */
+val NotoHieroglyphs = FontFamily(Font(R.font.noto_sans_egyptian_hieroglyphs, FontWeight.Normal))
+val NotoUgaritic = FontFamily(Font(R.font.noto_sans_ugaritic, FontWeight.Normal))
+val NotoPhoenician = FontFamily(Font(R.font.noto_sans_phoenician, FontWeight.Normal))
+val GfsDidot = FontFamily(Font(R.font.gfs_didot, FontWeight.Normal))
+
+/**
  * THE TYPE SCALE, from docs/design/system/tokens/typography.css, which is
  * canonical for both surfaces. Eleven sizes, five tracking values, three
  * leadings, the same eleven web binds in web/src/app/globals.css.

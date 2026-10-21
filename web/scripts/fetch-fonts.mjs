@@ -183,6 +183,33 @@ const ANDROID_FAMILIES = [
     subset: "symbols",
     picks: [{ style: "normal", weight: "400", file: "noto_sans_symbols.ttf" }],
   },
+  /**
+   * The script-reveal faces (docs/superpowers/specs/2026-10-20-script-reveal.md):
+   * each culture's attested names in its own writing, never copy. The TTF
+   * response carries no subset split, so one file covers the whole family;
+   * GFS Didot's single TTF holds both Greek and Greek Extended (U+1F00-1FFF).
+   * ScriptFontCoverageTest checks every script code point against these cmaps.
+   */
+  {
+    family: "Noto Sans Egyptian Hieroglyphs",
+    css: "family=Noto+Sans+Egyptian+Hieroglyphs",
+    picks: [{ style: "normal", weight: "400", file: "noto_sans_egyptian_hieroglyphs.ttf" }],
+  },
+  {
+    family: "Noto Sans Ugaritic",
+    css: "family=Noto+Sans+Ugaritic",
+    picks: [{ style: "normal", weight: "400", file: "noto_sans_ugaritic.ttf" }],
+  },
+  {
+    family: "Noto Sans Phoenician",
+    css: "family=Noto+Sans+Phoenician",
+    picks: [{ style: "normal", weight: "400", file: "noto_sans_phoenician.ttf" }],
+  },
+  {
+    family: "GFS Didot",
+    css: "family=GFS+Didot",
+    picks: [{ style: "normal", weight: "400", file: "gfs_didot.ttf" }],
+  },
 ];
 
 /**
