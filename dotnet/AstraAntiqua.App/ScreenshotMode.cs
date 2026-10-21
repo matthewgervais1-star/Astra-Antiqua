@@ -26,6 +26,7 @@ public static class ScreenshotMode
         "voices" => new VoicesPage(),
         "voice-egypt" => new VoicePage(Culture.Egypt),
         "voice-canaan" => new VoicePage(Culture.Canaan),
+        "voice-carthage" => new VoicePage(Culture.Carthage),
         "matrix" => new MatrixPage(),
         "method" => new MethodPage(),
         "learn" => new LearnPage(),

@@ -6,3 +6,4 @@ AstraCore/.swiftpm/
 xcuserdata/
 *.xcuserstate
 DerivedData/
+build/

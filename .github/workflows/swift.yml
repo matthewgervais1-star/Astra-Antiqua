@@ -2,6 +2,11 @@
 #   core-linux — AstraCore's parity suite (swift test) in the official Swift
 #                container: the quick check that the Swift port composes what
 #                web composes, against the same fixtures the C# core uses.
+#   ios27-app  — the SwiftUI app on GitHub's Xcode 27 image: generates the
+#                Xcode project from ios/project.yml, builds it for the
+#                simulator with Xcode 27.1, boots an iOS 27 iPhone simulator
+#                and photographs every screen (.github/scripts/ios-smoke.sh).
+#                Uploads the screenshots and the generated project.
 name: swift
 
 on:
@@ -11,6 +16,8 @@ on:
       - "shared/**"
       - "dotnet/AstraAntiqua.Core.Tests/TestData/**"
       - ".github/workflows/swift.yml"
+      - ".github/scripts/ios-smoke.sh"
+      - "android/app/src/main/res/font/**"
   workflow_dispatch:
 
 jobs:
@@ -26,3 +33,51 @@ jobs:
         working-directory: ios/AstraCore
         run: swift test --parallel 2>&1 | tail -200
         shell: bash
+
+  ios27-app:
+    runs-on: xcode-27
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode 27.1
+        run: |
+          sudo xcode-select -s /Applications/Xcode_27.1.app/Contents/Developer
+          xcodebuild -version
+      - name: Generate the Xcode project
+        working-directory: ios
+        run: |
+          brew install xcodegen
+          xcodegen generate
+      - name: Build for the simulator (unsigned)
+        working-directory: ios
+        shell: bash
+        run: >
+          xcodebuild
+          -project AstraAntiqua.xcodeproj
+          -scheme AstraAntiqua
+          -sdk iphonesimulator
+          -destination "generic/platform=iOS Simulator"
+          -derivedDataPath build
+          -configuration Debug
+          CODE_SIGNING_ALLOWED=NO
+          build 2>&1 | grep -E "error:|warning:|BUILD" | tail -120
+      - name: Run every screen on an iOS 27 simulator
+        shell: bash
+        run: >
+          bash .github/scripts/ios-smoke.sh
+          ios/build/Build/Products/Debug-iphonesimulator/AstraAntiqua.app smoke 27
+          com.astra.antiqua.swift "Library/Application Support/birth.v1.json"
+      - name: Upload the screenshots and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: swift-ios27-screens
+          path: smoke/
+          if-no-files-found: warn
+      - name: Upload the generated Xcode project
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: swift-xcodeproj
+          path: ios/AstraAntiqua.xcodeproj
+          if-no-files-found: warn

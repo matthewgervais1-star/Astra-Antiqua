@@ -9,14 +9,20 @@
 # simulator's log and any crash report, and the script fails at the end if
 # there was one, after photographing every screen it can.
 #
-#   .github/scripts/ios-smoke.sh <path to AstraAntiqua.App.app> <out dir> <iOS major, e.g. 27>
+#   .github/scripts/ios-smoke.sh <path to the .app> <out dir> <iOS major, e.g. 27> [bundle id] [record path]
+#
+# The bundle id defaults to the .NET app's; the record path is where the app
+# reads its birth record inside its data container (default
+# Library/birth.v1.json, the .NET app's; the Swift app keeps it in
+# "Library/Application Support/birth.v1.json").
 set -uo pipefail
 
 APP="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 mkdir -p "$2/logs"
 OUT="$(cd "$2" && pwd)"   # absolute: the simulator resolves --stdout/--stderr itself
 MAJOR="$3"
-BUNDLE="com.astra.antiqua.ios"
+BUNDLE="${4:-com.astra.antiqua.ios}"
+RECORD="${5:-Library/birth.v1.json}"
 SEED="$(pwd)/dotnet/AstraAntiqua.Core.Tests/TestData/smoke-birth.v1.json"
 FAILURES=()
 
@@ -91,13 +97,13 @@ shot() {
 # Before any record exists: the five doorways.
 shot 01-doorways "" 25
 
-# Seed the birth record where the app reads it (FileSystem.AppDataDirectory,
-# which is Library on iOS), then read every screen against it.
+# Seed the birth record where the app reads it, then read every screen
+# against it.
 DATA=$(xcrun simctl get_app_container "$UDID" "$BUNDLE" data) || DATA=""
 if [ -n "$DATA" ]; then
-  mkdir -p "$DATA/Library"
-  cp "$SEED" "$DATA/Library/birth.v1.json"
-  echo "seeded $DATA/Library/birth.v1.json"
+  mkdir -p "$(dirname "$DATA/$RECORD")"
+  cp "$SEED" "$DATA/$RECORD"
+  echo "seeded $DATA/$RECORD"
 else
   echo "FAIL: no data container to seed"
   FAILURES+=("seed")
@@ -113,6 +119,7 @@ shot 08-placement-sun placement-sun 8
 shot 09-voices voices 8
 shot 10-voice-egypt voice-egypt 8
 shot 11-voice-canaan voice-canaan 8
+shot 11b-voice-carthage voice-carthage 8
 shot 12-matrix matrix 8
 shot 13-method method 8
 shot 14-learn learn 8

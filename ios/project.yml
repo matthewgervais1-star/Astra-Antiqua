@@ -1,0 +1,73 @@
+# XcodeGen spec for the native Swift iOS app. CI generates
+# AstraAntiqua.xcodeproj from this file; the generated project is committed,
+# so opening the app needs Xcode and nothing else.
+#
+#   cd ios && xcodegen generate
+#
+# The bundle copies shared/content (as the folder "content") and the shared
+# font files (as the folder "font") straight from where the repository keeps
+# them, so the Swift app, the .NET app, Android and web read one copy.
+name: AstraAntiqua
+options:
+  bundleIdPrefix: com.astra.antiqua
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+packages:
+  AstraCore:
+    path: AstraCore
+targets:
+  AstraAntiqua:
+    type: application
+    platform: iOS
+    # A shared scheme, so xcodebuild in CI and Xcode on a borrowed Mac both
+    # find "AstraAntiqua" to build and run.
+    scheme: {}
+    sources:
+      - path: AstraAntiqua
+      - path: ../shared/content
+        type: folder
+        buildPhase: resources
+      - path: ../android/app/src/main/res/font
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - package: AstraCore
+        product: AstraCore
+    info:
+      path: AstraAntiqua/Info.plist
+      properties:
+        CFBundleDisplayName: Astra Antiqua
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        LSRequiresIPhoneOS: true
+        UILaunchScreen:
+          UIColorName: ""
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIUserInterfaceStyle: Dark
+        ITSAppUsesNonExemptEncryption: false
+        UIAppFonts:
+          - font/cinzel_regular.ttf
+          - font/cinzel_medium.ttf
+          - font/cinzel_semibold.ttf
+          - font/spectral_regular.ttf
+          - font/spectral_regular_italic.ttf
+          - font/spectral_light.ttf
+          - font/spectral_light_italic.ttf
+          - font/ibm_plex_mono_regular.ttf
+          - font/ibm_plex_mono_medium.ttf
+          - font/noto_sans_symbols.ttf
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.astra.antiqua.swift
+        PRODUCT_NAME: AstraAntiqua
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_PREVIEWS: YES
