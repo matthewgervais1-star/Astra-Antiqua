@@ -11,6 +11,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -73,7 +75,9 @@ import kotlinx.coroutines.delay
  * frame of it recomposes nothing; scrolling recomposes only at a crossing.
  *
  * Rules: in the band (30% to 70% of the window height) the name reads Latin,
- * outside it the script. A tap resolves it at once, until the next crossing.
+ * outside it the script. A tap resolves it at once, until the next crossing,
+ * and so does focus reaching the container the name sits in ([interactionSource],
+ * the one that container's `clickable` takes; web listens for `focusin`).
  * With [intro], the script shows from the first frame, holds for
  * [introDelayMillis], then resolves, and only a later crossing applies the
  * band again: a name at the top of a screen would otherwise never resolve.
@@ -100,6 +104,7 @@ fun ScriptName(
     textAlign: TextAlign? = null,
     maxLines: Int = Int.MAX_VALUE,
     contentAlignment: Alignment = Alignment.CenterStart,
+    interactionSource: InteractionSource? = null,
 ) {
     val form = ScriptReveal.formFor(culture, key)
     val language = ScriptReveal.pickLanguage(LocalConfiguration.current.locales[0]?.language)
@@ -123,7 +128,7 @@ fun ScriptName(
 
     var inBand by remember { mutableStateOf<Boolean?>(null) }
     var introRunning by remember { mutableStateOf(intro) }
-    // Latin until the next crossing: set by a tap or the end of the intro.
+    // Latin until the next crossing: set by a tap, focus, or the end of the intro.
     var held by remember { mutableStateOf(false) }
     // Null before the first position report, when neither layer draws.
     val showLatin = ScriptReveal.showsLatin(introRunning, held, inBand)
@@ -141,6 +146,13 @@ fun ScriptName(
             settled = true
         }
     }
+    val resolve = {
+        introRunning = false
+        held = true
+    }
+    // Focus reaching the container resolves the name as a tap does.
+    val focused = interactionSource?.collectIsFocusedAsState()?.value == true
+    LaunchedEffect(focused) { if (focused) resolve() }
     if (intro) {
         LaunchedEffect(Unit) {
             delay(introDelayMillis)
@@ -170,10 +182,7 @@ fun ScriptName(
                 // a drag that scrolls the list cancels it.
                 awaitEachGesture {
                     awaitFirstDown(requireUnconsumed = false)
-                    if (waitForUpOrCancellation() != null) {
-                        introRunning = false
-                        held = true
-                    }
+                    if (waitForUpOrCancellation() != null) resolve()
                 }
             },
         contentAlignment = contentAlignment,
