@@ -1,6 +1,8 @@
 package com.astra.antiqua.ui.screens
 
 import com.astra.antiqua.ui.components.CultureNameHead
+import com.astra.antiqua.ui.components.ScriptName
+import com.astra.antiqua.domain.ScriptNameKey
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -120,11 +122,14 @@ fun MainDashboardScreen(
         item {
             Spacer(modifier = Modifier.height(Spacing.Step))
             CultureNameHead(culture, modifier = Modifier.padding(top = Spacing.Step))
-            Text(
-                text = displayCase(lexicon.dashboardTitle),
+            ScriptName(
+                culture = culture,
+                key = ScriptNameKey.Institution,
                 style = MaterialTheme.typography.displayMedium,
                 color = Bone,
+                displayFace = true,
                 textAlign = TextAlign.Center,
+                contentAlignment = Alignment.Center,
                 modifier = Modifier.padding(top = Spacing.Step)
             )
             Spacer(modifier = Modifier.height(Spacing.Snug))

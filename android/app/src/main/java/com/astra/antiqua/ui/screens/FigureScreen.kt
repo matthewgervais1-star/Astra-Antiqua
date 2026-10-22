@@ -46,6 +46,7 @@ import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.ui.components.ActionButton
 import com.astra.antiqua.ui.components.ActionWeight
 import com.astra.antiqua.ui.components.DeityGlyph
+import com.astra.antiqua.ui.components.InstitutionKicker
 import com.astra.antiqua.ui.components.NaveHead
 import com.astra.antiqua.ui.components.NaveShell
 import com.astra.antiqua.ui.components.Panel
@@ -107,12 +108,20 @@ fun FigureScreen(
                         FigureReadingComposer.Missing.SLOW -> "Two slow bodies make a long transit, not a day's figure"
                         FigureReadingComposer.Missing.ABSENT -> "The sky did not hold this figure that day"
                     }
-                    NaveHead(kicker = "$institution · the figure", headline = headline)
+                    NaveHead(
+                        kicker = "$institution · the figure",
+                        headline = headline,
+                        kickerContent = { InstitutionKicker(culture, after = "the figure") },
+                    )
                     FigureLinks(onNavigate)
                 }
 
                 FigureState.Failed -> item {
-                    NaveHead(kicker = "$institution · the figure", headline = stringResource(R.string.figure_failed))
+                    NaveHead(
+                        kicker = "$institution · the figure",
+                        headline = stringResource(R.string.figure_failed),
+                        kickerContent = { InstitutionKicker(culture, after = "the figure") },
+                    )
                     Box(modifier = Modifier.padding(horizontal = Spacing.Gutter)) {
                         ActionButton(
                             label = stringResource(R.string.figure_try_again),
@@ -130,6 +139,7 @@ fun FigureScreen(
                         NaveHead(
                             kicker = "${longDate(page.instant)} · $institution",
                             culture = culture,
+                            kickerContent = { InstitutionKicker(culture, before = longDate(page.instant)) },
                             headline = page.headline,
                             sub = page.evidence,
                         )
