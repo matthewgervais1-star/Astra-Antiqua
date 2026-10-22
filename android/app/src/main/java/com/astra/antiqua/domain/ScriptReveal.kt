@@ -1,6 +1,7 @@
 package com.astra.antiqua.domain
 
 import com.astra.antiqua.model.AncientCulture
+import com.astra.antiqua.model.AppPhase
 import com.astra.antiqua.model.Planet
 import java.util.Locale
 
@@ -33,9 +34,6 @@ object ScriptReveal {
 
     /** The step between the picker's names, so they resolve in turn. */
     const val INTRO_STAGGER_MILLIS = 200L
-
-    /** The fade MainActivity runs between app phases; the picker composes when it starts. */
-    const val PHASE_FADE_MILLIS = 400
 
     /**
      * French when the device locale's language is French (fr, fr-CA); English
@@ -78,7 +76,7 @@ object ScriptReveal {
      * When the picker's name at [index] resolves, counted from the picker's first
      * composition: the phase fade runs first, so the hold starts on a full-opacity name.
      */
-    fun pickerDelayFor(index: Int): Long = PHASE_FADE_MILLIS + introDelayFor(index)
+    fun pickerDelayFor(index: Int): Long = AppPhase.FADE_MILLIS + introDelayFor(index)
 
     /**
      * The form a name shows: true for Latin, false for script, null while nothing
