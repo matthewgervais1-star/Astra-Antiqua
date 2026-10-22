@@ -31,7 +31,7 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   `claude/script-reveal` (stacked on PR #4, unpushed) holds the owner's script reveal: names in
   attested script resolve to English or French on scroll (spec `2026-10-20-script-reveal.md`).
   Tasks 1 (data, 56 of 60 sourced) and 2 (web, large culture names, picker) done and reviewed.
-  Task 3 (Android) reviewed; TalkBack fix ece6cf4. Six Minors deferred in the ledger.
+  Task 3 (Android) reviewed; TalkBack fix ece6cf4. Android institution titles now equal web's (owner, 2026-10-22) and reveal too.
 
 ## Decisions taken, and why
 - 2026-09-29, owner: rebuild the daily readings to the Co-Star anatomy in five voices (spec
