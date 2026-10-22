@@ -1,5 +1,9 @@
 package com.astra.antiqua.ui.components
 
+import android.content.Context
+import android.database.ContentObserver
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -11,11 +15,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -213,13 +221,50 @@ private fun scriptStyle(culture: AncientCulture, base: TextStyle): TextStyle {
 }
 
 /** True when the system animator duration scale is 0 (Developer options or "Remove animations"). */
+private fun readAnimationsOff(context: Context): Boolean =
+    Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+
+/**
+ * The animator-scale flag, kept current by [AnimationsOffProvider]. Null where nothing
+ * provides it (a preview, a test), and [ScriptName] reads the setting once instead.
+ */
+private val LocalAnimationsOff = staticCompositionLocalOf<State<Boolean>?> { null }
+
+/**
+ * Observes the animator duration scale once for everything below it, so a change
+ * made while the app runs reaches every [ScriptName] on screen. One observer per
+ * activity, never one per name; it is unregistered when this leaves the composition.
+ */
+@Composable
+fun AnimationsOffProvider(content: @Composable () -> Unit) {
+    val context = LocalContext.current
+    val off = remember(context) { mutableStateOf(readAnimationsOff(context)) }
+    DisposableEffect(context) {
+        val resolver = context.contentResolver
+        val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
+            override fun onChange(selfChange: Boolean) {
+                off.value = readAnimationsOff(context)
+            }
+        }
+        resolver.registerContentObserver(
+            Settings.Global.getUriFor(Settings.Global.ANIMATOR_DURATION_SCALE),
+            false,
+            observer,
+        )
+        // A change between the first read and the registration would otherwise be missed.
+        off.value = readAnimationsOff(context)
+        onDispose { resolver.unregisterContentObserver(observer) }
+    }
+    CompositionLocalProvider(LocalAnimationsOff provides off, content = content)
+}
+
 @Composable
 private fun rememberAnimationsOff(): Boolean {
     if (LocalInspectionMode.current) return false
+    val shared = LocalAnimationsOff.current
+    if (shared != null) return shared.value
     val context = LocalContext.current
-    return remember(context) {
-        Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
-    }
+    return remember(context) { readAnimationsOff(context) }
 }
 
 @Preview
