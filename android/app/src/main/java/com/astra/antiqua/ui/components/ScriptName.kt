@@ -28,7 +28,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -144,7 +145,7 @@ fun ScriptName(
 
     Box(
         modifier = modifier
-            .clearAndSetSemantics { contentDescription = latin }
+            .clearAndSetSemantics { text = AnnotatedString(latin) }
             .onGloballyPositioned { coordinates ->
                 val bounds = coordinates.boundsInWindow()
                 val height = coordinates.findRootCoordinates().size.height.toFloat()
