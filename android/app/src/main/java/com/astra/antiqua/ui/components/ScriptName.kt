@@ -112,6 +112,10 @@ fun ScriptName(
     val latin = if (displayFace) displayCase(raw) else raw
     val script = ScriptReveal.scriptFor(form)
     val animationsOff = rememberAnimationsOff()
+    // Above the early return, so a finished intro stays finished when animations come back on.
+    var introRunning by remember { mutableStateOf(intro) }
+    // Latin until the next crossing: set by a tap, focus, or the end of the intro.
+    var held by remember { mutableStateOf(false) }
 
     if (script == null || animationsOff) {
         Text(
@@ -127,9 +131,6 @@ fun ScriptName(
     }
 
     var inBand by remember { mutableStateOf<Boolean?>(null) }
-    var introRunning by remember { mutableStateOf(intro) }
-    // Latin until the next crossing: set by a tap, focus, or the end of the intro.
-    var held by remember { mutableStateOf(false) }
     // Null before the first position report, when neither layer draws.
     val showLatin = ScriptReveal.showsLatin(introRunning, held, inBand)
 
