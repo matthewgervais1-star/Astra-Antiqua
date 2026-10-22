@@ -31,6 +31,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.astra.antiqua.domain.ScriptReveal
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.AppPhase
 import com.astra.antiqua.model.Planet
@@ -103,8 +104,8 @@ class MainActivity : ComponentActivity() {
                             transitionSpec = {
                                 // A plain opacity fade, which is the only motion
                                 // this identity allows. Nothing moves or scales.
-                                fadeIn(animationSpec = tween(FADE_MS)) togetherWith
-                                    fadeOut(animationSpec = tween(FADE_MS))
+                                fadeIn(animationSpec = tween(ScriptReveal.PHASE_FADE_MILLIS)) togetherWith
+                                    fadeOut(animationSpec = tween(ScriptReveal.PHASE_FADE_MILLIS))
                             },
                             label = "PhaseTransition"
                         ) { phase ->
@@ -127,10 +128,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    private companion object {
-        const val FADE_MS = 400
     }
 }
 

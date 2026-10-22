@@ -103,15 +103,16 @@ fun CultureSelectionScreen(
                         Spacer(modifier = Modifier.width(Spacing.Step))
                         Column {
                             // The culture's own name, large, in its script first; the five
-                            // resolve in turn (1.2 s, then 200 ms apart) and a tap resolves one
-                            // at once. Canaan has no attested script for its name and stays Latin.
+                            // resolve in turn (1.2 s, then 200 ms apart, once the phase fade has
+                            // passed) and a tap resolves one at once. Canaan has no attested
+                            // script for its name and stays Latin.
                             ScriptName(
                                 culture = culture,
                                 key = ScriptNameKey.CultureName,
                                 style = MaterialTheme.typography.displaySmall,
                                 color = Bone,
                                 intro = true,
-                                introDelayMillis = ScriptReveal.introDelayFor(index),
+                                introDelayMillis = ScriptReveal.pickerDelayFor(index),
                                 upper = true,
                             )
                             Spacer(modifier = Modifier.height(Spacing.Tight))

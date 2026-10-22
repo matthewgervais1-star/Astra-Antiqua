@@ -75,4 +75,11 @@ class ScriptRevealTest {
         assertEquals(2000L, ScriptReveal.introDelayFor(4))
         assertEquals(400, ScriptReveal.FADE_MILLIS)
     }
+
+    @Test
+    fun thePickerHoldStartsAfterThePhaseFade() {
+        assertEquals(400, ScriptReveal.PHASE_FADE_MILLIS)
+        val delays = AncientCulture.entries.indices.map { ScriptReveal.pickerDelayFor(it) }
+        assertEquals(listOf(1600L, 1800L, 2000L, 2200L, 2400L), delays)
+    }
 }

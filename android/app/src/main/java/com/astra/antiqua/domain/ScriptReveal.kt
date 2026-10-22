@@ -34,6 +34,9 @@ object ScriptReveal {
     /** The step between the picker's names, so they resolve in turn. */
     const val INTRO_STAGGER_MILLIS = 200L
 
+    /** The fade MainActivity runs between app phases; the picker composes when it starts. */
+    const val PHASE_FADE_MILLIS = 400
+
     /**
      * French when the device locale's language is French (fr, fr-CA); English
      * otherwise. Matches the language subtag exactly, so "fro" (Old French)
@@ -70,4 +73,10 @@ object ScriptReveal {
 
     /** The picker's hold for the name at [index]: 1.2 s, then 200 ms apart. */
     fun introDelayFor(index: Int): Long = INTRO_HOLD_MILLIS + INTRO_STAGGER_MILLIS * index
+
+    /**
+     * When the picker's name at [index] resolves, counted from the picker's first
+     * composition: the phase fade runs first, so the hold starts on a full-opacity name.
+     */
+    fun pickerDelayFor(index: Int): Long = PHASE_FADE_MILLIS + introDelayFor(index)
 }
