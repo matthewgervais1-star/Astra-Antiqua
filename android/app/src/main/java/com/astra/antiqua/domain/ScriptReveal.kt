@@ -79,4 +79,29 @@ object ScriptReveal {
      * composition: the phase fade runs first, so the hold starts on a full-opacity name.
      */
     fun pickerDelayFor(index: Int): Long = PHASE_FADE_MILLIS + introDelayFor(index)
+
+    /**
+     * The form a name shows: true for Latin, false for script, null while nothing
+     * has been measured and no intro runs, when the name draws neither. The intro
+     * shows script and a tap holds Latin; otherwise the band decides ([inBand]).
+     */
+    fun showsLatin(introRunning: Boolean, held: Boolean, inBand: Boolean?): Boolean? = when {
+        introRunning -> false
+        held -> true
+        else -> inBand
+    }
+
+    /**
+     * The Latin layer's alpha. Until [settled] the first form shows at once, so it
+     * is never faded in from the wrong one; after that [animated] carries the fade.
+     */
+    fun latinAlpha(shows: Boolean?, settled: Boolean, animated: Float): Float = when {
+        shows == null -> 0f
+        !settled -> if (shows) 1f else 0f
+        else -> animated
+    }
+
+    /** The script layer's alpha: whatever the Latin layer leaves, and nothing before a form is known. */
+    fun scriptAlpha(shows: Boolean?, settled: Boolean, animated: Float): Float =
+        if (shows == null) 0f else 1f - latinAlpha(shows, settled, animated)
 }

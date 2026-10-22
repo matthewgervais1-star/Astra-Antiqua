@@ -69,6 +69,8 @@ import kotlinx.coroutines.delay
  * With [intro], the script shows from the first frame, holds for
  * [introDelayMillis], then resolves, and only a later crossing applies the
  * band again: a name at the top of a screen would otherwise never resolve.
+ * Without it the name draws nothing until its first position is reported, one
+ * blank frame, so no frame shows the form the band would not show.
  * A name with no attested script, or a device with animations off
  * (animator duration scale 0), shows Latin and never swaps.
  *
@@ -115,22 +117,20 @@ fun ScriptName(
     var introRunning by remember { mutableStateOf(intro) }
     // Latin until the next crossing: set by a tap or the end of the intro.
     var held by remember { mutableStateOf(false) }
-    val showLatin = when {
-        introRunning -> false
-        held -> true
-        else -> inBand ?: true
-    }
+    // Null before the first position report, when neither layer draws.
+    val showLatin = ScriptReveal.showsLatin(introRunning, held, inBand)
 
-    val latinAlpha = remember { Animatable(if (showLatin) 1f else 0f) }
-    // A name first measured outside the band starts in script without a fade.
-    val snapNext = remember { booleanArrayOf(false) }
+    val latinAlpha = remember { Animatable(0f) }
+    // False until the first form is on screen; that form takes its alpha at once, never a fade.
+    var settled by remember { mutableStateOf(false) }
     LaunchedEffect(showLatin) {
+        if (showLatin == null) return@LaunchedEffect
         val target = if (showLatin) 1f else 0f
-        if (snapNext[0]) {
-            snapNext[0] = false
-            latinAlpha.snapTo(target)
-        } else {
+        if (settled) {
             latinAlpha.animateTo(target, tween(ScriptReveal.FADE_MILLIS, easing = FastOutSlowInEasing))
+        } else {
+            latinAlpha.snapTo(target)
+            settled = true
         }
     }
     if (intro) {
@@ -152,7 +152,6 @@ fun ScriptName(
                 val now = ScriptReveal.inBand(bounds.top, bounds.bottom, height)
                 val before = inBand
                 if (before != now) {
-                    if (before == null && !now && !introRunning) snapNext[0] = true
                     inBand = now
                     // During the intro the band waits; afterwards a crossing clears a held Latin.
                     if (before != null && !introRunning) held = false
@@ -178,7 +177,9 @@ fun ScriptName(
             textAlign = textAlign,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.graphicsLayer { alpha = latinAlpha.value },
+            modifier = Modifier.graphicsLayer {
+                alpha = ScriptReveal.latinAlpha(showLatin, settled, latinAlpha.value)
+            },
         )
         Text(
             text = script,
@@ -187,7 +188,9 @@ fun ScriptName(
             textAlign = textAlign,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.graphicsLayer { alpha = 1f - latinAlpha.value },
+            modifier = Modifier.graphicsLayer {
+                alpha = ScriptReveal.scriptAlpha(showLatin, settled, latinAlpha.value)
+            },
         )
     }
 }

@@ -82,4 +82,42 @@ class ScriptRevealTest {
         val delays = AncientCulture.entries.indices.map { ScriptReveal.pickerDelayFor(it) }
         assertEquals(listOf(1600L, 1800L, 2000L, 2200L, 2400L), delays)
     }
+
+    @Test
+    fun anIntroShowsScriptAHeldNameShowsLatinOtherwiseTheBandDecides() {
+        // The intro wins over a tap and the band alike.
+        assertEquals(false, ScriptReveal.showsLatin(introRunning = true, held = true, inBand = true))
+        assertEquals(false, ScriptReveal.showsLatin(introRunning = true, held = false, inBand = null))
+        // A tap or focus holds Latin outside the band.
+        assertEquals(true, ScriptReveal.showsLatin(introRunning = false, held = true, inBand = false))
+        // Otherwise the band decides, and before the first report there is no form.
+        assertEquals(true, ScriptReveal.showsLatin(introRunning = false, held = false, inBand = true))
+        assertEquals(false, ScriptReveal.showsLatin(introRunning = false, held = false, inBand = false))
+        assertNull(ScriptReveal.showsLatin(introRunning = false, held = false, inBand = null))
+    }
+
+    @Test
+    fun noLayerDrawsBeforeTheFirstReport() {
+        assertEquals(0f, ScriptReveal.latinAlpha(null, settled = false, animated = 0f), 0f)
+        assertEquals(0f, ScriptReveal.scriptAlpha(null, settled = false, animated = 0f), 0f)
+    }
+
+    @Test
+    fun theFirstFormTakesItsAlphaAtOnceWhateverTheFadeHasReached() {
+        // In the band: Latin whole, script gone. Outside it: the reverse.
+        assertEquals(1f, ScriptReveal.latinAlpha(true, settled = false, animated = 0f), 0f)
+        assertEquals(0f, ScriptReveal.scriptAlpha(true, settled = false, animated = 0f), 0f)
+        assertEquals(0f, ScriptReveal.latinAlpha(false, settled = false, animated = 1f), 0f)
+        assertEquals(1f, ScriptReveal.scriptAlpha(false, settled = false, animated = 1f), 0f)
+    }
+
+    @Test
+    fun onceSettledTheFadeCarriesTheAlphasAndTheLayersSumToOne() {
+        for (animated in listOf(0f, 0.25f, 0.5f, 1f)) {
+            val latin = ScriptReveal.latinAlpha(true, settled = true, animated = animated)
+            val script = ScriptReveal.scriptAlpha(true, settled = true, animated = animated)
+            assertEquals(animated, latin, 0f)
+            assertEquals(1f, latin + script, 0f)
+        }
+    }
 }
