@@ -47,8 +47,9 @@
     --font-body: var(--font-spectral), "Spectral", Georgia, serif;
     --font-hieroglyph: var(--font-noto-hieroglyphs), "Noto Sans Egyptian Hieroglyphs", serif;
     --font-ugaritic: var(--font-noto-ugaritic), "Noto Sans Ugaritic", serif;
+    --font-phoenician: var(--font-noto-phoenician), "Noto Sans Phoenician", serif;
     --font-symbols: var(--font-noto-symbols), "Noto Sans Symbols", serif;
-    --font-greek-display: var(--font-gfs-didot), "GFS Didot", serif;
+    --font-greek-display: var(--font-gfs-didot), var(--font-gfs-didot-ext), "GFS Didot", serif;
     --text-display-xl: 52px;
     --text-display-l: 40px;
     --text-display-m: 26px;
@@ -2088,6 +2089,89 @@ h1, h2, h3 {
 }
 code, pre, kbd, samp {
   font-family: var(--font-mono);
+}
+.script-name {
+  display: inline-grid;
+}
+.script-name > .script-name__latin, .script-name > .script-name__script {
+  grid-area: 1 / 1;
+  transition: opacity 400ms ease-in-out;
+}
+.script-name__script {
+  opacity: 0;
+  text-transform: none;
+  letter-spacing: normal;
+  user-select: none;
+  pointer-events: none;
+}
+.script-name__script::before {
+  content: attr(data-script);
+}
+.script-name__script[data-culture="egypt"] {
+  font-family: var(--font-hieroglyph);
+}
+.script-name__script[data-culture="greece"] {
+  font-family: var(--font-greek-display);
+}
+.script-name__script[data-culture="canaan"] {
+  font-family: var(--font-ugaritic);
+}
+.script-name__script[data-culture="carthage"] {
+  font-family: var(--font-phoenician);
+}
+.script-name__script[data-culture="rome"] {
+  font-family: var(--font-cinzel), "Cinzel", Georgia, serif;
+  letter-spacing: var(--tracking-display);
+}
+.script-name[data-reveal="script"] > .script-name__latin {
+  opacity: 0;
+}
+.script-name[data-reveal="script"] > .script-name__script {
+  opacity: 1;
+}
+.script-name[data-reveal="script"]:hover > .script-name__latin, :is(a, button):is(:hover, :focus-visible) .script-name[data-reveal="script"] > .script-name__latin {
+  opacity: 1;
+}
+.script-name[data-reveal="script"]:hover > .script-name__script, :is(a, button):is(:hover, :focus-visible) .script-name[data-reveal="script"] > .script-name__script {
+  opacity: 0;
+}
+.script-name--intro > .script-name__latin {
+  animation: script-name-latin-in 400ms ease-in-out var(--script-name-intro-delay, 1200ms) both;
+}
+.script-name--intro > .script-name__script {
+  animation: script-name-script-out 400ms ease-in-out var(--script-name-intro-delay, 1200ms) both;
+}
+.script-name--intro:hover > .script-name__latin, :is(a, button):is(:hover, :focus-visible) .script-name--intro > .script-name__latin {
+  animation: none;
+  opacity: 1;
+}
+.script-name--intro:hover > .script-name__script, :is(a, button):is(:hover, :focus-visible) .script-name--intro > .script-name__script {
+  animation: none;
+  opacity: 0;
+}
+@keyframes script-name-latin-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes script-name-script-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .script-name__script {
+    display: none;
+  }
+  .script-name--intro > .script-name__latin, .script-name--intro > .script-name__script {
+    animation: none;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
