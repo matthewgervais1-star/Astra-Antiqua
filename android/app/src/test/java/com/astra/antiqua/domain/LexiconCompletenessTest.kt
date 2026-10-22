@@ -1,6 +1,6 @@
 package com.astra.antiqua.domain
 
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -25,7 +25,7 @@ class LexiconCompletenessTest {
     @Test
     fun `every culture's culturalVoices covers every planet with non-blank copy`() {
         for ((name, lexicon) in lexiconsByName) {
-            for (planet in ClassicalPlanet.values()) {
+            for (planet in Planet.values()) {
                 val voice = lexicon.culturalVoices(planet)
                 assertTrue("$name has blank cultural-voice copy for $planet", voice.isNotBlank())
             }
@@ -35,7 +35,7 @@ class LexiconCompletenessTest {
     @Test
     fun `getOfficerName never falls back to the old Servant placeholder`() {
         for ((name, lexicon) in lexiconsByName) {
-            for (planet in ClassicalPlanet.values()) {
+            for (planet in Planet.values()) {
                 val officerName = lexicon.getOfficerName(planet, "Deity")
                 assertTrue(
                     "$name/$planet produced the old fallback copy",

@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [UserProfile::class], version = 2, exportSchema = true)
+@Database(entities = [UserProfile::class], version = 3, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
@@ -24,6 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
                     // saved birth data on any version bump, which is the one
                     // thing this database holds. A missing migration should
                     // fail loudly in development instead.
+                    .addMigrations(MIGRATION_2_3)
                     .build()
                 INSTANCE = instance
                 instance

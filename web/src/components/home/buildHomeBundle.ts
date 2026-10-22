@@ -19,9 +19,11 @@ import {
 } from "@/data/sampleChart";
 import { findRetrogradeStations, findYearIngresses, SLOW_BODIES } from "@/lib/yearForecast";
 import { computeTransitSpans, type TransitSpan } from "@/lib/transitSpans";
-import { composeDecree, type DayDecree } from "@/lib/decree";
+import { composeDayPage, utcDayNumber, type DayDecree } from "@/lib/decree";
+import { DECREE_BANKS } from "@/data/decreeBanks";
 import { toneOf, type Tone } from "@/lib/tone";
-import { dayPermissions, composeDayVotive, type DayPermissions } from "@/lib/permissions";
+import { dayPermissions, natalDayPermissions, composeDayVotive, type DayPermissions } from "@/lib/permissions";
+import { composeDiveDeeper, type DiveDeeper } from "@/lib/diveDeeper";
 import { dayPressure, type PressureGroup } from "@/lib/dayPressure";
 import type { SavedNatal } from "@/lib/savedNatal";
 import type { OrbTone } from "@/components/chrome/OrbBar";
@@ -105,7 +107,16 @@ export interface HomeBundle {
   aspectRows: readonly AspectRow[];
   longTransit: LongTransitData;
   votive: string;
-  permissions: DayPermissions | null;
+  /** The culture's come-back line, closing the day page. */
+  comeBack: string;
+  /** The tone of the decree's headline figure. */
+  dayTone: Tone;
+  /** Every reader gets the day's lists: from the day's transits to the chart when there is one, from the decree's figures otherwise. */
+  permissions: DayPermissions;
+  /** Where the lists came from. */
+  permissionsSource: "sky" | "natal";
+  /** Four paragraphs, one per house group (spec A.6). */
+  diveDeeper: DiveDeeper;
   pressureGroups: readonly PressureGroup[] | null;
 }
 
@@ -283,7 +294,7 @@ export function buildHomeBundle(culture: Culture, now: Date, natal: SavedNatal |
   const todayChart = computeChart(todayStart);
   const tomorrowChart = computeChart(new Date(todayStart.getTime() + DAY_MS));
 
-  const reading = composeDecree(culture, todayChart);
+  const reading = composeDayPage(culture, now);
 
   const ephemerisRows = buildEphemerisRows(culture, todayChart, tomorrowChart);
   const aspectRows = buildAspectRows(culture, todayChart);
@@ -291,10 +302,18 @@ export function buildHomeBundle(culture: Culture, now: Date, natal: SavedNatal |
   const longTransit = buildLongTransit(culture, now, natal, todayChart);
   const compactSkyRows = buildCompactSkyRows(ephemerisRows, aspectRows);
 
-  const dominantTone: Tone = aspectRows[0] ? toneOf(aspectRows[0].kind) : "harmony";
-  const votive = composeDayVotive(culture, dominantTone, now);
-  const permissions = natal ? dayPermissions(culture, now, dominantTone) : null;
+  // The day's tone, the votive and the lists all follow the decree's own
+  // headline figure, so the page agrees with itself. The aspects rail ranks
+  // slow-slow pairs too and can disagree.
+  const top = reading.figures[0];
+  const dayTone: Tone = top ? toneOf(top.kind) : "harmony";
+  const votive = composeDayVotive(culture, dayTone, now);
+  const day = utcDayNumber(now);
+  const natalPermissions = natal ? natalDayPermissions(culture, todayChart, natal.chart, day) : null;
+  const permissions = natalPermissions ?? dayPermissions(culture, reading.figures, day);
+  const natalPoints = natal ? { chart: natal.chart, ascendant: natal.angles.ascendant } : null;
   const pressureGroups = natal ? dayPressure(natal, todayChart, culture) : null;
+  const diveDeeper = composeDiveDeeper(culture, reading, todayChart, day, natalPoints, pressureGroups?.map((g) => g.sentence) ?? []);
 
   return {
     now,
@@ -311,7 +330,11 @@ export function buildHomeBundle(culture: Culture, now: Date, natal: SavedNatal |
     aspectRows,
     longTransit,
     votive,
+    comeBack: DECREE_BANKS[culture].comeBack,
+    dayTone,
     permissions,
+    permissionsSource: natalPermissions ? "natal" : "sky",
+    diveDeeper,
     pressureGroups,
   };
 }

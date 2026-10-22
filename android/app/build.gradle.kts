@@ -20,6 +20,16 @@ val keystoreProperties = Properties().apply {
 }
 val hasReleaseKeystore = keystorePropertiesFile.exists()
 
+/**
+ * The web API the account screens talk to. Debug builds reach the host
+ * machine's `pnpm dev` through the emulator alias 10.0.2.2; release builds
+ * take the deployed origin from `astra.apiOrigin` (gradle.properties or -P),
+ * and the release build stops if it is unset or not https. The check runs in
+ * preReleaseBuild, so a debug build never needs the property.
+ */
+val debugApiOrigin = "http://10.0.2.2:3000"
+val releaseApiOrigin: String = providers.gradleProperty("astra.apiOrigin").orNull?.trim().orEmpty()
+
 android {
     namespace = "com.astra.antiqua"
     compileSdk = 36
@@ -46,7 +56,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "API_ORIGIN", "\"$debugApiOrigin\"")
+        }
         release {
+            buildConfigField("String", "API_ORIGIN", "\"$releaseApiOrigin\"")
             signingConfig = if (hasReleaseKeystore) {
                 signingConfigs.getByName("release")
             } else {
@@ -92,6 +106,20 @@ android {
     }
 }
 
+tasks.configureEach {
+    if (name == "preReleaseBuild") {
+        val origin = releaseApiOrigin
+        doFirst {
+            if (!Regex("""^https://[^/\s"]+$""").matches(origin)) {
+                throw GradleException(
+                    "astra.apiOrigin must be set to the deployed https origin (no path, " +
+                        "no trailing slash) for a release build; found \"$origin\"."
+                )
+            }
+        }
+    }
+}
+
 // The exported schema is committed, so a future entity change has a baseline
 // to write a migration against rather than being discovered in production.
 ksp {
@@ -128,8 +156,15 @@ dependencies {
     // DataStore
     implementation(libs.androidx.datastore.preferences)
 
+    // The web account's HTTP client
+    implementation(libs.okhttp)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.okhttp.mockwebserver)
+    // A real SQLite on the JVM for the Room migration test. Pinned to the
+    // androidx.sqlite version Room 2.8.4 resolves, so its API classes match.
+    testImplementation(libs.sqlite.bundled.jvm)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

@@ -18,10 +18,17 @@ private fun CreationExtras.container(): AppContainer =
 
 val AstraViewModelFactory: ViewModelProvider.Factory = viewModelFactory {
     initializer { AppViewModel(container().settings, container().profiles) }
-    initializer { LocationSearchViewModel(container().profiles) }
+    initializer { LocationSearchViewModel(container().profiles, container().account, container().appScope) }
     initializer { DashboardViewModel(container().astronomy, container().profiles, container().settings, container().readings) }
     initializer { TransitsViewModel(container().astronomy, container().profiles) }
+    initializer { FigureViewModel(container().astronomy, container().profiles) }
     initializer { HorizonViewModel(container().astronomy, container().settings) }
     initializer { ForecastViewModel(container().astronomy, container().profiles, container().settings) }
     initializer { SynastryViewModel(container().astronomy, container().profiles, container().settings) }
+    initializer { SignInViewModel(container().account) }
+    initializer {
+        val container = container()
+        AccountViewModel(container.account, container.profiles, exportDir = { container.exportDir })
+    }
+    initializer { WaitListViewModel(container().account) }
 }

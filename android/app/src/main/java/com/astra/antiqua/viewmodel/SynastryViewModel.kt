@@ -11,7 +11,7 @@ import com.astra.antiqua.domain.AspectType
 import com.astra.antiqua.domain.CalculateNatalChartUseCase
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,8 +23,8 @@ import kotlin.math.abs
 
 /** One contact between the two charts: their body, yours, and the angle. */
 data class Bond(
-    val mine: ClassicalPlanet,
-    val theirs: ClassicalPlanet,
+    val mine: Planet,
+    val theirs: Planet,
     val aspect: AspectType,
     val orb: Double,
 )
@@ -141,9 +141,9 @@ class SynastryViewModel(
      */
     private fun bondsBetween(mine: NatalChartData, theirs: NatalChartData): List<Bond> {
         val out = mutableListOf<Bond>()
-        for (a in ClassicalPlanet.entries) {
+        for (a in Planet.entries) {
             val myLongitude = mine.planets[a]?.longitude ?: continue
-            for (b in ClassicalPlanet.entries) {
+            for (b in Planet.entries) {
                 val theirLongitude = theirs.planets[b]?.longitude ?: continue
                 val separation = angularSeparation(myLongitude, theirLongitude)
                 for (aspect in AspectType.entries) {

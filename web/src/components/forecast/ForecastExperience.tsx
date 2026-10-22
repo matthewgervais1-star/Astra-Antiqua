@@ -321,7 +321,7 @@ function ForecastInstrument({ culture }: { culture: Culture }) {
       <aside className="flex flex-col gap-4 border-l border-rule px-[var(--space-5)] py-6">
         <div>
           <div className="font-mono text-data-xs tracking-label text-dim">THE LONG TRANSITS · READ EACH</div>
-          <h2 className="mt-2 font-display text-[15px] tracking-[0.08em] text-bone">{voice.forecastTitle}</h2>
+          <h2 className="mt-2 font-display text-display-xs tracking-[0.08em] text-bone">{voice.forecastTitle}</h2>
           <p className="mt-1 font-mono text-data-xs tracking-label text-dim">{voice.forecastNote}</p>
         </div>
         {!bundle.natal ? (
@@ -358,7 +358,7 @@ function ForecastInstrument({ culture }: { culture: Culture }) {
                         : "block border border-rule px-[var(--space-3)] py-[var(--space-3)]"
                     }
                   >
-                    <span className="block font-display text-[13px] leading-[1.4] tracking-[0.08em] text-bone">
+                    <span className="block font-display text-display-xs tracking-[0.08em] text-bone">
                       {deity} {verb} {natalName}
                     </span>
                     <span className="mt-1.5 block font-mono text-data-xs leading-data text-dim">

@@ -13,6 +13,14 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  // Metadata image routes render through Satori's ImageResponse, where next/image cannot be used.
+  // The plugin's own exemption for these routes only matches POSIX paths, so disable it here uniformly.
+  {
+    files: ["src/app/**/opengraph-image.tsx", "src/app/**/twitter-image.tsx"],
+    rules: {
+      "@next/next/no-img-element": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

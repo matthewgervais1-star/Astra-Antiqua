@@ -2,10 +2,10 @@ import type { Culture, Planet } from "@/data/cultures";
 
 /**
  * What each god brings before its institution: a short noun phrase in the
- * culture's own nouns, written to sit inside a sentence as a subject or an
- * object ("{charge A} lends its wind to {charge B}"). This is what ties a
- * decree's ruling to the two bodies actually in the figure, so Sun sextile
- * Mars and Moon sextile Venus can never print the same sentence.
+ * culture's own nouns. The week's ingress line reads the crossing god's
+ * charge into its frame (data/ingressFrames.ts), so the line changes with
+ * the body that moved. The day page's decree speaks through the plainer
+ * domains in data/deityDomains.ts instead.
  *
  * Lowercase-initial by design; the frame that uses one capitalises it when it
  * opens the sentence. No phrase here may be moved to another culture without
@@ -14,62 +14,62 @@ import type { Culture, Planet } from "@/data/cultures";
 export const DEITY_CHARGES: Readonly<Record<Culture, Readonly<Record<Planet, string>>>> = {
   egypt: {
     sun: "the day's own course",
-    moon: "the count of the nights",
-    mercury: "the quick fire at the edge of the field",
-    venus: "what was scattered and gathered back",
-    mars: "a fight already decided",
+    moon: "the count of the months",
+    mercury: "the storm off the red land",
+    venus: "the gathering of the limbs",
+    mars: "the falcon's harpoon",
     jupiter: "the hidden king's hand",
     saturn: "the weight of the ground itself",
-    uranus: "the five days outside the year",
+    uranus: "the gap of five days outside the year",
     neptune: "the dark water under everything",
-    pluto: "the verdict of the hall below",
+    pluto: "the green grain of the Duat",
   },
   greece: {
-    sun: "what the sky has seen and will tell",
-    moon: "the borrowed light",
+    sun: "the eye that misses no deed",
+    moon: "the light borrowed from Helios",
     mercury: "the word carried through the door",
-    venus: "the pull that needs no argument",
-    mars: "the quarrel looking for a field",
-    jupiter: "the thunder that settles it",
+    venus: "the girdle that turns every head",
+    mars: "the slaughter looking for a field",
+    jupiter: "the nod that shakes Olympus",
     saturn: "the sickle's one question",
-    uranus: "the sky before there were names",
+    uranus: "the sky unthroned in one stroke",
     neptune: "the ground that will not hold still",
-    pluto: "the wealth kept under the floor",
+    pluto: "the silver under the earth",
   },
   canaan: {
-    sun: "the messenger's report to the council",
-    moon: "the lamp of the night watch",
-    mercury: "the craftsman's finished work",
-    venus: "the name sworn on at the altar",
-    mars: "the plague-arrow already on the string",
+    sun: "the herald's message brought down from the sky",
+    moon: "the bride price paid by moonlight",
+    mercury: "the mace forged for Baal's hand",
+    venus: "the armed morning star",
+    mars: "the arrow of plague in flight",
     jupiter: "the rain that decides the harvest",
-    saturn: "the old father's ruling",
-    uranus: "the unnamed heavens",
+    saturn: "the word from the tent at the source of the rivers",
+    uranus: "the offering owed to Heaven itself",
     neptune: "the sea's claim to the throne",
-    pluto: "the dry mouth of death",
+    pluto: "the open gullet of death",
   },
   carthage: {
-    sun: "the day's sailing light",
-    moon: "the vow entered under her sign",
-    mercury: "the superintendent's tally",
-    venus: "the cargo worth the voyage",
-    mars: "the pillar the city was founded on",
-    jupiter: "the store that fills",
-    saturn: "the elder's due called in",
-    uranus: "the weather no manifest allows for",
-    neptune: "the open sea between ports",
+    sun: "the Tyrian sun over the new city",
+    moon: "the dedication cut into the stele beneath the crescent",
+    mercury: "the guide's landfall on a foreign shore",
+    venus: "the war fleet launched under the Lady of the Sea",
+    mars: "the champion's yearly tithe to Tyre",
+    jupiter: "the horned lord of the gods",
+    saturn: "the whole of the Ancient One's due",
+    uranus: "the foremost name in the city's oath",
+    neptune: "the partner of every hull out of Carthage",
     pluto: "the debt that outlives the debtor",
   },
   rome: {
-    sun: "the day's light on the Forum",
-    moon: "the night's turning",
-    mercury: "the message on the road",
-    venus: "the treaty sealed by desire",
-    mars: "the legion in the field",
-    jupiter: "the thunder on the right",
-    saturn: "the old boundary stone",
-    uranus: "the whole sky before augury divided it",
-    neptune: "the sea the fleet must cross",
-    pluto: "the store beneath the earth",
+    sun: "the unconquered light",
+    moon: "the chariot of the moon",
+    mercury: "the bargain struck in the market",
+    venus: "the marriage of two houses",
+    mars: "the shield of the Salii",
+    jupiter: "the thunderbolt from the Alban Mount",
+    saturn: "the treasury at the Capitol's foot",
+    uranus: "the canopy over every army",
+    neptune: "the failing spring at the Neptunalia",
+    pluto: "the altar buried at the Tarentum",
   },
 };

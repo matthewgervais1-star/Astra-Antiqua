@@ -16,6 +16,8 @@ drawn: nothing here was redrawn, restyled or replaced.
 | `073c7de` | The type and spacing scales connected |
 | `c707b40` | The tier-2 emblems on the doorways, the chip and the matrix |
 | `eba8d47` | The shared components, and the scale on every surface |
+| `a47a778` | `DeityGlyph` takes a `decorative` prop, set where the deity's name sits beside the glyph |
+| `f62c971`, `a810581` | One `--breakpoint-instrument` token; the instrument stacks below it (now `68.75rem`, 1100px) |
 
 **The glyphs.** `web/scripts/export-glyphs.mjs` copies the fifty SVGs into
 `web/src/glyphs` and generates the typed module the app reads, asserting the 24
@@ -82,6 +84,7 @@ Screenshots: `docs/design/screenshots/phase7`, `phase8`.
 | `c4ec1ca` | The seven Learn sections |
 | `9219b0e` | The forecast, casting again, and an offline birthplace picker |
 | `e0aff05` | Synastry |
+| `95e0180` | The balance beside the ankh on Egypt's doorway, outlined from Noto Sans Egyptian Hieroglyphs as `TypesetSign.BALANCE` |
 
 **Launcher icons.** Six adaptive icons generated from the design-system marks by
 `web/scripts/gen-android-launchers.mjs`, each mark rasterised and measured
@@ -111,8 +114,8 @@ matrix and the placements table. `4f23517`, `050844c` and `36581e5` port the
 transit spans, the week and the sky-event finders, so the long transits and
 all four horizons exist.
 
-**The reading corpus is generated, not retyped.** The fifty deity charges and
-the twenty-five rulings reach Kotlin through
+**The reading corpus is generated, not retyped.** The fifty deity charges, the
+twenty-five ruling frames and the five ingress frames reach Kotlin through
 `web/scripts/gen-android-reading-banks.mjs`, reading
 `web/src/data/deityCharges.ts` and `aspectFrames.ts`. The same figure prints
 the same sentence on both surfaces, and a change to the prose lands on both
@@ -131,7 +134,8 @@ second party entered for the reading and never stored.
 
 **Four generators keep the two surfaces on one corpus.**
 `gen-android-emblems.mjs` carries the marks, `gen-android-reading-banks.mjs`
-the fifty charges and the thirty rulings, `gen-android-learn.mjs` the
+the day page's banks and domains, the ingress charges and frames, the aspect
+verbs (`2a43515`) and the day-page parity goldens, `gen-android-learn.mjs` the
 explainer prose and its reference tables, and `gen-android-cities.mjs` the
 birthplace list. Nothing in that corpus is retyped, so neither surface can
 drift from the other by a sentence.
@@ -144,6 +148,9 @@ pass after every wave, the second included. Android: `./gradlew assembleDebug` a
 were walked on a Pixel 9 emulator with the network unreachable. `node scripts/check-svgs.mjs docs/design/system` passes on all 75 files.
 The launcher icons and the glyphs were checked on a Pixel emulator, not inferred
 from a green build.
+
+2026-09-29: the Android suite now runs 65 unit tests, and all seven ViewModels
+run against fakes (`7222c01`).
 
 ## What was decided along the way
 
@@ -191,7 +198,8 @@ smallest is 22px. Sixty sites set Cinzel between 11 and 17px, as list names,
 nav labels and small heads. Mapping them up would break those rows, and the
 tokens file says not to add a step to fit one screen, so they stay at their
 literal size and are listed by the sweep. The buttons that were among them are
-now mono, which is what the Button spec asks for.
+now mono, which is what the Button spec asks for. (Superseded on 2026-09-29:
+the owner added `display-xs` at 18px; see "Since closed".)
 
 **Greece ships the omega, not the tripod.** The research names the tripod as
 the launcher; both icon generators cut it from `ts-omega.svg`. The reasoning
@@ -226,6 +234,21 @@ reader into the birth form, which a test now guards. The birth form had only
 the platform Geocoder, so a reader offline could not finish the first run at
 all; it now leads with the packaged city list.
 
+**`ReadingDisplay`'s fade stands.** The reading fades in on opacity alone,
+over 0.55 seconds, and drops to 0.01 seconds when the reader asks for reduced
+motion. `docs/design/system/readme.md` permits a plain opacity fade where
+motion is unavoidable, so the fade stays.
+
+**The instrument stacks below one breakpoint.** At tablet widths the
+three-column instrument scrolled sideways. `f62c971` and `a810581` add one
+`--breakpoint-instrument` token in `globals.css`, read as the `instrument:`
+variant by `InstrumentShell` and `ChartsInstrument`. Those commits set it to
+1200px, measured while a specificity bug put the placements in the centre
+column. With the columns in the handoff's order (data, visualization, reading),
+the re-measured value is `68.75rem` (1100px): the smallest trial width at
+which the data rail shows every body name whole and no instrument page scrolls
+sideways. `docs/web-rebrand-report.md` records the trials.
+
 **The zodiac notation needed a fourth face.** None of the three product faces
 carries those codepoints, so Android's font chain fell through to the colour
 emoji font and painted them as orange pictographs. Noto Sans Symbols ships in
@@ -246,10 +269,6 @@ better mark and that Tanit carries a cost a launcher icon cannot disarm, having
 no label. Tracing it needs a Salammbo harbour survey, which is a document to be
 got rather than a thing to be drawn. Tanit ships meanwhile, in her outline cut.
 
-**A display step under 22px, or none.** Whether the small Cinzel labels get
-a `display-xs` step or move to mono is a design call; the sweep left them
-literal so the decision is not made by a script.
-
 **The account, sign-in and wait-list routes need a server, not a screen.**
 Web talks to `/api/auth/*`, `/api/charts` and `/api/wait-list` from the same
 origin. Android would need a base URL, a session store and a cookie client,
@@ -258,37 +277,73 @@ decision, not a parity gap". Three of web's twenty-six routes are therefore
 deliberately absent, and they are the three that do nothing without an
 account.
 
-**Android keeps one birth record where web keeps many.** That is why casting
-a chart replaces the one on the device, and why synastry enters the second
-party rather than choosing a saved one. Multiple charts mean a Room migration
-and a chart list, which is a feature rather than a port.
-
 **The Learn hub's sample wheel did not cross.** It is the one block the
 extractor deliberately leaves behind: the day screen already draws a wheel
 from a real chart, so a fixed illustration of one would be the weaker of the
 two on a phone.
 
-**The Spectral SC display decision.** The small-caps treatment on the four
-non-Roman surfaces is still a prototype in `globals.css` and was not promoted
-into the tokens or carried to Android. Its open question is Cinzel's tracking,
-set per component and loose on small caps, which wants looking at before it is
-tuned.
-
-**Two rule colours drift.** The web rules are bone with alpha (0.16 and 0.11)
-where the design system has opaque hex (`--rule-hairline` `#4A3E28`,
-`--rule-incised` `#2A241C`). Composited on the neutral ground they land at
-`#38332E` and `#2E2925`, so the web pair is darker and ordered the other way
-round. Alpha rules shift with the culture ground, which may be the better
-behaviour; the design system is canonical, so this is a decision rather than a
-bug to fix silently.
-
-**The glyph names its deity twice for a screen reader.** `DeityGlyph` sets the
-deity's name as the image's label and the visible name follows it, so a row
-reads as "Sol SOL 24°09′ GEM". The Unicode sign it replaced had the same shape,
-so this is not a regression, but an `aria-hidden` option for name-adjacent sites
-would fix it.
-
 **The Ugaritic codepoints.** `docs/design/culture-marks.md` gives U+1039B U+1038D
 for the name of El, and `ts-il.svg` is cut from exactly those. Counting forward
 through the Ugaritic block puts U+1039B at SSU rather than at ʾI, so someone who
 reads Ugaritic should confirm the pair before it ships as Canaan's launcher.
+
+### Since closed
+
+Recorded 2026-09-29. The first two items stood in this section; the third was
+a gap between the two doorways. The tree has since closed all three.
+
+- **The glyph named its deity twice for a screen reader.** A row read as
+  "Sol SOL 24°09′ GEM". `a47a778` gives `DeityGlyph` a `decorative` prop that
+  sets `aria-hidden`, and the name-adjacent sites pass it.
+- **Android kept one birth record where web kept many.** Since `8796ef7` web
+  keeps one chart per account too. On both surfaces casting replaces the one
+  chart, and synastry enters the second party for the reading and never
+  stores it.
+- **Egypt's doorway on Android showed the ankh alone.** Web shows the ankh and
+  the balance. `95e0180` outlines `ts-balance.svg` from Noto Sans Egyptian
+  Hieroglyphs, adds `TypesetSign.BALANCE`, and sets it after the ankh.
+- **Two rule colours drifted.** The web rules were bone with alpha (0.16 and
+  0.11) where the design system has opaque hex. The rules now take
+  `--rule-hairline` `#4A3E28` and `--rule-incised` `#2A241C` on web
+  (`--color-rule`, `--color-rule-row`) and on Android (`Rule`, `RuleRow`).
+  The rules no longer shift with the culture ground. The OG cards draw their
+  own frame in literal values and never read the tokens, so they did not
+  change. Landed with the commit `feat(design): the rules take the system's
+  incised and hairline inks`; screenshots in
+  `docs/design/screenshots/phase11-design-calls/`.
+- **A display step under 22px, or none.** The owner took the call on
+  2026-09-29: both. The scale's step ratios are 52/40 = 1.30, 40/26 = 1.54
+  and 26/22 = 1.18. The smallest, applied once below 22, gives
+  22 x 22 / 26 = 18.6; the step is 18px, since 19 would sit closer to 22 than
+  any step sits to the one above it. `--type-display-xs` in
+  `tokens/typography.css`, `--text-display-xs` in `globals.css` and
+  `TypeScale.DisplayXs` on Android carry it, with the display tracking and
+  leading. Cinzel sites at 14 to 17px moved onto `text-display-xs`; sites at
+  11 to 13px are microcopy and moved to mono (`text-data-s` or
+  `text-data-xs`, uppercase). On Android `titleLarge` and `titleMedium` take
+  display-xs and `titleSmall` takes mono. Three links keep a literal Cinzel
+  size: each wraps the drawn `Wordmark`, which sizes itself from
+  `capHeight`, so no Cinzel glyph renders at that size. The Satori OG cards
+  keep their literal sizes. Landed with the commit `feat(design): a
+  display-xs step, and the small labels move onto the scale`; screenshots in
+  `docs/design/screenshots/phase11-design-calls/`.
+- **The Spectral SC display decision.** The small-caps treatment on the four
+  non-Roman surfaces is the rule, recorded 2026-10-06. The open question was
+  Cinzel's tracking, set per component and loose on small caps. The answer
+  leaves Cinzel untouched and gives Spectral SC its own `--track-display-sc`
+  at 0.06em. The prototype set no sizes, so Spectral SC sits on the display
+  scale as it stands, 18px included. `tokens/typography.css` now names the
+  four surfaces (`[data-culture]` sets `--text-display-font` and
+  `--text-display-track`), and the `globals.css` block reads
+  `--tracking-display-sc`. Android fetches Spectral SC 400 and 500 as TTF
+  through `fetch-fonts.mjs --android`; `Type.kt` adds `SpectralSc`,
+  `TypeScale.TrackDisplaySc`, `displaySc` and a small-caps `Typography`, and
+  `AstraAntiquaTheme` picks it for every culture but Rome. Spectral SC draws
+  small capitals on lowercase codepoints and carries no `c2sc` or `smcp`
+  feature, and Android call sites pass display text uppercased, so each
+  display call site now goes through `displayCase()`, which lowercases on
+  the four surfaces and passes through on Rome. The culture doorway is the
+  shell and keeps Cinzel through `ShellType`. Landed with the commit
+  `feat(design): Spectral SC is the rule on the four non-Roman surfaces`;
+  screenshots `sc-home-<culture>-1280.png` in
+  `docs/design/screenshots/phase11-design-calls/`.

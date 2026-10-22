@@ -10,6 +10,12 @@ export interface DeityGlyphProps {
   /** Rendered width and height in px. Defaults to 16. */
   size?: number;
   className?: string;
+  /**
+   * True when the deity's name or the body's label is visible in the same row
+   * beside the glyph. The glyph then hides from assistive tech so a screen
+   * reader does not read the name twice.
+   */
+  decorative?: boolean;
 }
 
 /** Escapes the characters that would break out of text content inside the SVG string. */
@@ -42,12 +48,11 @@ const SLOT_CLASS = "inline-block shrink-0 align-middle";
  * With culture null the classical Unicode sign stands in, sized to the same
  * line box, so a row never shows an empty slot.
  */
-export function DeityGlyph({ body, culture, size = 16, className }: DeityGlyphProps) {
+export function DeityGlyph({ body, culture, size = 16, className, decorative = false }: DeityGlyphProps) {
   if (!culture) {
     return (
       <span
-        role="img"
-        aria-label={PLANET_LABELS[body]}
+        {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": PLANET_LABELS[body] })}
         className={cn(SLOT_CLASS, className)}
         style={{ fontSize: size, lineHeight: 1 }}
       >
@@ -66,9 +71,7 @@ export function DeityGlyph({ body, culture, size = 16, className }: DeityGlyphPr
       viewBox="0 0 24 24"
       width={size}
       height={size}
-      role="img"
-      aria-label={name}
-      aria-hidden={false}
+      {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": name })}
       focusable="false"
       className={cn(SLOT_CLASS, className)}
       style={{ width: size, height: size }}

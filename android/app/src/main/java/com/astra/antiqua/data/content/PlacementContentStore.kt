@@ -2,7 +2,7 @@ package com.astra.antiqua.data.content
 
 import android.content.Context
 import com.astra.antiqua.domain.ZodiacSign
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import java.io.IOException
 import java.io.InputStream
 import kotlinx.serialization.SerializationException
@@ -16,12 +16,10 @@ import kotlinx.serialization.json.Json
  * copied into Kotlin or a new JSON under `android/`, so the repo keeps
  * exactly one copy of the prose.
  *
- * `planet-in-sign.json` has 120 paragraphs across the 10 bodies web already
- * ships (7 classical + Uranus/Neptune/Pluto); [ClassicalPlanet] is still 7
- * (Phase 4 of the rollout plan adds the other three), so [textFor] only ever
- * queries the 7 keys this app currently has planets for -- the extra
- * uranus/neptune/pluto entries are parsed along with everything else and
- * simply never looked up until then.
+ * `planet-in-sign.json` has 120 paragraphs, one per (planet, sign) cell for
+ * the 10 bodies (7 classical + Uranus/Neptune/Pluto). [Planet] holds all ten,
+ * so [textFor] can look up every cell, and the store's completeness test
+ * asserts a paragraph for each one.
  *
  * [openStream] is injected (an `() -> InputStream` rather than a `Context`
  * directly) so a JVM test can feed this the real file straight off disk, the
@@ -57,7 +55,7 @@ class PlacementContentStore(
      * the corpus itself has a hole and callers should be told which key, not
      * silently drop the card.
      */
-    fun textFor(planet: ClassicalPlanet, sign: ZodiacSign): String {
+    fun textFor(planet: Planet, sign: ZodiacSign): String {
         val planetKey = planet.name.lowercase()
         val bySign = table[planetKey]
             ?: throw ContentLoadException.MissingKey(assetName, planetKey)

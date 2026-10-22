@@ -4,7 +4,7 @@ import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.data.content.PlacementContentStore
 import com.astra.antiqua.data.local.room.UserProfile
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import java.io.File
 import java.time.Instant
 import org.junit.Assert.assertEquals
@@ -41,7 +41,7 @@ class NatalReadingComposerGoldenTest {
     @Test
     fun `the Greek Sun reading for the golden chart matches the recorded composition`() {
         val chart = CalculateNatalChartUseCase(AstronomyEngine()).execute(goldenProfile)
-        val sunPosition = chart.planets.getValue(ClassicalPlanet.SUN)
+        val sunPosition = chart.planets.getValue(Planet.SUN)
 
         val placementText = placementStore.textFor(sunPosition.planet, sunPosition.zodiacSign)
         val reading = NatalReadingComposer.compose(AncientCulture.GREECE, sunPosition, placementText)

@@ -1,11 +1,11 @@
 package com.astra.antiqua.domain
 
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 
 /** The deity's proper name for a culture/planet, read from the single source of truth. */
-private fun deityName(culture: AncientCulture, planet: ClassicalPlanet): String =
+private fun deityName(culture: AncientCulture, planet: Planet): String =
     DeityRegistry.getDeity(culture, planet).name
 
 object LexiconDictionary {
@@ -16,16 +16,16 @@ object LexiconDictionary {
         settingsTitle = "Mt. Olympus",
         culturalVoices = { planet ->
             when (planet) {
-                ClassicalPlanet.SUN -> "The Radiant King"
-                ClassicalPlanet.MOON -> "The Night Rider"
-                ClassicalPlanet.MERCURY -> "The Messenger"
-                ClassicalPlanet.VENUS -> "The Rose"
-                ClassicalPlanet.MARS -> "The Warrior"
-                ClassicalPlanet.JUPITER -> "The Thunderer"
-                ClassicalPlanet.SATURN -> "The Father of Time"
-                ClassicalPlanet.URANUS -> "The Elder Sky"
-                ClassicalPlanet.NEPTUNE -> "The Earth-Shaker"
-                ClassicalPlanet.PLUTO -> "The Host Below"
+                Planet.SUN -> "The Radiant King"
+                Planet.MOON -> "The Night Rider"
+                Planet.MERCURY -> "The Messenger"
+                Planet.VENUS -> "The Rose"
+                Planet.MARS -> "The Warrior"
+                Planet.JUPITER -> "The Thunderer"
+                Planet.SATURN -> "The Father of Time"
+                Planet.URANUS -> "The Elder Sky"
+                Planet.NEPTUNE -> "The Earth-Shaker"
+                Planet.PLUTO -> "The Host Below"
             }
         },
         highPriestSummaryTitle = "The Pythia's Prophecy",
@@ -47,16 +47,16 @@ object LexiconDictionary {
         settingsTitle = "Scales of Ma'at",
         culturalVoices = { planet ->
             when (planet) {
-                ClassicalPlanet.SUN -> "The Lord"
-                ClassicalPlanet.MOON -> "The Lunar Traveler"
-                ClassicalPlanet.MERCURY -> "${deityName(AncientCulture.EGYPT, ClassicalPlanet.MERCURY)} (Set)"
-                ClassicalPlanet.VENUS -> "The Mistress of Life"
-                ClassicalPlanet.MARS -> deityName(AncientCulture.EGYPT, ClassicalPlanet.MARS)
-                ClassicalPlanet.JUPITER -> deityName(AncientCulture.EGYPT, ClassicalPlanet.JUPITER)
-                ClassicalPlanet.SATURN -> deityName(AncientCulture.EGYPT, ClassicalPlanet.SATURN)
-                ClassicalPlanet.URANUS -> "The Star-Vault"
-                ClassicalPlanet.NEPTUNE -> "The First Water"
-                ClassicalPlanet.PLUTO -> "The King Below"
+                Planet.SUN -> "The Lord"
+                Planet.MOON -> "The Lunar Traveler"
+                Planet.MERCURY -> "${deityName(AncientCulture.EGYPT, Planet.MERCURY)} (Set)"
+                Planet.VENUS -> "The Mistress of Life"
+                Planet.MARS -> deityName(AncientCulture.EGYPT, Planet.MARS)
+                Planet.JUPITER -> deityName(AncientCulture.EGYPT, Planet.JUPITER)
+                Planet.SATURN -> deityName(AncientCulture.EGYPT, Planet.SATURN)
+                Planet.URANUS -> "The Star-Vault"
+                Planet.NEPTUNE -> "The First Water"
+                Planet.PLUTO -> "The King Below"
             }
         },
         highPriestSummaryTitle = "The Weighing of the Heart",
@@ -78,16 +78,16 @@ object LexiconDictionary {
         settingsTitle = "Council of El",
         culturalVoices = { planet ->
             when (planet) {
-                ClassicalPlanet.SUN -> "The Divine Torch"
-                ClassicalPlanet.MOON -> "The Crescent Lord"
-                ClassicalPlanet.MERCURY -> "The Divine Architect"
-                ClassicalPlanet.VENUS -> "The Morning Star"
-                ClassicalPlanet.MARS -> deityName(AncientCulture.CANAAN, ClassicalPlanet.MARS)
-                ClassicalPlanet.JUPITER -> deityName(AncientCulture.CANAAN, ClassicalPlanet.JUPITER)
-                ClassicalPlanet.SATURN -> deityName(AncientCulture.CANAAN, ClassicalPlanet.SATURN)
-                ClassicalPlanet.URANUS -> "The Open Heavens"
-                ClassicalPlanet.NEPTUNE -> "The Prince of Sea"
-                ClassicalPlanet.PLUTO -> "The Swallower"
+                Planet.SUN -> "The Divine Torch"
+                Planet.MOON -> "The Crescent Lord"
+                Planet.MERCURY -> "The Divine Architect"
+                Planet.VENUS -> "The Morning Star"
+                Planet.MARS -> deityName(AncientCulture.CANAAN, Planet.MARS)
+                Planet.JUPITER -> deityName(AncientCulture.CANAAN, Planet.JUPITER)
+                Planet.SATURN -> deityName(AncientCulture.CANAAN, Planet.SATURN)
+                Planet.URANUS -> "The Open Heavens"
+                Planet.NEPTUNE -> "The Prince of Sea"
+                Planet.PLUTO -> "The Swallower"
             }
         },
         highPriestSummaryTitle = "The Seer's Judgment",
@@ -109,16 +109,16 @@ object LexiconDictionary {
         settingsTitle = "The Suffetes",
         culturalVoices = { planet ->
             when (planet) {
-                ClassicalPlanet.SUN -> "The Lord of the Altar"
-                ClassicalPlanet.MOON -> "The Face of Baal"
-                ClassicalPlanet.MERCURY -> "The Herald"
-                ClassicalPlanet.VENUS -> "The Phoenician Queen"
-                ClassicalPlanet.MARS -> deityName(AncientCulture.CARTHAGE, ClassicalPlanet.MARS)
-                ClassicalPlanet.JUPITER -> deityName(AncientCulture.CARTHAGE, ClassicalPlanet.JUPITER)
-                ClassicalPlanet.SATURN -> deityName(AncientCulture.CARTHAGE, ClassicalPlanet.SATURN)
-                ClassicalPlanet.URANUS -> "The Witness Above"
-                ClassicalPlanet.NEPTUNE -> "The Sea-Partner"
-                ClassicalPlanet.PLUTO -> "The Creditor"
+                Planet.SUN -> "The Lord of the Altar"
+                Planet.MOON -> "The Face of Baal"
+                Planet.MERCURY -> "The Herald"
+                Planet.VENUS -> "The Phoenician Queen"
+                Planet.MARS -> deityName(AncientCulture.CARTHAGE, Planet.MARS)
+                Planet.JUPITER -> deityName(AncientCulture.CARTHAGE, Planet.JUPITER)
+                Planet.SATURN -> deityName(AncientCulture.CARTHAGE, Planet.SATURN)
+                Planet.URANUS -> "The Witness Above"
+                Planet.NEPTUNE -> "The Sea-Partner"
+                Planet.PLUTO -> "The Creditor"
             }
         },
         highPriestSummaryTitle = "The Ba'al Priest's Command",
@@ -140,16 +140,16 @@ object LexiconDictionary {
         settingsTitle = "The Forum",
         culturalVoices = { planet ->
             when (planet) {
-                ClassicalPlanet.SUN -> deityName(AncientCulture.ROME, ClassicalPlanet.SUN)
-                ClassicalPlanet.MOON -> deityName(AncientCulture.ROME, ClassicalPlanet.MOON)
-                ClassicalPlanet.MERCURY -> deityName(AncientCulture.ROME, ClassicalPlanet.MERCURY)
-                ClassicalPlanet.VENUS -> deityName(AncientCulture.ROME, ClassicalPlanet.VENUS)
-                ClassicalPlanet.MARS -> deityName(AncientCulture.ROME, ClassicalPlanet.MARS)
-                ClassicalPlanet.JUPITER -> deityName(AncientCulture.ROME, ClassicalPlanet.JUPITER)
-                ClassicalPlanet.SATURN -> deityName(AncientCulture.ROME, ClassicalPlanet.SATURN)
-                ClassicalPlanet.URANUS -> "The Elder Canopy"
-                ClassicalPlanet.NEPTUNE -> "The Lord of Waters"
-                ClassicalPlanet.PLUTO -> "The Rich Father"
+                Planet.SUN -> deityName(AncientCulture.ROME, Planet.SUN)
+                Planet.MOON -> deityName(AncientCulture.ROME, Planet.MOON)
+                Planet.MERCURY -> deityName(AncientCulture.ROME, Planet.MERCURY)
+                Planet.VENUS -> deityName(AncientCulture.ROME, Planet.VENUS)
+                Planet.MARS -> deityName(AncientCulture.ROME, Planet.MARS)
+                Planet.JUPITER -> deityName(AncientCulture.ROME, Planet.JUPITER)
+                Planet.SATURN -> deityName(AncientCulture.ROME, Planet.SATURN)
+                Planet.URANUS -> "The Elder Canopy"
+                Planet.NEPTUNE -> "The Lord of Waters"
+                Planet.PLUTO -> "The Rich Father"
             }
         },
         highPriestSummaryTitle = "The Pontifex Maximus's Judgment",

@@ -78,12 +78,11 @@ class AstronomyEngine {
         val gmstHours = siderealTime(time)
         val ramcDeg = ((gmstHours * 15.0 + lon) % 360.0 + 360.0) % 360.0
 
-        // Approximate obliquity of the ecliptic
-        val t = (julianDay - 2451545.0) / 36525.0
-        val epsDeg = 23.4392911 - 0.013004167 * t
-
+        // Web's fixed mean obliquity (MEAN_OBLIQUITY_DEG, web/src/lib/ascendant.ts),
+        // not the obliquity of date: web is canonical, and the two print a
+        // different minute or sign for a few charts in a hundred far from J2000.
         val ramc = Math.toRadians(ramcDeg)
-        val eps = Math.toRadians(epsDeg)
+        val eps = Math.toRadians(MEAN_OBLIQUITY_DEG)
         val latRad = Math.toRadians(lat)
 
         val asc = Math.toDegrees(atan2(cos(ramc), -(sin(eps) * tan(latRad) + cos(eps) * sin(ramc))))
@@ -158,6 +157,11 @@ class AstronomyEngine {
     }
 
     private fun normDeg(d: Double) = ((d % 360.0) + 360.0) % 360.0
+
+    private companion object {
+        /** web/src/lib/ascendant.ts MEAN_OBLIQUITY_DEG, the J2000 mean obliquity. */
+        const val MEAN_OBLIQUITY_DEG = 23.4392911
+    }
 }
 
 data class PlanetData(

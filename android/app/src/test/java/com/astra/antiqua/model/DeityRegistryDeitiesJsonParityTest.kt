@@ -16,7 +16,7 @@ import org.junit.Test
  * check: it reads the JSON directly (the same relative-path-off-the-module-
  * directory approach `PlacementContentStoreTest` uses) and asserts
  * record-for-record agreement for every body, the three receptions included.
- * The exclusion this test used to carry, while ClassicalPlanet still held
+ * The exclusion this test used to carry, while Planet still held
  * only seven, is gone now that the enum covers all ten.
  */
 class DeityRegistryDeitiesJsonParityTest {
@@ -35,8 +35,8 @@ class DeityRegistryDeitiesJsonParityTest {
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    private fun classicalPlanetFor(jsonKey: String): ClassicalPlanet? =
-        ClassicalPlanet.values().firstOrNull { it.name.equals(jsonKey, ignoreCase = true) }
+    private fun classicalPlanetFor(jsonKey: String): Planet? =
+        Planet.values().firstOrNull { it.name.equals(jsonKey, ignoreCase = true) }
 
     private fun cultureFor(jsonKey: String): AncientCulture =
         AncientCulture.values().first { it.name.equals(jsonKey, ignoreCase = true) }

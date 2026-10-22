@@ -25,7 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.domain.AspectVerbs
 import com.astra.antiqua.domain.TransitSpan
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.ui.components.ActionButton
 import com.astra.antiqua.ui.components.ActionWeight
@@ -41,6 +41,7 @@ import com.astra.antiqua.ui.theme.Dim
 import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.SpansState
 import com.astra.antiqua.viewmodel.TransitsViewModel
@@ -212,7 +213,7 @@ private fun SpanRow(
         }
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = "${transitDeity.uppercase()} ${verb.uppercase()} ${natalPointLabel(culture, span.natalKey).uppercase()}",
+                text = displayCase("${transitDeity.uppercase()} ${verb.uppercase()} ${natalPointLabel(culture, span.natalKey).uppercase()}"),
                 style = MaterialTheme.typography.titleMedium,
                 color = if (received) accent else Bone,
             )
@@ -239,8 +240,8 @@ private fun SpanRow(
  * alone inside a Spectral sentence, where caps read as shouting.
  */
 internal fun natalPointLabel(culture: AncientCulture, key: String): String = when (key) {
-    "sun" -> DeityRegistry.getDeity(culture, ClassicalPlanet.SUN).name
-    "moon" -> DeityRegistry.getDeity(culture, ClassicalPlanet.MOON).name
+    "sun" -> DeityRegistry.getDeity(culture, Planet.SUN).name
+    "moon" -> DeityRegistry.getDeity(culture, Planet.MOON).name
     "asc" -> "your rising"
     "mc" -> "your midheaven"
     else -> key

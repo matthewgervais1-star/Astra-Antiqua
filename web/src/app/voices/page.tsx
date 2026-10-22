@@ -34,7 +34,7 @@ export default function VoicesPage() {
               className="flex items-baseline gap-4 border-t border-rule px-4 py-5 last:border-b hover:bg-bone/5"
             >
               <span className="h-2 w-2 shrink-0 self-center bg-[var(--row-accent)]" />
-              <span className="font-display text-[16px] tracking-[0.14em] text-bone">
+              <span className="font-display text-display-xs tracking-[0.14em] text-bone">
                 {CULTURE_LABELS[culture].toUpperCase()}
               </span>
               <span className="ml-auto font-mono text-data-xs tracking-data text-dim lowercase">

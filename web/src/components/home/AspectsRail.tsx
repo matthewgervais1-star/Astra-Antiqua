@@ -32,9 +32,9 @@ export function AspectsRail({ className, culture, aspects, longTransit }: Aspect
             <div key={row.key}>
               <div className="mb-2 flex items-center justify-between font-mono text-data-xs text-bone">
                 <span className="inline-flex items-center gap-[var(--space-1)]">
-                  <DeityGlyph body={row.a} culture={culture} size={16} />
+                  <DeityGlyph body={row.a} culture={culture} size={16} decorative />
                   {row.kindGlyph}
-                  <DeityGlyph body={row.b} culture={culture} size={16} />
+                  <DeityGlyph body={row.b} culture={culture} size={16} decorative />
                   <span>
                     {row.nameA}–{row.nameB}
                   </span>

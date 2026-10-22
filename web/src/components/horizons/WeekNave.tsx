@@ -88,7 +88,7 @@ function ShorthandItems({ shorthand, culture }: { shorthand: WeekShorthand; cult
         <DeityGlyph body={shorthand.a} culture={culture} size={16} className="self-center" />
         {ASPECT_GLYPH[shorthand.aspect]}
         <DeityGlyph body={shorthand.b} culture={culture} size={16} className="self-center" />
-        {shorthand.exact ? "EXACT" : null}
+        {shorthand.tight ? "TIGHT" : null}
       </>
     );
   }
@@ -108,7 +108,7 @@ function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
   return (
     <div
       className={cn(
-        "grid grid-cols-[104px_1fr_auto] items-baseline gap-4 border-t border-rule px-3 py-3.5 last:border-b",
+        "grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 sm:grid-cols-[104px_1fr_auto] border-t border-rule px-3 py-3.5 last:border-b",
         day.isToday && "bg-[color-mix(in_srgb,var(--accent)_7%,transparent)]",
       )}
     >
@@ -127,10 +127,21 @@ function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
           </>
         ) : null}
       </span>
-      <span className="font-body text-prose-s leading-prose text-bone">{day.line}</span>
+      <span className="order-3 col-span-2 flex flex-col gap-1 sm:order-none sm:col-span-1">
+        {day.headline ? (
+          day.figureHref ? (
+            <Link href={day.figureHref} className="font-display text-display-xs leading-display text-bone hover:text-accent">
+              {day.headline}
+            </Link>
+          ) : (
+            <span className="font-display text-display-xs leading-display text-bone">{day.headline}</span>
+          )
+        ) : null}
+        <span className="font-body text-prose-s leading-prose text-prose">{day.line}</span>
+      </span>
       <span
         className={cn(
-          "inline-flex items-baseline gap-[4px] whitespace-nowrap font-mono text-data-xs",
+          "order-2 inline-flex items-baseline gap-[4px] whitespace-nowrap font-mono text-data-xs sm:order-none",
           day.tone === "tension" ? "text-conflict" : "text-dim",
         )}
       >
@@ -181,7 +192,7 @@ function WeekContent({
       <div className="mt-6 flex justify-center">
         <FeedbackRow readingId={weekReadingId(weekStart)} noun="WEEK" />
       </div>
-      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-display text-[11.5px] tracking-[0.2em]">
+      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-mono text-data-xs tracking-microcopy">
         <Link href="/" className="text-bone/65 hover:text-bone">
           ← THE DAY
         </Link>

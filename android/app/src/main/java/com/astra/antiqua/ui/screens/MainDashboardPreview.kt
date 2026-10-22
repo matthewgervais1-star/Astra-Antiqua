@@ -12,7 +12,7 @@ import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
 import com.astra.antiqua.domain.ZodiacSign
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
 
 /** Preview-only helper: builds the composed reading the same way
@@ -40,8 +40,8 @@ fun EgyptDashboardPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             val sampleChart = NatalChartData(
                 planets = mapOf(
-                    ClassicalPlanet.SUN to AccuratePlanetPosition(
-                        planet = ClassicalPlanet.SUN,
+                    Planet.SUN to AccuratePlanetPosition(
+                        planet = Planet.SUN,
                         longitude = 125.0,
                         velocity = 1.0,
                         isRetrograde = false,
@@ -51,8 +51,8 @@ fun EgyptDashboardPreview() {
                         secondInSign = 0,
                         house = 10
                     ),
-                    ClassicalPlanet.MERCURY to AccuratePlanetPosition(
-                        planet = ClassicalPlanet.MERCURY,
+                    Planet.MERCURY to AccuratePlanetPosition(
+                        planet = Planet.MERCURY,
                         longitude = 135.0,
                         velocity = -0.5,
                         isRetrograde = true,
@@ -65,8 +65,8 @@ fun EgyptDashboardPreview() {
                     // A received body in the sample so this preview also
                     // exercises the wheel's reception ring and the shared
                     // accent, and its glyph.
-                    ClassicalPlanet.URANUS to AccuratePlanetPosition(
-                        planet = ClassicalPlanet.URANUS,
+                    Planet.URANUS to AccuratePlanetPosition(
+                        planet = Planet.URANUS,
                         longitude = 220.0,
                         velocity = 0.05,
                         isRetrograde = false,
@@ -78,6 +78,7 @@ fun EgyptDashboardPreview() {
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
+                ascendant = 45.0,
                 julianDay = 2451545.0
             )
 
@@ -86,7 +87,7 @@ fun EgyptDashboardPreview() {
                 OracleDecreeCard(
                     culture = AncientCulture.EGYPT,
                     reading = previewReading(
-                        position = sampleChart.planets.getValue(ClassicalPlanet.MERCURY),
+                        position = sampleChart.planets.getValue(Planet.MERCURY),
                         deityName = "Sebegu",
                         deityEpithet = "Aspect of Set",
                         decreeLine = "The scribe's ink runs thin as the storm approaches.",
@@ -105,8 +106,8 @@ fun CarthageDashboardPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             val sampleChart = NatalChartData(
                 planets = mapOf(
-                    ClassicalPlanet.MOON to AccuratePlanetPosition(
-                        planet = ClassicalPlanet.MOON,
+                    Planet.MOON to AccuratePlanetPosition(
+                        planet = Planet.MOON,
                         longitude = 45.0,
                         velocity = 13.0,
                         isRetrograde = false,
@@ -116,8 +117,8 @@ fun CarthageDashboardPreview() {
                         secondInSign = 22,
                         house = 2
                     ),
-                    ClassicalPlanet.NEPTUNE to AccuratePlanetPosition(
-                        planet = ClassicalPlanet.NEPTUNE,
+                    Planet.NEPTUNE to AccuratePlanetPosition(
+                        planet = Planet.NEPTUNE,
                         longitude = 300.0,
                         velocity = 0.02,
                         isRetrograde = true,
@@ -129,6 +130,7 @@ fun CarthageDashboardPreview() {
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
+                ascendant = 45.0,
                 julianDay = 2451545.0
             )
             
@@ -137,7 +139,7 @@ fun CarthageDashboardPreview() {
                 OracleDecreeCard(
                     culture = AncientCulture.CARTHAGE,
                     reading = previewReading(
-                        position = sampleChart.planets.getValue(ClassicalPlanet.MOON),
+                        position = sampleChart.planets.getValue(Planet.MOON),
                         deityName = "Tanit",
                         deityEpithet = "Dea Caelestis",
                         decreeLine = "A sacrifice of spirit is demanded to secure the city's gates.",
@@ -156,8 +158,8 @@ fun GreeceDashboardPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             val sampleChart = NatalChartData(
                 planets = mapOf(
-                    ClassicalPlanet.SUN to AccuratePlanetPosition(
-                        planet = ClassicalPlanet.SUN,
+                    Planet.SUN to AccuratePlanetPosition(
+                        planet = Planet.SUN,
                         longitude = 10.0,
                         velocity = 1.0,
                         isRetrograde = false,
@@ -167,8 +169,8 @@ fun GreeceDashboardPreview() {
                         secondInSign = 0,
                         house = 1
                     ),
-                    ClassicalPlanet.PLUTO to AccuratePlanetPosition(
-                        planet = ClassicalPlanet.PLUTO,
+                    Planet.PLUTO to AccuratePlanetPosition(
+                        planet = Planet.PLUTO,
                         longitude = 190.0,
                         velocity = 0.01,
                         isRetrograde = false,
@@ -180,6 +182,7 @@ fun GreeceDashboardPreview() {
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
+                ascendant = 45.0,
                 julianDay = 2451545.0
             )
             
@@ -188,7 +191,7 @@ fun GreeceDashboardPreview() {
                 OracleDecreeCard(
                     culture = AncientCulture.GREECE,
                     reading = previewReading(
-                        position = sampleChart.planets.getValue(ClassicalPlanet.SUN),
+                        position = sampleChart.planets.getValue(Planet.SUN),
                         deityName = "Helios",
                         deityEpithet = "Who Sees All Things",
                         decreeLine = "I see all things from my height, and the golden chariot rises to illuminate the hidden path.",
@@ -207,8 +210,8 @@ fun CanaanDashboardPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             val sampleChart = NatalChartData(
                 planets = mapOf(
-                    ClassicalPlanet.MARS to AccuratePlanetPosition(
-                        planet = ClassicalPlanet.MARS,
+                    Planet.MARS to AccuratePlanetPosition(
+                        planet = Planet.MARS,
                         longitude = 285.0,
                         velocity = 0.6,
                         isRetrograde = false,
@@ -218,8 +221,8 @@ fun CanaanDashboardPreview() {
                         secondInSign = 0,
                         house = 10
                     ),
-                    ClassicalPlanet.URANUS to AccuratePlanetPosition(
-                        planet = ClassicalPlanet.URANUS,
+                    Planet.URANUS to AccuratePlanetPosition(
+                        planet = Planet.URANUS,
                         longitude = 60.0,
                         velocity = 0.05,
                         isRetrograde = false,
@@ -231,6 +234,7 @@ fun CanaanDashboardPreview() {
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
+                ascendant = 45.0,
                 julianDay = 2451545.0
             )
 
@@ -239,7 +243,7 @@ fun CanaanDashboardPreview() {
                 OracleDecreeCard(
                     culture = AncientCulture.CANAAN,
                     reading = previewReading(
-                        position = sampleChart.planets.getValue(ClassicalPlanet.MARS),
+                        position = sampleChart.planets.getValue(Planet.MARS),
                         deityName = "Resheph",
                         deityEpithet = "Lord of the Arrow",
                         decreeLine = "The fortress is strong, but the pestilence of doubt creeps through the stones.",
@@ -258,8 +262,8 @@ fun RomeDashboardPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             val sampleChart = NatalChartData(
                 planets = mapOf(
-                    ClassicalPlanet.JUPITER to AccuratePlanetPosition(
-                        planet = ClassicalPlanet.JUPITER,
+                    Planet.JUPITER to AccuratePlanetPosition(
+                        planet = Planet.JUPITER,
                         longitude = 95.0,
                         velocity = 0.2,
                         isRetrograde = false,
@@ -269,8 +273,8 @@ fun RomeDashboardPreview() {
                         secondInSign = 0,
                         house = 4
                     ),
-                    ClassicalPlanet.NEPTUNE to AccuratePlanetPosition(
-                        planet = ClassicalPlanet.NEPTUNE,
+                    Planet.NEPTUNE to AccuratePlanetPosition(
+                        planet = Planet.NEPTUNE,
                         longitude = 340.0,
                         velocity = 0.02,
                         isRetrograde = false,
@@ -282,6 +286,7 @@ fun RomeDashboardPreview() {
                     )
                 ),
                 houseCusps = DoubleArray(13) { it * 30.0 },
+                ascendant = 45.0,
                 julianDay = 2451545.0
             )
 
@@ -290,7 +295,7 @@ fun RomeDashboardPreview() {
                 OracleDecreeCard(
                     culture = AncientCulture.ROME,
                     reading = previewReading(
-                        position = sampleChart.planets.getValue(ClassicalPlanet.JUPITER),
+                        position = sampleChart.planets.getValue(Planet.JUPITER),
                         deityName = "Iuppiter",
                         deityEpithet = "Optimus Maximus, Best and Greatest",
                         decreeLine = "The Capitoline stands firm; the augur reads favor in the flight of the eagle.",

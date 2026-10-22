@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Auto Backup on Android 11 and below. Everything is backed up except the web
+  session: its token is sealed with a Keystore key that never leaves the
+  device, so a restored copy could not be opened anyway, and a session should
+  not travel to another device.
+-->
+<full-backup-content>
+    <exclude domain="file" path="datastore/account_session.preferences_pb" />
+</full-backup-content>

@@ -52,6 +52,7 @@ export function storageSection(
 }
 
 export const PRIVACY_EN: PrivacyCopy = {
+  lang: "en-CA",
   metaTitle: "Privacy Policy",
   metaDescription:
     "What Astra Antiqua collects, why, where it is stored, how long it is kept, and how to see, correct or delete it.",
@@ -211,6 +212,7 @@ export const PRIVACY_EN: PrivacyCopy = {
 };
 
 export const PRIVACY_FR: PrivacyCopy = {
+  lang: "fr-CA",
   metaTitle: "Politique de confidentialité",
   metaDescription:
     "Ce qu'Astra Antiqua recueille, pourquoi, où l'information est conservée, combien de temps, et comment la consulter, la corriger ou la supprimer.",

@@ -1,6 +1,8 @@
 package com.astra.antiqua.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,18 +20,24 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.domain.DayTone
 import com.astra.antiqua.domain.WeekDay
+import com.astra.antiqua.domain.WeekShorthand
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.ui.components.Badge
 import com.astra.antiqua.ui.components.BadgeTone
+import com.astra.antiqua.ui.components.DeityGlyph
 import com.astra.antiqua.ui.components.NaveHead
 import com.astra.antiqua.ui.components.NaveShell
 import com.astra.antiqua.ui.components.RowRule
 import com.astra.antiqua.ui.nav.Horizon
+import com.astra.antiqua.ui.nav.Route
 import com.astra.antiqua.ui.nav.Section
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.Conflict
@@ -38,6 +46,7 @@ import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.LocalLexicon
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.HorizonViewModel
 import com.astra.antiqua.viewmodel.WeekState
@@ -56,6 +65,7 @@ import java.util.Date
 fun WeekScreen(
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
+    onOpenFigure: (String) -> Unit = {},
 ) {
     val viewModel: HorizonViewModel = viewModel(factory = AstraViewModelFactory)
     val state by viewModel.week.collectAsState()
@@ -98,7 +108,7 @@ fun WeekScreen(
                                 "${year(current.end)}",
                         )
                     }
-                    items(current.days, key = { it.date.time }) { day -> DayRow(day) }
+                    items(current.days, key = { it.date.time }) { day -> DayRow(day, culture, onOpenFigure) }
                     item {
                         Text(
                             text = "EACH DAY TAKES THE TIGHTEST FIGURE THE SKY MAKES INSIDE " +
@@ -116,7 +126,7 @@ fun WeekScreen(
 }
 
 @Composable
-private fun DayRow(day: WeekDay) {
+private fun DayRow(day: WeekDay, culture: AncientCulture, onOpenFigure: (String) -> Unit) {
     val accent = LocalAccent.current
     RowRule()
     Row(
@@ -148,6 +158,18 @@ private fun DayRow(day: WeekDay) {
             }
         }
         Column(modifier = Modifier.weight(1f)) {
+            day.headline?.let { headline ->
+                // The headline opens the row's figure page, as on web.
+                val open = day.figure?.let { (date, id) -> { onOpenFigure(Route.figure(date, id)) } }
+                Text(
+                    text = displayCase(headline),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Bone,
+                    modifier = Modifier
+                        .padding(bottom = Spacing.Tight)
+                        .then(if (open != null) Modifier.clickable(onClickLabel = "Read the figure", role = Role.Button, onClick = open) else Modifier),
+                )
+            }
             Text(
                 text = day.line,
                 style = MaterialTheme.typography.bodySmall,
@@ -156,14 +178,41 @@ private fun DayRow(day: WeekDay) {
             Row(
                 modifier = Modifier.padding(top = Spacing.Tight),
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Spacing.Tight),
             ) {
-                Text(
-                    text = day.shorthand,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = toneInk(day.tone),
-                )
+                Shorthand(day.shorthand, culture, toneInk(day.tone))
             }
         }
+    }
+}
+
+/**
+ * Web's WeekNave shorthand: the bodies as deity glyphs in the culture in
+ * force, the aspect glyph between them and TIGHT after; on an ingress the body,
+ * the arrow and the sign's abbreviation; QUIET on a day with nothing in orb.
+ */
+@Composable
+private fun Shorthand(shorthand: WeekShorthand, culture: AncientCulture, ink: Color) {
+    val style = MaterialTheme.typography.labelSmall
+    when (shorthand) {
+        is WeekShorthand.Aspect -> {
+            DeityGlyph(body = shorthand.a, culture = culture, size = 16.dp)
+            Text(
+                text = shorthand.glyph,
+                style = style,
+                color = ink,
+                modifier = Modifier.semantics { contentDescription = shorthand.aspect.name.lowercase() },
+            )
+            DeityGlyph(body = shorthand.b, culture = culture, size = 16.dp)
+            shorthand.tail?.let { Text(text = it, style = style, color = ink) }
+        }
+
+        is WeekShorthand.Ingress -> {
+            DeityGlyph(body = shorthand.planet, culture = culture, size = 16.dp)
+            Text(text = shorthand.tail, style = style, color = ink)
+        }
+
+        WeekShorthand.Quiet -> Text(text = "QUIET", style = style, color = ink)
     }
 }
 

@@ -7,7 +7,7 @@ import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.data.ProfileRepository
 import com.astra.antiqua.data.SettingsRepository
 import com.astra.antiqua.domain.CalculateNatalChartUseCase
-import com.astra.antiqua.domain.NatalPoint
+import com.astra.antiqua.domain.natalPointsOf
 import com.astra.antiqua.domain.SLOW_BODIES
 import com.astra.antiqua.domain.SkyEvent
 import com.astra.antiqua.domain.SkyEvents
@@ -15,7 +15,7 @@ import com.astra.antiqua.domain.TransitSpan
 import com.astra.antiqua.domain.TransitSpans
 import com.astra.antiqua.domain.ZodiacSign
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import java.util.Date
 import kotlin.math.floor
 import kotlinx.coroutines.Dispatchers
@@ -77,11 +77,7 @@ class ForecastViewModel(
                 val now = Date()
                 val ready = withContext(Dispatchers.Default) {
                     val chart = CalculateNatalChartUseCase(astronomy).execute(profile)
-                    val points = buildList {
-                        chart.planets[ClassicalPlanet.SUN]?.let { add(NatalPoint("sun", it.longitude)) }
-                        chart.planets[ClassicalPlanet.MOON]?.let { add(NatalPoint("moon", it.longitude)) }
-                        chart.houseCusps.getOrNull(1)?.let { add(NatalPoint("asc", it)) }
-                    }
+                    val points = natalPointsOf(chart)
                     // A span open at any point in the coming year belongs in
                     // the forecast, so the walk starts behind today: a transit
                     // that began last autumn is still this year's weather.
@@ -94,7 +90,7 @@ class ForecastViewModel(
                     ).filter { it.end.time >= now.time && it.start.time <= now.time + YEAR_MS }
 
                     val stations = SkyEvents.stations(astronomy, now, YEAR_DAYS)
-                    val natalSun = chart.planets[ClassicalPlanet.SUN]?.longitude
+                    val natalSun = chart.planets[Planet.SUN]?.longitude
                     val solarReturn = natalSun?.let { solarReturnAfter(it, now) }
 
                     ForecastState.Ready(now, culture, solarReturn, spans, stations)

@@ -204,8 +204,12 @@ npm run gates
 ```
 
 Scans `src/` for em dashes, banned terms (`inter`, `roboto`, `harness`,
-"unlock your", "discover your"), and `framer-motion` imports, and exits
-non-zero with a `file:line` list. Run it alongside `npm run typecheck` and
+"unlock your", "discover your"), `framer-motion` imports, backdrop filters
+(`backdrop-filter`, the `backdropFilter` style key, Tailwind `backdrop-blur`),
+and radius: `border-radius` or a corner longhand other than `0`, `0px` or
+`0 !important`, a non-zero `borderRadius` style key, and any Tailwind
+`rounded` class except `rounded-none`. It exits non-zero with a `file:line`
+list. Run it alongside `npm run typecheck` and
 `npm run lint` before every commit.
 
 ## Routes

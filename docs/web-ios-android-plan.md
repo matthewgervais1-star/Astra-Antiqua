@@ -1,25 +1,30 @@
 # Astra Antiqua Platform Plan
 
-## Delivery status — 2026-07-12
+## Delivery status, 2026-09-29
+
+Checked against the tree on 2026-09-29. This table replaces the 2026-07-12 one,
+which git history keeps.
 
 | Plan item | Status |
 |-----------|--------|
-| Web reading flow (Milestone 1) | **Done.** Reading, forecast, synastry, learn, and pantheon journeys shipped; production build green. |
-| Android reading flow (Milestone 1) | **Done.** Kotlin/Compose app in `android/` compiles (`compileDebugSources`); core reading experience implemented. |
-| Android content + chart-math parity (Milestone 1/2) | **Done.** All five cultures including Rome (enum, deity registry, lexicon, theme, 84 Roman decrees), whole-sign houses, and the canonical aspect-orb table now match the web per [shared-content-model.md](shared-content-model.md). |
-| Shared content model agreed (Milestone 1) | **Done.** Documented in [shared-content-model.md](shared-content-model.md); both surfaces stay in sync by hand against that document until a shared module exists. |
-| Auth flow on web (Milestone 2) | **Done.** Email/password accounts (`jose` + `bcryptjs`), sign-up/sign-in/success onboarding funnel, account page with export and deletion. |
-| Saved charts on web (Milestone 2) | **Done.** Anonymous charts live in localStorage; on sign-up they upload and thereafter mirror to the server (SQLite in dev). |
-| Onboarding + PWA install (web) | **Done.** First-visit onboarding funnel, web app manifest, install icons, LAN install path (`start:lan` + `ASTRA_ALLOW_HTTP`). |
-| Auth + saved charts on Android (Milestone 2) | **Deferred.** The Android app is standalone (Room storage, no backend client). Needs the shared backend contract below. |
-| iOS app (Milestone 2/3) | **Deferred — blocked on tooling.** Requires macOS/Xcode; cannot be built or verified from this Windows workstation. Architecture direction below still stands. |
-| Web rebrand Phase 2 ("The Instrument in the Temple") | **Done.** Full visual and structural rebrand of `web/` per [rebrand-brief.md](design/rebrand-brief.md) and the [Phase 2 handoff](design/handoff/README.md): two chassis (nave and instrument), Cinzel/Spectral/IBM Plex Mono, per-culture grounds and accents, ten bodies with designed receptions, long-transit readings, placement pages, reading feedback, the day's permissions and day-pressure modules, and the whole route map reorganized with redirects. |
-| Android restyle to the new identity | **Not started.** The rebrand deliberately covered `web/` only. Android still carries the relic gold-on-black identity and the 7-planet model. |
-| Android ten-body + orb-table catch-up | **Not started.** `ClassicalPlanet`, `DeityRegistry`, and `oracle_decrees.json` need the three received bodies and the corrected Greek and Canaanite deity names; `AspectType` needs the documented orb table. See divergences 6 to 8 in [shared-content-model.md](shared-content-model.md). |
-| Notification delivery (web) | **Not started.** The per-culture notification corpus is authored and in the code (160 lines, one per day, user's culture only). No push infrastructure exists to deliver it. |
-| PWA home-screen widgets | **Not started.** The handoff designs small and medium widgets; the OG share card ships, the widget surfaces do not. |
+| Web reading flow (Milestone 1) | **Done.** Reading, forecast, synastry, learn and pantheon journeys ship; the production build is green. |
+| Android reading flow (Milestone 1) | **Done.** 18 screens in `android/`, walked on a Pixel 9 emulator (see [design/IMPLEMENTATION.md](design/IMPLEMENTATION.md)). |
+| Android content + chart-math parity (Milestone 1/2) | **Done.** Five cultures, ten bodies, whole-sign houses and the documented orb table, per [shared-content-model.md](shared-content-model.md). |
+| Shared content model (Milestone 1) | **Done.** `cd web && npm run export:content` generates `shared/content/*.json`. Android reads it as a build-time asset and the C# core embeds it. |
+| Auth flow on web (Milestone 2) | **Done.** Email/password accounts (`jose` + `bcryptjs`), the sign-up and sign-in funnel, and an account page with export and deletion. |
+| Saved charts on web (Milestone 2) | **Done.** One chart per account since `8796ef7`, stored in Postgres. Synastry enters the second party for the reading and never stores it. |
+| Onboarding + PWA install (web) | **Done.** First-visit onboarding, a web app manifest, install icons and the LAN install path (`start:lan` + `ASTRA_ALLOW_HTTP`). There is no service worker. |
+| Auth + saved charts on Android (Milestone 2) | **Done** (2026-10-06). Sign-in, first entry, sign-out, one-chart sync by web's merge rule (the server's chart wins), export through the share sheet, strike, and the wait list, against the web API: `6056b2e` to `20c4dd6`. Walked on the Pixel 9 emulator against `pnpm dev` on PGlite, screenshots in [design/screenshots/phase13-android-sync/](design/screenshots/phase13-android-sync/). Release builds need `astra.apiOrigin` set to the deployed origin, which is an owner decision. |
+| iOS app (Milestone 2/3) | **Partial.** A .NET MAUI head (`dotnet/AstraAntiqua.App`) with one page and no reading flow; `.github/workflows/ios.yml` builds it on a macOS runner. The chart core under it (`dotnet/AstraAntiqua.Core`) passes 39 tests, golden parity with web's own output among them. |
+| Web rebrand Phase 2 ("The Instrument in the Temple") | **Done.** The visual and structural rebrand of `web/` per [rebrand-brief.md](design/rebrand-brief.md) and the [Phase 2 handoff](design/handoff/README.md): two chassis, the new type and per-culture grounds, ten bodies, long transits and the reorganized route map. |
+| Android restyle to the new identity | **Done.** The design system (`e0eb763`) and every screen on it (`5837c7b`), then the deity glyphs, emblems and brand marks per [design/IMPLEMENTATION.md](design/IMPLEMENTATION.md). |
+| Android ten-body + orb-table catch-up | **Done.** `c1cfac3` widens the body enum to ten, `b598060` renames it `Planet`, and `AspectType` runs the documented orb table. |
+| Notification delivery (web) | **Not started.** No push infrastructure exists. The fixed 160-line corpus is gone: `67d67db` replaced it with `web/src/lib/dailyMessage.ts`, which composes the day's line from the sky. |
+| PWA home-screen widgets | **Not started.** The handoff designs small and medium widgets; the OG share cards ship, the widget surfaces do not. |
 | Social features ("add friends") | **Out of scope, per brief.** Needs a backend social graph. |
-| Shared domain extraction (Phase 4) | **Not started.** The content-model document is the agreed contract; extraction into a shared module/API remains future work. |
+| Shared domain extraction (Phase 4) | **Partial.** Content is shared through `shared/content`. The chart rules are still written three times, in TypeScript, Kotlin and C#, and golden tests pin them to each other. |
+| CI | **Done.** `.github/workflows/web.yml` and `android.yml` (`14b8d37`, `60ba2ec`) join `ios.yml`, so every surface builds and tests when a push touches its paths. |
+| Verification evidence | **Done.** 41 screenshots in `docs/design/screenshots/phase10-verification/` and the rebrand's final report, [web-rebrand-report.md](web-rebrand-report.md) (`a8d6cbe`, `cb73ec8`). |
 
 ## Overview
 
