@@ -1,4 +1,4 @@
-# HANDOFF, Astra Antiqua, state at 2026-10-20
+# HANDOFF, Astra Antiqua, state at 2026-10-22
 
 Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFERENCE / CANNOT CONFIRM.
 
@@ -8,11 +8,10 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   head built only in CI). `shared/content/*.json` is generated from web; never hand-edit it.
 
 ## Where things stand
-- FACT (GitHub PR #2): plan-gap branch to `master`, CI green, mergeable, not merged.
-- FACT (GitHub PR #4): `claude/reading-anatomy-495257`, stacked on PR #2's head, holds
-  the second wave. Done and reviewed: Tasks 15 to 17 (day page, figure page, dive deeper),
-  11 to 14 (archive, rule hex, display-xs 18px, Spectral SC), 18a and 18b (Android sync
-  client and screens; Android birth times now use a bundled tz-lookup, as web does).
+- FACT (GitHub, 2026-10-22): PR #2 merged into `master` (376a2db), carrying PR #4; PR #5, the
+  script reveal, merged into `master` (b32ee44). `master` now matches the Claude Design cards.
+- FACT (PR #4): second wave, reviewed: Tasks 15 to 17 (day, figure, dive deeper), 11 to 14
+  (design calls), 18a and 18b (Android sync; Android birth times use a bundled tz-lookup).
 - FACT (ledger, 2026-10-08): 18c passed on the emulator; whole-branch review of 9804a4e..1d930a3 found 0 Critical,
   1 Important (Room 2->3 migration kept the guessed-zone instant); fixed 1e048b1..44bc3e3.
   Cleanup done and reviewed: C1 LICENCES screen (6292fea); C2 /charts header, /week rows,
@@ -32,7 +31,7 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   `claude/script-reveal` (stacked on PR #4, unpushed) holds the owner's script reveal: names in
   attested script resolve to English or French on scroll (spec `2026-10-20-script-reveal.md`).
   Tasks 1 (data, 56 of 60 sourced) and 2 (web, large culture names, picker) done and reviewed.
-  Task 3 (Android) built, 078a60e..ee9e774, 215 tests green, NOT yet reviewed. Then Task 4, PR.
+  Task 3 (Android) reviewed; TalkBack fix ece6cf4. Android institution titles now equal web's (owner, 2026-10-22) and reveal too.
 
 ## Decisions taken, and why
 - 2026-09-29, owner: rebuild the daily readings to the Co-Star anatomy in five voices (spec
@@ -44,8 +43,9 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   (Room v3). All rulings with their reasons: the ledger and the plan's Rulings section.
 
 ## Pending, in order
-1. FACT (GitHub, 2026-10-20): PR #4 head 3e71306, open against PR #2's branch, CI running.
-   Owner merges #2, then #4 (squash: web tests are red at 1c28ac7..429136c). Claude Design:
+1. FACT (check-run annotation, 2026-10-22): GitHub Actions jobs do not start: "recent account
+   payments have failed or your spending limit needs to be increased". Owner fixes billing; every
+   CI step passed locally at ece6cf4 (ledger). Claude Design:
    26 cards pushed from 4e3c1a5, 3 files from 3e71306, tokens/fonts.css from 24346d4 (2026-10-21), 12 script-reveal files from a2b762f (2026-10-22).
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.

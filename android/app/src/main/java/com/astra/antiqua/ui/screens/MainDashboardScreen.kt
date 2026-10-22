@@ -55,6 +55,7 @@ import com.astra.antiqua.domain.DiveDeeper
 import com.astra.antiqua.domain.permissionPair
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
+import com.astra.antiqua.domain.ScriptNameKey
 import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.components.DeityGlyph
 import com.astra.antiqua.ui.glyphs.deityGlyph
@@ -66,6 +67,7 @@ import com.astra.antiqua.ui.components.Kicker
 import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.components.NaveShell
 import com.astra.antiqua.ui.components.RowRule
+import com.astra.antiqua.ui.components.ScriptName
 import com.astra.antiqua.ui.components.SectionDivider
 import com.astra.antiqua.ui.nav.Horizon
 import com.astra.antiqua.ui.nav.Route
@@ -120,11 +122,14 @@ fun MainDashboardScreen(
         item {
             Spacer(modifier = Modifier.height(Spacing.Step))
             CultureNameHead(culture, modifier = Modifier.padding(top = Spacing.Step))
-            Text(
-                text = displayCase(lexicon.dashboardTitle),
+            ScriptName(
+                culture = culture,
+                key = ScriptNameKey.Institution,
                 style = MaterialTheme.typography.displayMedium,
                 color = Bone,
+                displayFace = true,
                 textAlign = TextAlign.Center,
+                contentAlignment = Alignment.Center,
                 modifier = Modifier.padding(top = Spacing.Step)
             )
             Spacer(modifier = Modifier.height(Spacing.Snug))

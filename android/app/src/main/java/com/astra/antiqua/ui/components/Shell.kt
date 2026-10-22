@@ -6,6 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -276,13 +278,14 @@ fun MethodFooter(onOpenMethod: () -> Unit, modifier: Modifier = Modifier) {
  */
 @Composable
 fun NaveHead(
-    kicker: String,
+    kicker: String = "",
     headline: String,
     modifier: Modifier = Modifier,
     emblem: (@Composable () -> Unit)? = null,
     sub: String? = null,
     culture: AncientCulture? = null,
     headlineContent: (@Composable () -> Unit)? = null,
+    kickerContent: (@Composable () -> Unit)? = null,
 ) {
     Column(
         modifier = modifier.fillMaxWidth().padding(vertical = Spacing.Step),
@@ -296,15 +299,19 @@ fun NaveHead(
             CultureNameHead(culture)
             Box(Modifier.height(Spacing.Snug))
         }
-        Text(
-            text = kicker.uppercase(),
-            style = MaterialTheme.typography.labelSmall,
-            color = Dim,
-            textAlign = TextAlign.Center,
-            // A long institution line has to keep the screen's gutter, or it
-            // runs to both edges and stops looking set.
-            modifier = Modifier.padding(horizontal = Spacing.Gutter),
-        )
+        if (kickerContent != null) {
+            kickerContent()
+        } else {
+            Text(
+                text = kicker.uppercase(),
+                style = MaterialTheme.typography.labelSmall,
+                color = Dim,
+                textAlign = TextAlign.Center,
+                // A long institution line has to keep the screen's gutter, or it
+                // runs to both edges and stops looking set.
+                modifier = Modifier.padding(horizontal = Spacing.Gutter),
+            )
+        }
         Box(Modifier.height(Spacing.Step))
         AccentRule()
         Box(Modifier.height(Spacing.Step))
@@ -331,6 +338,26 @@ fun NaveHead(
         }
         Box(Modifier.height(Spacing.Step))
         AccentRule()
+    }
+}
+
+/**
+ * A kicker line that ends in (or holds) the culture's institution as a
+ * [ScriptName]: [before] and [after] are Latin text around it, set in the
+ * kicker's own style. Web's `<ScriptName heading="institution" />` in a kicker.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun InstitutionKicker(culture: AncientCulture, before: String? = null, after: String? = null) {
+    val style = MaterialTheme.typography.labelSmall
+    FlowRow(
+        horizontalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.Gutter),
+    ) {
+        if (before != null) Text(text = "${before.uppercase()} · ", style = style, color = Dim)
+        ScriptName(culture = culture, key = ScriptNameKey.Institution, style = style, color = Dim, upper = true)
+        if (after != null) Text(text = " · ${after.uppercase()}", style = style, color = Dim)
     }
 }
 

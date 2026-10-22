@@ -10,7 +10,7 @@ private fun deityName(culture: AncientCulture, planet: Planet): String =
 
 object LexiconDictionary {
     val Greek = CulturalLexicon(
-        dashboardTitle = "The Oracle of Delphi",
+        dashboardTitle = "The Day's Oracle",
         birthChartMenu = "Thread of the Fates",
         ephemerisMenu = "The Antikythera",
         settingsTitle = "Mt. Olympus",
@@ -41,7 +41,7 @@ object LexiconDictionary {
     )
 
     val Egyptian = CulturalLexicon(
-        dashboardTitle = "The Hall of Ma'at",
+        dashboardTitle = "The Hall of Ma’at",
         birthChartMenu = "Scroll of Thoth",
         ephemerisMenu = "The Decans",
         settingsTitle = "Scales of Ma'at",
@@ -72,7 +72,7 @@ object LexiconDictionary {
     )
 
     val Canaanite = CulturalLexicon(
-        dashboardTitle = "The Divine Council",
+        dashboardTitle = "The Council of El",
         birthChartMenu = "Tablets of Destiny",
         ephemerisMenu = "The Watchers",
         settingsTitle = "Council of El",
@@ -134,7 +134,7 @@ object LexiconDictionary {
     )
 
     val Roman = CulturalLexicon(
-        dashboardTitle = "The Auspices of the Capitoline",
+        dashboardTitle = "The Auspices of the Day",
         birthChartMenu = "The Augur's Templum",
         ephemerisMenu = "The Fasti",
         settingsTitle = "The Forum",
