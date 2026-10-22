@@ -46,7 +46,7 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
 ## Pending, in order
 1. FACT (GitHub, 2026-10-20): PR #4 head 3e71306, open against PR #2's branch, CI running.
    Owner merges #2, then #4 (squash: web tests are red at 1c28ac7..429136c). Claude Design:
-   26 cards pushed from 4e3c1a5, then NaveHead, CenterDecree and specimen.css from 3e71306.
+   26 cards pushed from 4e3c1a5, 3 files from 3e71306, tokens/fonts.css from 24346d4 (2026-10-21), 12 script-reveal files from a2b762f (2026-10-22).
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.
 
