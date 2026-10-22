@@ -2,16 +2,19 @@ import Link from "next/link";
 import { NaveHead } from "@/components/chrome/NaveHead";
 import { Votive } from "@/components/chrome/Votive";
 import { FeedbackRow } from "@/components/chrome/FeedbackRow";
+import { EvidenceLine } from "@/components/chrome/EvidenceLine";
+import { ScriptName } from "@/components/chrome/ScriptName";
+import type { Culture } from "@/data/cultures";
 import type { DayDecree } from "@/lib/decree";
 import { isoDateUtc } from "@/components/home/format";
 import { cn } from "@/lib/classNames";
 
 export interface CenterDecreeProps {
   className?: string;
-  institution: string;
+  culture: Culture;
   weekday: string;
   dateLong: string;
-  reading: Pick<DayDecree, "headline" | "evidence" | "paragraphs" | "tone">;
+  reading: Pick<DayDecree, "headline" | "evidence" | "paragraphs" | "tone" | "figures">;
   votive: string;
   now: Date;
   /** The figure page for the day's headline figure; the headline links to it. Null on a quiet day. */
@@ -27,7 +30,7 @@ export interface CenterDecreeProps {
  * (DiveDeeper.tsx). Shared between the desktop grid and the mobile stack. */
 export function CenterDecree({
   className,
-  institution,
+  culture,
   weekday,
   dateLong,
   reading,
@@ -40,10 +43,17 @@ export function CenterDecree({
   return (
     <main id="day-figure" className={cn("flex flex-col items-center px-6 py-11 text-center md:px-14 md:py-[var(--space-6)]", className)}>
       <NaveHead
-        kicker={`${weekday} · ${dateLong} · ${institution}`}
+        culture={culture}
+        kicker={
+          <>
+            {weekday} · {dateLong} · <ScriptName culture={culture} heading="institution" />
+          </>
+        }
         sub={
-          reading.evidence ? (
-            <div className="font-mono text-data-xs tracking-data text-dim">{reading.evidence}</div>
+          reading.figures[0] ? (
+            <div className="font-mono text-data-xs tracking-data text-dim">
+              <EvidenceLine culture={culture} figure={reading.figures[0]} />
+            </div>
           ) : undefined
         }
       >

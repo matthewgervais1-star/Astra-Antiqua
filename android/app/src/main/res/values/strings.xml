@@ -91,6 +91,10 @@
     <string name="licences_font_spectral_sc">Copyright 2017 The Spectral Project Authors (https://github.com/productiontype/Spectral)</string>
     <string name="licences_font_ibm_plex_mono">Copyright 2017 IBM Corp. All rights reserved.</string>
     <string name="licences_font_noto_sans_symbols">Copyright 2022 The Noto Project Authors (https://github.com/notofonts/symbols)</string>
+    <string name="licences_font_noto_sans_egyptian_hieroglyphs">Copyright 2022 The Noto Project Authors (https://github.com/notofonts/egyptian-hieroglyphs)</string>
+    <string name="licences_font_noto_sans_ugaritic">Copyright 2022 The Noto Project Authors (https://github.com/notofonts/ugaritic)</string>
+    <string name="licences_font_noto_sans_phoenician">Copyright 2022 The Noto Project Authors (https://github.com/notofonts/phoenician)</string>
+    <string name="licences_font_gfs_didot">Copyright (c) Takis Katsoulidis and George D. Matthiopoulos, 2001. All rights reserved.</string>
     <string name="figure_failed">This figure could not be drawn. Try again.</string>
     <string name="figure_try_again">Try again</string>
 </resources>

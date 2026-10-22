@@ -62,7 +62,7 @@ export function HomeBody() {
         />
 
         <CenterDecree
-          institution={bundle.institution}
+          culture={bundle.culture}
           weekday={bundle.weekday}
           dateLong={bundle.dateLong}
           reading={bundle.reading}

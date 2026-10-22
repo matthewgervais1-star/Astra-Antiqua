@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
-import { CULTURES, CULTURE_LABELS, PLANETS, RECEIVED_BODIES } from "@/data/cultures";
-import { DEITY_MATRIX } from "@/data/deities";
+import { CULTURES, PLANETS, RECEIVED_BODIES } from "@/data/cultures";
 import { CULTURE_ACCENTS } from "@/data/palettes";
 import { cn } from "@/lib/classNames";
 import { CultureEmblem } from "@/components/chrome/CultureEmblem";
+import { ScriptName } from "@/components/chrome/ScriptName";
 
 /**
  * The ten-by-five reference table: every body this almanac tracks, seated
@@ -43,7 +43,7 @@ export function TranslationMatrix() {
                 >
                   <span className="flex items-center gap-[var(--space-1)]">
                     <CultureEmblem culture={culture} size={18} decorative />
-                    {CULTURE_LABELS[culture].toUpperCase()}
+                    <ScriptName culture={culture} heading="culture" upper />
                   </span>
                 </th>
               ))}
@@ -65,7 +65,7 @@ export function TranslationMatrix() {
                   <td key={culture} className="px-2 py-[var(--space-2)] text-bone">
                     <span className="inline-flex items-center gap-[var(--space-1)]">
                       <DeityGlyph body={planet} culture={culture} size={16} decorative />
-                      {DEITY_MATRIX[culture][planet].name}
+                      <ScriptName culture={culture} planet={planet} />
                     </span>
                   </td>
                 ))}

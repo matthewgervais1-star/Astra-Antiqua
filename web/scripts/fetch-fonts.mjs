@@ -92,6 +92,14 @@ const FAMILIES = [
     subset: "ugaritic",
     picks: [{ style: "normal", weight: "400", file: "noto-sans-ugaritic-400.woff2" }],
   },
+  // Punic names on the script-reveal surface (docs/superpowers/specs/
+  // 2026-10-20-script-reveal.md), U+10900-U+1091F.
+  {
+    family: "Noto Sans Phoenician",
+    css: "family=Noto+Sans+Phoenician",
+    subset: "phoenician",
+    picks: [{ style: "normal", weight: "400", file: "noto-sans-phoenician-400.woff2" }],
+  },
   {
     family: "Noto Sans Symbols",
     css: "family=Noto+Sans+Symbols",
@@ -103,6 +111,14 @@ const FAMILIES = [
     css: "family=GFS+Didot",
     subset: "greek",
     picks: [{ style: "normal", weight: "400", file: "gfs-didot-400.woff2" }],
+  },
+  {
+    // Polytonic Greek (breathings and accents, U+1F00-1FFF) ships in its own
+    // subset; the font stack falls through to it for the attested deity names.
+    family: "GFS Didot",
+    css: "family=GFS+Didot",
+    subset: "greek-ext",
+    picks: [{ style: "normal", weight: "400", file: "gfs-didot-greek-ext-400.woff2" }],
   },
 ];
 
@@ -167,6 +183,33 @@ const ANDROID_FAMILIES = [
     subset: "symbols",
     picks: [{ style: "normal", weight: "400", file: "noto_sans_symbols.ttf" }],
   },
+  /**
+   * The script-reveal faces (docs/superpowers/specs/2026-10-20-script-reveal.md):
+   * each culture's attested names in its own writing, never copy. The TTF
+   * response carries no subset split, so one file covers the whole family;
+   * GFS Didot's single TTF holds both Greek and Greek Extended (U+1F00-1FFF).
+   * ScriptFontCoverageTest checks every script code point against these cmaps.
+   */
+  {
+    family: "Noto Sans Egyptian Hieroglyphs",
+    css: "family=Noto+Sans+Egyptian+Hieroglyphs",
+    picks: [{ style: "normal", weight: "400", file: "noto_sans_egyptian_hieroglyphs.ttf" }],
+  },
+  {
+    family: "Noto Sans Ugaritic",
+    css: "family=Noto+Sans+Ugaritic",
+    picks: [{ style: "normal", weight: "400", file: "noto_sans_ugaritic.ttf" }],
+  },
+  {
+    family: "Noto Sans Phoenician",
+    css: "family=Noto+Sans+Phoenician",
+    picks: [{ style: "normal", weight: "400", file: "noto_sans_phoenician.ttf" }],
+  },
+  {
+    family: "GFS Didot",
+    css: "family=GFS+Didot",
+    picks: [{ style: "normal", weight: "400", file: "gfs_didot.ttf" }],
+  },
 ];
 
 /**
@@ -214,7 +257,12 @@ function pickUrl(cssText, style, weight, ext = "woff2", subset = "latin") {
 
 const android = process.argv.includes("--android");
 const outDir = android ? ANDROID_OUT_DIR : OUT_DIR;
-const families = android ? ANDROID_FAMILIES : FAMILIES;
+// `--only "Family Name"` fetches one family, so adding a face does not
+// re-download, and possibly re-cut, every committed file.
+const onlyIndex = process.argv.indexOf("--only");
+const only = onlyIndex === -1 ? null : process.argv[onlyIndex + 1];
+const families = (android ? ANDROID_FAMILIES : FAMILIES).filter((fam) => only === null || fam.family === only);
+if (families.length === 0) throw new Error(`No family named ${only}`);
 const label = android ? "android/app/src/main/res/font" : "src/fonts";
 
 await mkdir(outDir, { recursive: true });

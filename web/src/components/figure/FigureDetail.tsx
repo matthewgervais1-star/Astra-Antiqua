@@ -8,6 +8,8 @@ import { DEITY_MATRIX } from "@/data/deities";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { FeedbackRow } from "@/components/chrome/FeedbackRow";
 import { NaveHead } from "@/components/chrome/NaveHead";
+import { ScriptName } from "@/components/chrome/ScriptName";
+import { EvidenceLine } from "@/components/chrome/EvidenceLine";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { FigureAnatomy } from "@/components/figure/FigureAnatomy";
@@ -86,7 +88,13 @@ export function FigureDetail({ date, id }: FigureDetailProps) {
   if (!page || !instant) {
     return (
       <div className="mx-auto max-w-[640px] text-center">
-        <NaveHead kicker={`${voice.institution} · THE FIGURE`}>{MISSING[figureMissing(date, id) ?? "absent"]}</NaveHead>
+        <NaveHead
+          kicker={
+            <>
+              <ScriptName culture={culture} heading="institution" /> · THE FIGURE
+            </>
+          }
+        >{MISSING[figureMissing(date, id) ?? "absent"]}</NaveHead>
         <p className="font-mono text-data-xs tracking-label text-dim">
           {id.toUpperCase()} · {date}
         </p>
@@ -101,10 +109,15 @@ export function FigureDetail({ date, id }: FigureDetailProps) {
   return (
     <div className="mx-auto max-w-[640px]">
       <NaveHead
-        kicker={`${weekdayUpper(instant)} · ${dateLongUpper(instant)} · ${voice.institution}`}
+        culture={culture}
+        kicker={
+          <>
+            {weekdayUpper(instant)} · {dateLongUpper(instant)} · <ScriptName culture={culture} heading="institution" />
+          </>
+        }
         sub={
           <div className="font-mono text-data-xs tracking-data text-dim">
-            {page.evidence}
+            <EvidenceLine culture={culture} figure={page.figure} />
             {page.bridge ? (
               <>
                 <br />

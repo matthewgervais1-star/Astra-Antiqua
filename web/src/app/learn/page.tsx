@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CULTURES, CULTURE_LABELS } from "@/data/cultures";
+import { CULTURES } from "@/data/cultures";
 import { computeAspects, SAMPLE_CHART } from "@/data/sampleChart";
 import { NaveShell } from "@/components/chrome/NaveShell";
 import { NaveHead } from "@/components/chrome/NaveHead";
+import { ScriptName } from "@/components/chrome/ScriptName";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { WheelSvg } from "@/components/chrome/WheelSvg";
 import { LearnTOC } from "@/components/LearnTOC";
@@ -228,7 +229,7 @@ export default function LearnPage() {
               href={`/voices/${c}`}
               className="font-display text-display-xs tracking-[0.08em] text-prose hover:text-bone"
             >
-              {CULTURE_LABELS[c].toUpperCase()}
+              <ScriptName culture={c} heading="culture" upper />
             </Link>
           ))}
         </div>

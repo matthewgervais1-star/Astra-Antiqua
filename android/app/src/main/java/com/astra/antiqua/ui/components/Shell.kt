@@ -22,6 +22,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.domain.ScriptReveal
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.label
 import com.astra.antiqua.ui.nav.Horizon
@@ -263,7 +265,15 @@ fun MethodFooter(onOpenMethod: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
-/** A centred page head: kicker, accent rule, headline, closing rule. */
+/**
+ * A centred page head: kicker, accent rule, headline, closing rule.
+ *
+ * With [culture], the culture's own name stands large above the kicker, in
+ * its script first, resolving to Latin after the intro hold (web's NaveHead
+ * culture, docs/superpowers/specs/2026-10-20-script-reveal.md). With
+ * [headlineContent], that composable takes the headline's place, for a page
+ * whose title is itself a name.
+ */
 @Composable
 fun NaveHead(
     kicker: String,
@@ -271,6 +281,8 @@ fun NaveHead(
     modifier: Modifier = Modifier,
     emblem: (@Composable () -> Unit)? = null,
     sub: String? = null,
+    culture: AncientCulture? = null,
+    headlineContent: (@Composable () -> Unit)? = null,
 ) {
     Column(
         modifier = modifier.fillMaxWidth().padding(vertical = Spacing.Step),
@@ -279,6 +291,10 @@ fun NaveHead(
         if (emblem != null) {
             emblem()
             Box(Modifier.height(Spacing.Step))
+        }
+        if (culture != null) {
+            CultureNameHead(culture)
+            Box(Modifier.height(Spacing.Snug))
         }
         Text(
             text = kicker.uppercase(),
@@ -292,13 +308,17 @@ fun NaveHead(
         Box(Modifier.height(Spacing.Step))
         AccentRule()
         Box(Modifier.height(Spacing.Step))
-        Text(
-            text = displayCase(headline.uppercase()),
-            style = MaterialTheme.typography.displaySmall,
-            color = Bone,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = Spacing.Gutter),
-        )
+        if (headlineContent != null) {
+            headlineContent()
+        } else {
+            Text(
+                text = displayCase(headline.uppercase()),
+                style = MaterialTheme.typography.displaySmall,
+                color = Bone,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = Spacing.Gutter),
+            )
+        }
         if (sub != null) {
             Box(Modifier.height(Spacing.Snug))
             Text(
@@ -312,4 +332,25 @@ fun NaveHead(
         Box(Modifier.height(Spacing.Step))
         AccentRule()
     }
+}
+
+/**
+ * The culture's name large at the head of a culture screen, in the accent:
+ * script on arrival, Latin after [ScriptReveal.INTRO_HOLD_MILLIS], then the
+ * band rule. Canaan has no attested script for its own name, so it shows Latin.
+ */
+@Composable
+fun CultureNameHead(culture: AncientCulture, modifier: Modifier = Modifier) {
+    ScriptName(
+        culture = culture,
+        key = ScriptNameKey.CultureName,
+        style = MaterialTheme.typography.displayMedium,
+        color = LocalAccent.current,
+        intro = true,
+        upper = true,
+        displayFace = true,
+        textAlign = TextAlign.Center,
+        contentAlignment = Alignment.Center,
+        modifier = modifier.padding(horizontal = Spacing.Gutter),
+    )
 }

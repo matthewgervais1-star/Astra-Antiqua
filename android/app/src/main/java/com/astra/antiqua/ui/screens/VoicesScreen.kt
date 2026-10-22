@@ -1,5 +1,7 @@
 package com.astra.antiqua.ui.screens
 
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.ui.components.ScriptName
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -91,10 +93,13 @@ fun VoicesScreen(
                 ) {
                     CultureEmblem(culture = each, size = 22.dp, tint = accentFor(each))
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = displayCase(each.label.uppercase()),
+                        ScriptName(
+                            culture = each,
+                            key = ScriptNameKey.CultureName,
                             style = MaterialTheme.typography.titleLarge,
                             color = Bone,
+                            upper = true,
+                            displayFace = true,
                         )
                         if (copy != null) {
                             Text(

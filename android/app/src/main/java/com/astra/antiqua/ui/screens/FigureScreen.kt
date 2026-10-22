@@ -129,6 +129,7 @@ fun FigureScreen(
                     item {
                         NaveHead(
                             kicker = "${longDate(page.instant)} · $institution",
+                            culture = culture,
                             headline = page.headline,
                             sub = page.evidence,
                         )

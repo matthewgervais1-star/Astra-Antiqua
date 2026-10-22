@@ -80,6 +80,7 @@ fun TransitsScreen(
                 NaveHead(
                     kicker = "Read against your own sky",
                     headline = "The long transits",
+                    culture = culture,
                 )
             }
             when (val current = state) {

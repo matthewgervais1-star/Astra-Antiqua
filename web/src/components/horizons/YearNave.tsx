@@ -133,7 +133,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
 
   return (
     <div className="mx-auto max-w-[640px]">
-      <NaveHead kicker={`${voice.institution} · THE YEAR`}>
+      <NaveHead culture={culture} kicker={`${voice.institution} · THE YEAR`}>
         {roman} · {voice.yearTitle}
       </NaveHead>
 

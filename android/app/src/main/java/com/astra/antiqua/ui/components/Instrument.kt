@@ -1,5 +1,6 @@
 package com.astra.antiqua.ui.components
 
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -270,6 +271,8 @@ fun DataRow(
     received: Boolean = false,
     leading: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null,
+    /** Draws the name in place of the plain text, given the row's style and ink (a ScriptName). */
+    nameContent: (@Composable (style: TextStyle, ink: Color) -> Unit)? = null,
 ) {
     val accent = LocalAccent.current
     val ink = if (received) accent else Bone
@@ -293,7 +296,11 @@ fun DataRow(
             horizontalArrangement = Arrangement.spacedBy(Spacing.Tight),
         ) {
             if (leading != null) leading()
-            Text(name.uppercase(), style = style, color = ink, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (nameContent != null) {
+                nameContent(style, ink)
+            } else {
+                Text(name.uppercase(), style = style, color = ink, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
         }
         Text(position, style = style, color = Dim, modifier = Modifier.width(POSITION_WIDTH))
         Text(sign.uppercase(), style = style, color = Dim, modifier = Modifier.width(SIGN_WIDTH))

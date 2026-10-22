@@ -44,8 +44,9 @@
   /* epigraphic faces: attested signs only, never copy (docs/design/system/readme.md, Type) */
   --font-hieroglyph: var(--font-noto-hieroglyphs), "Noto Sans Egyptian Hieroglyphs", serif;
   --font-ugaritic: var(--font-noto-ugaritic), "Noto Sans Ugaritic", serif;
+  --font-phoenician: var(--font-noto-phoenician), "Noto Sans Phoenician", serif;
   --font-symbols: var(--font-noto-symbols), "Noto Sans Symbols", serif;
-  --font-greek-display: var(--font-gfs-didot), "GFS Didot", serif;
+  --font-greek-display: var(--font-gfs-didot), var(--font-gfs-didot-ext), "GFS Didot", serif;
 
   --radius: 0px;
 
@@ -342,6 +343,138 @@ pre,
 kbd,
 samp {
   font-family: var(--font-mono);
+}
+
+/*
+ * THE SCRIPT REVEAL (components/chrome/ScriptName.tsx;
+ * docs/superpowers/specs/2026-10-20-script-reveal.md).
+ *
+ * The Latin form and the script layer share one grid cell, so the box is the
+ * wider of the two from the first paint and the swap shifts nothing. The
+ * script is CSS generated content from data-script: it is not in the page's
+ * text, so search engines and copy-paste get the Latin form, and the layer is
+ * aria-hidden. The layer sets its own case and tracking: the four non-Roman
+ * surfaces lowercase display type for Spectral SC, which would rewrite
+ * polytonic Greek. Rome's inscriptional capitals take Cinzel and the display
+ * tracking on every surface, since --font-display is Spectral SC elsewhere.
+ * Hover and keyboard focus resolve a name the band has not reached, so a
+ * header pinned above the band can still be read.
+ */
+.script-name {
+  display: inline-grid;
+}
+
+.script-name > .script-name__latin,
+.script-name > .script-name__script {
+  grid-area: 1 / 1;
+  transition: opacity 400ms ease-in-out;
+}
+
+.script-name__script {
+  opacity: 0;
+  text-transform: none;
+  letter-spacing: normal;
+  user-select: none;
+  pointer-events: none;
+}
+
+.script-name__script::before {
+  content: attr(data-script);
+}
+
+.script-name__script[data-culture="egypt"] {
+  font-family: var(--font-hieroglyph);
+}
+
+.script-name__script[data-culture="greece"] {
+  font-family: var(--font-greek-display);
+}
+
+.script-name__script[data-culture="canaan"] {
+  font-family: var(--font-ugaritic);
+}
+
+.script-name__script[data-culture="carthage"] {
+  font-family: var(--font-phoenician);
+}
+
+.script-name__script[data-culture="rome"] {
+  font-family: var(--font-cinzel), "Cinzel", Georgia, serif;
+  letter-spacing: var(--tracking-display);
+}
+
+.script-name[data-reveal="script"] > .script-name__latin {
+  opacity: 0;
+}
+
+.script-name[data-reveal="script"] > .script-name__script {
+  opacity: 1;
+}
+
+.script-name[data-reveal="script"]:hover > .script-name__latin,
+:is(a, button):is(:hover, :focus-visible) .script-name[data-reveal="script"] > .script-name__latin {
+  opacity: 1;
+}
+
+.script-name[data-reveal="script"]:hover > .script-name__script,
+:is(a, button):is(:hover, :focus-visible) .script-name[data-reveal="script"] > .script-name__script {
+  opacity: 0;
+}
+
+/*
+ * The load-time resolve for a name near the top of the page (ScriptName's
+ * intro prop): script from the first paint, held for the delay, then the same
+ * 400ms cross-fade to Latin. ScriptName removes the class when the animation
+ * ends, or at once on hover or focus, and the band rule takes over.
+ */
+.script-name--intro > .script-name__latin {
+  animation: script-name-latin-in 400ms ease-in-out var(--script-name-intro-delay, 1200ms) both;
+}
+
+.script-name--intro > .script-name__script {
+  animation: script-name-script-out 400ms ease-in-out var(--script-name-intro-delay, 1200ms) both;
+}
+
+/* Hover or focus during the intro resolves at once, before hydration too:
+   stopping the animation lets the resting opacities below apply. */
+.script-name--intro:hover > .script-name__latin,
+:is(a, button):is(:hover, :focus-visible) .script-name--intro > .script-name__latin {
+  animation: none;
+  opacity: 1;
+}
+
+.script-name--intro:hover > .script-name__script,
+:is(a, button):is(:hover, :focus-visible) .script-name--intro > .script-name__script {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes script-name-latin-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes script-name-script-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .script-name__script {
+    display: none;
+  }
+  .script-name--intro > .script-name__latin,
+  .script-name--intro > .script-name__script {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

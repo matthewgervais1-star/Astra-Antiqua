@@ -151,6 +151,7 @@ const proc = spawn(
     `--user-data-dir=${profile}`,
     `--window-size=${args.width},${args.height}`,
     "--hide-scrollbars",
+    "--disable-lcd-text",
     "--no-first-run",
     "--no-default-browser-check",
     "--disable-gpu",

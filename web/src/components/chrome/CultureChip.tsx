@@ -7,6 +7,7 @@ import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { writePersistedPantheon } from "@/lib/pantheonPreference";
 import { cn } from "@/lib/classNames";
 import { CultureEmblem } from "@/components/chrome/CultureEmblem";
+import { ScriptName } from "@/components/chrome/ScriptName";
 
 const CHIP_CLASS =
   "whitespace-nowrap border border-[var(--accent-strong-border)] px-[var(--space-2)] py-2 font-mono text-data-xs text-accent";
@@ -44,7 +45,6 @@ function CultureChipImpl() {
     };
   }, [open]);
 
-  const label = culture ? `${CULTURE_LABELS[culture].toUpperCase()} ▾` : "CHOOSE ▾";
 
   const select = (next: Culture) => {
     writePersistedPantheon(next);
@@ -67,7 +67,13 @@ function CultureChipImpl() {
       >
         {culture ? <CultureEmblem culture={culture} size={14} decorative /> : null}
         <ChipPrefix />
-        {label}
+        {culture ? (
+          <>
+            <ScriptName culture={culture} heading="culture" upper /> ▾
+          </>
+        ) : (
+          "CHOOSE ▾"
+        )}
       </button>
       {open ? (
         <div

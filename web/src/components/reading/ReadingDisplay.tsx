@@ -10,9 +10,9 @@ import {
 import type { Reading } from "@/lib/reading";
 import { formatOffset, type ResolvedBirth } from "@/lib/birthDateTime";
 import { CULTURE_LABELS } from "@/data/cultures";
-import { DEITY_MATRIX } from "@/data/deities";
 import { PLANET_AREAS } from "@/data/planetAreas";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
+import { ScriptName } from "@/components/chrome/ScriptName";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { OrbBar, type OrbTone } from "@/components/chrome/OrbBar";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
@@ -130,7 +130,7 @@ export function ReadingDisplay({
                   )}
                 >
                   <DeityGlyph body={p.planet} culture={culture} size={16} decorative />
-                  {p.deityName.toUpperCase()}
+                  <ScriptName culture={culture} planet={p.planet} upper />
                   <span className="ml-2 font-body text-prose-s normal-case italic text-dim">
                     {p.deityEpithet}
                   </span>
@@ -176,7 +176,6 @@ export function ReadingDisplay({
         <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
           {PLANETS.map((planet) => {
             const area = PLANET_AREAS[planet];
-            const deity = DEITY_MATRIX[culture][planet];
             const received = isReceived(planet);
             return (
               <div key={planet} className="border-t border-rule-row pt-4">
@@ -187,7 +186,7 @@ export function ReadingDisplay({
                   )}
                 >
                   <DeityGlyph body={planet} culture={culture} size={16} decorative />
-                  {deity.name.toUpperCase()} · {area.area.toUpperCase()}
+                  <ScriptName culture={culture} planet={planet} upper /> · {area.area.toUpperCase()}
                 </div>
                 <p className="mt-2 font-body text-prose-s leading-prose text-prose">{area.blurb}</p>
               </div>

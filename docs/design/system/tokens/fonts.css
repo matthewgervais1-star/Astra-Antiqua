@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=Spectral+SC:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Egyptian+Hieroglyphs&family=Noto+Sans+Ugaritic&family=Noto+Sans+Symbols+2&family=GFS+Didot&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Egyptian+Hieroglyphs&family=Noto+Sans+Ugaritic&family=Noto+Sans+Phoenician&family=Noto+Sans+Symbols+2&family=GFS+Didot&display=swap');
 
 :root {
   /* three product faces */
@@ -13,6 +13,7 @@
   /* epigraphic faces, used only to set attested signs, never for copy */
   --font-hieroglyph: 'Noto Sans Egyptian Hieroglyphs', serif;
   --font-ugaritic: 'Noto Sans Ugaritic', serif;
+  --font-phoenician: 'Noto Sans Phoenician', serif;
   --font-greek-display: 'GFS Didot', serif;
   --font-symbols: 'Noto Sans Symbols 2', serif;
 
