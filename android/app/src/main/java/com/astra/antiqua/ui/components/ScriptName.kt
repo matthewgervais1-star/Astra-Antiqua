@@ -75,9 +75,11 @@ import kotlinx.coroutines.delay
  * frame of it recomposes nothing; scrolling recomposes only at a crossing.
  *
  * Rules: in the band (30% to 70% of the window height) the name reads Latin,
- * outside it the script. A tap resolves it at once, until the next crossing,
- * and so does focus reaching the container the name sits in ([interactionSource],
- * the one that container's `clickable` takes; web listens for `focusin`).
+ * outside it the script. A tap resolves it at once, until the next crossing.
+ * Focus on the container the name sits in ([interactionSource], the one that
+ * container's `clickable` takes) shows Latin while it lasts and returns the name
+ * to the band's form when it leaves (web's `:focus-visible`); during the intro it
+ * also ends the intro (web's `focusin`), and Latin holds until the next crossing.
  * With [intro], the script shows from the first frame, holds for
  * [introDelayMillis], then resolves, and only a later crossing applies the
  * band again: a name at the top of a screen would otherwise never resolve.
@@ -114,7 +116,7 @@ fun ScriptName(
     val animationsOff = rememberAnimationsOff()
     // Above the early return, so a finished intro stays finished when animations come back on.
     var introRunning by remember { mutableStateOf(intro) }
-    // Latin until the next crossing: set by a tap, focus, or the end of the intro.
+    // Latin until the next crossing: set by a tap or the end of the intro, which focus can cause.
     var held by remember { mutableStateOf(false) }
 
     if (script == null || animationsOff) {
@@ -131,19 +133,20 @@ fun ScriptName(
     }
 
     var inBand by remember { mutableStateOf<Boolean?>(null) }
+    val focused = interactionSource?.collectIsFocusedAsState()?.value == true
     // Null before the first position report, when neither layer draws.
-    val showLatin = ScriptReveal.showsLatin(introRunning, held, inBand)
+    val showLatin = ScriptReveal.showsLatin(introRunning, held, inBand, focused)
 
-    val latinAlpha = remember { Animatable(0f) }
+    val latinFade = remember { Animatable(0f) }
     // False until the first form is on screen; that form takes its alpha at once, never a fade.
     var settled by remember { mutableStateOf(false) }
     LaunchedEffect(showLatin) {
         if (showLatin == null) return@LaunchedEffect
         val target = if (showLatin) 1f else 0f
         if (settled) {
-            latinAlpha.animateTo(target, tween(ScriptReveal.FADE_MILLIS, easing = FastOutSlowInEasing))
+            latinFade.animateTo(target, tween(ScriptReveal.FADE_MILLIS, easing = FastOutSlowInEasing))
         } else {
-            latinAlpha.snapTo(target)
+            latinFade.snapTo(target)
             settled = true
         }
     }
@@ -151,16 +154,11 @@ fun ScriptName(
         introRunning = false
         held = true
     }
-    // Focus reaching the container resolves the name as a tap does.
-    val focused = interactionSource?.collectIsFocusedAsState()?.value == true
-    LaunchedEffect(focused) { if (focused) resolve() }
+    LaunchedEffect(focused) { if (ScriptReveal.focusEndsIntro(introRunning, focused)) resolve() }
     if (intro) {
         LaunchedEffect(Unit) {
             delay(introDelayMillis)
-            if (introRunning) {
-                introRunning = false
-                held = true
-            }
+            if (introRunning) resolve()
         }
     }
 
@@ -196,7 +194,7 @@ fun ScriptName(
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.graphicsLayer {
-                alpha = ScriptReveal.latinAlpha(showLatin, settled, latinAlpha.value)
+                alpha = ScriptReveal.latinAlpha(showLatin, settled, latinFade.value)
             },
         )
         Text(
@@ -207,7 +205,7 @@ fun ScriptName(
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.graphicsLayer {
-                alpha = ScriptReveal.scriptAlpha(showLatin, settled, latinAlpha.value)
+                alpha = ScriptReveal.scriptAlpha(showLatin, settled, latinFade.value)
             },
         )
     }

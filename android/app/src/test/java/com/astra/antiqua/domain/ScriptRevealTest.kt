@@ -87,14 +87,35 @@ class ScriptRevealTest {
     @Test
     fun anIntroShowsScriptAHeldNameShowsLatinOtherwiseTheBandDecides() {
         // The intro wins over a tap and the band alike.
-        assertEquals(false, ScriptReveal.showsLatin(introRunning = true, held = true, inBand = true))
-        assertEquals(false, ScriptReveal.showsLatin(introRunning = true, held = false, inBand = null))
-        // A tap or focus holds Latin outside the band.
-        assertEquals(true, ScriptReveal.showsLatin(introRunning = false, held = true, inBand = false))
+        assertEquals(false, ScriptReveal.showsLatin(introRunning = true, held = true, inBand = true, focused = false))
+        assertEquals(false, ScriptReveal.showsLatin(introRunning = true, held = false, inBand = null, focused = false))
+        // A tap holds Latin outside the band.
+        assertEquals(true, ScriptReveal.showsLatin(introRunning = false, held = true, inBand = false, focused = false))
         // Otherwise the band decides, and before the first report there is no form.
-        assertEquals(true, ScriptReveal.showsLatin(introRunning = false, held = false, inBand = true))
-        assertEquals(false, ScriptReveal.showsLatin(introRunning = false, held = false, inBand = false))
-        assertNull(ScriptReveal.showsLatin(introRunning = false, held = false, inBand = null))
+        assertEquals(true, ScriptReveal.showsLatin(introRunning = false, held = false, inBand = true, focused = false))
+        assertEquals(false, ScriptReveal.showsLatin(introRunning = false, held = false, inBand = false, focused = false))
+        assertNull(ScriptReveal.showsLatin(introRunning = false, held = false, inBand = null, focused = false))
+    }
+
+    @Test
+    fun aFocusedNameReadsLatinAndGoesBackToScriptWhenFocusLeaves() {
+        // Outside the band: Latin while the container holds focus, script once it leaves.
+        assertEquals(true, ScriptReveal.showsLatin(introRunning = false, held = false, inBand = false, focused = true))
+        assertEquals(false, ScriptReveal.showsLatin(introRunning = false, held = false, inBand = false, focused = false))
+        // Focus alone sets nothing held: a name in the band stays Latin, one outside returns to script.
+        assertEquals(true, ScriptReveal.showsLatin(introRunning = false, held = false, inBand = true, focused = false))
+    }
+
+    @Test
+    fun focusDuringTheIntroEndsItAndLatinHoldsAfterFocusLeaves() {
+        // Latin at once, without waiting for the intro's hold.
+        assertEquals(true, ScriptReveal.showsLatin(introRunning = true, held = false, inBand = false, focused = true))
+        assertTrue(ScriptReveal.focusEndsIntro(introRunning = true, focused = true))
+        // The intro keeps running while nothing has focus, and focus after it ended changes nothing.
+        assertFalse(ScriptReveal.focusEndsIntro(introRunning = true, focused = false))
+        assertFalse(ScriptReveal.focusEndsIntro(introRunning = false, focused = true))
+        // Once ended it is held (ScriptName's resolve), so Latin stays when focus moves on.
+        assertEquals(true, ScriptReveal.showsLatin(introRunning = false, held = true, inBand = false, focused = false))
     }
 
     @Test

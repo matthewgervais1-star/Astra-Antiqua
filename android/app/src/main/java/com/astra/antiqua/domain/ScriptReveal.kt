@@ -80,14 +80,19 @@ object ScriptReveal {
 
     /**
      * The form a name shows: true for Latin, false for script, null while nothing
-     * has been measured and no intro runs, when the name draws neither. The intro
-     * shows script and a tap holds Latin; otherwise the band decides ([inBand]).
+     * has been measured and no intro runs, when the name draws neither. Focus on the
+     * name's container shows Latin for as long as it lasts (web's `:focus-visible`);
+     * otherwise the intro shows script, a tap holds Latin, and the band decides ([inBand]).
      */
-    fun showsLatin(introRunning: Boolean, held: Boolean, inBand: Boolean?): Boolean? = when {
+    fun showsLatin(introRunning: Boolean, held: Boolean, inBand: Boolean?, focused: Boolean): Boolean? = when {
+        focused -> true
         introRunning -> false
         held -> true
         else -> inBand
     }
+
+    /** Focus ends a running intro, as web's `focusin` does; the name then holds Latin until the next crossing. */
+    fun focusEndsIntro(introRunning: Boolean, focused: Boolean): Boolean = introRunning && focused
 
     /**
      * The Latin layer's alpha. Until [settled] the first form shows at once, so it
