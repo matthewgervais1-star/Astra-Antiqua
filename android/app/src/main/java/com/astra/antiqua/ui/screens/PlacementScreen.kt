@@ -30,6 +30,7 @@ import com.astra.antiqua.ui.components.ActionWeight
 import com.astra.antiqua.ui.components.Badge
 import com.astra.antiqua.ui.components.BadgeTone
 import com.astra.antiqua.ui.components.DeityGlyph
+import com.astra.antiqua.ui.components.InstitutionKicker
 import com.astra.antiqua.ui.components.NaveHead
 import com.astra.antiqua.ui.components.NaveShell
 import com.astra.antiqua.ui.components.Panel
@@ -117,6 +118,7 @@ fun PlacementScreen(
                         item {
                             NaveHead(
                                 kicker = "${lexicon.dashboardTitle} · your standing placement",
+                                kickerContent = { InstitutionKicker(culture, after = "your standing placement") },
                                 headline = "Your ${deity.name} in ${position.zodiacSign.signName}",
                                 emblem = {
                                     DeityGlyph(
