@@ -1,8 +1,6 @@
 package com.astra.antiqua.ui.screens
 
 import com.astra.antiqua.ui.components.CultureNameHead
-import com.astra.antiqua.ui.components.ScriptName
-import com.astra.antiqua.domain.ScriptNameKey
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -57,6 +55,7 @@ import com.astra.antiqua.domain.DiveDeeper
 import com.astra.antiqua.domain.permissionPair
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
+import com.astra.antiqua.domain.ScriptNameKey
 import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.components.DeityGlyph
 import com.astra.antiqua.ui.glyphs.deityGlyph
@@ -68,6 +67,7 @@ import com.astra.antiqua.ui.components.Kicker
 import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.components.NaveShell
 import com.astra.antiqua.ui.components.RowRule
+import com.astra.antiqua.ui.components.ScriptName
 import com.astra.antiqua.ui.components.SectionDivider
 import com.astra.antiqua.ui.nav.Horizon
 import com.astra.antiqua.ui.nav.Route

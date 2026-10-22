@@ -89,7 +89,6 @@ fun FigureScreen(
     val viewModel: FigureViewModel = viewModel(factory = AstraViewModelFactory)
     val state by viewModel.state.collectAsState()
     val accent = LocalAccent.current
-    val institution = LocalLexicon.current.dashboardTitle
 
     LaunchedEffect(culture, date, id) { viewModel.load(culture, date, id) }
 
@@ -109,7 +108,6 @@ fun FigureScreen(
                         FigureReadingComposer.Missing.ABSENT -> "The sky did not hold this figure that day"
                     }
                     NaveHead(
-                        kicker = "$institution · the figure",
                         headline = headline,
                         kickerContent = { InstitutionKicker(culture, after = "the figure") },
                     )
@@ -118,7 +116,6 @@ fun FigureScreen(
 
                 FigureState.Failed -> item {
                     NaveHead(
-                        kicker = "$institution · the figure",
                         headline = stringResource(R.string.figure_failed),
                         kickerContent = { InstitutionKicker(culture, after = "the figure") },
                     )
@@ -137,7 +134,6 @@ fun FigureScreen(
                     val window = page.window
                     item {
                         NaveHead(
-                            kicker = "${longDate(page.instant)} · $institution",
                             culture = culture,
                             kickerContent = { InstitutionKicker(culture, before = longDate(page.instant)) },
                             headline = page.headline,

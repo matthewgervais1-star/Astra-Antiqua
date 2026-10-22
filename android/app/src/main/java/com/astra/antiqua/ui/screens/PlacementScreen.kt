@@ -117,7 +117,6 @@ fun PlacementScreen(
                         val house = HouseMeanings.get(position.house)
                         item {
                             NaveHead(
-                                kicker = "${lexicon.dashboardTitle} · your standing placement",
                                 kickerContent = { InstitutionKicker(culture, after = "your standing placement") },
                                 headline = "Your ${deity.name} in ${position.zodiacSign.signName}",
                                 emblem = {

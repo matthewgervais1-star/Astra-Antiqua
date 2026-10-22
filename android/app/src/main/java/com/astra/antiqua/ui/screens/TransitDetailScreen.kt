@@ -130,7 +130,6 @@ fun TransitDetailScreen(
                     }
                     item {
                         NaveHead(
-                            kicker = "${LocalLexicon.current.dashboardTitle} · A LONG TRANSIT",
                             kickerContent = { InstitutionKicker(culture, after = "A long transit") },
                             headline = figure?.first ?: "${deity.name} $verb $natal",
                             sub = if (figure != null) "${deity.name} $verb $natal" else null,
