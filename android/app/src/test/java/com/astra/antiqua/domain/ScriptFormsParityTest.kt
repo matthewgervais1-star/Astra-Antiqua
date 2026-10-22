@@ -20,6 +20,17 @@ class ScriptFormsParityTest {
     private fun pin(expected: ScriptForm, actual: ScriptForm) = assertEquals(expected, actual)
 
     @Test
+    fun institutionTitlesMatchTheLexiconHeadings() {
+        for (culture in AncientCulture.entries) {
+            assertEquals(
+                culture.name,
+                ScriptForms.institution(culture).en,
+                LexiconDictionary.forCulture(culture).dashboardTitle.uppercase(java.util.Locale.ENGLISH),
+            )
+        }
+    }
+
+    @Test
     fun egypt() {
         pin(ScriptForm("𓇋𓏠𓈖𓁩", "Amun", "Amon"), ScriptForms.deity(AncientCulture.EGYPT, Planet.JUPITER))
         pin(ScriptForm(null, "Horus the Red", "Horus le Rouge"), ScriptForms.deity(AncientCulture.EGYPT, Planet.MARS))
