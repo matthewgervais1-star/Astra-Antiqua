@@ -37,6 +37,11 @@ function Unset({ children }: { children: string }) {
   );
 }
 
+/** Not drawn below sm, still read by screen readers. `max-sm:` rather than
+ * `sr-only sm:not-sr-only`, which would set `white-space: normal` on these
+ * spans from sm up. */
+const PHONE_SR_ONLY = "max-sm:sr-only";
+
 /**
  * The sub-bar's "2026-08-11 · 14:32 UTC · LIVE" context. The date renders
  * directly (both server and client compute it the same way almost always;
@@ -47,6 +52,10 @@ function Unset({ children }: { children: string }) {
  *
  * A dated view (`/?date=YYYY-MM-DD`) is not live: it shows the instant the
  * page reads, "2026-09-29 · 00:00 UTC", and no LIVE flag.
+ *
+ * Below sm the horizon control and the culture chip leave the line room for
+ * the time alone, "14:32 UTC". The date and LIVE stay for screen readers, as
+ * the chip's "CULTURE:" does, and the kicker under the bar prints the day.
  */
 export function LiveClock() {
   const [time, setTime] = useState<string | null>(null);
@@ -61,12 +70,18 @@ export function LiveClock() {
   }, [dated]);
 
   if (dated) {
-    return <span className="whitespace-nowrap">{isoDate(dated)} · 00:00 UTC</span>;
+    return (
+      <span className="whitespace-nowrap">
+        <span className={PHONE_SR_ONLY}>{isoDate(dated)} · </span>00:00 UTC
+      </span>
+    );
   }
 
   return (
     <span className="whitespace-nowrap">
-      {isoDate(new Date())} · {time ?? <Unset>00:00</Unset>} UTC · LIVE
+      <span className={PHONE_SR_ONLY}>{isoDate(new Date())} · </span>
+      {time ?? <Unset>00:00</Unset>} UTC
+      <span className={PHONE_SR_ONLY}> · LIVE</span>
     </span>
   );
 }
