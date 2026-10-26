@@ -54,6 +54,7 @@ import com.astra.antiqua.domain.AspectType
 import com.astra.antiqua.domain.DayDecree
 import com.astra.antiqua.domain.DayPermissions
 import com.astra.antiqua.domain.DiveDeeper
+import com.astra.antiqua.domain.LongTransits
 import com.astra.antiqua.domain.permissionPair
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
@@ -103,6 +104,8 @@ fun MainDashboardScreen(
     onNavigate: (String) -> Unit,
     onOpenMethod: () -> Unit = {},
     onOpenFigure: (String) -> Unit = {},
+    onOpenSpan: (String) -> Unit = {},
+    onCastChart: () -> Unit = {},
     date: String? = null,
 ) {
     val dashboardViewModel: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
@@ -110,6 +113,7 @@ fun MainDashboardScreen(
     val chartState by dashboardViewModel.chartState.collectAsState()
     val dayDecree by dashboardViewModel.dayDecree.collectAsState()
     val dayExtras by dashboardViewModel.dayExtras.collectAsState()
+    val longTransit by dashboardViewModel.longTransit.collectAsState()
     val lexicon = LocalLexicon.current
     val accent = LocalAccent.current
 
@@ -174,6 +178,13 @@ fun MainDashboardScreen(
                     },
                 )
                 Spacer(modifier = Modifier.height(Spacing.Step))
+            }
+            // Web's phone order: the long transit sits between the decree and the lists.
+            longTransit?.let { teaser ->
+                item {
+                    LongTransitTeaser(teaser = teaser, onOpenSpan = onOpenSpan, onCastChart = onCastChart)
+                    Spacer(modifier = Modifier.height(Spacing.Step))
+                }
             }
             dayExtras?.let { extras ->
                 item {
@@ -327,6 +338,46 @@ fun DayDecreeCard(decree: DayDecree, onOpenFigure: (() -> Unit)? = null) {
             color = Prose,
             modifier = Modifier.fillMaxWidth(),
         )
+    }
+}
+
+/**
+ * The long transit, as web's TransitTeaser draws it on a phone: one line in
+ * the accent box, to the span's own page. Without a span it goes to the
+ * birth form, as web's does, whether there is no chart or none in reach.
+ */
+@Composable
+fun LongTransitTeaser(
+    teaser: LongTransits.Teaser,
+    onOpenSpan: (String) -> Unit,
+    onCastChart: () -> Unit,
+) {
+    val accent = LocalAccent.current
+    val span = teaser.span
+    Panel(
+        accented = true,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                onClickLabel = if (span != null) "Read the long transit" else "Cast a chart",
+                role = Role.Button,
+                onClick = { if (span != null) onOpenSpan(span.id) else onCastChart() },
+            ),
+    ) {
+        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "THE LONG TRANSIT",
+                style = MaterialTheme.typography.labelSmall,
+                color = if (teaser.status == LongTransits.TeaserStatus.NONE) Dim else accent,
+            )
+            Spacer(modifier = Modifier.height(Spacing.Tight))
+            Text(
+                text = LongTransits.teaserLine(teaser),
+                style = MaterialTheme.typography.labelSmall,
+                color = Bone,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
 

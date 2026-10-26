@@ -2,6 +2,8 @@ package com.astra.antiqua.viewmodel
 
 import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.domain.DecreeBanks
+import com.astra.antiqua.domain.LongTransits
+import com.astra.antiqua.domain.natalPointsOf
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.Planet
 import kotlinx.coroutines.Dispatchers
@@ -94,6 +96,52 @@ class DashboardViewModelTest {
 
         assertTrue("Expected Error but was $state", state is ChartState.Error)
         assertTrue((state as ChartState.Error).message.contains("onboarding"))
+    }
+
+    @Test
+    fun `with a chart the day names its long transit, read against the day it reads`() = runTest(dispatcher) {
+        val model = model(FakeProfiles(romeProfile()))
+        val now = java.util.Date.from(java.time.Instant.parse("2026-12-15T15:00:00Z"))
+
+        model.calculateChart(now, date = "2026-10-27")
+        advanceUntilIdle()
+        val chart = (model.settled() as ChartState.Success).chartData
+        val teaser = model.longTransit.first { it != null }!!
+
+        assertTrue(teaser.status == LongTransits.TeaserStatus.ACTIVE || teaser.status == LongTransits.TeaserStatus.UPCOMING)
+        val dated = java.util.Date.from(java.time.Instant.parse("2026-10-27T00:00:00Z"))
+        assertEquals(LongTransits.teaser(AstronomyEngine(), AncientCulture.ROME, dated, natalPointsOf(chart)), teaser)
+    }
+
+    @Test
+    fun `a change of voice reads the long transit again, in the new voice`() = runTest(dispatcher) {
+        val settings = FakeSettings(AncientCulture.ROME)
+        val model = model(FakeProfiles(romeProfile()), settings)
+        val dated = java.util.Date.from(java.time.Instant.parse("2026-10-27T00:00:00Z"))
+
+        model.calculateChart(date = "2026-10-27")
+        advanceUntilIdle()
+        val chart = (model.settled() as ChartState.Success).chartData
+        val rome = model.longTransit.first { it != null }!!
+        settings.saveCulture(AncientCulture.EGYPT)
+        model.calculateChart(date = "2026-10-27")
+        advanceUntilIdle()
+        val egypt = model.longTransit.first { it != null && it != rome }!!
+
+        val expected = LongTransits.teaser(AstronomyEngine(), AncientCulture.EGYPT, dated, natalPointsOf(chart))
+        assertEquals(expected, egypt)
+        assertNotEquals(rome.title, egypt.title)
+    }
+
+    @Test
+    fun `with no birth record the long transit asks for a chart`() = runTest(dispatcher) {
+        val model = model(FakeProfiles(profile = null))
+
+        model.calculateChart()
+        advanceUntilIdle()
+        model.settled()
+
+        assertEquals(LongTransits.TeaserStatus.CTA, model.longTransit.first { it != null }!!.status)
     }
 
     @Test

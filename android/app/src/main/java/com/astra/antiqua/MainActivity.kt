@@ -163,6 +163,8 @@ fun AstraNavHost(
                 onNavigate = go,
                 onOpenMethod = { open(Route.METHOD) },
                 onOpenFigure = open,
+                onOpenSpan = { open(Route.transitDetail(it)) },
+                onCastChart = { open(Route.READING) },
             )
         }
         composable(Route.DATED_DAY) { entry ->
@@ -171,6 +173,8 @@ fun AstraNavHost(
                 onNavigate = go,
                 onOpenMethod = { open(Route.METHOD) },
                 onOpenFigure = open,
+                onOpenSpan = { open(Route.transitDetail(it)) },
+                onCastChart = { open(Route.READING) },
                 date = entry.arguments?.getString("date"),
             )
         }
@@ -181,7 +185,7 @@ fun AstraNavHost(
             SeasonScreen(culture = culture, onNavigate = go)
         }
         composable(Route.YEAR) {
-            YearScreen(culture = culture, onNavigate = go)
+            YearScreen(culture = culture, onNavigate = go, onOpenSpan = { open(Route.transitDetail(it)) })
         }
         composable(Route.VOICES) {
             VoicesScreen(culture = culture, onNavigate = go, onOpenVoice = openVoice)
