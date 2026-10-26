@@ -129,25 +129,36 @@ const SCHEMA_LOCK_KEY = 8_314_207;
  * other in the system catalogs. The advisory lock makes them take turns, so a
  * deploy that wakes several instances at once still ends with one schema and no
  * failed requests.
+ *
+ * The lock is transaction-scoped (`pg_advisory_xact_lock`) rather than
+ * session-scoped. Behind a transaction-mode pooler such as Supabase's, two
+ * statements on one client can reach different backends, so a session lock
+ * taken on one can be "unlocked" on another and stay held, and every later
+ * bootstrap waits on it. Between BEGIN and COMMIT the pooler keeps one backend,
+ * and Postgres drops the lock when the transaction ends, so nothing has to
+ * release it.
  */
 export function ensureSchema(): Promise<void> {
   if (schemaReady) return schemaReady;
   schemaReady = (async () => {
     const client = await getPool().connect();
+    // Set on failure, so release() hands the pool the error and it discards
+    // this client instead of reusing a connection in an unknown state.
+    let failure: Error | boolean | undefined;
     try {
-      await client.query("SELECT pg_advisory_lock($1)", [SCHEMA_LOCK_KEY]);
-      try {
-        await client.query(SCHEMA);
-      } finally {
-        await client.query("SELECT pg_advisory_unlock($1)", [SCHEMA_LOCK_KEY]);
-      }
+      await client.query("BEGIN");
+      await client.query("SELECT pg_advisory_xact_lock($1)", [SCHEMA_LOCK_KEY]);
+      await client.query(SCHEMA);
+      await client.query("COMMIT");
     } catch (err) {
+      failure = err instanceof Error ? err : true;
+      await client.query("ROLLBACK").catch(() => undefined);
       // A failed attempt must not be cached as success, or the process spends
       // the rest of its life querying tables that were never created.
       schemaReady = null;
       throw err;
     } finally {
-      client.release();
+      client.release(failure);
     }
   })();
   return schemaReady;
