@@ -114,6 +114,26 @@ class DashboardViewModelTest {
     }
 
     @Test
+    fun `a change of voice reads the long transit again, in the new voice`() = runTest(dispatcher) {
+        val settings = FakeSettings(AncientCulture.ROME)
+        val model = model(FakeProfiles(romeProfile()), settings)
+        val dated = java.util.Date.from(java.time.Instant.parse("2026-10-27T00:00:00Z"))
+
+        model.calculateChart(date = "2026-10-27")
+        advanceUntilIdle()
+        val chart = (model.settled() as ChartState.Success).chartData
+        val rome = model.longTransit.first { it != null }!!
+        settings.saveCulture(AncientCulture.EGYPT)
+        model.calculateChart(date = "2026-10-27")
+        advanceUntilIdle()
+        val egypt = model.longTransit.first { it != null && it != rome }!!
+
+        val expected = LongTransits.teaser(AstronomyEngine(), AncientCulture.EGYPT, dated, natalPointsOf(chart))
+        assertEquals(expected, egypt)
+        assertNotEquals(rome.title, egypt.title)
+    }
+
+    @Test
     fun `with no birth record the long transit asks for a chart`() = runTest(dispatcher) {
         val model = model(FakeProfiles(profile = null))
 

@@ -20,6 +20,7 @@ import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.Planet
 import java.util.Calendar
 import java.util.Date
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -114,7 +115,6 @@ class HorizonViewModel(
         }
     }
 
-    /** The reader's four points, or null when no chart is stored. */
     /**
      * The reader's four points, or null when no chart is stored. A chart
      * that cannot be read leaves the page reading the sky alone, as it did
@@ -126,6 +126,8 @@ class HorizonViewModel(
                 natalPointsOf(CalculateNatalChartUseCase(astronomy).execute(profile))
             }
         }
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: Exception) {
         Log.e(TAG, "Could not read the chart; reading the sky alone", e)
         null
@@ -136,7 +138,7 @@ class HorizonViewModel(
      * sky event inside it. The three inner planets are the ones whose sign
      * changes are worth naming over ten weeks; the outers barely move. Above
      * them, web's WHAT IS CHANGING. The list scans as far as the standouts do,
-     * so a beat named above is never missing below.
+     * so a sign change or station named above is never missing below.
      */
     fun loadSeason(now: Date = Date()) {
         if (seasonBuilt) return

@@ -24,6 +24,7 @@ import com.astra.antiqua.domain.NatalPlacementReading
 import com.astra.antiqua.domain.natalPointsOf
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.Planet
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -101,6 +102,9 @@ class DashboardViewModel(
      */
     private var teaserSource: Triple<UserProfile?, AncientCulture, Long?>? = null
 
+    /** Counts the calls, so only the latest call's walk is shown. */
+    private var teaserRun = 0
+
     private fun extrasFor(culture: AncientCulture, decree: DayDecree, now: Date, natal: NatalPoints?): DayExtras {
         val day = Math.floorDiv(now.time, DAY_MS)
         val sky = DayDecreeComposer.chartAt(astronomy, Date(day * DAY_MS))
@@ -121,6 +125,7 @@ class DashboardViewModel(
     fun calculateChart(now: Date = Date(), date: String? = null) {
         val dated = date?.let(FigureReadingComposer::parseIsoDate)
         val read = dated ?: now
+        val run = ++teaserRun
         viewModelScope.launch {
             _chartState.value = ChartState.Loading
             val dayCulture = settings.selectedCulture.first() ?: AncientCulture.GREECE
@@ -190,16 +195,24 @@ class DashboardViewModel(
                 // A dated day read from the same chart and voice has its answer
                 // already; the live day walks again, since its instant moved.
                 // A walk that fails leaves the teaser out; the chart stands.
+                // A walk that ends after a later call's has nothing to say.
                 if (dated == null || teaserSource != source || _longTransit.value == null) {
                     try {
-                        _longTransit.value = withContext(Dispatchers.Default) {
+                        val teaser = withContext(Dispatchers.Default) {
                             LongTransits.teaser(astronomy, dayCulture, read, natalPointsOf(chartData))
                         }
-                        teaserSource = source
+                        if (run == teaserRun) {
+                            _longTransit.value = teaser
+                            teaserSource = source
+                        }
+                    } catch (e: CancellationException) {
+                        throw e
                     } catch (e: Exception) {
                         Log.e(TAG, "Error walking the long transit", e)
-                        _longTransit.value = null
-                        teaserSource = null
+                        if (run == teaserRun) {
+                            _longTransit.value = null
+                            teaserSource = null
+                        }
                     }
                 }
             } catch (e: Exception) {

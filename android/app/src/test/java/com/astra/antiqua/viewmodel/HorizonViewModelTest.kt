@@ -1,7 +1,10 @@
 package com.astra.antiqua.viewmodel
 
 import com.astra.antiqua.data.AstronomyEngine
+import com.astra.antiqua.data.ProfileRepository
+import com.astra.antiqua.data.local.room.UserProfile
 import com.astra.antiqua.domain.CalculateNatalChartUseCase
+import com.astra.antiqua.domain.LongTransits
 import com.astra.antiqua.domain.NatalPoint
 import com.astra.antiqua.domain.SeasonStandouts
 import com.astra.antiqua.domain.SkyEventKind
@@ -14,7 +17,9 @@ import java.util.Calendar
 import java.util.Date
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -93,47 +98,69 @@ class HorizonViewModelTest {
         assertEquals(dates.sorted(), dates)
     }
 
+    private fun composed(at: Date, natal: List<NatalPoint>?): String {
+        val engine = AstronomyEngine()
+        val window = SkyEvents.currentSeason(engine, at)
+        return SeasonStandouts.whatIsChanging(
+            AncientCulture.CARTHAGE,
+            SeasonStandouts.standouts(AncientCulture.CARTHAGE, SeasonStandouts.events(engine, window, natal)),
+        )
+    }
+
     @Test
     fun `the season says what is changing, from the reader's transits when there is a chart`() = runTest(dispatcher) {
-        val engine = AstronomyEngine()
         val profile = romeProfile()
-        val plain = model()
-        val read = model(profiles = FakeProfiles(profile))
+        val plain = model(AncientCulture.CARTHAGE)
+        val read = model(AncientCulture.CARTHAGE, FakeProfiles(profile))
 
-        plain.loadSeason(SCORPIO_2026)
-        read.loadSeason(SCORPIO_2026)
+        plain.loadSeason(TAURUS_2027)
+        read.loadSeason(TAURUS_2027)
         advanceUntilIdle()
         val sky = plain.season.first { it !is SeasonState.Loading } as SeasonState.Ready
         val natal = read.season.first { it !is SeasonState.Loading } as SeasonState.Ready
 
-        val window = SkyEvents.currentSeason(engine, SCORPIO_2026)
-        val points = natalPointsOf(CalculateNatalChartUseCase(engine).execute(profile))
-        fun composed(natal: List<NatalPoint>?) = SeasonStandouts.whatIsChanging(
-            AncientCulture.ROME,
-            SeasonStandouts.standouts(AncientCulture.ROME, SeasonStandouts.events(engine, window, natal)),
-        )
-        assertEquals(composed(null), sky.whatIsChanging)
-        assertEquals(composed(points), natal.whatIsChanging)
-        // On this date the chart's own transits lead: Iuppiter's sextile to the natal Sun.
-        val sol = DeityRegistry.getDeity(AncientCulture.ROME, Planet.SUN).name
-        assertTrue(natal.whatIsChanging, natal.whatIsChanging.startsWith("Iuppiter strikes a treaty with your $sol."))
-        assertTrue(sky.whatIsChanging, "your $sol" !in sky.whatIsChanging)
+        val points = natalPointsOf(CalculateNatalChartUseCase(AstronomyEngine()).execute(profile))
+        assertEquals(composed(TAURUS_2027, null), sky.whatIsChanging)
+        assertEquals(composed(TAURUS_2027, points), natal.whatIsChanging)
+        // In this season the chart's own transits lead: Melqart's sextile to the natal Sun.
+        val semes = DeityRegistry.getDeity(AncientCulture.CARTHAGE, Planet.SUN).name
+        assertTrue(natal.whatIsChanging, natal.whatIsChanging.startsWith("Melqart trades safe passage with your $semes."))
+        assertTrue(sky.whatIsChanging, "your $semes" !in sky.whatIsChanging)
+    }
+
+    @Test
+    fun `a chart that cannot be read leaves the season reading the sky`() = runTest(dispatcher) {
+        val broken = object : ProfileRepository {
+            override val profile: Flow<UserProfile?> = flow { throw IllegalStateException("disk unreadable") }
+            override suspend fun save(profile: UserProfile) = Unit
+        }
+        val model = HorizonViewModel(AstronomyEngine(), FakeSettings(AncientCulture.CARTHAGE), broken)
+
+        model.loadSeason(TAURUS_2027)
+        advanceUntilIdle()
+        val state = model.season.first { it !is SeasonState.Loading }
+
+        assertTrue("Expected Ready but was $state", state is SeasonState.Ready)
+        assertEquals(composed(TAURUS_2027, null), (state as SeasonState.Ready).whatIsChanging)
     }
 
     @Test
     fun `with a chart the year carries its spine, six spans at most in the order they open`() = runTest(dispatcher) {
-        val model = model(profiles = FakeProfiles(romeProfile()))
+        val profile = romeProfile()
+        val model = model(profiles = FakeProfiles(profile))
 
-        model.loadYear(SCORPIO_2026)
+        model.loadYear(TAURUS_2027)
         advanceUntilIdle()
         val year = model.year.first { it !is YearState.Loading } as YearState.Ready
 
-        assertEquals(6, year.spine.size)
-        val starts = year.spine.map { it.start.time }
-        assertEquals(starts.sorted(), starts)
-        assertTrue(year.spine.all { it.end.time >= SCORPIO_2026.time })
+        val engine = AstronomyEngine()
+        val points = natalPointsOf(CalculateNatalChartUseCase(engine).execute(profile))
+        val expected = LongTransits.yearSpine(engine, points, TAURUS_2027)
+        assertTrue(expected.isNotEmpty())
+        assertEquals(expected.map { it.id }, year.spine.map { it.id })
         val start = Calendar.getInstance().apply { time = year.start }
-        val now = Calendar.getInstance().apply { time = SCORPIO_2026 }
+        val now = Calendar.getInstance().apply { time = TAURUS_2027 }
+        assertEquals(now.get(Calendar.YEAR), start.get(Calendar.YEAR))
         assertEquals(now.get(Calendar.MONTH), start.get(Calendar.MONTH))
     }
 
@@ -141,7 +168,7 @@ class HorizonViewModelTest {
     fun `without a chart the year has no spine`() = runTest(dispatcher) {
         val model = model()
 
-        model.loadYear(SCORPIO_2026)
+        model.loadYear(TAURUS_2027)
         advanceUntilIdle()
         val year = model.year.first { it !is YearState.Loading } as YearState.Ready
 
@@ -160,7 +187,11 @@ class HorizonViewModelTest {
     }
 
     private companion object {
-        /** Scorpio season, 2026: no eclipse in it, and the seeded chart's transits lead it. */
-        val SCORPIO_2026: Date = Date.from(java.time.Instant.parse("2026-10-27T12:00:00Z"))
+        /**
+         * Taurus season, 2027: no eclipse in it, the seeded chart's transits
+         * lead it, and it is months from when these tests were written, so a
+         * page that read the clock again would not pass by chance.
+         */
+        val TAURUS_2027: Date = Date.from(java.time.Instant.parse("2027-05-01T12:00:00Z"))
     }
 }

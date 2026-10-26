@@ -939,10 +939,10 @@ function edgesClear(s) {
 // A finder samples from its start in whole steps (8 days for the outers, 2
 // for the rest) and stops at the last step inside its window; a pass within a
 // day of the first or the last sample could be found by one engine and missed
-// by the other. The passes are listed over a wider window, so a pass web
-// missed is seen as well.
+// by the other. The passes are listed over a window a full step wider each
+// side, so a pass web missed is seen as well.
 function passesClear(points, start, days) {
-  const peaks = findMajorTransits(points, SLOW_BODIES, new Date(start.getTime() - 2 * DAY_MS), days + 4);
+  const peaks = findMajorTransits(points, SLOW_BODIES, new Date(start.getTime() - 8 * DAY_MS), days + 16);
   return peaks.every((p) => {
     const step = ["uranus", "neptune", "pluto"].includes(p.transitPlanet) ? 8 : 2;
     const last = new Date(start.getTime() + Math.floor(days / step) * step * DAY_MS);
