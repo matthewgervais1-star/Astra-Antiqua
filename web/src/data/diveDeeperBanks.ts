@@ -110,6 +110,6 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
       "The templum gives no sign today. Leave the auspices alone and keep your vows.",
     ],
     shared: "The sign read in {group} falls here as well, and the augur does not take it twice.",
-    concrete: "The auspices show {thing}.",
+    concrete: "Prepare for {thing}.",
   },
 };

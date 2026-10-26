@@ -1374,7 +1374,7 @@ object DiveDeeperBanks {
         AncientCulture.GREECE -> "Expect {thing}."
         AncientCulture.CANAAN -> "Be ready for {thing}."
         AncientCulture.CARTHAGE -> "Enter it in the daybook: {thing}."
-        AncientCulture.ROME -> "The auspices show {thing}."
+        AncientCulture.ROME -> "Prepare for {thing}."
     }
 }
 
