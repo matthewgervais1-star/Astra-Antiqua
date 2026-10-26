@@ -39,8 +39,8 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   "As shipped" note: each earlier wording repeated a word on the page or read wrong.
 
 ## Pending, in order
-1. FACT: PR #7 waits for the owner's merge. `claude/deferred-minors` waits for the owner's
-   go-ahead to push and open its PR (base PR #7's branch; GitHub retargets it after #7 merges).
+1. FACT: PR #7 waits for the owner's merge. `claude/deferred-minors` stays local by the owner's
+   choice (popup, 2026-10-26); its PR, when asked for, takes base PR #7's branch.
 2. FACT (check-run annotation, 2026-10-22): GitHub Actions jobs do not start: "recent account
    payments have failed or your spending limit needs to be increased". Owner fixes billing.
 3. FACT (canvas, 2026-10-26): no comments on https://claude.ai/artifact/LKiWRGTi16LRZ5GvyHbD3V;
@@ -55,6 +55,5 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
 CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 
 ## Files that matter
-- Plan: `docs/superpowers/plans/2026-10-26-deferred-minors.md`. Composition: `web/src/lib/decree.ts`,
-  `figureReading.ts`, `diveDeeper.ts`; banks in `web/src/data/`, mirrored by
-  `web/scripts/gen-android-reading-banks.mjs`; voice rules `docs/design/reading-voice.md`.
+- Plan: `docs/superpowers/plans/2026-10-26-deferred-minors.md`. Composition in `web/src/lib/`; banks
+  in `web/src/data/`, mirrored by `web/scripts/gen-android-reading-banks.mjs`; voice rules `docs/design/reading-voice.md`.
