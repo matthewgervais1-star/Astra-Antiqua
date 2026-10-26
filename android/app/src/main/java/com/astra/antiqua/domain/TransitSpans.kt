@@ -35,11 +35,12 @@ data class TransitSpan(
 /** A natal point a transit can be measured against. */
 data class NatalPoint(val key: String, val longitude: Double)
 
-/** The natal Sun, Moon and Ascendant, the points the long transits are walked against. */
+/** The natal Sun, Moon, Ascendant and Midheaven, the points the long transits are walked against, in web's order. */
 fun natalPointsOf(chart: NatalChartData): List<NatalPoint> = buildList {
     chart.planets[Planet.SUN]?.let { add(NatalPoint("sun", it.longitude)) }
     chart.planets[Planet.MOON]?.let { add(NatalPoint("moon", it.longitude)) }
     add(NatalPoint("asc", chart.ascendant))
+    add(NatalPoint("mc", chart.midheaven))
 }
 
 /**

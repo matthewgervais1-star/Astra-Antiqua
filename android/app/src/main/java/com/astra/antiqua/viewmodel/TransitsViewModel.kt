@@ -42,8 +42,8 @@ sealed class SpansState {
 }
 
 /**
- * Every long-transit span: the five slow bodies against the Sun, the Moon
- * and the ascendant, computed once and held.
+ * Every long-transit span: the five slow bodies against the Sun, the Moon,
+ * the ascendant and the midheaven, computed once and held.
  *
  * The walk is expensive, so it runs on the default dispatcher and the screen
  * waits behind a loading state rather than recomputing per frame. The window

@@ -74,9 +74,7 @@ class AstronomyEngine {
      * cusps below.
      */
     fun getAscendant(julianDay: Double, lat: Double, lon: Double): Double {
-        val time = Time(julianDay - 2451545.0)
-        val gmstHours = siderealTime(time)
-        val ramcDeg = ((gmstHours * 15.0 + lon) % 360.0 + 360.0) % 360.0
+        val ramcDeg = ramcDegrees(julianDay, lon)
 
         // Web's fixed mean obliquity (MEAN_OBLIQUITY_DEG, web/src/lib/ascendant.ts),
         // not the obliquity of date: web is canonical, and the two print a
@@ -87,6 +85,24 @@ class AstronomyEngine {
 
         val asc = Math.toDegrees(atan2(cos(ramc), -(sin(eps) * tan(latRad) + cos(eps) * sin(ramc))))
         return normDeg(asc)
+    }
+
+    /**
+     * The Midheaven's ecliptic longitude, web's computeAngularPoints
+     * (web/src/lib/ascendant.ts): tan(MC) = tan(RAMC) / cos(obliquity), on the
+     * same RAMC and the same fixed mean obliquity as [getAscendant]. It does not
+     * depend on latitude.
+     */
+    fun getMidheaven(julianDay: Double, lon: Double): Double {
+        val ramc = Math.toRadians(ramcDegrees(julianDay, lon))
+        val eps = Math.toRadians(MEAN_OBLIQUITY_DEG)
+        return normDeg(Math.toDegrees(atan2(sin(ramc), cos(ramc) * cos(eps))))
+    }
+
+    /** RAMC, the local sidereal time in degrees: Greenwich sidereal time plus the east longitude. */
+    private fun ramcDegrees(julianDay: Double, lon: Double): Double {
+        val gmstHours = siderealTime(Time(julianDay - 2451545.0))
+        return ((gmstHours * 15.0 + lon) % 360.0 + 360.0) % 360.0
     }
 
     // Whole-sign houses are the product's house system (docs/shared-content-model.md);

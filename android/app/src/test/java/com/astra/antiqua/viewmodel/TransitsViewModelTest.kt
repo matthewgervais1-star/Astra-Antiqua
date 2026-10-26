@@ -30,7 +30,7 @@ class TransitsViewModelTest {
     private suspend fun TransitsViewModel.settled() = state.first { it !is SpansState.Loading }
 
     @Test
-    fun `the slow bodies make spans against the Sun, the Moon and the ascendant`() = runTest(dispatcher) {
+    fun `the slow bodies make spans against the Sun, the Moon, the ascendant and the midheaven`() = runTest(dispatcher) {
         val model = TransitsViewModel(AstronomyEngine(), FakeProfiles(romeProfile()))
 
         model.load()
@@ -39,10 +39,10 @@ class TransitsViewModelTest {
 
         assertTrue("Expected Ready but was $state", state is SpansState.Ready)
         val spans = (state as SpansState.Ready).spans
-        // Depends on the run date. The 1200-day window holds several passes of Jupiter alone over the Rome 1990 Sun, Moon and ascendant, so it holds on any plausible date.
+        // Depends on the run date. The 1200-day window holds several passes of Jupiter alone over the Rome 1990 Sun, Moon, ascendant and midheaven, so it holds on any plausible date.
         assertTrue(spans.isNotEmpty())
         assertTrue(spans.all { it.transitPlanet in SLOW_BODIES })
-        assertTrue(spans.all { it.natalKey in setOf("sun", "moon", "asc") })
+        assertTrue(spans.all { it.natalKey in setOf("sun", "moon", "asc", "mc") })
     }
 
     @Test

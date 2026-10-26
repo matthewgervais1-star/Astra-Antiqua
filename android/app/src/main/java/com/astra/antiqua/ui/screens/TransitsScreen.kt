@@ -50,8 +50,8 @@ import java.util.Date
 
 /**
  * The long transits, web's /transits: every span the five slow bodies make
- * against the natal Sun, Moon and ascendant, split into the ones running now
- * and the ones still to come.
+ * against the natal Sun, Moon, ascendant and midheaven, split into the ones
+ * running now and the ones still to come.
  *
  * A transit here is a stretch, not a date. That is the claim the three-degree
  * rule on the method page makes, and it is why each row prints the window and

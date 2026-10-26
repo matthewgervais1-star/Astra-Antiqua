@@ -7,6 +7,8 @@ data class NatalChartData(
     val houseCusps: DoubleArray,
     /** The Ascendant's ecliptic longitude. [houseCusps] holds 0 degrees of its sign, not the degree itself. */
     val ascendant: Double,
+    /** The Midheaven's ecliptic longitude, web's natal.angles.midheaven. */
+    val midheaven: Double,
     val julianDay: Double,
     val aspects: List<Aspect> = emptyList()
 ) {

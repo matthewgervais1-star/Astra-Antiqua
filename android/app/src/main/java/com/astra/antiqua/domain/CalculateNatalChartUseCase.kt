@@ -21,6 +21,7 @@ class CalculateNatalChartUseCase(private val astronomyEngine: AstronomyEngine) {
         // each following sign is the next house, so cusps land on 0 degrees of each sign.
         val ascendant = astronomyEngine.getAscendant(jd, userProfile.latitude, userProfile.longitude)
         val houseCusps = WholeSignHouses.cusps(ascendant)
+        val midheaven = astronomyEngine.getMidheaven(jd, userProfile.longitude)
 
         val planets = mutableMapOf<Planet, AccuratePlanetPosition>()
         
@@ -55,6 +56,7 @@ class CalculateNatalChartUseCase(private val astronomyEngine: AstronomyEngine) {
             planets = planets,
             houseCusps = houseCusps,
             ascendant = ascendant,
+            midheaven = midheaven,
             julianDay = jd,
             aspects = aspects
         )
