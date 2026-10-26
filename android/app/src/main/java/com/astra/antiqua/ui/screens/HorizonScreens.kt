@@ -1,5 +1,6 @@
 package com.astra.antiqua.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,15 +19,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.astra.antiqua.domain.LongTransits
 import com.astra.antiqua.domain.SkyEvent
 import com.astra.antiqua.domain.SkyEventKind
+import com.astra.antiqua.domain.TransitSpan
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.ui.components.DeityGlyph
 import com.astra.antiqua.ui.components.NaveHead
 import com.astra.antiqua.ui.components.NaveShell
+import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.components.RowRule
 import com.astra.antiqua.ui.components.SectionDivider
 import com.astra.antiqua.ui.nav.Horizon
@@ -38,6 +43,7 @@ import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.LocalLexicon
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.HorizonViewModel
 import com.astra.antiqua.viewmodel.SeasonState
@@ -50,12 +56,14 @@ private val ALL_HORIZONS = Horizon.entries.toSet()
 
 /**
  * The season, web's /season: the stretch the Sun spends in its current sign,
- * and every sign change, station and lunar quarter inside it.
+ * what is changing in it, and every sign change, station and lunar quarter
+ * inside it.
  *
  * The window is found by walking to the ingress either side rather than
  * assuming thirty days, because the signs are not equal in time. The counter
  * says which day of the season today is, which is the thing a reader cannot
- * work out from a date alone.
+ * work out from a date alone. WHAT IS CHANGING is web's first section, the
+ * reader's own transits among the beats it weighs.
  */
 @Composable
 fun SeasonScreen(
@@ -96,6 +104,18 @@ fun SeasonScreen(
                     }
                     item {
                         SectionDivider(
+                            label = "What is changing",
+                            modifier = Modifier.padding(horizontal = Spacing.Gutter),
+                        )
+                        Text(
+                            text = current.whatIsChanging,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Prose,
+                            modifier = Modifier.padding(horizontal = Spacing.Gutter),
+                        )
+                    }
+                    item {
+                        SectionDivider(
                             label = "What the sky does",
                             modifier = Modifier.padding(horizontal = Spacing.Gutter),
                         )
@@ -115,8 +135,9 @@ fun SeasonScreen(
 }
 
 /**
- * The year, web's /year: twelve months of sign changes and stations, grouped
- * by the month they fall in.
+ * The year, web's /year: with a chart, the year's long transits, its spine;
+ * then twelve months of sign changes and stations, grouped by the month they
+ * fall in.
  *
  * The Moon is left out. It changes sign every two and a half days, so
  * thirteen ingresses a month would bury everything a year is for.
@@ -125,6 +146,7 @@ fun SeasonScreen(
 fun YearScreen(
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
+    onOpenSpan: (String) -> Unit = {},
 ) {
     val viewModel: HorizonViewModel = viewModel(factory = AstraViewModelFactory)
     val state by viewModel.year.collectAsState()
@@ -157,6 +179,9 @@ fun YearScreen(
                                 "${current.events.size} turnings",
                         )
                     }
+                    if (current.spine.isNotEmpty()) {
+                        item { YearSpine(current.spine, current.culture, onOpenSpan) }
+                    }
                     val byMonth = current.events.groupBy { monthKey(it.date) }
                     byMonth.forEach { (_, events) ->
                         val first = events.firstOrNull() ?: return@forEach
@@ -171,6 +196,54 @@ fun YearScreen(
                         }
                     }
                     item { Tail("SIGN CHANGES AND STATIONS ONLY · THE MOON IS LEFT OUT, OR IT WOULD BURY THE REST") }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * The year's long transits, web's spine box on /year: six spans at most,
+ * read against the reader's chart, each to its own page, with the month it
+ * ends.
+ */
+@Composable
+private fun YearSpine(spans: List<TransitSpan>, culture: AncientCulture, onOpenSpan: (String) -> Unit) {
+    val accent = LocalAccent.current
+    Panel(
+        accented = true,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = Spacing.Gutter, vertical = Spacing.Step),
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(Spacing.Snug)) {
+            Text(
+                text = "THE YEAR'S LONG TRANSITS · ITS SPINE",
+                style = MaterialTheme.typography.labelSmall,
+                color = accent,
+            )
+            spans.forEach { span ->
+                val headline = LongTransits.spanHeadline(culture, span)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(
+                            onClickLabel = "Read the long transit",
+                            role = Role.Button,
+                            onClick = { onOpenSpan(span.id) },
+                        ),
+                ) {
+                    Text(
+                        text = displayCase(headline),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Prose,
+                    )
+                    Text(
+                        text = "→ ${monthYear(span.end)}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Dim,
+                        modifier = Modifier.padding(top = Spacing.Tight),
+                    )
                 }
             }
         }

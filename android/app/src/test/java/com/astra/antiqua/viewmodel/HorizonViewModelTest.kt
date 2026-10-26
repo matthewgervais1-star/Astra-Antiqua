@@ -30,8 +30,8 @@ class HorizonViewModelTest {
     @After
     fun tearDown() = Dispatchers.resetMain()
 
-    private fun model(culture: AncientCulture? = AncientCulture.ROME) =
-        HorizonViewModel(AstronomyEngine(), FakeSettings(culture))
+    private fun model(culture: AncientCulture? = AncientCulture.ROME, profiles: FakeProfiles = FakeProfiles()) =
+        HorizonViewModel(AstronomyEngine(), FakeSettings(culture), profiles)
 
     @Test
     fun `the week has seven days and exactly one of them is today`() = runTest(dispatcher) {
@@ -85,6 +85,50 @@ class HorizonViewModelTest {
         assertTrue(year.events.any { it.kind == SkyEventKind.INGRESS })
         val dates = year.events.map { it.date.time }
         assertEquals(dates.sorted(), dates)
+    }
+
+    @Test
+    fun `the season says what is changing, from the reader's transits when there is a chart`() = runTest(dispatcher) {
+        val plain = model()
+        val read = model(profiles = FakeProfiles(romeProfile()))
+
+        plain.loadSeason()
+        read.loadSeason()
+        advanceUntilIdle()
+        val sky = plain.season.first { it !is SeasonState.Loading } as SeasonState.Ready
+        val natal = read.season.first { it !is SeasonState.Loading } as SeasonState.Ready
+
+        assertTrue(sky.whatIsChanging.isNotBlank())
+        assertTrue(natal.whatIsChanging.isNotBlank())
+        assertTrue("Expected the chart to change it: ${natal.whatIsChanging}", "your " in natal.whatIsChanging)
+        assertTrue("your " !in sky.whatIsChanging)
+    }
+
+    @Test
+    fun `with a chart the year carries its spine, six spans at most in the order they open`() = runTest(dispatcher) {
+        val model = model(profiles = FakeProfiles(romeProfile()))
+        val before = Date()
+
+        model.loadYear()
+        advanceUntilIdle()
+        val year = model.year.first { it !is YearState.Loading } as YearState.Ready
+
+        assertTrue(year.spine.isNotEmpty())
+        assertTrue(year.spine.size <= 6)
+        val starts = year.spine.map { it.start.time }
+        assertEquals(starts.sorted(), starts)
+        assertTrue(year.spine.all { it.end.time >= before.time })
+    }
+
+    @Test
+    fun `without a chart the year has no spine`() = runTest(dispatcher) {
+        val model = model()
+
+        model.loadYear()
+        advanceUntilIdle()
+        val year = model.year.first { it !is YearState.Loading } as YearState.Ready
+
+        assertTrue(year.spine.isEmpty())
     }
 
     @Test

@@ -4,11 +4,18 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.astra.antiqua.data.AstronomyEngine
+import com.astra.antiqua.data.ProfileRepository
 import com.astra.antiqua.data.SettingsRepository
+import com.astra.antiqua.domain.CalculateNatalChartUseCase
+import com.astra.antiqua.domain.LongTransits
+import com.astra.antiqua.domain.NatalPoint
+import com.astra.antiqua.domain.SeasonStandouts
 import com.astra.antiqua.domain.SkyEvent
 import com.astra.antiqua.domain.SkyEvents
+import com.astra.antiqua.domain.TransitSpan
 import com.astra.antiqua.domain.WeekDay
 import com.astra.antiqua.domain.WeekReading
+import com.astra.antiqua.domain.natalPointsOf
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.Planet
 import java.util.Calendar
@@ -33,6 +40,8 @@ sealed class SeasonState {
         val window: SkyEvents.SeasonWindow,
         val events: List<SkyEvent>,
         val culture: AncientCulture,
+        /** WHAT IS CHANGING: the season's two strongest beats, the reader's own transits among them. */
+        val whatIsChanging: String,
     ) : SeasonState()
     data class Error(val message: String) : SeasonState()
 }
@@ -43,6 +52,8 @@ sealed class YearState {
         val start: Date,
         val events: List<SkyEvent>,
         val culture: AncientCulture,
+        /** The year's long transits against the reader's chart, six at most; empty without one. */
+        val spine: List<TransitSpan> = emptyList(),
     ) : YearState()
     data class Error(val message: String) : YearState()
 }
@@ -54,10 +65,15 @@ sealed class YearState {
  * thread and the screen waits. The culture is read here rather than passed in
  * because the reading's voice has to match the culture the app is actually
  * set to, not whatever a screen happened to be given.
+ *
+ * The season and the year also read the reader's chart when there is one, as
+ * web's do: its Sun, Moon, Ascendant and Midheaven are what the long
+ * transits are walked against.
  */
 class HorizonViewModel(
     private val astronomy: AstronomyEngine,
     private val settings: SettingsRepository,
+    private val profiles: ProfileRepository,
 ) : ViewModel() {
 
     private val _week = MutableStateFlow<WeekState>(WeekState.Loading)
@@ -98,10 +114,19 @@ class HorizonViewModel(
         }
     }
 
+    /** The reader's four points, or null when no chart is stored. */
+    private suspend fun natalPoints(): List<NatalPoint>? {
+        val profile = profiles.profile.first() ?: return null
+        return withContext(Dispatchers.Default) {
+            natalPointsOf(CalculateNatalChartUseCase(astronomy).execute(profile))
+        }
+    }
+
     /**
      * The season: the stretch the Sun spends in its current sign, and every
      * sky event inside it. The three inner planets are the ones whose sign
-     * changes are worth naming over ten weeks; the outers barely move.
+     * changes are worth naming over ten weeks; the outers barely move. Above
+     * them, web's WHAT IS CHANGING.
      */
     fun loadSeason() {
         if (seasonBuilt) return
@@ -109,6 +134,7 @@ class HorizonViewModel(
         viewModelScope.launch {
             try {
                 val culture = settings.selectedCulture.first() ?: AncientCulture.GREECE
+                val natal = natalPoints()
                 val today = Date()
                 val ready = withContext(Dispatchers.Default) {
                     val window = SkyEvents.currentSeason(astronomy, today)
@@ -118,7 +144,8 @@ class HorizonViewModel(
                         addAll(SkyEvents.stations(astronomy, window.start, days))
                         addAll(SkyEvents.moonQuarters(astronomy, window.start, days))
                     }.filter { it.date.time <= window.end.time }.sortedBy { it.date.time }
-                    SeasonState.Ready(window, events, culture)
+                    val standouts = SeasonStandouts.standouts(culture, SeasonStandouts.events(astronomy, window, natal))
+                    SeasonState.Ready(window, events, culture, SeasonStandouts.whatIsChanging(culture, standouts))
                 }
                 _season.value = ready
             } catch (e: Exception) {
@@ -133,7 +160,8 @@ class HorizonViewModel(
     /**
      * The year: twelve months of sign changes and stations, from the start of
      * this month. The Moon is left out; thirteen ingresses a month would bury
-     * everything else.
+     * everything else. With a chart, the year's spine as well: the long
+     * transits from today, as web's /year reads them.
      */
     fun loadYear() {
         if (yearBuilt) return
@@ -141,18 +169,21 @@ class HorizonViewModel(
         viewModelScope.launch {
             try {
                 val culture = settings.selectedCulture.first() ?: AncientCulture.GREECE
+                val natal = natalPoints()
+                val now = Date()
                 val start = Calendar.getInstance().apply {
                     set(Calendar.DAY_OF_MONTH, 1)
                     set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0)
                     set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
                 }.time
-                val events = withContext(Dispatchers.Default) {
-                    buildList {
+                val (events, spine) = withContext(Dispatchers.Default) {
+                    val events = buildList {
                         addAll(SkyEvents.ingresses(astronomy, start, YEAR_DAYS, YEAR_BODIES))
                         addAll(SkyEvents.stations(astronomy, start, YEAR_DAYS))
                     }.sortedBy { it.date.time }
+                    events to natal?.let { LongTransits.yearSpine(astronomy, it, now) }.orEmpty()
                 }
-                _year.value = YearState.Ready(start, events, culture)
+                _year.value = YearState.Ready(start, events, culture, spine)
             } catch (e: Exception) {
                 Log.e(TAG, "Could not read the year", e)
                 _year.value = YearState.Error(

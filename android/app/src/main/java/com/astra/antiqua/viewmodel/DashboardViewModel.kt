@@ -17,8 +17,10 @@ import com.astra.antiqua.domain.DiveDeeperComposer
 import com.astra.antiqua.domain.FigureReadingComposer
 import com.astra.antiqua.domain.NatalPoints
 import com.astra.antiqua.domain.LexiconDictionary
+import com.astra.antiqua.domain.LongTransits
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
+import com.astra.antiqua.domain.natalPointsOf
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.Planet
 import kotlinx.coroutines.Dispatchers
@@ -83,6 +85,14 @@ class DashboardViewModel(
     private val _dayExtras = MutableStateFlow<DayExtras?>(null)
     val dayExtras: StateFlow<DayExtras?> = _dayExtras.asStateFlow()
 
+    /**
+     * The day's long transit, web's teaser under the decree: walked once the
+     * chart is in, because a 1200-day walk should not hold the chart back.
+     * Null until then, and on a chart that fails.
+     */
+    private val _longTransit = MutableStateFlow<LongTransits.Teaser?>(null)
+    val longTransit: StateFlow<LongTransits.Teaser?> = _longTransit.asStateFlow()
+
     private fun extrasFor(culture: AncientCulture, decree: DayDecree, now: Date, natal: NatalPoints?): DayExtras {
         val day = Math.floorDiv(now.time, DAY_MS)
         val sky = DayDecreeComposer.chartAt(astronomy, Date(day * DAY_MS))
@@ -120,6 +130,7 @@ class DashboardViewModel(
                 val userProfile = profiles.profile.first()
                 if (userProfile == null) {
                     Log.e(TAG, "User profile is null")
+                    _longTransit.value = LongTransits.teaser(astronomy, dayCulture, read, null)
                     _chartState.value =
                         ChartState.Error("The Oracle cannot find your record. Please restart the onboarding.")
                     return@launch
@@ -159,6 +170,15 @@ class DashboardViewModel(
                 val summary = LexiconDictionary.forCulture(culture).highPriestSummary(sunSign, moonSign)
 
                 _chartState.value = ChartState.Success(chartData, bigThree, placements, summary)
+
+                // A walk that fails leaves the teaser out; the chart stands.
+                try {
+                    _longTransit.value = withContext(Dispatchers.Default) {
+                        LongTransits.teaser(astronomy, dayCulture, read, natalPointsOf(chartData))
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error walking the long transit", e)
+                }
             } catch (e: Exception) {
                 Log.e(TAG, "Error calculating chart", e)
                 _chartState.value = ChartState.Error(

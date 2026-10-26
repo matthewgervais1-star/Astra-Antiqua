@@ -35,6 +35,20 @@ data class TransitSpan(
 /** A natal point a transit can be measured against. */
 data class NatalPoint(val key: String, val longitude: Double)
 
+/**
+ * One exact pass of a moving body over an aspect to a natal point, web's
+ * NatalTransitPeak. The season reads these as dated beats; a span groups them.
+ */
+data class TransitPeak(
+    val transitPlanet: Planet,
+    val natalKey: String,
+    val natalLongitude: Double,
+    val aspect: AspectType,
+    val date: Date,
+    val transitSign: ZodiacSign,
+    val transitDegree: Double,
+)
+
 /** The natal Sun, Moon, Ascendant and Midheaven, the points the long transits are walked against, in web's order. */
 fun natalPointsOf(chart: NatalChartData): List<NatalPoint> = buildList {
     chart.planets[Planet.SUN]?.let { add(NatalPoint("sun", it.longitude)) }
@@ -92,10 +106,10 @@ object TransitSpans {
         start: Date,
         days: Int,
     ): List<TransitSpan> {
-        val peaks = findExactPasses(engine, natalPoints, transitPlanets, start, days)
-        val groups = LinkedHashMap<String, MutableList<Peak>>()
+        val peaks = peaks(engine, natalPoints, transitPlanets, start, days)
+        val groups = LinkedHashMap<String, MutableList<TransitPeak>>()
         for (peak in peaks) {
-            val id = "${peak.planet.name.lowercase()}-${peak.aspect.name.lowercase()}-${peak.natalKey}"
+            val id = "${peak.transitPlanet.name.lowercase()}-${peak.aspect.name.lowercase()}-${peak.natalKey}"
             groups.getOrPut(id) { mutableListOf() }.add(peak)
         }
 
@@ -105,28 +119,18 @@ object TransitSpans {
             val last = group.last()
             TransitSpan(
                 id = id,
-                transitPlanet = first.planet,
+                transitPlanet = first.transitPlanet,
                 natalKey = first.natalKey,
                 natalLongitude = first.natalLongitude,
                 aspect = first.aspect,
                 start = walkEdge(engine, first, first.date, -1),
                 end = walkEdge(engine, last, last.date, 1),
                 passes = group.map { it.date },
-                transitSign = first.sign,
-                transitDegree = first.degreeInSign,
+                transitSign = first.transitSign,
+                transitDegree = first.transitDegree,
             )
         }.sortedBy { it.start.time }
     }
-
-    private data class Peak(
-        val planet: Planet,
-        val natalKey: String,
-        val natalLongitude: Double,
-        val aspect: AspectType,
-        val date: Date,
-        val sign: ZodiacSign,
-        val degreeInSign: Double,
-    )
 
     private fun longitudeAt(engine: AstronomyEngine, planet: Planet, date: Date): Double =
         engine.getPlanetPosition(julianDayOf(date), bodyOf(planet)).longitude
@@ -154,12 +158,12 @@ object TransitSpans {
      * Walk out from an exact pass until the body leaves the orb. Capped, so a
      * body that barely moves cannot walk the loop forever.
      */
-    private fun walkEdge(engine: AstronomyEngine, peak: Peak, from: Date, direction: Int): Date {
+    private fun walkEdge(engine: AstronomyEngine, peak: TransitPeak, from: Date, direction: Int): Date {
         var edge = from
         var step = 1
         while (step * WALK_STEP_DAYS <= WALK_CAP_DAYS) {
             val probe = Date(from.time + direction.toLong() * step * WALK_STEP_DAYS * MS_PER_DAY)
-            val lon = longitudeAt(engine, peak.planet, probe)
+            val lon = longitudeAt(engine, peak.transitPlanet, probe)
             val distance = abs(angularSeparation(lon, peak.natalLongitude) - peak.aspect.degree)
             if (distance > SPAN_ORB) break
             edge = probe
@@ -173,16 +177,16 @@ object TransitSpans {
      * and look for a sign change in the signed difference from the target
      * longitude. A crossing is then narrowed by bisection and confirmed
      * against the angle to half a degree, so a wraparound cannot be mistaken
-     * for a hit.
+     * for a hit. Web's findMajorTransits, in date order.
      */
-    private fun findExactPasses(
+    fun peaks(
         engine: AstronomyEngine,
         natalPoints: List<NatalPoint>,
         transitPlanets: List<Planet>,
         start: Date,
         days: Int,
-    ): List<Peak> {
-        val out = mutableListOf<Peak>()
+    ): List<TransitPeak> {
+        val out = mutableListOf<TransitPeak>()
         for (planet in transitPlanets) {
             val sampleDays = if (planet.isReceived) SLOW_SAMPLE_DAYS else FAST_SAMPLE_DAYS
             for (point in natalPoints) {
@@ -208,14 +212,14 @@ object TransitSpans {
                                 val lonAtExact = longitudeAt(engine, planet, exact)
                                 val separation = angularSeparation(lonAtExact, point.longitude)
                                 if (abs(separation - aspect.degree) < 0.5) {
-                                    out += Peak(
-                                        planet = planet,
+                                    out += TransitPeak(
+                                        transitPlanet = planet,
                                         natalKey = point.key,
                                         natalLongitude = point.longitude,
                                         aspect = aspect,
                                         date = exact,
-                                        sign = signOf(lonAtExact),
-                                        degreeInSign = lonAtExact - floor(lonAtExact / 30.0) * 30.0,
+                                        transitSign = signOf(lonAtExact),
+                                        transitDegree = lonAtExact - floor(lonAtExact / 30.0) * 30.0,
                                     )
                                 }
                             }
