@@ -17,14 +17,14 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
 - FACT (git, 2026-10-26): branch `claude/deferred-minors` sits on PR #7's head, not pushed. It
   closes deferred review Minors (plan `2026-10-26-deferred-minors.md`):
   - Android: long transits walk the natal midheaven; a figure's "← The day" opens its own date
-    (live day when the date is today), with `← BACK TO TODAY`; the figure error says "Try again"
-    once.
-  - Web: `/year` holds span headlines to two lines at 375px; the clock never prints `--:--`.
-  - Reading text: about a dozen lines reworded on web and mirrored to Android (see Decisions).
-  - The schema bootstrap takes a transaction-scoped lock and retries a failed connect
-    (`docs/deploy.md` updated); CI jobs have timeouts.
-  - Every task reviewed clean; final review "with fixes", one fix wave. Counts: web 128 (111 pass,
-    17 skipped), test:db 128/128, Android 232/0 (ledger `.superpowers/sdd/2026-10-26-deferred-minors/`).
+    (live day when it is today), with `← BACK TO TODAY`. Web: `/year` fits 375px; no `--:--`.
+  - About a dozen reading lines reworded (see Decisions). Schema bootstrap: transaction-scoped
+    lock, failed connect retried (`docs/deploy.md`). CI jobs have timeouts. Reviews clean
+    after one final fix wave (ledger `.superpowers/sdd/2026-10-26-deferred-minors/`).
+  - Merged in at the owner's word (popup, 2026-10-26), each reviewed in its own session: the
+    home clock reads its time and UTC at 375px (05fa59d, 8fba41c); Android's season, year and
+    day read the long transits against the chart as web's do (acf168f..afe5a46, merge ade0dd9).
+  - Counts at ade0dd9: web 128 (111 pass, 17 skipped), Android 256/0; test:db 128/128 at 3a9fad1.
 - FACT (git): the native Swift iOS app sits on `claude/ios-branch-parity-895dbc`, 18 commits not
   on `master`, waiting on the flat-canvas approval below.
 
@@ -45,9 +45,9 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
    payments have failed or your spending limit needs to be increased". Owner fixes billing.
 3. FACT (canvas, 2026-10-26): no comments on https://claude.ai/artifact/LKiWRGTi16LRZ5GvyHbD3V;
    the SwiftUI port starts once the owner approves it.
-4. INFERENCE (final review): next web task, the home sub-bar clock truncates to "202…" at 375px.
-   Next Android parity task: web's season personal transits, `/year` natal spans and the home
-   long-transit teaser have no Android counterpart.
+4. INFERENCE (ledger): left for a later pass, none blocking: `MainActivity.kt` reads the
+   library-internal `currentBackStack`; `TodaySpecimen.html` shows an old headline (run
+   `pnpm specimens` before the next Claude Design push); three Rome items strain after "Prepare for".
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.
 
