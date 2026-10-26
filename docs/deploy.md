@@ -25,8 +25,8 @@ Canada (Central), which is Montreal. Pick the region at creation; the project
 stays where it starts. Copy the **pooled** connection string from the
 project's connection panel. The pooler is what keeps a scaled-out deploy from
 exhausting the connection limit. The schema bootstrap below takes a
-session-level `pg_advisory_lock`, so use the pooler's session mode, which holds
-one server connection for the client's whole session.
+transaction-scoped `pg_advisory_xact_lock`, which Postgres drops when the
+transaction ends, so the pooler's transaction mode works.
 
 Nothing else is needed. The app creates its own tables on first use, under an
 advisory lock so several instances starting at once cannot race.
