@@ -136,7 +136,7 @@ object DecreeBanks {
             }
             AspectType.SQUARE -> when (body) {
                 Planet.SUN -> "Finish the one task the overseer will check."
-                Planet.MOON -> "Do not act on the mood you wake up with before the sun is high."
+                Planet.MOON -> "Before the sun is high, do not act on the mood you wake up with."
                 Planet.MERCURY -> "Read the papyrus twice before you answer it."
                 Planet.VENUS -> "Do not haggle with your beloved as you would over linen."
                 Planet.MARS -> "Stay still until your blood cools."
@@ -163,7 +163,7 @@ object DecreeBanks {
         AncientCulture.GREECE -> when (aspect) {
             AspectType.CONJUNCTION -> when (body) {
                 Planet.SUN -> "Sign your name in the agora where everyone can read it."
-                Planet.MOON -> "Ask your household the question you avoid once the krater is mixed."
+                Planet.MOON -> "Once the krater is mixed, ask your household the question you avoid."
                 Planet.MERCURY -> "Say your question to the oracle out loud and write down the answer."
                 Planet.VENUS -> "Throw the apple, and tell the person you want that you want them."
                 Planet.MARS -> "Choose one fight worth your shield and walk away from the rest."
@@ -378,8 +378,8 @@ object DecreeBanks {
 
     /** Appended to the meaning sentence when the figure is tight (under half a degree); the day picks one of three. */
     fun tightTail(culture: AncientCulture, variant: Int): String = when (culture) {
-        AncientCulture.EGYPT -> listOf(", straight as the plumb line", ", and the cord is drawn tight", ", and Thoth records it to the hair")
-        AncientCulture.GREECE -> listOf(", to the very degree", ", and the Pythia does not hesitate", ", and the tripod answers at once")
+        AncientCulture.EGYPT -> listOf(", straight as the plumb line", ", and the cord is drawn tight", ", and Thoth records it before all others")
+        AncientCulture.GREECE -> listOf(", and the seer needs no second look", ", and the Pythia does not hesitate", ", and the tripod answers at once")
         AncientCulture.CANAAN -> listOf(", and the whole council hears it", ", and the witnesses sign the tablet", ", and the elders mark the day")
         AncientCulture.CARTHAGE -> listOf(", posted to the hour", ", weighed to the last shekel", ", entered without a correction")
         AncientCulture.ROME -> listOf(", true to the augur's line", ", and the augur marks it in his book", ", and the pontiff marks it in the calendar")
@@ -1227,7 +1227,7 @@ object PermissionsRegister {
             Planet.SATURN -> listOf("Questions to the elders", "Respect for custom", "Patience to the council")
             Planet.URANUS -> listOf("Plans for new pasture", "News from the caravan", "A bold proposal")
             Planet.NEPTUNE -> listOf("A plain prayer", "Fish from the sea", "A calm voice")
-            Planet.PLUTO -> listOf("Your grief out loud", "Offerings for the dead", "Stored grain")
+            Planet.PLUTO -> listOf("A mourner's lament", "Offerings for the dead", "Stored grain")
         }
 
         AncientCulture.CARTHAGE -> when (body) {
@@ -1285,7 +1285,7 @@ object PermissionsRegister {
         }
 
         AncientCulture.CANAAN -> when (body) {
-            Planet.SUN -> listOf("Unfinished work", "Boasts to the gate", "Your temper to work")
+            Planet.SUN -> listOf("Unfinished work", "Boasts to the gate", "Your temper at work")
             Planet.MOON -> listOf("Old family quarrels", "Complaints to the table", "Bad news at supper")
             Planet.MERCURY -> listOf("Shoddy work", "A blunt blade", "Rushed repairs")
             Planet.VENUS -> listOf("Talk of old lovers", "Jealous talk", "Haggling over a dowry")
@@ -1362,7 +1362,7 @@ object DiveDeeperBanks {
     /** What a group says when every figure touching it is read above. Slot: {group}, that group's name. */
     fun shared(culture: AncientCulture): String = when (culture) {
         AncientCulture.EGYPT -> "The same weight that sits on {group} reaches here too, so read it there."
-        AncientCulture.GREECE -> "The answer given at {group} is the one this place hears too."
+        AncientCulture.GREECE -> "The answer given at {group} holds here as well, so there is nothing new to ask."
         AncientCulture.CANAAN -> "The matter heard at {group} is the same matter heard here."
         AncientCulture.CARTHAGE -> "The entry posted under {group} is charged here as well, and it is not entered twice."
         AncientCulture.ROME -> "The sign read in {group} falls here as well, and the augur does not take it twice."
@@ -1371,10 +1371,10 @@ object DiveDeeperBanks {
     /** The paragraph's last line. Slot: {thing}, a manifestation. */
     fun concrete(culture: AncientCulture): String = when (culture) {
         AncientCulture.EGYPT -> "Reckon on {thing}."
-        AncientCulture.GREECE -> "Look for {thing}."
+        AncientCulture.GREECE -> "The day holds {thing}."
         AncientCulture.CANAAN -> "Be ready for {thing}."
         AncientCulture.CARTHAGE -> "Enter it in the daybook: {thing}."
-        AncientCulture.ROME -> "Watch for {thing}."
+        AncientCulture.ROME -> "The auspices show {thing}."
     }
 }
 

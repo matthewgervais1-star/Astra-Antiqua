@@ -191,8 +191,8 @@ The paragraph is composed, not written, from banks the page already has:
    already printed on the page gives way to the other body's, or to none.
 3. **One concrete thing**, from the figure page's manifestations for the group
    and the tone, turned by the UTC day, in the culture's frame ("Reckon on
-   ...", "Look for ...", "Be ready for ...", "Enter it in the daybook: ...",
-   "Watch for ..."). Every frame reads any manifestation as a plain thing to
+   ...", "The day holds ...", "Be ready for ...", "Enter it in the daybook: ...",
+   "The auspices show ..."). Every frame reads any manifestation as a plain thing to
    meet, and shares no word with one.
 
 Without a chart a group reads the tightest sky figure with a body whose domain

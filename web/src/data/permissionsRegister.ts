@@ -48,7 +48,7 @@ export const PERMISSIONS_REGISTER: Readonly<Record<Culture, Readonly<Record<Plan
     pluto: { proceed: ["What you are owed", "About your inheritance", "For the old story"], refrain: ["About the dead's money", "For someone's secrets", "For buried silver"] },
   },
   canaan: {
-    sun: { proceed: ["Your best work", "A neighbor's tools back", "Water for the harvesters"], refrain: ["Unfinished work", "Boasts to the gate", "Your temper to work"] },
+    sun: { proceed: ["Your best work", "A neighbor's tools back", "Water for the harvesters"], refrain: ["Unfinished work", "Boasts to the gate", "Your temper at work"] },
     moon: { proceed: ["Bread to your kin", "A wedding gift", "Lamp oil home"], refrain: ["Old family quarrels", "Complaints to the table", "Bad news at supper"] },
     mercury: { proceed: ["Your own tools", "A finished piece", "A fair measure"], refrain: ["Shoddy work", "A blunt blade", "Rushed repairs"] },
     venus: { proceed: ["A spoken vow", "Flowers from the vineyard", "A love song"], refrain: ["Talk of old lovers", "Jealous talk", "Haggling over a dowry"] },
@@ -57,7 +57,7 @@ export const PERMISSIONS_REGISTER: Readonly<Record<Culture, Readonly<Record<Plan
     saturn: { proceed: ["Questions to the elders", "Respect for custom", "Patience to the council"], refrain: ["Open defiance", "Quick judgments", "Scorn for the elders"] },
     uranus: { proceed: ["Plans for new pasture", "News from the caravan", "A bold proposal"], refrain: ["Last year's plan", "Yesterday's excuses", "The same tired complaint"] },
     neptune: { proceed: ["A plain prayer", "Fish from the sea", "A calm voice"], refrain: ["Night fears", "Strong wine", "Wild rumors"] },
-    pluto: { proceed: ["Your grief out loud", "Offerings for the dead", "Stored grain"], refrain: ["Old curses", "Talk of death", "A funeral grudge"] },
+    pluto: { proceed: ["A mourner's lament", "Offerings for the dead", "Stored grain"], refrain: ["Old curses", "Talk of death", "A funeral grudge"] },
   },
   carthage: {
     sun: { proceed: ["Your harbor dues", "Wages on time", "The scribe's fee"], refrain: ["Fees for show", "Gifts to win favor", "Payment before delivery"] },

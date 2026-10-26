@@ -90,7 +90,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       },
       square: {
         sun: "Finish the one task the overseer will check.",
-        moon: "Do not act on the mood you wake up with before the sun is high.",
+        moon: "Before the sun is high, do not act on the mood you wake up with.",
         mercury: "Read the papyrus twice before you answer it.",
         venus: "Do not haggle with your beloved as you would over linen.",
         mars: "Stay still until your blood cools.",
@@ -117,7 +117,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       trine: ["like each other", "keep the same pace", "go easily with each other"],
       opposition: ["face each other down", "want opposite things", "each want it all"],
     },
-    tightTails: [", straight as the plumb line", ", and the cord is drawn tight", ", and Thoth records it to the hair"],
+    tightTails: [", straight as the plumb line", ", and the cord is drawn tight", ", and Thoth records it before all others"],
     consequences: {
       conjunction: {
         sun: "Your name travels ahead of you.",
@@ -260,7 +260,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
     headlines: {
       conjunction: {
         sun: "Sign your name in the agora where everyone can read it.",
-        moon: "Ask your household the question you avoid once the krater is mixed.",
+        moon: "Once the krater is mixed, ask your household the question you avoid.",
         mercury: "Say your question to the oracle out loud and write down the answer.",
         venus: "Throw the apple, and tell the person you want that you want them.",
         mars: "Choose one fight worth your shield and walk away from the rest.",
@@ -301,7 +301,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       trine: ["keep step with each other", "agree without argument", "fit together"],
       opposition: ["take opposite sides of the question", "pull in opposite directions", "give opposite answers"],
     },
-    tightTails: [", to the very degree", ", and the Pythia does not hesitate", ", and the tripod answers at once"],
+    tightTails: [", and the seer needs no second look", ", and the Pythia does not hesitate", ", and the tripod answers at once"],
     consequences: {
       conjunction: {
         sun: "Everyone in the agora sees what you do.",

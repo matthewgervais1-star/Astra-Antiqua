@@ -75,16 +75,13 @@ class DiveDeeperParityTest {
 
     @Test
     fun `a group whose figures are read above points there, as web prints it`() {
-        // On 2026-10-22 the third group's only figures are read by the second (web's dump).
+        // On 2026-10-22 the third group's only figures are read by the second (web's dump). The
+        // expected line is the bank's shared line with the second group's name in the slot, so the
+        // test pins that date's fact and not the bank's wording.
         val date = Date.from(Instant.parse("2026-10-22T00:00:00Z"))
-        val expected = mapOf(
-            AncientCulture.EGYPT to "The same weight that sits on the House of the Ka reaches here too, so read it there.",
-            AncientCulture.GREECE to "The answer given at the Oikos is the one this place hears too.",
-            AncientCulture.CANAAN to "The matter heard at the Father's House is the same matter heard here.",
-            AncientCulture.CARTHAGE to "The entry posted under the Courtyard is charged here as well, and it is not entered twice.",
-            AncientCulture.ROME to "The sign read in the Domus falls here as well, and the augur does not take it twice.",
-        )
-        for ((culture, line) in expected) {
+        for (culture in AncientCulture.entries) {
+            val second = DiveDeeperBanks.title(culture, 1).substringBefore(":").replaceFirstChar { it.lowercase() }
+            val line = DiveDeeperBanks.shared(culture).replace("{group}", second)
             val group = DiveDeeperComposer.composeForDay(engine, culture, date, null).groups[2]
             assertEquals(culture.name, listOf(line), group.sentences)
             assertEquals(false, group.quiet)

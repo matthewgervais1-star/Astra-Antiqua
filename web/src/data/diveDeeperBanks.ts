@@ -61,8 +61,8 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
       "The herm stands alone at the crossroads today. Send your messages by the road you always take.",
       "The adyton is silent today. Keep your question for a day when the tripod speaks.",
     ],
-    shared: "The answer given at {group} is the one this place hears too.",
-    concrete: "Look for {thing}.",
+    shared: "The answer given at {group} holds here as well, so there is nothing new to ask.",
+    concrete: "The day holds {thing}.",
   },
   canaan: {
     titles: [
@@ -110,6 +110,6 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
       "The templum gives no sign today. Leave the auspices alone and keep your vows.",
     ],
     shared: "The sign read in {group} falls here as well, and the augur does not take it twice.",
-    concrete: "Watch for {thing}.",
+    concrete: "The auspices show {thing}.",
   },
 };
