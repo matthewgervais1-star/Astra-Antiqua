@@ -1,7 +1,9 @@
 package com.astra.antiqua.ui.nav
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.lang.reflect.Modifier
 
@@ -47,6 +49,16 @@ class RouteTest {
     fun aFigureOfAnotherDayLeadsToThatDay() {
         assertEquals("day/2026-10-27", Route.dayOfFigure("2026-10-27", today = "2026-10-26"))
         assertEquals("day/2026-09-29", Route.dayOfFigure("2026-09-29", today = "2026-10-26"))
+    }
+
+    /** A figure opened from a dated day sits above it, and its own pattern is not the day's. */
+    @Test
+    fun aBackStackHoldsADatedDayOnlyByTheDayRoute() {
+        val figure = Route.FIGURE
+        assertFalse(Route.holdsDatedDay(listOf(null, Route.DAY, Route.WEEK, figure)))
+        assertTrue(Route.holdsDatedDay(listOf(null, Route.DAY, Route.WEEK, figure, Route.DATED_DAY)))
+        assertTrue(Route.holdsDatedDay(listOf(Route.DAY, Route.DATED_DAY, figure)))
+        assertFalse(Route.holdsDatedDay(emptyList()))
     }
 
     @Test

@@ -345,8 +345,16 @@ fun AstraNavHost(
  * Moving between sections: one copy of a destination on the stack, and back
  * always leads home. Tapping TODAY four times should not put four days behind
  * you, and returning to a section it should find it where you left it.
+ *
+ * A dated day is the one thing a section's stack must not keep. It is opened
+ * from a figure ("← The day") and renders as the day page, so saved with the
+ * stack under W it came back as the day page, not the week. It goes first, with
+ * anything opened above it.
  */
 private fun NavHostController.goToSection(route: String) {
+    while (Route.holdsDatedDay(currentBackStack.value.map { it.destination.route })) {
+        if (!popBackStack(Route.DATED_DAY, inclusive = true)) break
+    }
     navigate(route) {
         popUpTo(Route.DAY) { saveState = true }
         launchSingleTop = true

@@ -66,6 +66,14 @@ object Route {
      */
     fun dayOfFigure(date: String, today: String): String =
         if (date == today || FigureReadingComposer.parseIsoDate(date) == null) DAY else day(date)
+
+    /**
+     * Whether a back stack, as the route patterns from the bottom, holds a dated
+     * day. Moving to a section pops it first: a dated day saved into a section's
+     * stack came back under W as the day page, where web's W always opens the week.
+     */
+    fun holdsDatedDay(routes: List<String?>): Boolean = DATED_DAY in routes
+
     fun figure(date: String, id: String) = "day/$date/figure/$id"
     fun voice(culture: AncientCulture) = "voices/${culture.name.lowercase()}"
 
