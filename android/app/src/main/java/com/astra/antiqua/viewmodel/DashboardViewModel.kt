@@ -14,6 +14,7 @@ import com.astra.antiqua.domain.DayPermissions
 import com.astra.antiqua.domain.DayPermissionsComposer
 import com.astra.antiqua.domain.DiveDeeper
 import com.astra.antiqua.domain.DiveDeeperComposer
+import com.astra.antiqua.domain.FigureReadingComposer
 import com.astra.antiqua.domain.NatalPoints
 import com.astra.antiqua.domain.LexiconDictionary
 import com.astra.antiqua.domain.NatalChartData
@@ -93,15 +94,21 @@ class DashboardViewModel(
         )
     }
 
-    fun calculateChart(now: Date = Date()) {
+    /**
+     * Read the day and the chart. A dated day (web's /?date=YYYY-MM-DD) reads
+     * 00:00 UTC on [date], the instant the figure page read; a [date] that is
+     * no day from 1900 to 2100 reads the live day, as web's useDatedDay does.
+     */
+    fun calculateChart(now: Date = Date(), date: String? = null) {
+        val read = date?.let(FigureReadingComposer::parseIsoDate) ?: now
         viewModelScope.launch {
             _chartState.value = ChartState.Loading
             val dayCulture = settings.selectedCulture.first() ?: AncientCulture.GREECE
             try {
                 // One hop to the background for the page, its lists and its dive deeper.
                 val (decree, extras) = withContext(Dispatchers.Default) {
-                    val page = DayDecreeComposer.composeDayPage(astronomy, dayCulture, now)
-                    page to extrasFor(dayCulture, page, now, null)
+                    val page = DayDecreeComposer.composeDayPage(astronomy, dayCulture, read)
+                    page to extrasFor(dayCulture, page, read, null)
                 }
                 _dayDecree.value = decree
                 _dayExtras.value = extras
@@ -123,7 +130,7 @@ class DashboardViewModel(
                 val (chartData, natalExtras) = withContext(Dispatchers.Default) {
                     val chart = CalculateNatalChartUseCase(astronomy).execute(userProfile)
                     val extras = if (decree != null) {
-                        extrasFor(dayCulture, decree, now, NatalPoints.of(chart))
+                        extrasFor(dayCulture, decree, read, NatalPoints.of(chart))
                     } else {
                         null
                     }

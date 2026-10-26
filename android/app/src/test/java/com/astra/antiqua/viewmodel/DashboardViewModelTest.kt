@@ -115,4 +115,43 @@ class DashboardViewModelTest {
         assertEquals(false, extras.diveDeeper.natal)
         assertEquals(4, extras.diveDeeper.groups.size)
     }
+
+    @Test
+    fun `a dated day reads midnight UTC on its date, not now`() = runTest(dispatcher) {
+        val model = model(FakeProfiles(profile = null), FakeSettings(AncientCulture.CARTHAGE))
+        val now = java.util.Date.from(java.time.Instant.parse("2026-10-26T15:00:00Z"))
+
+        model.calculateChart(now, date = "2026-09-29")
+        advanceUntilIdle()
+        model.settled()
+        val decree = model.dayDecree.first { it != null }!!
+
+        // The pinned reading of 2026-09-29, the one the live-day test above reads at 15:00 UTC.
+        assertEquals("Your name is good for credit anywhere on the quay.", decree.headline)
+        assertEquals("SEMES △ BAAL SHAMEM · 0°19′", decree.evidence)
+        val live = model(FakeProfiles(profile = null), FakeSettings(AncientCulture.CARTHAGE))
+        live.calculateChart(now)
+        advanceUntilIdle()
+        live.settled()
+        assertNotEquals(decree.evidence, live.dayDecree.first { it != null }!!.evidence)
+    }
+
+    @Test
+    fun `a date that is no day reads the live day`() = runTest(dispatcher) {
+        val now = java.util.Date.from(java.time.Instant.parse("2026-09-29T15:00:00Z"))
+        val live = model(FakeProfiles(profile = null), FakeSettings(AncientCulture.CARTHAGE))
+        live.calculateChart(now)
+        advanceUntilIdle()
+        live.settled()
+        val liveDecree = live.dayDecree.first { it != null }!!
+
+        // Not a date, a date that does not exist, and one past the 1900 to 2100 span a page reads.
+        listOf("garbage", "2026-02-30", "1850-01-01", "2150-06-01").forEach { date ->
+            val model = model(FakeProfiles(profile = null), FakeSettings(AncientCulture.CARTHAGE))
+            model.calculateChart(now, date = date)
+            advanceUntilIdle()
+            model.settled()
+            assertEquals(date, liveDecree, model.dayDecree.first { it != null }!!)
+        }
+    }
 }

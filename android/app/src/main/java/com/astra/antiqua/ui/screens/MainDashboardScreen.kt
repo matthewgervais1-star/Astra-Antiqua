@@ -31,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -46,6 +47,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.astra.antiqua.R
 import com.astra.antiqua.domain.FigureReadingComposer
 import com.astra.antiqua.domain.AccuratePlanetPosition
 import com.astra.antiqua.domain.AspectType
@@ -89,12 +91,19 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * The day page. With a [date] (YYYY-MM-DD, UTC) it is that day, as web's
+ * /?date= is: the sky at 00:00 UTC on it, the date and instant under the
+ * culture's name, no come-back line, and a way back to the live day. A [date]
+ * that is no day from 1900 to 2100 is the live day.
+ */
 @Composable
 fun MainDashboardScreen(
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
     onOpenMethod: () -> Unit = {},
     onOpenFigure: (String) -> Unit = {},
+    date: String? = null,
 ) {
     val dashboardViewModel: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
 
@@ -104,7 +113,8 @@ fun MainDashboardScreen(
     val lexicon = LocalLexicon.current
     val accent = LocalAccent.current
 
-    LaunchedEffect(Unit) { dashboardViewModel.calculateChart() }
+    val datedDay = remember(date) { date?.takeIf { FigureReadingComposer.parseIsoDate(it) != null } }
+    LaunchedEffect(datedDay) { dashboardViewModel.calculateChart(date = datedDay) }
 
     NaveShell(
         context = lexicon.dashboardTitle,
@@ -133,6 +143,17 @@ fun MainDashboardScreen(
                 modifier = Modifier.padding(top = Spacing.Step)
             )
             Spacer(modifier = Modifier.height(Spacing.Snug))
+            if (datedDay != null) {
+                // Web's sub bar prints this where the live day prints its clock; here the
+                // sub bar is too narrow to keep "UTC", so the instant stands under the name.
+                Text(
+                    text = stringResource(R.string.day_dated_context, datedDay),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Dim,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.height(Spacing.Snug))
+            }
             AccentRule()
             Spacer(modifier = Modifier.height(Spacing.Step))
         }
@@ -145,7 +166,7 @@ fun MainDashboardScreen(
                         {
                             onOpenFigure(
                                 Route.figure(
-                                    FigureReadingComposer.isoDateUtc(java.util.Date()),
+                                    datedDay ?: FigureReadingComposer.isoDateUtc(java.util.Date()),
                                     FigureReadingComposer.figureId(top),
                                 ),
                             )
@@ -163,14 +184,32 @@ fun MainDashboardScreen(
                 }
             }
             item {
-                // The culture's come-back line closes the day page, under the dive deeper.
-                Text(
-                    text = decree.comeBack.uppercase(),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Dim,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.Step),
-                )
+                if (datedDay != null) {
+                    // A dated day has no come-back line: it ends on the way back to the live day.
+                    Text(
+                        text = stringResource(R.string.day_back_to_today),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Bone,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                                onClickLabel = stringResource(R.string.day_back_to_today_action),
+                                role = Role.Button,
+                                onClick = { onNavigate(Route.DAY) },
+                            )
+                            .padding(vertical = Spacing.Step),
+                    )
+                } else {
+                    // The culture's come-back line closes the day page, under the dive deeper.
+                    Text(
+                        text = decree.comeBack.uppercase(),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Dim,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.Step),
+                    )
+                }
                 Spacer(modifier = Modifier.height(Spacing.Step))
             }
         }

@@ -165,6 +165,15 @@ fun AstraNavHost(
                 onOpenFigure = open,
             )
         }
+        composable(Route.DATED_DAY) { entry ->
+            MainDashboardScreen(
+                culture = culture,
+                onNavigate = go,
+                onOpenMethod = { open(Route.METHOD) },
+                onOpenFigure = open,
+                date = entry.arguments?.getString("date"),
+            )
+        }
         composable(Route.WEEK) {
             WeekScreen(culture = culture, onNavigate = go, onOpenFigure = open)
         }

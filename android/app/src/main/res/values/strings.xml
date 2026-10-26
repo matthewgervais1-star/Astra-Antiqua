@@ -97,4 +97,9 @@
     <string name="licences_font_gfs_didot">Copyright (c) Takis Katsoulidis and George D. Matthiopoulos, 2001. All rights reserved.</string>
     <string name="figure_failed">This figure could not be drawn. Try again.</string>
     <string name="figure_try_again">Try again</string>
+
+    <!-- A dated day, web's /?date=: the instant it reads, and the way back to the live day. -->
+    <string name="day_dated_context">%1$s · 00:00 UTC</string>
+    <string name="day_back_to_today">← BACK TO TODAY</string>
+    <string name="day_back_to_today_action">Return to the live day</string>
 </resources>

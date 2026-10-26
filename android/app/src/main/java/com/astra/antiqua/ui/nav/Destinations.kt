@@ -12,6 +12,8 @@ import com.astra.antiqua.model.Planet
  */
 object Route {
     const val DAY = "reading"
+    /** The day for one date, web's /?date=YYYY-MM-DD: date is YYYY-MM-DD (UTC), read at 00:00 UTC. [DAY] is the live day. */
+    const val DATED_DAY = "day/{date}"
     const val WEEK = "week"
     const val SEASON = "season"
     const val YEAR = "year"
@@ -54,6 +56,7 @@ object Route {
     const val LEARN = "learn/{slug}"
 
     fun transitDetail(id: String) = "transits/$id"
+    fun day(date: String) = "day/$date"
     fun figure(date: String, id: String) = "day/$date/figure/$id"
     fun voice(culture: AncientCulture) = "voices/${culture.name.lowercase()}"
 

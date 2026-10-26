@@ -111,7 +111,7 @@ fun FigureScreen(
                         headline = headline,
                         kickerContent = { InstitutionKicker(culture, after = "the figure") },
                     )
-                    FigureLinks(onNavigate)
+                    FigureLinks(date, onNavigate, onOpen)
                 }
 
                 FigureState.Failed -> item {
@@ -126,7 +126,7 @@ fun FigureScreen(
                             onClick = { viewModel.load(culture, date, id) },
                         )
                     }
-                    FigureLinks(onNavigate)
+                    FigureLinks(date, onNavigate, onOpen)
                 }
 
                 is FigureState.Ready -> {
@@ -161,7 +161,7 @@ fun FigureScreen(
                             onOpenGlossary = { onOpen(Route.learn("/learn/aspects")) },
                         )
                     }
-                    item { FigureLinks(onNavigate) }
+                    item { FigureLinks(date, onNavigate, onOpen) }
                 }
             }
         }
@@ -171,18 +171,27 @@ fun FigureScreen(
 private fun longDate(instant: java.util.Date): String =
     instant.toInstant().atZone(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("EEEE · MMMM d, yyyy", Locale.US)).uppercase()
 
+/**
+ * The way back: the figure's own day, as web's /?date= is, the week, every
+ * transit. The day is a push, so back from it returns to the figure; the other
+ * two move between sections.
+ */
 @Composable
-private fun FigureLinks(onNavigate: (String) -> Unit) {
+private fun FigureLinks(date: String, onNavigate: (String) -> Unit, onOpen: (String) -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(Spacing.Gutter),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
-        listOf("← The day" to Route.DAY, "The week" to Route.WEEK, "All transits →" to Route.TRANSITS).forEach { (label, route) ->
+        listOf<Pair<String, () -> Unit>>(
+            "← The day" to { onOpen(Route.day(date)) },
+            "The week" to { onNavigate(Route.WEEK) },
+            "All transits →" to { onNavigate(Route.TRANSITS) },
+        ).forEach { (label, onClick) ->
             Text(
                 text = label.uppercase(),
                 style = MaterialTheme.typography.labelMedium,
                 color = Dim,
-                modifier = Modifier.clickable(role = Role.Button) { onNavigate(route) },
+                modifier = Modifier.clickable(role = Role.Button, onClick = onClick),
             )
         }
     }
