@@ -2,7 +2,10 @@
 # unit tests. The GitHub Ubuntu runner ships the Android SDK at ANDROID_HOME,
 # so the job writes no local.properties.
 # shared/** is a trigger because android/app/build.gradle.kts reads
-# ../shared/content as an assets directory.
+# ../shared/content as an assets directory. The web files and the dotnet
+# goldens are triggers because the generator inputs and the parity tests read
+# them: web/src/data/**, decree.ts (WeekShorthandParityTest), chartFormat.ts
+# (ZodiacSignAbbrTest) and the goldens file (TransitMidheavenTest).
 name: android
 
 on:
@@ -10,13 +13,21 @@ on:
     paths:
       - "android/**"
       - "shared/**"
+      - "web/src/data/**"
+      - "web/src/lib/decree.ts"
+      - "web/src/components/charts/chartFormat.ts"
       - "web/scripts/gen-android-*.mjs"
+      - "dotnet/AstraAntiqua.Core.Tests/TestData/goldens.json"
       - ".github/workflows/android.yml"
   pull_request:
     paths:
       - "android/**"
       - "shared/**"
+      - "web/src/data/**"
+      - "web/src/lib/decree.ts"
+      - "web/src/components/charts/chartFormat.ts"
       - "web/scripts/gen-android-*.mjs"
+      - "dotnet/AstraAntiqua.Core.Tests/TestData/goldens.json"
       - ".github/workflows/android.yml"
 
 permissions:
