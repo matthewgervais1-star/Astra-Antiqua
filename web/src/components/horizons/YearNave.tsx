@@ -174,6 +174,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
                     href={`/transits/${span.id}`}
                     className="flex flex-col gap-1 text-prose no-underline hover:text-bone sm:flex-row sm:items-baseline sm:justify-between sm:gap-3"
                   >
+                    {/* Phones take one step down (text-prose-s) so the longest span headline holds two lines at 375px. */}
                     <span className="font-display text-prose-s tracking-[0.04em] sm:text-display-xs sm:tracking-[0.08em]">
                       {spanHeadline(culture, span)}
                     </span>
