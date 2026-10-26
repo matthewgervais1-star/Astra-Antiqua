@@ -75,6 +75,19 @@ test("the quiet line prints only when no figure in orb touches the group", () =>
   }
 });
 
+test("on 2026-10-22 the third group's only figures are read by the second, so it prints the shared line there and is not quiet", () => {
+  // Android's DiveDeeperParityTest pins this day from the same fact, building the line from its bank.
+  const date = new Date(Date.UTC(2026, 9, 22));
+  for (const culture of CULTURES) {
+    const bank = DIVE_DEEPER_BANKS[culture];
+    const head = bank.titles[1].split(":")[0]!;
+    const line = bank.shared.replace("{group}", head.charAt(0).toLowerCase() + head.slice(1));
+    const third = composeDiveDeeperForDay(culture, date, null).groups[2]!;
+    assert.deepEqual(third.sentences, [line], culture);
+    assert.equal(third.quiet, false, culture);
+  }
+});
+
 test("four groups in the culture's order, each a quiet line or two to three sentences ending on a concrete thing", () => {
   for (const culture of CULTURES) {
     const bank = DIVE_DEEPER_BANKS[culture];
