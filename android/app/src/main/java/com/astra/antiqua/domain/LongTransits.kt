@@ -95,11 +95,15 @@ object LongTransits {
         )
     }
 
-    /** The teaser's line under THE LONG TRANSIT, as web's TransitTeaser prints it on a phone. */
+    /**
+     * The teaser's line under THE LONG TRANSIT, as web's TransitTeaser prints
+     * it on a phone. The arrow is held to its word by a no-break space, as
+     * web's &nbsp; holds it.
+     */
     fun teaserLine(teaser: Teaser): String = when {
-        teaser.status == TeaserStatus.CTA -> "CAST THE FIRST CHART TO READ ONE →"
+        teaser.status == TeaserStatus.CTA -> "CAST THE FIRST CHART TO READ ONE\u00A0→"
         teaser.status == TeaserStatus.NONE || teaser.title == null -> "NO SLOW BODY IN REACH RIGHT NOW"
-        else -> "${teaser.title} · THROUGH ${teaser.through} →"
+        else -> "${teaser.title} · THROUGH ${teaser.through}\u00A0→"
     }
 
     private val MONTHS = listOf(

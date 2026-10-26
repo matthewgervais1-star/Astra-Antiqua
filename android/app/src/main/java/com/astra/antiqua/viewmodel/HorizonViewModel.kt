@@ -115,30 +115,39 @@ class HorizonViewModel(
     }
 
     /** The reader's four points, or null when no chart is stored. */
-    private suspend fun natalPoints(): List<NatalPoint>? {
-        val profile = profiles.profile.first() ?: return null
-        return withContext(Dispatchers.Default) {
-            natalPointsOf(CalculateNatalChartUseCase(astronomy).execute(profile))
+    /**
+     * The reader's four points, or null when no chart is stored. A chart
+     * that cannot be read leaves the page reading the sky alone, as it did
+     * before it read a chart at all.
+     */
+    private suspend fun natalPoints(): List<NatalPoint>? = try {
+        profiles.profile.first()?.let { profile ->
+            withContext(Dispatchers.Default) {
+                natalPointsOf(CalculateNatalChartUseCase(astronomy).execute(profile))
+            }
         }
+    } catch (e: Exception) {
+        Log.e(TAG, "Could not read the chart; reading the sky alone", e)
+        null
     }
 
     /**
      * The season: the stretch the Sun spends in its current sign, and every
      * sky event inside it. The three inner planets are the ones whose sign
      * changes are worth naming over ten weeks; the outers barely move. Above
-     * them, web's WHAT IS CHANGING.
+     * them, web's WHAT IS CHANGING. The list scans as far as the standouts do,
+     * so a beat named above is never missing below.
      */
-    fun loadSeason() {
+    fun loadSeason(now: Date = Date()) {
         if (seasonBuilt) return
         seasonBuilt = true
         viewModelScope.launch {
             try {
                 val culture = settings.selectedCulture.first() ?: AncientCulture.GREECE
                 val natal = natalPoints()
-                val today = Date()
                 val ready = withContext(Dispatchers.Default) {
-                    val window = SkyEvents.currentSeason(astronomy, today)
-                    val days = ((window.end.time - window.start.time) / 86_400_000L).toInt() + 1
+                    val window = SkyEvents.currentSeason(astronomy, now)
+                    val days = SeasonStandouts.scanDays(window)
                     val events = buildList {
                         addAll(SkyEvents.ingresses(astronomy, window.start, days, SEASON_BODIES))
                         addAll(SkyEvents.stations(astronomy, window.start, days))
@@ -161,17 +170,18 @@ class HorizonViewModel(
      * The year: twelve months of sign changes and stations, from the start of
      * this month. The Moon is left out; thirteen ingresses a month would bury
      * everything else. With a chart, the year's spine as well: the long
-     * transits from today, as web's /year reads them.
+     * transits from today, as web's /year reads them. A spine that fails
+     * leaves the twelve months standing.
      */
-    fun loadYear() {
+    fun loadYear(now: Date = Date()) {
         if (yearBuilt) return
         yearBuilt = true
         viewModelScope.launch {
             try {
                 val culture = settings.selectedCulture.first() ?: AncientCulture.GREECE
                 val natal = natalPoints()
-                val now = Date()
                 val start = Calendar.getInstance().apply {
+                    time = now
                     set(Calendar.DAY_OF_MONTH, 1)
                     set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0)
                     set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
@@ -181,7 +191,13 @@ class HorizonViewModel(
                         addAll(SkyEvents.ingresses(astronomy, start, YEAR_DAYS, YEAR_BODIES))
                         addAll(SkyEvents.stations(astronomy, start, YEAR_DAYS))
                     }.sortedBy { it.date.time }
-                    events to natal?.let { LongTransits.yearSpine(astronomy, it, now) }.orEmpty()
+                    val spine = try {
+                        natal?.let { LongTransits.yearSpine(astronomy, it, now) }.orEmpty()
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Could not walk the year's spine", e)
+                        emptyList()
+                    }
+                    events to spine
                 }
                 _year.value = YearState.Ready(start, events, culture, spine)
             } catch (e: Exception) {

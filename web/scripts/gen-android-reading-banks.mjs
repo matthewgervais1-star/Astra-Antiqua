@@ -66,7 +66,7 @@ const { SIGN_IMAGE } = await import("../src/components/home/format.ts");
 const { getCurrentSeason, getSeasonEvents, buildSeasonStandouts } = await import("../src/lib/season.ts");
 const { composeWhatIsChanging } = await import("../src/components/horizons/seasonContent.ts");
 const { computeTransitSpans, SPAN_ORB } = await import("../src/lib/transitSpans.ts");
-const { SLOW_BODIES } = await import("../src/lib/yearForecast.ts");
+const { SLOW_BODIES, findMajorTransits } = await import("../src/lib/yearForecast.ts");
 const { spanHeadline } = await import("../src/components/horizons/yearContent.ts");
 const { buildHomeBundle } = await import("../src/components/home/buildHomeBundle.ts");
 const { computeGeocentricLongitude } = await import("../src/lib/ephemeris.ts");
@@ -898,22 +898,26 @@ ${SIGNS.map((s) => `        ZodiacSign.${upper(s)} -> ${kt(SIGN_IMAGE[s])}`).joi
 // One day per culture against the seeded chart (Rome, 1990-06-15 14:30),
 // whose four points travel as literals. A day is taken only when nothing the
 // output depends on sits near a boundary two engines a hair apart could read
-// differently: no season event within an hour of the window's edges, no
-// eclipse's score within MARGIN of another score, no printed station degree
-// near its rounding, no exact pass within a day of a search window's edge, no
-// 5-day probe of a counted span's walk within MARGIN of SPAN_ORB, no span edge
-// within a day of the instant, the spine's starts a day apart, and the
-// teaser's orbs MARGIN apart (teaserClear says which spans count there).
+// differently: no season event within an hour of the window's edges (looked
+// for past them, so an event web trimmed counts too), no two of the season's
+// beats within five minutes, no eclipse's score within MARGIN of another, no
+// printed station degree near its rounding, no exact pass within a day of a
+// finder's first or last sample, no 5-day probe of a counted span's walk
+// within MARGIN of SPAN_ORB, no span edge within a day of the instant, the
+// spine's starts a day apart, and the teaser's orbs MARGIN apart (teaserClear
+// says which spans count there).
 const horizonNatal = seedNatal;
-const horizonPoints = [
-  { key: "sun", longitude: horizonNatal.chart.sun },
-  { key: "moon", longitude: horizonNatal.chart.moon },
-  { key: "asc", longitude: horizonNatal.angles.ascendant },
-  { key: "mc", longitude: horizonNatal.angles.midheaven },
+const pointsOf = (natal) => [
+  { key: "sun", longitude: natal.chart.sun },
+  { key: "moon", longitude: natal.chart.moon },
+  { key: "asc", longitude: natal.angles.ascendant },
+  { key: "mc", longitude: natal.angles.midheaven },
 ];
+const horizonPoints = pointsOf(horizonNatal);
 const ASPECT_ANGLE = { conjunction: 0, sextile: 60, square: 90, trine: 120, opposition: 180 };
 const HOUR_MS = 3_600_000;
 const DAY_MS = 86_400_000;
+const apart = (a, b, gap) => Math.abs(a.getTime() - b.getTime()) >= gap;
 
 function walkClear(planet, natalLongitude, kind, from, direction) {
   for (let step = 1; step * 5 <= 700; step += 1) {
@@ -932,29 +936,43 @@ function edgesClear(s) {
   );
 }
 
-function passesClear(spans, start, days) {
-  const end = start.getTime() + days * DAY_MS;
-  return spans.every((s) =>
-    s.passes.every((pass) => pass.getTime() - start.getTime() >= DAY_MS && end - pass.getTime() >= DAY_MS),
-  );
+// A finder samples from its start in whole steps (8 days for the outers, 2
+// for the rest) and stops at the last step inside its window; a pass within a
+// day of the first or the last sample could be found by one engine and missed
+// by the other. The passes are listed over a wider window, so a pass web
+// missed is seen as well.
+function passesClear(points, start, days) {
+  const peaks = findMajorTransits(points, SLOW_BODIES, new Date(start.getTime() - 2 * DAY_MS), days + 4);
+  return peaks.every((p) => {
+    const step = ["uranus", "neptune", "pluto"].includes(p.transitPlanet) ? 8 : 2;
+    const last = new Date(start.getTime() + Math.floor(days / step) * step * DAY_MS);
+    return apart(p.date, start, DAY_MS) && apart(p.date, last, DAY_MS);
+  });
 }
-
-function spansClear(spans, start, days) {
-  return passesClear(spans, start, days) && spans.every(edgesClear);
-}
-
-const apart = (a, b, gap) => Math.abs(a.getTime() - b.getTime()) >= gap;
 
 function seasonOutput(culture, window, natal) {
   const events = getSeasonEvents(window, natal);
-  return { events, text: composeWhatIsChanging(culture, buildSeasonStandouts(culture, events, 2)) };
+  const all = buildSeasonStandouts(culture, events, 1000);
+  return {
+    events,
+    all,
+    rows: all.map((s) => `${s.date.getTime()}|${s.significance}|${s.title}|${s.body}`),
+    text: composeWhatIsChanging(culture, buildSeasonStandouts(culture, events, 2)),
+  };
 }
 
-function seasonClear(culture, window, events) {
-  const dated = [...events.moonPhases, ...events.eclipses, ...events.retrogrades, ...events.ingresses, ...events.transits];
+function seasonClear(window, natal, { events, all }) {
+  const wide = getSeasonEvents(
+    { ...window, start: new Date(window.start.getTime() - HOUR_MS), end: new Date(window.end.getTime() + HOUR_MS) },
+    natal,
+  );
+  const dated = [...wide.moonPhases, ...wide.eclipses, ...wide.retrogrades, ...wide.ingresses, ...wide.transits];
   if (dated.some((e) => !apart(e.date, window.start, HOUR_MS) || !apart(e.date, window.end, HOUR_MS))) return false;
   if (events.retrogrades.some((r) => Math.abs(((r.degree * 10) % 1) - 0.5) < 0.01)) return false;
-  const scores = buildSeasonStandouts(culture, events, 1000).map((s) => s.significance);
+  // Five minutes, not an hour: an eclipse peaks minutes from its New or Full
+  // Moon, and the two engines time both to well under a minute.
+  if (!all.every((s, i) => i === 0 || apart(s.date, all[i - 1].date, 5 * 60_000))) return false;
+  const scores = all.map((s) => s.significance);
   for (const e of events.eclipses) {
     const score = 5 + e.obscuration * 2;
     if (scores.filter((s) => Math.abs(s - score) < MARGIN).length > 1) return false;
@@ -969,13 +987,13 @@ function spineOutput(culture, now) {
 }
 
 function spineClear(now, { all, kept }) {
-  if (!spansClear(all, now, 365)) return false;
+  if (!passesClear(horizonPoints, now, 365) || !all.every(edgesClear)) return false;
   if (all.some((s) => !apart(s.end, now, DAY_MS))) return false;
   return kept.slice(0, 7).every((s, i, a) => i === 0 || apart(s.start, a[i - 1].start, DAY_MS));
 }
 
-function teaserOutput(culture, now) {
-  const data = buildHomeBundle(culture, now, horizonNatal).longTransit;
+function teaserOutput(culture, now, natal = horizonNatal) {
+  const data = buildHomeBundle(culture, now, natal).longTransit;
   return {
     id: data.span?.id ?? null,
     line: `${data.status}|${data.span?.id ?? ""}|${data.title1 ?? ""}|${data.rangeLabel?.split(" → ")[1] ?? ""}`,
@@ -986,10 +1004,10 @@ function teaserOutput(culture, now) {
 // edge within ten days of it could walk across it), their order by today's
 // orb, the first span to come when none holds it, and the chosen span's end
 // month, which prints in UTC.
-function teaserClear(now, chosenId) {
+function teaserClear(now, chosenId, points = horizonPoints) {
   const start = new Date(now.getTime() - 420 * DAY_MS);
-  const spans = computeTransitSpans(horizonPoints, SLOW_BODIES, start, 1200);
-  if (!passesClear(spans, start, 1200)) return false;
+  const spans = computeTransitSpans(points, SLOW_BODIES, start, 1200);
+  if (!passesClear(points, start, 1200)) return false;
   if (spans.some((s) => !apart(s.start, now, DAY_MS) || !apart(s.end, now, DAY_MS))) return false;
   const near = spans.filter((s) => !apart(s.start, now, 10 * DAY_MS) || !apart(s.end, now, 10 * DAY_MS));
   if (!near.every(edgesClear)) return false;
@@ -1030,15 +1048,51 @@ for (const culture of CULTURES) {
     const window = getCurrentSeason(now);
     const sky = seasonOutput(culture, window, null);
     const natal = seasonOutput(culture, window, horizonNatal);
-    if (!seasonClear(culture, window, sky.events) || !seasonClear(culture, window, natal.events)) continue;
+    if (!seasonClear(window, null, sky) || !seasonClear(window, horizonNatal, natal)) continue;
     const spine = spineOutput(culture, now);
     const teaser = teaserOutput(culture, now);
     if (!spineClear(now, spine) || !teaserClear(now, teaser.id)) continue;
-    found = { instant: now.toISOString(), culture, seasonSky: sky.text, seasonNatal: natal.text, yearSpine: spine.rows, teaser: teaser.line };
+    found = {
+      instant: now.toISOString(),
+      culture,
+      seasonSky: sky.text,
+      seasonNatal: natal.text,
+      seasonBeats: natal.rows,
+      yearSpine: spine.rows,
+      teaser: teaser.line,
+    };
   }
   if (!found) fail(`${culture}: no stable horizon day in sixty days`);
   horizonGoldens.push(found);
 }
+
+// The seeded chart always has a span under way, so one more day reads a
+// chart that has none: four natal degrees no slow body touches that day,
+// found by walking the circle, stand in for its Sun, Moon, Ascendant and
+// Midheaven, and the teaser names the next span to open. Each day starts the
+// walk a little further round, so a rejected day does not offer the same
+// degrees again.
+const UPCOMING_CULTURE = "carthage";
+let upcoming = null;
+for (let t = Date.UTC(2026, 9, 27), n = 0; !upcoming && n < 60; t += DAY_MS, n += 1) {
+  const now = new Date(t);
+  const start = new Date(t - 420 * DAY_MS);
+  const idle = [];
+  for (let lon = 0.5 + ((n * 2.9) % 7); lon < 360 && idle.length < 4; lon += 7) {
+    const spans = computeTransitSpans([{ key: "sun", longitude: lon }], SLOW_BODIES, start, 1200);
+    if (spans.every((s) => s.end < now || s.start > now)) idle.push(lon);
+  }
+  if (idle.length < 4) continue;
+  const natal = {
+    ...horizonNatal,
+    chart: { ...horizonNatal.chart, sun: idle[0], moon: idle[1] },
+    angles: { ...horizonNatal.angles, ascendant: idle[2], midheaven: idle[3] },
+  };
+  const teaser = teaserOutput(UPCOMING_CULTURE, now, natal);
+  if (!teaser.line.startsWith("upcoming|") || !teaserClear(now, teaser.id, pointsOf(natal))) continue;
+  upcoming = { instant: now.toISOString(), points: pointsOf(natal), teaser: teaser.line };
+}
+if (!upcoming) fail("no day in sixty with four idle natal degrees and a stable next span");
 
 const horizonGoldensFile = `package com.astra.antiqua.domain
 
@@ -1052,21 +1106,39 @@ import com.astra.antiqua.model.AncientCulture
  *
  * One day per culture, read against the screenshots' seeded chart, whose
  * Sun, Moon, Ascendant and Midheaven travel as literals: the season's WHAT IS
- * CHANGING without a chart and with it, the year's spine as
- * "id|headline|start ms|end ms", and the day page's teaser as
- * "status|id|title|through". HorizonParityTest recomputes each.
+ * CHANGING without a chart and with it, every beat of the season scored
+ * against the chart as "date ms|score|title|body" in date order, the year's
+ * spine as "id|headline|start ms|end ms", and the day page's teaser as
+ * "status|id|title|through". HORIZON_UPCOMING is one more day, read against
+ * four natal degrees no slow body touches that day. HorizonParityTest
+ * recomputes each.
  */
 internal data class HorizonGolden(
     val instantUtc: String,
     val culture: AncientCulture,
     val seasonSky: String,
     val seasonNatal: String,
+    val seasonBeats: List<String>,
     val yearSpine: List<String>,
+    val teaser: String,
+)
+
+internal data class HorizonUpcoming(
+    val instantUtc: String,
+    val culture: AncientCulture,
+    val natal: List<NatalPoint>,
     val teaser: String,
 )
 
 internal val HORIZON_NATAL: List<NatalPoint> = listOf(
 ${horizonPoints.map((p) => `    NatalPoint(${kt(p.key)}, ${p.longitude}),`).join("\n")}
+)
+
+internal val HORIZON_UPCOMING: HorizonUpcoming = HorizonUpcoming(
+    instantUtc = ${kt(upcoming.instant)},
+    culture = AncientCulture.${upper(UPCOMING_CULTURE)},
+    natal = listOf(${upcoming.points.map((p) => `NatalPoint(${kt(p.key)}, ${p.longitude})`).join(", ")}),
+    teaser = ${kt(upcoming.teaser)},
 )
 
 internal val HORIZON_GOLDENS: List<HorizonGolden> = listOf(
@@ -1077,6 +1149,7 @@ ${horizonGoldens
         culture = AncientCulture.${upper(g.culture)},
         seasonSky = ${kt(g.seasonSky)},
         seasonNatal = ${kt(g.seasonNatal)},
+        seasonBeats = ${listKt(g.seasonBeats)},
         yearSpine = ${listKt(g.yearSpine)},
         teaser = ${kt(g.teaser)},
     ),`,
@@ -1100,5 +1173,6 @@ console.log(
     `DayDecreeGoldens.kt (${goldens.map((g) => `${g.culture} ${g.instant.slice(0, 10)}`).join(", ")}), ` +
     `FigureBanks.kt (${figureFile.length} bytes), FigureGoldens.kt (${figureGoldens.map((g) => `${g.culture} ${g.id}`).join(", ")}), ` +
     `DiveDeeperGoldens.kt (${diveGoldens.map((g) => `${g.culture} ${g.instant.slice(0, 10)}`).join(", ")}), ` +
-    `HorizonBanks.kt, HorizonGoldens.kt (${horizonGoldens.map((g) => `${g.culture} ${g.instant.slice(0, 10)}`).join(", ")})`,
+    `HorizonBanks.kt, HorizonGoldens.kt (${horizonGoldens.map((g) => `${g.culture} ${g.instant.slice(0, 10)}`).join(", ")}; ` +
+    `upcoming ${UPCOMING_CULTURE} ${upcoming.instant.slice(0, 10)})`,
 );

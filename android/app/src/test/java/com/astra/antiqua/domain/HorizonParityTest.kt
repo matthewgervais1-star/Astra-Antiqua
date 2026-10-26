@@ -33,11 +33,40 @@ class HorizonParityTest {
     }
 
     @Test
-    fun `the goldens reach the reader's own transits and an eclipse`() {
-        // Guards the goldens themselves: a regeneration that lost either would
-        // stop this test from proving the paths it is here for.
+    fun `every beat of every season is scored and worded as web's`() {
+        for (g in HORIZON_GOLDENS) {
+            val window = SkyEvents.currentSeason(engine, instantOf(g))
+            val label = "${g.culture} at ${g.instantUtc}"
+            val beats = SeasonStandouts.standouts(g.culture, SeasonStandouts.events(engine, window, HORIZON_NATAL), count = 1000)
+            val expected = g.seasonBeats.map { it.split("|", limit = 4) }
+            assertEquals("$label titles", expected.map { it[2] }, beats.map { it.title })
+            assertEquals("$label bodies", expected.map { it[3] }, beats.map { it.body })
+            expected.zip(beats).forEach { (row, beat) ->
+                assertEquals("$label ${beat.title} score", row[1].toDouble(), beat.significance, 1e-9)
+                assertWithin("$label ${beat.title} date", row[0].toLong(), beat.date.time)
+            }
+        }
+    }
+
+    @Test
+    fun `the goldens reach every path they are here for`() {
+        // Guards the goldens themselves: a regeneration that lost a path would
+        // stop this test from proving it.
+        val beats = HORIZON_GOLDENS.flatMap { it.seasonBeats }
         assertTrue(HORIZON_GOLDENS.any { "your Midheaven" in it.seasonNatal || "your Ascendant" in it.seasonNatal })
         assertTrue(HORIZON_GOLDENS.any { HorizonBanks.eclipseBeat(lunar = false).headline in it.seasonNatal })
+        assertTrue(HORIZON_GOLDENS.any { HorizonBanks.eclipseBeat(lunar = true).headline in it.seasonNatal })
+        assertTrue(beats.any { "turns direct at" in it })
+        assertTrue(beats.any { " enters " in it })
+        assertTrue(HORIZON_UPCOMING.teaser.startsWith("upcoming|"))
+    }
+
+    @Test
+    fun `a chart no span holds today is told the next to open, as web tells it`() {
+        val u = HORIZON_UPCOMING
+        val teaser = LongTransits.teaser(engine, u.culture, Date.from(Instant.parse(u.instantUtc)), u.natal)
+        val line = listOf(teaser.status.name.lowercase(), teaser.span?.id.orEmpty(), teaser.title.orEmpty(), teaser.through.orEmpty())
+        assertEquals(u.teaser, line.joinToString("|"))
     }
 
     @Test

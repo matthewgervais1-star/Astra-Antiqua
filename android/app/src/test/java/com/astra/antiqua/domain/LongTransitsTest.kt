@@ -52,8 +52,8 @@ class LongTransitsTest {
             title = "GEB IN THE RAM",
             through = "MAR 2027",
         )
-        assertEquals("GEB IN THE RAM · THROUGH MAR 2027 →", LongTransits.teaserLine(chosen))
-        assertEquals("CAST THE FIRST CHART TO READ ONE →", LongTransits.teaserLine(LongTransits.Teaser(LongTransits.TeaserStatus.CTA)))
+        assertEquals("GEB IN THE RAM · THROUGH MAR 2027\u00A0→", LongTransits.teaserLine(chosen))
+        assertEquals("CAST THE FIRST CHART TO READ ONE\u00A0→", LongTransits.teaserLine(LongTransits.Teaser(LongTransits.TeaserStatus.CTA)))
         assertEquals("NO SLOW BODY IN REACH RIGHT NOW", LongTransits.teaserLine(LongTransits.Teaser(LongTransits.TeaserStatus.NONE)))
     }
 

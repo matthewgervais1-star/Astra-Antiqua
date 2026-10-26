@@ -78,17 +78,23 @@ object SeasonStandouts {
     )
 
     /**
-     * The coarsest finder samples every five days (Mars's sign changes), so
-     * every finder walks this many days past the window, and nothing in the
-     * season's tail is missed. The overshoot is trimmed at the window's end.
+     * Every finder walks this many days past the window, as web's do, so its
+     * last sample lands beyond the window's end and nothing in the season's
+     * tail is missed. The coarsest step is eight days (the outers' passes
+     * over the chart); a season never runs past thirty-two days, so six is
+     * margin enough. The overshoot is trimmed at the window's end.
      */
     private const val SAMPLING_PAD_DAYS = 6
+
+    /** How many days a finder walks from the window's start: web's windowDays. */
+    fun scanDays(window: SkyEvents.SeasonWindow): Int =
+        ceil((window.end.time - window.start.time) / MS_PER_DAY.toDouble()).toInt() + SAMPLING_PAD_DAYS
 
     /** Every dated beat inside [window], read against [natal] when there is a chart. */
     fun events(engine: AstronomyEngine, window: SkyEvents.SeasonWindow, natal: List<NatalPoint>?): SeasonEvents {
         val start = window.start
         val end = window.end.time
-        val days = ceil((window.end.time - start.time) / MS_PER_DAY.toDouble()).toInt() + SAMPLING_PAD_DAYS
+        val days = scanDays(window)
         return SeasonEvents(
             transits = natal
                 ?.let { TransitSpans.peaks(engine, it, TRANSIT_PLANETS, start, days) }

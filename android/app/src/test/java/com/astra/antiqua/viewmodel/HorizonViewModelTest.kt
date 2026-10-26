@@ -1,8 +1,14 @@
 package com.astra.antiqua.viewmodel
 
 import com.astra.antiqua.data.AstronomyEngine
+import com.astra.antiqua.domain.CalculateNatalChartUseCase
+import com.astra.antiqua.domain.NatalPoint
+import com.astra.antiqua.domain.SeasonStandouts
 import com.astra.antiqua.domain.SkyEventKind
+import com.astra.antiqua.domain.SkyEvents
+import com.astra.antiqua.domain.natalPointsOf
 import com.astra.antiqua.model.AncientCulture
+import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.model.Planet
 import java.util.Calendar
 import java.util.Date
@@ -89,42 +95,53 @@ class HorizonViewModelTest {
 
     @Test
     fun `the season says what is changing, from the reader's transits when there is a chart`() = runTest(dispatcher) {
+        val engine = AstronomyEngine()
+        val profile = romeProfile()
         val plain = model()
-        val read = model(profiles = FakeProfiles(romeProfile()))
+        val read = model(profiles = FakeProfiles(profile))
 
-        plain.loadSeason()
-        read.loadSeason()
+        plain.loadSeason(SCORPIO_2026)
+        read.loadSeason(SCORPIO_2026)
         advanceUntilIdle()
         val sky = plain.season.first { it !is SeasonState.Loading } as SeasonState.Ready
         val natal = read.season.first { it !is SeasonState.Loading } as SeasonState.Ready
 
-        assertTrue(sky.whatIsChanging.isNotBlank())
-        assertTrue(natal.whatIsChanging.isNotBlank())
-        assertTrue("Expected the chart to change it: ${natal.whatIsChanging}", "your " in natal.whatIsChanging)
-        assertTrue("your " !in sky.whatIsChanging)
+        val window = SkyEvents.currentSeason(engine, SCORPIO_2026)
+        val points = natalPointsOf(CalculateNatalChartUseCase(engine).execute(profile))
+        fun composed(natal: List<NatalPoint>?) = SeasonStandouts.whatIsChanging(
+            AncientCulture.ROME,
+            SeasonStandouts.standouts(AncientCulture.ROME, SeasonStandouts.events(engine, window, natal)),
+        )
+        assertEquals(composed(null), sky.whatIsChanging)
+        assertEquals(composed(points), natal.whatIsChanging)
+        // On this date the chart's own transits lead: Iuppiter's sextile to the natal Sun.
+        val sol = DeityRegistry.getDeity(AncientCulture.ROME, Planet.SUN).name
+        assertTrue(natal.whatIsChanging, natal.whatIsChanging.startsWith("Iuppiter strikes a treaty with your $sol."))
+        assertTrue(sky.whatIsChanging, "your $sol" !in sky.whatIsChanging)
     }
 
     @Test
     fun `with a chart the year carries its spine, six spans at most in the order they open`() = runTest(dispatcher) {
         val model = model(profiles = FakeProfiles(romeProfile()))
-        val before = Date()
 
-        model.loadYear()
+        model.loadYear(SCORPIO_2026)
         advanceUntilIdle()
         val year = model.year.first { it !is YearState.Loading } as YearState.Ready
 
-        assertTrue(year.spine.isNotEmpty())
-        assertTrue(year.spine.size <= 6)
+        assertEquals(6, year.spine.size)
         val starts = year.spine.map { it.start.time }
         assertEquals(starts.sorted(), starts)
-        assertTrue(year.spine.all { it.end.time >= before.time })
+        assertTrue(year.spine.all { it.end.time >= SCORPIO_2026.time })
+        val start = Calendar.getInstance().apply { time = year.start }
+        val now = Calendar.getInstance().apply { time = SCORPIO_2026 }
+        assertEquals(now.get(Calendar.MONTH), start.get(Calendar.MONTH))
     }
 
     @Test
     fun `without a chart the year has no spine`() = runTest(dispatcher) {
         val model = model()
 
-        model.loadYear()
+        model.loadYear(SCORPIO_2026)
         advanceUntilIdle()
         val year = model.year.first { it !is YearState.Loading } as YearState.Ready
 
@@ -140,5 +157,10 @@ class HorizonViewModelTest {
         val year = model.year.first { it !is YearState.Loading } as YearState.Ready
 
         assertEquals(AncientCulture.GREECE, year.culture)
+    }
+
+    private companion object {
+        /** Scorpio season, 2026: no eclipse in it, and the seeded chart's transits lead it. */
+        val SCORPIO_2026: Date = Date.from(java.time.Instant.parse("2026-10-27T12:00:00Z"))
     }
 }
