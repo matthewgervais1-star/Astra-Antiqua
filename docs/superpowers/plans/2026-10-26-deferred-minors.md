@@ -124,6 +124,17 @@ Each line changes in `web/src/data/` as given, then the Android mirror is regene
 Kept, by ruling: Egypt's `Another delay` (WITHHOLD) reads as "keep from causing another delay",
 which is the intended sense.
 
+As shipped (2026-10-26, after review), four rows changed from the table above:
+- Egypt's tight tail is `, and Thoth records it foremost`. "before all else" and "first" each
+  repeated a word on Egypt pages, and web's echo tests failed them.
+- Greece's concrete frame is `Expect {thing}.` "The day holds" met "day" in two Greek items ("an
+  obol short at the end of the day").
+- Rome's concrete frame is `Prepare for {thing}.` "The auspices show" put "auspices" on up to six
+  lines of a Rome page.
+- Two Rome items changed: `a sacrifice put off for another day` (was "an augury put off for
+  another day") and `the urge to win an argument by shouting` (was "the urge to settle it by
+  shouting").
+
 Also in this task:
 - Android's `DiveDeeperParityTest` ("a group whose figures are read above points there",
   `android/app/src/test/.../domain/DiveDeeperParityTest.kt:76-91`) pins five literal sentences on
