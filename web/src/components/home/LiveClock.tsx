@@ -17,10 +17,21 @@ function isoTime(d: Date): string {
 
 /** A slot that holds its width and shows nothing: invisible, and hidden from
  * screen readers. The text is a stand-in of the same length as the real one.
- * Inline style, so no frame shows it before the stylesheet lands. */
+ * Inline style, so no frame shows it before the stylesheet lands. The box
+ * clips at the cell's width: hidden text that overflowed a truncating cell
+ * would still draw the cell's ellipsis, a lone "…" on a phone. */
 function Unset({ children }: { children: string }) {
   return (
-    <span aria-hidden="true" style={{ visibility: "hidden" }}>
+    <span
+      aria-hidden="true"
+      style={{
+        visibility: "hidden",
+        display: "inline-block",
+        maxWidth: "100%",
+        overflow: "hidden",
+        verticalAlign: "top",
+      }}
+    >
       {children}
     </span>
   );
