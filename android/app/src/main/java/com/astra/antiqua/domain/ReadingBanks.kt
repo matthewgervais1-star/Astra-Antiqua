@@ -378,7 +378,7 @@ object DecreeBanks {
 
     /** Appended to the meaning sentence when the figure is tight (under half a degree); the day picks one of three. */
     fun tightTail(culture: AncientCulture, variant: Int): String = when (culture) {
-        AncientCulture.EGYPT -> listOf(", straight as the plumb line", ", and the cord is drawn tight", ", and Thoth records it before all others")
+        AncientCulture.EGYPT -> listOf(", straight as the plumb line", ", and the cord is drawn tight", ", and Thoth records it foremost")
         AncientCulture.GREECE -> listOf(", and the seer needs no second look", ", and the Pythia does not hesitate", ", and the tripod answers at once")
         AncientCulture.CANAAN -> listOf(", and the whole council hears it", ", and the witnesses sign the tablet", ", and the elders mark the day")
         AncientCulture.CARTHAGE -> listOf(", posted to the hour", ", weighed to the last shekel", ", entered without a correction")
@@ -1371,7 +1371,7 @@ object DiveDeeperBanks {
     /** The paragraph's last line. Slot: {thing}, a manifestation. */
     fun concrete(culture: AncientCulture): String = when (culture) {
         AncientCulture.EGYPT -> "Reckon on {thing}."
-        AncientCulture.GREECE -> "The day holds {thing}."
+        AncientCulture.GREECE -> "Expect {thing}."
         AncientCulture.CANAAN -> "Be ready for {thing}."
         AncientCulture.CARTHAGE -> "Enter it in the daybook: {thing}."
         AncientCulture.ROME -> "The auspices show {thing}."

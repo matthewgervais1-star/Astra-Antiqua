@@ -117,7 +117,7 @@ export const DECREE_BANKS: Readonly<Record<Culture, DecreeBank>> = {
       trine: ["like each other", "keep the same pace", "go easily with each other"],
       opposition: ["face each other down", "want opposite things", "each want it all"],
     },
-    tightTails: [", straight as the plumb line", ", and the cord is drawn tight", ", and Thoth records it before all others"],
+    tightTails: [", straight as the plumb line", ", and the cord is drawn tight", ", and Thoth records it foremost"],
     consequences: {
       conjunction: {
         sun: "Your name travels ahead of you.",

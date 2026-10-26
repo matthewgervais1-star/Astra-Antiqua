@@ -926,7 +926,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
         ],
         tension: [
           "a dispatch lost at a river crossing",
-          "the urge to settle it by shouting",
+          "the urge to win an argument by shouting",
           "a friend who forgets your appointment",
           "a rumor from the baths that reaches the Senate",
         ],
@@ -940,7 +940,7 @@ export const FIGURE_BANKS: Readonly<Record<Culture, FigureBank>> = {
         ],
         tension: [
           "a door that stays shut until you stop pushing",
-          "an augury put off for another day",
+          "a sacrifice put off for another day",
           "a vow you made and have not kept",
           "a sleepless night before a decision",
         ],

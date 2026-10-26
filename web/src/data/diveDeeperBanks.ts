@@ -62,7 +62,7 @@ export const DIVE_DEEPER_BANKS: Readonly<Record<Culture, DiveDeeperBank>> = {
       "The adyton is silent today. Keep your question for a day when the tripod speaks.",
     ],
     shared: "The answer given at {group} holds here as well, so there is nothing new to ask.",
-    concrete: "The day holds {thing}.",
+    concrete: "Expect {thing}.",
   },
   canaan: {
     titles: [

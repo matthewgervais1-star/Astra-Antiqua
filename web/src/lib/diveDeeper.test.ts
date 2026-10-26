@@ -130,20 +130,23 @@ test("every group title opens on the culture's own name for the group", () => {
 });
 
 test("the concrete frame shares no word with the things it carries", () => {
+  // Words of three letters or more; the function words a frame may share with any item are left out.
+  const FUNCTION_WORDS = new Set(["the", "for", "and", "with"]);
+  const stem = (w: string) => w.replace(/'s$/, "").replace(/s$/, "");
+  const shared: string[] = [];
   for (const culture of CULTURES) {
-    const frameWords = DIVE_DEEPER_BANKS[culture].concrete
+    const frameWords = (DIVE_DEEPER_BANKS[culture].concrete
       .replace("{thing}", "")
       .toLowerCase()
-      .match(/[a-z']{4,}/g) ?? [];
+      .match(/[a-z']{3,}/g) ?? []).filter((w) => !FUNCTION_WORDS.has(w));
     for (const group of FIGURE_BANKS[culture].manifestations) {
       for (const thing of [...group.harmony, ...group.tension]) {
-        const words = new Set(thing.toLowerCase().match(/[a-z']+/g) ?? []);
-        for (const w of frameWords) {
-          assert.ok(!words.has(w) && !words.has(w.replace(/'s$/, "")), `${culture}: "${w}" in "${thing}"`);
-        }
+        const words = new Set((thing.toLowerCase().match(/[a-z']+/g) ?? []).map(stem));
+        for (const w of frameWords) if (words.has(stem(w))) shared.push(`${culture}: "${w}" in "${thing}"`);
       }
     }
   }
+  assert.deepEqual(shared, []);
 });
 
 test("no dive deeper line repeats a line on its page, whole or inside a longer sentence", () => {
