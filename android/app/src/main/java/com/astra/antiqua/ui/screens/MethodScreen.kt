@@ -158,7 +158,7 @@ fun MethodScreen(onBack: () -> Unit, onOpenLicences: () -> Unit) {
         // so the licences are also linked from here.
         val licences = stringResource(R.string.account_licences)
         Text(
-            text = "$licences →",
+            text = stringResource(R.string.method_licences_link),
             style = MaterialTheme.typography.labelSmall,
             color = accent,
             modifier = Modifier
