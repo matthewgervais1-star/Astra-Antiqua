@@ -52,7 +52,7 @@ function SegmentRow({ seg }: { seg: YearSegment }) {
   return (
     <div
       className={cn(
-        "grid grid-cols-[150px_1fr_auto] items-baseline gap-4 border-t border-rule px-3 py-3.5 last:border-b",
+        "grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 sm:grid-cols-[150px_1fr_auto] border-t border-rule px-3 py-3.5 last:border-b",
         isCurrent && "bg-[color-mix(in_srgb,var(--accent)_7%,transparent)]",
       )}
     >
@@ -63,11 +63,19 @@ function SegmentRow({ seg }: { seg: YearSegment }) {
         <br />
         {seg.dateRange}
       </span>
-      <span className={cn("font-body text-prose-s leading-prose", isCurrent ? "text-bone" : "text-bone/70")}>
+      <span
+        className={cn(
+          "order-3 col-span-2 font-body text-prose-s leading-prose sm:order-none sm:col-span-1",
+          isCurrent ? "text-bone" : "text-bone/70",
+        )}
+      >
         {seg.summary || "The sky holds no single dominant beat here."}
       </span>
       <span
-        className={cn("whitespace-nowrap font-mono text-data-xs", isCurrent ? "text-accent" : "text-dim")}
+        className={cn(
+          "order-2 whitespace-nowrap font-mono text-data-xs sm:order-none",
+          isCurrent ? "text-accent" : "text-dim",
+        )}
       >
         {seg.status}
       </span>
@@ -155,7 +163,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
           ) : null}
 
           {spans.length > 0 ? (
-            <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-[var(--space-4)] py-[var(--space-3)] text-left">
+            <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-3 py-[var(--space-3)] text-left sm:px-[var(--space-4)]">
               <div className="mb-3 font-mono text-data-xs tracking-label text-accent">
                 THE YEAR&apos;S LONG TRANSITS · ITS SPINE
               </div>
@@ -164,9 +172,9 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
                   <Link
                     key={span.id}
                     href={`/transits/${span.id}`}
-                    className="flex items-baseline justify-between gap-3 text-prose no-underline hover:text-bone"
+                    className="flex flex-col gap-1 text-prose no-underline hover:text-bone sm:flex-row sm:items-baseline sm:justify-between sm:gap-3"
                   >
-                    <span className="font-display text-display-xs tracking-[0.08em]">
+                    <span className="font-display text-prose-s tracking-[0.04em] sm:text-display-xs sm:tracking-[0.08em]">
                       {spanHeadline(culture, span)}
                     </span>
                     <span className="whitespace-nowrap font-mono text-data-xs text-dim">

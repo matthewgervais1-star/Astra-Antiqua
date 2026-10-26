@@ -5,7 +5,7 @@ import { Lintel } from "@/components/chrome/Lintel";
 import { SubBar } from "@/components/chrome/SubBar";
 import { CultureGate } from "@/components/chrome/CultureGate";
 import { MethodFooter } from "@/components/chrome/MethodFooter";
-import { LiveClock } from "@/components/home/LiveClock";
+import { LiveClock, LiveClockPending } from "@/components/home/LiveClock";
 import { HomeBody } from "@/components/home/HomeBody";
 import { Skeleton } from "@/components/chrome/Skeleton";
 
@@ -23,7 +23,7 @@ export function HomeExperience() {
       <Lintel active="today" />
       <SubBar
         context={
-          <Suspense fallback={<span className="whitespace-nowrap">--:-- UTC</span>}>
+          <Suspense fallback={<LiveClockPending />}>
             <LiveClock />
           </Suspense>
         }
