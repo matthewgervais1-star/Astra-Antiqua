@@ -1,5 +1,6 @@
 package com.astra.antiqua.ui.nav
 
+import com.astra.antiqua.domain.FigureReadingComposer
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.Planet
 
@@ -57,6 +58,14 @@ object Route {
 
     fun transitDetail(id: String) = "transits/$id"
     fun day(date: String) = "day/$date"
+
+    /**
+     * Where "← The day" goes from a figure of [date], as web's FigureDetail
+     * does: the dated day, or the live day when [date] is [today] or is no day.
+     * Both are UTC dates, YYYY-MM-DD.
+     */
+    fun dayOfFigure(date: String, today: String): String =
+        if (date == today || FigureReadingComposer.parseIsoDate(date) == null) DAY else day(date)
     fun figure(date: String, id: String) = "day/$date/figure/$id"
     fun voice(culture: AncientCulture) = "voices/${culture.name.lowercase()}"
 

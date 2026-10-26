@@ -34,6 +34,21 @@ class RouteTest {
         assertNotEquals(Route.DAY, Route.DATED_DAY)
     }
 
+    /** web's FigureDetail Links: today and anything that is no day go to the live day. */
+    @Test
+    fun aFigureOfTodayOrOfNoDayLeadsToTheLiveDay() {
+        assertEquals(Route.DAY, Route.dayOfFigure("2026-10-26", today = "2026-10-26"))
+        assertEquals(Route.DAY, Route.dayOfFigure("garbage", today = "2026-10-26"))
+        assertEquals(Route.DAY, Route.dayOfFigure("2026-02-30", today = "2026-10-26"))
+        assertEquals(Route.DAY, Route.dayOfFigure("1850-01-01", today = "2026-10-26"))
+    }
+
+    @Test
+    fun aFigureOfAnotherDayLeadsToThatDay() {
+        assertEquals("day/2026-10-27", Route.dayOfFigure("2026-10-27", today = "2026-10-26"))
+        assertEquals("day/2026-09-29", Route.dayOfFigure("2026-09-29", today = "2026-10-26"))
+    }
+
     @Test
     fun everySectionLeadsToADifferentRoute() {
         val routes = Section.entries.map { it.route }

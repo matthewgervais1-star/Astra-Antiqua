@@ -68,6 +68,7 @@ import com.astra.antiqua.viewmodel.FigureState
 import com.astra.antiqua.viewmodel.FigureViewModel
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 import kotlin.math.cos
 import kotlin.math.sin
@@ -172,9 +173,9 @@ private fun longDate(instant: java.util.Date): String =
     instant.toInstant().atZone(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("EEEE · MMMM d, yyyy", Locale.US)).uppercase()
 
 /**
- * The way back: the figure's own day, as web's /?date= is, the week, every
- * transit. The day is a push, so back from it returns to the figure; the other
- * two move between sections.
+ * The way back: the figure's own day, the week, every transit. The dated day is
+ * a push, so back from it returns to the figure; the live day, which a figure
+ * of today goes to, and the other two links move between sections.
  */
 @Composable
 private fun FigureLinks(date: String, onNavigate: (String) -> Unit, onOpen: (String) -> Unit) {
@@ -183,7 +184,10 @@ private fun FigureLinks(date: String, onNavigate: (String) -> Unit, onOpen: (Str
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         listOf<Pair<String, () -> Unit>>(
-            "← The day" to { onOpen(Route.day(date)) },
+            "← The day" to {
+                val route = Route.dayOfFigure(date, today = FigureReadingComposer.isoDateUtc(Date()))
+                if (route == Route.DAY) onNavigate(route) else onOpen(route)
+            },
             "The week" to { onNavigate(Route.WEEK) },
             "All transits →" to { onNavigate(Route.TRANSITS) },
         ).forEach { (label, onClick) ->
