@@ -49,13 +49,16 @@ const PHONE_SR_ONLY = "max-sm:sr-only";
  * until after mount, then ticks every 30s, so the server-rendered markup
  * never disagrees with the client's first paint on the minute. The blank
  * keeps the width of a time, so the line does not shift when it arrives.
+ * It covers "UTC" too: a visible "UTC" after the blank would overflow a
+ * narrow cell and leave its ellipsis alone on the line.
  *
  * A dated view (`/?date=YYYY-MM-DD`) is not live: it shows the instant the
  * page reads, "2026-09-29 · 00:00 UTC", and no LIVE flag.
  *
  * Below sm the horizon control and the culture chip leave the line room for
  * the time alone, "14:32 UTC". The date and LIVE stay for screen readers, as
- * the chip's "CULTURE:" does, and the kicker under the bar prints the day.
+ * the chip's "CULTURE:" does. Once a culture is chosen, the kicker under the
+ * bar prints the day.
  */
 export function LiveClock() {
   const [time, setTime] = useState<string | null>(null);
@@ -80,7 +83,7 @@ export function LiveClock() {
   return (
     <span className="whitespace-nowrap">
       <span className={PHONE_SR_ONLY}>{isoDate(new Date())} · </span>
-      {time ?? <Unset>00:00</Unset>} UTC
+      {time === null ? <Unset>00:00 UTC</Unset> : `${time} UTC`}
       <span className={PHONE_SR_ONLY}> · LIVE</span>
     </span>
   );
