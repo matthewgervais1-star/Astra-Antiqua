@@ -96,8 +96,9 @@ class DashboardViewModel(
 
     /**
      * Read the day and the chart. A dated day (web's /?date=YYYY-MM-DD) reads
-     * 00:00 UTC on [date], the instant the figure page read; a [date] that is
-     * no day from 1900 to 2100 reads the live day, as web's useDatedDay does.
+     * 00:00 UTC on [date], the instant the figure page read; a [date] that does
+     * not parse, or falls outside 1900 to 2100, reads the live day, as web's
+     * useDatedDay does.
      */
     fun calculateChart(now: Date = Date(), date: String? = null) {
         val read = date?.let(FigureReadingComposer::parseIsoDate) ?: now

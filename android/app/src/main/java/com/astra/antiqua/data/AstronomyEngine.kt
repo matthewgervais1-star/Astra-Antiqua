@@ -109,9 +109,7 @@ class AstronomyEngine {
     // the Placidus quadrant-cusp routines below are retained for reference/future use
     // but are no longer called by CalculateNatalChartUseCase.
     fun getHouseCusp(julianDay: Double, lat: Double, lon: Double, @Suppress("UNUSED_PARAMETER") hsys: Char): DoubleArray {
-        val time = Time(julianDay - 2451545.0)
-        val gmstHours = siderealTime(time)
-        val ramcDeg = ((gmstHours * 15.0 + lon) % 360.0 + 360.0) % 360.0
+        val ramcDeg = ramcDegrees(julianDay, lon)
 
         // Approximate obliquity of the ecliptic
         val t = (julianDay - 2451545.0) / 36525.0

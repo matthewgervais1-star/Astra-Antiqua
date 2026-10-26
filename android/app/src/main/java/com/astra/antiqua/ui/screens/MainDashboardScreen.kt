@@ -95,7 +95,7 @@ import kotlin.math.sin
  * The day page. With a [date] (YYYY-MM-DD, UTC) it is that day, as web's
  * /?date= is: the sky at 00:00 UTC on it, the date and instant under the
  * culture's name, no come-back line, and a way back to the live day. A [date]
- * that is no day from 1900 to 2100 is the live day.
+ * that does not parse, or falls outside 1900 to 2100, is the live day.
  */
 @Composable
 fun MainDashboardScreen(

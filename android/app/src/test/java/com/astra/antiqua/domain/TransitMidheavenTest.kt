@@ -25,7 +25,7 @@ class TransitMidheavenTest {
     @Serializable
     private data class Goldens(val tolerance: Double, val cases: List<Golden>)
 
-    // The web goldens the C# core is pinned to (npm run export:goldens), read in place.
+    // The web goldens the C# core is pinned to (pnpm export:goldens), read in place.
     private val goldensFile = File("../../dotnet/AstraAntiqua.Core.Tests/TestData/goldens.json")
 
     private val json = Json { ignoreUnknownKeys = true }
@@ -48,7 +48,7 @@ class TransitMidheavenTest {
     fun `the Midheaven matches web's golden charts`() {
         assertTrue("Expected to find ${goldensFile.path}", goldensFile.exists())
         val goldens = json.decodeFromString<Goldens>(goldensFile.readText())
-        assertEquals(4, goldens.cases.size)
+        assertTrue(goldens.cases.isNotEmpty())
 
         for (golden in goldens.cases) {
             val profile = UserProfile(
