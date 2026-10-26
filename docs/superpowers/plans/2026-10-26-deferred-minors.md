@@ -75,8 +75,8 @@ Required:
 - A dated day shows the date where the live day shows today's, has no come-back line if the
   Android dashboard has one, and ends its reading with `← BACK TO TODAY`, which goes to the live
   day as the section tabs do (`goToSection(Route.DAY)`).
-- "← The day" on a figure opens the dated day for that figure's date, always, as web does, even
-  when the date is today.
+- "← The day" on a figure opens the dated day for that figure's date, as web does
+  (`FigureDetail.tsx:38`): a date that is today (UTC), or does not parse, goes to the live day.
 - Tests: the route builder, and a view-model or domain test that a dated day reads 00:00 UTC on
   its date. Emulator: open a figure from the week for a day other than today, tap "← The day",
   shot of the dated day; tap `← BACK TO TODAY`, shot of the live day.
