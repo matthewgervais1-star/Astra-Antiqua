@@ -192,8 +192,8 @@ The paragraph is composed, not written, from banks the page already has:
 3. **One concrete thing**, from the figure page's manifestations for the group
    and the tone, turned by the UTC day, in the culture's frame ("Reckon on
    ...", "Expect ...", "Be ready for ...", "Enter it in the daybook: ...",
-   "The auspices show ..."). Every frame reads any manifestation as a plain
-   thing to meet, and shares no word with one.
+   "Prepare for ..."). Every frame reads any manifestation as a plain
+   thing to meet, and shares no content word with one.
 
 Without a chart a group reads the tightest sky figure with a body whose domain
 the group keeps that no earlier group reads. With a chart it reads the contact
@@ -203,10 +203,11 @@ natal place last within its speed, then by orb), so the two modules agree. A
 group no figure touches prints the culture's quiet line for it, one of four,
 and only then. A group whose every figure is read by a group above points
 there in one line of the culture's own ("The same weight that sits on the
-House of the Ka reaches here too, and the scale reads it once."), so no group
-says the sky is empty when it is not. The Moon on the natal Moon, which keys no
-relation and no consequence, speaks through the concrete line alone. No dive deeper line repeats a line on the page, whole or inside a longer
-sentence. The come-back line closes the page under the dive deeper.
+House of the Ka reaches here too, so read it there."), so no group says the
+sky is empty when it is not. The Moon on the natal Moon, which keys no
+relation and no consequence, speaks through the concrete line alone. No dive
+deeper line repeats a line on the page, whole or inside a longer sentence. The
+come-back line closes the page under the dive deeper.
 
 ## The figure page
 
