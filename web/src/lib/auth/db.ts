@@ -157,7 +157,8 @@ export function ensureSchema(): Promise<void> {
       await client?.query("ROLLBACK").catch(() => undefined);
       // A failed attempt must not be cached as success, or the process spends
       // the rest of its life querying tables that were never created. That
-      // includes a connect that never answered: the next call tries again.
+      // includes a connect that failed: the next call tries again.
+      // Keep after the awaited rollback, or a synchronous getPool() throw is cached.
       schemaReady = null;
       throw err;
     } finally {
@@ -203,15 +204,20 @@ export async function execute(text: string, params: unknown[] = []): Promise<num
 export async function transaction<T>(fn: (client: PoolClient) => Promise<T>): Promise<T> {
   await ensureSchema();
   const client = await getPool().connect();
+  // Set when the rollback fails too, so release() hands the pool the error and
+  // it discards this client instead of reusing one in an unknown state.
+  let unusable: Error | boolean | undefined;
   try {
     await client.query("BEGIN");
     const result = await fn(client);
     await client.query("COMMIT");
     return result;
   } catch (err) {
-    await client.query("ROLLBACK").catch(() => undefined);
+    await client.query("ROLLBACK").catch((rollbackErr: unknown) => {
+      unusable = rollbackErr instanceof Error ? rollbackErr : true;
+    });
     throw err;
   } finally {
-    client.release();
+    client.release(unusable);
   }
 }
