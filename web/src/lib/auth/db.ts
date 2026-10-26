@@ -141,24 +141,27 @@ const SCHEMA_LOCK_KEY = 8_314_207;
 export function ensureSchema(): Promise<void> {
   if (schemaReady) return schemaReady;
   schemaReady = (async () => {
-    const client = await getPool().connect();
+    // Unset until connect() answers, so a failed connect has nothing to release.
+    let client: PoolClient | undefined;
     // Set on failure, so release() hands the pool the error and it discards
     // this client instead of reusing a connection in an unknown state.
     let failure: Error | boolean | undefined;
     try {
+      client = await getPool().connect();
       await client.query("BEGIN");
       await client.query("SELECT pg_advisory_xact_lock($1)", [SCHEMA_LOCK_KEY]);
       await client.query(SCHEMA);
       await client.query("COMMIT");
     } catch (err) {
       failure = err instanceof Error ? err : true;
-      await client.query("ROLLBACK").catch(() => undefined);
+      await client?.query("ROLLBACK").catch(() => undefined);
       // A failed attempt must not be cached as success, or the process spends
-      // the rest of its life querying tables that were never created.
+      // the rest of its life querying tables that were never created. That
+      // includes a connect that never answered: the next call tries again.
       schemaReady = null;
       throw err;
     } finally {
-      client.release(failure);
+      client?.release(failure);
     }
   })();
   return schemaReady;
