@@ -1,4 +1,4 @@
-# HANDOFF, Astra Antiqua, state at 2026-10-26
+# HANDOFF, Astra Antiqua, state at 2026-10-27
 
 Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFERENCE / CANNOT CONFIRM.
 
@@ -26,8 +26,7 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
     home clock reads its time and UTC at 375px (05fa59d, 8fba41c); Android's season, year and
     day read the long transits against the chart as web's do (acf168f..afe5a46, merge ade0dd9).
   - Counts at ade0dd9: web 128 (111 pass, 17 skipped), Android 256/0; test:db 128/128 at 3a9fad1.
-- FACT (git): the native Swift iOS app sits on `claude/ios-branch-parity-895dbc`, 18 commits not
-  on `master`, waiting on the flat-canvas approval below.
+- FACT (git): native Swift iOS app on `claude/ios-branch-parity-895dbc`, 18 commits off `master`; waits on pending 3.
 
 ## Decisions taken, and why
 - 2026-09-29 to 2026-10-22: reading anatomy, recurrence, fast-first, Android sync and reveal
@@ -44,15 +43,15 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
    choice (popup, 2026-10-26); its PR, when asked for, takes base PR #7's branch.
 2. FACT (check-run annotation, 2026-10-22): GitHub Actions jobs do not start: "recent account
    payments have failed or your spending limit needs to be increased". Owner fixes billing.
-3. FACT (canvas, 2026-10-26): no comments on https://claude.ai/artifact/LKiWRGTi16LRZ5GvyHbD3V;
-   the SwiftUI port starts once the owner approves it.
+3. FACT (canvas v18, 2026-10-27): owner chose Liquid Glass, chrome A; rounds 1 and 2 (Sky Day) sit on the Glass
+   page of https://claude.ai/artifact/LKiWRGTi16LRZ5GvyHbD3V. Round 3 (Week, Season, Year) next; port after.
+   Content references (popup): `docs/design/references/2026-10-27_phone-screenshots/` (Co-Star, untracked).
 4. INFERENCE (ledger): left for a later pass, none blocking: `MainActivity.kt` reads the
    library-internal `currentBackStack`; `TodaySpecimen.html` shows an old headline (run
    `pnpm specimens` before the next Claude Design push); three Rome items strain after "Prepare for".
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.
-
-## Deadlines, CANNOT CONFIRM: none recorded in this repo; the owner has named none.
+- Deadlines, CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 
 ## Files that matter
 - Plan: `docs/superpowers/plans/2026-10-26-deferred-minors.md`. Composition in `web/src/lib/`; banks
