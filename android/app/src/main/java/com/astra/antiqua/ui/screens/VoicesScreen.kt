@@ -2,7 +2,9 @@ package com.astra.antiqua.ui.screens
 
 import com.astra.antiqua.domain.ScriptNameKey
 import com.astra.antiqua.ui.components.ScriptName
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -78,11 +80,15 @@ fun VoicesScreen(
             }
             items(AncientCulture.entries.toTypedArray(), key = { it.name }) { each ->
                 val copy = runCatching { store.copyFor(each) }.getOrNull()
+                // The row and the name share one source, so focus on the row resolves the name.
+                val interactionSource = remember { MutableInteractionSource() }
                 RowRule()
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(
+                            interactionSource = interactionSource,
+                            indication = LocalIndication.current,
                             onClickLabel = each.label,
                             role = Role.Button,
                             onClick = { onOpenVoice(each) },
@@ -100,6 +106,7 @@ fun VoicesScreen(
                             color = Bone,
                             upper = true,
                             displayFace = true,
+                            interactionSource = interactionSource,
                         )
                         if (copy != null) {
                             Text(

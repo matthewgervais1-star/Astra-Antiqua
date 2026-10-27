@@ -1,7 +1,9 @@
 package com.astra.antiqua.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +19,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -81,11 +84,16 @@ fun CultureSelectionScreen(
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             itemsIndexed(AncientCulture.entries, key = { _, it -> it.name }) { index, culture ->
                 val institution = LexiconDictionary.forCulture(culture).dashboardTitle
+                // The panel and the name share one source, so focus on the panel resolves the name.
+                val interactionSource = remember { MutableInteractionSource() }
                 Panel(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = Spacing.Snug)
-                        .clickable { onCultureSelected(culture) }
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = LocalIndication.current,
+                        ) { onCultureSelected(culture) }
                         .semantics {
                             role = Role.Button
                         },
@@ -103,16 +111,18 @@ fun CultureSelectionScreen(
                         Spacer(modifier = Modifier.width(Spacing.Step))
                         Column {
                             // The culture's own name, large, in its script first; the five
-                            // resolve in turn (1.2 s, then 200 ms apart) and a tap resolves one
-                            // at once. Canaan has no attested script for its name and stays Latin.
+                            // resolve in turn (1.2 s, then 200 ms apart, once the phase fade has
+                            // passed) and a tap or focus resolves one at once. Canaan has no
+                            // attested script for its name and stays Latin.
                             ScriptName(
                                 culture = culture,
                                 key = ScriptNameKey.CultureName,
                                 style = MaterialTheme.typography.displaySmall,
                                 color = Bone,
                                 intro = true,
-                                introDelayMillis = ScriptReveal.introDelayFor(index),
+                                introDelayMillis = ScriptReveal.pickerDelayFor(index),
                                 upper = true,
+                                interactionSource = interactionSource,
                             )
                             Spacer(modifier = Modifier.height(Spacing.Tight))
                             Text(

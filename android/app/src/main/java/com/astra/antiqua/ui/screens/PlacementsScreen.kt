@@ -113,7 +113,7 @@ fun PlacementsScreen(
                                     leading = {
                                         DeityGlyph(body = body, culture = culture, size = 14.dp)
                                     },
-                                    nameContent = { style, ink ->
+                                    nameContent = { style, ink, interactionSource ->
                                         ScriptName(
                                             culture = culture,
                                             key = ScriptNameKey.Deity(body),
@@ -121,6 +121,7 @@ fun PlacementsScreen(
                                             color = ink,
                                             upper = true,
                                             maxLines = 1,
+                                            interactionSource = interactionSource,
                                         )
                                     },
                                     onClick = { onOpenPlacement(body) },

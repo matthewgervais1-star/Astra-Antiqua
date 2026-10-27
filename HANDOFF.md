@@ -8,30 +8,22 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   head built only in CI). `shared/content/*.json` is generated from web; never hand-edit it.
 
 ## Where things stand
-- FACT (GitHub, 2026-10-22): PR #2 merged into `master` (376a2db), carrying PR #4; PR #5, the
-  script reveal, merged into `master` (b32ee44). `master` now matches the Claude Design cards.
-- FACT (PR #4): second wave, reviewed: Tasks 15 to 17 (day, figure, dive deeper), 11 to 14
-  (design calls), 18a and 18b (Android sync; Android birth times use a bundled tz-lookup).
-- FACT (ledger, 2026-10-08): 18c passed on the emulator; whole-branch review of 9804a4e..1d930a3 found 0 Critical,
-  1 Important (Room 2->3 migration kept the guessed-zone instant); fixed 1e048b1..44bc3e3.
-  Cleanup done and reviewed: C1 LICENCES screen (6292fea); C2 /charts header, /week rows,
-  names wrap at 1280 (7638d9e); C3 Android ASC line on web's obliquity, CNC/PSC/AQR on both
-  surfaces, transit spans to the true ASC (d30dfa6..440c3ab). C4 Egypt echo tests and rewording, spec A.6/B.3
-  (3985cb4..53d42d5, five fix rounds). FACT (ledger, 2026-10-20): final review of
-  1d930a3..53d42d5 found 1 Important (river echo in the Egypt transit spine), fixed
-  2d16643..65691d1, re-review Approved. At 65691d1: web 112 (95 pass, 17 skipped), Android
-  200/0, dotnet 39/0. FACT (ledger): two sessions ran this wave in parallel; the second added
-  1c28ac7..3e71306 on top (figure page: river in the title and at most one other line, the
-  recurrence line no longer names it; haul once; headlines hyphenate from 1100px; French legal
-  pages `fr-CA`), re-review clean. At 5105fd9: web 113 (96 pass, 17 skipped), Android 200/0
-  (fresh build), dotnet 39/0. Egypt and Canaan device errors follow the owner's guidance, Carthage and
-  Rome approved as written.
-
-- FACT (ledger `.superpowers/sdd/2026-10-20-script-reveal/progress.md`, 2026-10-20): branch
-  `claude/script-reveal` (stacked on PR #4, unpushed) holds the owner's script reveal: names in
-  attested script resolve to English or French on scroll (spec `2026-10-20-script-reveal.md`).
-  Tasks 1 (data, 56 of 60 sourced) and 2 (web, large culture names, picker) done and reviewed.
-  Task 3 (Android) reviewed; TalkBack fix ece6cf4. Android institution titles now equal web's (owner, 2026-10-22) and reveal too.
+- FACT (GitHub, 2026-10-22): `master` (2f38e6e) holds PR #2 with PR #4 (the second wave), PR #5
+  (script reveal) and PR #6 (Android institution titles). It matches the Claude Design cards.
+- FACT (ledger `.superpowers/sdd/2026-09-29-planned-work-closeout/progress.md`): second wave
+  reviewed: day, figure and dive-deeper pages, three design calls, Android sync (Room v3, bundled
+  tz-lookup), cleanup C1 to C4. Counts there at 5105fd9: web 113 (96 pass, 17 skipped),
+  Android 200/0, dotnet 39/0. Egypt and Canaan device errors follow the owner's guidance.
+- FACT (ledger `.superpowers/sdd/2026-10-20-script-reveal/progress.md`): names in attested script
+  resolve to English or French on scroll, web and Android (spec `2026-10-20-script-reveal.md`);
+  56 of 60 names sourced; Android institution titles equal web's and reveal too.
+- FACT (GitHub PR #7, 2026-10-22): branch `claude/continue-next-stage-7bf3d6` fixes the four
+  Android reveal Minors deferred at #5's merge: no Latin frame before script, the animation
+  setting followed live, the picker's hold after the phase fade, D-pad focus as on web (plan
+  `2026-10-22-android-reveal-polish.md`). Review approved after one fix round; Android 223/0 local.
+- FACT (git, 2026-10-22): the native Swift iOS app sits on `claude/ios-branch-parity-895dbc`,
+  18 commits not on `master`. Its layout port waits for the owner to approve the flat canvas
+  (`docs/design/ios-layout-2026-10-21.md`, uncommitted in worktree `festive-khayyam-4aac34`).
 
 ## Decisions taken, and why
 - 2026-09-29, owner: rebuild the daily readings to the Co-Star anatomy in five voices (spec
@@ -41,11 +33,17 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   words; recurrence by mean geocentric rates (Sun meets Mercury every 57.9 d, Venus 291.9 d);
   natal day readings read fast bodies first; Android keeps the typed birth date and time
   (Room v3). All rulings with their reasons: the ledger and the plan's Rulings section.
+- 2026-10-22, owner (popup): the four deferred Android reveal Minors come before the iOS port and
+  the Swift catch-up, which both need CI. Controller: Android focus follows web's `:focus-visible`
+  (Latin only while a row holds focus), because web is canonical.
 
 ## Pending, in order
-1. FACT (check-run annotation, 2026-10-22): GitHub Actions jobs do not start: "recent account
+1. FACT (GitHub, 2026-10-22): PR #7 open against `master`; the owner reviews and merges it.
+2. FACT (check-run annotation, 2026-10-22): GitHub Actions jobs do not start: "recent account
    payments have failed or your spending limit needs to be increased". Owner fixes billing; every
-   CI step passed locally at ece6cf4 (ledger). Claude Design:
+   CI step passed locally at ece6cf4 (ledger), Android at 2113a55 (PR #7).
+3. FACT (canvas, 2026-10-22): no comments yet on https://claude.ai/artifact/LKiWRGTi16LRZ5GvyHbD3V;
+   the SwiftUI port starts once the owner approves it. SwiftUI builds only in CI. Claude Design:
    26 cards pushed from 4e3c1a5, 3 files from 3e71306, tokens/fonts.css from 24346d4 (2026-10-21), 12 script-reveal files from a2b762f (2026-10-22).
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.

@@ -35,6 +35,7 @@ import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.AppPhase
 import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.LauncherIcon
+import com.astra.antiqua.ui.components.AnimationsOffProvider
 import com.astra.antiqua.ui.components.Monogram
 import com.astra.antiqua.ui.nav.Route
 import com.astra.antiqua.ui.screens.AccountScreen
@@ -86,51 +87,50 @@ class MainActivity : ComponentActivity() {
             val currentPhase by viewModel.currentPhase.collectAsState()
             val selectedCulture by viewModel.selectedCulture.collectAsState()
 
-            AstraAntiquaTheme(selectedCulture = selectedCulture) {
-                LaunchedEffect(Unit) { viewModel.start() }
+            // One observer of the animator scale for the whole activity; the script names read it.
+            AnimationsOffProvider {
+                AstraAntiquaTheme(selectedCulture = selectedCulture) {
+                    LaunchedEffect(Unit) { viewModel.start() }
 
-                // Edge-to-edge is enforced from SDK 35. The Surface must fill the
-                // whole window so the culture's ground paints behind the system
-                // bars; the inset is applied to the CONTENT inside it, not to the
-                // Surface, or the bars show the bare window background instead.
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Box(modifier = Modifier.safeDrawingPadding()) {
-                        AnimatedContent(
-                            targetState = currentPhase,
-                            transitionSpec = {
-                                // A plain opacity fade, which is the only motion
-                                // this identity allows. Nothing moves or scales.
-                                fadeIn(animationSpec = tween(FADE_MS)) togetherWith
-                                    fadeOut(animationSpec = tween(FADE_MS))
-                            },
-                            label = "PhaseTransition"
-                        ) { phase ->
-                            when (phase) {
-                                AppPhase.ENGINE_WARMUP -> EngineWarmupScreen()
-                                AppPhase.CULTURE_SELECTION -> CultureSelectionScreen { culture ->
-                                    viewModel.selectCulture(culture)
+                    // Edge-to-edge is enforced from SDK 35. The Surface must fill the
+                    // whole window so the culture's ground paints behind the system
+                    // bars; the inset is applied to the CONTENT inside it, not to the
+                    // Surface, or the bars show the bare window background instead.
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        Box(modifier = Modifier.safeDrawingPadding()) {
+                            AnimatedContent(
+                                targetState = currentPhase,
+                                transitionSpec = {
+                                    // A plain opacity fade, which is the only motion
+                                    // this identity allows. Nothing moves or scales.
+                                    fadeIn(animationSpec = tween(AppPhase.FADE_MILLIS)) togetherWith
+                                        fadeOut(animationSpec = tween(AppPhase.FADE_MILLIS))
+                                },
+                                label = "PhaseTransition"
+                            ) { phase ->
+                                when (phase) {
+                                    AppPhase.ENGINE_WARMUP -> EngineWarmupScreen()
+                                    AppPhase.CULTURE_SELECTION -> CultureSelectionScreen { culture ->
+                                        viewModel.selectCulture(culture)
+                                    }
+                                    AppPhase.ONBOARDING -> OnboardingScreen(
+                                        onLocationSaved = { viewModel.completeOnboarding() },
+                                    )
+                                    AppPhase.MAIN_DASHBOARD -> AstraNavHost(
+                                        culture = selectedCulture,
+                                        onChooseCulture = viewModel::switchCulture,
+                                        onStruck = viewModel::returnToCultureSelection,
+                                    )
                                 }
-                                AppPhase.ONBOARDING -> OnboardingScreen(
-                                    onLocationSaved = { viewModel.completeOnboarding() },
-                                )
-                                AppPhase.MAIN_DASHBOARD -> AstraNavHost(
-                                    culture = selectedCulture,
-                                    onChooseCulture = viewModel::switchCulture,
-                                    onStruck = viewModel::returnToCultureSelection,
-                                )
                             }
                         }
                     }
                 }
             }
         }
-    }
-
-    private companion object {
-        const val FADE_MS = 400
     }
 }
 

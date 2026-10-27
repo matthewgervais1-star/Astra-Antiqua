@@ -1,6 +1,7 @@
 package com.astra.antiqua.domain
 
 import com.astra.antiqua.model.AncientCulture
+import com.astra.antiqua.model.AppPhase
 import com.astra.antiqua.model.Planet
 import java.util.Locale
 
@@ -70,4 +71,40 @@ object ScriptReveal {
 
     /** The picker's hold for the name at [index]: 1.2 s, then 200 ms apart. */
     fun introDelayFor(index: Int): Long = INTRO_HOLD_MILLIS + INTRO_STAGGER_MILLIS * index
+
+    /**
+     * When the picker's name at [index] resolves, counted from the picker's first
+     * composition: the phase fade runs first, so the hold starts on a full-opacity name.
+     */
+    fun pickerDelayFor(index: Int): Long = AppPhase.FADE_MILLIS + introDelayFor(index)
+
+    /**
+     * The form a name shows: true for Latin, false for script, null while nothing
+     * has been measured and no intro runs, when the name draws neither. Focus on the
+     * name's container shows Latin for as long as it lasts (web's `:focus-visible`);
+     * otherwise the intro shows script, a tap holds Latin, and the band decides ([inBand]).
+     */
+    fun showsLatin(introRunning: Boolean, held: Boolean, inBand: Boolean?, focused: Boolean): Boolean? = when {
+        focused -> true
+        introRunning -> false
+        held -> true
+        else -> inBand
+    }
+
+    /** Focus ends a running intro, as web's `focusin` does; the name then holds Latin until the next crossing. */
+    fun focusEndsIntro(introRunning: Boolean, focused: Boolean): Boolean = introRunning && focused
+
+    /**
+     * The Latin layer's alpha. Until [settled] the first form shows at once, so it
+     * is never faded in from the wrong one; after that [animated] carries the fade.
+     */
+    fun latinAlpha(shows: Boolean?, settled: Boolean, animated: Float): Float = when {
+        shows == null -> 0f
+        !settled -> if (shows) 1f else 0f
+        else -> animated
+    }
+
+    /** The script layer's alpha: whatever the Latin layer leaves, and nothing before a form is known. */
+    fun scriptAlpha(shows: Boolean?, settled: Boolean, animated: Float): Float =
+        if (shows == null) 0f else 1f - latinAlpha(shows, settled, animated)
 }

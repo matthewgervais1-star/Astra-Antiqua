@@ -1,5 +1,9 @@
 package com.astra.antiqua.ui.components
 
+import android.content.Context
+import android.database.ContentObserver
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -7,15 +11,21 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -66,9 +76,15 @@ import kotlinx.coroutines.delay
  *
  * Rules: in the band (30% to 70% of the window height) the name reads Latin,
  * outside it the script. A tap resolves it at once, until the next crossing.
+ * Focus on the container the name sits in ([interactionSource], the one that
+ * container's `clickable` takes) shows Latin while it lasts and returns the name
+ * to the band's form when it leaves (web's `:focus-visible`); during the intro it
+ * also ends the intro (web's `focusin`), and Latin holds until the next crossing.
  * With [intro], the script shows from the first frame, holds for
  * [introDelayMillis], then resolves, and only a later crossing applies the
  * band again: a name at the top of a screen would otherwise never resolve.
+ * Without it the name draws nothing until its first position is reported, one
+ * blank frame, so no frame shows the form the band would not show.
  * A name with no attested script, or a device with animations off
  * (animator duration scale 0), shows Latin and never swaps.
  *
@@ -90,6 +106,7 @@ fun ScriptName(
     textAlign: TextAlign? = null,
     maxLines: Int = Int.MAX_VALUE,
     contentAlignment: Alignment = Alignment.CenterStart,
+    interactionSource: InteractionSource? = null,
 ) {
     val form = ScriptReveal.formFor(culture, key)
     val language = ScriptReveal.pickLanguage(LocalConfiguration.current.locales[0]?.language)
@@ -97,6 +114,10 @@ fun ScriptName(
     val latin = if (displayFace) displayCase(raw) else raw
     val script = ScriptReveal.scriptFor(form)
     val animationsOff = rememberAnimationsOff()
+    // Above the early return, so a finished intro stays finished when animations come back on.
+    var introRunning by remember { mutableStateOf(intro) }
+    // Latin until the next crossing: set by a tap or the end of the intro, which focus can cause.
+    var held by remember { mutableStateOf(false) }
 
     if (script == null || animationsOff) {
         Text(
@@ -112,34 +133,32 @@ fun ScriptName(
     }
 
     var inBand by remember { mutableStateOf<Boolean?>(null) }
-    var introRunning by remember { mutableStateOf(intro) }
-    // Latin until the next crossing: set by a tap or the end of the intro.
-    var held by remember { mutableStateOf(false) }
-    val showLatin = when {
-        introRunning -> false
-        held -> true
-        else -> inBand ?: true
-    }
+    val focused = interactionSource?.collectIsFocusedAsState()?.value == true
+    // Null before the first position report, when neither layer draws.
+    val showLatin = ScriptReveal.showsLatin(introRunning, held, inBand, focused)
 
-    val latinAlpha = remember { Animatable(if (showLatin) 1f else 0f) }
-    // A name first measured outside the band starts in script without a fade.
-    val snapNext = remember { booleanArrayOf(false) }
+    val latinFade = remember { Animatable(0f) }
+    // False until the first form is on screen; that form takes its alpha at once, never a fade.
+    var settled by remember { mutableStateOf(false) }
     LaunchedEffect(showLatin) {
+        if (showLatin == null) return@LaunchedEffect
         val target = if (showLatin) 1f else 0f
-        if (snapNext[0]) {
-            snapNext[0] = false
-            latinAlpha.snapTo(target)
+        if (settled) {
+            latinFade.animateTo(target, tween(ScriptReveal.FADE_MILLIS, easing = FastOutSlowInEasing))
         } else {
-            latinAlpha.animateTo(target, tween(ScriptReveal.FADE_MILLIS, easing = FastOutSlowInEasing))
+            latinFade.snapTo(target)
+            settled = true
         }
     }
+    val resolve = {
+        introRunning = false
+        held = true
+    }
+    LaunchedEffect(focused) { if (ScriptReveal.focusEndsIntro(introRunning, focused)) resolve() }
     if (intro) {
         LaunchedEffect(Unit) {
             delay(introDelayMillis)
-            if (introRunning) {
-                introRunning = false
-                held = true
-            }
+            if (introRunning) resolve()
         }
     }
 
@@ -152,7 +171,6 @@ fun ScriptName(
                 val now = ScriptReveal.inBand(bounds.top, bounds.bottom, height)
                 val before = inBand
                 if (before != now) {
-                    if (before == null && !now && !introRunning) snapNext[0] = true
                     inBand = now
                     // During the intro the band waits; afterwards a crossing clears a held Latin.
                     if (before != null && !introRunning) held = false
@@ -163,10 +181,7 @@ fun ScriptName(
                 // a drag that scrolls the list cancels it.
                 awaitEachGesture {
                     awaitFirstDown(requireUnconsumed = false)
-                    if (waitForUpOrCancellation() != null) {
-                        introRunning = false
-                        held = true
-                    }
+                    if (waitForUpOrCancellation() != null) resolve()
                 }
             },
         contentAlignment = contentAlignment,
@@ -178,7 +193,9 @@ fun ScriptName(
             textAlign = textAlign,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.graphicsLayer { alpha = latinAlpha.value },
+            modifier = Modifier.graphicsLayer {
+                alpha = ScriptReveal.latinAlpha(showLatin, settled, latinFade.value)
+            },
         )
         Text(
             text = script,
@@ -187,7 +204,9 @@ fun ScriptName(
             textAlign = textAlign,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.graphicsLayer { alpha = 1f - latinAlpha.value },
+            modifier = Modifier.graphicsLayer {
+                alpha = ScriptReveal.scriptAlpha(showLatin, settled, latinFade.value)
+            },
         )
     }
 }
@@ -210,13 +229,50 @@ private fun scriptStyle(culture: AncientCulture, base: TextStyle): TextStyle {
 }
 
 /** True when the system animator duration scale is 0 (Developer options or "Remove animations"). */
+private fun readAnimationsOff(context: Context): Boolean =
+    Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+
+/**
+ * The animator-scale flag, kept current by [AnimationsOffProvider]. Null where nothing
+ * provides it (a preview, a test), and [ScriptName] reads the setting once instead.
+ */
+private val LocalAnimationsOff = staticCompositionLocalOf<State<Boolean>?> { null }
+
+/**
+ * Observes the animator duration scale once for everything below it, so a change
+ * made while the app runs reaches every [ScriptName] on screen. One observer per
+ * activity, never one per name; it is unregistered when this leaves the composition.
+ */
+@Composable
+fun AnimationsOffProvider(content: @Composable () -> Unit) {
+    val context = LocalContext.current
+    val off = remember(context) { mutableStateOf(readAnimationsOff(context)) }
+    DisposableEffect(context) {
+        val resolver = context.contentResolver
+        val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
+            override fun onChange(selfChange: Boolean) {
+                off.value = readAnimationsOff(context)
+            }
+        }
+        resolver.registerContentObserver(
+            Settings.Global.getUriFor(Settings.Global.ANIMATOR_DURATION_SCALE),
+            false,
+            observer,
+        )
+        // A change between the first read and the registration would otherwise be missed.
+        off.value = readAnimationsOff(context)
+        onDispose { resolver.unregisterContentObserver(observer) }
+    }
+    CompositionLocalProvider(LocalAnimationsOff provides off, content = content)
+}
+
 @Composable
 private fun rememberAnimationsOff(): Boolean {
     if (LocalInspectionMode.current) return false
+    val shared = LocalAnimationsOff.current
+    if (shared != null) return shared.value
     val context = LocalContext.current
-    return remember(context) {
-        Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
-    }
+    return remember(context) { readAnimationsOff(context) }
 }
 
 @Preview
