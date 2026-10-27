@@ -10,7 +10,8 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
 ## Where things stand
 - FACT (GitHub, 2026-10-26): `master` (2f38e6e) holds PRs #2, #4, #5 and #6: the second wave,
   the script reveal (names in attested script resolve on scroll, 56 of 60 sourced) and Android
-  institution titles. Ledgers in worktree `planner-buildout-completion-495257`.
+  institution titles. Their ledgers stay in worktree `planner-buildout-completion-495257`.
+- FACT (disk, 2026-10-26): folder cleanup ran; ledger copies and the full account are in `_archive/2026-10-26_folder-cleanup/` (`ledgers/`, `README.md`).
 - FACT (GitHub, 2026-10-26): PR #7 (`claude/continue-next-stage-7bf3d6`, 5f96a05) is open and
   unmerged: four Android reveal fixes (no Latin frame before script, live animation setting,
   picker hold after the phase fade, D-pad focus as on web). Android 223/0 local.
@@ -51,8 +52,7 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.
 
-## Deadlines
-CANNOT CONFIRM: none recorded in this repo; the owner has named none.
+## Deadlines, CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 
 ## Files that matter
 - Plan: `docs/superpowers/plans/2026-10-26-deferred-minors.md`. Composition in `web/src/lib/`; banks
