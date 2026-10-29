@@ -5,7 +5,6 @@ import { CULTURES, type Culture } from "@/data/cultures";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { CULTURE_ACCENTS } from "@/data/palettes";
 import { CultureEmblem } from "@/components/chrome/CultureEmblem";
-import { CULTURE_NAME_INTRO_MS } from "@/components/chrome/NaveHead";
 import { ScriptName } from "@/components/chrome/ScriptName";
 import { cn } from "@/lib/classNames";
 
@@ -26,11 +25,14 @@ export interface CultureSwitchProps {
  *
  * Each name is a large ScriptName (owner, 2026-10-20). The list does not
  * scroll, so the band rule alone would leave it all in script: the names
- * resolve to Latin one after another after the page paints, staggered by
- * PICKER_STAGGER_MS, and hover or keyboard focus resolves a name at once.
+ * resolve to Latin one after another after the page paints: the first holds
+ * its script PICKER_INTRO_MS, each next one PICKER_STAGGER_MS longer, and
+ * hover or keyboard focus resolves a name at once.
  * The institution sits under the name, since the larger name and the
  * institution side by side overflow the column for Carthage.
  */
+/** How long the first picker name holds its script after the page paints (owner, 2026-10-20). */
+const PICKER_INTRO_MS = 1200;
 const PICKER_STAGGER_MS = 200;
 
 export function CultureSwitch({ value, onChange, showSurface = true }: CultureSwitchProps) {
@@ -59,7 +61,7 @@ export function CultureSwitch({ value, onChange, showSurface = true }: CultureSw
                   culture={culture}
                   heading="culture"
                   upper
-                  intro={CULTURE_NAME_INTRO_MS + index * PICKER_STAGGER_MS}
+                  intro={PICKER_INTRO_MS + index * PICKER_STAGGER_MS}
                 />
               </span>
               {showSurface ? (

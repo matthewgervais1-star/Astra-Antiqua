@@ -3,9 +3,9 @@
  * in headless Chrome over the DevTools protocol, no npm dependency, the way
  * scripts/screenshot.mjs captures pages.
  *
- *   cd web && node scripts/check-script-reveal.mjs <base-url> [--out DIR] [--chrome PATH]
+ *   cd web && node scripts/check-script-reveal.mjs <base-url> [--out DIR] [--chrome PATH] [--viewport WxH ...]
  *
- * For each /voices/<culture> page at 1280x800 and 375x740 it checks:
+ * For each /voices/<culture> page at 1280x800, 390x844 and 375x740 it checks:
  *   - the server HTML carries every name's Latin form as text, and no script
  *     text outside the data-script attribute;
  *   - the page makes one IntersectionObserver for the band however many names it sets;
@@ -14,14 +14,21 @@
  *   - no name's box moves or changes size between those three states;
  *   - the page never scrolls sideways;
  *   - under prefers-reduced-motion: reduce no name swaps and no script layer shows.
- * The large culture name in the head (NaveHead) and the five names of the
- * culture picker (CultureSwitch on /welcome) and the day page's head carry ScriptName's intro: the
- * check pauses their animations at the start to see the script, reads each
- * delay (1200 ms, the picker staggered by 200), plays them out to Latin,
- * hovers a picker row to resolve it early, and checks 375 for sideways scroll.
+ * The large culture title (NaveHead's culture, the voices page headline, the
+ * day page's head) is script until scrolled (owner, 2026-10-29): the check
+ * reads the first paint at DOMContentLoaded (script, no Latin), the held state
+ * after hydration (data-reveal="script", no fade ran), Latin while hovered and
+ * script again after, the band's verdict once the page has scrolled one pixel,
+ * script once the title has scrolled out of the band, and Latin with scripts
+ * disabled (the layout's noscript style) and under reduced motion.
+ * The five names of the culture picker (CultureSwitch on /welcome) carry
+ * ScriptName's intro: the check pauses their animations at the start to see
+ * the script, reads each delay (1200 ms, staggered by 200), plays them out to
+ * Latin, hovers a picker row to resolve it early, and checks for sideways scroll.
  * With --out it saves the script and resolved states per culture as PNGs,
- * and the head and the picker in both states at each width.
- * The dev server must already be running. Exits 1 on any failure.
+ * the title held, hovered and scrolled, and the picker in both states at each width.
+ * --viewport (repeatable) limits the run to those sizes. The dev server must
+ * already be running. Exits 1 on any failure.
  */
 import { spawn } from "node:child_process";
 import fs from "node:fs";
@@ -36,6 +43,7 @@ const CHROME_CANDIDATES = [
 const CULTURES = ["egypt", "greece", "canaan", "carthage", "rome"];
 const VIEWPORTS = [
   { width: 1280, height: 800, cultures: CULTURES },
+  { width: 390, height: 844, cultures: CULTURES },
   { width: 375, height: 740, cultures: CULTURES },
 ];
 
@@ -117,6 +125,40 @@ const INTRO_PROBE = `(() => [...document.querySelectorAll("[data-intro]")].map((
 }))()`;
 const SCROLL_WIDTH = `({ scrollWidth: document.documentElement.scrollWidth, innerWidth: window.innerWidth })`;
 
+// Each script-first title: its state, the two layers' opacity, any fade in flight, and its place against the band.
+const TITLE_PROBE = `(() => [...document.querySelectorAll(".script-name--script-first")].map((el) => {
+  const latin = el.querySelector(".script-name__latin");
+  const script = el.querySelector(".script-name__script");
+  const r = el.getBoundingClientRect();
+  const h = window.innerHeight;
+  return {
+    text: latin.textContent,
+    reveal: el.dataset.reveal ?? null,
+    latin: Number(getComputedStyle(latin).opacity),
+    script: getComputedStyle(script).display === "none" ? 0 : Number(getComputedStyle(script).opacity),
+    fading: latin.getAnimations().length + script.getAnimations().length,
+    inBand: r.bottom > h * 0.3 && r.top < h * 0.7,
+    top: r.top + window.scrollY,
+    bottom: r.bottom + window.scrollY,
+    x: r.left + r.width / 2,
+    y: r.top + r.height / 2,
+  };
+}))()`;
+// The title as first painted: recorded at DOMContentLoaded, before hydration on a server-rendered page.
+const RECORD_FIRST_PAINT = `document.addEventListener("DOMContentLoaded", () => {
+  window.__titleFirstPaint = [...document.querySelectorAll(".script-name--script-first")].map((el) => {
+    const latin = el.querySelector(".script-name__latin");
+    const script = el.querySelector(".script-name__script");
+    return {
+      text: latin.textContent,
+      hydrated: el.hasAttribute("data-reveal"),
+      styled: getComputedStyle(el).display === "inline-grid",
+      latin: Number(getComputedStyle(latin).opacity),
+      script: getComputedStyle(script).display === "none" ? 0 : Number(getComputedStyle(script).opacity),
+    };
+  });
+});`;
+
 /**
  * The intro on one page: script while held, the expected delays, Latin and
  * the class gone once played out, no sideways scroll in either state.
@@ -158,20 +200,96 @@ async function checkIntro(cdp, label, delays, out, prefix, hoverIndex = null) {
   console.log(`${label}: ${held.length} intro names held in script, resolved to Latin; scrollWidth ${w2.scrollWidth}/${w2.innerWidth}`);
 }
 
+/**
+ * The script-first title on one page: script at the first paint and held after
+ * hydration with no fade, Latin while hovered, the band's verdict after the
+ * first scroll, script once scrolled out of the band, no sideways scroll.
+ */
+async function checkTitle(cdp, label, count, out, prefix, serverRendered = true) {
+  // Client-computed pages (the day page) mount their head after load.
+  for (let i = 0; i < 100; i += 1) {
+    if ((await cdp.evaluate(`document.querySelectorAll(".script-name--script-first[data-reveal]").length`)) >= count) break;
+    await sleep(100);
+  }
+  // Right after hydration: a fade in flight here would mean the first paint differed from the held state.
+  const hydrated = await cdp.evaluate(TITLE_PROBE);
+  if (hydrated.length !== count) fail(`${label}: ${hydrated.length} script-first titles, expected ${count}`);
+  for (const n of hydrated) {
+    if (n.fading > 0) fail(`${label} hydrated: "${n.text}" has ${n.fading} fade(s) running`);
+  }
+  const first = (await cdp.evaluate(`window.__titleFirstPaint ?? []`)).filter((n) => n.styled);
+  // A server-rendered title is in the HTML at DOMContentLoaded; a client-computed head (the day page) is not.
+  if (serverRendered && first.length !== count) fail(`${label} first paint: ${first.length} styled titles recorded at DOMContentLoaded, expected ${count}`);
+  for (const n of first) {
+    if (n.latin > 0.01 || n.script < 0.99) fail(`${label} first paint: "${n.text}" latin ${n.latin} script ${n.script} (hydrated ${n.hydrated})`);
+  }
+  await sleep(600);
+  const held = await cdp.evaluate(TITLE_PROBE);
+  for (const n of held) {
+    if (n.reveal !== "script" || n.latin > 0.01 || n.script < 0.99) fail(`${label} held: "${n.text}" reveal ${n.reveal} latin ${n.latin} script ${n.script}`);
+  }
+  const w1 = await cdp.evaluate(SCROLL_WIDTH);
+  if (w1.scrollWidth > w1.innerWidth) fail(`${label} held: horizontal scroll (${w1.scrollWidth} > ${w1.innerWidth})`);
+  await shoot(cdp, out, `${prefix}-script.png`);
+  if (held[0]) {
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: held[0].x, y: held[0].y });
+    await sleep(600);
+    const hovered = (await cdp.evaluate(TITLE_PROBE))[0];
+    if (hovered.latin < 0.99 || hovered.script > 0.01) fail(`${label}: hovering "${hovered.text}" did not show Latin (latin ${hovered.latin})`);
+    await shoot(cdp, out, `${prefix}-hovered.png`);
+    await cdp.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 1, y: 1 });
+    await sleep(600);
+    const left = (await cdp.evaluate(TITLE_PROBE))[0];
+    if (left.reveal !== "script" || left.latin > 0.01) fail(`${label}: "${left.text}" did not return to script after hover (latin ${left.latin})`);
+  }
+  // The first scroll releases the band's verdict.
+  await cdp.evaluate(`window.scrollBy(0, 1)`);
+  await sleep(900);
+  const scrolled = await cdp.evaluate(TITLE_PROBE);
+  for (const n of scrolled) {
+    const want = n.inBand ? "latin" : "script";
+    if (n.reveal !== want) fail(`${label} scrolled: "${n.text}" reads ${n.reveal}, expected ${want} (top ${Math.round(n.top)}, band from ${Math.round(0.3 * (await cdp.evaluate("innerHeight")))})`);
+  }
+  await shoot(cdp, out, `${prefix}-scrolled.png`);
+  // Out of the band above, where the page is tall enough to put it there.
+  if (scrolled[0]) {
+    const h = await cdp.evaluate("innerHeight");
+    const max = await cdp.evaluate("document.documentElement.scrollHeight - innerHeight");
+    const y = Math.ceil(scrolled[0].bottom - h * 0.3 + 8);
+    if (y <= max) {
+      await cdp.evaluate(`window.scrollTo(0, ${y})`);
+      await sleep(900);
+      const out1 = (await cdp.evaluate(TITLE_PROBE))[0];
+      if (out1.reveal !== "script") fail(`${label}: "${out1.text}" reads ${out1.reveal} scrolled out of the band`);
+      await cdp.evaluate(`window.scrollTo(0, 0)`);
+      await sleep(900);
+      const back = (await cdp.evaluate(TITLE_PROBE))[0];
+      const want = back.inBand ? "latin" : "script";
+      if (back.reveal !== want) fail(`${label}: "${back.text}" reads ${back.reveal} back at the top, expected ${want}`);
+    }
+  }
+  const w2 = await cdp.evaluate(SCROLL_WIDTH);
+  if (w2.scrollWidth > w2.innerWidth) fail(`${label} scrolled: horizontal scroll (${w2.scrollWidth} > ${w2.innerWidth})`);
+  const where = scrolled.map((n) => `"${n.text}" ${n.inBand ? "in the band" : "above the band"} at the top, ${n.reveal} after the first scroll`).join("; ");
+  const paint = first.length === 0 ? "" : ` (first paint recorded ${first.filter((n) => !n.hydrated).length}/${first.length} before hydration)`;
+  console.log(`${label}: ${held.length} title(s) script at first paint and held${paint}; ${where || "none"}; scrollWidth ${w2.scrollWidth}/${w2.innerWidth}`);
+}
+
 // The stagger runs by list position; Canaan (third) has no script form, so no intro.
 const PICKER_DELAYS = [1200, 1400, 1800, 2000];
-// Canaan's own name has no attested script form, so its head carries no intro.
-const HEAD_INTROS = { egypt: 1, greece: 1, canaan: 0, carthage: 1, rome: 1 };
+// Canaan's own name has no attested script form, so its head carries no title.
+const HEAD_TITLES = { egypt: 1, greece: 1, canaan: 0, carthage: 1, rome: 1 };
 
 function parseArgs(argv) {
-  const opts = { base: null, out: null, chrome: null };
+  const opts = { base: null, out: null, chrome: null, viewports: [] };
   for (let i = 0; i < argv.length; i += 1) {
     if (argv[i] === "--out") opts.out = argv[++i];
     else if (argv[i] === "--chrome") opts.chrome = argv[++i];
+    else if (argv[i] === "--viewport") opts.viewports.push(argv[++i]);
     else opts.base = argv[i];
   }
   if (!opts.base) {
-    console.error("usage: node scripts/check-script-reveal.mjs <base-url> [--out DIR] [--chrome PATH]");
+    console.error("usage: node scripts/check-script-reveal.mjs <base-url> [--out DIR] [--chrome PATH] [--viewport WxH ...]");
     process.exit(1);
   }
   return opts;
@@ -294,6 +412,10 @@ async function checkServerHtml(base, culture) {
   for (const [, inner] of layers) {
     if (inner !== "") fail(`${culture} server html: script layer carries text "${inner}"`);
   }
+  // The class as rendered on the element; the noscript style and the flight payload also carry the name.
+  const titles = (html.match(/class="script-name script-name--script-first/g) ?? []).length;
+  if (titles !== HEAD_TITLES[culture]) fail(`${culture} server html: ${titles} script-first titles, expected ${HEAD_TITLES[culture]}`);
+  if (!/<noscript><style>[^<]*script-name--script-first/.test(html)) fail(`${culture} server html: no noscript style for the script-first title`);
   return latin.length;
 }
 
@@ -331,6 +453,7 @@ try {
   await cdp.send("Page.enable");
   await cdp.send("Runtime.enable");
   await cdp.send("Page.addScriptToEvaluateOnNewDocument", { source: COUNT_OBSERVERS });
+  await cdp.send("Page.addScriptToEvaluateOnNewDocument", { source: RECORD_FIRST_PAINT });
 
   await navigate(cdp, new URL("/", args.base).toString());
   if ((await cdp.evaluate(SEED_ONBOARDED)) !== "seeded") throw new Error("seeding localStorage failed");
@@ -340,19 +463,15 @@ try {
     console.log(`${culture} server html: ${n} Latin names as text`);
   }
 
-  for (const vp of VIEWPORTS) {
+  const viewports = args.viewports.length === 0 ? VIEWPORTS : VIEWPORTS.filter((vp) => args.viewports.includes(`${vp.width}x${vp.height}`));
+  if (viewports.length === 0) throw new Error(`check-script-reveal: no viewport matches ${args.viewports.join(", ")}`);
+  for (const vp of viewports) {
     await cdp.send("Emulation.setDeviceMetricsOverride", { width: vp.width, height: vp.height, deviceScaleFactor: 1, mobile: vp.width < 600 });
     await cdp.send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "no-preference" }] });
     for (const culture of vp.cultures) {
       const label = `${culture} @${vp.width}`;
       await navigate(cdp, new URL(`/voices/${culture}`, args.base).toString());
-      await checkIntro(
-        cdp,
-        `${label} head`,
-        Array(HEAD_INTROS[culture]).fill(1200),
-        args.out,
-        `${culture}-${vp.width}-head`,
-      );
+      await checkTitle(cdp, `${label} title`, HEAD_TITLES[culture], args.out, `${culture}-${vp.width}-title`);
 
       if ((await cdp.evaluate(listScroll(0.85))) === null) {
         fail(`${label}: no pantheon list names found`);
@@ -384,7 +503,20 @@ try {
 
     // The day page: the culture's name above the decree.
     await navigate(cdp, new URL("/?culture=egypt", args.base).toString());
-    await checkIntro(cdp, `day page @${vp.width} head`, [1200], args.out, `day-${vp.width}-head`);
+    await checkTitle(cdp, `day page @${vp.width} title`, 1, args.out, `day-${vp.width}-title`, false);
+
+    // No JavaScript: the layout's noscript style shows the title's Latin form.
+    await cdp.send("Emulation.setScriptExecutionDisabled", { value: true });
+    await navigate(cdp, new URL("/voices/egypt", args.base).toString());
+    const noJs = await cdp.evaluate(TITLE_PROBE);
+    const noscriptStyled = await cdp.evaluate(`document.querySelector("noscript style") !== null`);
+    if (!noscriptStyled) fail(`egypt @${vp.width} no js: the noscript style did not render`);
+    if (noJs.length !== HEAD_TITLES.egypt) fail(`egypt @${vp.width} no js: ${noJs.length} titles, expected ${HEAD_TITLES.egypt}`);
+    for (const n of noJs) {
+      if (n.reveal !== null || n.latin < 0.99 || n.script > 0.01) fail(`egypt @${vp.width} no js: "${n.text}" reveal ${n.reveal} latin ${n.latin} script ${n.script}`);
+    }
+    await cdp.send("Emulation.setScriptExecutionDisabled", { value: false });
+    console.log(`egypt @${vp.width} no js: ${noJs.length} title(s) Latin, noscript style ${noscriptStyled ? "rendered" : "missing"}`);
 
     // The culture picker on /welcome: five large names, staggered.
     await navigate(cdp, new URL("/welcome", args.base).toString());
@@ -401,8 +533,8 @@ try {
     const layers = reduced.names.filter((n) => n.layerShown).length;
     if (swapped > 0) fail(`egypt @${vp.width} reduced motion: ${swapped} names carry data-reveal`);
     if (layers > 0) fail(`egypt @${vp.width} reduced motion: ${layers} script layers shown`);
-    for (const n of await cdp.evaluate(INTRO_PROBE)) {
-      if (n.latin < 0.99) fail(`egypt @${vp.width} reduced motion: intro "${n.text}" not Latin at once (${n.latin})`);
+    for (const n of await cdp.evaluate(TITLE_PROBE)) {
+      if (n.reveal !== null || n.latin < 0.99 || n.script > 0.01) fail(`egypt @${vp.width} reduced motion: title "${n.text}" reveal ${n.reveal} latin ${n.latin} script ${n.script}`);
     }
     console.log(`egypt @${vp.width} reduced motion: ${reduced.names.length} names, ${swapped} swapped, ${layers} layers shown`);
   }
