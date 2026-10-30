@@ -56,3 +56,46 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   `.superpowers/sdd/2026-09-29-planned-work-closeout/progress.md` and the task reports.
 - Composition: `web/src/lib/decree.ts`, `figureReading.ts`; banks in `web/src/data/`, mirrored
   to Android by `web/scripts/gen-android-*.mjs`. Script forms: `web/src/data/scriptForms.ts`.
+
+## Added 2026-10-29: script name on the large title (built)
+
+- FACT (Matthew's popup answer, 2026-10-29, recorded in worktree `astra-antiqua-design-rounds-a1291d`'s
+  HANDOFF): "Script until scrolled": the title name is script from the first paint with no Latin
+  flash, Latin when scrolled into the middle band or hovered.
+- FACT (this branch, `claude/large-title-script-band-rule-038769`): `ScriptName` takes `scriptFirst`.
+  The class `script-name--script-first` paints the script before hydration; after mount the name reads
+  `data-reveal="script"` and the band's verdict waits for the reader's first scroll, then every crossing
+  applies; hover shows Latin as on any name the band has not reached; reduced motion and a page with no
+  JavaScript (noscript style in `web/src/app/layout.tsx`) show Latin. `NaveHead`'s culture title and the
+  voices page headline use it. The 1.2 s intro stays on the culture picker only (`PICKER_INTRO_MS` in
+  `CultureSwitch.tsx`); `CULTURE_NAME_INTRO_MS` is gone.
+- FACT (headless Chrome, `web/scripts/check-script-reveal.mjs`, now at 1280x800, 390x844 and 375x740,
+  `--viewport WxH` to pick one): at 390x844 the voices title sits inside the band at the top of the page
+  (y 320 to 364, band 253 to 591), so it turns Latin on the first scroll and back to script about 110 px
+  down; the day page's title sits above the band (159 to 203) and stays script until hovered, like the
+  culture chip. Under the plain band rule the voices title would have resolved before any scroll, which
+  is why the first scroll gates it.
+- INFERENCE: Android's title still holds its script 1.2 s then fades (`Shell.kt`,
+  `ScriptReveal.INTRO_HOLD_MILLIS`); the same change there waits on Matthew's word.
+- FACT (traced in headless Chrome, this session): the picker intro on `/welcome` sometimes never showed
+  under the dev server: a second stylesheet arrives 60 to 80 ms in and the intro animations are
+  cancelled and re-created, and when hydration lands in that frame `ScriptName`'s check for a running
+  animation found none and dropped the intro class for good (stack: `finishIntro` from the effect).
+  Pre-existing path; fixed by finishing the intro at hydration only once the hold delay has elapsed
+  since the page started, since before that the intro cannot have ended and its own `animationend`
+  finishes it. Three runs against `master` did not hit the frame; this worktree's server hit it in
+  about half its runs.
+- FACT (review, one Opus reviewer and two Sonnet refuters per finding, 2026-10-29): five Minors, none
+  blocking. Fixed: a scroll before hydration or a restored scroll position counts as scrolled (the hold
+  starts only at scrollY 0); a scroll event that leaves the page at the top (the router's scroll to the
+  top on navigation) does not release it; a hold the reader released survives a re-run of the effect
+  (culture switched in place via the chip). The check now counts the first-paint and no-JS records.
+  Deferred: when JavaScript is on but the bundle never hydrates (chunk failure, a blocker on
+  `/_next/static`), the title stays script with Latin on hover only; a CSS fallback that fades to Latin
+  after a long unhydrated wait would cover it, at the cost of a snap back on a very slow load.
+- FACT (GitHub, 2026-10-30): PR #8 opens this branch against `master` (commit 94136a1). Its `web`
+  check did not start: zero steps, the same billing annotation as item 2 above. Every CI step passed
+  locally at 94136a1 (tsc, eslint, gates, 110 unit tests, the reveal check at three viewports).
+- FACT (Matthew, 2026-10-30): merge PR #8 on the local verification; the Actions check stays
+  unstarted because he does not pay for that feature. Same ground applies to later PRs until he says otherwise.
+- Pending: Round 7 of the glass design on Matthew's word.

@@ -20,14 +20,24 @@ export type ScriptNameProps = ScriptNameKey & {
   upper?: boolean;
   /**
    * Milliseconds to hold the script form after the page paints before it
-   * resolves to Latin; the band rule takes over afterwards. For a name near
-   * the top of the page, which would otherwise sit above the band in script.
+   * resolves to Latin; the band rule takes over afterwards. For the culture
+   * picker, whose list does not scroll.
    */
   intro?: number;
+  /**
+   * Script until scrolled (owner, 2026-10-29): the script form paints from
+   * the first frame, before hydration, and holds until the reader scrolls;
+   * from then on the band rule applies as for every other name. Hover shows
+   * the Latin form meanwhile, as it does for any name the band has not
+   * reached. For the large culture title, which sits in or above the band
+   * at load and would otherwise resolve before the reader has looked at it.
+   */
+  scriptFirst?: boolean;
   className?: string;
 };
 
 const INTRO_CLASS = "script-name--intro";
+const SCRIPT_FIRST_CLASS = "script-name--script-first";
 
 /**
  * A deity or culture name in its culture's writing that resolves to the
@@ -48,9 +58,20 @@ const INTRO_CLASS = "script-name--intro";
  * it, and fades to Latin, so it runs before hydration and without
  * JavaScript too. When it ends (or the reader hovers or focuses the name)
  * the intro class comes off, and from then on each band crossing applies.
+ *
+ * With scriptFirst, the class alone shows the script before hydration (the
+ * root layout's noscript style restores Latin for a page with no
+ * JavaScript). After mount the element reads data-reveal="script" and the
+ * band's verdicts wait; the reader's first scroll releases them, and each
+ * crossing applies from then on. A page that already sits below the top
+ * when the effect runs (a scroll before hydration, a restored position)
+ * counts as scrolled, as does a hold released before the effect re-ran
+ * (the culture switched in place); a scroll event that leaves the page at
+ * the top, such as the router's scroll to the top on navigation, does not.
  */
-export function ScriptName({ culture, upper = false, intro, className, ...key }: ScriptNameProps) {
+export function ScriptName({ culture, upper = false, intro, scriptFirst = false, className, ...key }: ScriptNameProps) {
   const ref = useRef<HTMLSpanElement | null>(null);
+  const releasedRef = useRef(false);
   const [lang, setLang] = useState<ReaderLanguage>("en");
   const reducedMotion = usePrefersReducedMotion();
   const form = scriptFormFor(culture, key as ScriptNameKey);
@@ -75,23 +96,46 @@ export function ScriptName({ culture, upper = false, intro, className, ...key }:
       latinLayer?.addEventListener("animationend", finishIntro);
       hoverTarget.addEventListener("pointerenter", finishIntro);
       hoverTarget.addEventListener("focusin", finishIntro);
-      // Hydration can land after the CSS intro has ended, when animationend has already fired.
+      // Hydration can land after the CSS intro has ended, when animationend has already
+      // fired: nothing runs on the layer any more, and the hold has elapsed since the page
+      // started. Before the hold has elapsed the intro cannot have ended, whatever the layer
+      // reports: a stylesheet arriving during hydration cancels and restarts the animations
+      // for a frame, and finishing then would skip the intro.
       const running = latinLayer?.getAnimations().some((a) => a.playState === "running") ?? false;
-      if (!running) finishIntro();
+      if (!running && performance.now() > (intro ?? 0)) finishIntro();
     }
+    // Script until scrolled: the band's verdict waits in `pending` until the reader scrolls.
+    let held = scriptFirst && !releasedRef.current && window.scrollY === 0;
+    let pending: boolean | null = null;
+    if (held) el.dataset.reveal = "script";
+    const release = () => {
+      held = false;
+      releasedRef.current = true;
+      window.removeEventListener("scroll", onScroll);
+      if (pending !== null) el.dataset.reveal = pending ? "latin" : "script";
+    };
+    const onScroll = () => {
+      if (window.scrollY !== 0) release();
+    };
+    if (held) window.addEventListener("scroll", onScroll, { passive: true });
     const stop = observeBand(el, (inBand) => {
       // During the intro the band waits; afterwards only a crossing applies.
       if (el.classList.contains(INTRO_CLASS)) return;
+      if (held) {
+        pending = inBand;
+        return;
+      }
       el.dataset.reveal = inBand ? "latin" : "script";
     });
     return () => {
       stop();
+      window.removeEventListener("scroll", onScroll);
       latinLayer?.removeEventListener("animationend", finishIntro);
       hoverTarget.removeEventListener("pointerenter", finishIntro);
       hoverTarget.removeEventListener("focusin", finishIntro);
       delete el.dataset.reveal;
     };
-  }, [script, reducedMotion]);
+  }, [script, reducedMotion, scriptFirst, intro]);
 
   const latin = latinFor(form, lang, upper);
 
@@ -105,7 +149,7 @@ export function ScriptName({ culture, upper = false, intro, className, ...key }:
   return (
     <span
       ref={ref}
-      className={cn("script-name", intro !== undefined && INTRO_CLASS, className)}
+      className={cn("script-name", intro !== undefined && INTRO_CLASS, scriptFirst && SCRIPT_FIRST_CLASS, className)}
       data-intro={intro === undefined ? undefined : ""}
       style={introStyle}
     >

@@ -17,7 +17,7 @@ import { DEITY_MATRIX } from "@/data/deities";
 import { ASPECT_RULINGS } from "@/data/aspectRulings";
 import { ASPECT_RULES, type AspectKind } from "@/data/sampleChart";
 import { NaveShell } from "@/components/chrome/NaveShell";
-import { CULTURE_NAME_INTRO_MS, NaveHead } from "@/components/chrome/NaveHead";
+import { NaveHead } from "@/components/chrome/NaveHead";
 import { CultureEmblem } from "@/components/chrome/CultureEmblem";
 import { IconTile, type IconTileMark } from "@/components/chrome/IconTile";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
@@ -125,7 +125,7 @@ export default async function VoiceCulturePage({ params }: VoicePageProps) {
             <CultureEmblem culture={culture} size={72} decorative className="text-accent" />
           }
         >
-          <ScriptName culture={culture} heading="culture" upper intro={CULTURE_NAME_INTRO_MS} />
+          <ScriptName culture={culture} heading="culture" upper scriptFirst />
         </NaveHead>
 
         <div className="mx-auto flex max-w-[560px] flex-col gap-5">

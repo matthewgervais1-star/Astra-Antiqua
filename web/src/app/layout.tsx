@@ -148,6 +148,11 @@ export default function RootLayout({
       className={`${cinzel.variable} ${spectral.variable} ${spectralSc.variable} ${plexMono.variable} ${notoHieroglyphs.variable} ${notoUgaritic.variable} ${notoPhoenician.variable} ${notoSymbols.variable} ${gfsDidot.variable} ${gfsDidotExt.variable}`}
     >
       <body className="flex min-h-screen flex-col text-bone">
+        {/* A script-first ScriptName (the large culture title) paints its script before hydration;
+            with no JavaScript the band never runs, so the Latin form shows instead. */}
+        <noscript>
+          <style>{`.script-name--script-first:not([data-reveal])>.script-name__latin{opacity:1}.script-name--script-first:not([data-reveal])>.script-name__script{opacity:0}`}</style>
+        </noscript>
         <AuthProvider>
           <PantheonProvider>
             <PantheonBodyAttribute />
