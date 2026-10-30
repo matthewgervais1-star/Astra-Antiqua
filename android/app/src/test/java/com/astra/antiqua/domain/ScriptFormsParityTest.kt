@@ -49,7 +49,7 @@ class ScriptFormsParityTest {
         val el = ScriptForms.deity(AncientCulture.CANAAN, Planet.SATURN)
         assertEquals("El", el.en)
         assertEquals("𐎛𐎍", el.script)
-        pin(ScriptForm(null, "Canaan", "Canaan"), ScriptForms.cultureName(AncientCulture.CANAAN))
+        pin(ScriptForm("𐎋𐎐𐎓𐎐𐎊", "Canaan", "Canaan"), ScriptForms.cultureName(AncientCulture.CANAAN))
         pin(
             ScriptForm("𐎔𐎃𐎗𐎟𐎎𐎓𐎄", "THE COUNCIL OF EL", "LE CONSEIL D’EL"),
             ScriptForms.institution(AncientCulture.CANAAN),
@@ -86,7 +86,7 @@ class ScriptFormsParityTest {
         val web = File("../../web/src/data/scriptForms.ts").readText()
         val kotlin = File("src/main/java/com/astra/antiqua/domain/ScriptForms.kt").readText()
         val scripts = Regex("ScriptForm\\(\"([^\"]+)\"").findAll(kotlin).map { it.groupValues[1] }.toList()
-        assertEquals(56, scripts.size)
+        assertEquals(57, scripts.size)
         for (s in scripts) assertTrue("$s is not in scriptForms.ts", web.contains("script: \"$s\""))
         val webScripts = Regex("script: \"([^\"]+)\"").findAll(web).count()
         assertEquals("web and Android carry the same number of script forms", webScripts, scripts.size)

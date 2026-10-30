@@ -103,4 +103,13 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   voices titles script at first paint and held, Latin on hover and after the first scroll, the day
   page title script after the scroll, Latin with no JavaScript, picker and reduced motion clean. Canaan
   reports no script title (its name carries no attested form), so its check records none.
+- FACT (Matthew's popup answer, 2026-10-30): Canaan's title takes the Ugaritic gentilic knʿny
+  (𐎋𐎐𐎓𐎐𐎊), KTU 4.96:7 (= UT 311:7, yʿl.knʿny; Rainey, BASOR 304, 1996), as a second ruled
+  exception beside Yam and Mot: it reads "a Canaanite", not the land kn'n, which no Ugaritic
+  alphabetic text spells (RS 20.182 has it in syllabic Akkadian). The Phoenician knʿn of the Beirut
+  Laodicea bronzes was offered and declined (Carthage's block). This supersedes the line above that
+  said Canaan carries no attested form. Built in `web/src/data/scriptForms.ts`, Android
+  `ScriptForms.kt` regenerated (57 script forms on both sides), the reveal check expects a title on
+  every culture and five picker intros; web 110/0, Android script tests 23/0, the check passes at
+  1280x800, 390x844 and 375x740. Android's title now shows the script too, under its own hold-and-fade.
 - Pending: Round 7 of the glass design on Matthew's word.

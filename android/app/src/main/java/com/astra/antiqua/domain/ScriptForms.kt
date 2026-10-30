@@ -87,7 +87,7 @@ object ScriptForms {
     fun cultureName(culture: AncientCulture): ScriptForm = when (culture) {
         AncientCulture.EGYPT -> ScriptForm("𓆎𓅓𓏏𓊖", "Egypt", "Égypte")
         AncientCulture.GREECE -> ScriptForm("Ἑλλάς", "Greece", "Grèce")
-        AncientCulture.CANAAN -> ScriptForm(null, "Canaan", "Canaan")
+        AncientCulture.CANAAN -> ScriptForm("𐎋𐎐𐎓𐎐𐎊", "Canaan", "Canaan")
         AncientCulture.CARTHAGE -> ScriptForm("𐤒𐤓𐤕𐤇𐤃𐤔𐤕", "Carthage", "Carthage")
         AncientCulture.ROME -> ScriptForm("ROMA", "Rome", "Rome")
     }

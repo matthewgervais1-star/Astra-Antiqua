@@ -8,9 +8,12 @@ import type { Culture, Planet } from "@/data/cultures";
  * English. A name with no citable spelling carries script: null and a note
  * saying why, and the reveal shows no effect for it.
  *
- * One ruled exception (owner, 2026-10-20): Carthage's Yam and Mot carry the
+ * Two ruled exceptions. Owner, 2026-10-20: Carthage's Yam and Mot carry the
  * Phoenician alphabet's rendering of the Northwest Semitic names ym and mt,
- * which no Punic text spells; their notes say so.
+ * which no Punic text spells; their notes say so. Owner, 2026-10-30: Canaan's
+ * own name carries the gentilic knʿny (a Canaanite) from KTU 4.96:7, the one
+ * Ugaritic alphabetic spelling of the name; the land kn'n is attested from
+ * Ugarit only in syllabic Akkadian (RS 20.182), outside the Ugaritic block.
  *
  * Blocks: Egypt, Egyptian Hieroglyphs U+13000-U+1342F. Greece, Greek and
  * Greek Extended, polytonic as the texts print it. Canaan, Ugaritic
@@ -382,11 +385,11 @@ export const CULTURE_NAME_FORMS: Readonly<Record<Culture, ScriptForm>> = {
     note: "The script reads Hellas.",
   },
   canaan: {
-    script: null,
+    script: "𐎋𐎐𐎓𐎐𐎊",
     en: "Canaan",
     fr: "Canaan",
-    source: "No citable Ugaritic spelling of kn'n or kn'ny (checked 2026-10-20)",
-    note: "A script form must read what it resolves to, so ugrt (Ugarit) cannot stand for Canaan. The gentilic kn'ny is reported in an administrative text, but its KTU number and spelling could not be confirmed, so the heading has no script form.",
+    source: "KTU 4.96:7 (= UT 311:7, yʿl.knʿny), a list of traders on royal estates; Rainey, Who Is a Canaanite?, BASOR 304 (1996)",
+    note: "Ruled exception (owner, 2026-10-30): the script reads knʿny, the gentilic a Canaanite, not the land kn'n, which no Ugaritic alphabetic text spells (RS 20.182 has it in syllabic Akkadian). The one attested Ugaritic spelling of the name stands for the heading. ugrt (Ugarit) cannot stand for Canaan.",
   },
   carthage: {
     script: "𐤒𐤓𐤕𐤇𐤃𐤔𐤕",

@@ -60,7 +60,6 @@ test("a name with no attested script falls back to Latin alone", () => {
   for (const [culture, key] of [
     ["egypt", { planet: "mercury" }],
     ["egypt", { planet: "mars" }],
-    ["canaan", { heading: "culture" }],
     ["carthage", { heading: "institution" }],
   ] as const) {
     const form = scriptFormFor(culture, key);

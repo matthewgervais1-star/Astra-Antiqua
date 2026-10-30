@@ -275,10 +275,9 @@ async function checkTitle(cdp, label, count, out, prefix, serverRendered = true)
   console.log(`${label}: ${held.length} title(s) script at first paint and held${paint}; ${where || "none"}; scrollWidth ${w2.scrollWidth}/${w2.innerWidth}`);
 }
 
-// The stagger runs by list position; Canaan (third) has no script form, so no intro.
-const PICKER_DELAYS = [1200, 1400, 1800, 2000];
-// Canaan's own name has no attested script form, so its head carries no title.
-const HEAD_TITLES = { egypt: 1, greece: 1, canaan: 0, carthage: 1, rome: 1 };
+// The stagger runs by list position; every culture name has a script form.
+const PICKER_DELAYS = [1200, 1400, 1600, 1800, 2000];
+const HEAD_TITLES = { egypt: 1, greece: 1, canaan: 1, carthage: 1, rome: 1 };
 
 function parseArgs(argv) {
   const opts = { base: null, out: null, chrome: null, viewports: [] };

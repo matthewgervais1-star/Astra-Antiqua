@@ -44,7 +44,6 @@ class ScriptRevealTest {
     @Test
     fun aNameWithNoAttestedSpellingHasNoScriptLayer() {
         assertNull(ScriptReveal.scriptFor(ScriptForms.deity(AncientCulture.EGYPT, Planet.MERCURY)))
-        assertNull(ScriptReveal.scriptFor(ScriptForms.cultureName(AncientCulture.CANAAN)))
         assertNull(ScriptReveal.scriptFor(ScriptForms.institution(AncientCulture.CARTHAGE)))
         assertNull(ScriptReveal.scriptFor(ScriptForm("", "x", "x")))
         assertEquals("𓂋𓂝𓇳", ScriptReveal.scriptFor(ScriptForms.deity(AncientCulture.EGYPT, Planet.SUN)))
