@@ -96,4 +96,6 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 - FACT (GitHub, 2026-10-30): PR #8 opens this branch against `master` (commit 94136a1). Its `web`
   check did not start: zero steps, the same billing annotation as item 2 above. Every CI step passed
   locally at 94136a1 (tsc, eslint, gates, 110 unit tests, the reveal check at three viewports).
-- Pending: Matthew reviews and merges PR #8 once billing is fixed; Round 7 of the glass design on his word.
+- FACT (Matthew, 2026-10-30): merge PR #8 on the local verification; the Actions check stays
+  unstarted because he does not pay for that feature. Same ground applies to later PRs until he says otherwise.
+- Pending: Round 7 of the glass design on Matthew's word.
