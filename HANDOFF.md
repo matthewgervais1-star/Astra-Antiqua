@@ -98,4 +98,9 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   locally at 94136a1 (tsc, eslint, gates, 110 unit tests, the reveal check at three viewports).
 - FACT (Matthew, 2026-10-30): merge PR #8 on the local verification; the Actions check stays
   unstarted because he does not pay for that feature. Same ground applies to later PRs until he says otherwise.
+- FACT (headless Chrome, 2026-10-30, worktree `large-title-script-band-rule-15a0a2` fast-forwarded to
+  `master` 5cd7669): `check-script-reveal.mjs --viewport 390x844` passes again on the merged code: five
+  voices titles script at first paint and held, Latin on hover and after the first scroll, the day
+  page title script after the scroll, Latin with no JavaScript, picker and reduced motion clean. Canaan
+  reports no script title (its name carries no attested form), so its check records none.
 - Pending: Round 7 of the glass design on Matthew's word.
