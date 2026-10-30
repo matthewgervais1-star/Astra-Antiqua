@@ -93,4 +93,7 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   Deferred: when JavaScript is on but the bundle never hydrates (chunk failure, a blocker on
   `/_next/static`), the title stays script with Latin on hover only; a CSS fallback that fades to Latin
   after a long unhydrated wait would cover it, at the cost of a snap back on a very slow load.
-- Pending: Round 7 of the glass design on Matthew's word.
+- FACT (GitHub, 2026-10-30): PR #8 opens this branch against `master` (commit 94136a1). Its `web`
+  check did not start: zero steps, the same billing annotation as item 2 above. Every CI step passed
+  locally at 94136a1 (tsc, eslint, gates, 110 unit tests, the reveal check at three viewports).
+- Pending: Matthew reviews and merges PR #8 once billing is fixed; Round 7 of the glass design on his word.
