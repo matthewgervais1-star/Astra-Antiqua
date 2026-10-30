@@ -98,4 +98,8 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   locally at 94136a1 (tsc, eslint, gates, 110 unit tests, the reveal check at three viewports).
 - FACT (Matthew, 2026-10-30): merge PR #8 on the local verification; the Actions check stays
   unstarted because he does not pay for that feature. Same ground applies to later PRs until he says otherwise.
+- FACT (GitHub, 2026-10-30, on Matthew's word): PR #8 merged as 5cd7669. The four Actions workflows
+  (`android.yml`, `ios.yml`, `swift.yml`, `web.yml`) are disabled from the Actions tab, so PRs show no
+  check. Consequence: the MAUI and SwiftUI iOS heads build only in CI and cannot build until a workflow
+  is re-enabled (Actions tab, "Enable workflow"); web, Android and dotnet checks run locally as before.
 - Pending: Round 7 of the glass design on Matthew's word.
