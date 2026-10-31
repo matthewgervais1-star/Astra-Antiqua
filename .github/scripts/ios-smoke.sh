@@ -36,18 +36,33 @@ cat "$OUT/logs/app.txt"
 
 xcrun simctl list runtimes > "$OUT/logs/runtimes.txt"
 cat "$OUT/logs/runtimes.txt"
-UDID=$(xcrun simctl list devices available -j | MAJOR="$MAJOR" python3 -c '
+# The glass design is drawn on a 390x844 frame, the iPhone 16e's screen in
+# points, so the screens are photographed on that phone when the runtime has
+# one (created if the runtime lists the type but no device), else on the
+# runtime's first iPhone.
+PHONE="${SMOKE_PHONE:-iPhone 16e}"
+PICK=$(xcrun simctl list devices available -j | MAJOR="$MAJOR" PHONE="$PHONE" python3 -c '
 import json, os, sys
-major = os.environ["MAJOR"]
+major, phone = os.environ["MAJOR"], os.environ["PHONE"]
 devices = json.load(sys.stdin)["devices"]
 runtimes = sorted((k for k in devices if (".iOS-" + major + "-") in k and devices[k]),
                   key=lambda k: [int(x) for x in k.rsplit("iOS-", 1)[1].split("-")])
 if not runtimes:
     sys.exit("no iOS " + major + " simulator on this runner")
 phones = [d for d in devices[runtimes[-1]] if d["name"].startswith("iPhone")]
-print(phones[0]["udid"])
-print(runtimes[-1] + " " + phones[0]["name"], file=sys.stderr)
+wanted = [d for d in phones if d["name"] == phone]
+print(runtimes[-1], (wanted or [{"udid": "-"}])[0]["udid"], phones[0]["udid"])
 ') || exit 1
+read -r RUNTIME UDID FIRST <<< "$PICK"
+if [ "$UDID" = "-" ]; then
+  TYPE="com.apple.CoreSimulator.SimDeviceType.$(echo "$PHONE" | tr ' ' '-')"
+  UDID=$(xcrun simctl create "$PHONE" "$TYPE" "$RUNTIME" 2>"$OUT/logs/create.txt") || UDID=""
+  if [ -z "$UDID" ]; then
+    echo "no $PHONE on $RUNTIME ($(tr '\n' ' ' < "$OUT/logs/create.txt")); using the first iPhone, not 390x844"
+    UDID="$FIRST"
+  fi
+fi
+xcrun simctl list devices | grep "$UDID" | tee "$OUT/logs/device.txt"
 echo "simulator: $UDID"
 xcrun simctl boot "$UDID" || true
 xcrun simctl bootstatus "$UDID" -b || exit 1
@@ -127,6 +142,16 @@ shot 15-learn-aspects learn-aspects 8
 shot 16-forecast forecast 30
 shot 17-synastry synastry 8
 shot 18-more more 8
+
+# The Liquid Glass chrome (Phase B, step 1): at rest, over a test pattern,
+# the canvas approximation of the glass, the proposed pressed states, and a
+# pushed screen. Each prints its placement for check-placement.py.
+shot 20-chrome chrome 8
+shot 21-chrome-scrolled chrome-scrolled 8
+shot 22-chrome-approx chrome-approx 8
+shot 23-chrome-pressed chrome-pressed 8
+shot 24-chrome-pushed chrome-pushed 8
+shot 25-chrome-pushed-pressed chrome-pushed-pressed 8
 
 if [ "${#FAILURES[@]}" -gt 0 ]; then
   echo "Failed screens on iOS $MAJOR: ${FAILURES[*]}"

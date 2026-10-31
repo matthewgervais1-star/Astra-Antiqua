@@ -26,6 +26,7 @@
 		A75EEAEF7B7AC30D4A024397 /* PlacementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AE57556791954C112AC6E3 /* PlacementView.swift */; };
 		D20D12F0B02F9847C53959C7 /* AstraAntiquaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CDFB96FBF12C98AA2597C9 /* AstraAntiquaApp.swift */; };
 		DD16FF21896B652580D4C875 /* GlyphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D887920D91E303A84632F1 /* GlyphView.swift */; };
+		A1C70E5B2F4D4C1E9B3A0001 /* Glass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C70E5B2F4D4C1E9B3A0002 /* Glass.swift */; };
 		DF08F2A982134BF2EC3288B2 /* AstraCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8BFB03E4A0DCB2EA9EB4DA51 /* AstraCore */; };
 		E151D41FAB33079813BCB36B /* ScreenshotMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E42C54305A6D77466B7136F /* ScreenshotMode.swift */; };
 		E2193137CE96086EB4B5707D /* BirthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577D118E96920217B75FB194 /* BirthView.swift */; };
@@ -45,6 +46,7 @@
 		43F42285167B807060D36DE5 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
 		510F4FB16F716A93E6982533 /* font */ = {isa = PBXFileReference; lastKnownFileType = folder; name = font; path = ../android/app/src/main/res/font; sourceTree = SOURCE_ROOT; };
 		56D887920D91E303A84632F1 /* GlyphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlyphView.swift; sourceTree = "<group>"; };
+		A1C70E5B2F4D4C1E9B3A0002 /* Glass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Glass.swift; sourceTree = "<group>"; };
 		577D118E96920217B75FB194 /* BirthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthView.swift; sourceTree = "<group>"; };
 		64EC0A7D67F138F21165A18B /* Words.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
 		6DE4D28506273F41E339C630 /* Ink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ink.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				43F42285167B807060D36DE5 /* Components.swift */,
+				A1C70E5B2F4D4C1E9B3A0002 /* Glass.swift */,
 				56D887920D91E303A84632F1 /* GlyphView.swift */,
 				6DE4D28506273F41E339C630 /* Ink.swift */,
 				64EC0A7D67F138F21165A18B /* Words.swift */,
@@ -287,6 +290,7 @@
 				3BDC6B111703EA3EA7685BD5 /* CultureView.swift in Sources */,
 				4F89DC3FB103A2A66BAB2A02 /* DayView.swift in Sources */,
 				1EEDCFB93BA2CF0F211FAD7E /* ForecastView.swift in Sources */,
+				A1C70E5B2F4D4C1E9B3A0001 /* Glass.swift in Sources */,
 				DD16FF21896B652580D4C875 /* GlyphView.swift in Sources */,
 				6E011C1B1471678211128209 /* HorizonsView.swift in Sources */,
 				993F24DE02550FA87A660F2E /* Ink.swift in Sources */,

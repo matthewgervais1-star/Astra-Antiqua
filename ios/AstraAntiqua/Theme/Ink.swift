@@ -4,10 +4,11 @@ import SwiftUI
 /// "The Instrument in the Temple": one flat ground and one muted accent per
 /// culture (shared/content/palettes.json), bone and prose inks, two signals,
 /// 1px rules. The same values web's tokens and Android's theme use. No
-/// gradients, no glass, no glow.
+/// gradients or glow on content; the navigation layer's glass is in Glass.swift.
 enum Ink {
     // Faces, by PostScript name (the same files Android ships).
     static let display = "Cinzel-Regular"
+    static let displayMedium = "Cinzel-Medium"
     static let displayStrong = "Cinzel-SemiBold"
     static let prose = "Spectral-Regular"
     static let proseItalic = "Spectral-Italic"

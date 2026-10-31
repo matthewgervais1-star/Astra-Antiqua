@@ -29,7 +29,9 @@ struct RootView: View {
     @Environment(AppState.self) private var state
 
     var body: some View {
-        if state.birth == nil && state.culture == nil {
+        if let screen = ScreenshotMode.requested, let view = ScreenshotMode.fullScreen(for: screen) {
+            view
+        } else if state.birth == nil && state.culture == nil {
             NavigationStack { CultureView(onboarding: true) }
         } else {
             MainTabs()

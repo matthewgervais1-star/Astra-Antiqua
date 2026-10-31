@@ -5,8 +5,10 @@
 #   ios27-app  — the SwiftUI app on GitHub's Xcode 27 image: builds the
 #                committed ios/AstraAntiqua.xcodeproj for the simulator with
 #                Xcode 27.1, boots an iOS 27 iPhone simulator, photographs
-#                every screen (.github/scripts/ios-smoke.sh), then checks the
-#                committed project still matches ios/project.yml.
+#                every screen (.github/scripts/ios-smoke.sh), checks the glass
+#                screens' placement against the canvas tables in
+#                ios/placement/ (.github/scripts/check-placement.py), then
+#                checks the committed project still matches ios/project.yml.
 name: swift
 
 on:
@@ -17,6 +19,7 @@ on:
       - "dotnet/AstraAntiqua.Core.Tests/TestData/**"
       - ".github/workflows/swift.yml"
       - ".github/scripts/ios-smoke.sh"
+      - ".github/scripts/check-placement.py"
       - "android/app/src/main/res/font/**"
   workflow_dispatch:
 
@@ -107,3 +110,9 @@ jobs:
             ios/AstraAntiqua.xcodeproj
             ios/AstraAntiqua/Info.plist
           if-no-files-found: warn
+      # Last, so a placement miss fails the job without stopping the uploads
+      # above. It prints its table of canvas against app in the step's log.
+      - name: Check the glass placement against the canvas (to within a point)
+        if: always()
+        shell: bash
+        run: python3 .github/scripts/check-placement.py smoke ios/placement/*.json
