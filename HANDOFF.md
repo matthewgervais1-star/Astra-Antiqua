@@ -132,4 +132,8 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   and scrolled every variant holds 5.4 or better.
 - FACT (Matthew's popup, 2026-10-31): keep Kyant; keep the canvas fill .80 over bright areas. Haze removed
   (its comparison test stays in commit 432bf29).
-- Pending: step 2, Sky Day, on Matthew's word; push and PR on his word.
+- FACT (Matthew, 2026-10-31, "go ahead"): step 2 built. Route.DAY opens Sky Day on the glass chrome
+  (`ui/screens/SkyDayScreen.kt`, `domain/SkyDay.kt`); chrome within 1 dp, every gap between blocks equals
+  the board's, heights follow the web's longer copy. Review fixes in. Local: 241 tests, 0 failures.
+  Record: `docs/design/android-glass.md` (step 2), renders `docs/design/android-glass/step2/`.
+- Pending: Matthew's word on Sky Day; step 3 (Week with the Moon) after it; push and PR on his word.

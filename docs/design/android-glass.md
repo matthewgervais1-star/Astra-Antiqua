@@ -172,3 +172,76 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
   `dev.chrisbanes.haze:haze` dependency are gone; `GlassBackdrop` stays with Kyant as its one
   implementation. The sheets and `contrast.txt` in `docs/design/android-glass/compare/` stay as the
   record; commit 432bf29 holds the test that made them.
+
+## Step 2, Sky Day (2026-10-31)
+
+- FACT (Matthew, 2026-10-31, in this session): "go ahead", after step 1 and the library choice.
+- FACT (`docs/design/prompts/ios-glass-phase-b-step2.md` on branch `claude/ios-glass-phase-b-881817`):
+  Matthew's iPhone rulings for Sky Day: the board's sections in its order filled with the web's
+  composition (kicker with the institution, headline, evidence line, paragraph; the "where the day
+  falls" contacts for the chart rows; the web's long-transit pick); the board's forms where the web
+  has no string (kicker date WED 21 OCT 2026, ON YOUR CHART TODAY, the rows' data lines); the votive,
+  lists, dive deeper and come-back line off Sky Day. INFERENCE: they bind Android the same way.
+- FACT (`domain/SkyDay.kt`): `SkyDayComposer` composes the page. The decree is Android's port of the
+  web's `composeDayPage` (`DayDecreeComposer`, read at 00:00 UTC). The Moon line ports
+  `web/src/lib/moonPhase.ts` (phase from the geocentric ecliptic longitudes, lit fraction
+  (1 - cos) / 2, the next quarter through the library's `searchMoonPhase`). The season is
+  `SkyEvents.currentSeason`. Each contact row ports `dayPressure` in `web/src/lib/dayPressure.ts`:
+  the group's lead by `rankContacts` (already ported in `DiveDeeper.kt`) and the web's sentence
+  "{god} {verb} your {god} in the {ordinal}. It touches {arena}." The long transit ports
+  `buildLongTransit` (`web/src/components/home/buildHomeBundle.ts`): of the open spans the closest
+  to exact now, else the next to open.
+- FACT (same file): two departures from the web. Groups with no contact are left out (the board
+  lists contacts only; the web prints "Nothing exact touches your fourth."). The long transit is
+  walked against the Sun, Moon and rising, as Android's Transits tab is; the web adds the midheaven,
+  which that tab does not list, so a card could not open it.
+- FACT (`SkyDayTest`, smoke birth Rome 1990-01-15 04:30 UTC, sample 2026-10-21 06:00 UTC, zone
+  Europe/Rome): WAXING GIBBOUS · 74% LIT; next quarter Full Moon 2026-10-26 04:12 UTC (the design
+  record's numbers); SUN IN LIBRA · DAY 29 OF 31. Egypt reads the web's day: "Do not haggle with
+  your beloved as you would over linen.", ISIS □ OSIRIS · 0°25′; four contacts (Mercury sextile
+  Saturn 3.0°, Venus trine Jupiter 0.8°, Sun square Venus 3.3°, Mercury conjunct Pluto 2.9°); long
+  transit jupiter-trine-asc, open, 3 passes, 2026-10-02 to 2027-06-29.
+- FACT (same test): the season counts local calendar days, as the web does; in Montreal (this
+  machine's zone) the same instant reads DAY 30 OF 32, because the Sun entered Libra on 22 Sep there.
+- FACT (`ui/screens/SkyDayScreen.kt`, `MainActivity.kt`): Route.DAY opens Sky Day on `GlassScreen`
+  (SKY lit, DAY lit). The tabs open Route.DAY, Route.TRANSITS, Route.PLACEMENTS and, for MORE,
+  Route.ACCOUNT until step 10 builds More; the horizons open the flat Week, Season and Year; the
+  culture menu opens the Voices list (where the account's "change culture" goes) until the sheet
+  in step 10. The kicker's institution is a `ScriptName`, so the script reveal still runs there.
+  Contact rows take the approved pressed fill P170; the card, a data box, has no pressed state on
+  the canvas and takes none; both draw web's focus outline. `MainDashboardScreen` is no longer
+  routed (its file stays).
+- FACT (`MainActivity.kt`): the system-bar padding moved from one box around the whole app onto the
+  first-run phases and each flat destination (`flat(...)`), so Sky Day paints its ground behind the
+  bars and places its chrome at the larger of the bars and the canvas's 62 and 34.
+- FACT (`SkyDayScreen.kt`): the text takes CSS's line boxes (`LineHeightStyle` centred, untrimmed),
+  so each block's height is its line-height times its lines as on the board; the section labels
+  keep CSS line-height 1 (11 tall). Headlines and the card title are set in their own case.
+- FACT (`SkyDayScreenshotTest`, `docs/design/android-glass/step2/placement.txt`): renders at rest,
+  scrolled 420, at the page's foot and in Rome. Chrome in all four: P1 off 0.9, P2, P3, P17, P20
+  0.0. Content at rest against the board's table: every gap between blocks equals the board's to
+  0.1. Heights differ where the copy differs: P6 headline 110.7 against 70.2 (three lines, the web's
+  sentence), P9 paragraph 270.0 against 89.1 (the web's five sentences against the board's one),
+  P13 and P14 147.7 against 95.3 (the web's longer sentences, two lines each), two more rows
+  (147.7 and 173.3) for the day's four contacts against the board's two, P11 180.3 against 178.4,
+  P16 151.0 against 147.8, P4 18.3 against 17.6 (the script face's line). So every block from P7 on
+  sits lower than the board: P7 by 41.2, P10 by 222.3, P15 by 649.9.
+- FACT (review, one Opus reviewer, 2026-10-31): nothing Critical; the ports match the web (sort keys,
+  house groups, ordinals, the long-transit pick, the moon bands, the Julian-day conversion). Five
+  Important, all fixed in one round: the page dropped its chart rows and the reader's scroll on every
+  return (now kept for the same culture and UTC day); an older load could overwrite a newer one (now
+  cancelled); the glass screen lost its side and cutout insets (`GlassScreen` now reads the system
+  bars and display cutouts on all four sides, not the keyboard); the Method page had no way in once the dashboard left
+  the graph (Sky Day now closes with the app's `MethodFooter`, not on the board); the kicker date named
+  the local day above the UTC day's decree (now UTC, as the web formats it, and the card's months too).
+  Minors fixed: the long-transit pick reads the 00:00 UTC sky as the web's todayChart does; a missing
+  next quarter leaves its line out; cancellation is not logged as a failure; section labels grow with
+  a large font scale; the row's spoken action says "Open Transits".
+- Deferred (Minors): no web golden pins the contacts and the long-transit pick for the sample day (the
+  web side needs an export like `npm run export:goldens`); D-pad focus can scroll a row to sit under the
+  tab bar (needs a bring-into-view inset the height of the chrome).
+- FACT (scoped re-review, Sonnet, 2026-10-31): all five fixes hold; four new Minors, fixed in the second
+  and last round: the keyboard no longer lifts the chrome; a culture change clears the old page first;
+  with no birth record the next return composes again; the section label's comment says its glyphs
+  overflow at large font scales, as CSS line-height 1 does.
+- FACT (local, 2026-10-31): `./gradlew compileDebugSources testDebugUnitTest` 241 tests, 0 failures.

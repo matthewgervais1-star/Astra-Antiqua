@@ -27,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -45,7 +47,7 @@ import com.astra.antiqua.ui.screens.WaitListScreen
 import com.astra.antiqua.ui.screens.CultureSelectionScreen
 import com.astra.antiqua.ui.screens.ForecastScreen
 import com.astra.antiqua.ui.screens.LearnScreen
-import com.astra.antiqua.ui.screens.MainDashboardScreen
+import com.astra.antiqua.ui.screens.SkyDayScreen
 import com.astra.antiqua.ui.screens.MatrixScreen
 import com.astra.antiqua.ui.screens.MethodScreen
 import com.astra.antiqua.ui.screens.OnboardingScreen
@@ -100,7 +102,10 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        Box(modifier = Modifier.safeDrawingPadding()) {
+                        // Glass screens paint their ground behind the system bars and
+                        // place their own chrome against them (GlassScreen); the
+                        // first-run phases and the flat destinations keep inside them.
+                        Box {
                             AnimatedContent(
                                 targetState = currentPhase,
                                 transitionSpec = {
@@ -112,13 +117,13 @@ class MainActivity : ComponentActivity() {
                                 label = "PhaseTransition"
                             ) { phase ->
                                 when (phase) {
-                                    AppPhase.ENGINE_WARMUP -> EngineWarmupScreen()
-                                    AppPhase.CULTURE_SELECTION -> CultureSelectionScreen { culture ->
-                                        viewModel.selectCulture(culture)
+                                    AppPhase.ENGINE_WARMUP -> Box(Modifier.safeDrawingPadding()) { EngineWarmupScreen() }
+                                    AppPhase.CULTURE_SELECTION -> Box(Modifier.safeDrawingPadding()) {
+                                        CultureSelectionScreen { culture -> viewModel.selectCulture(culture) }
                                     }
-                                    AppPhase.ONBOARDING -> OnboardingScreen(
-                                        onLocationSaved = { viewModel.completeOnboarding() },
-                                    )
+                                    AppPhase.ONBOARDING -> Box(Modifier.safeDrawingPadding()) {
+                                        OnboardingScreen(onLocationSaved = { viewModel.completeOnboarding() })
+                                    }
                                     AppPhase.MAIN_DASHBOARD -> AstraNavHost(
                                         culture = selectedCulture,
                                         onChooseCulture = viewModel::switchCulture,
@@ -157,27 +162,23 @@ fun AstraNavHost(
     val openVoice: (AncientCulture) -> Unit = { open(Route.voice(it)) }
 
     NavHost(navController, startDestination = Route.DAY) {
+        // SKY · DAY on the glass chrome (docs/design/android-glass.md, step 2).
         composable(Route.DAY) {
-            MainDashboardScreen(
-                culture = culture,
-                onNavigate = go,
-                onOpenMethod = { open(Route.METHOD) },
-                onOpenFigure = open,
-            )
+            SkyDayScreen(culture = culture, onNavigate = go, onOpen = open)
         }
-        composable(Route.WEEK) {
+        flat(Route.WEEK) {
             WeekScreen(culture = culture, onNavigate = go, onOpenFigure = open)
         }
-        composable(Route.SEASON) {
+        flat(Route.SEASON) {
             SeasonScreen(culture = culture, onNavigate = go)
         }
-        composable(Route.YEAR) {
+        flat(Route.YEAR) {
             YearScreen(culture = culture, onNavigate = go)
         }
-        composable(Route.VOICES) {
+        flat(Route.VOICES) {
             VoicesScreen(culture = culture, onNavigate = go, onOpenVoice = openVoice)
         }
-        composable(Route.VOICE) { entry ->
+        flat(Route.VOICE) { entry ->
             val name = entry.arguments?.getString("culture").orEmpty()
             val voice = runCatching { AncientCulture.valueOf(name.uppercase()) }.getOrNull()
             if (voice == null) {
@@ -195,14 +196,14 @@ fun AstraNavHost(
                 )
             }
         }
-        composable(Route.TRANSITS) {
+        flat(Route.TRANSITS) {
             TransitsScreen(
                 culture = culture,
                 onNavigate = go,
                 onOpenSpan = { open(Route.transitDetail(it)) },
             )
         }
-        composable(Route.TRANSIT_DETAIL) { entry ->
+        flat(Route.TRANSIT_DETAIL) { entry ->
             TransitDetailScreen(
                 spanId = entry.arguments?.getString("id").orEmpty(),
                 culture = culture,
@@ -210,7 +211,7 @@ fun AstraNavHost(
                 onBack = { navController.popBackStack() },
             )
         }
-        composable(Route.FIGURE) { entry ->
+        flat(Route.FIGURE) { entry ->
             FigureScreen(
                 date = entry.arguments?.getString("date").orEmpty(),
                 id = entry.arguments?.getString("id").orEmpty(),
@@ -219,10 +220,10 @@ fun AstraNavHost(
                 onOpen = open,
             )
         }
-        composable(Route.MATRIX) {
+        flat(Route.MATRIX) {
             MatrixScreen(culture = culture, onNavigate = go)
         }
-        composable(Route.PLACEMENTS) {
+        flat(Route.PLACEMENTS) {
             PlacementsScreen(
                 culture = culture,
                 onNavigate = go,
@@ -232,7 +233,7 @@ fun AstraNavHost(
                 onOpenSynastry = { open(Route.SYNASTRY) },
             )
         }
-        composable(Route.PLACEMENT) { entry ->
+        flat(Route.PLACEMENT) { entry ->
             val name = entry.arguments?.getString("body").orEmpty()
             val body = runCatching { Planet.valueOf(name.uppercase()) }.getOrNull()
             if (body == null) {
@@ -250,7 +251,7 @@ fun AstraNavHost(
                 )
             }
         }
-        composable(Route.LEARN) { entry ->
+        flat(Route.LEARN) { entry ->
             val slug = entry.arguments?.getString("slug") ?: Route.LEARN_INDEX
             LearnScreen(
                 href = Route.learnHref(slug),
@@ -259,7 +260,7 @@ fun AstraNavHost(
                 onOpenSection = { open(Route.learn(it)) },
             )
         }
-        composable(Route.READING) {
+        flat(Route.READING) {
             // The same form the first run uses. A chart cast again replaces
             // the one on the device, which is what the single birth record
             // this app keeps allows; web keeps many and this keeps one.
@@ -272,30 +273,30 @@ fun AstraNavHost(
             }
             OnboardingScreen(onLocationSaved = leave, onCancel = leave)
         }
-        composable(Route.FORECAST) {
+        flat(Route.FORECAST) {
             ForecastScreen(
                 culture = culture,
                 onNavigate = go,
                 onOpenSpan = { open(Route.transitDetail(it)) },
             )
         }
-        composable(Route.SYNASTRY) {
+        flat(Route.SYNASTRY) {
             SynastryScreen(
                 culture = culture,
                 onNavigate = go,
                 onCastChart = { open(Route.READING) },
             )
         }
-        composable(Route.METHOD) {
+        flat(Route.METHOD) {
             MethodScreen(
                 onBack = { navController.popBackStack() },
                 onOpenLicences = { open(Route.LICENCES) },
             )
         }
-        composable(Route.LICENCES) {
+        flat(Route.LICENCES) {
             LicencesScreen(culture = culture, onNavigate = go)
         }
-        composable(Route.ACCOUNT) {
+        flat(Route.ACCOUNT) {
             AccountScreen(
                 culture = culture,
                 onNavigate = go,
@@ -313,7 +314,7 @@ fun AstraNavHost(
                 onOpenLicences = { open(Route.LICENCES) },
             )
         }
-        composable(Route.SIGN_IN) {
+        flat(Route.SIGN_IN) {
             SignInScreen(
                 culture = culture,
                 onNavigate = go,
@@ -326,7 +327,7 @@ fun AstraNavHost(
                 onOpenRoll = { open(Route.WAIT_LIST) },
             )
         }
-        composable(Route.WAIT_LIST) {
+        flat(Route.WAIT_LIST) {
             WaitListScreen(culture = culture, onNavigate = go)
         }
     }
@@ -382,4 +383,13 @@ fun EngineWarmupScreen() = ShellType {
             )
         }
     }
+}
+
+/**
+ * A flat destination: drawn inside the system bars, as every screen was before
+ * the glass chrome. Glass screens are added with [composable] and place their
+ * own chrome against the bars.
+ */
+private fun NavGraphBuilder.flat(route: String, content: @Composable (NavBackStackEntry) -> Unit) {
+    composable(route) { entry -> Box(Modifier.safeDrawingPadding()) { content(entry) } }
 }

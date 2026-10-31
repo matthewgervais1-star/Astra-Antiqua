@@ -1,0 +1,35 @@
+sky-day-end P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-day-end P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-day-end P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-day-end P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-day-end P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-day-rome P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-day-rome P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-day-rome P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-day-rome P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-day-rome P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-day-scrolled P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-day-scrolled P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-day-scrolled P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-day-scrolled P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-day-scrolled P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-day P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-day P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-day P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-day P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-day P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-day P4 want 24.0, 189.0 · 342.0x17.6 got 24.0, 189.0 · 342.0x18.3 off 0.7
+sky-day P5 want 178.0, 230.6 · 34.0x34.0 got 178.0, 231.3 · 34.0x34.0 off 0.7
+sky-day P6 want 24.0, 280.6 · 342.0x70.2 got 24.0, 281.3 · 342.0x110.7 off 40.5
+sky-day P7 want 24.0, 360.8 · 342.0x17.6 got 24.0, 402.0 · 342.0x17.7 off 41.2
+sky-day P8 want 173.0, 402.4 · 44.0x1.0 got 173.0, 443.7 · 44.0x1.0 off 41.3
+sky-day P9 want 24.0, 427.4 · 342.0x89.1 got 24.0, 468.7 · 342.0x270.0 off 180.9
+sky-day P10 want 24.0, 556.4 · 342.0x11.0 got 24.0, 778.7 · 342.0x11.0 off 222.3
+sky-day P11 want 24.0, 581.4 · 342.0x178.4 got 24.0, 803.7 · 342.0x180.3 off 222.3
+sky-day P12 want 24.0, 799.8 · 342.0x11.0 got 24.0, 1024.0 · 342.0x11.0 off 224.2
+sky-day P13 want 24.0, 814.8 · 342.0x95.3 got 24.0, 1039.0 · 342.0x147.7 off 224.2
+sky-day P14 want 24.0, 910.1 · 342.0x95.3 got 24.0, 1186.7 · 342.0x147.7 off 276.6
+sky-day P15 want 24.0, 1045.4 · 342.0x11.0 got 24.0, 1695.3 · 342.0x11.0 off 649.9
+sky-day P16 want 24.0, 1070.4 · 342.0x147.8 got 24.0, 1720.3 · 342.0x151.0 off 649.9
+sky-day row-3 (no board ID) got 24.0, 1334.3 · 342.0x147.7
+sky-day row-4 (no board ID) got 24.0, 1482.0 · 342.0x173.3
