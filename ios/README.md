@@ -30,3 +30,4 @@ by XcodeGen and committed, so a Mac with Xcode opens and runs it with nothing el
 - A new Swift file must be added to `project.yml`'s sources (the `AstraAntiqua` folder is picked up
   whole) and to the committed project: run `xcodegen generate` on a Mac, or add it to
   `project.pbxproj` by hand and commit the project CI regenerates.
+- FACT (2026-10-31, step 2): Sky Day is the SKY section's DAY page on the glass tab bar; capture `sky-day`, placements `placement/sky-day.json` (measured from the board with the web's copy); the day page is composed in AstraCore (`DayDecree.swift`, `DayPressure.swift`, `SkyDay.swift`) and pinned to `dotnet/AstraAntiqua.Core.Tests/TestData/day.json`.
