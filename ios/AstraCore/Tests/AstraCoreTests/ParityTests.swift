@@ -160,6 +160,7 @@ final class HorizonParityTests: XCTestCase {
                 let label = "\(golden.culture) \(g.label)"
                 assertSameInstant(try Fixtures.instant(g.date), d.date, label)
                 XCTAssertEqual(d.label, g.label, label)
+                XCTAssertEqual(d.headline, g.headline, label)
                 XCTAssertEqual(d.line, g.line, label)
                 XCTAssertEqual(d.tone.rawValue, g.tone, label)
                 XCTAssertEqual(d.flag?.rawValue, g.flag, label)
@@ -171,11 +172,11 @@ final class HorizonParityTests: XCTestCase {
                     let a = try Planet.fromId(try XCTUnwrap(sh.a, label))
                     let b = try Planet.fromId(try XCTUnwrap(sh.b, label))
                     let aspect = try AspectKind.fromId(try XCTUnwrap(sh.aspect, label))
-                    let exact = try XCTUnwrap(sh.exact, label)
+                    let tight = try XCTUnwrap(sh.tight, label)
                     XCTAssertEqual(d.shorthand.a, a, label)
                     XCTAssertEqual(d.shorthand.b, b, label)
                     XCTAssertEqual(d.shorthand.aspect, aspect, label)
-                    XCTAssertEqual(d.shorthand.exact, exact, label)
+                    XCTAssertEqual(d.shorthand.tight, tight, label)
                 case .ingress:
                     let planet = try Planet.fromId(try XCTUnwrap(sh.planet, label))
                     let sign = try ZodiacSign.fromName(try XCTUnwrap(sh.sign, label))
@@ -188,9 +189,9 @@ final class HorizonParityTests: XCTestCase {
         }
     }
 
-    func test_theWeekFixturesIncludeAnExactDayAndAnIngressDay() throws {
+    func test_theWeekFixturesIncludeATightDayAndAnIngressDay() throws {
         let days = try Fixtures.horizons().weeks.flatMap { $0.days }
-        XCTAssertTrue(days.contains { $0.shorthand.exact == true }, "no week day is exact")
+        XCTAssertTrue(days.contains { $0.shorthand.tight == true }, "no week day is tight")
         XCTAssertTrue(days.contains { $0.shorthand.kind == "ingress" }, "no week day is an ingress")
     }
 

@@ -129,11 +129,6 @@ struct TransitDetailView: View {
                 Prose(text: "\(deity.name), \(deity.epithet), holds within \(String(format: "%.0f", TransitSpans.spanOrb)) degrees of exact against \(natal) "
                     + "from \(words.monthYear(span.start)) to \(words.monthYear(span.end)). Nothing here is forecast: the dates are the ephemeris read forward.")
             }
-            if let frame = aspectFrame(words.culture) {
-                Inset {
-                    Prose(text: frame, italic: true)
-                }
-            }
 
             SectionDivider(label: "The exact passes")
             ForEach(Array(span.passes.enumerated()), id: \.offset) { _, pass in
@@ -152,21 +147,6 @@ struct TransitDetailView: View {
         let total = span.end.timeIntervalSince(span.start)
         guard total > 0 else { return 1 }
         return max(0, min(1, now.timeIntervalSince(span.start) / total))
-    }
-
-    /// The culture's frame for the aspect, read only against the natal Sun or Moon.
-    private func aspectFrame(_ culture: Culture) -> String? {
-        let natalPlanet: Planet
-        switch span.natalKey {
-        case "sun": natalPlanet = .sun
-        case "moon": natalPlanet = .moon
-        default: return nil
-        }
-        let banks = state.store.banks
-        return banks.aspectFrame(
-            culture, span.kind,
-            banks.deityCharge(culture, span.transitPlanet),
-            banks.deityCharge(culture, natalPlanet))
     }
 
     private func passRow(_ pass: Date, words: Words, accent: Color) -> some View {

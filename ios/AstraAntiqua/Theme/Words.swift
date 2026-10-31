@@ -47,12 +47,12 @@ struct Words {
             + banks.ingressFrame(culture, banks.deityCharge(culture, planet))
     }
 
-    /// "☉ □ ♄ · EXACT", "♂ → SCO", or "QUIET", as web's week strip prints it.
+    /// "☉ □ ♄ · TIGHT", "♂ → SCO", or "QUIET", as web's week strip prints it.
     func shorthand(_ s: WeekShorthand) -> String {
         switch s.kind {
         case .aspect:
             guard let a = s.a, let b = s.b, let k = s.aspect else { return "" }
-            return "\(symbol(a)) \(store.banks.aspectGlyph(k)) \(symbol(b))\(s.exact ? " · EXACT" : "")"
+            return "\(symbol(a)) \(store.banks.aspectGlyph(k)) \(symbol(b))\(s.tight ? " · TIGHT" : "")"
         case .ingress:
             guard let p = s.planet, let sign = s.sign else { return "" }
             return "\(symbol(p)) \u{2192} \(store.banks.signAbbreviation(sign))"

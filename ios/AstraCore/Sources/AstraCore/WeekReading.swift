@@ -17,23 +17,24 @@ public enum ShorthandKind: String, CaseIterable, Sendable, Hashable {
 }
 
 /// The day's shorthand as data, for the screen to draw: an aspect's two bodies
-/// and its glyph, an ingress's body and sign, or nothing on a quiet day.
+/// and its glyph (flagged tight under half a degree), an ingress's body and
+/// sign, or nothing on a quiet day.
 public struct WeekShorthand: Sendable, Hashable {
     public let kind: ShorthandKind
     public let a: Planet?
     public let aspect: AspectKind?
     public let b: Planet?
-    public let exact: Bool
+    public let tight: Bool
     public let planet: Planet?
     public let sign: ZodiacSign?
 
     public init(kind: ShorthandKind, a: Planet? = nil, aspect: AspectKind? = nil, b: Planet? = nil,
-                exact: Bool = false, planet: Planet? = nil, sign: ZodiacSign? = nil) {
+                tight: Bool = false, planet: Planet? = nil, sign: ZodiacSign? = nil) {
         self.kind = kind
         self.a = a
         self.aspect = aspect
         self.b = b
-        self.exact = exact
+        self.tight = tight
         self.planet = planet
         self.sign = sign
     }
@@ -50,6 +51,10 @@ public struct WeekDay: Sendable, Hashable {
     /// "MON 11"
     public let label: String
     public let isToday: Bool
+    /// The decree's headline for the day's figure, the culture's holds line
+    /// when the figure is the row above's, the quiet headline on a quiet
+    /// day, or nil on an ingress day.
+    public let headline: String?
     public let line: String
     public let shorthand: WeekShorthand
     public let tone: WeekTone
@@ -59,14 +64,15 @@ public struct WeekDay: Sendable, Hashable {
     /// The local calendar date as one value, shaped like Instant.localYMD's result.
     public var localDate: (year: Int, month: Int, day: Int) { (year, month, day) }
 
-    public init(date: Date, year: Int, month: Int, day: Int, label: String, isToday: Bool, line: String,
-                shorthand: WeekShorthand, tone: WeekTone, flag: RomeDayFlag?) {
+    public init(date: Date, year: Int, month: Int, day: Int, label: String, isToday: Bool, headline: String?,
+                line: String, shorthand: WeekShorthand, tone: WeekTone, flag: RomeDayFlag?) {
         self.date = date
         self.year = year
         self.month = month
         self.day = day
         self.label = label
         self.isToday = isToday
+        self.headline = headline
         self.line = line
         self.shorthand = shorthand
         self.tone = tone
@@ -74,26 +80,20 @@ public struct WeekDay: Sendable, Hashable {
     }
 }
 
-/// Port of buildWeekDays and composeAspectSentence in web/src/lib/weekReading.ts.
-/// Each day's headline is the tightest sky aspect touching a fast mover,
-/// inside 1.2°, marked exact under 0.35°; a pair that headlined earlier in
-/// the week speaks again only when exact. Without one, an ingress that day;
-/// without that, the culture's plain quiet line, and nothing invented.
+/// Port of buildWeekDays in web/src/lib/weekReading.ts. Each row reads the
+/// sky at 00:00 UTC on its calendar date, the instant the day page reads.
+/// The day's figure is the tightest aspect touching a fast mover inside
+/// 1.2°, always; a figure that holds from the row above prints the
+/// culture's holds line in place of a second headline. The line is the
+/// decree's meaning and consequence. Without a figure, an ingress that day;
+/// without that, the culture's quiet headline and line.
 public enum WeekReading {
     private static let eventOrb = 1.2
-    private static let exactOrb = 0.35
 
     /// One ingress scan for the week, buffered past its end for the coarsest step.
     private static let ingressScanDays = 9
 
-    private static let fastBodies: Set<Planet> = [.sun, .moon, .mercury, .venus, .mars]
-
     private static let utc = TimeZone(secondsFromGMT: 0)!
-
-    private struct PlanetPair: Hashable {
-        let a: Planet
-        let b: Planet
-    }
 
     /// The Monday, local calendar in `zone`, of the week `date` falls in
     /// (web's mondayOf), returned as the UTC instant of that Monday's local
@@ -105,34 +105,6 @@ public enum WeekReading {
         let diff = day == 0 ? -6 : 1 - day
         let monday = addCalendarDays(local, diff)
         return Instant.localMidnight(year: monday.year, month: monday.month, day: monday.day, zone)
-    }
-
-    /// "Hermes challenges Ares." A conjunction names the sign it happens in.
-    /// `variant` picks the culture's exactness instrument and wraps, so two
-    /// exact figures on one page do not carry the same marker.
-    public static func composeAspectSentence(
-        culture: Culture,
-        a: Planet,
-        b: Planet,
-        kind: AspectKind,
-        exact: Bool,
-        chart: [Planet: Double],
-        store: ContentStore,
-        variant: Int = 0
-    ) -> String {
-        let banks = store.banks
-        let deityA = store.deity(culture, a).name
-        let deityB = store.deity(culture, b).name
-        var signClause = ""
-        if kind == .conjunction {
-            let sign = ZodiacMath.longitudeToSign(chart[a]!).sign
-            signClause = " in the " + Format.properCase(banks.signPhrase(sign))
-        }
-        let predicate = "\(banks.aspectVerb(culture, kind)) \(deityB)\(signClause)"
-        if exact {
-            return banks.exactForm(culture, variant: variant, subject: deityA, predicate: predicate)
-        }
-        return "\(deityA) \(predicate)."
     }
 
     /// The seven days from `weekStart`, the UTC instant of local midnight on
@@ -152,49 +124,43 @@ public enum WeekReading {
         let weekIngresses = SkyEvents.ingresses(scanStart, days: ingressScanDays)
 
         var days: [WeekDay] = []
-        var usedPairs = Set<PlanetPair>()
+        var previous: DayFigure? = nil
         for i in 0..<7 {
             let dateLocal = addCalendarDays(startLocal, i)
-            let noon = Instant.noonUTC(year: dateLocal.year, month: dateLocal.month, day: dateLocal.day)
-            let chart = Ephemeris.computeChart(noon)
+            // 00:00 UTC on the row's calendar date, the instant the day page reads.
+            let instant = Instant.localMidnight(year: dateLocal.year, month: dateLocal.month, day: dateLocal.day, utc)
+            let chart = Ephemeris.computeChart(instant)
 
-            let candidates = sortedByOrb(
-                AspectDetector.detect(chart, rules: store.aspectRules).filter {
-                    $0.orb < eventOrb && (fastBodies.contains($0.a) || fastBodies.contains($0.b))
-                })
-            var tightest: Aspect? = nil
-            for aspect in candidates {
-                let pair = PlanetPair(a: aspect.a, b: aspect.b)
-                if usedPairs.contains(pair) && aspect.orb >= exactOrb { continue }
-                tightest = aspect
-                usedPairs.insert(pair)
-                break
+            let tightest = DayDecreeComposer.dayFigures(chart, store: store).first { $0.orb < eventOrb }
+            var holds = false
+            if let t = tightest, let p = previous {
+                holds = t.a == p.a && t.b == p.b && t.kind == p.kind
             }
+            previous = tightest
 
             let dayStart = Instant.localMidnight(year: dateLocal.year, month: dateLocal.month, day: dateLocal.day, zone)
             let dayEnd = Instant.addDays(dayStart, 1)
             let dayIngress = weekIngresses.first { $0.date >= dayStart && $0.date < dayEnd }
 
+            let headline: String?
             let line: String
             let shorthand: WeekShorthand
             let tone: WeekTone
-            var exact = false
+            var tight = false
 
             if let figure = tightest {
-                exact = figure.orb < exactOrb
+                tight = figure.orb < store.day.tightOrb
                 tone = figure.kind.isHard ? .tension : .harmony
-                let astro = composeAspectSentence(
-                    culture: culture, a: figure.a, b: figure.b, kind: figure.kind,
-                    exact: exact, chart: chart, store: store)
-                let ruling = banks.aspectFrame(
-                    culture,
-                    figure.kind,
-                    banks.deityCharge(culture, figure.a),
-                    banks.deityCharge(culture, figure.b))
-                line = "\(astro) \(ruling)"
-                shorthand = WeekShorthand(kind: .aspect, a: figure.a, aspect: figure.kind, b: figure.b, exact: exact)
+                headline = holds
+                    ? store.day.decree(culture).holds
+                    : DayDecreeComposer.headline(culture, figure, store: store)
+                let dayNumber = DayDecreeComposer.utcDayNumber(instant)
+                line = DayDecreeComposer.meaning(culture, figure, day: dayNumber, store: store) + " "
+                    + DayDecreeComposer.consequence(culture, figure, store: store)
+                shorthand = WeekShorthand(kind: .aspect, a: figure.a, aspect: figure.kind, b: figure.b, tight: tight)
             } else if let ingress = dayIngress {
                 tone = .harmony
+                headline = nil
                 let deity = store.deity(culture, ingress.planet).name
                 let signWord = Format.properCase(banks.signPhrase(ingress.toSign))
                 line = "\(deity) \(banks.ingressVerb(culture)) the \(signWord). "
@@ -202,13 +168,14 @@ public enum WeekReading {
                 shorthand = WeekShorthand(kind: .ingress, planet: ingress.planet, sign: ingress.toSign)
             } else {
                 tone = .quiet
-                line = banks.quietLine(culture)
+                headline = store.day.quietHeadline(culture)
+                line = store.day.quietLine(culture)
                 shorthand = WeekShorthand(kind: .quiet)
             }
 
             let flag: RomeDayFlag?
             if culture == .rome {
-                flag = tone == .tension ? (exact ? RomeDayFlag.N : RomeDayFlag.C) : RomeDayFlag.F
+                flag = tone == .tension ? (tight ? RomeDayFlag.N : RomeDayFlag.C) : RomeDayFlag.F
             } else {
                 flag = nil
             }
@@ -222,8 +189,9 @@ public enum WeekReading {
                 year: dateLocal.year,
                 month: dateLocal.month,
                 day: dateLocal.day,
-                label: "\(Format.weekday(noon, zone: utc)) \(dateLocal.day)",
+                label: "\(Format.weekday(instant, zone: utc)) \(dateLocal.day)",
                 isToday: isToday,
+                headline: headline,
                 line: line,
                 shorthand: shorthand,
                 tone: tone,
@@ -247,15 +215,5 @@ public enum WeekReading {
     ) -> (year: Int, month: Int, day: Int) {
         let noon = Instant.noonUTC(year: date.year, month: date.month, day: date.day)
         return Instant.localYMD(noon.addingTimeInterval(Double(days) * 86_400), utc)
-    }
-
-    /// Ascending orb, ties kept in detection order (web's sort and C#'s
-    /// OrderBy are both stable; Swift's sort is not promised to be).
-    private static func sortedByOrb(_ aspects: [Aspect]) -> [Aspect] {
-        aspects.enumerated()
-            .sorted { lhs, rhs in
-                lhs.element.orb != rhs.element.orb ? lhs.element.orb < rhs.element.orb : lhs.offset < rhs.offset
-            }
-            .map { $0.element }
     }
 }

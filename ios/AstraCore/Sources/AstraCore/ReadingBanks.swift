@@ -12,10 +12,7 @@ public final class ReadingBanks: @unchecked Sendable {
     private let placementVerbs: [Culture: String]
     private let charges: [String: String]
     private let inscriptions: [String: String]
-    private let aspectFrames: [CultureKind: String]
     private let ingressFrames: [Culture: String]
-    private let exactInstructions: [CultureKind: String]
-    private let exactForms: [Culture: [String]]
     private let ingressVerbs: [Culture: String]
     private let quietLines: [Culture: String]
     private let summaryIntros: [Culture: String]
@@ -60,24 +57,8 @@ public final class ReadingBanks: @unchecked Sendable {
     /// The line of myth under a deity's name in a natal reading.
     public func inscription(_ culture: Culture, _ planet: Planet) -> String { inscriptions["\(culture.id)|\(planet.id)"]! }
 
-    /// The ruling tethered to the figure, taking both bodies' charges.
-    public func aspectFrame(_ culture: Culture, _ kind: AspectKind, _ chargeA: String, _ chargeB: String) -> String {
-        Self.fill(aspectFrames[CultureKind(culture, kind)]!, [("a", chargeA), ("b", chargeB)])
-    }
-
     public func ingressFrame(_ culture: Culture, _ charge: String) -> String {
         Self.fill(ingressFrames[culture]!, [("c", charge)])
-    }
-
-    /// The one instruction a decree may carry when its headline figure is exact.
-    public func exactInstruction(_ culture: Culture, _ kind: AspectKind, _ deity: String) -> String {
-        Self.fill(exactInstructions[CultureKind(culture, kind)]!, [("d", deity)])
-    }
-
-    /// How a culture marks a degree-exact contact. The variant wraps.
-    public func exactForm(_ culture: Culture, variant: Int, subject: String, predicate: String) -> String {
-        let forms = exactForms[culture]!
-        return Self.fill(forms[variant % forms.count], [("s", subject), ("p", predicate)])
     }
 
     public func ingressVerb(_ culture: Culture) -> String { ingressVerbs[culture]! }
@@ -131,10 +112,7 @@ public final class ReadingBanks: @unchecked Sendable {
         let placementVerbs: [String: String]
         let deityCharges: [String: [String: String]]
         let deityInscriptions: [String: [String: String]]
-        let aspectFrames: [String: [String: String]]
         let ingressFrames: [String: String]
-        let exactInstructions: [String: [String: String]]
-        let exactForms: [String: [String]]
         let ingressVerbs: [String: String]
         let quietLines: [String: String]
         let summaryIntros: [String: String]
@@ -223,15 +201,7 @@ public final class ReadingBanks: @unchecked Sendable {
         placementVerbs = try byCulture(d.placementVerbs)
         charges = try culturePlanet(d.deityCharges)
         inscriptions = try culturePlanet(d.deityInscriptions)
-        aspectFrames = try cultureKind(d.aspectFrames)
         ingressFrames = try byCulture(d.ingressFrames)
-        exactInstructions = try cultureKind(d.exactInstructions)
-        var forms: [Culture: [String]] = [:]
-        for (c, list) in d.exactForms {
-            let culture = try Culture.fromId(c)
-            forms[culture] = list
-        }
-        exactForms = forms
         ingressVerbs = try byCulture(d.ingressVerbs)
         quietLines = try byCulture(d.quietLines)
         summaryIntros = try byCulture(d.summaryIntros)
@@ -259,11 +229,8 @@ public final class ReadingBanks: @unchecked Sendable {
             for k in AspectKind.allCases {
                 let ck = CultureKind(c, k)
                 if aspectVerbs[ck] == nil { missing.append("verb \(c.id)/\(k.id)") }
-                if aspectFrames[ck] == nil { missing.append("frame \(c.id)/\(k.id)") }
-                if exactInstructions[ck] == nil { missing.append("instruction \(c.id)/\(k.id)") }
                 if aspectReflections[ck] == nil { missing.append("reflection \(c.id)/\(k.id)") }
             }
-            if (exactForms[c] ?? []).isEmpty { missing.append("exact forms \(c.id)") }
             for (name, table) in [("ingress frame", ingressFrames), ("ingress verb", ingressVerbs), ("quiet line", quietLines),
                                   ("summary intro", summaryIntros), ("placement verb", placementVerbs)] where table[c] == nil {
                 missing.append("\(name) \(c.id)")

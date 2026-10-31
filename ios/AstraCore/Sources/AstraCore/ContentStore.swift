@@ -11,6 +11,8 @@ import Foundation
 public final class ContentStore: @unchecked Sendable {
     public let aspectRules: [AspectRule]
     public let banks: ReadingBanks
+    /// The day page's banks (day-banks.json).
+    public let day: DayBanks
     public let cities: [City]
     public let method: MethodContent
     public let learn: LearnContent
@@ -205,6 +207,7 @@ public final class ContentStore: @unchecked Sendable {
             aspectGeometry: geometry)
 
         let banks = try ReadingBanks.load(from: directory)
+        let day = try DayBanks.load(from: directory)
 
         for culture in Culture.allCases {
             if cultureCopy[culture] == nil { gaps.append("culture copy \(culture.id)") }
@@ -243,5 +246,6 @@ public final class ContentStore: @unchecked Sendable {
         self.glyphs = glyphs
         self.learn = learn
         self.banks = banks
+        self.day = day
     }
 }

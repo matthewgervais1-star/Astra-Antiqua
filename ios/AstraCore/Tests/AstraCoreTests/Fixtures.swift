@@ -50,6 +50,13 @@ enum Fixtures {
 
     static func horizons() throws -> HorizonFile { try loadedHorizons.get() }
 
+    private static let loadedDay: Result<DayFile, Error> = Result {
+        try decode(DayFile.self, "day.json")
+    }
+
+    /// The day page web composes for the smoke birth at one instant (day.json).
+    static func day() throws -> DayFile { try loadedDay.get() }
+
     /// A TestData file's text, exactly as stored.
     static func text(_ name: String) throws -> String {
         let url = testData.appendingPathComponent(name)
@@ -253,6 +260,7 @@ struct WeekCase: Decodable {
 struct DayRow: Decodable {
     let date: String
     let label: String
+    let headline: String?
     let line: String
     let tone: String
     let flag: String?
@@ -264,7 +272,7 @@ struct ShorthandRow: Decodable {
     let a: String?
     let aspect: String?
     let b: String?
-    let exact: Bool?
+    let tight: Bool?
     let planet: String?
     let sign: String?
 }
@@ -420,4 +428,70 @@ struct BirthInputRow: Decodable {
     let minute: Int
     let latitude: Double
     let longitude: Double
+}
+
+// MARK: day.json
+
+struct DayFile: Decodable {
+    let at: String
+    let utcDay: Int
+    let birth: String
+    let natal: DayNatal
+    let cultures: [DayCase]
+}
+
+struct DayNatal: Decodable {
+    let longitudes: [String: Double]
+    let ascendant: Double
+    let midheaven: Double
+}
+
+struct DayCase: Decodable {
+    let culture: String
+    let institution: String
+    let headline: String
+    let evidence: String
+    let paragraph: String
+    let sentences: [String]
+    let tone: String
+    let figures: [DayFigureRow]
+    let pressure: [PressureRow]
+    let longTransit: LongTransitRow
+}
+
+struct DayFigureRow: Decodable {
+    let a: String
+    let b: String
+    let kind: String
+    let orb: Double
+}
+
+struct PressureRow: Decodable {
+    let name: String
+    let sub: String
+    let level: String
+    let levelLabel: String
+    let orb: Double?
+    let maxOrb: Double
+    let sentence: String
+    let lead: ContactLeadRow?
+}
+
+struct ContactLeadRow: Decodable {
+    let transit: String
+    let natal: String
+    let kind: String
+    let orb: Double
+}
+
+struct LongTransitRow: Decodable {
+    let status: String
+    let id: String?
+    let title1: String?
+    let title2: String?
+    let rangeLabel: String?
+    let progressPct: Double?
+    let start: String?
+    let end: String?
+    let passes: [String]
 }

@@ -54,10 +54,9 @@ final class ContentBanksTests: XCTestCase {
         XCTAssertEqual(ReadingBanks.cap(""), "")
         XCTAssertEqual(ReadingBanks.cap("ra"), "Ra")
         let store = try Fixtures.store()
-        let frame = store.banks.aspectFrame(.egypt, .trine, "the day's own course", "the count of the nights")
         XCTAssertEqual(
-            frame,
-            "The day's own course and the count of the nights sit level on the scale, and no hand needs to touch it.")
+            store.banks.ingressFrame(.canaan, "the count of the nights"),
+            "The count of the nights moves to the house of another god, where no envoy has announced it.")
     }
 
     func test_citySearchMatchesWebsSearch() throws {
