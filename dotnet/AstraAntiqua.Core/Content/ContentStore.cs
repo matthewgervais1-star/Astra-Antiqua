@@ -48,6 +48,9 @@ public sealed class ContentStore
     /// <summary>The fragments every composed reading is built from.</summary>
     public ReadingBanks Banks { get; private set; } = null!;
 
+    /// <summary>The decree, quiet and domain banks the day and the week speak with.</summary>
+    public DayBanks Day { get; private set; } = null!;
+
     /// <summary>The offline birthplace list, each city with its IANA zone.</summary>
     public IReadOnlyList<City> Cities { get; private set; } = Array.Empty<City>();
 
@@ -177,6 +180,9 @@ public sealed class ContentStore
 
         using (var doc = ReadResource("reading-banks.json"))
             store.Banks = ReadingBanks.Parse(doc.RootElement);
+
+        using (var doc = ReadResource("day-banks.json"))
+            store.Day = DayBanks.Parse(doc.RootElement);
 
         using (var doc = ReadResource("cultures.json"))
         {

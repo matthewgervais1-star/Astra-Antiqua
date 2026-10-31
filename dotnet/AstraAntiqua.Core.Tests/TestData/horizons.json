@@ -693,7 +693,7 @@
           "a": "moon",
           "b": "saturn",
           "kind": "square",
-          "verbLine": "Tanit raises a hand against Baal Hammon.",
+          "verbLine": "Tanit turns the prow against Baal Hammon.",
           "pairTheme": "The body and the limit, instinct and what asks for endurance.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -725,7 +725,7 @@
           "a": "saturn",
           "b": "uranus",
           "kind": "square",
-          "verbLine": "Baal Hammon raises a hand against Baal Shamem.",
+          "verbLine": "Baal Hammon turns the prow against Baal Shamem.",
           "pairTheme": "Limit and rupture, the structure and the break it was built to resist.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -918,7 +918,7 @@
           "a": "neptune",
           "b": "pluto",
           "kind": "sextile",
-          "verbLine": "Neptunus offers a treaty to Dis Pater.",
+          "verbLine": "Neptunus strikes a treaty with Dis Pater.",
           "pairTheme": "Dissolution and depth, the slowest tide and the deepest pressure, moving together.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         }
@@ -1087,7 +1087,7 @@
           "a": "venus",
           "b": "saturn",
           "kind": "opposition",
-          "verbLine": "Isis stands across the river from Geb.",
+          "verbLine": "Isis bars the door against Geb.",
           "pairTheme": "What you love and what you keep, beauty placed under contract.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -1304,7 +1304,7 @@
           "a": "venus",
           "b": "saturn",
           "kind": "opposition",
-          "verbLine": "Aphrodite stands across the agora from Kronos.",
+          "verbLine": "Aphrodite holds the far end of the agora against Kronos.",
           "pairTheme": "What you love and what you keep, beauty placed under contract.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -1706,7 +1706,7 @@
           "a": "sun",
           "b": "uranus",
           "kind": "square",
-          "verbLine": "Semes raises a hand against Baal Shamem.",
+          "verbLine": "Semes turns the prow against Baal Shamem.",
           "pairTheme": "Identity and rupture, who you are and the version that is already leaving.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -1714,7 +1714,7 @@
           "a": "moon",
           "b": "venus",
           "kind": "square",
-          "verbLine": "Tanit raises a hand against Astarte.",
+          "verbLine": "Tanit turns the prow against Astarte.",
           "pairTheme": "The body and the binding, instinct and the pull toward what you love.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -1722,7 +1722,7 @@
           "a": "moon",
           "b": "saturn",
           "kind": "square",
-          "verbLine": "Tanit raises a hand against Baal Hammon.",
+          "verbLine": "Tanit turns the prow against Baal Hammon.",
           "pairTheme": "The body and the limit, instinct and what asks for endurance.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -1746,7 +1746,7 @@
           "a": "mars",
           "b": "saturn",
           "kind": "square",
-          "verbLine": "Melqart raises a hand against Baal Hammon.",
+          "verbLine": "Melqart turns the prow against Baal Hammon.",
           "pairTheme": "Effort and limit, the push against the wall that wants you stopped.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -1754,7 +1754,7 @@
           "a": "mars",
           "b": "neptune",
           "kind": "square",
-          "verbLine": "Melqart raises a hand against Yam.",
+          "verbLine": "Melqart turns the prow against Yam.",
           "pairTheme": "Force and dissolution, the push and the fog it pushes through.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -1947,7 +1947,7 @@
           "a": "venus",
           "b": "jupiter",
           "kind": "sextile",
-          "verbLine": "Venus offers a treaty to Iuppiter.",
+          "verbLine": "Venus strikes a treaty with Iuppiter.",
           "pairTheme": "What you love and what you trust, the binding made into a creed.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -1955,7 +1955,7 @@
           "a": "venus",
           "b": "saturn",
           "kind": "opposition",
-          "verbLine": "Venus stands across the forum from Saturnus.",
+          "verbLine": "Venus sits on the opposite bench from Saturnus.",
           "pairTheme": "What you love and what you keep, beauty placed under contract.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -1987,7 +1987,7 @@
           "a": "uranus",
           "b": "neptune",
           "kind": "sextile",
-          "verbLine": "Caelus offers a treaty to Neptunus.",
+          "verbLine": "Caelus strikes a treaty with Neptunus.",
           "pairTheme": "Dissolution and rupture, the long fog and the sudden break inside it.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -2003,7 +2003,7 @@
           "a": "neptune",
           "b": "pluto",
           "kind": "sextile",
-          "verbLine": "Neptunus offers a treaty to Dis Pater.",
+          "verbLine": "Neptunus strikes a treaty with Dis Pater.",
           "pairTheme": "Dissolution and depth, the slowest tide and the deepest pressure, moving together.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         }
@@ -2140,7 +2140,7 @@
           "a": "sun",
           "b": "mercury",
           "kind": "opposition",
-          "verbLine": "Ra stands across the river from Sebegu.",
+          "verbLine": "Ra bars the door against Sebegu.",
           "pairTheme": "The voice that speaks and the identity it speaks for.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -2180,7 +2180,7 @@
           "a": "moon",
           "b": "venus",
           "kind": "opposition",
-          "verbLine": "Khonsu stands across the river from Isis.",
+          "verbLine": "Khonsu bars the door against Isis.",
           "pairTheme": "The body and the binding, instinct and the pull toward what you love.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -2212,7 +2212,7 @@
           "a": "mercury",
           "b": "neptune",
           "kind": "opposition",
-          "verbLine": "Sebegu stands across the river from Nun.",
+          "verbLine": "Sebegu bars the door against Nun.",
           "pairTheme": "Speech and dissolution, the word and the tide it cannot quite hold.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -2236,7 +2236,7 @@
           "a": "venus",
           "b": "pluto",
           "kind": "opposition",
-          "verbLine": "Isis stands across the river from Osiris.",
+          "verbLine": "Isis bars the door against Osiris.",
           "pairTheme": "Desire and depth, what you love and how far down you will go for it.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -2252,7 +2252,7 @@
           "a": "mars",
           "b": "saturn",
           "kind": "opposition",
-          "verbLine": "Horus the Red stands across the river from Geb.",
+          "verbLine": "Horus the Red bars the door against Geb.",
           "pairTheme": "Effort and limit, the push against the wall that wants you stopped.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -2276,7 +2276,7 @@
           "a": "jupiter",
           "b": "uranus",
           "kind": "opposition",
-          "verbLine": "Amun stands across the river from Nut.",
+          "verbLine": "Amun bars the door against Nut.",
           "pairTheme": "Growth and rupture, the lucky break and the sudden door.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -2429,7 +2429,7 @@
           "a": "sun",
           "b": "mercury",
           "kind": "opposition",
-          "verbLine": "Helios stands across the agora from Hermes.",
+          "verbLine": "Helios holds the far end of the agora against Hermes.",
           "pairTheme": "The voice that speaks and the identity it speaks for.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -2469,7 +2469,7 @@
           "a": "moon",
           "b": "venus",
           "kind": "opposition",
-          "verbLine": "Selene stands across the agora from Aphrodite.",
+          "verbLine": "Selene holds the far end of the agora against Aphrodite.",
           "pairTheme": "The body and the binding, instinct and the pull toward what you love.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -2501,7 +2501,7 @@
           "a": "mercury",
           "b": "neptune",
           "kind": "opposition",
-          "verbLine": "Hermes stands across the agora from Poseidon.",
+          "verbLine": "Hermes holds the far end of the agora against Poseidon.",
           "pairTheme": "Speech and dissolution, the word and the tide it cannot quite hold.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -2525,7 +2525,7 @@
           "a": "venus",
           "b": "pluto",
           "kind": "opposition",
-          "verbLine": "Aphrodite stands across the agora from Plouton.",
+          "verbLine": "Aphrodite holds the far end of the agora against Plouton.",
           "pairTheme": "Desire and depth, what you love and how far down you will go for it.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -2541,7 +2541,7 @@
           "a": "mars",
           "b": "saturn",
           "kind": "opposition",
-          "verbLine": "Ares stands across the agora from Kronos.",
+          "verbLine": "Ares holds the far end of the agora against Kronos.",
           "pairTheme": "Effort and limit, the push against the wall that wants you stopped.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -2565,7 +2565,7 @@
           "a": "jupiter",
           "b": "uranus",
           "kind": "opposition",
-          "verbLine": "Zeus stands across the agora from Ouranos.",
+          "verbLine": "Zeus holds the far end of the agora against Ouranos.",
           "pairTheme": "Growth and rupture, the lucky break and the sudden door.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -2999,7 +2999,7 @@
           "a": "sun",
           "b": "moon",
           "kind": "square",
-          "verbLine": "Semes raises a hand against Tanit.",
+          "verbLine": "Semes turns the prow against Tanit.",
           "pairTheme": "Two principles meet on the wheel.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3015,7 +3015,7 @@
           "a": "sun",
           "b": "venus",
           "kind": "square",
-          "verbLine": "Semes raises a hand against Astarte.",
+          "verbLine": "Semes turns the prow against Astarte.",
           "pairTheme": "What you want and the way you make yourself attractive enough to get it.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3031,7 +3031,7 @@
           "a": "sun",
           "b": "pluto",
           "kind": "square",
-          "verbLine": "Semes raises a hand against Mot.",
+          "verbLine": "Semes turns the prow against Mot.",
           "pairTheme": "Identity and depth, sovereignty and the power that remakes it from below.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3039,7 +3039,7 @@
           "a": "moon",
           "b": "mercury",
           "kind": "square",
-          "verbLine": "Tanit raises a hand against Sakun.",
+          "verbLine": "Tanit turns the prow against Sakun.",
           "pairTheme": "Feeling and speech, what you sense and what you put into words.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3055,7 +3055,7 @@
           "a": "moon",
           "b": "neptune",
           "kind": "square",
-          "verbLine": "Tanit raises a hand against Yam.",
+          "verbLine": "Tanit turns the prow against Yam.",
           "pairTheme": "Feeling and dissolution, the tide and the wider tide it merges with.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3071,7 +3071,7 @@
           "a": "mercury",
           "b": "venus",
           "kind": "square",
-          "verbLine": "Sakun raises a hand against Astarte.",
+          "verbLine": "Sakun turns the prow against Astarte.",
           "pairTheme": "Speech and beauty, the words you choose to draw what you love.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3087,7 +3087,7 @@
           "a": "mercury",
           "b": "pluto",
           "kind": "square",
-          "verbLine": "Sakun raises a hand against Mot.",
+          "verbLine": "Sakun turns the prow against Mot.",
           "pairTheme": "Speech and depth, the sentence and the buried thing it names.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3095,7 +3095,7 @@
           "a": "venus",
           "b": "neptune",
           "kind": "square",
-          "verbLine": "Astarte raises a hand against Yam.",
+          "verbLine": "Astarte turns the prow against Yam.",
           "pairTheme": "Desire and dissolution, what you love and the halo you have put on it.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3111,7 +3111,7 @@
           "a": "mars",
           "b": "jupiter",
           "kind": "square",
-          "verbLine": "Melqart raises a hand against Baal Hammon.",
+          "verbLine": "Melqart turns the prow against Baal Hammon.",
           "pairTheme": "Effort and expansion, the push toward the bigger story.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3127,7 +3127,7 @@
           "a": "mars",
           "b": "uranus",
           "kind": "square",
-          "verbLine": "Melqart raises a hand against Baal Shamem.",
+          "verbLine": "Melqart turns the prow against Baal Shamem.",
           "pairTheme": "Force and rupture, the push and the sudden break it triggers.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3135,7 +3135,7 @@
           "a": "jupiter",
           "b": "saturn",
           "kind": "square",
-          "verbLine": "Baal Hammon raises a hand against Baal Hammon.",
+          "verbLine": "Baal Hammon turns the prow against Baal Hammon.",
           "pairTheme": "Expansion and limit, the law that grows and the law that holds.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3151,7 +3151,7 @@
           "a": "saturn",
           "b": "uranus",
           "kind": "square",
-          "verbLine": "Baal Hammon raises a hand against Baal Shamem.",
+          "verbLine": "Baal Hammon turns the prow against Baal Shamem.",
           "pairTheme": "Limit and rupture, the structure and the break it was built to resist.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -3159,7 +3159,7 @@
           "a": "neptune",
           "b": "pluto",
           "kind": "square",
-          "verbLine": "Yam raises a hand against Mot.",
+          "verbLine": "Yam turns the prow against Mot.",
           "pairTheme": "Dissolution and depth, the slowest tide and the deepest pressure, moving together.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         }
@@ -3296,7 +3296,7 @@
           "a": "sun",
           "b": "mercury",
           "kind": "opposition",
-          "verbLine": "Sol stands across the forum from Mercurius.",
+          "verbLine": "Sol sits on the opposite bench from Mercurius.",
           "pairTheme": "The voice that speaks and the identity it speaks for.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -3336,7 +3336,7 @@
           "a": "moon",
           "b": "venus",
           "kind": "opposition",
-          "verbLine": "Luna stands across the forum from Venus.",
+          "verbLine": "Luna sits on the opposite bench from Venus.",
           "pairTheme": "The body and the binding, instinct and the pull toward what you love.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -3368,7 +3368,7 @@
           "a": "mercury",
           "b": "neptune",
           "kind": "opposition",
-          "verbLine": "Mercurius stands across the forum from Neptunus.",
+          "verbLine": "Mercurius sits on the opposite bench from Neptunus.",
           "pairTheme": "Speech and dissolution, the word and the tide it cannot quite hold.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -3392,7 +3392,7 @@
           "a": "venus",
           "b": "pluto",
           "kind": "opposition",
-          "verbLine": "Venus stands across the forum from Dis Pater.",
+          "verbLine": "Venus sits on the opposite bench from Dis Pater.",
           "pairTheme": "Desire and depth, what you love and how far down you will go for it.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -3408,7 +3408,7 @@
           "a": "mars",
           "b": "saturn",
           "kind": "opposition",
-          "verbLine": "Mars stands across the forum from Saturnus.",
+          "verbLine": "Mars sits on the opposite bench from Saturnus.",
           "pairTheme": "Effort and limit, the push against the wall that wants you stopped.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -3432,7 +3432,7 @@
           "a": "jupiter",
           "b": "uranus",
           "kind": "opposition",
-          "verbLine": "Iuppiter stands across the forum from Caelus.",
+          "verbLine": "Iuppiter sits on the opposite bench from Caelus.",
           "pairTheme": "Growth and rupture, the lucky break and the sudden door.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -3601,7 +3601,7 @@
           "a": "sun",
           "b": "mars",
           "kind": "opposition",
-          "verbLine": "Ra stands across the river from Horus the Red.",
+          "verbLine": "Ra bars the door against Horus the Red.",
           "pairTheme": "Will and force, sovereignty and the work of pushing through.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -3657,7 +3657,7 @@
           "a": "moon",
           "b": "jupiter",
           "kind": "opposition",
-          "verbLine": "Khonsu stands across the river from Amun.",
+          "verbLine": "Khonsu bars the door against Amun.",
           "pairTheme": "The body and the blessing, gut sense and the things that grow on faith.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -3681,7 +3681,7 @@
           "a": "mercury",
           "b": "venus",
           "kind": "opposition",
-          "verbLine": "Sebegu stands across the river from Isis.",
+          "verbLine": "Sebegu bars the door against Isis.",
           "pairTheme": "Speech and beauty, the words you choose to draw what you love.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -3769,7 +3769,7 @@
           "a": "mars",
           "b": "pluto",
           "kind": "opposition",
-          "verbLine": "Horus the Red stands across the river from Osiris.",
+          "verbLine": "Horus the Red bars the door against Osiris.",
           "pairTheme": "Force and depth, the fight on the surface and the power underneath.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -3970,7 +3970,7 @@
           "a": "sun",
           "b": "mars",
           "kind": "opposition",
-          "verbLine": "Helios stands across the agora from Ares.",
+          "verbLine": "Helios holds the far end of the agora against Ares.",
           "pairTheme": "Will and force, sovereignty and the work of pushing through.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -4026,7 +4026,7 @@
           "a": "moon",
           "b": "jupiter",
           "kind": "opposition",
-          "verbLine": "Selene stands across the agora from Zeus.",
+          "verbLine": "Selene holds the far end of the agora against Zeus.",
           "pairTheme": "The body and the blessing, gut sense and the things that grow on faith.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -4050,7 +4050,7 @@
           "a": "mercury",
           "b": "venus",
           "kind": "opposition",
-          "verbLine": "Hermes stands across the agora from Aphrodite.",
+          "verbLine": "Hermes holds the far end of the agora against Aphrodite.",
           "pairTheme": "Speech and beauty, the words you choose to draw what you love.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -4138,7 +4138,7 @@
           "a": "mars",
           "b": "pluto",
           "kind": "opposition",
-          "verbLine": "Ares stands across the agora from Plouton.",
+          "verbLine": "Ares holds the far end of the agora against Plouton.",
           "pairTheme": "Force and depth, the fight on the surface and the power underneath.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -4724,7 +4724,7 @@
           "a": "sun",
           "b": "neptune",
           "kind": "square",
-          "verbLine": "Semes raises a hand against Yam.",
+          "verbLine": "Semes turns the prow against Yam.",
           "pairTheme": "Identity and dissolution, the self and the tide that softens its edges.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -4772,7 +4772,7 @@
           "a": "moon",
           "b": "saturn",
           "kind": "square",
-          "verbLine": "Tanit raises a hand against Baal Hammon.",
+          "verbLine": "Tanit turns the prow against Baal Hammon.",
           "pairTheme": "The body and the limit, instinct and what asks for endurance.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -4812,7 +4812,7 @@
           "a": "mercury",
           "b": "uranus",
           "kind": "square",
-          "verbLine": "Sakun raises a hand against Baal Shamem.",
+          "verbLine": "Sakun turns the prow against Baal Shamem.",
           "pairTheme": "Speech and rupture, the thought that arrives sideways and changes the sentence.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -4844,7 +4844,7 @@
           "a": "venus",
           "b": "uranus",
           "kind": "square",
-          "verbLine": "Astarte raises a hand against Baal Shamem.",
+          "verbLine": "Astarte turns the prow against Baal Shamem.",
           "pairTheme": "Desire and rupture, what you love and the sudden thing that unsettles it.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -4868,7 +4868,7 @@
           "a": "mars",
           "b": "neptune",
           "kind": "square",
-          "verbLine": "Melqart raises a hand against Yam.",
+          "verbLine": "Melqart turns the prow against Yam.",
           "pairTheme": "Force and dissolution, the push and the fog it pushes through.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -4884,7 +4884,7 @@
           "a": "jupiter",
           "b": "saturn",
           "kind": "square",
-          "verbLine": "Baal Hammon raises a hand against Baal Hammon.",
+          "verbLine": "Baal Hammon turns the prow against Baal Hammon.",
           "pairTheme": "Expansion and limit, the law that grows and the law that holds.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -4924,7 +4924,7 @@
           "a": "neptune",
           "b": "pluto",
           "kind": "square",
-          "verbLine": "Yam raises a hand against Mot.",
+          "verbLine": "Yam turns the prow against Mot.",
           "pairTheme": "Dissolution and depth, the slowest tide and the deepest pressure, moving together.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         }
@@ -5069,7 +5069,7 @@
           "a": "sun",
           "b": "venus",
           "kind": "sextile",
-          "verbLine": "Sol offers a treaty to Venus.",
+          "verbLine": "Sol strikes a treaty with Venus.",
           "pairTheme": "What you want and the way you make yourself attractive enough to get it.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -5077,7 +5077,7 @@
           "a": "sun",
           "b": "mars",
           "kind": "opposition",
-          "verbLine": "Sol stands across the forum from Mars.",
+          "verbLine": "Sol sits on the opposite bench from Mars.",
           "pairTheme": "Will and force, sovereignty and the work of pushing through.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -5085,7 +5085,7 @@
           "a": "sun",
           "b": "jupiter",
           "kind": "sextile",
-          "verbLine": "Sol offers a treaty to Iuppiter.",
+          "verbLine": "Sol strikes a treaty with Iuppiter.",
           "pairTheme": "The throne and the blessing, identity expanded into role.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -5117,7 +5117,7 @@
           "a": "moon",
           "b": "venus",
           "kind": "sextile",
-          "verbLine": "Luna offers a treaty to Venus.",
+          "verbLine": "Luna strikes a treaty with Venus.",
           "pairTheme": "The body and the binding, instinct and the pull toward what you love.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -5125,7 +5125,7 @@
           "a": "moon",
           "b": "mars",
           "kind": "sextile",
-          "verbLine": "Luna offers a treaty to Mars.",
+          "verbLine": "Luna strikes a treaty with Mars.",
           "pairTheme": "Feeling and force, instinct and the will to act on it.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -5133,7 +5133,7 @@
           "a": "moon",
           "b": "jupiter",
           "kind": "opposition",
-          "verbLine": "Luna stands across the forum from Iuppiter.",
+          "verbLine": "Luna sits on the opposite bench from Iuppiter.",
           "pairTheme": "The body and the blessing, gut sense and the things that grow on faith.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -5157,7 +5157,7 @@
           "a": "mercury",
           "b": "venus",
           "kind": "opposition",
-          "verbLine": "Mercurius stands across the forum from Venus.",
+          "verbLine": "Mercurius sits on the opposite bench from Venus.",
           "pairTheme": "Speech and beauty, the words you choose to draw what you love.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -5165,7 +5165,7 @@
           "a": "mercury",
           "b": "mars",
           "kind": "sextile",
-          "verbLine": "Mercurius offers a treaty to Mars.",
+          "verbLine": "Mercurius strikes a treaty with Mars.",
           "pairTheme": "Speech and force, the sentence as a weapon or a wall.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -5173,7 +5173,7 @@
           "a": "mercury",
           "b": "jupiter",
           "kind": "sextile",
-          "verbLine": "Mercurius offers a treaty to Iuppiter.",
+          "verbLine": "Mercurius strikes a treaty with Iuppiter.",
           "pairTheme": "Speech and expansion, the meaning that wants to reach further.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -5221,7 +5221,7 @@
           "a": "venus",
           "b": "pluto",
           "kind": "sextile",
-          "verbLine": "Venus offers a treaty to Dis Pater.",
+          "verbLine": "Venus strikes a treaty with Dis Pater.",
           "pairTheme": "Desire and depth, what you love and how far down you will go for it.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -5245,7 +5245,7 @@
           "a": "mars",
           "b": "pluto",
           "kind": "opposition",
-          "verbLine": "Mars stands across the forum from Dis Pater.",
+          "verbLine": "Mars sits on the opposite bench from Dis Pater.",
           "pairTheme": "Force and depth, the fight on the surface and the power underneath.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -5261,7 +5261,7 @@
           "a": "jupiter",
           "b": "pluto",
           "kind": "sextile",
-          "verbLine": "Iuppiter offers a treaty to Dis Pater.",
+          "verbLine": "Iuppiter strikes a treaty with Dis Pater.",
           "pairTheme": "Expansion and depth, the growing claim and the power that backs it.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -6466,7 +6466,7 @@
           "a": "sun",
           "b": "uranus",
           "kind": "sextile",
-          "verbLine": "Sol offers a treaty to Caelus.",
+          "verbLine": "Sol strikes a treaty with Caelus.",
           "pairTheme": "Identity and rupture, who you are and the version that is already leaving.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -6474,7 +6474,7 @@
           "a": "sun",
           "b": "neptune",
           "kind": "sextile",
-          "verbLine": "Sol offers a treaty to Neptunus.",
+          "verbLine": "Sol strikes a treaty with Neptunus.",
           "pairTheme": "Identity and dissolution, the self and the tide that softens its edges.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -6482,7 +6482,7 @@
           "a": "sun",
           "b": "pluto",
           "kind": "sextile",
-          "verbLine": "Sol offers a treaty to Dis Pater.",
+          "verbLine": "Sol strikes a treaty with Dis Pater.",
           "pairTheme": "Identity and depth, sovereignty and the power that remakes it from below.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -6498,7 +6498,7 @@
           "a": "moon",
           "b": "uranus",
           "kind": "sextile",
-          "verbLine": "Luna offers a treaty to Caelus.",
+          "verbLine": "Luna strikes a treaty with Caelus.",
           "pairTheme": "Feeling and rupture, the mood and the sudden break in its weather.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -6506,7 +6506,7 @@
           "a": "moon",
           "b": "neptune",
           "kind": "sextile",
-          "verbLine": "Luna offers a treaty to Neptunus.",
+          "verbLine": "Luna strikes a treaty with Neptunus.",
           "pairTheme": "Feeling and dissolution, the tide and the wider tide it merges with.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -6514,7 +6514,7 @@
           "a": "moon",
           "b": "pluto",
           "kind": "sextile",
-          "verbLine": "Luna offers a treaty to Dis Pater.",
+          "verbLine": "Luna strikes a treaty with Dis Pater.",
           "pairTheme": "Feeling and depth, the surface mood and the old current underneath.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -6522,7 +6522,7 @@
           "a": "mercury",
           "b": "uranus",
           "kind": "sextile",
-          "verbLine": "Mercurius offers a treaty to Caelus.",
+          "verbLine": "Mercurius strikes a treaty with Caelus.",
           "pairTheme": "Speech and rupture, the thought that arrives sideways and changes the sentence.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -6530,7 +6530,7 @@
           "a": "mercury",
           "b": "neptune",
           "kind": "sextile",
-          "verbLine": "Mercurius offers a treaty to Neptunus.",
+          "verbLine": "Mercurius strikes a treaty with Neptunus.",
           "pairTheme": "Speech and dissolution, the word and the tide it cannot quite hold.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -6538,7 +6538,7 @@
           "a": "mercury",
           "b": "pluto",
           "kind": "sextile",
-          "verbLine": "Mercurius offers a treaty to Dis Pater.",
+          "verbLine": "Mercurius strikes a treaty with Dis Pater.",
           "pairTheme": "Speech and depth, the sentence and the buried thing it names.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -6707,7 +6707,7 @@
           "a": "sun",
           "b": "venus",
           "kind": "opposition",
-          "verbLine": "Ra stands across the river from Isis.",
+          "verbLine": "Ra bars the door against Isis.",
           "pairTheme": "What you want and the way you make yourself attractive enough to get it.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -6755,7 +6755,7 @@
           "a": "mars",
           "b": "saturn",
           "kind": "opposition",
-          "verbLine": "Horus the Red stands across the river from Geb.",
+          "verbLine": "Horus the Red bars the door against Geb.",
           "pairTheme": "Effort and limit, the push against the wall that wants you stopped.",
           "culturalReflection": "The two cross the river in opposite directions. Neither shore is the wrong one; only the timing of the crossing decides."
         },
@@ -6924,7 +6924,7 @@
           "a": "sun",
           "b": "venus",
           "kind": "opposition",
-          "verbLine": "Helios stands across the agora from Aphrodite.",
+          "verbLine": "Helios holds the far end of the agora against Aphrodite.",
           "pairTheme": "What you want and the way you make yourself attractive enough to get it.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -6972,7 +6972,7 @@
           "a": "mars",
           "b": "saturn",
           "kind": "opposition",
-          "verbLine": "Ares stands across the agora from Kronos.",
+          "verbLine": "Ares holds the far end of the agora against Kronos.",
           "pairTheme": "Effort and limit, the push against the wall that wants you stopped.",
           "culturalReflection": "The two stand at the antipodes of the wheel. The Greek question is whether you can hold both extremes in mind at once."
         },
@@ -7366,7 +7366,7 @@
           "a": "sun",
           "b": "pluto",
           "kind": "square",
-          "verbLine": "Semes raises a hand against Mot.",
+          "verbLine": "Semes turns the prow against Mot.",
           "pairTheme": "Identity and depth, sovereignty and the power that remakes it from below.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -7390,7 +7390,7 @@
           "a": "mercury",
           "b": "uranus",
           "kind": "square",
-          "verbLine": "Sakun raises a hand against Baal Shamem.",
+          "verbLine": "Sakun turns the prow against Baal Shamem.",
           "pairTheme": "Speech and rupture, the thought that arrives sideways and changes the sentence.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -7398,7 +7398,7 @@
           "a": "venus",
           "b": "pluto",
           "kind": "square",
-          "verbLine": "Astarte raises a hand against Mot.",
+          "verbLine": "Astarte turns the prow against Mot.",
           "pairTheme": "Desire and depth, what you love and how far down you will go for it.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -7430,7 +7430,7 @@
           "a": "jupiter",
           "b": "neptune",
           "kind": "square",
-          "verbLine": "Baal Hammon raises a hand against Yam.",
+          "verbLine": "Baal Hammon turns the prow against Yam.",
           "pairTheme": "Growth and dissolution, the expanding hope and the fog that surrounds it.",
           "culturalReflection": "Melqart raises his hand. A price is being demanded; the question is which comfort you can afford to lay on the fire."
         },
@@ -7575,7 +7575,7 @@
           "a": "sun",
           "b": "venus",
           "kind": "opposition",
-          "verbLine": "Sol stands across the forum from Venus.",
+          "verbLine": "Sol sits on the opposite bench from Venus.",
           "pairTheme": "What you want and the way you make yourself attractive enough to get it.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -7591,7 +7591,7 @@
           "a": "moon",
           "b": "pluto",
           "kind": "sextile",
-          "verbLine": "Luna offers a treaty to Dis Pater.",
+          "verbLine": "Luna strikes a treaty with Dis Pater.",
           "pairTheme": "Feeling and depth, the surface mood and the old current underneath.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -7623,7 +7623,7 @@
           "a": "mars",
           "b": "saturn",
           "kind": "opposition",
-          "verbLine": "Mars stands across the forum from Saturnus.",
+          "verbLine": "Mars sits on the opposite bench from Saturnus.",
           "pairTheme": "Effort and limit, the push against the wall that wants you stopped.",
           "culturalReflection": "The two stand across the forum from each other. Rome settles it by who holds the ground when the session ends."
         },
@@ -7631,7 +7631,7 @@
           "a": "mars",
           "b": "uranus",
           "kind": "sextile",
-          "verbLine": "Mars offers a treaty to Caelus.",
+          "verbLine": "Mars strikes a treaty with Caelus.",
           "pairTheme": "Force and rupture, the push and the sudden break it triggers.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         },
@@ -7663,7 +7663,7 @@
           "a": "saturn",
           "b": "neptune",
           "kind": "sextile",
-          "verbLine": "Saturnus offers a treaty to Neptunus.",
+          "verbLine": "Saturnus strikes a treaty with Neptunus.",
           "pairTheme": "Dissolution and limit, the dream and the structure it must survive.",
           "culturalReflection": "A treaty is offered between two powers. It holds as long as both sides keep the terms in the open."
         }
@@ -8161,21 +8161,8 @@
         {
           "date": "2026-10-19T00:00:00.000Z",
           "label": "MON 19",
-          "line": "The plumb hangs true: Khonsu rows in time with Nut. The count of the nights and the five days outside the year sit level on the scale, and no hand needs to touch it.",
-          "tone": "harmony",
-          "flag": null,
-          "shorthand": {
-            "kind": "aspect",
-            "a": "moon",
-            "aspect": "trine",
-            "b": "uranus",
-            "exact": true
-          }
-        },
-        {
-          "date": "2026-10-20T00:00:00.000Z",
-          "label": "TUE 20",
-          "line": "The plumb hangs true: Isis tips the scales against Osiris. What was scattered and gathered back pulls the beam out of true against the verdict of the hall below, and only labor brings the pans level.",
+          "headline": "Do not haggle with your beloved as you would over linen.",
+          "line": "Your beloved and what you have buried haul each other down. An old grievance is aired anew.",
           "tone": "tension",
           "flag": null,
           "shorthand": {
@@ -8183,71 +8170,95 @@
             "a": "venus",
             "aspect": "square",
             "b": "pluto",
-            "exact": true
+            "tight": false
+          }
+        },
+        {
+          "date": "2026-10-20T00:00:00.000Z",
+          "label": "TUE 20",
+          "headline": "The same weight sits on the scale as yesterday.",
+          "line": "Your beloved and what you have buried get in each other's way, and the cord is drawn tight. An old grievance is aired anew.",
+          "tone": "tension",
+          "flag": null,
+          "shorthand": {
+            "kind": "aspect",
+            "a": "venus",
+            "aspect": "square",
+            "b": "pluto",
+            "tight": true
           }
         },
         {
           "date": "2026-10-21T00:00:00.000Z",
           "label": "WED 21",
-          "line": "Khonsu is ferried into the Fishes. The count of the nights crosses to a new bank of the river, and the old mark no longer measures it.",
-          "tone": "harmony",
+          "headline": "The same weight sits on the scale as yesterday.",
+          "line": "Your beloved and what you have buried pull at each other, and Thoth records it to the hair. An old grievance is aired anew.",
+          "tone": "tension",
           "flag": null,
           "shorthand": {
-            "kind": "ingress",
-            "planet": "moon",
-            "sign": "Pisces"
+            "kind": "aspect",
+            "a": "venus",
+            "aspect": "square",
+            "b": "pluto",
+            "tight": true
           }
         },
         {
           "date": "2026-10-22T00:00:00.000Z",
           "label": "THU 22",
-          "line": "Nothing on the river runs close enough to weigh. A day of ordinary work, and Ma'at counts it no lower than a feast.",
-          "tone": "quiet",
+          "headline": "Do not act on the mood you wake up with before the sun is high.",
+          "line": "Your moods and your plans for the new season haul each other down. The scheme you trusted breaks at the dike.",
+          "tone": "tension",
           "flag": null,
           "shorthand": {
-            "kind": "quiet"
+            "kind": "aspect",
+            "a": "moon",
+            "aspect": "square",
+            "b": "uranus",
+            "tight": false
           }
         },
         {
           "date": "2026-10-23T00:00:00.000Z",
           "label": "FRI 23",
-          "line": "Ra joins the barque of Isis in the Scorpion. Two loads ride one barque today, the day's own course and what was scattered and gathered back, and the river carries both or neither.",
+          "headline": null,
+          "line": "Ra is ferried into the Scorpion. The priest of the hours on the temple roof watches the sign's decans rise and reads the day's own course in them.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
-            "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "venus",
-            "exact": false
+            "kind": "ingress",
+            "planet": "sun",
+            "sign": "Scorpio"
           }
         },
         {
           "date": "2026-10-24T00:00:00.000Z",
           "label": "SAT 24",
-          "line": "Khonsu joins the barque of Geb in the Ram. Two loads ride one barque today, the count of the nights and the weight of the ground itself, and the river carries both or neither.",
+          "headline": "Say what you feel over bread and beer on your own reed mat.",
+          "line": "Your moods and your dreams go out together, and Thoth records it to the hair. A dream comes true by daylight.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
             "a": "moon",
             "aspect": "conjunction",
-            "b": "saturn",
-            "exact": false
+            "b": "neptune",
+            "tight": true
           }
         },
         {
           "date": "2026-10-25T00:00:00.000Z",
           "label": "SUN 25",
-          "line": "Khonsu rows in time with Amun. The count of the nights and the hidden king's hand sit level on the scale, and no hand needs to touch it.",
+          "headline": "Let the scribe count the grain tomorrow, and rest tonight.",
+          "line": "Your moods and your temper like each other. Your effort lands where you aim it.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
             "a": "moon",
             "aspect": "trine",
-            "b": "jupiter",
-            "exact": false
+            "b": "mars",
+            "tight": false
           }
         }
       ]
@@ -8259,21 +8270,8 @@
         {
           "date": "2026-10-19T00:00:00.000Z",
           "label": "MON 19",
-          "line": "To the very degree, Selene moves in accord with Ouranos. The borrowed light moves in step with the sky before there were names, and the answer comes down the road unasked.",
-          "tone": "harmony",
-          "flag": null,
-          "shorthand": {
-            "kind": "aspect",
-            "a": "moon",
-            "aspect": "trine",
-            "b": "uranus",
-            "exact": true
-          }
-        },
-        {
-          "date": "2026-10-20T00:00:00.000Z",
-          "label": "TUE 20",
-          "line": "To the very degree, Aphrodite challenges Plouton. The pull that needs no argument contests the wealth kept under the floor at the shrine, and the god will not split the difference.",
+          "headline": "Wanting it badly is no reason to ask Aphrodite for it.",
+          "line": "Your desire and your hidden wealth argue at the same gate. Someone digs up what you buried.",
           "tone": "tension",
           "flag": null,
           "shorthand": {
@@ -8281,71 +8279,95 @@
             "a": "venus",
             "aspect": "square",
             "b": "pluto",
-            "exact": true
+            "tight": false
+          }
+        },
+        {
+          "date": "2026-10-20T00:00:00.000Z",
+          "label": "TUE 20",
+          "headline": "The oracle gives the same answer as yesterday.",
+          "line": "Your desire and your hidden wealth work against each other, and the Pythia does not hesitate. Someone digs up what you buried.",
+          "tone": "tension",
+          "flag": null,
+          "shorthand": {
+            "kind": "aspect",
+            "a": "venus",
+            "aspect": "square",
+            "b": "pluto",
+            "tight": true
           }
         },
         {
           "date": "2026-10-21T00:00:00.000Z",
           "label": "WED 21",
-          "line": "Selene goes on to the shrine of the Fishes. The borrowed light comes onto new ground, and the shrine there has not yet been asked.",
-          "tone": "harmony",
+          "headline": "The oracle gives the same answer as yesterday.",
+          "line": "Your desire and your hidden wealth cross each other, and the tripod answers at once. Someone digs up what you buried.",
+          "tone": "tension",
           "flag": null,
           "shorthand": {
-            "kind": "ingress",
-            "planet": "moon",
-            "sign": "Pisces"
+            "kind": "aspect",
+            "a": "venus",
+            "aspect": "square",
+            "b": "pluto",
+            "tight": true
           }
         },
         {
           "date": "2026-10-22T00:00:00.000Z",
           "label": "THU 22",
-          "line": "No shrine answers today. The oracle keeps its own counsel, and so should you.",
-          "tone": "quiet",
+          "headline": "Do not ask the oracle what you are not ready to hear.",
+          "line": "Your household and your sudden notions argue at the same gate. Your plan breaks at the worst moment.",
+          "tone": "tension",
           "flag": null,
           "shorthand": {
-            "kind": "quiet"
+            "kind": "aspect",
+            "a": "moon",
+            "aspect": "square",
+            "b": "uranus",
+            "tight": false
           }
         },
         {
           "date": "2026-10-23T00:00:00.000Z",
           "label": "FRI 23",
-          "line": "Helios stands shoulder to shoulder with Aphrodite in the Scorpion. The tripod gives one answer for what the sky has seen and will tell and the pull that needs no argument, and neither may claim it alone.",
+          "headline": null,
+          "line": "Helios goes on to the shrine of the Scorpion. The priests there begin the sacrifice for the eye that misses no deed.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
-            "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "venus",
-            "exact": false
+            "kind": "ingress",
+            "planet": "sun",
+            "sign": "Scorpio"
           }
         },
         {
           "date": "2026-10-24T00:00:00.000Z",
           "label": "SAT 24",
-          "line": "Selene stands shoulder to shoulder with Kronos in the Ram. The tripod gives one answer for the borrowed light and the sickle's one question, and neither may claim it alone.",
+          "headline": "Ask your household the question you avoid once the krater is mixed.",
+          "line": "Your household and your wandering thoughts come as a pair, and the tripod answers at once. What you hope for and what is true look alike.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
             "a": "moon",
             "aspect": "conjunction",
-            "b": "saturn",
-            "exact": false
+            "b": "neptune",
+            "tight": true
           }
         },
         {
           "date": "2026-10-25T00:00:00.000Z",
           "label": "SUN 25",
-          "line": "Selene moves in accord with Zeus. The borrowed light moves in step with the thunder that settles it, and the answer comes down the road unasked.",
+          "headline": "Your own hearth gives a better answer than any oracle.",
+          "line": "Your household and your fighting strength keep step with each other. You win the contest you enter.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
             "a": "moon",
             "aspect": "trine",
-            "b": "jupiter",
-            "exact": false
+            "b": "mars",
+            "tight": false
           }
         }
       ]
@@ -8357,21 +8379,8 @@
         {
           "date": "2026-10-19T00:00:00.000Z",
           "label": "MON 19",
-          "line": "Yarikh speaks favor over Shamem, and the gate is full to the wall. The lamp of the night watch and the unnamed heavens are entered in the record together, unopposed.",
-          "tone": "harmony",
-          "flag": null,
-          "shorthand": {
-            "kind": "aspect",
-            "a": "moon",
-            "aspect": "trine",
-            "b": "uranus",
-            "exact": true
-          }
-        },
-        {
-          "date": "2026-10-20T00:00:00.000Z",
-          "label": "TUE 20",
-          "line": "Attart draws the bow against Motu, and the gate is full to the wall. The name sworn on at the altar raises an objection to the dry mouth of death, and the matter goes twice round the floor.",
+          "headline": "Do not swear a vow of love at the standing stone in the middle of a fight.",
+          "line": "Your love and your family's land quarrel with each other. An old loss bites again.",
           "tone": "tension",
           "flag": null,
           "shorthand": {
@@ -8379,71 +8388,95 @@
             "a": "venus",
             "aspect": "square",
             "b": "pluto",
-            "exact": true
+            "tight": false
+          }
+        },
+        {
+          "date": "2026-10-20T00:00:00.000Z",
+          "label": "TUE 20",
+          "headline": "The council is still sitting on yesterday's matter.",
+          "line": "Your love and your family's land trip each other up, and the witnesses sign the tablet. An old loss bites again.",
+          "tone": "tension",
+          "flag": null,
+          "shorthand": {
+            "kind": "aspect",
+            "a": "venus",
+            "aspect": "square",
+            "b": "pluto",
+            "tight": true
           }
         },
         {
           "date": "2026-10-21T00:00:00.000Z",
           "label": "WED 21",
-          "line": "Yarikh comes before the Fishes. The lamp of the night watch is brought before a new seat, and the council there has not yet ruled.",
-          "tone": "harmony",
+          "headline": "The council is still sitting on yesterday's matter.",
+          "line": "Your love and your family's land block each other at the gate, and the elders mark the day. An old loss bites again.",
+          "tone": "tension",
           "flag": null,
           "shorthand": {
-            "kind": "ingress",
-            "planet": "moon",
-            "sign": "Pisces"
+            "kind": "aspect",
+            "a": "venus",
+            "aspect": "square",
+            "b": "pluto",
+            "tight": true
           }
         },
         {
           "date": "2026-10-22T00:00:00.000Z",
           "label": "THU 22",
-          "line": "Not one matter is brought forward today. An ordinary day still stands under El's tent.",
-          "tone": "quiet",
+          "headline": "Keep the family quarrel inside the tent.",
+          "line": "Your kin at home and your change of pasture quarrel with each other. Your routine breaks without warning.",
+          "tone": "tension",
           "flag": null,
           "shorthand": {
-            "kind": "quiet"
+            "kind": "aspect",
+            "a": "moon",
+            "aspect": "square",
+            "b": "uranus",
+            "tight": false
           }
         },
         {
           "date": "2026-10-23T00:00:00.000Z",
           "label": "FRI 23",
-          "line": "Shapash shares the council seat with Attart in the Scorpion. The messenger's report to the council and the name sworn on at the altar come before El as one petition, and the council rules on both together.",
+          "headline": null,
+          "line": "Shapash comes before the Scorpion. The herald's message brought down from the sky moves to the house of another god, where no envoy has announced it.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
-            "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "venus",
-            "exact": false
+            "kind": "ingress",
+            "planet": "sun",
+            "sign": "Scorpio"
           }
         },
         {
           "date": "2026-10-24T00:00:00.000Z",
           "label": "SAT 24",
-          "line": "Yarikh shares the council seat with El in the Ram. The lamp of the night watch and the old father's ruling come before El as one petition, and the council rules on both together.",
+          "headline": "Settle one family matter before the flocks are folded.",
+          "line": "Your kin at home and your prayers come as one, and the elders mark the day. Your fears and your prayers come in one wave.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
             "a": "moon",
             "aspect": "conjunction",
-            "b": "saturn",
-            "exact": false
+            "b": "neptune",
+            "tight": true
           }
         },
         {
           "date": "2026-10-25T00:00:00.000Z",
           "label": "SUN 25",
-          "line": "Yarikh speaks favor over Baal Hadad. The lamp of the night watch and the rain that decides the harvest are entered in the record together, unopposed.",
+          "headline": "Sit under your own fig tree and enjoy the evening.",
+          "line": "Your kin at home and your hot blood go well together. Your strength finishes the job, and nobody falls sick.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
             "a": "moon",
             "aspect": "trine",
-            "b": "jupiter",
-            "exact": false
+            "b": "mars",
+            "tight": false
           }
         }
       ]
@@ -8455,21 +8488,8 @@
         {
           "date": "2026-10-19T00:00:00.000Z",
           "label": "MON 19",
-          "line": "Tanit lights the harbor for Baal Shamem, the entry posted to the hour. The vow entered under her sign and the weather no manifest allows for balance on the same page, and the day's sheet closes without a correction.",
-          "tone": "harmony",
-          "flag": null,
-          "shorthand": {
-            "kind": "aspect",
-            "a": "moon",
-            "aspect": "trine",
-            "b": "uranus",
-            "exact": true
-          }
-        },
-        {
-          "date": "2026-10-20T00:00:00.000Z",
-          "label": "TUE 20",
-          "line": "Astarte raises a hand against Mot, the entry posted to the hour. The cargo worth the voyage disputes the figure the debt that outlives the debtor brings, and the column is read again line by line.",
+          "headline": "Affection you paid for in shekels does not stay bought.",
+          "line": "Your pleasure fund and the debts you inherited fight over the same silver. An old debt grows new interest.",
           "tone": "tension",
           "flag": null,
           "shorthand": {
@@ -8477,71 +8497,95 @@
             "a": "venus",
             "aspect": "square",
             "b": "pluto",
-            "exact": true
+            "tight": false
+          }
+        },
+        {
+          "date": "2026-10-20T00:00:00.000Z",
+          "label": "TUE 20",
+          "headline": "Yesterday's entry stands, and the clerk carries it forward.",
+          "line": "Your pleasure fund and the debts you inherited eat into each other, weighed to the last shekel. An old debt grows new interest.",
+          "tone": "tension",
+          "flag": null,
+          "shorthand": {
+            "kind": "aspect",
+            "a": "venus",
+            "aspect": "square",
+            "b": "pluto",
+            "tight": true
           }
         },
         {
           "date": "2026-10-21T00:00:00.000Z",
           "label": "WED 21",
-          "line": "Tanit makes port in the Fishes. The vow entered under her sign is entered under a new heading, and the old bearing no longer holds.",
-          "tone": "harmony",
+          "headline": "Yesterday's entry stands, and the clerk carries it forward.",
+          "line": "Your pleasure fund and the debts you inherited undercut each other, entered without a correction. An old debt grows new interest.",
+          "tone": "tension",
           "flag": null,
           "shorthand": {
-            "kind": "ingress",
-            "planet": "moon",
-            "sign": "Pisces"
+            "kind": "aspect",
+            "a": "venus",
+            "aspect": "square",
+            "b": "pluto",
+            "tight": true
           }
         },
         {
           "date": "2026-10-22T00:00:00.000Z",
           "label": "THU 22",
-          "line": "The day's page takes no entry. The books hold steady, which is its own kind of profit.",
-          "tone": "quiet",
+          "headline": "Do not balance the house ledger in a temper.",
+          "line": "Your household accounts and your new routes fight over the same silver. A ship changes course without telling you.",
+          "tone": "tension",
           "flag": null,
           "shorthand": {
-            "kind": "quiet"
+            "kind": "aspect",
+            "a": "moon",
+            "aspect": "square",
+            "b": "uranus",
+            "tight": false
           }
         },
         {
           "date": "2026-10-23T00:00:00.000Z",
           "label": "FRI 23",
-          "line": "Semes sails under one banner with Astarte in the Scorpion. The day's sailing light and the cargo worth the voyage are posted to one line of the register, and one seal covers both.",
+          "headline": null,
+          "line": "Semes makes port in the Scorpion. The clerk carries the Tyrian sun over the new city onto a fresh sheet of the ledger and rules off the last one.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
-            "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "venus",
-            "exact": false
+            "kind": "ingress",
+            "planet": "sun",
+            "sign": "Scorpio"
           }
         },
         {
           "date": "2026-10-24T00:00:00.000Z",
           "label": "SAT 24",
-          "line": "Tanit sails under one banner with Baal Hammon in the Ram. The vow entered under her sign and the elder's due called in are posted to one line of the register, and one seal covers both.",
+          "headline": "The household purse is everyone's business today, to the last shekel.",
+          "line": "Your household accounts and your sea voyages go under one seal, entered without a correction. The sea brings back what you sent out.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
             "a": "moon",
             "aspect": "conjunction",
-            "b": "saturn",
-            "exact": false
+            "b": "neptune",
+            "tight": true
           }
         },
         {
           "date": "2026-10-25T00:00:00.000Z",
           "label": "SUN 25",
-          "line": "Tanit lights the harbor for Baal Hammon. The vow entered under her sign and the store that fills balance on the same page, and the day's sheet closes without a correction.",
+          "headline": "The household runs itself today like a well-stowed hold, so let it.",
+          "line": "Your household accounts and your war chest add up on the first pass. Your nerve pays out double.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
             "a": "moon",
             "aspect": "trine",
-            "b": "jupiter",
-            "exact": false
+            "b": "mars",
+            "tight": false
           }
         }
       ]
@@ -8553,21 +8597,23 @@
         {
           "date": "2026-10-19T00:00:00.000Z",
           "label": "MON 19",
-          "line": "Luna, at the line the augur drew, clasps the right hand of Caelus. The night's turning and the whole sky before augury divided it stand under the same fastus day, and what is done under it holds.",
-          "tone": "harmony",
-          "flag": "F",
+          "headline": "Keep courtship out of forum business.",
+          "line": "Your courtship and your inheritance block each other's road. An old family claim blocks your way.",
+          "tone": "tension",
+          "flag": "C",
           "shorthand": {
             "kind": "aspect",
-            "a": "moon",
-            "aspect": "trine",
-            "b": "uranus",
-            "exact": true
+            "a": "venus",
+            "aspect": "square",
+            "b": "pluto",
+            "tight": false
           }
         },
         {
           "date": "2026-10-20T00:00:00.000Z",
           "label": "TUE 20",
-          "line": "Venus, at the line the augur drew, raises the spear against Dis Pater. The treaty sealed by desire enters an objection against the store beneath the earth, and every step goes forward under challenge.",
+          "headline": "The auspices stand as they stood.",
+          "line": "Your courtship and your inheritance clash, and the augur marks it in his book. An old family claim blocks your way.",
           "tone": "tension",
           "flag": "N",
           "shorthand": {
@@ -8575,71 +8621,80 @@
             "a": "venus",
             "aspect": "square",
             "b": "pluto",
-            "exact": true
+            "tight": true
           }
         },
         {
           "date": "2026-10-21T00:00:00.000Z",
           "label": "WED 21",
-          "line": "Luna enters the augur's boundary of the Fishes. The night's turning stands on new ground, and the auspices there have not been taken.",
-          "tone": "harmony",
-          "flag": "F",
+          "headline": "The auspices stand as they stood.",
+          "line": "Your courtship and your inheritance obstruct each other, and the pontiff marks it in the calendar. An old family claim blocks your way.",
+          "tone": "tension",
+          "flag": "N",
           "shorthand": {
-            "kind": "ingress",
-            "planet": "moon",
-            "sign": "Pisces"
+            "kind": "aspect",
+            "a": "venus",
+            "aspect": "square",
+            "b": "pluto",
+            "tight": true
           }
         },
         {
           "date": "2026-10-22T00:00:00.000Z",
           "label": "THU 22",
-          "line": "Nothing is reported that the augurs would call a sign. The citadel was manned at dawn all the same.",
-          "tone": "quiet",
-          "flag": "F",
+          "headline": "The household is quarrelsome, and the whole insula is listening.",
+          "line": "Your household affairs and your reforms block each other's road. A sudden order reverses your plans.",
+          "tone": "tension",
+          "flag": "C",
           "shorthand": {
-            "kind": "quiet"
+            "kind": "aspect",
+            "a": "moon",
+            "aspect": "square",
+            "b": "uranus",
+            "tight": false
           }
         },
         {
           "date": "2026-10-23T00:00:00.000Z",
           "label": "FRI 23",
-          "line": "Sol marches under the same eagle as Venus in the Scorpion. The auspice taken for the day's light on the Forum binds the treaty sealed by desire as well; neither acts on it alone.",
+          "headline": null,
+          "line": "Sol enters the augur's boundary of the Scorpion. The auspices taken for the unconquered light lapse at that boundary, and the college takes new ones beyond it.",
           "tone": "harmony",
           "flag": "F",
           "shorthand": {
-            "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "venus",
-            "exact": false
+            "kind": "ingress",
+            "planet": "sun",
+            "sign": "Scorpio"
           }
         },
         {
           "date": "2026-10-24T00:00:00.000Z",
           "label": "SAT 24",
-          "line": "Luna marches under the same eagle as Saturnus in the Ram. The auspice taken for the night's turning binds the old boundary stone as well; neither acts on it alone.",
+          "headline": "Keep the lamp lit in the atrium and the door open.",
+          "line": "Your household affairs and your days at the baths go together, and the pontiff marks it in the calendar. Pleasure and confusion come in one cup.",
           "tone": "harmony",
           "flag": "F",
           "shorthand": {
             "kind": "aspect",
             "a": "moon",
             "aspect": "conjunction",
-            "b": "saturn",
-            "exact": false
+            "b": "neptune",
+            "tight": true
           }
         },
         {
           "date": "2026-10-25T00:00:00.000Z",
           "label": "SUN 25",
-          "line": "Luna clasps the right hand of Iuppiter. The night's turning and the thunder on the right stand under the same fastus day, and what is done under it holds.",
+          "headline": "Stay in the domus tonight and let the household fuss over you.",
+          "line": "Your household affairs and your campaign sit on the same side of the Senate. Your campaign takes ground.",
           "tone": "harmony",
           "flag": "F",
           "shorthand": {
             "kind": "aspect",
             "a": "moon",
             "aspect": "trine",
-            "b": "jupiter",
-            "exact": false
+            "b": "mars",
+            "tight": false
           }
         }
       ]
@@ -8651,18 +8706,22 @@
         {
           "date": "2026-03-16T00:00:00.000Z",
           "label": "MON 16",
-          "line": "Khonsu is ferried into the Fishes. The count of the nights crosses to a new bank of the river, and the old mark no longer measures it.",
+          "headline": "Write the letter on fresh papyrus and carry it yourself.",
+          "line": "Your letters and your temper go out together. Your anger has a useful outlet.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
-            "kind": "ingress",
-            "planet": "moon",
-            "sign": "Pisces"
+            "kind": "aspect",
+            "a": "mercury",
+            "aspect": "conjunction",
+            "b": "mars",
+            "tight": false
           }
         },
         {
           "date": "2026-03-17T00:00:00.000Z",
           "label": "TUE 17",
+          "headline": "Do the plain work and call it enough.",
           "line": "Nothing on the river runs close enough to weigh. A day of ordinary work, and Ma'at counts it no lower than a feast.",
           "tone": "quiet",
           "flag": null,
@@ -8673,35 +8732,53 @@
         {
           "date": "2026-03-18T00:00:00.000Z",
           "label": "WED 18",
-          "line": "The plumb hangs true: Isis tips the scales against Amun. What was scattered and gathered back pulls the beam out of true against the hidden king's hand, and only labor brings the pans level.",
-          "tone": "tension",
+          "headline": "Ask a neighbor to take the other end of the sledge.",
+          "line": "Your day's work and your plans for the new season help each other along. A chance comes from an unlikely quarter.",
+          "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "venus",
-            "aspect": "square",
-            "b": "jupiter",
-            "exact": true
+            "a": "sun",
+            "aspect": "sextile",
+            "b": "uranus",
+            "tight": false
           }
         },
         {
           "date": "2026-03-19T00:00:00.000Z",
           "label": "THU 19",
-          "line": "The plumb hangs true: Khonsu offers a steady hand to Osiris. The count of the nights lends its wind to the verdict of the hall below; the sail that is raised is the one that moves.",
+          "headline": "The same weight sits on the scale as yesterday.",
+          "line": "Your day's work and your plans for the new season lighten each other's load, and Thoth records it to the hair. A chance comes from an unlikely quarter.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "moon",
+            "a": "sun",
             "aspect": "sextile",
-            "b": "pluto",
-            "exact": true
+            "b": "uranus",
+            "tight": true
           }
         },
         {
           "date": "2026-03-20T00:00:00.000Z",
           "label": "FRI 20",
-          "line": "Horus the Red rows in time with Amun. A fight already decided and the hidden king's hand sit level on the scale, and no hand needs to touch it.",
+          "headline": "The same weight sits on the scale as yesterday.",
+          "line": "Your day's work and your plans for the new season throw in with each other. A chance comes from an unlikely quarter.",
+          "tone": "harmony",
+          "flag": null,
+          "shorthand": {
+            "kind": "aspect",
+            "a": "sun",
+            "aspect": "sextile",
+            "b": "uranus",
+            "tight": false
+          }
+        },
+        {
+          "date": "2026-03-21T00:00:00.000Z",
+          "label": "SAT 21",
+          "headline": "Push the barge off the mud while your arms are strong.",
+          "line": "Your temper and your patrons keep the same pace. Good fortune finds you unasked.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
@@ -8709,35 +8786,22 @@
             "a": "mars",
             "aspect": "trine",
             "b": "jupiter",
-            "exact": false
-          }
-        },
-        {
-          "date": "2026-03-21T00:00:00.000Z",
-          "label": "SAT 21",
-          "line": "Ra joins the barque of Nun in the Ram. Two loads ride one barque today, the day's own course and the dark water under everything, and the river carries both or neither.",
-          "tone": "harmony",
-          "flag": null,
-          "shorthand": {
-            "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "neptune",
-            "exact": false
+            "tight": false
           }
         },
         {
           "date": "2026-03-22T00:00:00.000Z",
           "label": "SUN 22",
-          "line": "The plumb hangs true: Ra joins the barque of Nun in the Ram. Two loads ride one barque today, the day's own course and the dark water under everything, and the river carries both or neither.",
+          "headline": "The same weight sits on the scale as yesterday.",
+          "line": "Your temper and your patrons go easily with each other, and Thoth records it to the hair. Good fortune finds you unasked.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "neptune",
-            "exact": true
+            "a": "mars",
+            "aspect": "trine",
+            "b": "jupiter",
+            "tight": true
           }
         }
       ]
@@ -8749,18 +8813,22 @@
         {
           "date": "2026-03-16T00:00:00.000Z",
           "label": "MON 16",
-          "line": "Selene goes on to the shrine of the Fishes. The borrowed light comes onto new ground, and the shrine there has not yet been asked.",
+          "headline": "Say your question to the oracle out loud and write down the answer.",
+          "line": "Your errands and your fighting strength come as a pair. Your strength and your temper march in one file.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
-            "kind": "ingress",
-            "planet": "moon",
-            "sign": "Pisces"
+            "kind": "aspect",
+            "a": "mercury",
+            "aspect": "conjunction",
+            "b": "mars",
+            "tight": false
           }
         },
         {
           "date": "2026-03-17T00:00:00.000Z",
           "label": "TUE 17",
+          "headline": "You can leave the questions for another day.",
           "line": "No shrine answers today. The oracle keeps its own counsel, and so should you.",
           "tone": "quiet",
           "flag": null,
@@ -8771,35 +8839,53 @@
         {
           "date": "2026-03-18T00:00:00.000Z",
           "label": "WED 18",
-          "line": "To the very degree, Aphrodite challenges Zeus. The pull that needs no argument contests the thunder that settles it at the shrine, and the god will not split the difference.",
-          "tone": "tension",
+          "headline": "Show your work in the agora to someone who can help it.",
+          "line": "Your name in the city and your sudden notions help each other out. A stranger brings you a useful idea.",
+          "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "venus",
-            "aspect": "square",
-            "b": "jupiter",
-            "exact": true
+            "a": "sun",
+            "aspect": "sextile",
+            "b": "uranus",
+            "tight": false
           }
         },
         {
           "date": "2026-03-19T00:00:00.000Z",
           "label": "THU 19",
-          "line": "To the very degree, Selene offers fair counsel to Plouton. The borrowed light stands ready to counsel the wealth kept under the floor; the shrine answers the question that is put.",
+          "headline": "The oracle gives the same answer as yesterday.",
+          "line": "Your name in the city and your sudden notions open doors for each other, and the tripod answers at once. A stranger brings you a useful idea.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "moon",
+            "a": "sun",
             "aspect": "sextile",
-            "b": "pluto",
-            "exact": true
+            "b": "uranus",
+            "tight": true
           }
         },
         {
           "date": "2026-03-20T00:00:00.000Z",
           "label": "FRI 20",
-          "line": "Ares moves in accord with Zeus. The quarrel looking for a field moves in step with the thunder that settles it, and the answer comes down the road unasked.",
+          "headline": "The oracle gives the same answer as yesterday.",
+          "line": "Your name in the city and your sudden notions clear the road for each other. A stranger brings you a useful idea.",
+          "tone": "harmony",
+          "flag": null,
+          "shorthand": {
+            "kind": "aspect",
+            "a": "sun",
+            "aspect": "sextile",
+            "b": "uranus",
+            "tight": false
+          }
+        },
+        {
+          "date": "2026-03-21T00:00:00.000Z",
+          "label": "SAT 21",
+          "headline": "Enter the hard race and expect the laurel.",
+          "line": "Your fighting strength and your standing with the powerful agree without argument. You get a straight answer without a riddle.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
@@ -8807,35 +8893,22 @@
             "a": "mars",
             "aspect": "trine",
             "b": "jupiter",
-            "exact": false
-          }
-        },
-        {
-          "date": "2026-03-21T00:00:00.000Z",
-          "label": "SAT 21",
-          "line": "Helios stands shoulder to shoulder with Poseidon in the Ram. The tripod gives one answer for what the sky has seen and will tell and the ground that will not hold still, and neither may claim it alone.",
-          "tone": "harmony",
-          "flag": null,
-          "shorthand": {
-            "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "neptune",
-            "exact": false
+            "tight": false
           }
         },
         {
           "date": "2026-03-22T00:00:00.000Z",
           "label": "SUN 22",
-          "line": "To the very degree, Helios stands shoulder to shoulder with Poseidon in the Ram. The tripod gives one answer for what the sky has seen and will tell and the ground that will not hold still, and neither may claim it alone.",
+          "headline": "The oracle gives the same answer as yesterday.",
+          "line": "Your fighting strength and your standing with the powerful fit together, and the tripod answers at once. You get a straight answer without a riddle.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "neptune",
-            "exact": true
+            "a": "mars",
+            "aspect": "trine",
+            "b": "jupiter",
+            "tight": true
           }
         }
       ]
@@ -8847,18 +8920,22 @@
         {
           "date": "2026-03-16T00:00:00.000Z",
           "label": "MON 16",
-          "line": "Yarikh comes before the Fishes. The lamp of the night watch is brought before a new seat, and the council there has not yet ruled.",
+          "headline": "Forge the thing yourself instead of buying it off the caravan.",
+          "line": "Your handiwork and your hot blood come as one. Your anger and your strength become one weapon.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
-            "kind": "ingress",
-            "planet": "moon",
-            "sign": "Pisces"
+            "kind": "aspect",
+            "a": "mercury",
+            "aspect": "conjunction",
+            "b": "mars",
+            "tight": false
           }
         },
         {
           "date": "2026-03-17T00:00:00.000Z",
           "label": "TUE 17",
+          "headline": "Nobody needs anything from you today.",
           "line": "Not one matter is brought forward today. An ordinary day still stands under El's tent.",
           "tone": "quiet",
           "flag": null,
@@ -8869,35 +8946,53 @@
         {
           "date": "2026-03-18T00:00:00.000Z",
           "label": "WED 18",
-          "line": "Attart draws the bow against Baal Hadad, and the gate is full to the wall. The name sworn on at the altar raises an objection to the rain that decides the harvest, and the matter goes twice round the floor.",
-          "tone": "tension",
+          "headline": "A neighbor will help with the threshing if you ask.",
+          "line": "Your daily labor and your change of pasture stand by each other. A visitor from far off brings an offer.",
+          "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "venus",
-            "aspect": "square",
-            "b": "jupiter",
-            "exact": true
+            "a": "sun",
+            "aspect": "sextile",
+            "b": "uranus",
+            "tight": false
           }
         },
         {
           "date": "2026-03-19T00:00:00.000Z",
           "label": "THU 19",
-          "line": "Yarikh exchanges tribute with Motu, and the gate is full to the wall. The lamp of the night watch speaks in favor of the dry mouth of death, and the floor is open for the vow.",
+          "headline": "The council is still sitting on yesterday's matter.",
+          "line": "Your daily labor and your change of pasture lend each other a hand, and the elders mark the day. A visitor from far off brings an offer.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "moon",
+            "a": "sun",
             "aspect": "sextile",
-            "b": "pluto",
-            "exact": true
+            "b": "uranus",
+            "tight": true
           }
         },
         {
           "date": "2026-03-20T00:00:00.000Z",
           "label": "FRI 20",
-          "line": "Resheph speaks favor over Baal Hadad. The plague-arrow already on the string and the rain that decides the harvest are entered in the record together, unopposed.",
+          "headline": "The council is still sitting on yesterday's matter.",
+          "line": "Your daily labor and your change of pasture help each other. A visitor from far off brings an offer.",
+          "tone": "harmony",
+          "flag": null,
+          "shorthand": {
+            "kind": "aspect",
+            "a": "sun",
+            "aspect": "sextile",
+            "b": "uranus",
+            "tight": false
+          }
+        },
+        {
+          "date": "2026-03-21T00:00:00.000Z",
+          "label": "SAT 21",
+          "headline": "Thresh the whole floor before the heat goes out of you.",
+          "line": "Your hot blood and your harvest keep pace with each other. What you ask for passes without a hand raised against it.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
@@ -8905,35 +9000,22 @@
             "a": "mars",
             "aspect": "trine",
             "b": "jupiter",
-            "exact": false
-          }
-        },
-        {
-          "date": "2026-03-21T00:00:00.000Z",
-          "label": "SAT 21",
-          "line": "Shapash shares the council seat with Yammu in the Ram. The messenger's report to the council and the sea's claim to the throne come before El as one petition, and the council rules on both together.",
-          "tone": "harmony",
-          "flag": null,
-          "shorthand": {
-            "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "neptune",
-            "exact": false
+            "tight": false
           }
         },
         {
           "date": "2026-03-22T00:00:00.000Z",
           "label": "SUN 22",
-          "line": "Shapash shares the council seat with Yammu in the Ram, and the gate is full to the wall. The messenger's report to the council and the sea's claim to the throne come before El as one petition, and the council rules on both together.",
+          "headline": "The council is still sitting on yesterday's matter.",
+          "line": "Your hot blood and your harvest agree, and the elders mark the day. What you ask for passes without a hand raised against it.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "neptune",
-            "exact": true
+            "a": "mars",
+            "aspect": "trine",
+            "b": "jupiter",
+            "tight": true
           }
         }
       ]
@@ -8945,19 +9027,23 @@
         {
           "date": "2026-03-16T00:00:00.000Z",
           "label": "MON 16",
-          "line": "Tanit makes port in the Fishes. The vow entered under her sign is entered under a new heading, and the old bearing no longer holds.",
+          "headline": "Put the handshake in writing before the ships sail.",
+          "line": "Your contracts and your war chest go under one seal. Your nerve and your coin go into one venture.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
-            "kind": "ingress",
-            "planet": "moon",
-            "sign": "Pisces"
+            "kind": "aspect",
+            "a": "mercury",
+            "aspect": "conjunction",
+            "b": "mars",
+            "tight": false
           }
         },
         {
           "date": "2026-03-17T00:00:00.000Z",
           "label": "TUE 17",
-          "line": "The day's page takes no entry. The books hold steady, which is its own kind of profit.",
+          "headline": "You owe nothing extra today.",
+          "line": "The day's page takes no entry. Nothing falls due, and the books close as they opened.",
           "tone": "quiet",
           "flag": null,
           "shorthand": {
@@ -8967,35 +9053,53 @@
         {
           "date": "2026-03-18T00:00:00.000Z",
           "label": "WED 18",
-          "line": "Astarte raises a hand against Baal Hammon, the entry posted to the hour. The cargo worth the voyage disputes the figure the store that fills brings, and the column is read again line by line.",
-          "tone": "tension",
+          "headline": "Your name opens one more door on the quay.",
+          "line": "Your credit in the harbor and your new routes vouch for each other. A captain offers you a new route.",
+          "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "venus",
-            "aspect": "square",
-            "b": "jupiter",
-            "exact": true
+            "a": "sun",
+            "aspect": "sextile",
+            "b": "uranus",
+            "tight": false
           }
         },
         {
           "date": "2026-03-19T00:00:00.000Z",
           "label": "THU 19",
-          "line": "Tanit trades safe passage with Mot, the entry posted to the hour. The vow entered under her sign holds a berth for the debt that outlives the debtor; the entry stands until the tide, unclaimed.",
+          "headline": "Yesterday's entry stands, and the clerk carries it forward.",
+          "line": "Your credit in the harbor and your new routes back each other, entered without a correction. A captain offers you a new route.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "moon",
+            "a": "sun",
             "aspect": "sextile",
-            "b": "pluto",
-            "exact": true
+            "b": "uranus",
+            "tight": true
           }
         },
         {
           "date": "2026-03-20T00:00:00.000Z",
           "label": "FRI 20",
-          "line": "Melqart lights the harbor for Baal Hammon. The pillar the city was founded on and the store that fills balance on the same page, and the day's sheet closes without a correction.",
+          "headline": "Yesterday's entry stands, and the clerk carries it forward.",
+          "line": "Your credit in the harbor and your new routes carry each other's cargo. A captain offers you a new route.",
+          "tone": "harmony",
+          "flag": null,
+          "shorthand": {
+            "kind": "aspect",
+            "a": "sun",
+            "aspect": "sextile",
+            "b": "uranus",
+            "tight": false
+          }
+        },
+        {
+          "date": "2026-03-21T00:00:00.000Z",
+          "label": "SAT 21",
+          "headline": "Your nerve pays off today, so press the bargain over the amphorae.",
+          "line": "Your war chest and your profits pay off together. Your figures come out right on the first count.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
@@ -9003,35 +9107,22 @@
             "a": "mars",
             "aspect": "trine",
             "b": "jupiter",
-            "exact": false
-          }
-        },
-        {
-          "date": "2026-03-21T00:00:00.000Z",
-          "label": "SAT 21",
-          "line": "Semes sails under one banner with Yam in the Ram. The day's sailing light and the open sea between ports are posted to one line of the register, and one seal covers both.",
-          "tone": "harmony",
-          "flag": null,
-          "shorthand": {
-            "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "neptune",
-            "exact": false
+            "tight": false
           }
         },
         {
           "date": "2026-03-22T00:00:00.000Z",
           "label": "SUN 22",
-          "line": "Semes sails under one banner with Yam in the Ram, the entry posted to the hour. The day's sailing light and the open sea between ports are posted to one line of the register, and one seal covers both.",
+          "headline": "Yesterday's entry stands, and the clerk carries it forward.",
+          "line": "Your war chest and your profits balance easily, entered without a correction. Your figures come out right on the first count.",
           "tone": "harmony",
           "flag": null,
           "shorthand": {
             "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "neptune",
-            "exact": true
+            "a": "mars",
+            "aspect": "trine",
+            "b": "jupiter",
+            "tight": true
           }
         }
       ]
@@ -9043,18 +9134,22 @@
         {
           "date": "2026-03-16T00:00:00.000Z",
           "label": "MON 16",
-          "line": "Luna enters the augur's boundary of the Fishes. The night's turning stands on new ground, and the auspices there have not been taken.",
+          "headline": "Put your own seal on the dispatch.",
+          "line": "Your dispatches and your campaign go together. Your effort and your anger serve under one command.",
           "tone": "harmony",
           "flag": "F",
           "shorthand": {
-            "kind": "ingress",
-            "planet": "moon",
-            "sign": "Pisces"
+            "kind": "aspect",
+            "a": "mercury",
+            "aspect": "conjunction",
+            "b": "mars",
+            "tight": false
           }
         },
         {
           "date": "2026-03-17T00:00:00.000Z",
           "label": "TUE 17",
+          "headline": "Go about your business without looking for signs.",
           "line": "Nothing is reported that the augurs would call a sign. The citadel was manned at dawn all the same.",
           "tone": "quiet",
           "flag": "F",
@@ -9065,35 +9160,53 @@
         {
           "date": "2026-03-18T00:00:00.000Z",
           "label": "WED 18",
-          "line": "Venus, at the line the augur drew, raises the spear against Iuppiter. The treaty sealed by desire enters an objection against the thunder on the right, and every step goes forward under challenge.",
-          "tone": "tension",
-          "flag": "N",
+          "headline": "Call in the favor a client owes you.",
+          "line": "Your good name and your reforms do each other favors. A new idea finds a sponsor.",
+          "tone": "harmony",
+          "flag": "F",
           "shorthand": {
             "kind": "aspect",
-            "a": "venus",
-            "aspect": "square",
-            "b": "jupiter",
-            "exact": true
+            "a": "sun",
+            "aspect": "sextile",
+            "b": "uranus",
+            "tight": false
           }
         },
         {
           "date": "2026-03-19T00:00:00.000Z",
           "label": "THU 19",
-          "line": "Luna, at the line the augur drew, offers a treaty to Dis Pater. The night's turning shows favorable to the store beneath the earth, and the sign waits for someone to claim it.",
+          "headline": "The auspices stand as they stood.",
+          "line": "Your good name and your reforms support each other, and the pontiff marks it in the calendar. A new idea finds a sponsor.",
           "tone": "harmony",
           "flag": "F",
           "shorthand": {
             "kind": "aspect",
-            "a": "moon",
+            "a": "sun",
             "aspect": "sextile",
-            "b": "pluto",
-            "exact": true
+            "b": "uranus",
+            "tight": true
           }
         },
         {
           "date": "2026-03-20T00:00:00.000Z",
           "label": "FRI 20",
-          "line": "Mars clasps the right hand of Iuppiter. The legion in the field and the thunder on the right stand under the same fastus day, and what is done under it holds.",
+          "headline": "The auspices stand as they stood.",
+          "line": "Your good name and your reforms lend each other troops. A new idea finds a sponsor.",
+          "tone": "harmony",
+          "flag": "F",
+          "shorthand": {
+            "kind": "aspect",
+            "a": "sun",
+            "aspect": "sextile",
+            "b": "uranus",
+            "tight": false
+          }
+        },
+        {
+          "date": "2026-03-21T00:00:00.000Z",
+          "label": "SAT 21",
+          "headline": "Take the field, because the auspices are on your side.",
+          "line": "Your campaign and your run for office see eye to eye. Your motion passes.",
           "tone": "harmony",
           "flag": "F",
           "shorthand": {
@@ -9101,35 +9214,22 @@
             "a": "mars",
             "aspect": "trine",
             "b": "jupiter",
-            "exact": false
-          }
-        },
-        {
-          "date": "2026-03-21T00:00:00.000Z",
-          "label": "SAT 21",
-          "line": "Sol marches under the same eagle as Neptunus in the Ram. The auspice taken for the day's light on the Forum binds the sea the fleet must cross as well; neither acts on it alone.",
-          "tone": "harmony",
-          "flag": "F",
-          "shorthand": {
-            "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "neptune",
-            "exact": false
+            "tight": false
           }
         },
         {
           "date": "2026-03-22T00:00:00.000Z",
           "label": "SUN 22",
-          "line": "Sol, at the line the augur drew, marches under the same eagle as Neptunus in the Ram. The auspice taken for the day's light on the Forum binds the sea the fleet must cross as well; neither acts on it alone.",
+          "headline": "The auspices stand as they stood.",
+          "line": "Your campaign and your run for office work well together, and the pontiff marks it in the calendar. Your motion passes.",
           "tone": "harmony",
           "flag": "F",
           "shorthand": {
             "kind": "aspect",
-            "a": "sun",
-            "aspect": "conjunction",
-            "b": "neptune",
-            "exact": true
+            "a": "mars",
+            "aspect": "trine",
+            "b": "jupiter",
+            "tight": true
           }
         }
       ]

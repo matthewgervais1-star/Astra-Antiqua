@@ -138,6 +138,8 @@ public class HorizonParityTests
             var label = $"{Str(golden, "culture")} {Str(g, "label")}";
             Assert.Equal(Utc(g.GetProperty("date")), d.Date);
             Assert.Equal(Str(g, "label"), d.Label);
+            var headline = g.GetProperty("headline");
+            Assert.Equal(headline.ValueKind == JsonValueKind.Null ? null : headline.GetString(), d.Headline);
             Assert.Equal(Str(g, "line"), d.Line);
             Assert.Equal(Str(g, "tone"), d.Tone.ToString().ToLowerInvariant());
             var flag = g.GetProperty("flag");
@@ -151,7 +153,7 @@ public class HorizonParityTests
                     Assert.Equal(PlanetInfo.FromId(Str(sh, "a")), d.Shorthand.A);
                     Assert.Equal(PlanetInfo.FromId(Str(sh, "b")), d.Shorthand.B);
                     Assert.Equal(AspectKinds.FromId(Str(sh, "aspect")), d.Shorthand.Aspect);
-                    Assert.Equal(sh.GetProperty("exact").GetBoolean(), d.Shorthand.Exact);
+                    Assert.Equal(sh.GetProperty("tight").GetBoolean(), d.Shorthand.Tight);
                     break;
                 case ShorthandKind.Ingress:
                     Assert.Equal(PlanetInfo.FromId(Str(sh, "planet")), d.Shorthand.Planet);
@@ -163,11 +165,11 @@ public class HorizonParityTests
     }
 
     [Fact]
-    public void The_week_fixtures_include_an_exact_day_and_an_ingress_day()
+    public void The_week_fixtures_include_a_tight_day_and_an_ingress_day()
     {
         var days = Root.GetProperty("weeks").EnumerateArray()
             .SelectMany(w => w.GetProperty("days").EnumerateArray()).ToList();
-        Assert.Contains(days, d => d.GetProperty("shorthand").TryGetProperty("exact", out var e) && e.GetBoolean());
+        Assert.Contains(days, d => d.GetProperty("shorthand").TryGetProperty("tight", out var e) && e.GetBoolean());
         Assert.Contains(days, d => Str(d.GetProperty("shorthand"), "kind") == "ingress");
     }
 

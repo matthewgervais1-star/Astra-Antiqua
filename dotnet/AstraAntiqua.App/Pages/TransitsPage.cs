@@ -89,19 +89,6 @@ public sealed class TransitDetailPage : SkyPage
                 $"from {MonthYear(span.Start)} to {MonthYear(span.End)}. Nothing here is forecast: the dates are the ephemeris read forward."),
         });
 
-        if (span.NatalKey is "sun" or "moon")
-        {
-            var natalPlanet = span.NatalKey == "sun" ? Planet.Sun : Planet.Moon;
-            var banks = Store.Banks;
-            column.Add(new ContentView
-            {
-                Padding = Ui.Inset,
-                Content = Ui.Prose(
-                    banks.AspectFrame(Culture, span.Kind, banks.DeityCharge(Culture, span.TransitPlanet), banks.DeityCharge(Culture, natalPlanet)),
-                    italic: true),
-            });
-        }
-
         column.Add(Ui.Divider("The exact passes"));
         foreach (var pass in span.Passes)
         {

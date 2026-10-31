@@ -1,0 +1,763 @@
+{
+  "at": "2026-10-21T06:00:00Z",
+  "utcDay": 20747,
+  "birth": "smoke-birth.v1.json",
+  "natal": {
+    "longitudes": {
+      "sun": 294.76004239931854,
+      "moon": 163.58319596753475,
+      "mercury": 281.5752497067905,
+      "venus": 300.87208543546575,
+      "mars": 259.68676224801885,
+      "jupiter": 93.40276343001031,
+      "saturn": 287.2775706280724,
+      "uranus": 276.5939786148897,
+      "neptune": 282.55373375670547,
+      "pluto": 227.4224672890375
+    },
+    "ascendant": 262.39847053166096,
+    "midheaven": 195.59877023258176
+  },
+  "cultures": [
+    {
+      "culture": "egypt",
+      "institution": "THE HALL OF MA’AT",
+      "headline": "Do not haggle with your beloved as you would over linen.",
+      "evidence": "ISIS □ OSIRIS · 0°25′",
+      "paragraph": "Your beloved and what you have buried pull at each other, and Thoth records it to the hair. An old grievance is aired anew. Isis leans on the balance, and the scribe of the hall notes where it settles. Past Isis and Osiris, in the next court, Khonsu bars the door against Amun: your moods and your patrons each want it all. Leave the household accounts for another night.",
+      "sentences": [
+        "Your beloved and what you have buried pull at each other, and Thoth records it to the hair.",
+        "An old grievance is aired anew.",
+        "Isis leans on the balance, and the scribe of the hall notes where it settles.",
+        "Past Isis and Osiris, in the next court, Khonsu bars the door against Amun: your moods and your patrons each want it all.",
+        "Leave the household accounts for another night."
+      ],
+      "tone": "tension",
+      "figures": [
+        {
+          "a": "venus",
+          "b": "pluto",
+          "kind": "square",
+          "orb": 0.4218831632206559
+        },
+        {
+          "a": "moon",
+          "b": "jupiter",
+          "kind": "opposition",
+          "orb": 0.6019847215905259
+        },
+        {
+          "a": "mercury",
+          "b": "jupiter",
+          "kind": "square",
+          "orb": 2.538634649479434
+        },
+        {
+          "a": "mars",
+          "b": "saturn",
+          "kind": "trine",
+          "orb": 2.8649709543173003
+        },
+        {
+          "a": "moon",
+          "b": "mercury",
+          "kind": "square",
+          "orb": 3.1406193710699597
+        },
+        {
+          "a": "sun",
+          "b": "moon",
+          "kind": "trine",
+          "orb": 4.156801934933384
+        },
+        {
+          "a": "sun",
+          "b": "jupiter",
+          "kind": "sextile",
+          "orb": 4.75878665652391
+        },
+        {
+          "a": "sun",
+          "b": "venus",
+          "kind": "conjunction",
+          "orb": 5.040458480262998
+        },
+        {
+          "a": "sun",
+          "b": "pluto",
+          "kind": "square",
+          "orb": 5.462341643483654
+        }
+      ],
+      "pressure": [
+        {
+          "name": "THE GRANARY",
+          "sub": "GRAIN & RATIONS",
+          "level": "strained",
+          "levelLabel": "STRAINED",
+          "orb": 3.0365427900042334,
+          "maxOrb": 5,
+          "sentence": "Sebegu offers a steady hand to your Geb in the second. It touches what you earn, hold, and count as yours.",
+          "lead": {
+            "transit": "mercury",
+            "natal": "saturn",
+            "kind": "sextile",
+            "orb": 3.0365427900042334
+          }
+        },
+        {
+          "name": "THE HOUSE OF THE KA",
+          "sub": "HOME & FOREBEARS",
+          "level": "loud",
+          "levelLabel": "LOUD",
+          "orb": 0.7507702256673383,
+          "maxOrb": 7,
+          "sentence": "Isis rows in time with your Amun in the eighth. It touches what is shared, inherited, hidden, and transformed.",
+          "lead": {
+            "transit": "venus",
+            "natal": "jupiter",
+            "kind": "trine",
+            "orb": 0.7507702256673383
+          }
+        },
+        {
+          "name": "THE FERRY",
+          "sub": "LETTERS & CROSSINGS",
+          "level": "quiet",
+          "levelLabel": "QUIET",
+          "orb": 3.2605507113857755,
+          "maxOrb": 7,
+          "sentence": "Ra tips the scales against your Isis in the third. It touches your words, your kin, and the road close to home.",
+          "lead": {
+            "transit": "sun",
+            "natal": "venus",
+            "kind": "square",
+            "orb": 3.2605507113857755
+          }
+        },
+        {
+          "name": "THE SEALED SHRINE",
+          "sub": "THE DARK CHAMBER",
+          "level": "quiet",
+          "levelLabel": "QUIET",
+          "orb": 2.891646129039117,
+          "maxOrb": 8,
+          "sentence": "Sebegu joins the barque of your Osiris in the twelfth. It touches the unseen, the retreat, and what works against you out of sight.",
+          "lead": {
+            "transit": "mercury",
+            "natal": "pluto",
+            "kind": "conjunction",
+            "orb": 2.891646129039117
+          }
+        }
+      ],
+      "longTransit": {
+        "status": "active",
+        "id": "jupiter-trine-asc",
+        "title1": "AMUN IN THE LION",
+        "title2": "ROWS IN TIME WITH YOUR NATAL ASCENDANT",
+        "rangeLabel": "OCT 2026 → JUN 2027",
+        "progressPct": 6.787479735887819,
+        "start": "2026-10-02T22:24:01.406Z",
+        "end": "2027-06-29T19:01:31.406Z",
+        "passes": [
+          "2026-10-17T22:24:01.406Z",
+          "2027-02-08T07:34:34.218Z",
+          "2027-06-14T19:01:31.406Z"
+        ]
+      }
+    },
+    {
+      "culture": "greece",
+      "institution": "THE DAY'S ORACLE",
+      "headline": "Wanting it badly is no reason to ask Aphrodite for it.",
+      "evidence": "APHRODITE □ PLOUTON · 0°25′",
+      "paragraph": "Your desire and your hidden wealth cross each other, and the tripod answers at once. Someone digs up what you buried. Aphrodite throws the golden apple onto the table, and three guests stop speaking. At a lesser shrine than the one Aphrodite and Plouton share, Selene holds the far end of the agora against Zeus: your household and your standing with the powerful give opposite answers. Wait a day before you ask for what you want.",
+      "sentences": [
+        "Your desire and your hidden wealth cross each other, and the tripod answers at once.",
+        "Someone digs up what you buried.",
+        "Aphrodite throws the golden apple onto the table, and three guests stop speaking.",
+        "At a lesser shrine than the one Aphrodite and Plouton share, Selene holds the far end of the agora against Zeus: your household and your standing with the powerful give opposite answers.",
+        "Wait a day before you ask for what you want."
+      ],
+      "tone": "tension",
+      "figures": [
+        {
+          "a": "venus",
+          "b": "pluto",
+          "kind": "square",
+          "orb": 0.4218831632206559
+        },
+        {
+          "a": "moon",
+          "b": "jupiter",
+          "kind": "opposition",
+          "orb": 0.6019847215905259
+        },
+        {
+          "a": "mercury",
+          "b": "jupiter",
+          "kind": "square",
+          "orb": 2.538634649479434
+        },
+        {
+          "a": "mars",
+          "b": "saturn",
+          "kind": "trine",
+          "orb": 2.8649709543173003
+        },
+        {
+          "a": "moon",
+          "b": "mercury",
+          "kind": "square",
+          "orb": 3.1406193710699597
+        },
+        {
+          "a": "sun",
+          "b": "moon",
+          "kind": "trine",
+          "orb": 4.156801934933384
+        },
+        {
+          "a": "sun",
+          "b": "jupiter",
+          "kind": "sextile",
+          "orb": 4.75878665652391
+        },
+        {
+          "a": "sun",
+          "b": "venus",
+          "kind": "conjunction",
+          "orb": 5.040458480262998
+        },
+        {
+          "a": "sun",
+          "b": "pluto",
+          "kind": "square",
+          "orb": 5.462341643483654
+        }
+      ],
+      "pressure": [
+        {
+          "name": "THE AGORA",
+          "sub": "SILVER & GOODS",
+          "level": "strained",
+          "levelLabel": "STRAINED",
+          "orb": 3.0365427900042334,
+          "maxOrb": 5,
+          "sentence": "Hermes offers fair counsel to your Kronos in the second. It touches what you earn, hold, and count as yours.",
+          "lead": {
+            "transit": "mercury",
+            "natal": "saturn",
+            "kind": "sextile",
+            "orb": 3.0365427900042334
+          }
+        },
+        {
+          "name": "THE OIKOS",
+          "sub": "HEARTH & KIN",
+          "level": "loud",
+          "levelLabel": "LOUD",
+          "orb": 0.7507702256673383,
+          "maxOrb": 7,
+          "sentence": "Aphrodite moves in accord with your Zeus in the eighth. It touches what is shared, inherited, hidden, and transformed.",
+          "lead": {
+            "transit": "venus",
+            "natal": "jupiter",
+            "kind": "trine",
+            "orb": 0.7507702256673383
+          }
+        },
+        {
+          "name": "THE HERM",
+          "sub": "MESSAGES & CROSSROADS",
+          "level": "quiet",
+          "levelLabel": "QUIET",
+          "orb": 3.2605507113857755,
+          "maxOrb": 7,
+          "sentence": "Helios challenges your Aphrodite in the third. It touches your words, your kin, and the road close to home.",
+          "lead": {
+            "transit": "sun",
+            "natal": "venus",
+            "kind": "square",
+            "orb": 3.2605507113857755
+          }
+        },
+        {
+          "name": "THE ADYTON",
+          "sub": "THE PYTHIA ALONE",
+          "level": "quiet",
+          "levelLabel": "QUIET",
+          "orb": 2.891646129039117,
+          "maxOrb": 8,
+          "sentence": "Hermes stands shoulder to shoulder with your Plouton in the twelfth. It touches the unseen, the retreat, and what works against you out of sight.",
+          "lead": {
+            "transit": "mercury",
+            "natal": "pluto",
+            "kind": "conjunction",
+            "orb": 2.891646129039117
+          }
+        }
+      ],
+      "longTransit": {
+        "status": "active",
+        "id": "jupiter-trine-asc",
+        "title1": "ZEUS IN THE LION",
+        "title2": "MOVES IN ACCORD WITH YOUR NATAL ASCENDANT",
+        "rangeLabel": "OCT 2026 → JUN 2027",
+        "progressPct": 6.787479735887819,
+        "start": "2026-10-02T22:24:01.406Z",
+        "end": "2027-06-29T19:01:31.406Z",
+        "passes": [
+          "2026-10-17T22:24:01.406Z",
+          "2027-02-08T07:34:34.218Z",
+          "2027-06-14T19:01:31.406Z"
+        ]
+      }
+    },
+    {
+      "culture": "canaan",
+      "institution": "THE COUNCIL OF EL",
+      "headline": "Do not swear a vow of love at the standing stone in the middle of a fight.",
+      "evidence": "ATTART □ MOTU · 0°25′",
+      "paragraph": "Your love and your family's land block each other at the gate, and the elders mark the day. An old loss bites again. Attart draws her sword at the feast, and the cups go down. In the fields beyond Attart and Motu, Yarikh convenes the council against Baal Hadad: your kin at home and your harvest pull the household two ways. Let the argument end before either of you speaks of love.",
+      "sentences": [
+        "Your love and your family's land block each other at the gate, and the elders mark the day.",
+        "An old loss bites again.",
+        "Attart draws her sword at the feast, and the cups go down.",
+        "In the fields beyond Attart and Motu, Yarikh convenes the council against Baal Hadad: your kin at home and your harvest pull the household two ways.",
+        "Let the argument end before either of you speaks of love."
+      ],
+      "tone": "tension",
+      "figures": [
+        {
+          "a": "venus",
+          "b": "pluto",
+          "kind": "square",
+          "orb": 0.4218831632206559
+        },
+        {
+          "a": "moon",
+          "b": "jupiter",
+          "kind": "opposition",
+          "orb": 0.6019847215905259
+        },
+        {
+          "a": "mercury",
+          "b": "jupiter",
+          "kind": "square",
+          "orb": 2.538634649479434
+        },
+        {
+          "a": "mars",
+          "b": "saturn",
+          "kind": "trine",
+          "orb": 2.8649709543173003
+        },
+        {
+          "a": "moon",
+          "b": "mercury",
+          "kind": "square",
+          "orb": 3.1406193710699597
+        },
+        {
+          "a": "sun",
+          "b": "moon",
+          "kind": "trine",
+          "orb": 4.156801934933384
+        },
+        {
+          "a": "sun",
+          "b": "jupiter",
+          "kind": "sextile",
+          "orb": 4.75878665652391
+        },
+        {
+          "a": "sun",
+          "b": "venus",
+          "kind": "conjunction",
+          "orb": 5.040458480262998
+        },
+        {
+          "a": "sun",
+          "b": "pluto",
+          "kind": "square",
+          "orb": 5.462341643483654
+        }
+      ],
+      "pressure": [
+        {
+          "name": "THE THRESHING FLOOR",
+          "sub": "LABOR & YIELD",
+          "level": "strained",
+          "levelLabel": "STRAINED",
+          "orb": 3.0365427900042334,
+          "maxOrb": 5,
+          "sentence": "Kothar exchanges tribute with your El in the second. It touches what you earn, hold, and count as yours.",
+          "lead": {
+            "transit": "mercury",
+            "natal": "saturn",
+            "kind": "sextile",
+            "orb": 3.0365427900042334
+          }
+        },
+        {
+          "name": "THE FATHER'S HOUSE",
+          "sub": "KIN & BIRTHRIGHT",
+          "level": "loud",
+          "levelLabel": "LOUD",
+          "orb": 0.7507702256673383,
+          "maxOrb": 7,
+          "sentence": "Attart speaks favor over your Baal Hadad in the eighth. It touches what is shared, inherited, hidden, and transformed.",
+          "lead": {
+            "transit": "venus",
+            "natal": "jupiter",
+            "kind": "trine",
+            "orb": 0.7507702256673383
+          }
+        },
+        {
+          "name": "THE GATE",
+          "sub": "WORDS & WITNESSES",
+          "level": "quiet",
+          "levelLabel": "QUIET",
+          "orb": 3.2605507113857755,
+          "maxOrb": 7,
+          "sentence": "Shapash draws the bow against your Attart in the third. It touches your words, your kin, and the road close to home.",
+          "lead": {
+            "transit": "sun",
+            "natal": "venus",
+            "kind": "square",
+            "orb": 3.2605507113857755
+          }
+        },
+        {
+          "name": "THE TENT OF EL",
+          "sub": "THE INNERMOST ROOM",
+          "level": "quiet",
+          "levelLabel": "QUIET",
+          "orb": 2.891646129039117,
+          "maxOrb": 8,
+          "sentence": "Kothar shares the council seat with your Motu in the twelfth. It touches the unseen, the retreat, and what works against you out of sight.",
+          "lead": {
+            "transit": "mercury",
+            "natal": "pluto",
+            "kind": "conjunction",
+            "orb": 2.891646129039117
+          }
+        }
+      ],
+      "longTransit": {
+        "status": "active",
+        "id": "jupiter-trine-asc",
+        "title1": "BAAL HADAD IN THE LION",
+        "title2": "SPEAKS FAVOR OVER YOUR NATAL ASCENDANT",
+        "rangeLabel": "OCT 2026 → JUN 2027",
+        "progressPct": 6.787479735887819,
+        "start": "2026-10-02T22:24:01.406Z",
+        "end": "2027-06-29T19:01:31.406Z",
+        "passes": [
+          "2026-10-17T22:24:01.406Z",
+          "2027-02-08T07:34:34.218Z",
+          "2027-06-14T19:01:31.406Z"
+        ]
+      }
+    },
+    {
+      "culture": "carthage",
+      "institution": "THE DECREE OF THE TOPHET",
+      "headline": "Affection you paid for in shekels does not stay bought.",
+      "evidence": "ASTARTE □ MOT · 0°25′",
+      "paragraph": "Your pleasure fund and the debts you inherited undercut each other, entered without a correction. An old debt grows new interest. Astarte recalls the fleet halfway out, and the crews want their pay. On the page facing Astarte and Mot, Tanit demands a price of Baal Hammon: your household accounts and your profits compete for the same coin. Keep your purse shut until the week's books close.",
+      "sentences": [
+        "Your pleasure fund and the debts you inherited undercut each other, entered without a correction.",
+        "An old debt grows new interest.",
+        "Astarte recalls the fleet halfway out, and the crews want their pay.",
+        "On the page facing Astarte and Mot, Tanit demands a price of Baal Hammon: your household accounts and your profits compete for the same coin.",
+        "Keep your purse shut until the week's books close."
+      ],
+      "tone": "tension",
+      "figures": [
+        {
+          "a": "venus",
+          "b": "pluto",
+          "kind": "square",
+          "orb": 0.4218831632206559
+        },
+        {
+          "a": "moon",
+          "b": "jupiter",
+          "kind": "opposition",
+          "orb": 0.6019847215905259
+        },
+        {
+          "a": "mercury",
+          "b": "jupiter",
+          "kind": "square",
+          "orb": 2.538634649479434
+        },
+        {
+          "a": "mars",
+          "b": "saturn",
+          "kind": "trine",
+          "orb": 2.8649709543173003
+        },
+        {
+          "a": "moon",
+          "b": "mercury",
+          "kind": "square",
+          "orb": 3.1406193710699597
+        },
+        {
+          "a": "sun",
+          "b": "moon",
+          "kind": "trine",
+          "orb": 4.156801934933384
+        },
+        {
+          "a": "sun",
+          "b": "jupiter",
+          "kind": "sextile",
+          "orb": 4.75878665652391
+        },
+        {
+          "a": "sun",
+          "b": "venus",
+          "kind": "conjunction",
+          "orb": 5.040458480262998
+        },
+        {
+          "a": "sun",
+          "b": "pluto",
+          "kind": "square",
+          "orb": 5.462341643483654
+        }
+      ],
+      "pressure": [
+        {
+          "name": "THE COUNTING HOUSE",
+          "sub": "WEIGHTS & WAGES",
+          "level": "strained",
+          "levelLabel": "STRAINED",
+          "orb": 3.0365427900042334,
+          "maxOrb": 5,
+          "sentence": "Sakun trades safe passage with your Baal Hammon in the second. It touches what you earn, hold, and count as yours.",
+          "lead": {
+            "transit": "mercury",
+            "natal": "saturn",
+            "kind": "sextile",
+            "orb": 3.0365427900042334
+          }
+        },
+        {
+          "name": "THE COURTYARD",
+          "sub": "HOUSEHOLD & HEIRS",
+          "level": "loud",
+          "levelLabel": "LOUD",
+          "orb": 0.7507702256673383,
+          "maxOrb": 7,
+          "sentence": "Astarte lights the harbor for your Baal Hammon in the eighth. It touches what is shared, inherited, hidden, and transformed.",
+          "lead": {
+            "transit": "venus",
+            "natal": "jupiter",
+            "kind": "trine",
+            "orb": 0.7507702256673383
+          }
+        },
+        {
+          "name": "THE HARBOR",
+          "sub": "MESSAGES & SAILINGS",
+          "level": "quiet",
+          "levelLabel": "QUIET",
+          "orb": 3.2605507113857755,
+          "maxOrb": 7,
+          "sentence": "Semes turns the prow against your Astarte in the third. It touches your words, your kin, and the road close to home.",
+          "lead": {
+            "transit": "sun",
+            "natal": "venus",
+            "kind": "square",
+            "orb": 3.2605507113857755
+          }
+        },
+        {
+          "name": "THE PRECINCT",
+          "sub": "VOWS & SILENCE",
+          "level": "quiet",
+          "levelLabel": "QUIET",
+          "orb": 2.891646129039117,
+          "maxOrb": 8,
+          "sentence": "Sakun sails under one banner with your Mot in the twelfth. It touches the unseen, the retreat, and what works against you out of sight.",
+          "lead": {
+            "transit": "mercury",
+            "natal": "pluto",
+            "kind": "conjunction",
+            "orb": 2.891646129039117
+          }
+        }
+      ],
+      "longTransit": {
+        "status": "active",
+        "id": "jupiter-trine-asc",
+        "title1": "BAAL HAMMON IN THE LION",
+        "title2": "LIGHTS THE HARBOR FOR YOUR NATAL ASCENDANT",
+        "rangeLabel": "OCT 2026 → JUN 2027",
+        "progressPct": 6.787479735887819,
+        "start": "2026-10-02T22:24:01.406Z",
+        "end": "2027-06-29T19:01:31.406Z",
+        "passes": [
+          "2026-10-17T22:24:01.406Z",
+          "2027-02-08T07:34:34.218Z",
+          "2027-06-14T19:01:31.406Z"
+        ]
+      }
+    },
+    {
+      "culture": "rome",
+      "institution": "THE AUSPICES OF THE DAY",
+      "headline": "Keep courtship out of forum business.",
+      "evidence": "VENUS □ DIS PATER · 0°25′",
+      "paragraph": "Your courtship and your inheritance obstruct each other, and the pontiff marks it in the calendar. An old family claim blocks your way. Venus quarrels with the bride's mother over the match, and the wedding is postponed. Below the Capitol, where Venus meets Dis Pater, Luna sits on the opposite bench from Iuppiter: your household affairs and your run for office pull in different directions. Let the courtship rest a week.",
+      "sentences": [
+        "Your courtship and your inheritance obstruct each other, and the pontiff marks it in the calendar.",
+        "An old family claim blocks your way.",
+        "Venus quarrels with the bride's mother over the match, and the wedding is postponed.",
+        "Below the Capitol, where Venus meets Dis Pater, Luna sits on the opposite bench from Iuppiter: your household affairs and your run for office pull in different directions.",
+        "Let the courtship rest a week."
+      ],
+      "tone": "tension",
+      "figures": [
+        {
+          "a": "venus",
+          "b": "pluto",
+          "kind": "square",
+          "orb": 0.4218831632206559
+        },
+        {
+          "a": "moon",
+          "b": "jupiter",
+          "kind": "opposition",
+          "orb": 0.6019847215905259
+        },
+        {
+          "a": "mercury",
+          "b": "jupiter",
+          "kind": "square",
+          "orb": 2.538634649479434
+        },
+        {
+          "a": "mars",
+          "b": "saturn",
+          "kind": "trine",
+          "orb": 2.8649709543173003
+        },
+        {
+          "a": "moon",
+          "b": "mercury",
+          "kind": "square",
+          "orb": 3.1406193710699597
+        },
+        {
+          "a": "sun",
+          "b": "moon",
+          "kind": "trine",
+          "orb": 4.156801934933384
+        },
+        {
+          "a": "sun",
+          "b": "jupiter",
+          "kind": "sextile",
+          "orb": 4.75878665652391
+        },
+        {
+          "a": "sun",
+          "b": "venus",
+          "kind": "conjunction",
+          "orb": 5.040458480262998
+        },
+        {
+          "a": "sun",
+          "b": "pluto",
+          "kind": "square",
+          "orb": 5.462341643483654
+        }
+      ],
+      "pressure": [
+        {
+          "name": "FORUM",
+          "sub": "BUSINESS & STANDING",
+          "level": "strained",
+          "levelLabel": "STRAINED",
+          "orb": 3.0365427900042334,
+          "maxOrb": 5,
+          "sentence": "Mercurius strikes a treaty with your Saturnus in the second. It touches what you earn, hold, and count as yours.",
+          "lead": {
+            "transit": "mercury",
+            "natal": "saturn",
+            "kind": "sextile",
+            "orb": 3.0365427900042334
+          }
+        },
+        {
+          "name": "DOMUS",
+          "sub": "LARES & LINE",
+          "level": "loud",
+          "levelLabel": "LOUD",
+          "orb": 0.7507702256673383,
+          "maxOrb": 7,
+          "sentence": "Venus clasps the right hand of your Iuppiter in the eighth. It touches what is shared, inherited, hidden, and transformed.",
+          "lead": {
+            "transit": "venus",
+            "natal": "jupiter",
+            "kind": "trine",
+            "orb": 0.7507702256673383
+          }
+        },
+        {
+          "name": "VIA",
+          "sub": "DISPATCHES & ERRANDS",
+          "level": "quiet",
+          "levelLabel": "QUIET",
+          "orb": 3.2605507113857755,
+          "maxOrb": 7,
+          "sentence": "Sol raises the spear against your Venus in the third. It touches your words, your kin, and the road close to home.",
+          "lead": {
+            "transit": "sun",
+            "natal": "venus",
+            "kind": "square",
+            "orb": 3.2605507113857755
+          }
+        },
+        {
+          "name": "TEMPLUM",
+          "sub": "THE INNER SANCTUM",
+          "level": "quiet",
+          "levelLabel": "QUIET",
+          "orb": 2.891646129039117,
+          "maxOrb": 8,
+          "sentence": "Mercurius marches under the same eagle as your Dis Pater in the twelfth. It touches the unseen, the retreat, and what works against you out of sight.",
+          "lead": {
+            "transit": "mercury",
+            "natal": "pluto",
+            "kind": "conjunction",
+            "orb": 2.891646129039117
+          }
+        }
+      ],
+      "longTransit": {
+        "status": "active",
+        "id": "jupiter-trine-asc",
+        "title1": "IUPPITER IN THE LION",
+        "title2": "CLASPS THE RIGHT HAND OF YOUR NATAL ASCENDANT",
+        "rangeLabel": "OCT 2026 → JUN 2027",
+        "progressPct": 6.787479735887819,
+        "start": "2026-10-02T22:24:01.406Z",
+        "end": "2027-06-29T19:01:31.406Z",
+        "passes": [
+          "2026-10-17T22:24:01.406Z",
+          "2027-02-08T07:34:34.218Z",
+          "2027-06-14T19:01:31.406Z"
+        ]
+      }
+    }
+  ]
+}

@@ -22,7 +22,7 @@ public sealed record WeekShorthand(
     Planet? A = null,
     AspectKind? Aspect = null,
     Planet? B = null,
-    bool Exact = false,
+    bool Tight = false,
     Planet? Planet = null,
     ZodiacSign? Sign = null);
 
@@ -32,22 +32,24 @@ public sealed record WeekDay(
     DateTime LocalDate,
     string Label,
     bool IsToday,
+    string? Headline,
     string Line,
     WeekShorthand Shorthand,
     WeekTone Tone,
     RomeDayFlag? Flag);
 
 /// <summary>
-/// Port of buildWeekDays and composeAspectSentence in web/src/lib/weekReading.ts.
-/// Each day's headline is the tightest sky aspect touching a fast mover,
-/// inside 1.2°, marked exact under 0.35°; a pair that headlined earlier in
-/// the week speaks again only when exact. Without one, an ingress that day;
-/// without that, the culture's plain quiet line, and nothing invented.
+/// Port of buildWeekDays in web/src/lib/weekReading.ts. Each row reads the
+/// sky at 00:00 UTC on its calendar date, the instant the day page reads. The
+/// day's figure is the tightest aspect touching a fast mover inside 1.2°,
+/// flagged tight under half a degree; a figure that holds from the row above
+/// prints the culture's holds line in place of a second headline. The line is
+/// the decree's meaning and consequence. Without a figure, an ingress that
+/// day; without that, the culture's quiet headline and line.
 /// </summary>
 public static class WeekReading
 {
     private const double EventOrb = 1.2;
-    private const double ExactOrb = 0.35;
 
     /// <summary>One ingress scan for the week, buffered past its end for the coarsest step.</summary>
     private const int IngressScanDays = 9;
@@ -63,27 +65,6 @@ public static class WeekReading
         var day = (int)localDate.DayOfWeek;
         var diff = day == 0 ? -6 : 1 - day;
         return localDate.Date.AddDays(diff);
-    }
-
-    /// <summary>"Hermes challenges Ares." A conjunction names the sign it happens in.</summary>
-    public static string ComposeAspectSentence(
-        Culture culture,
-        Planet a,
-        Planet b,
-        AspectKind kind,
-        bool exact,
-        IReadOnlyDictionary<Planet, double> chart,
-        ContentStore store,
-        int variant = 0)
-    {
-        var banks = store.Banks;
-        var deityA = store.GetDeity(culture, a).Name;
-        var deityB = store.GetDeity(culture, b).Name;
-        var signClause = kind == AspectKind.Conjunction
-            ? $" in the {Format.ProperCase(banks.SignPhrase(ZodiacMath.LongitudeToSign(chart[a]).Sign))}"
-            : "";
-        var predicate = $"{banks.AspectVerb(culture, kind)} {deityB}{signClause}";
-        return exact ? banks.ExactForm(culture, variant, deityA, predicate) : $"{deityA} {predicate}.";
     }
 
     /// <summary>
@@ -103,52 +84,49 @@ public static class WeekReading
         var weekIngresses = SkyEvents.Ingresses(LocalMidnightUtc(startLocal, zone), IngressScanDays);
 
         var days = new List<WeekDay>();
-        var usedPairs = new HashSet<(Planet, Planet)>();
+        Aspect? previous = null;
         for (var i = 0; i < 7; i++)
         {
             var dateLocal = startLocal.AddDays(i);
-            var noon = new DateTime(dateLocal.Year, dateLocal.Month, dateLocal.Day, 12, 0, 0, DateTimeKind.Utc);
-            var chart = Ephemeris.ComputeChart(noon);
+            // 00:00 UTC on the row's calendar date, the instant the day page reads.
+            var instant = new DateTime(dateLocal.Year, dateLocal.Month, dateLocal.Day, 0, 0, 0, DateTimeKind.Utc);
+            var chart = Ephemeris.ComputeChart(instant);
 
-            var candidates = AspectDetector.Detect(chart, store.AspectRules)
+            // OrderBy is stable, so equal orbs keep detection order.
+            var tightest = AspectDetector.Detect(chart, store.AspectRules)
                 .Where(a => a.Orb < EventOrb && (FastBodies.Contains(a.A) || FastBodies.Contains(a.B)))
                 .OrderBy(a => a.Orb)
-                .ToList();
-            Aspect? tightest = null;
-            foreach (var aspect in candidates)
-            {
-                var pair = (aspect.A, aspect.B);
-                if (usedPairs.Contains(pair) && aspect.Orb >= ExactOrb) continue;
-                tightest = aspect;
-                usedPairs.Add(pair);
-                break;
-            }
+                .FirstOrDefault();
+            var holds = tightest is not null && previous is not null
+                && tightest.A == previous.A && tightest.B == previous.B && tightest.Kind == previous.Kind;
+            previous = tightest;
 
             var dayStart = LocalMidnightUtc(dateLocal, zone);
             var dayEnd = Instant.AddDays(dayStart, 1);
             var dayIngress = weekIngresses.FirstOrDefault(e => e.Date >= dayStart && e.Date < dayEnd);
 
+            string? headline;
             string line;
             WeekShorthand shorthand;
             WeekTone tone;
-            var exact = false;
+            var tight = false;
 
             if (tightest is not null)
             {
-                exact = tightest.Orb < ExactOrb;
+                tight = tightest.Orb < store.Day.TightOrb;
                 tone = AspectKinds.IsHard(tightest.Kind) ? WeekTone.Tension : WeekTone.Harmony;
-                var astro = ComposeAspectSentence(culture, tightest.A, tightest.B, tightest.Kind, exact, chart, store);
-                var ruling = banks.AspectFrame(
-                    culture,
-                    tightest.Kind,
-                    banks.DeityCharge(culture, tightest.A),
-                    banks.DeityCharge(culture, tightest.B));
-                line = $"{astro} {ruling}";
-                shorthand = new WeekShorthand(ShorthandKind.Aspect, A: tightest.A, Aspect: tightest.Kind, B: tightest.B, Exact: exact);
+                headline = holds
+                    ? store.Day.GetDecree(culture).Holds
+                    : Decree.Headline(culture, tightest.A, tightest.B, tightest.Kind, store);
+                var dayNumber = Decree.UtcDayNumber(instant);
+                line = Decree.Meaning(culture, tightest.A, tightest.B, tightest.Kind, tightest.Orb, dayNumber, store)
+                       + " " + Decree.Consequence(culture, tightest.A, tightest.B, tightest.Kind, store);
+                shorthand = new WeekShorthand(ShorthandKind.Aspect, A: tightest.A, Aspect: tightest.Kind, B: tightest.B, Tight: tight);
             }
             else if (dayIngress is not null)
             {
                 tone = WeekTone.Harmony;
+                headline = null;
                 var deity = store.GetDeity(culture, dayIngress.Planet).Name;
                 var signWord = Format.ProperCase(banks.SignPhrase(dayIngress.ToSign));
                 line = $"{deity} {banks.IngressVerb(culture)} the {signWord}. " +
@@ -158,12 +136,13 @@ public static class WeekReading
             else
             {
                 tone = WeekTone.Quiet;
-                line = banks.QuietLine(culture);
+                headline = store.Day.QuietHeadline(culture);
+                line = store.Day.QuietLine(culture);
                 shorthand = new WeekShorthand(ShorthandKind.Quiet);
             }
 
             RomeDayFlag? flag = culture == Culture.Rome
-                ? tone == WeekTone.Tension ? (exact ? RomeDayFlag.N : RomeDayFlag.C) : RomeDayFlag.F
+                ? tone == WeekTone.Tension ? (tight ? RomeDayFlag.N : RomeDayFlag.C) : RomeDayFlag.F
                 : null;
 
             days.Add(new WeekDay(
@@ -171,6 +150,7 @@ public static class WeekReading
                 dateLocal,
                 $"{Format.Weekday(dateLocal)} {dateLocal.Day}",
                 dateLocal == todayLocal,
+                headline,
                 line,
                 shorthand,
                 tone,

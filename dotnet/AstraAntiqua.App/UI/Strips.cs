@@ -23,7 +23,7 @@ public static class Strips
         return stack;
     }
 
-    /// <summary>"☉ □ ♄ · EXACT", "♂ → SCO", or "QUIET", as web's week strip prints it.</summary>
+    /// <summary>"☉ □ ♄ · TIGHT", "♂ → SCO", or "QUIET", as web's week strip prints it.</summary>
     public static string Shorthand(WeekShorthand s)
     {
         var store = ContentStore.Shared;
@@ -31,7 +31,7 @@ public static class Strips
         {
             ShorthandKind.Aspect =>
                 $"{store.GetPlanetCopy(s.A!.Value).Symbol} {store.Banks.AspectGlyph(s.Aspect!.Value)} " +
-                $"{store.GetPlanetCopy(s.B!.Value).Symbol}{(s.Exact ? " · EXACT" : "")}",
+                $"{store.GetPlanetCopy(s.B!.Value).Symbol}{(s.Tight ? " · TIGHT" : "")}",
             ShorthandKind.Ingress =>
                 $"{store.GetPlanetCopy(s.Planet!.Value).Symbol} \u2192 {store.Banks.SignAbbreviation(s.Sign!.Value)}",
             _ => "QUIET",

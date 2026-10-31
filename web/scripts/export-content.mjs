@@ -35,9 +35,19 @@ const { ZODIAC_SIGNS, ASPECT_RULES } = await import("../src/data/sampleChart.ts"
 const { ASPECT_VERBS, PLAIN_ASPECT_VERBS, PLACEMENT_VERBS } = await import(
   "../src/data/aspectVerbs.ts"
 );
-const { ASPECT_FRAMES, INGRESS_FRAMES, EXACT_INSTRUCTIONS } = await import(
-  "../src/data/aspectFrames.ts"
+const { INGRESS_FRAMES } = await import("../src/data/ingressFrames.ts");
+const { DECREE_BANKS, QUIET_LINE } = await import("../src/data/decreeBanks.ts");
+const { QUIET_HEADLINE, ASPECT_GLYPH: DECREE_GLYPH, TIGHT_ORB, FAST_ORDER } = await import(
+  "../src/lib/decree.ts"
 );
+const { DEITY_DOMAINS } = await import("../src/data/deityDomains.ts");
+const { CULTURE_VOICES } = await import("../src/data/cultureVoice.ts");
+const { FIGURE_BANKS, PLACEMENT_CLAUSES } = await import("../src/data/figureBanks.ts");
+const { DEITY_SCRIPT_FORMS, CULTURE_NAME_FORMS, INSTITUTION_FORMS } = await import(
+  "../src/data/scriptForms.ts"
+);
+const { SIGN_IMAGE } = await import("../src/components/home/format.ts");
+const { ASPECT_RULINGS } = await import("../src/data/aspectRulings.ts");
 const { DEITY_CHARGES } = await import("../src/data/deityCharges.ts");
 const { DEITY_INSCRIPTIONS } = await import("../src/data/deityInscriptions.ts");
 const { PLANET_DOMAINS, ASPECT_REFLECTIONS, SIGN_REGISTERS, getPairTheme } = await import(
@@ -45,9 +55,7 @@ const { PLANET_DOMAINS, ASPECT_REFLECTIONS, SIGN_REGISTERS, getPairTheme } = awa
 );
 const { SIGN_PHRASES } = await import("../src/components/horizons/signPhrase.ts");
 const { SUMMARY_INTRO, SUMMARY_TONES, SUMMARY_FUSED } = await import("../src/lib/reading.ts");
-const { QUIET_LINE, INGRESS_VERB, EXACT_FORMS, ASPECT_GLYPH, SIGN_ABBR } = await import(
-  "../src/lib/weekReading.ts"
-);
+const { ASPECT_GLYPH, SIGN_ABBR } = await import("../src/lib/weekReading.ts");
 const { CITIES } = await import("../src/data/cities.ts");
 const { PLANET_CONCERN } = await import("../src/lib/houseReading.ts");
 const { houseGroupName } = await import("../src/components/horizons/houseGroups.ts");
@@ -55,8 +63,11 @@ const { composeWhatItTouchesNatal } = await import("../src/components/horizons/s
 const { NEUTRAL_GROUND, NEUTRAL_ACCENT, CULTURE_GROUNDS, CULTURE_ACCENTS } = await import(
   "../src/data/palettes.ts"
 );
+// Master moved the methodology bank to docs/archive/web-content (no web route
+// reads it any more); the native surfaces' Method screen still does, so the
+// export reads it from the archive.
 const { METHODOLOGY_SECTIONS, INTERPRETIVE_NOTES, SOURCES } = await import(
-  "../src/data/methodologyContent.ts"
+  "../../docs/archive/web-content/methodologyContent.ts"
 );
 const { default: tzLookup } = await import("tz-lookup");
 const { flatten, parseDocument, parseElements } = await import("./svg-shapes.mjs");
@@ -153,6 +164,21 @@ for (const rule of ASPECT_RULES)
 
 const KINDS = ASPECT_RULES.map((r) => r.kind);
 
+// The week's ingress verb is module-private in lib/weekReading.ts; read it
+// from the source the way gen-android-reading-banks.mjs does.
+const weekSource = fs.readFileSync(
+  path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../src/lib/weekReading.ts"),
+  "utf8",
+);
+const verbBlock = weekSource.slice(weekSource.indexOf("const INGRESS_VERB"));
+const INGRESS_VERB = Object.fromEntries(
+  CULTURES.map((c) => {
+    const m = verbBlock.match(new RegExp(`\\n\\s*${c}:\\s*"([^"]*)",`));
+    assert(m, `${c} has no INGRESS_VERB entry in weekReading.ts`);
+    return [c, m[1]];
+  }),
+);
+
 function template(fn, slots) {
   const args = slots.map((s) => `xq${s}`);
   let out = fn(...args);
@@ -185,12 +211,7 @@ const readingBanks = {
   placementVerbs: PLACEMENT_VERBS,
   deityCharges: DEITY_CHARGES,
   deityInscriptions: DEITY_INSCRIPTIONS,
-  aspectFrames: perCulture((c) => perKind((k) => template(ASPECT_FRAMES[c][k], ["a", "b"]))),
   ingressFrames: perCulture((c) => template(INGRESS_FRAMES[c], ["c"])),
-  exactInstructions: perCulture((c) =>
-    perKind((k) => template(EXACT_INSTRUCTIONS[c][k], ["d"])),
-  ),
-  exactForms: perCulture((c) => EXACT_FORMS[c].map((form) => template(form, ["s", "p"]))),
   ingressVerbs: INGRESS_VERB,
   quietLines: QUIET_LINE,
   summaryIntros: SUMMARY_INTRO,
@@ -223,12 +244,66 @@ for (const culture of CULTURES) {
     assert(ASPECT_VERBS[culture]?.[kind], `aspect verb missing for ${culture}/${kind}`);
     assert(ASPECT_REFLECTIONS[culture]?.[kind], `reflection missing for ${culture}/${kind}`);
   }
-  assert(EXACT_FORMS[culture].length >= 1, `no exact forms for ${culture}`);
   assert(INGRESS_VERB[culture] && QUIET_LINE[culture] && SUMMARY_INTRO[culture], `${culture} bank gap`);
 }
 assert(Object.keys(pairThemes).length === 45, `expected 45 pair themes`);
 for (const sign of ZODIAC_SIGNS)
   assert(SIGN_PHRASES[sign] && SIGN_ABBR[sign] && SIGN_REGISTERS[sign], `sign bank gap for ${sign}`);
+
+// ---- Day banks. -----------------------------------------------------------
+// What the day page (lib/decree.ts composeDayPage), the day pressure module
+// (lib/dayPressure.ts) and the long transit (buildHomeBundle.ts) speak with,
+// plus the figure page's banks and the script forms, as plain data. Every
+// value must survive JSON: a function would vanish silently, so the walk
+// below fails on one.
+
+function assertPlain(value, where) {
+  if (typeof value === "function") throw new Error(`export-content: ${where} is a function`);
+  if (value && typeof value === "object")
+    for (const [k, v] of Object.entries(value)) assertPlain(v, `${where}.${k}`);
+}
+
+const FAST = ["sun", "moon", "mercury", "venus", "mars"];
+const dayBanks = {
+  fastOrder: FAST_ORDER,
+  tightOrb: TIGHT_ORB,
+  aspectGlyphs: DECREE_GLYPH,
+  decree: DECREE_BANKS,
+  quietHeadlines: QUIET_HEADLINE,
+  quietLines: QUIET_LINE,
+  deityDomains: DEITY_DOMAINS,
+  cultureVoices: CULTURE_VOICES,
+  institutionForms: INSTITUTION_FORMS,
+  cultureNameForms: CULTURE_NAME_FORMS,
+  deityScriptForms: DEITY_SCRIPT_FORMS,
+  signImages: SIGN_IMAGE,
+  aspectRulings: ASPECT_RULINGS,
+  figure: FIGURE_BANKS,
+  placementClauses: PLACEMENT_CLAUSES,
+};
+assertPlain(dayBanks, "day-banks");
+for (const culture of CULTURES) {
+  const bank = DECREE_BANKS[culture];
+  for (const kind of KINDS) {
+    for (const body of FAST) {
+      assert(bank.headlines[kind]?.[body], `headline missing for ${culture}/${kind}/${body}`);
+      assert(bank.images[kind]?.[body], `image missing for ${culture}/${kind}/${body}`);
+      assert(bank.instructions[kind]?.[body], `instruction missing for ${culture}/${kind}/${body}`);
+    }
+    for (const partner of PLANETS.filter((p) => p !== "moon"))
+      assert(bank.consequences[kind]?.[partner], `consequence missing for ${culture}/${kind}/${partner}`);
+    assert(bank.relations[kind]?.length === 3, `relations for ${culture}/${kind} are not three`);
+    assert(ASPECT_RULINGS[culture]?.[kind], `ruling missing for ${culture}/${kind}`);
+  }
+  for (const key of ["tightTails", "secondFigure", "secondFigurePlain"])
+    assert(bank[key]?.length === 3, `${key} for ${culture} is not three`);
+  assert(bank.noSecondFigure && bank.holds, `${culture} decree bank gap`);
+  assert(QUIET_HEADLINE[culture] && QUIET_LINE[culture], `${culture} quiet gap`);
+  for (const planet of PLANETS) assert(DEITY_DOMAINS[culture]?.[planet], `domain missing for ${culture}/${planet}`);
+  assert(CULTURE_VOICES[culture]?.houseGroups?.length === 4, `${culture} needs four house groups`);
+  assert(INSTITUTION_FORMS[culture]?.en === CULTURE_VOICES[culture].institution, `${culture} institution form drifts`);
+}
+for (const sign of ZODIAC_SIGNS) assert(SIGN_IMAGE[sign], `sign image missing for ${sign}`);
 
 // ---- Cities, with the zone each one keeps its clocks by. -------------------
 // Web resolves a birthplace's zone with tz-lookup at runtime. A phone that has
@@ -372,6 +447,7 @@ const files = {
   "zodiac-signs.json": ZODIAC_SIGN_INFO,
   "aspect-rules.json": ASPECT_RULES,
   "reading-banks.json": readingBanks,
+  "day-banks.json": dayBanks,
   "cities.json": cities,
   "palettes.json": palettes,
   "method.json": method,

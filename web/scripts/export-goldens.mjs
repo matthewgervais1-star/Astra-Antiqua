@@ -169,6 +169,7 @@ for (const anchor of WEEK_ANCHORS) {
       days: buildWeekDays(culture, start, null).map((d) => ({
         date: iso(d.date),
         label: d.label,
+        headline: d.headline,
         line: d.line,
         tone: d.tone,
         flag: d.flag ?? null,
@@ -343,6 +344,102 @@ const horizons = {
 const htmp = `${HORIZONS_FILE}.tmp`;
 fs.writeFileSync(htmp, `${JSON.stringify(horizons, null, 2)}\n`, "utf8");
 fs.renameSync(htmp, HORIZONS_FILE);
+
+// ---- The day page: Sky Day's words for one instant and one chart. --------
+//   -> dotnet/AstraAntiqua.Core.Tests/TestData/day.json
+// composeDayPage (the decree, read at 00:00 UTC), dayPressure (the four
+// house groups and the contact each one reads) and the home bundle's long
+// transit, for the smoke birth in every culture. The Swift core's day-page
+// test recomputes all of it.
+const { composeDayPage, utcDayNumber } = await import("../src/lib/decree.ts");
+const { dayPressure, transitsByGroup, rankContacts } = await import("../src/lib/dayPressure.ts");
+const { buildHomeBundle } = await import("../src/components/home/buildHomeBundle.ts");
+const { resolveSavedChart } = await import("../src/lib/savedNatal.ts");
+
+const DAY_FILE = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../../dotnet/AstraAntiqua.Core.Tests/TestData/day.json",
+);
+const smokeBirth = JSON.parse(
+  fs.readFileSync(
+    path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      "../../dotnet/AstraAntiqua.Core.Tests/TestData/smoke-birth.v1.json",
+    ),
+    "utf8",
+  ),
+);
+const pad2 = (n) => String(n).padStart(2, "0");
+const dayNatal = resolveSavedChart({
+  name: smokeBirth.Name,
+  date: `${smokeBirth.Year}-${pad2(smokeBirth.Month)}-${pad2(smokeBirth.Day)}`,
+  time: `${pad2(smokeBirth.Hour)}:${pad2(smokeBirth.Minute)}`,
+  cityLabel: smokeBirth.PlaceName,
+  latitude: smokeBirth.Latitude,
+  longitude: smokeBirth.Longitude,
+});
+if (!dayNatal) throw new Error("export-goldens: the smoke birth did not resolve");
+
+const DAY_AT = "2026-10-21T06:00:00Z";
+const dayNow = new Date(DAY_AT);
+const dayStartUtc = new Date(utcDayNumber(dayNow) * 86_400_000);
+const dayChart = computeChart(dayStartUtc);
+const contactOf = (h) => (h ? { transit: h.transit, natal: h.natal, kind: h.kind, orb: h.orb } : null);
+const leads = transitsByGroup(dayNatal.chart, dayNatal.angles.ascendant, dayChart).map(
+  (hits) => contactOf(rankContacts(hits)[0] ?? null),
+);
+const dayCultures = CULTURES.map((culture) => {
+  const page = composeDayPage(culture, dayNow);
+  const bundle = buildHomeBundle(culture, dayNow, dayNatal);
+  const lt = bundle.longTransit;
+  return {
+    culture,
+    institution: bundle.institution,
+    headline: page.headline,
+    evidence: page.evidence,
+    paragraph: page.paragraphs.join(" "),
+    sentences: page.sentences,
+    tone: page.tone,
+    figures: page.figures.map(({ a, b, kind, orb }) => ({ a, b, kind, orb })),
+    pressure: dayPressure(dayNatal, dayChart, culture).map((g, i) => ({
+      name: g.name,
+      sub: g.sub,
+      level: g.level,
+      levelLabel: g.levelLabel,
+      orb: g.orb,
+      maxOrb: g.maxOrb,
+      sentence: g.sentence,
+      lead: leads[i],
+    })),
+    longTransit: {
+      status: lt.status,
+      id: lt.span?.id ?? null,
+      title1: lt.title1 ?? null,
+      title2: lt.title2 ?? null,
+      rangeLabel: lt.rangeLabel ?? null,
+      progressPct: lt.progressPct ?? null,
+      start: lt.span ? iso(lt.span.start) : null,
+      end: lt.span ? iso(lt.span.end) : null,
+      passes: lt.span ? lt.span.passes.map(iso) : [],
+    },
+  };
+});
+const day = {
+  at: DAY_AT,
+  utcDay: utcDayNumber(dayNow),
+  birth: "smoke-birth.v1.json",
+  natal: {
+    longitudes: dayNatal.chart,
+    ascendant: dayNatal.angles.ascendant,
+    midheaven: dayNatal.angles.midheaven,
+  },
+  cultures: dayCultures,
+};
+const dtmp = `${DAY_FILE}.tmp`;
+fs.writeFileSync(dtmp, `${JSON.stringify(day, null, 2)}
+`, "utf8");
+fs.renameSync(dtmp, DAY_FILE);
+console.log(`export-goldens: wrote the day page (${dayCultures.length} cultures at ${DAY_AT})`);
 
 const summaries = new Set(readings.map((r) => r.summary.replace(/^[^.]*\. /, "")));
 console.log(

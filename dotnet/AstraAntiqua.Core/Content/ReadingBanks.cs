@@ -18,10 +18,7 @@ public sealed class ReadingBanks
     private readonly Dictionary<Culture, string> _placementVerbs = new();
     private readonly Dictionary<(Culture, Planet), string> _charges = new();
     private readonly Dictionary<(Culture, Planet), string> _inscriptions = new();
-    private readonly Dictionary<(Culture, AspectKind), string> _aspectFrames = new();
     private readonly Dictionary<Culture, string> _ingressFrames = new();
-    private readonly Dictionary<(Culture, AspectKind), string> _exactInstructions = new();
-    private readonly Dictionary<Culture, IReadOnlyList<string>> _exactForms = new();
     private readonly Dictionary<Culture, string> _ingressVerbs = new();
     private readonly Dictionary<Culture, string> _quietLines = new();
     private readonly Dictionary<Culture, string> _summaryIntros = new();
@@ -71,23 +68,8 @@ public sealed class ReadingBanks
     /// <summary>The line of myth that sits under a deity's name in a natal reading.</summary>
     public string Inscription(Culture culture, Planet planet) => _inscriptions[(culture, planet)];
 
-    /// <summary>The ruling tethered to the figure, taking both bodies' charges.</summary>
-    public string AspectFrame(Culture culture, AspectKind kind, string chargeA, string chargeB)
-        => Fill(_aspectFrames[(culture, kind)], ('a', chargeA), ('b', chargeB));
-
     public string IngressFrame(Culture culture, string charge)
         => Fill(_ingressFrames[culture], ('c', charge));
-
-    /// <summary>The one instruction a decree may carry when its headline figure is exact.</summary>
-    public string ExactInstruction(Culture culture, AspectKind kind, string deity)
-        => Fill(_exactInstructions[(culture, kind)], ('d', deity));
-
-    /// <summary>How a culture marks a degree-exact contact. The variant wraps.</summary>
-    public string ExactForm(Culture culture, int variant, string subject, string predicate)
-    {
-        var forms = _exactForms[culture];
-        return Fill(forms[variant % forms.Count], ('s', subject), ('p', predicate));
-    }
 
     public string IngressVerb(Culture culture) => _ingressVerbs[culture];
 
@@ -155,12 +137,8 @@ public sealed class ReadingBanks
             banks._placementVerbs[CultureIds.FromId(c.Name)] = Str(c.Value);
         ReadCulturePlanet(root.GetProperty("deityCharges"), banks._charges);
         ReadCulturePlanet(root.GetProperty("deityInscriptions"), banks._inscriptions);
-        ReadCultureKind(root.GetProperty("aspectFrames"), banks._aspectFrames);
         foreach (var c in root.GetProperty("ingressFrames").EnumerateObject())
             banks._ingressFrames[CultureIds.FromId(c.Name)] = Str(c.Value);
-        ReadCultureKind(root.GetProperty("exactInstructions"), banks._exactInstructions);
-        foreach (var c in root.GetProperty("exactForms").EnumerateObject())
-            banks._exactForms[CultureIds.FromId(c.Name)] = c.Value.EnumerateArray().Select(Str).ToList();
         foreach (var c in root.GetProperty("ingressVerbs").EnumerateObject())
             banks._ingressVerbs[CultureIds.FromId(c.Name)] = Str(c.Value);
         foreach (var c in root.GetProperty("quietLines").EnumerateObject())
@@ -210,11 +188,8 @@ public sealed class ReadingBanks
             foreach (var kind in AspectKinds.Order)
             {
                 if (!_aspectVerbs.ContainsKey((culture, kind))) missing.Add($"verb {culture}/{kind}");
-                if (!_aspectFrames.ContainsKey((culture, kind))) missing.Add($"frame {culture}/{kind}");
-                if (!_exactInstructions.ContainsKey((culture, kind))) missing.Add($"instruction {culture}/{kind}");
                 if (!_aspectReflections.ContainsKey((culture, kind))) missing.Add($"reflection {culture}/{kind}");
             }
-            if (!_exactForms.TryGetValue(culture, out var forms) || forms.Count == 0) missing.Add($"exact forms {culture}");
             if (!_ingressFrames.ContainsKey(culture)) missing.Add($"ingress frame {culture}");
             if (!_ingressVerbs.ContainsKey(culture)) missing.Add($"ingress verb {culture}");
             if (!_quietLines.ContainsKey(culture)) missing.Add($"quiet line {culture}");

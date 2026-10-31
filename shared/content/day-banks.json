@@ -1,0 +1,3427 @@
+{
+  "fastOrder": [
+    "moon",
+    "sun",
+    "mercury",
+    "venus",
+    "mars"
+  ],
+  "tightOrb": 0.5,
+  "aspectGlyphs": {
+    "conjunction": "☌",
+    "sextile": "⚹",
+    "square": "□",
+    "trine": "△",
+    "opposition": "☍"
+  },
+  "decree": {
+    "egypt": {
+      "headlines": {
+        "conjunction": {
+          "sun": "Lay a mudbrick for the room you talk about most.",
+          "moon": "Say what you feel over bread and beer on your own reed mat.",
+          "mercury": "Write the letter on fresh papyrus and carry it yourself.",
+          "venus": "Take the one you love aside and tell them.",
+          "mars": "Aim your anger at one field of reeds and clear it."
+        },
+        "sextile": {
+          "sun": "Ask a neighbor to take the other end of the sledge.",
+          "moon": "Share your emmer bread with someone at home.",
+          "mercury": "Send the short note by a runner.",
+          "venus": "Set the first loaf on the altar, and make the gift small.",
+          "mars": "Put your strength into the canal in front of you."
+        },
+        "square": {
+          "sun": "Finish the one task the overseer will check.",
+          "moon": "Do not act on the mood you wake up with before the sun is high.",
+          "mercury": "Read the papyrus twice before you answer it.",
+          "venus": "Do not haggle with your beloved as you would over linen.",
+          "mars": "Stay still until your blood cools."
+        },
+        "trine": {
+          "sun": "Start the hard job while the light holds.",
+          "moon": "Let the scribe count the grain tomorrow, and rest tonight.",
+          "mercury": "Say it plainly and no one can mistake it.",
+          "venus": "Sit by the lotus pool and let someone else pour the beer.",
+          "mars": "Push the barge off the mud while your arms are strong."
+        },
+        "opposition": {
+          "sun": "You cannot hold the shrine door open and bolt it, so pick one.",
+          "moon": "You and your household are at odds tonight.",
+          "mercury": "The scribe at the other desk copies your words wrong.",
+          "venus": "Love asks you to yield this once.",
+          "mars": "Let whoever is shouting in the street wear themselves out."
+        }
+      },
+      "relations": {
+        "conjunction": [
+          "ride as one",
+          "walk as one",
+          "go out together"
+        ],
+        "sextile": [
+          "throw in with each other",
+          "help each other along",
+          "lighten each other's load"
+        ],
+        "square": [
+          "haul each other down",
+          "get in each other's way",
+          "pull at each other"
+        ],
+        "trine": [
+          "like each other",
+          "keep the same pace",
+          "go easily with each other"
+        ],
+        "opposition": [
+          "face each other down",
+          "want opposite things",
+          "each want it all"
+        ]
+      },
+      "tightTails": [
+        ", straight as the plumb line",
+        ", and the cord is drawn tight",
+        ", and Thoth records it to the hair"
+      ],
+      "consequences": {
+        "conjunction": {
+          "sun": "Your name travels ahead of you.",
+          "mercury": "Whatever you swear to today is written down.",
+          "venus": "Love comes with a dowry.",
+          "mars": "Your anger has a useful outlet.",
+          "jupiter": "A patron's favor lands on you whole.",
+          "saturn": "A duty you put off arrives in full.",
+          "uranus": "Your plans change shape overnight.",
+          "neptune": "A dream comes true by daylight.",
+          "pluto": "Something buried comes up under the hoe."
+        },
+        "sextile": {
+          "sun": "A small effort earns full pay.",
+          "mercury": "One short letter wins you a hearing.",
+          "venus": "A kind word buys more than silver.",
+          "mars": "One shove is enough.",
+          "jupiter": "A patron grants your request on the spot.",
+          "saturn": "An old duty eases the moment you start it.",
+          "uranus": "A chance comes from an unlikely quarter.",
+          "neptune": "A hunch is worth following for a while.",
+          "pluto": "An old store is yours to open."
+        },
+        "square": {
+          "sun": "Your work stalls at the first lock.",
+          "mercury": "Your words arrive bent.",
+          "venus": "Love costs more than you set aside for it.",
+          "mars": "Nothing moves today unless someone drags it.",
+          "jupiter": "A promise from above comes up short.",
+          "saturn": "Each chore outlasts the daylight.",
+          "uranus": "The scheme you trusted breaks at the dike.",
+          "neptune": "Every sum comes out uneven today.",
+          "pluto": "An old grievance is aired anew."
+        },
+        "trine": {
+          "sun": "Your work goes smoothly.",
+          "mercury": "Your plea reaches the right ear.",
+          "venus": "What you give in love is repaid with interest.",
+          "mars": "Your effort lands where you aim it.",
+          "jupiter": "Good fortune finds you unasked.",
+          "saturn": "What you built will last.",
+          "uranus": "A sudden change works in your favor.",
+          "neptune": "Sleep comes easy and the dreams are kind.",
+          "pluto": "What you hid away turns out to be worth having."
+        },
+        "opposition": {
+          "sun": "Home and work each demand you.",
+          "mercury": "Someone reads your words in reverse.",
+          "venus": "Your heart and your purse disagree.",
+          "mars": "Someone over the wall is spoiling for a fight.",
+          "jupiter": "A favor taken now will be called in later.",
+          "saturn": "Duty tugs one sleeve and wish the other.",
+          "uranus": "A sudden quarrel allows no middle ground.",
+          "neptune": "A pleasant story is being told about you.",
+          "pluto": "A neighbor has something of yours."
+        }
+      },
+      "images": {
+        "conjunction": {
+          "sun": "{god} enters the pylon with a guest, and the doorkeeper draws the bolt.",
+          "moon": "{god} brings a guest into the temple at night, and the priests light one lamp for both.",
+          "mercury": "{god} brings two people to one agreement, and the scribe presses his seal into the clay.",
+          "venus": "{god} gathers what was scattered, and the pieces are bound in one cloth.",
+          "mars": "{god} drives two harpoons home in one motion, and the hippopotamus does not rise again."
+        },
+        "sextile": {
+          "sun": "{god} sends the north wind, and the sails fill without a stroke of the oar.",
+          "moon": "{god} lights the path between the fields at night, and the watchman waves you through.",
+          "mercury": "{god} lends the scribe a fresh reed, and the letter is finished before noon.",
+          "venus": "{god} lays bread on the chapel step, and the neighbors bring the beer.",
+          "mars": "{god} takes the lighter oar, and the barge still makes headway."
+        },
+        "square": {
+          "sun": "{god} takes the weaker rope at the sledge, and the gang stops to rest.",
+          "moon": "{god} smudges the night's tally, and the scribe waits for dawn to count again.",
+          "mercury": "{god} spills the ink across the sheet, and the scribe starts again.",
+          "venus": "{god} leans on the balance, and the scribe of the hall notes where it settles.",
+          "mars": "{god} raises the harpoon, and the priests hold his arm."
+        },
+        "trine": {
+          "sun": "{god} matches the feather in weight, and the scribe lays down his reed.",
+          "moon": "{god} fills the cistern by night, and the household wakes to brimming jars.",
+          "mercury": "{god} speeds the letter on a fair wind, and it lands before nightfall.",
+          "venus": "{god} anoints the doorpost, and everyone who passes is welcome.",
+          "mars": "{god} drives the hippopotamus off the field, and the farmers plant again."
+        },
+        "opposition": {
+          "sun": "{god} stands at one end of the surveyor's rope, and the scribe waits with his reed raised.",
+          "moon": "{god} watches through the night from the far gate and counts every lamp you light.",
+          "mercury": "{god} reads the decree aloud in the Two Lands, and the north and the south understand it differently.",
+          "venus": "{god} stands at one end of the hall, and the bride's family waits at the other.",
+          "mars": "{god} meets a rival in the temple forecourt, and the crowd waits to see who strikes."
+        }
+      },
+      "instructions": {
+        "conjunction": {
+          "sun": "Place one task at the head of your day, and name it to {god} at sunrise.",
+          "moon": "Eat with the people you live with, and pour a cup for {god}.",
+          "mercury": "Answer no one else until your message is delivered, and thank {god} when it is.",
+          "venus": "Hide nothing from your beloved, and lay a blue lotus at {god}'s feet.",
+          "mars": "Spend your temper on the hardest chore in the house, and dedicate the first stroke to {god}."
+        },
+        "sextile": {
+          "sun": "Accept the first offer made before noon.",
+          "moon": "Mend one broken pot in the house.",
+          "mercury": "Answer what you owe briefly, and let it go.",
+          "venus": "Ask your beloved what they need this week.",
+          "mars": "Finish one job with your hands before dark."
+        },
+        "square": {
+          "sun": "Drop the least important job on your list.",
+          "moon": "Say nothing at home until you have eaten.",
+          "mercury": "Have a friend check your reply before you send it.",
+          "venus": "Leave the household accounts for another night.",
+          "mars": "Go the length of the canal before you answer an insult."
+        },
+        "trine": {
+          "sun": "Lift the heaviest stone of the week first, and call on {god} as you raise it.",
+          "moon": "Go to bed early, and leave a dish of figs for {god}.",
+          "mercury": "Speak to the person you have been avoiding, and trust {god} with the words.",
+          "venus": "Allow your beloved to do something for you, and thank {god} aloud.",
+          "mars": "Take on the heavy labor before noon, and salute {god} when it is done."
+        },
+        "opposition": {
+          "sun": "Choose home or work for the evening and stick to it.",
+          "moon": "Carry your moods to your own room.",
+          "mercury": "Ask whoever is listening to repeat what they heard.",
+          "venus": "Give up one small pleasure for your beloved.",
+          "mars": "Make no move until the other party does."
+        }
+      },
+      "secondFigure": [
+        "Lower on the roll than {god} and {partner},",
+        "Behind {god} and {partner} in the procession,",
+        "Past {god} and {partner}, in the next court,"
+      ],
+      "secondFigurePlain": [
+        "Lower on the roll,",
+        "Further back in the procession,",
+        "In the next court,"
+      ],
+      "noSecondFigure": "No other figure is near this one, so weigh it alone today.",
+      "comeBack": "Come back at dawn, when the scale is set again.",
+      "holds": "The same weight sits on the scale as yesterday."
+    },
+    "greece": {
+      "headlines": {
+        "conjunction": {
+          "sun": "Sign your name in the agora where everyone can read it.",
+          "moon": "Ask your household the question you avoid once the krater is mixed.",
+          "mercury": "Say your question to the oracle out loud and write down the answer.",
+          "venus": "Throw the apple, and tell the person you want that you want them.",
+          "mars": "Choose one fight worth your shield and walk away from the rest."
+        },
+        "sextile": {
+          "sun": "Show your work in the agora to someone who can help it.",
+          "moon": "Open your door to the friend who knocks late, and bring out the Chian wine.",
+          "mercury": "Give the next traveler on the road to Corinth a letter to carry.",
+          "venus": "Say one kind thing over the mixed wine and mean it.",
+          "mars": "Spend your strength in the gymnasium, where it builds something."
+        },
+        "square": {
+          "sun": "The agora will test you, so answer slowly.",
+          "moon": "Do not ask the oracle what you are not ready to hear.",
+          "mercury": "Check what the herald said before you repeat it.",
+          "venus": "Wanting it badly is no reason to ask Aphrodite for it.",
+          "mars": "Leave the spear with the hoplite gear before someone hands you a reason."
+        },
+        "trine": {
+          "sun": "Stand up on the Pnyx and be counted.",
+          "moon": "Your own hearth gives a better answer than any oracle.",
+          "mercury": "Ask now, while the road to Delphi is clear.",
+          "venus": "Accept the invitation to the symposium.",
+          "mars": "Enter the hard race and expect the laurel."
+        },
+        "opposition": {
+          "sun": "The agora has another candidate for your honor.",
+          "moon": "Your family's needs and yours face each other across the hearth.",
+          "mercury": "Two heralds will bring you two different stories from the same battle.",
+          "venus": "Choose between the two cups poured for you in the andron.",
+          "mars": "Let the enemy phalanx across the plain wait for a fight that does not come."
+        }
+      },
+      "relations": {
+        "conjunction": [
+          "go up the hill together",
+          "arrive together",
+          "come as a pair"
+        ],
+        "sextile": [
+          "clear the road for each other",
+          "help each other out",
+          "open doors for each other"
+        ],
+        "square": [
+          "argue at the same gate",
+          "work against each other",
+          "cross each other"
+        ],
+        "trine": [
+          "keep step with each other",
+          "agree without argument",
+          "fit together"
+        ],
+        "opposition": [
+          "take opposite sides of the question",
+          "pull in opposite directions",
+          "give opposite answers"
+        ]
+      },
+      "tightTails": [
+        ", to the very degree",
+        ", and the Pythia does not hesitate",
+        ", and the tripod answers at once"
+      ],
+      "consequences": {
+        "conjunction": {
+          "sun": "Everyone in the agora sees what you do.",
+          "mercury": "The message and the messenger are the same today.",
+          "venus": "Desire walks in with its price on it.",
+          "mars": "Your strength and your temper march in one file.",
+          "jupiter": "Whatever you ask of the powerful is heard.",
+          "saturn": "An old account comes due in full.",
+          "uranus": "The ground shifts under your plans.",
+          "neptune": "What you hope for and what is true look alike.",
+          "pluto": "A buried coin turns up, and someone will ask who spends it."
+        },
+        "sextile": {
+          "sun": "A good word in the right ear lifts your name.",
+          "mercury": "One short question earns a clear answer.",
+          "venus": "A small courtesy opens a door that force would not.",
+          "mars": "A brief effort settles the matter.",
+          "jupiter": "One plain question opens the way to someone powerful.",
+          "saturn": "An old debt eases if you pay a little now.",
+          "uranus": "A stranger brings you a useful idea.",
+          "neptune": "A dream points to something real.",
+          "pluto": "Some hidden silver is yours to find."
+        },
+        "square": {
+          "sun": "Your name is tested in public.",
+          "mercury": "A message goes wrong between the door and the street.",
+          "venus": "What you want costs more than you thought.",
+          "mars": "The answer you want is not the answer you get.",
+          "jupiter": "Someone powerful says no and means it.",
+          "saturn": "The work is slower than you planned.",
+          "uranus": "Your plan breaks at the worst moment.",
+          "neptune": "You see what you hope to see.",
+          "pluto": "Someone digs up what you buried."
+        },
+        "trine": {
+          "sun": "People speak well of you without being asked.",
+          "mercury": "Your words land where you aim them.",
+          "venus": "Pleasure costs you nothing today.",
+          "mars": "You win the contest you enter.",
+          "jupiter": "You get a straight answer without a riddle.",
+          "saturn": "Hard work pays at the harvest.",
+          "uranus": "A sudden notion turns out to be a good one.",
+          "neptune": "Your wandering mind brings back something useful.",
+          "pluto": "Old wealth works for you without noise."
+        },
+        "opposition": {
+          "sun": "Someone across the agora wants the same honor.",
+          "mercury": "Two people tell you two different stories.",
+          "venus": "You want two things, and the agora lets you carry home one.",
+          "mars": "Someone wants a quarrel in the open.",
+          "jupiter": "The powerful want a price for their help.",
+          "saturn": "A deadline comes the other way down your road.",
+          "uranus": "You will hear two answers, and the harder one is true.",
+          "neptune": "A rumor stands against the facts.",
+          "pluto": "Someone else claims what you inherited."
+        }
+      },
+      "images": {
+        "conjunction": {
+          "sun": "{god} stands at the tripod with a companion, and the Pythia answers them in one breath.",
+          "moon": "{god} brings a guest to the night rites, and the priestess pours for two.",
+          "mercury": "{god} carries two messages in one satchel, and both doors open.",
+          "venus": "{god} lends her girdle to a bride, and the whole symposium watches.",
+          "mars": "{god} locks shields with a comrade, and the line holds."
+        },
+        "sextile": {
+          "sun": "The shrine is open to {god}, and the Pythia answers whoever climbs to her first.",
+          "moon": "{god} walks the guests home from the symposium, and nobody stumbles.",
+          "mercury": "{god} raises a herm at the crossroads, and travelers take the right turn.",
+          "venus": "{god} sends a dove into the agora, and two strangers start talking.",
+          "mars": "{god} drills the young men at dawn, and the shield wall closes faster."
+        },
+        "square": {
+          "sun": "{god} fights for first place in the line, and the Pythia draws lots before she speaks.",
+          "moon": "{god} shuts the door of the night shrine, and the sailors outside argue over the course.",
+          "mercury": "{god} switches the herald's tablets, and the assembly hears the wrong decree.",
+          "venus": "{god} throws the golden apple onto the table, and three guests stop speaking.",
+          "mars": "{god} breaks the truce at the games, and the judges stop the race."
+        },
+        "trine": {
+          "sun": "The Pythia takes {god} ahead of the crowd and answers from the tripod.",
+          "moon": "{god} leads the night procession to the harbor, and every ship finds its mooring.",
+          "mercury": "{god} runs the road to Delphi without stopping, and the answer arrives before noon.",
+          "venus": "{god} walks through the agora, and the flower sellers give their roses away.",
+          "mars": "{god} takes the field at the head of the phalanx, and the line advances."
+        },
+        "opposition": {
+          "sun": "{god} comes up the hill by a separate road, and the Pythia gives a different answer at each door.",
+          "moon": "{god} sits on the far hill while the city sleeps, and the two watchfires answer each other.",
+          "mercury": "{god} argues both sides of the case, and the jurors cannot decide.",
+          "venus": "{god} turns her back on the host at the feast, and the guests take sides.",
+          "mars": "{god} meets his rival on the open field, and both armies wait for the first spear."
+        }
+      },
+      "instructions": {
+        "conjunction": {
+          "sun": "Put your own name to one public act, and let {god} see it done.",
+          "moon": "Sit down with your household after supper, and burn a pinch of barley for {god}.",
+          "mercury": "Run your errands in one trip, and leave a coin at the herm for {god}.",
+          "venus": "Say it to them in person, and burn incense to {god}.",
+          "mars": "Give one contest everything you have, and pledge the effort to {god}."
+        },
+        "sextile": {
+          "sun": "Ask one person whose work you respect to look at yours.",
+          "moon": "Invite a friend in for the evening.",
+          "mercury": "Ask about each errand in the fewest words.",
+          "venus": "Pay the person you want one honest compliment.",
+          "mars": "Run, lift or dig for an hour."
+        },
+        "square": {
+          "sun": "Hold your public answer until tomorrow.",
+          "moon": "Let the household argument end at the door.",
+          "mercury": "Repeat nothing you heard secondhand.",
+          "venus": "Wait a day before you ask for what you want.",
+          "mars": "Keep your fists at your sides."
+        },
+        "trine": {
+          "sun": "Speak first when the assembly opens, and pour a little wine for {god} at noon.",
+          "moon": "Keep the evening for your own house, and set out honey for {god}.",
+          "mercury": "Put the question you have been saving into words, and thank {god} when the answer comes.",
+          "venus": "Accept the pleasure in front of you, and burn a pinch of myrrh for {god}.",
+          "mars": "Go at the hardest task while your arm is fresh, and give {god} the first round."
+        },
+        "opposition": {
+          "sun": "Let someone else take the credit once.",
+          "moon": "Hear what your family needs before you say what you need.",
+          "mercury": "Ask both people to repeat what they said.",
+          "venus": "Give up one of the two things you want.",
+          "mars": "Let the other side strike first."
+        }
+      },
+      "secondFigure": [
+        "Down the hill from {god} and {partner},",
+        "In the agora below {god} and {partner},",
+        "At a lesser shrine than the one {god} and {partner} share,"
+      ],
+      "secondFigurePlain": [
+        "At a lesser shrine,",
+        "Down in the agora,",
+        "On the road below,"
+      ],
+      "noSecondFigure": "No other shrine speaks today, so carry this one answer home.",
+      "comeBack": "Bring your next question tomorrow, when the tripod is lit again.",
+      "holds": "The oracle gives the same answer as yesterday."
+    },
+    "canaan": {
+      "headlines": {
+        "conjunction": {
+          "sun": "Put your hand to the plow and keep it there until the ram's horn sounds.",
+          "moon": "Settle one family matter before the flocks are folded.",
+          "mercury": "Forge the thing yourself instead of buying it off the caravan.",
+          "venus": "Make the vow you have been holding back, before the whole clan.",
+          "mars": "Pick one enemy for your bow and forget the rest."
+        },
+        "sextile": {
+          "sun": "A neighbor will help with the threshing if you ask.",
+          "moon": "Send a barley loaf to the family on the next terrace.",
+          "mercury": "Trade your skill for a neighbor's at the gate.",
+          "venus": "Bring a gift to the tent flap and wait to be asked in.",
+          "mars": "Your anger can dig a whole cistern today."
+        },
+        "square": {
+          "sun": "Someone at the gate wants your work stopped.",
+          "moon": "Keep the family quarrel inside the tent.",
+          "mercury": "Pull the crooked peg from the cedar beam and cut it again.",
+          "venus": "Do not swear a vow of love at the standing stone in the middle of a fight.",
+          "mars": "Keep clear of the fight at your neighbor's gate."
+        },
+        "trine": {
+          "sun": "The council says yes to you today, so ask.",
+          "moon": "Sit under your own fig tree and enjoy the evening.",
+          "mercury": "Your hands know the bronze, so let them work.",
+          "venus": "Love walks in from the olive grove without being called.",
+          "mars": "Thresh the whole floor before the heat goes out of you."
+        },
+        "opposition": {
+          "sun": "Your field and your tent both want the whole day.",
+          "moon": "The tent is divided, and your kin expect you to pick a side.",
+          "mercury": "Someone at the gate takes your words and argues the other side.",
+          "venus": "Your beloved stands across the council floor from you.",
+          "mars": "Someone at the well is spoiling for a quarrel, and you owe them nothing."
+        }
+      },
+      "relations": {
+        "conjunction": [
+          "rise and fall together",
+          "share one tent",
+          "come as one"
+        ],
+        "sextile": [
+          "help each other",
+          "stand by each other",
+          "lend each other a hand"
+        ],
+        "square": [
+          "quarrel with each other",
+          "trip each other up",
+          "block each other at the gate"
+        ],
+        "trine": [
+          "go well together",
+          "keep pace with each other",
+          "agree"
+        ],
+        "opposition": [
+          "make opposite demands",
+          "make claims against each other",
+          "pull the household two ways"
+        ]
+      },
+      "tightTails": [
+        ", and the whole council hears it",
+        ", and the witnesses sign the tablet",
+        ", and the elders mark the day"
+      ],
+      "consequences": {
+        "conjunction": {
+          "sun": "Your work is seen by everyone at the gate.",
+          "mercury": "Your hands and your words make one thing.",
+          "venus": "Love and war arrive at the same door.",
+          "mars": "Your anger and your strength become one weapon.",
+          "jupiter": "The rain and the harvest come together.",
+          "saturn": "The elders' ruling falls on you whole.",
+          "uranus": "The heavens change your plans for you.",
+          "neptune": "Your fears and your prayers come in one wave.",
+          "pluto": "Something you lost comes back to the threshing floor."
+        },
+        "sextile": {
+          "sun": "A day's honest work earns a fair word.",
+          "mercury": "A skill you lend comes back as a skill borrowed.",
+          "venus": "A promise made now holds.",
+          "mars": "A short burst of effort finishes the job.",
+          "jupiter": "Rain falls where you planted.",
+          "saturn": "The elders grant one request.",
+          "uranus": "A visitor from far off brings an offer.",
+          "neptune": "A prayer said plainly is heard.",
+          "pluto": "An old loss eases once you name it."
+        },
+        "square": {
+          "sun": "Your work is stopped at the gate.",
+          "mercury": "Your tools fail you halfway through.",
+          "venus": "Someone tests your promise.",
+          "mars": "Someone objects to you in front of the council.",
+          "jupiter": "The rain comes late or too hard.",
+          "saturn": "The elders refuse you and hear no appeal.",
+          "uranus": "Your routine breaks without warning.",
+          "neptune": "Your fears speak louder than the facts.",
+          "pluto": "An old loss bites again."
+        },
+        "trine": {
+          "sun": "Your work goes through the gate without a question.",
+          "mercury": "Whatever you build stands.",
+          "venus": "Love answers when you call.",
+          "mars": "Your strength finishes the job, and nobody falls sick.",
+          "jupiter": "What you ask for passes without a hand raised against it.",
+          "saturn": "The elders approve your plan.",
+          "uranus": "A change you did not plan works out well.",
+          "neptune": "Your prayer is answered plainly.",
+          "pluto": "You stop grieving something old."
+        },
+        "opposition": {
+          "sun": "Your daytime work pulls against your nights at home.",
+          "mercury": "Your words get turned around in the retelling.",
+          "venus": "What you love and what you owe face each other.",
+          "mars": "Someone picks a quarrel with you in public.",
+          "jupiter": "The harvest and the debt arrive together.",
+          "saturn": "The elders take the other side.",
+          "uranus": "The sky turns against your plan.",
+          "neptune": "Both sides are heard, and the other side speaks well.",
+          "pluto": "Someone claims what you thought was finished."
+        }
+      },
+      "images": {
+        "conjunction": {
+          "sun": "{god} goes before the assembly with a companion, and the council's decree falls on the pair.",
+          "moon": "{god} pays the whole bride price, and both families drink from one cup.",
+          "mercury": "{god} forges a weapon at the bellows, and the blade comes out true.",
+          "venus": "{god} rides out with a companion, and the city opens both gates.",
+          "mars": "{god} draws two arrows at once, and the gate guards step back."
+        },
+        "sextile": {
+          "sun": "{god} brings a friend before the gods, and the cupbearer pours for both.",
+          "moon": "{god} sends gifts ahead of the wedding, and the door stands open.",
+          "mercury": "{god} lends his tongs to a neighbor's forge, and the work goes faster.",
+          "venus": "{god} hangs a lamp in the window, and the guest finds the house.",
+          "mars": "{god} lowers his bow at the gate, and the traders come in."
+        },
+        "square": {
+          "sun": "{god} stands up to accuse, and the assembly hears nothing else at this sitting.",
+          "moon": "{god} quarrels over the bride price, and the families leave the table.",
+          "mercury": "{god}'s fire goes out under the anvil, and the blade cools half made.",
+          "venus": "{god} draws her sword at the feast, and the cups go down.",
+          "mars": "{god} shoots into the crowd at the gate, and the elders call for order."
+        },
+        "trine": {
+          "sun": "The assembly waves {god} through, and no god asks for a vow.",
+          "moon": "{god} sits with the threshers all night, and the work finishes early.",
+          "mercury": "{god} builds a palace of cedar in seven days, and it stands.",
+          "venus": "{god} comes down from the hills in peace, and the vineyards fill.",
+          "mars": "{god} unstrings his bow, and the city sleeps without fever."
+        },
+        "opposition": {
+          "sun": "The gods put down their cups as {god} takes the floor against a rival.",
+          "moon": "{god} calls the night court to order, and it sits until dawn.",
+          "mercury": "{god} wants windows in the palace and the owner wants none, and the work stops.",
+          "venus": "{god} faces the sea across the beach, and the sailors wait for a sign.",
+          "mars": "{god} aims his arrow at the gatekeeper, and the gate stays shut."
+        }
+      },
+      "instructions": {
+        "conjunction": {
+          "sun": "Put your whole day into one job, and say its name to {god} at the gate.",
+          "moon": "Ask the eldest at your table for a ruling, and pour a drink for {god}.",
+          "mercury": "Finish the piece you started, and show it to {god} with your mark on it.",
+          "venus": "Say the vow in front of a witness, and let {god} hear it.",
+          "mars": "Spend your heat on the field before evening, and let {god} keep the arrows."
+        },
+        "sextile": {
+          "sun": "Lend your hands to a neighbor's work first.",
+          "moon": "Visit the relative you have not seen since the last feast.",
+          "mercury": "Teach someone younger one thing you know.",
+          "venus": "Speak kindly of the one you love in front of others.",
+          "mars": "Take the hardest job in the field before noon."
+        },
+        "square": {
+          "sun": "Write down who blocks your work and why.",
+          "moon": "Let your kin speak first and answer them tomorrow.",
+          "mercury": "Measure the work again before you finish it.",
+          "venus": "Let the argument end before either of you speaks of love.",
+          "mars": "Lock your own gate and stay inside it."
+        },
+        "trine": {
+          "sun": "Name the thing you want at the gate, and leave a share of the yield for {god}.",
+          "moon": "Spend the evening at home with your kin, and leave a bowl of dates for {god}.",
+          "mercury": "Start the hard part of the work first, and lay the first piece before {god}.",
+          "venus": "Make room at your table for one more, and thank {god} at the threshold.",
+          "mars": "Carry the heavy sacks yourself, and leave a sheaf for {god}."
+        },
+        "opposition": {
+          "sun": "Split the day between field and family, and say out loud how you split it.",
+          "moon": "Hear your family out before you answer.",
+          "mercury": "Ask the one arguing with you to say your words back.",
+          "venus": "Cross the floor to the one you love.",
+          "mars": "Refuse the fight you are offered."
+        }
+      },
+      "secondFigure": [
+        "Further down the bench from {god} and {partner},",
+        "At the gate below {god} and {partner},",
+        "In the fields beyond {god} and {partner},"
+      ],
+      "secondFigurePlain": [
+        "Further down the bench,",
+        "At the city gate,",
+        "Out in the fields,"
+      ],
+      "noSecondFigure": "No other matter reaches the floor today, so close this one before you leave.",
+      "comeBack": "The council sits again tomorrow, and your seat is kept.",
+      "holds": "The council is still sitting on yesterday's matter."
+    },
+    "carthage": {
+      "headlines": {
+        "conjunction": {
+          "sun": "Let the whole harbor know which deal is yours.",
+          "moon": "The household purse is everyone's business today, to the last shekel.",
+          "mercury": "Put the handshake in writing before the ships sail.",
+          "venus": "Buy the length of purple you keep looking at.",
+          "mars": "Put the whole war chest behind one voyage."
+        },
+        "sextile": {
+          "sun": "Your name opens one more door on the quay.",
+          "moon": "Strike the small debt from the household ledger this week.",
+          "mercury": "The harbor is open to your offer.",
+          "venus": "Buy the gift from the Sicilian cargo and deliver it yourself.",
+          "mars": "Partners follow the trader who pays in first."
+        },
+        "square": {
+          "sun": "The suffetes are checking your figures, so make them right.",
+          "moon": "Do not balance the house ledger in a temper.",
+          "mercury": "Nothing gets your seal until a second clerk has read it.",
+          "venus": "Affection you paid for in shekels does not stay bought.",
+          "mars": "Pay nothing out of the war chest in anger."
+        },
+        "trine": {
+          "sun": "Your name is good for credit anywhere on the quay.",
+          "moon": "The household runs itself today like a well-stowed hold, so let it.",
+          "mercury": "The deal you are drafting closes cleanly before the ships leave for Gades.",
+          "venus": "Enjoy what the last ship brought, all of it paid for.",
+          "mars": "Your nerve pays off today, so press the bargain over the amphorae."
+        },
+        "opposition": {
+          "sun": "A rival trader wants your berth at the quay.",
+          "moon": "Home and the warehouse want the same silver.",
+          "mercury": "Your partners in Tyre take the contract to mean something else.",
+          "venus": "Your purse cannot cover both things you want, whatever the moneychanger says.",
+          "mars": "A mercenary captain wants you to fund his fight."
+        }
+      },
+      "relations": {
+        "conjunction": [
+          "share one account",
+          "move as one",
+          "go under one seal"
+        ],
+        "sextile": [
+          "carry each other's cargo",
+          "vouch for each other",
+          "back each other"
+        ],
+        "square": [
+          "fight over the same silver",
+          "eat into each other",
+          "undercut each other"
+        ],
+        "trine": [
+          "add up on the first pass",
+          "pay off together",
+          "balance easily"
+        ],
+        "opposition": [
+          "bid against each other",
+          "pull the accounts two ways",
+          "compete for the same coin"
+        ]
+      },
+      "tightTails": [
+        ", posted to the hour",
+        ", weighed to the last shekel",
+        ", entered without a correction"
+      ],
+      "consequences": {
+        "conjunction": {
+          "sun": "Your name and your credit become one entry.",
+          "mercury": "The deal and the paperwork close together.",
+          "venus": "Pleasure and money come in one shipment.",
+          "mars": "Your nerve and your coin go into one venture.",
+          "jupiter": "Profit arrives in a single cargo.",
+          "saturn": "Every fixed due falls on the same day.",
+          "uranus": "A new route opens and closes the old one.",
+          "neptune": "The sea brings back what you sent out.",
+          "pluto": "An inherited debt and an inherited asset arrive together."
+        },
+        "sextile": {
+          "sun": "A good word in the harbor raises your credit.",
+          "mercury": "A small contract opens a larger one.",
+          "venus": "A small gift earns a large favor.",
+          "mars": "A little more nerve closes the deal.",
+          "jupiter": "A small loan made today comes back.",
+          "saturn": "One fixed due can be paid early at a discount.",
+          "uranus": "A captain offers you a new route.",
+          "neptune": "The weather holds for one sailing.",
+          "pluto": "An old debt can be settled for less."
+        },
+        "square": {
+          "sun": "Someone questions your credit on the quay.",
+          "mercury": "A clause in the contract turns against you.",
+          "venus": "Pleasure costs double.",
+          "mars": "Someone changes the terms on you.",
+          "jupiter": "Profit stalls in the warehouse.",
+          "saturn": "A due you forgot comes to the door.",
+          "uranus": "A ship changes course without telling you.",
+          "neptune": "Your figures blur at the edges.",
+          "pluto": "An old debt grows new interest."
+        },
+        "trine": {
+          "sun": "Your credit opens doors on the quay.",
+          "mercury": "Every contract closes cleanly.",
+          "venus": "Money spent on pleasure comes back.",
+          "mars": "Your nerve pays out double.",
+          "jupiter": "Your figures come out right on the first count.",
+          "saturn": "Your dues are paid and stay paid.",
+          "uranus": "A new route pays on its first sailing.",
+          "neptune": "The sea is kind to your cargo.",
+          "pluto": "An inheritance comes through clean."
+        },
+        "opposition": {
+          "sun": "A rival bids for your standing in the harbor.",
+          "mercury": "The other side reads the terms another way.",
+          "venus": "Your wants and your needs bid for the same coin.",
+          "mars": "A quarrel that is not yours asks for your silver.",
+          "jupiter": "A profit for you is a loss for a partner.",
+          "saturn": "Something has to be paid out, and you must choose what.",
+          "uranus": "A new route competes with your old one.",
+          "neptune": "A rumor in the harbor bids against the facts.",
+          "pluto": "An heir across the table disputes the will."
+        }
+      },
+      "images": {
+        "conjunction": {
+          "sun": "The clerk writes {god} and a partner on one line, and one seal covers both.",
+          "moon": "{god}'s sign is cut on a fresh stele, and two families pay for it together.",
+          "mercury": "{god} guides two ships into port on one tide, and the harbor master logs both.",
+          "venus": "{god} launches the fleet with every bench manned, and each captain knows the plan.",
+          "mars": "{god} carries two cargoes to Tyre, and the temple takes its tithe from both."
+        },
+        "sextile": {
+          "sun": "{god} stands surety for you until the ships come home.",
+          "moon": "{god} keeps the harbor watch awake, and the late ship finds the channel.",
+          "mercury": "{god} points a captain to another landing, and the trade begins there.",
+          "venus": "{god} sends a fair wind to the merchant fleet, and the cargo arrives early.",
+          "mars": "{god} opens his storehouse to a partner, and both profit."
+        },
+        "square": {
+          "sun": "{god} refuses the terms, and the Hundred and Four read the roll again line by line.",
+          "moon": "{god} looks away from the household altar, and the accounts do not balance.",
+          "mercury": "{god} sends the ship to the wrong shore, and the cargo sits on the beach.",
+          "venus": "{god} recalls the fleet halfway out, and the crews want their pay.",
+          "mars": "{god} demands the whole tithe at once, and the warehouse empties."
+        },
+        "trine": {
+          "sun": "The clerk adds {god}'s column once, and the sum closes the sheet.",
+          "moon": "{god} blesses the household stele, and the family's books close clean.",
+          "mercury": "{god} guides every ship to its berth, and the harbor clears by noon.",
+          "venus": "{god} sends the fleet home laden, and the city lights its lamps.",
+          "mars": "{god} wins the contest at Tyre, and the tithe comes back doubled."
+        },
+        "opposition": {
+          "sun": "The clerk writes {god} against the other column, and the balance stays open.",
+          "moon": "{god} closes the harbor for the night, and the fishermen stay ashore.",
+          "mercury": "{god} guides one ship in while another sails out, and the berth is disputed.",
+          "venus": "{god} faces the other bidder across the harbor, and the merchants wait to see who yields.",
+          "mars": "{god} meets a rival champion on the quay, and the city takes sides."
+        }
+      },
+      "instructions": {
+        "conjunction": {
+          "sun": "Put your name on one deal and see it through, and seal the page in {god}'s name.",
+          "moon": "Agree on one household budget with everyone at the table, and set {god}'s share aside first.",
+          "mercury": "Draft the contract and sign it before you sleep, with {god} as witness.",
+          "venus": "Spend on what you love without keeping score, and hang a strip of purple at {god}'s stele.",
+          "mars": "Name one venture as the only call on your war chest, and enter {god} as its patron."
+        },
+        "sextile": {
+          "sun": "Ask one trader you trust to speak for you.",
+          "moon": "Pay one household debt before the market opens.",
+          "mercury": "Put your price in writing before the next sailing.",
+          "venus": "Carry it to their door in your own hands.",
+          "mars": "Put some of your own silver into the venture."
+        },
+        "square": {
+          "sun": "Go through last month's entries line by line.",
+          "moon": "Leave the household books shut until morning.",
+          "mercury": "Ask a second clerk to read the contract.",
+          "venus": "Keep your purse shut until the week's books close.",
+          "mars": "Lock the war chest until your blood cools."
+        },
+        "trine": {
+          "sun": "Ask for the larger loan, and set aside {god}'s share.",
+          "moon": "Take the evening off from the household books, and thank {god} at the meal.",
+          "mercury": "Sign before the week is out, and file a copy at {god}'s temple.",
+          "venus": "Use the good cups at supper, and pour the first one for {god}.",
+          "mars": "Ask for the better price, and tithe the profit to {god}."
+        },
+        "opposition": {
+          "sun": "Name your price before the other side names theirs.",
+          "moon": "Decide whether the silver goes to the house or the ship.",
+          "mercury": "Read the contract aloud with the other side.",
+          "venus": "Pick the need over the want this once.",
+          "mars": "Keep your war chest closed to other people's quarrels."
+        }
+      },
+      "secondFigure": [
+        "Below the line for {god} and {partner},",
+        "In the column after {god} and {partner},",
+        "On the page facing {god} and {partner},"
+      ],
+      "secondFigurePlain": [
+        "Further down the page,",
+        "In the next column,",
+        "On the facing page,"
+      ],
+      "noSecondFigure": "Nothing else is entered today, so rule off under this line and go home.",
+      "comeBack": "Come back tomorrow, when the books open at first light.",
+      "holds": "Yesterday's entry stands, and the clerk carries it forward."
+    },
+    "rome": {
+      "headlines": {
+        "conjunction": {
+          "sun": "Take the credit for your work on the rostra.",
+          "moon": "Keep the lamp lit in the atrium and the door open.",
+          "mercury": "Put your own seal on the dispatch.",
+          "venus": "Ask the paterfamilias for the match you want.",
+          "mars": "March on one objective and leave the rest in camp."
+        },
+        "sextile": {
+          "sun": "Call in the favor a client owes you.",
+          "moon": "Fill the triclinium with neighbors for dinner.",
+          "mercury": "A short note to the right magistrate gets results.",
+          "venus": "Pay the morning call you keep postponing.",
+          "mars": "Drill today, and the Campus Martius is yours tomorrow."
+        },
+        "square": {
+          "sun": "Your rivals in the Senate are watching, so give them nothing.",
+          "moon": "The household is quarrelsome, and the whole insula is listening.",
+          "mercury": "Hold the wax tablet until your temper cools.",
+          "venus": "Keep courtship out of forum business.",
+          "mars": "Stay in camp with the gladius sheathed."
+        },
+        "trine": {
+          "sun": "Speak in the forum while the crowd is ready to listen.",
+          "moon": "Stay in the domus tonight and let the household fuss over you.",
+          "mercury": "Make your case to the praetor while it reads well.",
+          "venus": "Take your place on the dining couch when you are asked.",
+          "mars": "Take the field, because the auspices are on your side."
+        },
+        "opposition": {
+          "sun": "A rival in the Senate wants your seat.",
+          "moon": "Your household and your duties in the Curia pull against each other.",
+          "mercury": "Your dispatch and theirs cannot both carry the tribes' vote.",
+          "venus": "One of the two houses on the Palatine will be disappointed in you.",
+          "mars": "You do not have to force what the ground refuses."
+        }
+      },
+      "relations": {
+        "conjunction": [
+          "march under one standard",
+          "act as one",
+          "go together"
+        ],
+        "sextile": [
+          "lend each other troops",
+          "do each other favors",
+          "support each other"
+        ],
+        "square": [
+          "block each other's road",
+          "clash",
+          "obstruct each other"
+        ],
+        "trine": [
+          "sit on the same side of the Senate",
+          "see eye to eye",
+          "work well together"
+        ],
+        "opposition": [
+          "veto each other",
+          "oppose each other",
+          "pull in different directions"
+        ]
+      },
+      "tightTails": [
+        ", true to the augur's line",
+        ", and the augur marks it in his book",
+        ", and the pontiff marks it in the calendar"
+      ],
+      "consequences": {
+        "conjunction": {
+          "sun": "You answer in public for everything you do.",
+          "mercury": "Your words and your deals travel together.",
+          "venus": "Love and alliance become one contract.",
+          "mars": "Your effort and your anger serve under one command.",
+          "jupiter": "Good fortune and duty arrive on the same day.",
+          "saturn": "Your accounts and your obligations meet at once.",
+          "uranus": "Your plans change in a single stroke.",
+          "neptune": "Pleasure and confusion come in one cup.",
+          "pluto": "What you inherit and what you owe come due together."
+        },
+        "sextile": {
+          "sun": "One public favor raises your name.",
+          "mercury": "A short letter gets a fast answer.",
+          "venus": "A friendly visit opens a useful door.",
+          "mars": "A short effort wins the skirmish.",
+          "jupiter": "One favor asked is granted.",
+          "saturn": "One debt can be settled on good terms.",
+          "uranus": "A new idea finds a sponsor.",
+          "neptune": "An afternoon of rest pays for itself.",
+          "pluto": "A family matter can be settled quietly."
+        },
+        "square": {
+          "sun": "Your name meets resistance in public.",
+          "mercury": "Your dispatch arrives late or garbled.",
+          "venus": "A courtship meets a family objection.",
+          "mars": "Your business is put off.",
+          "jupiter": "The vote you expected does not come.",
+          "saturn": "The treasury says no.",
+          "uranus": "A sudden order reverses your plans.",
+          "neptune": "You cannot tell flattery from counsel.",
+          "pluto": "An old family claim blocks your way."
+        },
+        "trine": {
+          "sun": "Your name carries weight in the forum.",
+          "mercury": "Your messages arrive on time and are read.",
+          "venus": "A courtship goes well.",
+          "mars": "Your campaign takes ground.",
+          "jupiter": "Your motion passes.",
+          "saturn": "Your accounts balance at the year's end.",
+          "uranus": "A reform you pushed takes hold.",
+          "neptune": "Rest restores you.",
+          "pluto": "Family money comes to your aid."
+        },
+        "opposition": {
+          "sun": "A rival stands against your name.",
+          "mercury": "Two reports contradict each other.",
+          "venus": "Two families want different matches for you.",
+          "mars": "Your opponent will not yield.",
+          "jupiter": "Your patron wants something in return.",
+          "saturn": "The treasury and your wishes face each other.",
+          "uranus": "Your reforms meet a reaction.",
+          "neptune": "Nothing passes today.",
+          "pluto": "An heir across the forum contests your claim."
+        }
+      },
+      "images": {
+        "conjunction": {
+          "sun": "{god} waits on the sacred chickens, and the keeper announces that they have eaten.",
+          "moon": "{god} comes to the household shrine with a guest, and both are fed before the family eats.",
+          "mercury": "{god} closes two bargains on one market day, and the aediles record both.",
+          "venus": "{god} joins two houses at the altar, and the pontifex ties the knot.",
+          "mars": "{god} gathers two legions under one eagle, and the camp moves at dawn."
+        },
+        "sextile": {
+          "sun": "The haruspex finds the liver favorable to {god}, and the sign holds until dusk.",
+          "moon": "{god} keeps the gate open after dark, and the travelers leave early.",
+          "mercury": "{god} speeds the courier along the Via Appia, and the reply comes back in a day.",
+          "venus": "{god} sends a garland to the right door, and the family invites you in.",
+          "mars": "{god} sends a cohort to relieve the line, and the soldiers eat a hot meal."
+        },
+        "square": {
+          "sun": "An adverse omen stands in {god}'s path, and the consul adjourns the Senate.",
+          "moon": "{god}'s offering is late at the Aventine shrine, and the household quarrels over whose turn it was.",
+          "mercury": "{god} loses the dispatch at the river crossing, and the legate waits for orders.",
+          "venus": "{god} quarrels with the bride's mother over the match, and the wedding is postponed.",
+          "mars": "{god} finds the sacred shields moved, and the Salii refuse to dance."
+        },
+        "trine": {
+          "sun": "The augur names {god} in his prayer, and the birds come from the right.",
+          "moon": "{god} is honored in the atrium at supper, and the household shrine gets an extra cake.",
+          "mercury": "{god} carries every letter on time, and the forum hears your case first.",
+          "venus": "{god} smiles on the wedding procession, and the torches stay lit all the way home.",
+          "mars": "{god} gives the signal from the right, and the legion advances in good order."
+        },
+        "opposition": {
+          "sun": "The tribunes are divided over {god}, and the assembly goes home without a vote.",
+          "moon": "{god} holds the night and the magistrates hold the day, and the watch doubles at the gates.",
+          "mercury": "{god} takes the case for both parties before the praetor, and the hearing is adjourned.",
+          "venus": "{god} stands with one family and the pontifex with the other, and the betrothal stalls.",
+          "mars": "{god} faces an enemy camp across the river, and neither side crosses."
+        }
+      },
+      "instructions": {
+        "conjunction": {
+          "sun": "Stand behind one decision in public, and burn incense to {god}.",
+          "moon": "Bring the household together for one meal, and set out a cake for {god}.",
+          "mercury": "Write the dispatch in your own hand, and sprinkle the page with water from {god}'s spring.",
+          "venus": "Send a go-between to the family, and tie a ribbon at {god}'s shrine.",
+          "mars": "Name one objective to your officers, and vow a shield to {god}."
+        },
+        "sextile": {
+          "sun": "Visit your patron in the morning.",
+          "moon": "Set an extra place at dinner.",
+          "mercury": "Find out which clerk handles your matter.",
+          "venus": "Send a gift ahead of your visit.",
+          "mars": "Spend an hour at drill."
+        },
+        "square": {
+          "sun": "Say less than you know in public.",
+          "moon": "Settle household quarrels inside the walls.",
+          "mercury": "Show the letter to a friend before you send it.",
+          "venus": "Let the courtship rest a week.",
+          "mars": "Post sentries and hold your ground."
+        },
+        "trine": {
+          "sun": "Take the front bench at the next meeting, and hang a garland for {god} on the way.",
+          "moon": "Eat with your family, and give the first cup to {god}.",
+          "mercury": "Get your argument into writing, and leave a coin at {god}'s shrine.",
+          "venus": "Go where you are invited, and wear a sprig of myrtle for {god}.",
+          "mars": "Move first, and promise {god} a share of the spoils."
+        },
+        "opposition": {
+          "sun": "Let your rival speak first in the forum.",
+          "moon": "Tell your household whether duty or home comes first.",
+          "mercury": "Ask for both reports in writing.",
+          "venus": "Choose one family's favor over the other's.",
+          "mars": "Hold your position without attacking."
+        }
+      },
+      "secondFigure": [
+        "Behind {god} and {partner} in the sky,",
+        "Across the forum from {god} and {partner},",
+        "Below the Capitol, where {god} meets {partner},"
+      ],
+      "secondFigurePlain": [
+        "Elsewhere in the sky,",
+        "Across the forum,",
+        "On the Capitol,"
+      ],
+      "noSecondFigure": "The sky sends no second sign, so the rest of your day is yours to spend.",
+      "comeBack": "The augur takes the auspices again at dawn, so come back tomorrow.",
+      "holds": "The auspices stand as they stood."
+    }
+  },
+  "quietHeadlines": {
+    "egypt": "Do the plain work and call it enough.",
+    "greece": "You can leave the questions for another day.",
+    "canaan": "Nobody needs anything from you today.",
+    "carthage": "You owe nothing extra today.",
+    "rome": "Go about your business without looking for signs."
+  },
+  "quietLines": {
+    "egypt": "Nothing on the river runs close enough to weigh. A day of ordinary work, and Ma'at counts it no lower than a feast.",
+    "greece": "No shrine answers today. The oracle keeps its own counsel, and so should you.",
+    "canaan": "Not one matter is brought forward today. An ordinary day still stands under El's tent.",
+    "carthage": "The day's page takes no entry. Nothing falls due, and the books close as they opened.",
+    "rome": "Nothing is reported that the augurs would call a sign. The citadel was manned at dawn all the same."
+  },
+  "deityDomains": {
+    "egypt": {
+      "sun": "your day's work",
+      "moon": "your moods",
+      "mercury": "your letters",
+      "venus": "your beloved",
+      "mars": "your temper",
+      "jupiter": "your patrons",
+      "saturn": "your duties",
+      "uranus": "your plans for the new season",
+      "neptune": "your dreams",
+      "pluto": "what you have buried"
+    },
+    "greece": {
+      "sun": "your name in the city",
+      "moon": "your household",
+      "mercury": "your errands",
+      "venus": "your desire",
+      "mars": "your fighting strength",
+      "jupiter": "your standing with the powerful",
+      "saturn": "your old obligations",
+      "uranus": "your sudden notions",
+      "neptune": "your wandering thoughts",
+      "pluto": "your hidden wealth"
+    },
+    "canaan": {
+      "sun": "your daily labor",
+      "moon": "your kin at home",
+      "mercury": "your handiwork",
+      "venus": "your love",
+      "mars": "your hot blood",
+      "jupiter": "your harvest",
+      "saturn": "your elders' rules",
+      "uranus": "your change of pasture",
+      "neptune": "your prayers",
+      "pluto": "your family's land"
+    },
+    "carthage": {
+      "sun": "your credit in the harbor",
+      "moon": "your household accounts",
+      "mercury": "your contracts",
+      "venus": "your pleasure fund",
+      "mars": "your war chest",
+      "jupiter": "your profits",
+      "saturn": "your fixed dues",
+      "uranus": "your new routes",
+      "neptune": "your sea voyages",
+      "pluto": "the debts you inherited"
+    },
+    "rome": {
+      "sun": "your good name",
+      "moon": "your household affairs",
+      "mercury": "your dispatches",
+      "venus": "your courtship",
+      "mars": "your campaign",
+      "jupiter": "your run for office",
+      "saturn": "your treasury",
+      "uranus": "your reforms",
+      "neptune": "your days at the baths",
+      "pluto": "your inheritance"
+    }
+  },
+  "cultureVoices": {
+    "egypt": {
+      "institution": "THE HALL OF MA’AT",
+      "weekTitle": "SEVEN DAYS WEIGHED",
+      "weekThesis": "The day is laid on the scale at evening and the pans settle overnight. Seven weighings make the week.",
+      "weekNote": "DAYS TALLIED AGAINST THE FEATHER",
+      "yearTitle": "THE YEAR OF THE RIVER",
+      "yearStructure": "seasons3",
+      "synastryTitle": "TWO HEARTS, ONE SCALE",
+      "forecastTitle": "THE NILOMETER",
+      "forecastNote": "SPANS DRAWN AS FLOOD MARKS",
+      "permissionPair": [
+        "OFFER",
+        "WITHHOLD"
+      ],
+      "houseGroups": [
+        {
+          "name": "THE GRANARY",
+          "sub": "GRAIN & RATIONS"
+        },
+        {
+          "name": "THE HOUSE OF THE KA",
+          "sub": "HOME & FOREBEARS"
+        },
+        {
+          "name": "THE FERRY",
+          "sub": "LETTERS & CROSSINGS"
+        },
+        {
+          "name": "THE SEALED SHRINE",
+          "sub": "THE DARK CHAMBER"
+        }
+      ],
+      "dayFlags": false,
+      "receptionLine": "The roll carries three names that no scribe of Memphis ever wrote. A late name weighs no less than an old one."
+    },
+    "greece": {
+      "institution": "THE DAY'S ORACLE",
+      "weekTitle": "SEVEN QUESTIONS",
+      "weekThesis": "One question goes up to Delphi each day; the week is the art of asking them in order.",
+      "weekNote": "EACH DAY NAMES ITS QUESTION",
+      "yearTitle": "THE FESTIVAL CIRCUIT",
+      "yearStructure": "festivals",
+      "synastryTitle": "THE SYMBOLON",
+      "forecastTitle": "COUNSEL FOR THE TWELVEMONTH",
+      "forecastNote": "HEARINGS, RETURNS, AND RELEASES",
+      "permissionPair": [
+        "ASK",
+        "DO NOT ASK"
+      ],
+      "houseGroups": [
+        {
+          "name": "THE AGORA",
+          "sub": "SILVER & GOODS"
+        },
+        {
+          "name": "THE OIKOS",
+          "sub": "HEARTH & KIN"
+        },
+        {
+          "name": "THE HERM",
+          "sub": "MESSAGES & CROSSROADS"
+        },
+        {
+          "name": "THE ADYTON",
+          "sub": "THE PYTHIA ALONE"
+        }
+      ],
+      "dayFlags": false,
+      "receptionLine": "Three questions were put that Delphi had never been asked. The god answered them at the usual fee."
+    },
+    "canaan": {
+      "institution": "THE COUNCIL OF EL",
+      "weekTitle": "SEVEN SITTINGS",
+      "weekThesis": "The council convenes each day on one matter; El presides at the seventh and closes the session.",
+      "weekNote": "THE SEVENTH DAY SEALS THE SIX",
+      "yearTitle": "THE YEAR OF THE RAINS",
+      "yearStructure": "halvesRains",
+      "synastryTitle": "THE COVENANT",
+      "forecastTitle": "THE RAINS TO COME",
+      "forecastNote": "WET / DRY BANDS OVER THE SPANS",
+      "permissionPair": [
+        "BRING",
+        "HOLD BACK"
+      ],
+      "houseGroups": [
+        {
+          "name": "THE THRESHING FLOOR",
+          "sub": "LABOR & YIELD"
+        },
+        {
+          "name": "THE FATHER'S HOUSE",
+          "sub": "KIN & BIRTHRIGHT"
+        },
+        {
+          "name": "THE GATE",
+          "sub": "WORDS & WITNESSES"
+        },
+        {
+          "name": "THE TENT OF EL",
+          "sub": "THE INNERMOST ROOM"
+        }
+      ],
+      "dayFlags": false,
+      "receptionLine": "Three took seats that were empty when the council first sat. Their word stands as witness with the rest."
+    },
+    "carthage": {
+      "institution": "THE DECREE OF THE TOPHET",
+      "weekTitle": "THE WEEK'S LEDGER",
+      "weekThesis": "Seven entries, debits and credits of the sky; the ledger is balanced before the next crossing.",
+      "weekNote": "ENTRIES CARRY FORWARD, VOWS DO NOT",
+      "yearTitle": "THE OPEN AND CLOSED SEA",
+      "yearStructure": "halvesSea",
+      "synastryTitle": "THE CONTRACT BETWEEN TWO",
+      "forecastTitle": "WHEN TO SAIL",
+      "forecastNote": "SPANS AS SHIPPING LANES",
+      "permissionPair": [
+        "PAY",
+        "DEFER"
+      ],
+      "houseGroups": [
+        {
+          "name": "THE COUNTING HOUSE",
+          "sub": "WEIGHTS & WAGES"
+        },
+        {
+          "name": "THE COURTYARD",
+          "sub": "HOUSEHOLD & HEIRS"
+        },
+        {
+          "name": "THE HARBOR",
+          "sub": "MESSAGES & SAILINGS"
+        },
+        {
+          "name": "THE PRECINCT",
+          "sub": "VOWS & SILENCE"
+        }
+      ],
+      "dayFlags": false,
+      "receptionLine": "Three hulls put in from a sea no master out of Carthage has sailed. The harbor weighs their cargo and does not discount it."
+    },
+    "rome": {
+      "institution": "THE AUSPICES OF THE DAY",
+      "weekTitle": "FASTUS AND NEFASTUS",
+      "weekThesis": "Each day is marked lawful or unlawful for business before it begins; act on the F days.",
+      "weekNote": "DAYS FLAGGED F · N · C IN THE LIST",
+      "yearTitle": "THE GREAT CIRCUIT",
+      "yearStructure": "quarters4",
+      "synastryTitle": "THE FOEDUS",
+      "forecastTitle": "THE FASTI AHEAD",
+      "forecastNote": "F / N / C MARKS ALONG THE SPANS",
+      "permissionPair": [
+        "PROCEED",
+        "REFRAIN"
+      ],
+      "houseGroups": [
+        {
+          "name": "FORUM",
+          "sub": "BUSINESS & STANDING"
+        },
+        {
+          "name": "DOMUS",
+          "sub": "LARES & LINE"
+        },
+        {
+          "name": "VIA",
+          "sub": "DISPATCHES & ERRANDS"
+        },
+        {
+          "name": "TEMPLUM",
+          "sub": "THE INNER SANCTUM"
+        }
+      ],
+      "dayFlags": true,
+      "receptionLine": "The censor enrolled three new names. The law that covers the oldest names covers these."
+    }
+  },
+  "institutionForms": {
+    "egypt": {
+      "script": "𓌷𓂝𓏏𓁦",
+      "en": "THE HALL OF MA’AT",
+      "fr": "LA SALLE DE MAÂT",
+      "source": "Wb. II 18 (mꜣꜥ.t); sign sequence checked against the en.wikipedia infobox, 2026-10-20 (Maat)",
+      "note": "The script reads mꜣꜥt, Maat, with the seated goddess. The hall itself, wsḫt mꜣꜥty of Book of the Dead 125, is not set because its writing could not be confirmed."
+    },
+    "greece": {
+      "script": "χρηστήριον",
+      "en": "THE DAY'S ORACLE",
+      "fr": "L’ORACLE DU JOUR",
+      "source": "Herodotus 1.46-47 (Croesus tests the χρηστήρια); LSJ s.v. χρηστήριον",
+      "note": "The script reads chrēstērion, the oracle."
+    },
+    "canaan": {
+      "script": "𐎔𐎃𐎗𐎟𐎎𐎓𐎄",
+      "en": "THE COUNCIL OF EL",
+      "fr": "LE CONSEIL D’EL",
+      "source": "KTU 1.2 I 14, 20, 31 (pḫr mʿd)",
+      "note": "The script reads pḫr mʿd, the assembled council."
+    },
+    "carthage": {
+      "script": null,
+      "en": "THE DECREE OF THE TOPHET",
+      "fr": "LE DÉCRET DU TOPHET",
+      "source": "Jeremiah 7:31 (Hebrew tpt); no Punic attestation",
+      "note": "Tophet is the Hebrew Bible's word; no Punic inscription names the precinct, so the heading has no native script form."
+    },
+    "rome": {
+      "script": "AVSPICIA",
+      "en": "THE AUSPICES OF THE DAY",
+      "fr": "LES AUSPICES DU JOUR",
+      "source": "Res Gestae Divi Augusti 4 (auspicis meis, Monumentum Ancyranum); Cicero, De divinatione 1.3",
+      "note": "The script reads auspicia, the auspices."
+    }
+  },
+  "cultureNameForms": {
+    "egypt": {
+      "script": "𓆎𓅓𓏏𓊖",
+      "en": "Egypt",
+      "fr": "Égypte",
+      "source": "Wb. V 126 (Km.t); sign sequence checked against en.wikipedia Names of Egypt, 2026-10-20",
+      "note": "The script reads Kmt, Kemet, the Black Land."
+    },
+    "greece": {
+      "script": "Ἑλλάς",
+      "en": "Greece",
+      "fr": "Grèce",
+      "source": "Herodotus, Histories, passim; LSJ s.v. Ἑλλάς",
+      "note": "The script reads Hellas."
+    },
+    "canaan": {
+      "script": null,
+      "en": "Canaan",
+      "fr": "Canaan",
+      "source": "No citable Ugaritic spelling of kn'n or kn'ny (checked 2026-10-20)",
+      "note": "A script form must read what it resolves to, so ugrt (Ugarit) cannot stand for Canaan. The gentilic kn'ny is reported in an administrative text, but its KTU number and spelling could not be confirmed, so the heading has no script form."
+    },
+    "carthage": {
+      "script": "𐤒𐤓𐤕𐤇𐤃𐤔𐤕",
+      "en": "Carthage",
+      "fr": "Carthage",
+      "source": "Siculo-Punic tetradrachm legend qrtḥdšt (Jenkins, Punic Sicily Part 2, SNR 53, 1974, for example no. 37)",
+      "note": "The script reads qrtḥdšt, Qart-hadasht, the New City."
+    },
+    "rome": {
+      "script": "ROMA",
+      "en": "Rome",
+      "fr": "Rome",
+      "source": "Crawford, Roman Republican Coinage 44/5 (denarius, legend ROMA)"
+    }
+  },
+  "deityScriptForms": {
+    "egypt": {
+      "sun": {
+        "script": "𓂋𓂝𓇳",
+        "en": "Ra",
+        "fr": "Rê",
+        "source": "Wb. II 401 (rꜥ); Allen, Middle Egyptian, sign list D21, D36, N5; sign sequence checked against the en.wikipedia infobox, 2026-10-20"
+      },
+      "moon": {
+        "script": "𓐍𓈖𓇓𓅱",
+        "en": "Khonsu",
+        "fr": "Khonsou",
+        "source": "Leitz, LGG, s.v. Ḫnsw; sign sequence checked against the en.wikipedia infobox, 2026-10-20"
+      },
+      "mercury": {
+        "script": null,
+        "en": "Sebegu",
+        "fr": "Sebegou",
+        "source": "Neugebauer and Parker, Egyptian Astronomical Texts III (1969), planet lists",
+        "note": "The planet name Sbg.w is attested in the planet lists of the Senenmut ceiling, the Ramesseum and Seti I, edited in Neugebauer and Parker, EAT III. No source available on 2026-10-20 gave its signs: the Oxford Research Encyclopedia article The Planets in Ancient Egypt (body text not reachable), skyscript.co.uk Heritage of the Stars ch. 3 (transliteration Sbg only), and the Thesaurus Linguae Aegyptiae (blocks automated access). Left null rather than spelled from the transliteration."
+      },
+      "venus": {
+        "script": "𓊨𓏏𓆇𓁐",
+        "en": "Isis",
+        "fr": "Isis",
+        "source": "Leitz, LGG, s.v. Ꜣs.t; sign sequence checked against the en.wikipedia infobox, 2026-10-20"
+      },
+      "mars": {
+        "script": null,
+        "en": "Horus the Red",
+        "fr": "Horus le Rouge",
+        "source": "Neugebauer and Parker, Egyptian Astronomical Texts III (1969), planet lists",
+        "note": "Ḥr dšr, Horus the Red, is mainly a late name for Mars; the earlier lists of Seti I and Ramesses II call him Horus of the Horizon, edited in Neugebauer and Parker, EAT III. No source available on 2026-10-20 gave the signs: the Oxford Research Encyclopedia article The Planets in Ancient Egypt (body text not reachable), skyscript.co.uk Heritage of the Stars ch. 3 (no spelling), and the Thesaurus Linguae Aegyptiae (no Ḥr-dšr lemma found; blocks automated access). Left null; the falcon alone would misname the planet."
+      },
+      "jupiter": {
+        "script": "𓇋𓏠𓈖𓁩",
+        "en": "Amun",
+        "fr": "Amon",
+        "source": "Leitz, LGG, s.v. Jmn; Allen, Middle Egyptian, sign list M17, Y5, N35; sign sequence checked against the en.wikipedia infobox, 2026-10-20"
+      },
+      "saturn": {
+        "script": "𓅬𓃀𓀭",
+        "en": "Geb",
+        "fr": "Geb",
+        "source": "Leitz, LGG, s.v. Gbb; sign sequence checked against the en.wikipedia infobox, 2026-10-20"
+      },
+      "uranus": {
+        "script": "𓏌𓏏𓇯",
+        "en": "Nut",
+        "fr": "Nout",
+        "source": "Leitz, LGG, s.v. Nw.t; sign sequence checked against the en.wikipedia infobox, 2026-10-20"
+      },
+      "neptune": {
+        "script": "𓏌𓏌𓏌𓇯𓈗",
+        "en": "Nun",
+        "fr": "Noun",
+        "source": "Faulkner, Concise Dictionary of Middle Egyptian (1962), s.v. Nnw; sign sequence checked against en.wiktionary nnw, 2026-10-20",
+        "note": "Egyptologists debate the reading (nnw, nww, nwn); the writing with three nw-pots, sky and water is not in doubt."
+      },
+      "pluto": {
+        "script": "𓊨𓁹𓀭",
+        "en": "Osiris",
+        "fr": "Osiris",
+        "source": "Leitz, LGG, s.v. Wsjr; Allen, Middle Egyptian, sign list Q1, D4; sign sequence checked against the en.wikipedia infobox, 2026-10-20"
+      }
+    },
+    "greece": {
+      "sun": {
+        "script": "Ἥλιος",
+        "en": "Helios",
+        "fr": "Hélios",
+        "source": "Homeric Hymn 31 (to Helios); Plato, Cratylus 408e-409a; LSJ s.v. ἥλιος"
+      },
+      "moon": {
+        "script": "Σελήνη",
+        "en": "Selene",
+        "fr": "Séléné",
+        "source": "Homeric Hymn 32 (to Selene); Plato, Cratylus 409a-b; LSJ s.v. σελήνη"
+      },
+      "mercury": {
+        "script": "Ἑρμῆς",
+        "en": "Hermes",
+        "fr": "Hermès",
+        "source": "Homeric Hymn 4 (to Hermes); Plato, Cratylus 407e-408b; LSJ s.v. Ἑρμῆς"
+      },
+      "venus": {
+        "script": "Ἀφροδίτη",
+        "en": "Aphrodite",
+        "fr": "Aphrodite",
+        "source": "Homeric Hymn 5 (to Aphrodite); Hesiod, Theogony 195; LSJ s.v. Ἀφροδίτη"
+      },
+      "mars": {
+        "script": "Ἄρης",
+        "en": "Ares",
+        "fr": "Arès",
+        "source": "Homeric Hymn 8 (to Ares); Plato, Cratylus 407c-d; LSJ s.v. Ἄρης"
+      },
+      "jupiter": {
+        "script": "Ζεύς",
+        "en": "Zeus",
+        "fr": "Zeus",
+        "source": "Hesiod, Theogony 886; Plato, Cratylus 395e-396b; LSJ s.v. Ζεύς"
+      },
+      "saturn": {
+        "script": "Κρόνος",
+        "en": "Kronos",
+        "fr": "Cronos",
+        "source": "Hesiod, Theogony 137; Plato, Cratylus 396b; LSJ s.v. Κρόνος"
+      },
+      "uranus": {
+        "script": "Οὐρανός",
+        "en": "Ouranos",
+        "fr": "Ouranos",
+        "source": "Hesiod, Theogony 126-127; Plato, Cratylus 396b-c; LSJ s.v. οὐρανός"
+      },
+      "neptune": {
+        "script": "Ποσειδῶν",
+        "en": "Poseidon",
+        "fr": "Poséidon",
+        "source": "Plato, Cratylus 402d-403a (Attic form; Homer writes Ποσειδάων); LSJ s.v. Ποσειδῶν"
+      },
+      "pluto": {
+        "script": "Πλούτων",
+        "en": "Plouton",
+        "fr": "Ploutôn",
+        "source": "Plato, Cratylus 403a; Sophocles, Antigone 1200; LSJ s.v. Πλούτων"
+      }
+    },
+    "canaan": {
+      "sun": {
+        "script": "𐎌𐎔𐎌",
+        "en": "Shapash",
+        "fr": "Shapash",
+        "source": "KTU 1.6 (nrt ilm špš, passim); KTU 1.47 (deity list)"
+      },
+      "moon": {
+        "script": "𐎊𐎗𐎃",
+        "en": "Yarikh",
+        "fr": "Yarikh",
+        "source": "KTU 1.24 (Nikkal and Yarikh); KTU 1.47 (deity list)"
+      },
+      "mercury": {
+        "script": "𐎋𐎘𐎗",
+        "en": "Kothar",
+        "fr": "Kothar",
+        "source": "KTU 1.2 IV (kṯr fashions the two maces); KTU 1.47 (deity list)"
+      },
+      "venus": {
+        "script": "𐎓𐎘𐎚𐎗𐎚",
+        "en": "Attart",
+        "fr": "Athtart",
+        "source": "KTU 1.2 IV 28 (ʿṯtrt rebukes Baal); KTU 1.47 (deity list)"
+      },
+      "mars": {
+        "script": "𐎗𐎌𐎔",
+        "en": "Resheph",
+        "fr": "Resheph",
+        "source": "KTU 1.14 I 18-19 (ršp takes a share of Kirta's house); KTU 1.47 (deity list)"
+      },
+      "jupiter": {
+        "script": "𐎁𐎓𐎍𐎟𐎅𐎄",
+        "en": "Baal Hadad",
+        "fr": "Baal Hadad",
+        "source": "KTU 1.1-1.6 (bʿl and hd as names of the one storm god in the Baal cycle); DUL s.v. bʿl (II), hd",
+        "note": "The texts set bʿl and hd in poetic parallel; the two words written together here are the modern compound name, each word attested."
+      },
+      "saturn": {
+        "script": "𐎛𐎍",
+        "en": "El",
+        "fr": "El",
+        "source": "KTU 1.4 IV (ltpn il dpid); KTU 1.47 (deity list)"
+      },
+      "uranus": {
+        "script": "𐎌𐎎𐎎",
+        "en": "Shamem",
+        "fr": "Shamem",
+        "source": "KTU 1.47 (deity list, arṣ w šmm)"
+      },
+      "neptune": {
+        "script": "𐎊𐎎",
+        "en": "Yammu",
+        "fr": "Yam",
+        "source": "KTU 1.2 III-IV (zbl ym, ṯpṭ nhr)"
+      },
+      "pluto": {
+        "script": "𐎎𐎚",
+        "en": "Motu",
+        "fr": "Mot",
+        "source": "KTU 1.5 and 1.6 (bn ilm mt)"
+      }
+    },
+    "carthage": {
+      "sun": {
+        "script": "𐤔𐤌𐤔",
+        "en": "Semes",
+        "fr": "Semes",
+        "source": "KAI 26 A III 19 (Karatepe, šmš ʿlm); Punic theophoric names in ʿbdšmš, CIS I"
+      },
+      "moon": {
+        "script": "𐤕𐤍𐤕",
+        "en": "Tanit",
+        "fr": "Tanit",
+        "source": "KAI 78 and KAI 79 (Carthage tophet stelae, lrbt ltnt pn bʿl)"
+      },
+      "mercury": {
+        "script": "𐤎𐤊𐤍",
+        "en": "Sakun",
+        "fr": "Sakun",
+        "source": "Benz, Personal Names in the Phoenician and Punic Inscriptions (1972), s.v. SKN (Punic grskn and related names)",
+        "note": "The god is attested at Carthage through theophoric personal names, not through a dedication in his own name."
+      },
+      "venus": {
+        "script": "𐤏𐤔𐤕𐤓𐤕",
+        "en": "Astarte",
+        "fr": "Astarté",
+        "source": "KAI 81 (Carthage, lʿštrt wltnt blbnn); KAI 14 (Sidon)"
+      },
+      "mars": {
+        "script": "𐤌𐤋𐤒𐤓𐤕",
+        "en": "Melqart",
+        "fr": "Melqart",
+        "source": "KAI 47 (Malta cippi, lʾdnn lmlqrt bʿl ṣr)"
+      },
+      "jupiter": {
+        "script": "𐤁𐤏𐤋𐤟𐤇𐤌𐤍",
+        "en": "Baal Hammon",
+        "fr": "Baal Hammon",
+        "source": "KAI 78 and KAI 79 (Carthage tophet stelae, lʾdn lbʿl ḥmn)",
+        "note": "The stelae run the two words together; the word separator U+1091F marks the boundary for the reader."
+      },
+      "saturn": {
+        "script": "𐤁𐤏𐤋𐤟𐤇𐤌𐤍",
+        "en": "Baal Hammon",
+        "fr": "Baal Hammon",
+        "source": "KAI 78 and KAI 79 (Carthage tophet stelae, lʾdn lbʿl ḥmn)",
+        "note": "The stelae run the two words together; the word separator U+1091F marks the boundary for the reader."
+      },
+      "uranus": {
+        "script": "𐤁𐤏𐤋𐤟𐤔𐤌𐤌",
+        "en": "Baal Shamem",
+        "fr": "Baal Shamem",
+        "source": "KAI 78 line 2 (Carthage, lʾdn lbʿl šmm); KAI 26 A III 18 (Karatepe); KAI 4 (Byblos)"
+      },
+      "neptune": {
+        "script": "𐤉𐤌",
+        "en": "Yam",
+        "fr": "Yam",
+        "source": "KTU 1.2 III-IV (Ugaritic zbl ym); Philo of Byblos, via Eusebius, Praeparatio evangelica 1.10 (Greek Pontos), for the Phoenician tradition",
+        "note": "No Punic text names the god. The script is the Phoenician alphabet's rendering of the Northwest Semitic name ym, as Ugarit spells it; it is not an attested Punic spelling."
+      },
+      "pluto": {
+        "script": "𐤌𐤕",
+        "en": "Mot",
+        "fr": "Mot",
+        "source": "KTU 1.5 and 1.6 (Ugaritic bn ilm mt); Philo of Byblos, via Eusebius, Praeparatio evangelica 1.10 (Greek Μώθ), for the Phoenician tradition",
+        "note": "No Punic text names the god. The script is the Phoenician alphabet's rendering of the Northwest Semitic name mt, as Ugarit spells it; it is not an attested Punic spelling."
+      }
+    },
+    "rome": {
+      "sun": {
+        "script": "SOL",
+        "en": "Sol",
+        "fr": "Sol",
+        "source": "CIL VI 701 and 702 (Augustus's obelisks, SOLI DONVM DEDIT); Cicero, De natura deorum 2.68"
+      },
+      "moon": {
+        "script": "LVNA",
+        "en": "Luna",
+        "fr": "Luna",
+        "source": "Cicero, De natura deorum 2.68 (Luna a lucendo); Varro, De lingua Latina 5.68"
+      },
+      "mercury": {
+        "script": "MERCVRIVS",
+        "en": "Mercurius",
+        "fr": "Mercure",
+        "source": "Cicero, De natura deorum 2.53 (stella Mercurii) and 3.56"
+      },
+      "venus": {
+        "script": "VENVS",
+        "en": "Venus",
+        "fr": "Vénus",
+        "source": "Cicero, De natura deorum 2.53 (stella Veneris) and 2.69"
+      },
+      "mars": {
+        "script": "MARS",
+        "en": "Mars",
+        "fr": "Mars",
+        "source": "Cicero, De natura deorum 2.53 (stella Martis) and 2.67"
+      },
+      "jupiter": {
+        "script": "IVPPITER",
+        "en": "Iuppiter",
+        "fr": "Jupiter",
+        "source": "Cicero, De natura deorum 2.52 (stella Iovis) and 2.64 (Iuppiter, id est iuvans pater)"
+      },
+      "saturn": {
+        "script": "SATVRNVS",
+        "en": "Saturnus",
+        "fr": "Saturne",
+        "source": "Cicero, De natura deorum 2.52 (stella Saturni) and 2.64"
+      },
+      "uranus": {
+        "script": "CAELVS",
+        "en": "Caelus",
+        "fr": "Caelus",
+        "source": "Ennius, Annales fr. 27 Warmington (ROL I, via Nonius, who notes Ennius's masculine caelus; Skutsch number not confirmed); Cicero, De natura deorum 2.63 and 3.44",
+        "note": "Cicero's cases (Caelum, Caeli) do not fix the gender; the masculine nominative rests on the Ennius fragment."
+      },
+      "neptune": {
+        "script": "NEPTVNVS",
+        "en": "Neptunus",
+        "fr": "Neptune",
+        "source": "Cicero, De natura deorum 2.66 (Neptunus a nando)"
+      },
+      "pluto": {
+        "script": "DIS PATER",
+        "en": "Dis Pater",
+        "fr": "Dis Pater",
+        "source": "Macrobius, Saturnalia 3.9.10 (devotio formula, nominative Dis pater); Cicero, De natura deorum 2.66 (Diti patri dedicata est, qui dives)"
+      }
+    }
+  },
+  "signImages": {
+    "Aries": "RAM",
+    "Taurus": "BULL",
+    "Gemini": "TWINS",
+    "Cancer": "CRAB",
+    "Leo": "LION",
+    "Virgo": "MAIDEN",
+    "Libra": "SCALES",
+    "Scorpio": "SCORPION",
+    "Sagittarius": "ARCHER",
+    "Capricorn": "GOAT",
+    "Aquarius": "WATER-BEARER",
+    "Pisces": "FISH"
+  },
+  "aspectRulings": {
+    "rome": {
+      "conjunction": "The auspice was taken once and it binds two names. Neither can act on it alone.",
+      "sextile": "The birds are favorable and no one has yet taken the auspice. A sign unclaimed confers no right to act.",
+      "square": "An objection is entered and the objector has standing. Every step of this goes forward under challenge.",
+      "trine": "The day stands fastus and the augury attached no condition. What is done under it holds.",
+      "opposition": "Two magistrates, one office. Each vetoes the other, and the day's business stands adjourned."
+    },
+    "egypt": {
+      "conjunction": "Two gods ride in one barque. Where the river carries it, it carries them both.",
+      "sextile": "A fair wind stands on the river. It moves only the boat that raises a sail.",
+      "square": "Isfet crossed the threshold of the hall. The pans come level again through labor, and the labor is yours.",
+      "trine": "Heart and feather agree and no hand touches the scale. Go on with the day; the hall asks you nothing.",
+      "opposition": "The two pans hang level, and neither falls. The scribe writes no verdict until one side descends."
+    },
+    "greece": {
+      "conjunction": "The tripod answers once for two gods. Nothing in the answer belongs to one more than the other.",
+      "sextile": "The shrine takes questions today. An unasked god has nothing to say to you.",
+      "square": "The price is named before the answer, and it is not small. Pay it, or ask nothing.",
+      "trine": "The oracle speaks before the question is finished. The god volunteered the answer.",
+      "opposition": "Delphi says one thing and Dodona the other. Both answers are true, and acting on one breaks the other."
+    },
+    "canaan": {
+      "conjunction": "The docket carries two names under a single heading. Whatever El decrees falls on the pair.",
+      "sextile": "Nothing reaches the council but by vow. Silence keeps the matter off the list.",
+      "square": "A witness rises against the matter. Nothing passes at this sitting that is not spoken against first.",
+      "trine": "No vow was made and the rains came anyway. The wadis are running full.",
+      "opposition": "Baal holds above and Mot holds below. El hears both and decrees nothing."
+    },
+    "carthage": {
+      "conjunction": "One manifest covers two cargoes. Profit or loss, the ledger no longer tells them apart.",
+      "sextile": "The harbor is open and a berth is held in your name. Nothing loads itself.",
+      "square": "Short weight turns up in the audit. Trade goes on, and a clerk watches every measure you make.",
+      "trine": "The sailing season opens and the ledger is clean. Nothing stands against your name in the precinct.",
+      "opposition": "Two merchants claim one cargo at the quay. The hold stays sealed and the season runs on without it."
+    }
+  },
+  "figure": {
+    "egypt": {
+      "slowHeadlines": {
+        "conjunction": {
+          "jupiter": "Build the granary wider, because this year's harvest runs heavy.",
+          "saturn": "Dig down to bedrock before you raise one more wall.",
+          "uranus": "Your old way of doing things goes out with the year.",
+          "neptune": "Keep your feet on the dike while the fields turn to mud.",
+          "pluto": "Open the sealed storeroom and look at what you put there."
+        },
+        "sextile": {
+          "jupiter": "Ask the temple for the larger plot, and you will get it.",
+          "saturn": "Lay one course of mudbrick a day and the wall goes up.",
+          "uranus": "Take the boat that is leaving for the next nome.",
+          "neptune": "Tell your dreams to the scribe each morning before they fade.",
+          "pluto": "Clear out one old storeroom and the house breathes again."
+        },
+        "square": {
+          "jupiter": "Measure the harvest before you promise any of it away.",
+          "saturn": "The wall you built on sand has to come down.",
+          "uranus": "The canal you dug is changing course, and nobody can stop it.",
+          "neptune": "Check every measure twice while the dust hangs in the air.",
+          "pluto": "Something you buried long ago is coming up with the silt."
+        },
+        "trine": {
+          "jupiter": "Plant the second field, since the soil is generous this year.",
+          "saturn": "Carve your name on the stone while your hand is steady.",
+          "uranus": "Change the line of your canal, and the land drinks.",
+          "neptune": "Spend your evenings at the temple and sleep well after.",
+          "pluto": "Give the old grain to the poor and keep the seed."
+        },
+        "opposition": {
+          "jupiter": "Your patron wants a share of the harvest you grew.",
+          "saturn": "The tax assessor stands at the far edge of your field with his measuring rope.",
+          "uranus": "The man who farms beside you is moving your boundary stone.",
+          "neptune": "The field next door looks richer than it is.",
+          "pluto": "An old claim on your house is carried in under seal."
+        }
+      },
+      "shortRelations": {
+        "conjunction": "cannot be parted from",
+        "sextile": "can lean on",
+        "square": "must strain against",
+        "trine": "can be at peace with",
+        "opposition": "must be weighed against"
+      },
+      "natalFrame": "Your birth set {deity} in the {sign}: {clause}.",
+      "skyMoveOne": "{god} is in the {sign}, weighing {domain}.",
+      "angleMoveOne": {
+        "asc": "The {sign} stood on the eastern horizon when you were born: it is the face you show at the door.",
+        "mc": "The {sign} stood overhead when you were born: the nome ranks you by it."
+      },
+      "angleDomains": {
+        "asc": "the face you show at the door",
+        "mc": "your rank in the nome"
+      },
+      "recurrenceFrame": "This figure comes round again {interval}.",
+      "recurrenceIrregular": "This figure keeps no season: it can come back within a decan or stay away for most of a year.",
+      "playsOutTitle": "HOW THIS PLAYS OUT ON THE RIVER",
+      "slowActs": {
+        "jupiter": "{god} heaps the grain on the threshing floor a cubit higher, and the scribes call for more jars.",
+        "saturn": "{god} lies still under the field, and the surveyor walks the old boundary again.",
+        "uranus": "{god} spreads her body over the roof beams, and the old plaster comes down.",
+        "neptune": "{god} wells up from below, and the boundary stones sink out of sight.",
+        "pluto": "{god} sits in judgment in the lower hall, and the scribe reads out what you buried."
+      },
+      "manifestations": [
+        {
+          "harmony": [
+            "a ration measured out in full",
+            "the foreman passing your row without a word",
+            "oil left over at the month's end",
+            "your measure coming out even at the first count"
+          ],
+          "tension": [
+            "a short measure at the granary",
+            "the foreman counting your bricks twice",
+            "a debt you forgot you owed",
+            "a copper chisel blunted before the work is half done"
+          ]
+        },
+        {
+          "harmony": [
+            "supper shared on the roof at dusk",
+            "a mother's name said kindly at the table",
+            "the offering table for the ancestors swept and set",
+            "a child who sleeps through the night"
+          ],
+          "tension": [
+            "an old argument over the family plot",
+            "the ancestor's niche left unswept",
+            "a brother asking for his share again",
+            "a house too small for everyone in it"
+          ]
+        },
+        {
+          "harmony": [
+            "a letter that arrives before you looked for it",
+            "the boatman waving you aboard without the fee",
+            "a buyer who meets your price",
+            "a contract read once and signed"
+          ],
+          "tension": [
+            "a letter answered in the wrong tone",
+            "a boat already gone from the landing",
+            "a witness who remembers the words differently",
+            "the same question put to you three times"
+          ]
+        },
+        {
+          "harmony": [
+            "an hour alone in the shade",
+            "a dream you remember clearly at waking",
+            "incense that burns down evenly",
+            "a vow you keep without anyone watching"
+          ],
+          "tension": [
+            "a sleepless hour before the dawn hymn",
+            "a secret that sits heavy in the chest",
+            "an amulet worn once and then forgotten",
+            "a fear you cannot put a name to"
+          ]
+        }
+      ],
+      "tryThis": {
+        "sun": [
+          {
+            "kind": "consider",
+            "title": "The obelisk of Thutmose III, a sun monument from Ra's own city.",
+            "source": "Raised at Heliopolis about 1450 BCE, now in Central Park, New York."
+          },
+          {
+            "kind": "read",
+            "title": "The hymns to the rising sun in the Papyrus of Ani.",
+            "source": "Book of the Dead, spell 15, British Museum EA 10470."
+          },
+          {
+            "kind": "keep",
+            "title": "Greet the sun at dawn with both hands raised.",
+            "source": "The adoration pose of the stelophorous statues and the spell 15 vignettes."
+          }
+        ],
+        "moon": [
+          {
+            "kind": "consider",
+            "title": "The temple of Khonsu at Karnak, his own house in Thebes.",
+            "source": "Karnak, begun under Ramesses III, finished by the high priests of Amun."
+          },
+          {
+            "kind": "read",
+            "title": "The Bentresh Stela, where Khonsu's image travels abroad to cure a princess.",
+            "source": "Louvre C 284."
+          },
+          {
+            "kind": "keep",
+            "title": "Begin the month on the morning the old crescent can no longer be seen.",
+            "source": "Richard Parker, The Calendars of Ancient Egypt (1950), on the temple lunar month."
+          }
+        ],
+        "mercury": [
+          {
+            "kind": "consider",
+            "title": "The was-sceptre with the Set-animal's head, the god's own finial.",
+            "source": "Gardiner sign S40, and docs/design/deity-glyphs.md on the Seth-specific head."
+          },
+          {
+            "kind": "read",
+            "title": "The Contendings of Horus and Seth, the quarrel argued before the gods.",
+            "source": "Papyrus Chester Beatty I, Chester Beatty Library, Dublin."
+          },
+          {
+            "kind": "keep",
+            "title": "Copy one model letter twice, the way the student scribes did.",
+            "source": "The Late Egyptian Miscellanies, edited by Alan Gardiner (1937)."
+          }
+        ],
+        "venus": [
+          {
+            "kind": "consider",
+            "title": "The throne sign that spells Isis's name and sits on her head.",
+            "source": "Gardiner sign Q1, attested in docs/design/deity-glyphs.md."
+          },
+          {
+            "kind": "read",
+            "title": "The songs Isis and Nephthys sing over Osiris.",
+            "source": "Papyrus Bremner-Rhind, British Museum EA 10188."
+          },
+          {
+            "kind": "keep",
+            "title": "Wear a tyet knot, the amulet called the blood of Isis.",
+            "source": "Book of the Dead, spell 156, for the tyet of red jasper."
+          }
+        ],
+        "mars": [
+          {
+            "kind": "consider",
+            "title": "The round zodiac of Dendera, where the planets stand among the stars.",
+            "source": "Louvre D 38, read in Neugebauer and Parker, Egyptian Astronomical Texts III."
+          },
+          {
+            "kind": "read",
+            "title": "The Triumph of Horus, the harpoon drama on the Edfu temple wall.",
+            "source": "Edfu, enclosure wall, translated by Blackman and Fairman (1942 to 1944)."
+          },
+          {
+            "kind": "keep",
+            "title": "Wear a wedjat eye, the commonest charm in Egyptian graves.",
+            "source": "Flinders Petrie, Amulets (1914), on the faience wedjat."
+          }
+        ],
+        "jupiter": [
+          {
+            "kind": "consider",
+            "title": "The ram-headed sphinxes that line Amun's avenue at Karnak.",
+            "source": "Karnak, the western dromos of the Amun precinct."
+          },
+          {
+            "kind": "read",
+            "title": "The Leiden hymns, a cycle of praises to Amun.",
+            "source": "Papyrus Leiden I 350, Rijksmuseum van Oudheden."
+          },
+          {
+            "kind": "keep",
+            "title": "Bring flowers to a family tomb, as Thebans did at the Feast of the Valley.",
+            "source": "The Beautiful Festival of the Valley, in New Kingdom Theban tomb paintings."
+          }
+        ],
+        "saturn": [
+          {
+            "kind": "consider",
+            "title": "The Greenfield Papyrus, where Geb lies under the arched sky.",
+            "source": "British Museum EA 10554."
+          },
+          {
+            "kind": "read",
+            "title": "The Memphite Theology, where Geb judges between Horus and Seth.",
+            "source": "The Shabaka Stone, British Museum EA 498."
+          },
+          {
+            "kind": "keep",
+            "title": "Bury a few tools and a brick under the corner before you build.",
+            "source": "Foundation deposits under the corners of New Kingdom temples."
+          }
+        ],
+        "uranus": [
+          {
+            "kind": "consider",
+            "title": "The ceiling of the tomb of Ramesses VI, where Nut swallows and bears the sun.",
+            "source": "Valley of the Kings, KV9, the Books of the Day and the Night."
+          },
+          {
+            "kind": "read",
+            "title": "The Book of Nut, the course of the stars along her body.",
+            "source": "The cenotaph of Seti I at Abydos."
+          },
+          {
+            "kind": "keep",
+            "title": "Keep the five days outside the year apart, as the birthdays of Nut's children.",
+            "source": "The epagomenal days of the civil calendar, and Plutarch, On Isis and Osiris 12."
+          }
+        ],
+        "neptune": [
+          {
+            "kind": "consider",
+            "title": "The sacred lake at Karnak, the temple's own piece of Nun, the deep before creation.",
+            "source": "Karnak, the lake of the Amun precinct."
+          },
+          {
+            "kind": "read",
+            "title": "The Book of the Heavenly Cow, where Ra takes counsel with Nun.",
+            "source": "The gilded shrine of Tutankhamun, and the tomb of Seti I (KV17)."
+          },
+          {
+            "kind": "keep",
+            "title": "Rinse your hands and face before you begin, as the priests did twice a day.",
+            "source": "Herodotus, Histories 2.37."
+          }
+        ],
+        "pluto": [
+          {
+            "kind": "consider",
+            "title": "A corn mummy, the grain-filled Osiris buried at the Khoiak festival.",
+            "source": "Late Period corn mummies, and the Khoiak rites carved at Dendera."
+          },
+          {
+            "kind": "read",
+            "title": "The great hymn to Osiris on the stela of Amenmose.",
+            "source": "Louvre C 286."
+          },
+          {
+            "kind": "keep",
+            "title": "Sow barley in a tray of earth and let it sprout.",
+            "source": "The Osiris bed found in the tomb of Tutankhamun."
+          }
+        ]
+      },
+      "lessons": {
+        "conjunction": "Two weights in one pan still read as one weight. {god} does not let you claim you carried only half.",
+        "sextile": "A small offering laid on time weighs more than a large one laid late. The scribe writes the date beside every gift.",
+        "square": "The beam does not tilt to spare you. What tips against you today was already in the pan.",
+        "trine": "An easy passage still goes on the scale. {god} records what you did with it.",
+        "opposition": "The scale has two pans, and you stand in one of them. The beam settles only when you stop pushing on it."
+      }
+    },
+    "greece": {
+      "slowHeadlines": {
+        "conjunction": {
+          "jupiter": "Stand for office at the next assembly, and the vote is yours.",
+          "saturn": "Pay what you owe the city before the archon sends for it.",
+          "uranus": "Throw out the old shield and train with a different one.",
+          "neptune": "Steer by the stars you can see over the bow.",
+          "pluto": "Climb into the cellar under the house and count what is left."
+        },
+        "sextile": {
+          "jupiter": "Write to the friend in Athens who owes you a favor.",
+          "saturn": "Train every morning at the palaestra, and the strength stays.",
+          "uranus": "Listen to the stranger at the symposium with the odd idea.",
+          "neptune": "Take your question to the dream sanctuary at Epidauros.",
+          "pluto": "Sell the vineyard your grandfather left you while the price is good."
+        },
+        "square": {
+          "jupiter": "Turn down the patron who wants your vote in return.",
+          "saturn": "Your old debt to the city cannot wait another year.",
+          "uranus": "Your plans break apart like a ship on the rocks at Malea.",
+          "neptune": "Doubt the soothsayer who tells you only the pleasant half.",
+          "pluto": "A buried family quarrel comes back up at the funeral feast."
+        },
+        "trine": {
+          "jupiter": "Ask the powerful plainly for the favor you need.",
+          "saturn": "Lay the foundation of the house you mean to grow old in.",
+          "uranus": "Sail for the colony when the ships are ready.",
+          "neptune": "Sleep in the precinct of Asklepios and bring back the dream.",
+          "pluto": "Dig up the silver in the old jar and put it to work."
+        },
+        "opposition": {
+          "jupiter": "A rich neighbor across the agora wants your vineyard.",
+          "saturn": "The magistrates call you to account for an old contract.",
+          "uranus": "Your city and your plans pull toward opposite harbors.",
+          "neptune": "Someone in the agora is telling you a pretty story.",
+          "pluto": "Your kinsmen take the will to a jury."
+        }
+      },
+      "shortRelations": {
+        "conjunction": "must climb the hill beside",
+        "sextile": "can count on",
+        "square": "will quarrel with",
+        "trine": "can walk in step with",
+        "opposition": "will take the opposite side from"
+      },
+      "natalFrame": "{deity} stood in the {sign} when you were born: {clause}.",
+      "skyMoveOne": "{god} walks through the {sign} and answers for {domain}.",
+      "angleMoveOne": {
+        "asc": "The {sign} was coming up over the hills at your birth, and strangers meet that sign in you first.",
+        "mc": "The {sign} held the top of the sky at your birth, and the city judges you under it."
+      },
+      "angleDomains": {
+        "asc": "the first impression you make",
+        "mc": "your office in the city"
+      },
+      "recurrenceFrame": "The tripod hears this figure again {interval}.",
+      "recurrenceIrregular": "The tripod cannot say when this figure comes again: sometimes within days, sometimes not for most of a year.",
+      "playsOutTitle": "HOW THIS PLAYS OUT AT THE TRIPOD",
+      "slowActs": {
+        "jupiter": "{god} nods from Olympus, and the assembly gives you the floor.",
+        "saturn": "{god} counts the sheaves at the threshing floor, and the short ones are set aside.",
+        "uranus": "{god} spreads the sky wider, and the city walls look small under it.",
+        "neptune": "{god} stirs the harbor, and the moorings slip one by one.",
+        "pluto": "{god} opens the storerooms under the earth, and old silver comes up with the plow."
+      },
+      "manifestations": [
+        {
+          "harmony": [
+            "a fair price at the first stall",
+            "silver counted out with nothing missing",
+            "a buyer who comes back for more",
+            "your goods sold before the market closes"
+          ],
+          "tension": [
+            "a merchant who weighs with his thumb",
+            "the tax farmer at your door before noon",
+            "an obol short at the end of the day",
+            "goods spoiled on the road to the agora"
+          ]
+        },
+        {
+          "harmony": [
+            "the whole household at one table",
+            "the hearth fire caught on the first try",
+            "a guest who brings his own wine",
+            "an old quarrel left at the threshold"
+          ],
+          "tension": [
+            "a sharp word over the loom",
+            "the hearth smoking out the room",
+            "a relative who stays three days too long",
+            "the dowry argued over again"
+          ]
+        },
+        {
+          "harmony": [
+            "a message carried right the first time",
+            "a stranger on the road who knows the way",
+            "a friend who answers before you finish asking",
+            "the right word at the crossroads"
+          ],
+          "tension": [
+            "a rumor that reaches the agora before you",
+            "a wrong turn at the herm",
+            "a friend who repeats what you told him in confidence",
+            "a letter delivered to the wrong house"
+          ]
+        },
+        {
+          "harmony": [
+            "a quiet hour before the lamp is lit",
+            "an answer that comes to you while walking",
+            "a dream worth telling at breakfast",
+            "the oracle's words making sense at last"
+          ],
+          "tension": [
+            "a question you are afraid to ask aloud",
+            "a dream you would rather not have interpreted",
+            "a bad omen you keep turning over",
+            "the riddle that wakes you at night"
+          ]
+        }
+      ],
+      "tryThis": {
+        "sun": [
+          {
+            "kind": "consider",
+            "title": "The Helios metope from Ilion, the god driving his four horses.",
+            "source": "Temple of Athena at Troy, now in the Pergamonmuseum, Berlin."
+          },
+          {
+            "kind": "read",
+            "title": "The Homeric Hymn to Helios.",
+            "source": "Homeric Hymn 31."
+          },
+          {
+            "kind": "keep",
+            "title": "Stand and greet the sun when it comes up, as Socrates did at Potidaea.",
+            "source": "Plato, Symposium 220d."
+          }
+        ],
+        "moon": [
+          {
+            "kind": "consider",
+            "title": "The horse of Selene's chariot from the Parthenon's east pediment.",
+            "source": "British Museum, Parthenon sculptures, east pediment figure O."
+          },
+          {
+            "kind": "read",
+            "title": "The Homeric Hymn to Selene.",
+            "source": "Homeric Hymn 32."
+          },
+          {
+            "kind": "keep",
+            "title": "Keep the first of the month, the noumenia, with a small offering at home.",
+            "source": "Jon Mikalson, The Sacred and Civil Calendar of the Athenian Year (1975)."
+          }
+        ],
+        "mercury": [
+          {
+            "kind": "consider",
+            "title": "A herm, the pillar with Hermes' head that stood at Athenian doors.",
+            "source": "The Hermes Propylaios of Alkamenes, Roman copy from Pergamon, Istanbul Archaeology Museums."
+          },
+          {
+            "kind": "read",
+            "title": "The Homeric Hymn to Hermes, the cattle theft and the lyre.",
+            "source": "Homeric Hymn 4."
+          },
+          {
+            "kind": "keep",
+            "title": "Add a stone to the heap at the roadside as you pass.",
+            "source": "Walter Burkert, Greek Religion (1985), on the herma and the wayside cairn."
+          }
+        ],
+        "venus": [
+          {
+            "kind": "consider",
+            "title": "Praxiteles' Aphrodite of Knidos, in its Roman copy.",
+            "source": "The Colonna Venus, Vatican Museums."
+          },
+          {
+            "kind": "read",
+            "title": "Sappho's prayer to Aphrodite.",
+            "source": "Sappho, fragment 1."
+          },
+          {
+            "kind": "keep",
+            "title": "Burn frankincense on the altar for her.",
+            "source": "Sappho, fragment 2, the altars smoking with frankincense."
+          }
+        ],
+        "mars": [
+          {
+            "kind": "consider",
+            "title": "The Ludovisi Ares, seated, his shield set down beside him.",
+            "source": "Palazzo Altemps, Museo Nazionale Romano."
+          },
+          {
+            "kind": "read",
+            "title": "The Homeric Hymn to Ares, which asks him for the strength to stay out of strife.",
+            "source": "Homeric Hymn 8."
+          },
+          {
+            "kind": "keep",
+            "title": "Swear the ephebes' oath never to leave the man beside you in the line.",
+            "source": "The ephebic oath on the Acharnai stele, fourth century BCE."
+          }
+        ],
+        "jupiter": [
+          {
+            "kind": "consider",
+            "title": "The Otricoli head of Zeus, the father of the gods in marble.",
+            "source": "Vatican Museums, Sala Rotonda."
+          },
+          {
+            "kind": "read",
+            "title": "The opening hymn of Works and Days, to the Zeus who raises and humbles.",
+            "source": "Hesiod, Works and Days 1 to 10."
+          },
+          {
+            "kind": "keep",
+            "title": "Pour the third cup to Zeus Soter before the drinking ends.",
+            "source": "Plato, Philebus 66d, on the third to the Savior."
+          }
+        ],
+        "saturn": [
+          {
+            "kind": "consider",
+            "title": "The stone at Delphi said to be the one Kronos swallowed in place of his child.",
+            "source": "Pausanias, Description of Greece 10.24.6."
+          },
+          {
+            "kind": "read",
+            "title": "Kronos, his children and the swallowed stone.",
+            "source": "Hesiod, Theogony 453 to 506."
+          },
+          {
+            "kind": "keep",
+            "title": "Keep the Kronia, when masters and slaves ate at one table.",
+            "source": "Philochorus, quoted in Macrobius, Saturnalia 1.10.22."
+          }
+        ],
+        "uranus": [
+          {
+            "kind": "consider",
+            "title": "The Farnese Atlas, the oldest celestial globe that survives.",
+            "source": "Museo Archeologico Nazionale, Naples."
+          },
+          {
+            "kind": "read",
+            "title": "Ouranos, Gaia and the sickle.",
+            "source": "Hesiod, Theogony 126 to 210."
+          },
+          {
+            "kind": "keep",
+            "title": "Time your work by a star's first dawn appearance, as Hesiod times the harvest by the Pleiades.",
+            "source": "Hesiod, Works and Days 383 to 384."
+          }
+        ],
+        "neptune": [
+          {
+            "kind": "consider",
+            "title": "The Penteskouphia plaques, potters' painted prayers to Poseidon.",
+            "source": "Corinth, now in the Antikensammlung, Berlin."
+          },
+          {
+            "kind": "read",
+            "title": "The Homeric Hymn to Poseidon, the tamer of horses and savior of ships.",
+            "source": "Homeric Hymn 22."
+          },
+          {
+            "kind": "keep",
+            "title": "Pour wine into the sea before you sail, as the fleet did at Piraeus.",
+            "source": "Thucydides, History 6.32."
+          }
+        ],
+        "pluto": [
+          {
+            "kind": "consider",
+            "title": "The Ploutonion at Eleusis, the cave shrine beside the sanctuary gate.",
+            "source": "Eleusis, the sanctuary of Demeter and Kore."
+          },
+          {
+            "kind": "read",
+            "title": "The Homeric Hymn to Demeter, where the lord below carries off Persephone.",
+            "source": "Homeric Hymn 2."
+          },
+          {
+            "kind": "keep",
+            "title": "Pour milk and honey for your dead.",
+            "source": "Homer, Odyssey 10.518 to 520."
+          }
+        ]
+      },
+      "lessons": {
+        "conjunction": "The Pythia answers the question you bring. Bring one, and say it plainly.",
+        "sextile": "The stone heaps at the crossroads were built one traveler at a time. Add yours and keep walking.",
+        "square": "An oracle that frightens you is still an oracle. Croesus heard what he wanted and lost a kingdom.",
+        "trine": "A clear answer is a debt to the god who gave it. Pay it at the altar before you spend it.",
+        "opposition": "Two heralds can both be honest. The assembly votes, and the losing side still goes home to eat."
+      }
+    },
+    "canaan": {
+      "slowHeadlines": {
+        "conjunction": {
+          "jupiter": "Plant twice the barley, because the rains are coming heavy.",
+          "saturn": "Sit down among the elders and carry the weight of it.",
+          "uranus": "Move your flocks to the far pasture before the season turns.",
+          "neptune": "Keep one hand on the rope while the sea climbs the walls.",
+          "pluto": "Open the family tomb and set the bones in order."
+        },
+        "sextile": {
+          "jupiter": "Lend your oxen to the neighbor, and the harvest comes back doubled.",
+          "saturn": "Repair one terrace wall each week before the rains.",
+          "uranus": "Take the trader's offer to carry your oil down to Egypt.",
+          "neptune": "Say your prayer at the high place each evening.",
+          "pluto": "Pay what is owed to your father's kin."
+        },
+        "square": {
+          "jupiter": "Store water in the cistern now, and never count on the rains.",
+          "saturn": "The elders will not bend the rule for you, so keep it.",
+          "uranus": "The caravan road you depend on is closing.",
+          "neptune": "Draw your own water and trust what you see in the bucket.",
+          "pluto": "Your family's land is under claim, so gather your witnesses."
+        },
+        "trine": {
+          "jupiter": "Fill every jar you own with this harvest.",
+          "saturn": "Build the stone house your grandsons will live in.",
+          "uranus": "Move the tent to better water, and the flock thrives.",
+          "neptune": "Climb to the sanctuary on Mount Zaphon and make your vow.",
+          "pluto": "Bury the old grievance with the family's dead."
+        },
+        "opposition": {
+          "jupiter": "A rich man at the gate demands a cut of your barley.",
+          "saturn": "The elders sit against you in a matter of the old law.",
+          "uranus": "Your clan wants to move, and you want to stay.",
+          "neptune": "Someone at the well promises rain nobody can bring.",
+          "pluto": "A distant cousin claims your family's field before the council."
+        }
+      },
+      "shortRelations": {
+        "conjunction": "will go up to the council with",
+        "sextile": "can lend a hand to",
+        "square": "will stand in the gate against",
+        "trine": "can work the same field as",
+        "opposition": "will bring a claim against"
+      },
+      "natalFrame": "{deity} sat in the {sign} on the day you were named: {clause}.",
+      "skyMoveOne": "{god} sits in the {sign} and speaks for {domain} before the council.",
+      "angleMoveOne": {
+        "asc": "The {sign} came up over the hills on the day you were named, and the gate knows you by it.",
+        "mc": "The {sign} stood highest on the day you were named, and the elders weigh your work under it."
+      },
+      "angleDomains": {
+        "asc": "the way the gate sees you",
+        "mc": "your seat among the elders"
+      },
+      "recurrenceFrame": "This matter comes before the council again {interval}.",
+      "recurrenceIrregular": "This matter keeps no calendar before the council: it can return within days or stay away for most of a year.",
+      "playsOutTitle": "HOW THIS PLAYS OUT IN THE COUNCIL",
+      "slowActs": {
+        "jupiter": "{god} thunders from the cloud, and the rain falls on your terraces first.",
+        "saturn": "{god} sits at the head of the council, and every case waits for his word.",
+        "uranus": "{god} moves the bounds of the sky, and the flock follows the fresh grass.",
+        "neptune": "{god} rolls against the shore, and the fishermen drag their boats higher.",
+        "pluto": "{god} opens his throat at the edge of the field, and old losses come back to mind."
+      },
+      "manifestations": [
+        {
+          "harmony": [
+            "a full floor of sheaves before the heat",
+            "an ox that pulls without the goad",
+            "a jar of oil pressed on the first try",
+            "your field's share counted honestly"
+          ],
+          "tension": [
+            "a broken plowshare on the stony row",
+            "locusts on the neighbor's field and yours",
+            "a hired hand who does not come back",
+            "the tithe collector at the threshing floor"
+          ]
+        },
+        {
+          "harmony": [
+            "the clan gathered for the first wine",
+            "a cousin's wedding where everyone comes",
+            "the boundary stone left where your grandfather set it",
+            "an elder who takes your side"
+          ],
+          "tension": [
+            "a quarrel over the birthright",
+            "a widow in the family who needs bread",
+            "an inheritance split three ways",
+            "a shut tent flap where there was welcome"
+          ]
+        },
+        {
+          "harmony": [
+            "two witnesses who agree on every word",
+            "a traveler at the gate with good news",
+            "a bargain sealed with a handclasp",
+            "your name spoken well among the elders"
+          ],
+          "tension": [
+            "a witness who changes his story",
+            "a suit brought against you at the gate",
+            "a neighbor's oath you cannot trust",
+            "gossip carried up from the well"
+          ]
+        },
+        {
+          "harmony": [
+            "a prayer said without stumbling",
+            "an evening with the lamp and no visitors",
+            "a vow fulfilled on the day you named",
+            "sleep that comes without dreams of debt"
+          ],
+          "tension": [
+            "a vow made in haste",
+            "an evil dream after a feast",
+            "a sacrifice the priest turns away",
+            "a silence where an answer should be"
+          ]
+        }
+      ],
+      "tryThis": {
+        "sun": [
+          {
+            "kind": "consider",
+            "title": "The winged sun disc, drawn without rays, on Syrian seals.",
+            "source": "Attested in docs/design/deity-glyphs.md, Canaan, Shapash."
+          },
+          {
+            "kind": "read",
+            "title": "Shapash goes down to the dead and brings Baal back up.",
+            "source": "The Baal Cycle, KTU 1.6."
+          },
+          {
+            "kind": "keep",
+            "title": "Put the day's work down at sunset, when the ritual texts free the king.",
+            "source": "KTU 1.41 and 1.87, in Dennis Pardee, Ritual and Cult at Ugarit (2002)."
+          }
+        ],
+        "moon": [
+          {
+            "kind": "consider",
+            "title": "The Hazor stele of two raised hands beneath a crescent.",
+            "source": "Hazor, the stelae shrine in Area C, Israel Museum."
+          },
+          {
+            "kind": "read",
+            "title": "Nikkal and Yarikh, the moon's wedding and its silver bride price.",
+            "source": "KTU 1.24."
+          },
+          {
+            "kind": "keep",
+            "title": "Begin the month's offerings on the day the crescent returns.",
+            "source": "The month ritual, KTU 1.41, in Pardee, Ritual and Cult at Ugarit."
+          }
+        ],
+        "mercury": [
+          {
+            "kind": "consider",
+            "title": "The gold bowl of Ugarit with its chariot hunt.",
+            "source": "Louvre AO 17208."
+          },
+          {
+            "kind": "read",
+            "title": "Kothar builds Baal's palace and argues for the window.",
+            "source": "The Baal Cycle, KTU 1.4."
+          },
+          {
+            "kind": "keep",
+            "title": "Cut your name on the tools you work with.",
+            "source": "The inscribed bronze adzes from the high priest's house at Ugarit."
+          }
+        ],
+        "venus": [
+          {
+            "kind": "consider",
+            "title": "A mould-made clay plaque of the naked goddess.",
+            "source": "The Late Bronze Age plaques of the southern Levant, in most regional collections."
+          },
+          {
+            "kind": "read",
+            "title": "Attart rebukes Baal over the captive sea.",
+            "source": "The Baal Cycle, KTU 1.2, column IV."
+          },
+          {
+            "kind": "keep",
+            "title": "Bake cakes for the Queen of Heaven with the women of the house.",
+            "source": "Jeremiah 7:18 and 44:19."
+          }
+        ],
+        "mars": [
+          {
+            "kind": "consider",
+            "title": "The stela of Qadesh, Min and Resheph, the archer god from Canaan honored in Egypt.",
+            "source": "British Museum EA 191."
+          },
+          {
+            "kind": "read",
+            "title": "Resheph takes his share of King Kirta's household.",
+            "source": "The Kirta epic, KTU 1.14."
+          },
+          {
+            "kind": "keep",
+            "title": "Set aside the archer's share at the month's offerings.",
+            "source": "Resheph in the Ugaritic offering lists, in Pardee, Ritual and Cult at Ugarit."
+          }
+        ],
+        "jupiter": [
+          {
+            "kind": "consider",
+            "title": "The Baal au foudre stele, the storm god with club and lightning spear.",
+            "source": "Louvre AO 15775, traced in docs/design/system/assets/traced/canaan-baal-stele.png."
+          },
+          {
+            "kind": "read",
+            "title": "Baal's message to Anat: the word of trees and the whisper of stones.",
+            "source": "The Baal Cycle, KTU 1.3, column III."
+          },
+          {
+            "kind": "keep",
+            "title": "Wait for the first rain before you sow.",
+            "source": "The Kirta epic, KTU 1.16, column III."
+          }
+        ],
+        "saturn": [
+          {
+            "kind": "consider",
+            "title": "The seated god of Ugarit in bronze and gold foil, read as El.",
+            "source": "National Museum of Damascus."
+          },
+          {
+            "kind": "read",
+            "title": "The Gracious Gods, El at the shore with his two wives.",
+            "source": "KTU 1.23."
+          },
+          {
+            "kind": "keep",
+            "title": "Join a marzeah, the sworn drinking fellowship held in El's own house.",
+            "source": "KTU 1.114."
+          }
+        ],
+        "uranus": [
+          {
+            "kind": "read",
+            "title": "The god list that names Earth and Heaven as one seat in the council.",
+            "source": "KTU 1.47, the Ugaritic pantheon list."
+          },
+          {
+            "kind": "keep",
+            "title": "Call heaven and earth to witness a promise, as the treaties of the age close.",
+            "source": "The treaty witness lists in the archives of Ugarit, published in PRU IV."
+          }
+        ],
+        "neptune": [
+          {
+            "kind": "consider",
+            "title": "The stone anchors that sailors dedicated in Baal's temple at Ugarit.",
+            "source": "The temple of Baal on the acropolis of Ugarit."
+          },
+          {
+            "kind": "read",
+            "title": "Kothar's two clubs strike down Prince Sea.",
+            "source": "The Baal Cycle, KTU 1.2, column IV."
+          }
+        ],
+        "pluto": [
+          {
+            "kind": "consider",
+            "title": "The family vaults under the houses of Ugarit, where the dead stayed home.",
+            "source": "The excavated houses of Ugarit and their corbel-vaulted tombs."
+          },
+          {
+            "kind": "read",
+            "title": "Mot's message: his throat is a pit, and he swallows Baal.",
+            "source": "The Baal Cycle, KTU 1.5, column I."
+          },
+          {
+            "kind": "keep",
+            "title": "Name your dead aloud and pour for them.",
+            "source": "KTU 1.161, the royal funerary ritual."
+          }
+        ]
+      },
+      "lessons": {
+        "conjunction": "When two matters reach the council together, the elders rule on both. You live with both rulings.",
+        "sextile": "A favor done at the gate is remembered at the gate. The elders keep no tablet, and they forget nothing.",
+        "square": "A suit you lose at the gate is still settled. Pay what the elders ruled and walk home through the same gate.",
+        "trine": "The council says yes once. Ask for what you need, and leave the rest for another sitting.",
+        "opposition": "Two claims on one field cannot both stand. The council hears both and divides the field, and nobody leaves pleased."
+      }
+    },
+    "carthage": {
+      "slowHeadlines": {
+        "conjunction": {
+          "jupiter": "Put your silver into the largest venture you can find.",
+          "saturn": "Your fixed dues all fall due this year, so set the silver aside now.",
+          "uranus": "Sell the old ship and buy into the route west of the Pillars.",
+          "neptune": "Count your cargo yourself while fog sits on the harbor.",
+          "pluto": "Open the inherited ledger and read every page of it."
+        },
+        "sextile": {
+          "jupiter": "Lend to the captain who has never lost a ship.",
+          "saturn": "Pay a little on the old loan each month and watch it shrink.",
+          "uranus": "Buy a share in the first voyage to the tin islands.",
+          "neptune": "Risk one hull on the long voyage and moor the others.",
+          "pluto": "Sell the inherited warehouse while buyers are bidding."
+        },
+        "square": {
+          "jupiter": "Borrow nothing against profits still at sea.",
+          "saturn": "The suffetes audit your books this year, line by line.",
+          "uranus": "Your best route closes without warning, so find a second.",
+          "neptune": "Trust no cargo list you did not count yourself.",
+          "pluto": "The debt your family left you comes due with interest."
+        },
+        "trine": {
+          "jupiter": "Expand the warehouse, because the profits will fill it.",
+          "saturn": "Pay off the old loan in full and break the tablet.",
+          "uranus": "Open the western route, and it pays from the first sailing.",
+          "neptune": "Send the ship out on the long voyage this season.",
+          "pluto": "Claim your inheritance and invest it in the harbor."
+        },
+        "opposition": {
+          "jupiter": "A rival house bids against you for the same cargo.",
+          "saturn": "The temple wants its dues and the ship wants its repairs.",
+          "uranus": "Your partners want the western route, and you would keep the old one.",
+          "neptune": "A captain sells you a voyage that cannot sail.",
+          "pluto": "A cousin from Tyre wants half of what your family left you."
+        }
+      },
+      "shortRelations": {
+        "conjunction": "must sign under one seal with",
+        "sextile": "can stand surety for",
+        "square": "will undercut",
+        "trine": "will tally cleanly with",
+        "opposition": "will bid against"
+      },
+      "natalFrame": "The roll of your birth enters {deity} under the {sign}: {clause}.",
+      "skyMoveOne": "{god} trades under the {sign} and keeps the books on {domain}.",
+      "angleMoveOne": {
+        "asc": "Your birth roll opens under the {sign} rising, the first line every partner reads.",
+        "mc": "Your birth roll puts the {sign} at the head of the page, where your standing is entered."
+      },
+      "angleDomains": {
+        "asc": "your face on the quay",
+        "mc": "your standing with the suffetes"
+      },
+      "recurrenceFrame": "This entry falls due again {interval}.",
+      "recurrenceIrregular": "This entry has no fixed due date: it can fall again within days or not for most of a year.",
+      "playsOutTitle": "HOW THIS PLAYS OUT ON THE LEDGER",
+      "slowActs": {
+        "jupiter": "{god} opens the temple treasury, and the loans go out at a low rate.",
+        "saturn": "{god} calls in the old accounts, and the clerks work by lamplight.",
+        "uranus": "{god} blows the storm off its usual course, and the captains chart another passage.",
+        "neptune": "{god} hides the coastline in fog, and every pilot slows.",
+        "pluto": "{god} opens the family tomb for an audit, and the heirs gather at the door."
+      },
+      "manifestations": [
+        {
+          "harmony": [
+            "a ledger that closes on the first count",
+            "wages paid on the day they fall due",
+            "silver weighed and found full",
+            "a buyer who pays before delivery"
+          ],
+          "tension": [
+            "a coin that rings false on the table",
+            "a clerk's error in the other party's favor",
+            "a cargo valued below its cost",
+            "interest added to a loan you thought was settled"
+          ]
+        },
+        {
+          "harmony": [
+            "the household books agreed by everyone",
+            "an heir who learns the trade",
+            "a dowry paid on time",
+            "a courtyard full at the festival meal"
+          ],
+          "tension": [
+            "an heir who wants his share early",
+            "a steward who loses the keys",
+            "a will read aloud and disputed",
+            "household silver spent before the month is out"
+          ]
+        },
+        {
+          "harmony": [
+            "a ship that arrives a day early",
+            "a letter from Gades with good prices",
+            "a captain who keeps his word",
+            "a berth free when you need one"
+          ],
+          "tension": [
+            "a ship held in port by the wind",
+            "a tally that does not match the cargo",
+            "a partner's letter that contradicts the last one",
+            "news from Tyre that arrives too late"
+          ]
+        },
+        {
+          "harmony": [
+            "a vow paid and a stele set up",
+            "an hour of quiet in the precinct",
+            "a priest who accepts the offering at once",
+            "a promise you keep without witnesses"
+          ],
+          "tension": [
+            "a vow you have not yet paid",
+            "a sleepless night over a contract",
+            "an omen at the altar you cannot read",
+            "a secret you have kept too long"
+          ]
+        }
+      ],
+      "tryThis": {
+        "sun": [
+          {
+            "kind": "consider",
+            "title": "A tophet stela crowned by the disc and crescent, the commonest emblem in the precinct.",
+            "source": "The Carthage tophet stelae, Musée national de Carthage."
+          },
+          {
+            "kind": "read",
+            "title": "Hannibal's oath, sworn by the Sun, the Moon and the Earth among the gods of Carthage.",
+            "source": "Polybius, Histories 7.9."
+          }
+        ],
+        "moon": [
+          {
+            "kind": "consider",
+            "title": "The sign of Tanit cut on the stelae of the tophet.",
+            "source": "The tophet of Salammbô, Carthage, and docs/design/deity-glyphs.md."
+          },
+          {
+            "kind": "read",
+            "title": "A dedication to the Lady Tanit, face of Baal, and to the Lord Baal Hammon.",
+            "source": "KAI 79, Carthage."
+          },
+          {
+            "kind": "keep",
+            "title": "Set up a small stone when a vow is answered, because the god heard your voice.",
+            "source": "The tophet formula, in the dedications collected in CIS I."
+          }
+        ],
+        "mercury": [
+          {
+            "kind": "consider",
+            "title": "The steering oar carved on Punic votive stelae.",
+            "source": "Attested in docs/design/deity-glyphs.md, Carthage, Sakun."
+          },
+          {
+            "kind": "read",
+            "title": "Hanno's voyage down the African coast, a Carthaginian captain's own record.",
+            "source": "The Periplus of Hanno, in its Greek translation."
+          },
+          {
+            "kind": "keep",
+            "title": "Post your prices where everyone can read them, as the temple posted its tariff.",
+            "source": "The Marseille Tariff, CIS I 165."
+          }
+        ],
+        "venus": [
+          {
+            "kind": "consider",
+            "title": "The Pyrgi gold tablets, a king's dedication to Astarte in Phoenician and Etruscan.",
+            "source": "Museo Nazionale Etrusco di Villa Giulia, Rome."
+          },
+          {
+            "kind": "read",
+            "title": "King Eshmunazar's coffin, which records the house he built for Astarte in Sidon.",
+            "source": "Louvre AO 4806, KAI 14."
+          },
+          {
+            "kind": "keep",
+            "title": "Watch the doves of Eryx, whose flight to Africa and return marked her festivals.",
+            "source": "Aelian, On the Nature of Animals 4.2."
+          }
+        ],
+        "mars": [
+          {
+            "kind": "consider",
+            "title": "The Maltese cippus to Melqart, lord of Tyre, written in two scripts.",
+            "source": "Louvre AO 4818."
+          },
+          {
+            "kind": "read",
+            "title": "The two pillars in Melqart's temple at Tyre, one of gold and one of green stone.",
+            "source": "Herodotus, Histories 2.44."
+          },
+          {
+            "kind": "keep",
+            "title": "Send the first fruits to the god's temple every year.",
+            "source": "Polybius, Histories 31.12, the Carthaginian ship carrying first fruits to Tyre."
+          }
+        ],
+        "jupiter": [
+          {
+            "kind": "consider",
+            "title": "The enthroned god between sphinxes from the sanctuary of Thinissut.",
+            "source": "Bardo National Museum, Tunis."
+          },
+          {
+            "kind": "read",
+            "title": "Hanno's prayer in Punic to the gods of the city.",
+            "source": "Plautus, Poenulus 930 to 949."
+          },
+          {
+            "kind": "keep",
+            "title": "Give a lamb in place of what you vowed.",
+            "source": "The N'Gaous stelae, Algeria, which record the substitute lamb."
+          }
+        ],
+        "saturn": [
+          {
+            "kind": "consider",
+            "title": "The sickle carved on the stelae of the god's African sanctuaries.",
+            "source": "Marcel Le Glay, Saturne africain (1961 to 1966)."
+          },
+          {
+            "kind": "read",
+            "title": "The city in crisis turns back to its oldest god.",
+            "source": "Diodorus Siculus, Library 20.14."
+          }
+        ],
+        "uranus": [
+          {
+            "kind": "read",
+            "title": "King Azatiwada's inscription, which names the lord of heaven first among the gods.",
+            "source": "The Karatepe bilingual, KAI 26."
+          },
+          {
+            "kind": "keep",
+            "title": "Put the god of heaven in the curse clause of your contract.",
+            "source": "The closing curse of the Karatepe inscription, KAI 26."
+          }
+        ],
+        "neptune": [
+          {
+            "kind": "consider",
+            "title": "The round war harbor of Carthage with the admiral's island at its center.",
+            "source": "Appian, Punic Wars 96, and the excavated cothon at Salammbô."
+          },
+          {
+            "kind": "read",
+            "title": "The silent trade on the coast beyond the Pillars.",
+            "source": "Herodotus, Histories 4.196."
+          },
+          {
+            "kind": "keep",
+            "title": "Carry a small god on the prow, as Phoenician ships did.",
+            "source": "Herodotus, Histories 3.37, on the pataikoi."
+          }
+        ],
+        "pluto": [
+          {
+            "kind": "consider",
+            "title": "The engraved bronze razors laid in Carthaginian tombs.",
+            "source": "The necropoleis of Carthage, Musée national de Carthage."
+          },
+          {
+            "kind": "read",
+            "title": "The god the Phoenicians call Death.",
+            "source": "Philo of Byblos, in Eusebius, Preparation for the Gospel 1.10."
+          },
+          {
+            "kind": "keep",
+            "title": "Leave a lamp in the tomb.",
+            "source": "Hélène Bénichou-Safar, Les tombes puniques de Carthage (1982)."
+          }
+        ]
+      },
+      "lessons": {
+        "conjunction": "Two entries on one line are paid together. Read the whole line before you sign.",
+        "sextile": "A small credit honored today earns a large one offered later. The clerk remembers who paid on time.",
+        "square": "A loss written down is smaller than a loss hidden. Enter it, and the book closes.",
+        "trine": "A good year in the ledger pays the tithe first. {god}'s share comes off the top, before yours.",
+        "opposition": "Every bid has a seller across the table. Name your price, and let them name theirs."
+      }
+    },
+    "rome": {
+      "slowHeadlines": {
+        "conjunction": {
+          "jupiter": "Stand for the magistracy this year, and the tribes elect you.",
+          "saturn": "Settle with the aerarium before the censor asks.",
+          "uranus": "Bring forward the law you drafted last winter.",
+          "neptune": "Avoid the baths and the flatterers who live in them.",
+          "pluto": "Break the seals on the strongbox and read the will again."
+        },
+        "sextile": {
+          "jupiter": "Call on your patron, and he speaks for you in the Curia.",
+          "saturn": "Pay your creditor one installment at each Kalends.",
+          "uranus": "Back the reform early, while it still needs sponsors.",
+          "neptune": "Rest at the villa for a few days and come back sharper.",
+          "pluto": "Settle the family estate quietly, before anyone sues."
+        },
+        "square": {
+          "jupiter": "Count no votes before the tribes have voted.",
+          "saturn": "Declare your property honestly when the censor assesses it.",
+          "uranus": "A sudden decree overturns what you planned in the forum.",
+          "neptune": "Your flatterers will not hold the line when the vote comes.",
+          "pluto": "An old family lawsuit is called before the praetor."
+        },
+        "trine": {
+          "jupiter": "Name the province you favor, and the Senate grants it.",
+          "saturn": "Build in stone, and the building outlasts your consulship.",
+          "uranus": "Push your reform through while the assembly is with you.",
+          "neptune": "Spend a month at Baiae and come home rested.",
+          "pluto": "Your inheritance comes through, and the estates are yours to run."
+        },
+        "opposition": {
+          "jupiter": "A rival patron wants the same client you do.",
+          "saturn": "The treasury and your own purse meet in court.",
+          "uranus": "The old families block your reform in the Senate.",
+          "neptune": "A smooth talker in the forum is asking for your trust.",
+          "pluto": "Your sister's husband sues for the farm your mother left you."
+        }
+      },
+      "shortRelations": {
+        "conjunction": "must march under one standard with",
+        "sextile": "can lend troops to",
+        "square": "will block the road of",
+        "trine": "can vote with",
+        "opposition": "will veto"
+      },
+      "natalFrame": "As {deity} in the {sign}, {clause}.",
+      "skyMoveOne": "{god} stands in the {sign}, in charge of {domain}.",
+      "angleMoveOne": {
+        "asc": "The {sign} came up at your birth, and it is the face you bring into the forum.",
+        "mc": "The {sign} stood at the height of heaven at your birth, and your career runs under it."
+      },
+      "angleDomains": {
+        "asc": "the face you bring into the forum",
+        "mc": "your career in office"
+      },
+      "recurrenceFrame": "The augurs record this figure again {interval}.",
+      "recurrenceIrregular": "The augurs cannot set this figure in the calendar: it returns within days or not for most of a year.",
+      "playsOutTitle": "HOW THIS PLAYS OUT IN THE FORUM",
+      "slowActs": {
+        "jupiter": "{god} thunders on the left, and the magistrate takes office under good auspices.",
+        "saturn": "{god} has the wool unbound from his statue's feet, and the city keeps holiday.",
+        "uranus": "{god} spreads his mantle over the city, and the old laws look narrow under it.",
+        "neptune": "{god} stirs the sea off Ostia, and the grain fleet waits in harbor.",
+        "pluto": "{god} opens the mundus, and the dead have the city for the day."
+      },
+      "manifestations": [
+        {
+          "harmony": [
+            "a client who pays his respects at dawn",
+            "a motion carried without debate",
+            "a contract witnessed and sealed",
+            "your name read out with approval"
+          ],
+          "tension": [
+            "a petition that comes back unsigned",
+            "a debt nobody will name at the table",
+            "a rival who takes the front bench first",
+            "a magistrate who will not see you today"
+          ]
+        },
+        {
+          "harmony": [
+            "the Lares fed and the hearth kept bright",
+            "a dinner where every couch is full",
+            "a freedman who serves your house well",
+            "an ancestor's mask honored in the atrium"
+          ],
+          "tension": [
+            "a quarrel over a dowry",
+            "a servant who breaks the good cup",
+            "an heir who expects more than his share",
+            "the household gods neglected for eight days"
+          ]
+        },
+        {
+          "harmony": [
+            "a courier who arrives a day ahead",
+            "a friend's letter with good news from the provinces",
+            "a road clear all the way to the gate",
+            "an introduction that opens a door"
+          ],
+          "tension": [
+            "a dispatch lost at a river crossing",
+            "the urge to settle it by shouting",
+            "a friend who forgets your appointment",
+            "a rumor from the baths that reaches the Senate"
+          ]
+        },
+        {
+          "harmony": [
+            "a morning at the shrine with no one else there",
+            "an omen from the right side",
+            "a dream that answers a question",
+            "a vow you renew without being asked"
+          ],
+          "tension": [
+            "a door that stays shut until you stop pushing",
+            "an augury put off for another day",
+            "a vow you made and have not kept",
+            "a sleepless night before a decision"
+          ]
+        }
+      ],
+      "tryThis": {
+        "sun": [
+          {
+            "kind": "consider",
+            "title": "The Colossus beside the amphitheater, Nero's statue remade as Sol.",
+            "source": "Pliny the Elder, Natural History 34.45."
+          },
+          {
+            "kind": "read",
+            "title": "Phaethon takes the chariot of the Sun.",
+            "source": "Ovid, Metamorphoses 2.1 to 328."
+          },
+          {
+            "kind": "keep",
+            "title": "Mark 9 August, when the calendar records a sacrifice to Sol Indiges on the Quirinal.",
+            "source": "The Fasti of Amiternum."
+          }
+        ],
+        "moon": [
+          {
+            "kind": "consider",
+            "title": "Luna driving her two-horse chariot on Republican denarii.",
+            "source": "Michael Crawford, Roman Republican Coinage (1974)."
+          },
+          {
+            "kind": "read",
+            "title": "The Secular Hymn, which asks Luna to hear the girls' chorus.",
+            "source": "Horace, Carmen Saeculare 35 to 36."
+          },
+          {
+            "kind": "keep",
+            "title": "Keep the Kalends, when the pontiff watched for the crescent and called the Nones.",
+            "source": "Macrobius, Saturnalia 1.15.9 to 10, and Varro, On the Latin Language 6.27."
+          }
+        ],
+        "mercury": [
+          {
+            "kind": "consider",
+            "title": "Mercury with his purse painted over the shop door of Verecundus.",
+            "source": "Pompeii, Via dell'Abbondanza, IX.7.5 to 7."
+          },
+          {
+            "kind": "read",
+            "title": "The merchants' prayer at Mercury's spring, asking pardon for the month's lies.",
+            "source": "Ovid, Fasti 5.663 to 692."
+          },
+          {
+            "kind": "keep",
+            "title": "Enter every sum received and paid in your own ledger, each day.",
+            "source": "Cicero, Pro Roscio Comoedo 2 to 4, on the household account book."
+          }
+        ],
+        "venus": [
+          {
+            "kind": "consider",
+            "title": "The Venus Genetrix, after the statue Caesar set in his forum temple.",
+            "source": "Louvre Ma 525, from Fréjus."
+          },
+          {
+            "kind": "read",
+            "title": "The hymn to Venus that opens Lucretius' poem.",
+            "source": "Lucretius, On the Nature of Things 1.1 to 43."
+          },
+          {
+            "kind": "keep",
+            "title": "Keep the Veneralia on 1 April, washing the goddess's image and wearing myrtle.",
+            "source": "Ovid, Fasti 4.133 to 162."
+          }
+        ],
+        "mars": [
+          {
+            "kind": "consider",
+            "title": "The Mars of Todi, a bronze soldier pouring a libation before battle.",
+            "source": "Vatican Museums, Museo Gregoriano Etrusco."
+          },
+          {
+            "kind": "read",
+            "title": "The farmer's prayer to Mars at the purification of the fields.",
+            "source": "Cato, On Agriculture 141."
+          },
+          {
+            "kind": "keep",
+            "title": "Mark 1 March, when the Salii took down the shields and danced through the city.",
+            "source": "Livy 1.20, and Ovid, Fasti 3.259 to 392."
+          }
+        ],
+        "jupiter": [
+          {
+            "kind": "consider",
+            "title": "The foundation blocks of the Capitoline temple, still standing in the museum.",
+            "source": "Musei Capitolini, Palazzo Caffarelli."
+          },
+          {
+            "kind": "read",
+            "title": "Romulus dedicates the first spoils to Iuppiter Feretrius.",
+            "source": "Livy 1.10."
+          },
+          {
+            "kind": "keep",
+            "title": "Swear by Iuppiter Lapis with a flint in your hand.",
+            "source": "Polybius, Histories 3.25."
+          }
+        ],
+        "saturn": [
+          {
+            "kind": "consider",
+            "title": "The temple of Saturn in the Forum, which held the state treasury.",
+            "source": "Forum Romanum, the aerarium Saturni."
+          },
+          {
+            "kind": "read",
+            "title": "Macrobius on the Saturnalia, its origins and its days.",
+            "source": "Macrobius, Saturnalia 1.7 to 1.10."
+          },
+          {
+            "kind": "keep",
+            "title": "Keep the Saturnalia from 17 December, with candles and clay figures for gifts.",
+            "source": "Macrobius, Saturnalia 1.10 to 1.11, on the cerei and sigillaria."
+          }
+        ],
+        "uranus": [
+          {
+            "kind": "consider",
+            "title": "Caelus spreading his mantle across the top of the Prima Porta breastplate.",
+            "source": "Vatican Museums, Braccio Nuovo, traced in docs/design/system/assets/traced/rome-augustus.png."
+          },
+          {
+            "kind": "read",
+            "title": "Cicero's Stoic reads Caelus and Saturn as the sky and time.",
+            "source": "Cicero, On the Nature of the Gods 2.63 to 64."
+          },
+          {
+            "kind": "keep",
+            "title": "Take the auspices from one fixed place, the templum the augur marks on the sky.",
+            "source": "Varro, On the Latin Language 7.6 to 7.9."
+          }
+        ],
+        "neptune": [
+          {
+            "kind": "consider",
+            "title": "The mosaic of Neptune and Amphitrite in its own Herculaneum house.",
+            "source": "Herculaneum, Insula V, the House of Neptune and Amphitrite."
+          },
+          {
+            "kind": "read",
+            "title": "Neptune lifts his head from the waves and calms the storm.",
+            "source": "Virgil, Aeneid 1.124 to 156."
+          },
+          {
+            "kind": "keep",
+            "title": "Keep the Neptunalia on 23 July under huts of leafy branches.",
+            "source": "Festus, under umbrae."
+          }
+        ],
+        "pluto": [
+          {
+            "kind": "consider",
+            "title": "The buried altar of Dis Pater and Proserpina at the Tarentum, uncovered only for the Secular Games.",
+            "source": "Valerius Maximus 2.4.5, and Zosimus 2.1 to 2.3."
+          },
+          {
+            "kind": "read",
+            "title": "The formula that devotes an enemy city to Dis Pater.",
+            "source": "Macrobius, Saturnalia 3.9."
+          },
+          {
+            "kind": "keep",
+            "title": "Keep the Parentalia in February with bread, salt and violets at the family tomb.",
+            "source": "Ovid, Fasti 2.533 to 542."
+          }
+        ]
+      },
+      "lessons": {
+        "conjunction": "One standard carries two legions' honor and two legions' blame. March under it knowing both.",
+        "sextile": "A favor asked of a patron is a debt in the patron's book. Pay it before he asks.",
+        "square": "An adverse omen does not cancel the assembly. It moves the vote to another day, and the business waits.",
+        "trine": "The birds on the right are a permission. What you do with it is your own vote.",
+        "opposition": "A veto stops the motion and leaves the house standing. The vote comes again on another day."
+      }
+    }
+  },
+  "placementClauses": {
+    "sun": {
+      "Aries": "you move first and decide on the way",
+      "Taurus": "you decide slowly, and then nothing moves you",
+      "Gemini": "you find out who you are by talking it through",
+      "Cancer": "you are most yourself behind your own door, feeding people",
+      "Leo": "you stand where people can see you, and you warm the room",
+      "Virgo": "you know yourself by the thing you have just mended",
+      "Libra": "you see your own shape best across a table from someone",
+      "Scorpio": "you keep the part of yourself that matters out of sight",
+      "Sagittarius": "you feel most like yourself on the road, headed somewhere far",
+      "Capricorn": "you are proud of what you build and slow to show it",
+      "Aquarius": "you stand a little apart from the crowd and watch how it works",
+      "Pisces": "you take the shape of whatever room you walk into"
+    },
+    "moon": {
+      "Aries": "you feel it fast and say it before you have thought",
+      "Taurus": "you calm down with good bread and a chair you know",
+      "Gemini": "you settle a mood by talking it out with someone",
+      "Cancer": "you remember every house you lived in and who was kind there",
+      "Leo": "you need someone to see what you feel",
+      "Virgo": "you calm yourself by putting the house in order",
+      "Libra": "you take your mood from the person across from you",
+      "Scorpio": "you feel everything deeply and show little of it",
+      "Sagittarius": "you get restless in a small room and want the open road",
+      "Capricorn": "you get through a hard day by working through it",
+      "Aquarius": "you go for a long walk before you say what upset you",
+      "Pisces": "you soak up the mood of everyone around you"
+    },
+    "mercury": {
+      "Aries": "you think out loud and speak first",
+      "Taurus": "you make up your mind once and keep it made up",
+      "Gemini": "you follow three conversations at once and enjoy all of them",
+      "Cancer": "you remember what was said by how it made you feel",
+      "Leo": "you speak to the whole room and watch its faces as you talk",
+      "Virgo": "you spot the wrong number on the page before anyone else",
+      "Libra": "you can argue both sides and hate to choose one",
+      "Scorpio": "you listen for what people leave unsaid",
+      "Sagittarius": "you reach for the big rule and skip the small print",
+      "Capricorn": "you trust an idea only once it can carry weight",
+      "Aquarius": "you see how the whole thing is wired before you see the parts",
+      "Pisces": "you think in pictures and remember how a thing felt more than what it said"
+    },
+    "venus": {
+      "Aries": "you go after what you want before the wanting cools",
+      "Taurus": "you love slowly, and you love what lasts",
+      "Gemini": "you fall for a quick mind and a good conversation",
+      "Cancer": "you love by feeding people and keeping them close",
+      "Leo": "you love generously and like to be seen doing it",
+      "Virgo": "you show love by fixing whatever is broken in front of you",
+      "Libra": "you want a partner, and you would rather keep the peace than win",
+      "Scorpio": "you love all the way or not at all",
+      "Sagittarius": "you want someone who shows you somewhere you have never been",
+      "Capricorn": "you court slowly and prove your love by staying",
+      "Aquarius": "you love a friend first and keep a little distance",
+      "Pisces": "you give yourself away and forget to keep some back"
+    },
+    "mars": {
+      "Aries": "you push straight at the wall to find out where it is",
+      "Taurus": "you are slow to start and impossible to stop",
+      "Gemini": "you fight with words, and on three fronts at once",
+      "Cancer": "you fight hardest when your own people are threatened",
+      "Leo": "you fight best with someone watching",
+      "Virgo": "you work with care and finish the small parts properly",
+      "Libra": "you fight by bargaining, and you hate an open quarrel",
+      "Scorpio": "you hold your anger until the right moment and then strike",
+      "Sagittarius": "you throw yourself at the far goal and run out of ground",
+      "Capricorn": "you work long hours and outlast everyone around you",
+      "Aquarius": "you go to war over the rules of the house",
+      "Pisces": "you get your way by waiting and by quiet persuasion"
+    },
+    "jupiter": {
+      "Aries": "you are given more each time you start something new",
+      "Taurus": "you grow rich by keeping what you have",
+      "Gemini": "you collect friends, languages and books, and they pay you back",
+      "Cancer": "you take people in, and the household grows around you",
+      "Leo": "you give freely, and more comes back to you",
+      "Virgo": "you weigh a thing before you bless it, and you bless little",
+      "Libra": "you do better in pairs and prosper through partners",
+      "Scorpio": "you gain from what other people give up or leave behind",
+      "Sagittarius": "you go far and come home with more than you took",
+      "Capricorn": "you build your wealth brick by brick, and it comes late",
+      "Aquarius": "you prosper when you join a cause larger than yourself",
+      "Pisces": "you give to anyone who asks, and the giving comes back to you"
+    },
+    "saturn": {
+      "Aries": "you wait before you strike, and the strike lands",
+      "Taurus": "you build slowly, and what you build is still yours in twenty years",
+      "Gemini": "you finish one sentence before you start the next",
+      "Cancer": "you carry a family duty you did not choose",
+      "Leo": "you keep working when nobody is clapping",
+      "Virgo": "you keep the house in working order and know it will never be perfect",
+      "Libra": "you say no to the person you love when no is the answer",
+      "Scorpio": "you keep a secret until the keeping costs too much",
+      "Sagittarius": "you wait a long time to reach the place you set out for",
+      "Capricorn": "you take on heavy work and carry it without complaint",
+      "Aquarius": "you keep the rule and know the one case where you would break it",
+      "Pisces": "you give help all day and know when to bar the door for the night"
+    },
+    "uranus": {
+      "Aries": "you break with the old way before anyone finishes explaining it",
+      "Taurus": "you hold still for years and then change everything at once",
+      "Gemini": "you change the subject, and the whole room changes with it",
+      "Cancer": "you leave the house you grew up in to build one that fits",
+      "Leo": "you quit the part people cast you in, in front of all of them",
+      "Virgo": "you tear out a whole routine to fix one broken part",
+      "Libra": "you break any bargain that asks you to keep quiet",
+      "Scorpio": "you keep quiet for months and then say everything in one night",
+      "Sagittarius": "you leave the creed you were raised in and go to see for yourself",
+      "Capricorn": "you climb the ladder and then kick it away",
+      "Aquarius": "you break old customs on principle",
+      "Pisces": "you slip out of the old cage without a fight"
+    },
+    "neptune": {
+      "Aries": "you charge at causes bigger than yourself",
+      "Taurus": "you make something holy of the things you can hold",
+      "Gemini": "you talk in pictures and lose the plain fact on the way",
+      "Cancer": "you cry when your mother cries and laugh when your brother laughs",
+      "Leo": "you play a better version of yourself until you believe it",
+      "Virgo": "you serve others until you forget to eat",
+      "Libra": "you see your partner at their best and forgive them the rest",
+      "Scorpio": "you go all the way down with the people you love",
+      "Sagittarius": "you pray in any temple you pass and belong to none of them",
+      "Capricorn": "you climb toward a summit hidden in fog",
+      "Aquarius": "you dream of a whole city that does not exist yet",
+      "Pisces": "you feel every stranger's sorrow as if it were yours"
+    },
+    "pluto": {
+      "Aries": "you carry a scar from every fight you could not walk away from",
+      "Taurus": "you hold hardest to the things that will be taken from you",
+      "Gemini": "you dig with questions until the buried thing comes up",
+      "Cancer": "you watch the house you came from torn open to its foundations",
+      "Leo": "you take a public fall and are back on your feet by the next season",
+      "Virgo": "you cut away what does not work, one piece at a time",
+      "Libra": "you choose partners who make you say what you kept quiet",
+      "Scorpio": "you go to the bottom of everything and expect others to follow",
+      "Sagittarius": "you watch an old belief burn and keep what comes through the fire",
+      "Capricorn": "you see what you built stripped back to bedrock",
+      "Aquarius": "you see the gears turning behind what others call natural",
+      "Pisces": "you can lose the house and the savings and still keep your nerve"
+    }
+  }
+}

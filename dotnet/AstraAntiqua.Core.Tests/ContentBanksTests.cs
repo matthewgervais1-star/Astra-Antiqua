@@ -58,8 +58,8 @@ public class ContentBanksTests
         Assert.Equal("Abc and def.", ReadingBanks.Fill("{A} and {b}.", ('a', "abc"), ('b', "def")));
         Assert.Equal("", ReadingBanks.Cap(""));
         Assert.Equal("Ra", ReadingBanks.Cap("ra"));
-        var frame = Store.Banks.AspectFrame(Culture.Egypt, AspectKind.Trine, "the day's own course", "the count of the nights");
-        Assert.Equal("The day's own course and the count of the nights sit level on the scale, and no hand needs to touch it.", frame);
+        var frame = Store.Banks.IngressFrame(Culture.Canaan, "the count of the nights");
+        Assert.Equal("The count of the nights moves to the house of another god, where no envoy has announced it.", frame);
     }
 
     [Fact]
