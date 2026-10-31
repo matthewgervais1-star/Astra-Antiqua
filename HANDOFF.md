@@ -122,5 +122,6 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 - FACT (`GlassContrastTest`): the tint tier (API 26 to 30) uses fill .90, 4.64:1 over a bone stroke;
   the canvas's .80 gives 3.45:1 there.
 - INFERENCE: the iPhone answer "Fixed at 11 pt" applies to Android's chrome type too.
-- Pending, Matthew's popup: system-bar floors 62 and 34, the tint tier's fill, the lens under blur 24,
-  backdrop 1.0.6 or a Kotlin 2.4 move.
+- FACT (Matthew's popup, 2026-10-31): canvas 62 and 34 as floors; tint fill .90; keep blur 24 (the
+  lens barely shows under it); stay on backdrop 1.0.6. Step 1 stands as built.
+- Pending: step 2, Sky Day, on Matthew's word; push and PR on his word.

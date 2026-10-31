@@ -110,3 +110,8 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
 3. The lens: keep the canvas's blur 24 (the lens barely shows), or a lighter blur so the refraction
    shows, which needs fill .90 on every tier to hold 4.5:1.
 4. The library: stay on backdrop 1.0.6, or move the app to Kotlin 2.4 and Compose 1.12 for 2.0.1.
+
+### Matthew's answers (popup, 2026-10-31, after the eight renders were shown in the chat)
+
+- FACT: "Canvas 62 and 34 as floors"; "Fill .90, holds 4.5:1"; "Keep canvas blur 24"; "Stay on
+  1.0.6". All four confirm step 1 as built; nothing changed. Step 2, Sky Day, waits for his word.
