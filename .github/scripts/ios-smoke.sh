@@ -168,6 +168,7 @@ else
   FAILURES+=("seed")
 fi
 
+# The day: Sky Day on the glass chrome, live.
 shot 02-day "" 15
 shot 03-week week 10
 shot 04-season season 12
@@ -196,6 +197,12 @@ shot 22-chrome-approx chrome-approx 10
 shot 23-chrome-pressed chrome-pressed 10
 shot 24-chrome-pushed chrome-pushed 10
 shot 25-chrome-pushed-pressed chrome-pushed-pressed 10
+
+# Sky Day (Phase B, step 2) for the sample state the day-page golden pins
+# (TestData/day.json): Egypt, 2026-10-21 06:00 UTC, the smoke birth. The
+# page is composed before the first frame, so the wait covers the
+# long-transit search.
+shot 26-sky-day sky-day 15
 
 # The iPhone Duo (Matthew, 2026-10-31): no canvas board, so pictures only, in
 # duo/ where check-placement.py does not look. Its failures are reported and do

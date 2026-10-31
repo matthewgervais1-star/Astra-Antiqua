@@ -32,6 +32,7 @@ struct MoreView: View {
     @ViewBuilder
     private var readings: some View {
         SectionDivider(label: "Readings")
+        link("Today in full", "The week's line, the Moon, the season, today's transits and your two lights") { DayView() }
         link("The year ahead", "Your solar return, long transits and stations") { ForecastView() }
         link("Synastry", "Two charts read against each other") { SynastryView() }
     }

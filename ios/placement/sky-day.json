@@ -1,0 +1,128 @@
+{
+  "source": "Glass-Day board (canvas page Glass, version 1793480018-d41d), its markup at default levers rendered in headless Chrome with the app's font files and the web's copy for the sample state (TestData/day.json, Egypt, 2026-10-21 06:00 UTC, the smoke birth). The board's own copy reproduces the Day table P4 to P16 of report.md exactly. P14+1 and P14+2 are the third and fourth chart rows, which the board does not draw. Rects are x, y, width, height in points on the 390x844 frame; content below 844 is measured where the scroll view lays it out.",
+  "tolerance": 1.0,
+  "screens": {
+    "sky-day": {
+      "P1": [
+        24,
+        75,
+        153.8,
+        18
+      ],
+      "P3": [
+        270,
+        62,
+        104,
+        44
+      ],
+      "P2": [
+        16,
+        113,
+        358,
+        44
+      ],
+      "P17": [
+        16,
+        748,
+        358,
+        56
+      ],
+      "P20": [
+        0,
+        0,
+        390,
+        173
+      ],
+      "P4": [
+        24,
+        189,
+        342,
+        17.6
+      ],
+      "P5": [
+        178,
+        230.6,
+        34,
+        34
+      ],
+      "P6": [
+        24,
+        280.6,
+        342,
+        105.3
+      ],
+      "P7": [
+        24,
+        395.9,
+        342,
+        17.6
+      ],
+      "P8": [
+        173,
+        437.5,
+        44,
+        1
+      ],
+      "P9": [
+        24,
+        462.5,
+        342,
+        267.2
+      ],
+      "P10": [
+        24,
+        769.7,
+        342,
+        11
+      ],
+      "P11": [
+        24,
+        794.7,
+        342,
+        178.4
+      ],
+      "P12": [
+        24,
+        1013,
+        342,
+        11
+      ],
+      "P13": [
+        24,
+        1028,
+        342,
+        146.3
+      ],
+      "P14": [
+        24,
+        1174.3,
+        342,
+        146.3
+      ],
+      "P14+1": [
+        24,
+        1320.6,
+        342,
+        146.3
+      ],
+      "P14+2": [
+        24,
+        1466.9,
+        342,
+        171.8
+      ],
+      "P15": [
+        24,
+        1678.7,
+        342,
+        11
+      ],
+      "P16": [
+        24,
+        1703.7,
+        342,
+        171
+      ]
+    }
+  }
+}

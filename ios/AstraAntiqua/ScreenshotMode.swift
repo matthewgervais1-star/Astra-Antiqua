@@ -24,7 +24,24 @@ enum ScreenshotMode {
         case "chrome-pressed": return AnyView(ChromeCapture(variant: .rest).environment(\.pressedPreview, ["P163.transits", "P164", "P166.week"]))
         case "chrome-pushed": return AnyView(ChromeCapture(variant: .pushed))
         case "chrome-pushed-pressed": return AnyView(ChromeCapture(variant: .pushed).environment(\.pressedPreview, ["P165"]))
+        case "sky-day": return AnyView(SkyDayCapture())
         default: return nil
+        }
+    }
+
+    /// The section and horizon a named screen opens under on the glass tab
+    /// bar; every unknown name, the empty one included, opens Sky Day.
+    static func place(for screen: String) -> (section: ChromeSection, horizon: SkyHorizon) {
+        switch screen {
+        case "week": return (.sky, .week)
+        case "season": return (.sky, .season)
+        case "year": return (.sky, .year)
+        case "transits": return (.transits, .day)
+        case "chart", "placement-sun": return (.chart, .day)
+        case "voices", "voice-egypt", "voice-canaan", "voice-carthage", "matrix", "method", "learn",
+             "learn-aspects", "forecast", "synastry", "more":
+            return (.more, .day)
+        default: return (.sky, .day)
         }
     }
 
@@ -84,6 +101,34 @@ struct ChromeCapture: View {
                     .padding(.vertical, 6)
                 }
             }
+        }
+    }
+}
+
+/// Sky Day for the sample state the day-page golden pins
+/// (dotnet/AstraAntiqua.Core.Tests/TestData/day.json): 2026-10-21 06:00 UTC,
+/// the smoke birth (smoke-birth.v1.json), Egypt, dates read in UTC. The page
+/// is composed before the first frame, so every probe reports in the
+/// placement log's one print.
+struct SkyDayCapture: View {
+    static let now = Instant.parseISO("2026-10-21T06:00:00Z") ?? Date(timeIntervalSince1970: 1_792_562_400)
+    static let birth = SavedBirth(
+        name: "Smoke Test", culture: .egypt, year: 1990, month: 1, day: 15, hour: 5, minute: 30,
+        latitude: 41.9028, longitude: 12.4964, placeName: "Rome, Italy",
+        timeZone: "Europe/Rome", zoneEstimated: false)
+
+    private let page: SkyDayPage
+
+    init() {
+        let store = Content.store
+        page = SkyDayView.compose(
+            culture: .egypt, chart: Self.birth.cast(rules: store.aspectRules), now: Self.now,
+            zone: TimeZone(secondsFromGMT: 0) ?? .current, store: store)
+    }
+
+    var body: some View {
+        GlassScreen(culture: .egypt, section: .sky, horizon: .day, contentBottom: SkyDayMetrics.bottom) {
+            SkyDayContent(culture: .egypt, page: page)
         }
     }
 }
