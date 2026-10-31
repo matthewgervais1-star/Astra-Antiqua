@@ -221,9 +221,8 @@ struct PressedFill<S: Shape>: ButtonStyle {
     }
 
     func makeBody(configuration: Configuration) -> some View {
-        let pressed = configuration.isPressed || preview.contains(id)
         configuration.label.background {
-            if pressed && (fill || preview.contains(id)) {
+            if (configuration.isPressed && fill) || preview.contains(id) {
                 LitFill(shape: shape, fill: GlassInk.pressed, highlight: GlassInk.pressedHighlight)
             }
         }
