@@ -37,44 +37,50 @@ cat "$OUT/logs/app.txt"
 xcrun simctl list runtimes > "$OUT/logs/runtimes.txt"
 cat "$OUT/logs/runtimes.txt"
 # The glass design is drawn on a 390x844 frame, so the screens are photographed
-# on a phone of that size: the first of SMOKE_PHONES the newest runtime offers
-# (an existing device, or one created from a supported type). Without one, the
+# on a phone of that size: the first of SMOKE_PHONES any runtime of the major
+# offers, newest first (an existing device, or one created from a supported
+# type). Without one, the
 # first iPhone that is not a foldable, and the placement check then reports the
 # window it measured on. Every phone the runtime offers is logged in phones.txt.
-# (2026-10-31: iOS 27.1 refuses the iPhone 16e as "Incompatible device", and its
-# first iPhone, the iPhone Duo, saved no screenshot.)
+# (2026-10-31: iOS 27.1 offers one iPhone, the iPhone Duo, 466x678 points on
+# its primary display, and refuses the iPhone 16e as "Incompatible device".)
 PHONES="${SMOKE_PHONES:-iPhone 17e,iPhone 16e}"
 xcrun simctl list runtimes -j > "$OUT/logs/runtimes.json"
 PICK=$(xcrun simctl list devices available -j | MAJOR="$MAJOR" PHONES="$PHONES" RUNTIMES="$OUT/logs/runtimes.json" LOG="$OUT/logs/phones.txt" python3 -c '
 import json, os, sys
 major, prefs = os.environ["MAJOR"], [p.strip() for p in os.environ["PHONES"].split(",") if p.strip()]
 devices = json.load(sys.stdin)["devices"]
-keys = sorted((k for k in devices if (".iOS-" + major + "-") in k),
-              key=lambda k: [int(x) for x in k.rsplit("iOS-", 1)[1].split("-")])
-if not keys:
+listed = [r for r in json.load(open(os.environ["RUNTIMES"]))["runtimes"]
+          if (".iOS-" + major + "-") in r.get("identifier", "") and r.get("isAvailable", True)]
+ids = {r["identifier"] for r in listed} | {k for k in devices if (".iOS-" + major + "-") in k}
+order = lambda k: [int(x) for x in k.rsplit("iOS-", 1)[1].split("-")]
+runtimes = sorted(ids, key=order, reverse=True)
+if not runtimes:
     sys.exit("no iOS " + major + " simulator on this runner")
-runtime = keys[-1]
-phones = [d for d in devices[runtime] if d["name"].startswith("iPhone")]
-supported = []
-for r in json.load(open(os.environ["RUNTIMES"]))["runtimes"]:
-    if r.get("identifier") == runtime:
-        supported = [t for t in r.get("supportedDeviceTypes", []) if t.get("productFamily") == "iPhone"]
+phones = {k: [d for d in devices.get(k, []) if d["name"].startswith("iPhone")] for k in runtimes}
+types = {k: [] for k in runtimes}
+for r in listed:
+    types[r["identifier"]] = [t for t in r.get("supportedDeviceTypes", []) if t.get("productFamily") == "iPhone"]
 with open(os.environ["LOG"], "w") as log:
-    log.write("runtime " + runtime + "\n")
-    log.write("devices: " + ", ".join(d["name"] for d in phones) + "\n")
-    log.write("types: " + ", ".join(t["name"] for t in supported) + "\n")
-duo = next((d["udid"] for d in phones if "Duo" in d["name"]), "-")
+    for k in runtimes:
+        log.write(k + "\n  devices: " + ", ".join(d["name"] for d in phones[k]) + "\n")
+        log.write("  types: " + ", ".join(t["name"] for t in types[k]) + "\n")
+duo = next((d["udid"] for k in runtimes for d in phones[k] if "Duo" in d["name"]), "-")
+# The first phone of SMOKE_PHONES on any iOS major runtime, newest first.
 for pref in prefs:
-    hit = [d for d in phones if d["name"] == pref]
-    if hit:
-        print("use", hit[0]["udid"], runtime, pref.replace(" ", "_"), duo); sys.exit()
-    typ = [t for t in supported if t["name"] == pref]
-    if typ:
-        print("create", typ[0]["identifier"], runtime, pref.replace(" ", "_"), duo); sys.exit()
-plain = [d for d in phones if not any(w in d["name"] for w in ("Duo", "Fold", "Flip"))] or phones
-if not plain:
-    sys.exit("no iPhone on " + runtime)
-print("use", plain[0]["udid"], runtime, plain[0]["name"].replace(" ", "_"), duo)
+    for k in runtimes:
+        hit = [d for d in phones[k] if d["name"] == pref]
+        if hit:
+            print("use", hit[0]["udid"], k, pref.replace(" ", "_"), duo); sys.exit()
+        typ = [t for t in types[k] if t["name"] == pref]
+        if typ:
+            print("create", typ[0]["identifier"], k, pref.replace(" ", "_"), duo); sys.exit()
+# Else the first iPhone that is not a foldable, on any runtime; else any iPhone.
+fold = lambda d: any(w in d["name"] for w in ("Duo", "Fold", "Flip"))
+pick = [(k, d) for k in runtimes for d in phones[k] if not fold(d)] or [(k, d) for k in runtimes for d in phones[k]]
+if not pick:
+    sys.exit("no iPhone on any iOS " + major + " runtime")
+print("use", pick[0][1]["udid"], pick[0][0], pick[0][1]["name"].replace(" ", "_"), duo)
 ') || exit 1
 cat "$OUT/logs/phones.txt"
 read -r ACTION ID RUNTIME NAME DUO <<< "$PICK"
@@ -123,10 +129,17 @@ shot() {
     return
   fi
   sleep "$wait"
-  # A phone with two displays wants one named; the errors are kept.
-  xcrun simctl io "$UDID" screenshot "$OUT/$name.png" >"$OUT/logs/$name.shot.txt" 2>&1 \
-    || xcrun simctl io "$UDID" screenshot --display=internal "$OUT/$name.png" >>"$OUT/logs/$name.shot.txt" 2>&1 \
-    || true
+  # A phone with two displays wants one named: simctl lists them in its error
+  # ("--display=1  LCD (primary) 1398x2034"). Each is photographed as
+  # <name>.display-<n>.png and the primary one is kept as <name>.png.
+  if ! xcrun simctl io "$UDID" screenshot "$OUT/$name.png" >"$OUT/logs/$name.shot.txt" 2>&1; then
+    local d
+    for d in $(grep -oE -- "--display=[0-9]+" "$OUT/logs/$name.shot.txt" | sort -u | cut -d= -f2); do
+      xcrun simctl io "$UDID" screenshot --display="$d" "$OUT/$name.display-$d.png" >>"$OUT/logs/$name.shot.txt" 2>&1 || true
+    done
+    d=$(grep -oE -- "--display=[0-9]+ +LCD \(primary\)" "$OUT/logs/$name.shot.txt" | head -1 | grep -oE "[0-9]+" | head -1)
+    [ -n "$d" ] && [ -s "$OUT/$name.display-$d.png" ] && cp "$OUT/$name.display-$d.png" "$OUT/$name.png"
+  fi
   if [ ! -s "$OUT/$name.png" ]; then
     echo "FAIL: $name has no screenshot: $(tr '\n' ' ' < "$OUT/logs/$name.shot.txt")"
     FAILURES+=("$name")
