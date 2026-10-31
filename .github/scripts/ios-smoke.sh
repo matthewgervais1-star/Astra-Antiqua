@@ -36,32 +36,55 @@ cat "$OUT/logs/app.txt"
 
 xcrun simctl list runtimes > "$OUT/logs/runtimes.txt"
 cat "$OUT/logs/runtimes.txt"
-# The glass design is drawn on a 390x844 frame, the iPhone 16e's screen in
-# points, so the screens are photographed on that phone when the runtime has
-# one (created if the runtime lists the type but no device), else on the
-# runtime's first iPhone.
-PHONE="${SMOKE_PHONE:-iPhone 16e}"
-PICK=$(xcrun simctl list devices available -j | MAJOR="$MAJOR" PHONE="$PHONE" python3 -c '
+# The glass design is drawn on a 390x844 frame, so the screens are photographed
+# on a phone of that size: the first of SMOKE_PHONES the newest runtime offers
+# (an existing device, or one created from a supported type). Without one, the
+# first iPhone that is not a foldable, and the placement check then reports the
+# window it measured on. Every phone the runtime offers is logged in phones.txt.
+# (2026-10-31: iOS 27.1 refuses the iPhone 16e as "Incompatible device", and its
+# first iPhone, the iPhone Duo, saved no screenshot.)
+PHONES="${SMOKE_PHONES:-iPhone 17e,iPhone 16e}"
+xcrun simctl list runtimes -j > "$OUT/logs/runtimes.json"
+PICK=$(xcrun simctl list devices available -j | MAJOR="$MAJOR" PHONES="$PHONES" RUNTIMES="$OUT/logs/runtimes.json" LOG="$OUT/logs/phones.txt" python3 -c '
 import json, os, sys
-major, phone = os.environ["MAJOR"], os.environ["PHONE"]
+major, prefs = os.environ["MAJOR"], [p.strip() for p in os.environ["PHONES"].split(",") if p.strip()]
 devices = json.load(sys.stdin)["devices"]
-runtimes = sorted((k for k in devices if (".iOS-" + major + "-") in k and devices[k]),
-                  key=lambda k: [int(x) for x in k.rsplit("iOS-", 1)[1].split("-")])
-if not runtimes:
+keys = sorted((k for k in devices if (".iOS-" + major + "-") in k),
+              key=lambda k: [int(x) for x in k.rsplit("iOS-", 1)[1].split("-")])
+if not keys:
     sys.exit("no iOS " + major + " simulator on this runner")
-phones = [d for d in devices[runtimes[-1]] if d["name"].startswith("iPhone")]
-wanted = [d for d in phones if d["name"] == phone]
-print(runtimes[-1], (wanted or [{"udid": "-"}])[0]["udid"], phones[0]["udid"])
+runtime = keys[-1]
+phones = [d for d in devices[runtime] if d["name"].startswith("iPhone")]
+supported = []
+for r in json.load(open(os.environ["RUNTIMES"]))["runtimes"]:
+    if r.get("identifier") == runtime:
+        supported = [t for t in r.get("supportedDeviceTypes", []) if t.get("productFamily") == "iPhone"]
+with open(os.environ["LOG"], "w") as log:
+    log.write("runtime " + runtime + "\n")
+    log.write("devices: " + ", ".join(d["name"] for d in phones) + "\n")
+    log.write("types: " + ", ".join(t["name"] for t in supported) + "\n")
+for pref in prefs:
+    hit = [d for d in phones if d["name"] == pref]
+    if hit:
+        print("use", hit[0]["udid"], runtime, pref.replace(" ", "_")); sys.exit()
+    typ = [t for t in supported if t["name"] == pref]
+    if typ:
+        print("create", typ[0]["identifier"], runtime, pref.replace(" ", "_")); sys.exit()
+plain = [d for d in phones if not any(w in d["name"] for w in ("Duo", "Fold", "Flip"))] or phones
+if not plain:
+    sys.exit("no iPhone on " + runtime)
+print("use", plain[0]["udid"], runtime, plain[0]["name"].replace(" ", "_"))
 ') || exit 1
-read -r RUNTIME UDID FIRST <<< "$PICK"
-if [ "$UDID" = "-" ]; then
-  TYPE="com.apple.CoreSimulator.SimDeviceType.$(echo "$PHONE" | tr ' ' '-')"
-  UDID=$(xcrun simctl create "$PHONE" "$TYPE" "$RUNTIME" 2>"$OUT/logs/create.txt") || UDID=""
-  if [ -z "$UDID" ]; then
-    echo "no $PHONE on $RUNTIME ($(tr '\n' ' ' < "$OUT/logs/create.txt")); using the first iPhone, not 390x844"
-    UDID="$FIRST"
-  fi
+cat "$OUT/logs/phones.txt"
+read -r ACTION ID RUNTIME NAME <<< "$PICK"
+NAME="${NAME//_/ }"
+if [ "$ACTION" = "create" ]; then
+  UDID=$(xcrun simctl create "$NAME" "$ID" "$RUNTIME" 2>"$OUT/logs/create.txt") \
+    || { echo "could not create $NAME: $(tr '\n' ' ' < "$OUT/logs/create.txt")"; exit 1; }
+else
+  UDID="$ID"
 fi
+case ",$PHONES," in *",$NAME,"*) ;; *) echo "WARNING: none of $PHONES on $RUNTIME; photographing on $NAME, not 390x844" ;; esac
 xcrun simctl list devices | grep "$UDID" | tee "$OUT/logs/device.txt"
 echo "simulator: $UDID"
 xcrun simctl boot "$UDID" || true
@@ -99,7 +122,14 @@ shot() {
     return
   fi
   sleep "$wait"
-  xcrun simctl io "$UDID" screenshot "$OUT/$name.png" >/dev/null 2>&1 || true
+  # A phone with two displays wants one named; the errors are kept.
+  xcrun simctl io "$UDID" screenshot "$OUT/$name.png" >"$OUT/logs/$name.shot.txt" 2>&1 \
+    || xcrun simctl io "$UDID" screenshot --display=internal "$OUT/$name.png" >>"$OUT/logs/$name.shot.txt" 2>&1 \
+    || true
+  if [ ! -s "$OUT/$name.png" ]; then
+    echo "FAIL: $name has no screenshot: $(tr '\n' ' ' < "$OUT/logs/$name.shot.txt")"
+    FAILURES+=("$name")
+  fi
   if ! kill -0 "$pid" 2>/dev/null; then
     echo "FAIL: $name (screen '$screen', pid $pid) was not running at its screenshot"
     FAILURES+=("$name")

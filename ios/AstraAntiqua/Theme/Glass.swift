@@ -1,5 +1,6 @@
 import AstraCore
 import SwiftUI
+import UIKit
 
 // The Liquid Glass chrome, from the approved canvas
 // (https://claude.ai/artifact/LKiWRGTi16LRZ5GvyHbD3V, page "Glass", version 39,
@@ -583,7 +584,8 @@ private struct PlacementProbe: ViewModifier {
 }
 
 /// Collects the probes' frames and prints them once the layout has settled:
-/// one line per ID, `PLACEMENT <screen> <id> <x> <y> <width> <height>`.
+/// one line per ID, `PLACEMENT <screen> <id> <x> <y> <width> <height>`, and
+/// one `WINDOW` line with the window's size.
 @MainActor
 enum PlacementLog {
     private static var frames: [String: CGRect] = [:]
@@ -596,6 +598,11 @@ enum PlacementLog {
         Task { @MainActor in
             try? await Task.sleep(nanoseconds: 3_000_000_000)
             let screen = ScreenshotMode.requested ?? "day"
+            // The window the frames were measured in, so CI can tell a
+            // 390x844 run from one on another phone.
+            let window = UIApplication.shared.connectedScenes
+                .compactMap { ($0 as? UIWindowScene)?.coordinateSpace.bounds.size }.first ?? .zero
+            print(String(format: "PLACEMENT %@ WINDOW 0.0 0.0 %.1f %.1f", screen, window.width, window.height))
             for (id, f) in frames.sorted(by: { $0.key < $1.key }) {
                 print(String(format: "PLACEMENT %@ %@ %.1f %.1f %.1f %.1f", screen, id, f.minX, f.minY, f.width, f.height))
             }
