@@ -21,14 +21,10 @@ Tags: FACT (source) / INFERENCE / CANNOT CONFIRM. This branch's handoff; the des
 
 ## Where things stand
 - FACT (`ios/AstraAntiqua/Theme/Glass.swift`): step 1, the chrome, written: P17, P1, P3, P55, P2, P20,
-  `GlassScreen`, the pressed style for P163 to P170. Not yet wired into the app's tabs (`MainTabs` still
-  uses the system `TabView`); step 2 (Sky Day) replaces it.
-- FACT (`ios/AstraAntiqua/ScreenshotMode.swift`, `.github/scripts/ios-smoke.sh`, `ios/placement/chrome.json`,
-  `.github/scripts/check-placement.py`): six chrome captures at 390x844 on an iPhone 16e and a CI step
-  that checks 30 rects against the canvas to within 1 pt.
-- CANNOT CONFIRM: that it compiles. GitHub Actions workflows were disabled on 2026-10-30 (design
-  worktree `HANDOFF.md`); nothing iOS builds until Matthew re-enables `swift.yml`. Local check: `swiftc
-  -parse` under WSL passed. AstraCore unchanged.
+  `GlassScreen`, the pressed style for P163 to P170; not yet wired into `MainTabs` (step 2 does). Six
+  captures at 390x844 on an iPhone 16e; CI checks 30 rects to 1 pt (`ios/placement/chrome.json`).
+- CANNOT CONFIRM: that it compiles. Actions disabled since 2026-10-30 (design worktree `HANDOFF.md`);
+  only `swiftc -parse` under WSL ran. AstraCore unchanged.
 
 ## Decisions taken, and why
 - 2026-10-31, Matthew (popup): top row at max(safe top, 62), so a 390x844 phone (safe top 47) keeps the
@@ -40,7 +36,9 @@ Tags: FACT (source) / INFERENCE / CANNOT CONFIRM. This branch's handoff; the des
   check in CI will flag it until the regenerated project is committed.
 
 ## Pending, in order
-1. Step 2, Sky Day (in progress). Push only on Matthew's word; a CI run once Actions is on again.
+1. Step 2, Sky Day, in a fresh session: prompt `docs/design/prompts/ios-glass-phase-b-step2.md`
+   (Matthew, 2026-10-31: merge master in; board sections with web strings; board's forms where the
+   web has none). Push only on his word; a CI run once Actions is on again.
 2. Steps 2 to 11 of the brief: Sky Day; Week with P53 and P171 (Reduce Motion: the Moon scrolls with
    the text, INFERENCE for Matthew); Season with P54; Year; Transits; Chart; Placement with P55 and P56;
    Transit detail; More, the culture sheet P146, the Doorway; the five cultures live.
