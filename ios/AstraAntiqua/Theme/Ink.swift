@@ -13,6 +13,9 @@ enum Ink {
     static let prose = "Spectral-Regular"
     static let proseItalic = "Spectral-Italic"
     static let proseLight = "Spectral-Light"
+    /// Headlines on Egypt, Greece, Canaan and Carthage; Rome keeps Cinzel (2026-10-21).
+    static let proseSC = "SpectralSC-Regular"
+    static let proseSCStrong = "SpectralSC-Medium"
     static let mono = "IBMPlexMono-Regular"
     static let monoStrong = "IBMPlexMono-Medium"
     static let symbols = "NotoSansSymbols-Regular"

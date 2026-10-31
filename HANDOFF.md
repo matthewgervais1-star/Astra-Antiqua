@@ -44,9 +44,14 @@ Tags: FACT (source) / INFERENCE / CANNOT CONFIRM. This branch's handoff; the des
 2. Steps 2 to 11 of the brief: Sky Day; Week with P53 and P171 (Reduce Motion: the Moon scrolls with
    the text, INFERENCE for Matthew); Season with P54; Year; Transits; Chart; Placement with P55 and P56;
    Transit detail; More, the culture sheet P146, the Doorway; the five cultures live.
+3. FACT (message from the session that started this one, 2026-10-31): Matthew approved Round 8,
+   Glass-Explain, built in step 10 with More: canvas version 43 (id 1793475970-ffe5), row y 26500, a
+   pushed screen (back to More, MORE lit, no switcher) opened by P119 and P139; IDs P172 to P225, next
+   free P226. Copy and tables: `compose-explain-r8.mjs`, `explain-r8.json`, `report-r8.md` under the
+   design worktree's `.superpowers/sdd/glass-build/`; Round 8 section of its layout record. The canvas
+   change log is now five notes (changeLog to changeLog5), the Hand-off index two.
 
-## Deadlines
-- CANNOT CONFIRM: none recorded for this work; Matthew has named none.
+## Deadlines: CANNOT CONFIRM, none recorded for this work; Matthew has named none.
 
 ## Files that matter
 - `ios/AstraAntiqua/Theme/Glass.swift`, `ios/AstraAntiqua/ScreenshotMode.swift`, `ios/placement/*.json`,

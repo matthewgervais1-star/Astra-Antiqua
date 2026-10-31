@@ -33,6 +33,8 @@
 		<string>font/spectral_regular_italic.ttf</string>
 		<string>font/spectral_light.ttf</string>
 		<string>font/spectral_light_italic.ttf</string>
+		<string>font/spectral_sc_regular.ttf</string>
+		<string>font/spectral_sc_medium.ttf</string>
 		<string>font/ibm_plex_mono_regular.ttf</string>
 		<string>font/ibm_plex_mono_medium.ttf</string>
 		<string>font/noto_sans_symbols.ttf</string>

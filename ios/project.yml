@@ -58,6 +58,8 @@ targets:
           - font/spectral_regular_italic.ttf
           - font/spectral_light.ttf
           - font/spectral_light_italic.ttf
+          - font/spectral_sc_regular.ttf
+          - font/spectral_sc_medium.ttf
           - font/ibm_plex_mono_regular.ttf
           - font/ibm_plex_mono_medium.ttf
           - font/noto_sans_symbols.ttf
