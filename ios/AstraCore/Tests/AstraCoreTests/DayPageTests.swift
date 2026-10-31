@@ -124,4 +124,39 @@ final class DayPageTests: XCTestCase {
         XCTAssertEqual(DayDecreeComposer.orbMeasure(0.01), "EXACT")
         XCTAssertEqual(DayDecreeComposer.variant(-1), 2)
     }
+
+    /// Sky Day's page for the sample state in Egypt: the board's forms
+    /// (kicker date, the Moon and season lines, the chart rows' data lines,
+    /// the long transit's meta and footer) filled from the web's numbers.
+    func test_skyDayPrintsTheBoardsFormsWithTheWebsNumbers() throws {
+        let store = try Fixtures.store()
+        let g = try Fixtures.day()
+        let at = try Fixtures.instant(g.at)
+        let natal = try smokeChart(store)
+        let spans = LongTransitPick.spans(
+            natal: natal.longitudes, ascendant: natal.ascendant, midheaven: natal.midheaven, now: at)
+        let page = SkyDayBuilder.build(
+            culture: .egypt, now: at, zone: Fixtures.utc, natal: natal, spans: spans, store: store)
+        let egypt = try XCTUnwrap(g.cultures.first { $0.culture == "egypt" })
+        XCTAssertEqual(page.kicker, "WED 21 OCT 2026 · THE HALL OF MA’AT")
+        XCTAssertEqual(page.heroPlanet, .venus)
+        XCTAssertEqual(page.headline, egypt.headline)
+        XCTAssertEqual(page.evidence, egypt.evidence)
+        XCTAssertEqual(page.paragraph, egypt.paragraph)
+        XCTAssertEqual(page.moon, "WAXING GIBBOUS · 74% LIT")
+        XCTAssertEqual(page.nextQuarterName, "FULL MOON")
+        XCTAssertEqual(page.nextQuarterDate, "26 OCT 2026")
+        XCTAssertEqual(page.season, "SUN IN LIBRA · DAY 29 OF 31")
+        XCTAssertEqual([page.seasonStart, page.seasonToGo, page.seasonEnd], ["23 SEP", "2 TO GO", "23 OCT"])
+        let rows = try XCTUnwrap(page.chartRows)
+        XCTAssertEqual(rows.map(\.sentence), egypt.pressure.filter { $0.lead != nil }.map(\.sentence))
+        XCTAssertEqual(rows[1].data, "VENUS △ NATAL JUPITER · 0.8° FROM EXACT · ")
+        XCTAssertEqual(rows[1].tone, "EASE")
+        let card = try XCTUnwrap(page.longTransit)
+        XCTAssertEqual(card.meta, "OPEN NOW · OCT 2026 → JUN 2027")
+        XCTAssertEqual(card.title1, "AMUN IN THE LION")
+        XCTAssertEqual(card.title2, "ROWS IN TIME WITH YOUR NATAL ASCENDANT")
+        XCTAssertEqual(card.footer, "3 EXACT · 2 AHEAD · EASE")
+        for row in rows { print("SKYDAY row:", row.sentence, "|", row.data ?? "", row.tone ?? "") }
+    }
 }
