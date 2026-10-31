@@ -124,4 +124,10 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 - INFERENCE: the iPhone answer "Fixed at 11 pt" applies to Android's chrome type too.
 - FACT (Matthew's popup, 2026-10-31): canvas 62 and 34 as floors; tint fill .90; keep blur 24 (the
   lens barely shows under it); stay on backdrop 1.0.6. Step 1 stands as built.
-- Pending: step 2, Sky Day, on Matthew's word; push and PR on his word.
+- FACT (Matthew's popup answer relayed 2026-10-31, "Compare both"): Kyant 1.0.6 against chrisbanes/haze
+  1.7.2 (Apache-2.0; 2.0.1 is Haze's current stable, needs Compose 1.12 and Kotlin 2.4) behind one seam
+  (`GlassBackdrop`, `GlassEngine` in `ui/theme/glass/`). Sheets: `docs/design/android-glass/compare/`.
+- FACT (`GlassLibraryComparisonTest`): at the canvas numbers the two draw the same glass (at most 9
+  levels of 255 apart). Worst dim label over solid bone: Kyant 3.49, Haze 3.47, tint .90 4.70; at rest
+  and scrolled every variant holds 5.4 or better.
+- Pending: Matthew picks the library (popup); the loser comes out. Step 2 waits; push and PR on his word.

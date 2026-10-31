@@ -103,7 +103,7 @@ private fun ChromeText(
     Text(
         text = text,
         style = chromeType(family, weight, size, tracking, lineHeight),
-        color = color,
+        color = if (LocalChromeLabelsHidden.current) Color.Transparent else color,
         maxLines = 1,
         softWrap = false,
         modifier = modifier.padding(end = size * tracking),

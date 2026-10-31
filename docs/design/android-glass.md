@@ -115,3 +115,49 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
 
 - FACT: "Canvas 62 and 34 as floors"; "Fill .90, holds 4.5:1"; "Keep canvas blur 24"; "Stay on
   1.0.6". All four confirm step 1 as built; nothing changed. Step 2, Sky Day, waits for his word.
+
+## The library comparison (2026-10-31)
+
+- FACT (message from the session "Large title script name band rule", 2026-10-31, quoting Matthew's
+  popup answer "Compare both (Recommended)"): render the chrome with Kyant0/AndroidLiquidGlass and
+  with chrisbanes/haze over the same scrolling Sky Day content at 390x844 dp, at rest, scrolled and
+  with a bright patch under the glass; give each library's worst dim-label contrast; keep the library
+  behind one seam; Matthew picks; step 2 waits.
+- FACT (GitHub API and Maven Central, read 2026-10-31): Haze is Apache-2.0, Maven
+  `dev.chrisbanes.haze:haze`. Its current stable release is 2.0.1 (2026-09-29); the 2.0 line left
+  beta with 2.0.0 on 2026-09-22. 2.0.x needs Compose 1.12 and Kotlin stdlib 2.4.20, and 1.7.3 needs
+  Compose 1.12 and stdlib 2.3.20. The app takes 1.7.2, the newest stable release on Compose 1.10
+  and Kotlin 2.2 (stdlib 2.2.21), the same footing as Kyant's 1.0.6.
+- FACT (Haze 1.7.2 source and `docs/platforms.md` at that tag): blur through RenderEffect on API 31+;
+  on 30 and below a plain scrim by default (RenderScript blur is opt-in and marked experimental);
+  `HazeStyle` has a tint, a blur radius, noise and a fallback tint, and no saturation control.
+- FACT (`ui/theme/glass/GlassSurface.kt`): the seam is the interface `GlassBackdrop` (`source()` on
+  the ground and content, `surface(shape, tier)` on each capsule) with `GlassEngine` and
+  `LocalGlassEngine` choosing; `KyantGlass.kt` and `HazeGlass.kt` hold one library each. The loser
+  comes out with its file, its enum entry, its line in `rememberGlassBackdrop` and its dependency.
+  Default today: Kyant, as committed in step 1. Both draw the same fill .80, blur 24 (radius 40.7)
+  and our own highlight, hairline and shadow; Kyant adds saturate 1.5 and, on 33+, the lens; Haze
+  draws no saturation. Below API 31 neither library is called: the tint tier (fill .90) is shared.
+- FACT (`GlassLibraryComparisonTest`, Roborazzi on Robolectric SDK 35, tiers forced): the content is
+  an approximation of Glass-Day for Egypt: the Round 6 board's strings (`r6-work/egypt.html`, design
+  worktree) at the Round 1 table's y positions (`report.md`, P4 to P16), glyphs left out. Frames: at
+  rest, scrolled 420 (Glass-Day's scrolled frame), scrolled 420 with solid bone (#E6DECC) under the
+  top chrome and the tab bar. Sheets in `docs/design/android-glass/compare/` (`compare-chrome.png`:
+  the top bar and tab bar strips for all three frames; `compare-rest.png`, `compare-scrolled.png`,
+  `compare-bright.png`: full screens), made by `make-sheets.py` there from the test's renders.
+- FACT (pixel diff of the renders): Kyant and Haze differ by at most 9 colour levels of 255 in any
+  frame (2 pixels above 8 levels, in the bright frame). Haze on 12 equals Haze on 13+ exactly; Kyant
+  on 12 differs from 13+ by at most 6 levels. Under the canvas's blur 24 and fill .80 the two
+  libraries draw the same glass.
+- FACT (same test, `compare/contrast.txt`; brightest pixel under each dim label with the labels
+  hidden, against #9A917D): worst dim label per frame. At rest: Kyant 5.82, Haze 5.77, tint 5.86.
+  Scrolled: Kyant 5.81, Haze 5.77, tint 5.42 (WEEK, text beneath unblurred). Bone patch: Kyant 3.49
+  (MORE), Haze 3.47 (TRANSITS), tint 4.70; the horizon labels there read Kyant 4.37 to 4.43, Haze
+  4.38. Over solid bone, fill .80 fails 4.5:1 in both libraries; the canvas's Round 1 table modelled
+  text under blur (50% bone) and never a solid bright area.
+- INFERENCE: on looks the two are a tie at the canvas numbers. What differs: Kyant brings the lens
+  (barely visible at blur 24) and saturate 1.5; Haze has its own fallback for Android 11 and below
+  and an opt-in blur there. FACT (GitHub API, read 2026-10-31): stars Kyant 4,407, Haze 2,641; last
+  push Kyant 2026-08-26, Haze 2026-10-30. Both need a Kotlin move for their current releases.
+- CANNOT CONFIRM: how either looks on a phone; Robolectric drew every frame.
+- FACT (local, 2026-10-31): `./gradlew compileDebugSources testDebugUnitTest` 249 tests, 0 failures.

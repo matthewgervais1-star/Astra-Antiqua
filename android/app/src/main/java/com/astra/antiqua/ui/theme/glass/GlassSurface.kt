@@ -30,20 +30,47 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.astra.antiqua.ui.theme.LocalAccent
-import com.kyant.backdrop.Backdrop
-import com.kyant.backdrop.drawBackdrop
-import com.kyant.backdrop.effects.blur
-import com.kyant.backdrop.effects.lens
-import com.kyant.backdrop.effects.vibrancy
 
 /** Every glass surface on the canvas is a capsule (corner 999). */
 val CapsuleShape = RoundedCornerShape(percent = 50)
 
 /**
- * What the glass refracts and blurs: the screen's ground and content, recorded
- * by [GlassScreen]. Null outside a glass screen, where the chrome draws the tint.
+ * The seam between the chrome and a glass library. [GlassScreen] marks its
+ * ground and content with [source]; each capsule draws itself with [surface].
+ * One implementation per library (KyantGlass.kt, HazeGlass.kt), so the one
+ * not kept comes out with its file, its [GlassEngine] entry and its dependency.
  */
-val LocalGlassBackdrop = staticCompositionLocalOf<Backdrop?> { null }
+interface GlassBackdrop {
+    /** Records what scrolls beneath the chrome. */
+    fun Modifier.source(): Modifier
+
+    /** Draws a capsule's glass over the recorded content, in [tier] (never [GlassTier.TINT]). */
+    fun Modifier.surface(shape: Shape, tier: GlassTier): Modifier
+}
+
+/** The glass libraries under comparison (Matthew, 2026-10-31: "Compare both"). */
+enum class GlassEngine {
+    /** Kyant0/AndroidLiquidGlass: lens refraction on API 33+ (KyantGlass.kt). */
+    KYANT,
+
+    /** chrisbanes/haze: frosted blur, no lens (HazeGlass.kt). */
+    HAZE,
+}
+
+/** The library the chrome draws with. A screenshot test sets it to compare the two. */
+val LocalGlassEngine = staticCompositionLocalOf { GlassEngine.KYANT }
+
+@Composable
+fun rememberGlassBackdrop(engine: GlassEngine = LocalGlassEngine.current): GlassBackdrop = when (engine) {
+    GlassEngine.KYANT -> rememberKyantBackdrop()
+    GlassEngine.HAZE -> rememberHazeBackdrop()
+}
+
+/**
+ * What the glass blurs: the screen's ground and content, recorded by
+ * [GlassScreen]. Null outside a glass screen, where the chrome draws the tint.
+ */
+val LocalGlassBackdrop = staticCompositionLocalOf<GlassBackdrop?> { null }
 
 /** A shape's outline as a path, in this draw scope's size. */
 private fun DrawScope.outlinePath(shape: Shape, size: Size = this.size, at: Offset = Offset.Zero): Path {
@@ -96,27 +123,16 @@ private fun DrawScope.drawGlassShadow(shape: Shape) {
 }
 
 /**
- * Puts a view on glass, in the tier this phone draws ([LocalGlassTier]):
- * the library's lens over blur 24 and saturate 1.5 on API 33+, the blur and
- * saturation alone on 31 and 32, and on 26 to 30 the tint fill. Every tier
- * then draws the canvas's 1px inset highlight and hairline, and the shadow.
+ * Puts a view on glass, in the tier this phone draws ([LocalGlassTier]): on
+ * API 31+ the library's blur (and, with Kyant on 33+, its lens), on 26 to 30
+ * the tint fill. Every tier then draws the canvas's 1px inset highlight and
+ * hairline, and the shadow.
  */
 fun Modifier.glassSurface(shape: Shape = CapsuleShape): Modifier = composed {
     val tier = LocalGlassTier.current
     val backdrop = LocalGlassBackdrop.current
     val surface = if (tier != GlassTier.TINT && backdrop != null) {
-        Modifier.drawBackdrop(
-            backdrop = backdrop,
-            shape = { shape },
-            effects = {
-                vibrancy()
-                blur(GlassInk.blurRadius.toPx())
-                if (tier == GlassTier.LENS) lens(GlassInk.lensHeight.toPx(), GlassInk.lensAmount.toPx())
-            },
-            highlight = null,
-            shadow = null,
-            onDrawSurface = { drawRect(GlassInk.fill) },
-        )
+        with(backdrop) { Modifier.surface(shape, tier) }
     } else {
         Modifier.background(GlassInk.tintFill, shape)
     }

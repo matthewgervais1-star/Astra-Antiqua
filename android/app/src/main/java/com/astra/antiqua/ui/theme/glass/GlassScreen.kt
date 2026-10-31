@@ -25,8 +25,6 @@ import androidx.compose.ui.unit.max
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.ui.nav.Horizon
 import com.astra.antiqua.ui.theme.groundFor
-import com.kyant.backdrop.backdrops.layerBackdrop
-import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 
 /**
  * One glass screen: the culture's ground, the content scrolling under the
@@ -68,13 +66,13 @@ fun GlassScreen(
     val chromeBottom = Chrome.chromeBottom(top, horizon = horizon != null)
     val ground = groundFor(culture)
     val tier = LocalGlassTier.current
-    val backdrop = rememberLayerBackdrop()
+    val backdrop = rememberGlassBackdrop()
 
     Box(modifier.fillMaxSize()) {
         Box(
             Modifier
                 .fillMaxSize()
-                .then(if (tier != GlassTier.TINT) Modifier.layerBackdrop(backdrop) else Modifier)
+                .then(if (tier != GlassTier.TINT) with(backdrop) { Modifier.source() } else Modifier)
                 .background(ground),
         ) {
             Column(

@@ -23,6 +23,9 @@ sqlite = "2.6.2"
 # The Liquid Glass chrome (docs/design/android-glass.md): Kyant0/AndroidLiquidGlass,
 # Apache-2.0. 1.0.6 is the last Android-only release; 2.0.x needs Kotlin 2.4.
 backdrop = "1.0.6"
+# The comparison's second library: chrisbanes/haze, Apache-2.0. 1.7.2 is the newest
+# stable release on Compose 1.10 and Kotlin 2.2; 1.7.3 and 2.0.x need Compose 1.12.
+haze = "1.7.2"
 robolectric = "4.17"
 roborazzi = "1.77.0"
 
@@ -53,6 +56,7 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 sqlite-bundled-jvm = { group = "androidx.sqlite", name = "sqlite-bundled-jvm", version.ref = "sqlite" }
 okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
 backdrop = { group = "io.github.kyant0", name = "backdrop", version.ref = "backdrop" }
+haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
