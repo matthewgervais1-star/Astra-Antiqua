@@ -146,12 +146,12 @@ shot 18-more more 8
 # The Liquid Glass chrome (Phase B, step 1): at rest, over a test pattern,
 # the canvas approximation of the glass, the proposed pressed states, and a
 # pushed screen. Each prints its placement for check-placement.py.
-shot 20-chrome chrome 8
-shot 21-chrome-scrolled chrome-scrolled 8
-shot 22-chrome-approx chrome-approx 8
-shot 23-chrome-pressed chrome-pressed 8
-shot 24-chrome-pushed chrome-pushed 8
-shot 25-chrome-pushed-pressed chrome-pushed-pressed 8
+shot 20-chrome chrome 10
+shot 21-chrome-scrolled chrome-scrolled 10
+shot 22-chrome-approx chrome-approx 10
+shot 23-chrome-pressed chrome-pressed 10
+shot 24-chrome-pushed chrome-pushed 10
+shot 25-chrome-pushed-pressed chrome-pushed-pressed 10
 
 if [ "${#FAILURES[@]}" -gt 0 ]; then
   echo "Failed screens on iOS $MAJOR: ${FAILURES[*]}"

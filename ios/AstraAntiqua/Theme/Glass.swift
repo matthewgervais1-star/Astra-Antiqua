@@ -498,12 +498,17 @@ struct GlassScreen<Content: View>: View {
     @ViewBuilder var content: () -> Content
 
     var body: some View {
+        // The reader keeps to the safe area, so its frame's top in window
+        // coordinates is the safe top (47 on a 390x844 phone) whatever
+        // safeAreaInsets reports. The ground, the scroll view and the edge
+        // ignore the safe area and run from the screen's top, as the canvas
+        // frame does; the top bar is padded down to the canvas's 62; the tab
+        // bar keeps to the safe area, so it sits 6 above the home line.
         GeometryReader { proxy in
-            let top = max(proxy.safeAreaInsets.top, Chrome.safeTop)
+            let safeTop = proxy.frame(in: .global).minY
+            let top = max(safeTop, Chrome.safeTop)
             let chromeBottom = Chrome.chromeBottom(top: top, horizon: horizon != nil)
             let ground = Ink.ground(culture)
-            // Every layer ignores the safe area and is placed from the
-            // screen's own edges, as the canvas frame is.
             ZStack(alignment: .top) {
                 ground.ignoresSafeArea()
                 ScrollView {
@@ -527,17 +532,14 @@ struct GlassScreen<Content: View>: View {
                             .padding(.horizontal, Chrome.inset)
                     }
                 }
-                .padding(.top, top)
+                .padding(.top, top - safeTop)
                 .frame(maxHeight: .infinity, alignment: .top)
-                .ignoresSafeArea()
                 GlassTabBar(selection: section, onSelect: onSection)
                     .padding(.horizontal, Chrome.inset)
-                    .padding(.bottom, proxy.safeAreaInsets.bottom + Chrome.homeGap)
+                    .padding(.bottom, Chrome.homeGap)
                     .frame(maxHeight: .infinity, alignment: .bottom)
-                    .ignoresSafeArea()
             }
         }
-        .ignoresSafeArea()
         .environment(\.culture, culture)
         .toolbar(.hidden, for: .navigationBar)
     }
@@ -565,8 +567,8 @@ private struct PlacementProbe: ViewModifier {
                 GeometryReader { geometry in
                     let frame = geometry.frame(in: .global)
                     Color.clear
-                        .onAppear { PlacementLog.record(id, frame) }
-                        .onChange(of: frame) { _, latest in PlacementLog.record(id, latest) }
+                        .onAppear { MainActor.assumeIsolated { PlacementLog.record(id, frame) } }
+                        .onChange(of: frame) { _, latest in MainActor.assumeIsolated { PlacementLog.record(id, latest) } }
                 }
             }
         }

@@ -111,8 +111,15 @@ jobs:
             ios/AstraAntiqua/Info.plist
           if-no-files-found: warn
       # Last, so a placement miss fails the job without stopping the uploads
-      # above. It prints its table of canvas against app in the step's log.
+      # above; the table of canvas against app goes up after it.
       - name: Check the glass placement against the canvas (to within a point)
         if: always()
         shell: bash
         run: python3 .github/scripts/check-placement.py smoke ios/placement/*.json
+      - name: Upload the placement table
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: swift-placement
+          path: smoke/placement.md
+          if-no-files-found: warn
