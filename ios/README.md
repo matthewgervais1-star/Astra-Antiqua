@@ -16,8 +16,10 @@ by XcodeGen and committed, so a Mac with Xcode opens and runs it with nothing el
   ```
 
   Use the checkout or worktree you work in for the path. Run it after every change to `AstraCore/`.
-- Screenshots: `.github/scripts/ios-smoke.sh` boots an iPhone 16e simulator (390x844 points, the glass
-  canvas's frame), installs the build and photographs every screen. The app opens the screen named by
+- Screenshots: `.github/scripts/ios-smoke.sh` boots a 390x844 iPhone (the glass canvas's frame; on the
+  Xcode 27.1 runner that is the iPhone 17e on iOS 27.0, since iOS 27.1 offers only the iPhone Duo),
+  installs the build and photographs every screen; a second pass photographs three chrome screens on the
+  Duo into `smoke/duo/`. The app opens the screen named by
   `ASTRA_SCREEN` (`AstraAntiqua/ScreenshotMode.swift`); a new screen gets a case there and a `shot` line
   in the script. CI uploads the pictures as the `swift-ios27-screens` artifact.
 - Placement: views of the glass design carry `.placement("P17")` and so on. In a screenshot run the app
