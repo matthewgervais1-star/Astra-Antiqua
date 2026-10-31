@@ -273,7 +273,7 @@ struct GlassTabBar: View {
                 let lit = section == selection
                 Button { onSelect(section) } label: {
                     Text(section.title)
-                        .font(.custom(lit ? Ink.monoStrong : Ink.mono, size: 11))
+                        .font(.custom(lit ? Ink.monoStrong : Ink.mono, fixedSize: 11))
                         .tracking(11 * 0.18)
                         .foregroundStyle(lit ? Ink.bone : Ink.dim)
                         .lineLimit(1)
@@ -285,6 +285,7 @@ struct GlassTabBar: View {
                 }
                 .buttonStyle(PressedFill(shape: Capsule(), id: "P163.\(section.rawValue)"))
                 .accessibilityAddTraits(lit ? .isSelected : [])
+                .accessibilityShowsLargeContentViewer()
             }
         }
         .padding(Chrome.tabPadding)
@@ -298,11 +299,15 @@ struct GlassTabBar: View {
 
 // MARK: - The top bar (P1, P3, P55)
 
+// The chrome's type is fixed at the canvas sizes and does not follow Dynamic
+// Type, as the system tab bar does not (Matthew, 2026-10-31); the tabs, the
+// horizons and the culture menu show the large content viewer on a long press.
+
 /// P1: the wordmark, on the ground.
 struct Wordmark: View {
     var body: some View {
         Text("ASTRA ANTIQVA")
-            .font(.custom(Ink.displayMedium, size: 13))
+            .font(.custom(Ink.displayMedium, fixedSize: 13))
             .tracking(13 * 0.28)
             .foregroundStyle(Ink.bone)
             .lineLimit(1)
@@ -325,7 +330,7 @@ struct CultureMenu: View {
                 HStack(spacing: Chrome.menuSquareGap) {
                     Rectangle().fill(Ink.accent(culture)).frame(width: Chrome.menuSquare, height: Chrome.menuSquare)
                     Text(name.uppercased())
-                        .font(.custom(Ink.mono, size: 11))
+                        .font(.custom(Ink.mono, fixedSize: 11))
                         .tracking(11 * 0.14)
                         .foregroundStyle(Ink.bone)
                         .lineLimit(1)
@@ -344,6 +349,7 @@ struct CultureMenu: View {
         .glassSurface(Capsule(), interactive: true)
         .placement("P3")
         .accessibilityLabel("Culture: \(name). Change culture")
+        .accessibilityShowsLargeContentViewer()
     }
 }
 
@@ -361,7 +367,7 @@ struct BackButton: View {
                     .frame(width: 6, height: 10)
                 if Chrome.backTitled {
                     Text(title)
-                        .font(.custom(Ink.mono, size: 11))
+                        .font(.custom(Ink.mono, fixedSize: 11))
                         .tracking(11 * 0.14)
                         .foregroundStyle(Ink.bone)
                 }
@@ -429,7 +435,7 @@ struct HorizonControl: View {
                 let lit = horizon == selection
                 Button { onSelect(horizon) } label: {
                     Text(horizon.title)
-                        .font(.custom(lit ? Ink.monoStrong : Ink.mono, size: 11))
+                        .font(.custom(lit ? Ink.monoStrong : Ink.mono, fixedSize: 11))
                         .tracking(11 * 0.12)
                         .foregroundStyle(lit ? Ink.bone : Ink.dim)
                         .lineLimit(1)
@@ -441,6 +447,7 @@ struct HorizonControl: View {
                 }
                 .buttonStyle(PressedFill(shape: Capsule(), id: "P166.\(horizon.rawValue)"))
                 .accessibilityAddTraits(lit ? .isSelected : [])
+                .accessibilityShowsLargeContentViewer()
             }
         }
         .padding(Chrome.horizonPadding)

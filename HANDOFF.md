@@ -31,15 +31,16 @@ Tags: FACT (source) / INFERENCE / CANNOT CONFIRM. This branch's handoff; the des
   -parse` under WSL passed. AstraCore unchanged.
 
 ## Decisions taken, and why
-- 2026-10-31, session: the top row sits at max(safe top, 62), so a 390x844 phone (safe top 47) keeps the
-  canvas numbers. Asked Matthew to confirm (popup after step 1).
+- 2026-10-31, Matthew (popup): top row at max(safe top, 62), so a 390x844 phone (safe top 47) keeps the
+  canvas numbers; chrome type fixed at the canvas sizes, large content viewer on long press; go on to
+  Sky Day before CI proves step 1; do not push yet.
 - 2026-10-31, session: system Liquid Glass on iOS 26+, tinted with the canvas fill; the canvas
   approximation below iOS 26 and under Reduce Transparency (opaque there, INFERENCE).
 - 2026-10-31, session: `Glass.swift` added to the committed Xcode project by hand; XcodeGen's drift
   check in CI will flag it until the regenerated project is committed.
 
 ## Pending, in order
-1. Matthew's word on step 1 and the popup's questions; then push (only on his word) and a CI run.
+1. Step 2, Sky Day (in progress). Push only on Matthew's word; a CI run once Actions is on again.
 2. Steps 2 to 11 of the brief: Sky Day; Week with P53 and P171 (Reduce Motion: the Moon scrolls with
    the text, INFERENCE for Matthew); Season with P54; Year; Transits; Chart; Placement with P55 and P56;
    Transit detail; More, the culture sheet P146, the Doorway; the five cultures live.
