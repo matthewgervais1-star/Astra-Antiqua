@@ -17,7 +17,6 @@ Tags: FACT (source) / INFERENCE / CANNOT CONFIRM. This branch's handoff; the des
   version 39 (id 1793472626-da1b); next free ID P172. Spec tables and the Hand-off index:
   `.superpowers/sdd/glass-build/report-r7.md` in worktree `astra-antiqua-design-rounds-a1291d`
   (git-ignored there, read from that path).
-- FACT (same): Phase B follows the web's reading of the sample day, not the flat boards' copy (Round 6).
 
 ## Where things stand
 - FACT (`ios/AstraAntiqua/Theme/Glass.swift`): step 1, the chrome, written: P17, P1, P3, P55, P2, P20,
