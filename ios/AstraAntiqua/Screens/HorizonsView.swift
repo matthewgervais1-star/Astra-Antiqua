@@ -18,8 +18,13 @@ struct HorizonsView: View {
     @State private var horizon: Horizon
     @State private var outcome: HorizonsOutcome?
 
-    init(initial: Horizon = .week) {
+    /// False under the glass horizon control (P2), which picks the horizon
+    /// in its place; the screen keeps its own switcher where it stands alone.
+    private let showsSwitcher: Bool
+
+    init(initial: Horizon = .week, showsSwitcher: Bool = true) {
         _horizon = State(initialValue: initial)
+        self.showsSwitcher = showsSwitcher
     }
 
     var body: some View {
@@ -27,7 +32,9 @@ struct HorizonsView: View {
         let words = Words(culture, zone: state.zone)
         let key = HorizonsKey(horizon: horizon, culture: culture, chart: state.chart)
         Page(title: "Horizons") {
-            switcher
+            if showsSwitcher {
+                switcher
+            }
             if horizon == .week {
                 weekHead(words)
             }

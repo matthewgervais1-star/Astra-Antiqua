@@ -113,7 +113,10 @@ public enum DayDecreeComposer {
             let afterOpen = rest.index(after: open)
             if let close = rest[afterOpen...].firstIndex(of: "}") {
                 let key = String(rest[afterOpen..<close])
-                let isWord = !key.isEmpty && key.allSatisfy { $0.isLetter || $0.isNumber || $0 == "_" }
+                // JavaScript's \w: ASCII letters, digits and the underscore only.
+                let isWord = !key.isEmpty && key.unicodeScalars.allSatisfy {
+                    ("a"..."z").contains($0) || ("A"..."Z").contains($0) || ("0"..."9").contains($0) || $0 == "_"
+                }
                 if isWord, let value = slots[key] {
                     out += value
                 } else {

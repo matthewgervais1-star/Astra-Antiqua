@@ -49,9 +49,9 @@ enum ScreenshotMode {
     @MainActor
     static func view(for screen: String) -> AnyView? {
         switch screen {
-        case "week": return AnyView(HorizonsView(initial: .week))
-        case "season": return AnyView(HorizonsView(initial: .season))
-        case "year": return AnyView(HorizonsView(initial: .year))
+        case "week": return AnyView(HorizonsView(initial: .week, showsSwitcher: false))
+        case "season": return AnyView(HorizonsView(initial: .season, showsSwitcher: false))
+        case "year": return AnyView(HorizonsView(initial: .year, showsSwitcher: false))
         case "transits": return AnyView(TransitsView())
         case "chart": return AnyView(PlacementsView())
         case "placement-sun": return AnyView(PlacementView(planet: .sun))

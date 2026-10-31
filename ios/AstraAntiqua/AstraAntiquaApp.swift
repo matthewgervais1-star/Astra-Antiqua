@@ -97,9 +97,9 @@ struct MainTabs: View {
             case .sky:
                 switch horizon {
                 case .day: DayView()
-                case .week: HorizonsView(initial: .week)
-                case .season: HorizonsView(initial: .season)
-                case .year: HorizonsView(initial: .year)
+                case .week: HorizonsView(initial: .week, showsSwitcher: false)
+                case .season: HorizonsView(initial: .season, showsSwitcher: false)
+                case .year: HorizonsView(initial: .year, showsSwitcher: false)
                 }
             case .transits: TransitsView()
             case .chart: PlacementsView()

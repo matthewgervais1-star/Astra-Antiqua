@@ -8,34 +8,68 @@ import SwiftUI
 /// (`.superpowers/sdd/glass-build/report.md` in the design worktree).
 ///
 /// The page is composed off the main thread when the screen appears and when
-/// the culture, the chart or the UTC day changes; the long-transit search
-/// takes the longest.
+/// the culture, the chart or the UTC day changes. The day is read again each
+/// minute and whenever the app comes back to the front, so the page turns
+/// over at 00:00 UTC. The long-transit spans depend on the chart and the day
+/// only, so a change of culture reuses them; the previous page stays up
+/// while the next is composed.
 struct SkyDayView: View {
     @Environment(AppState.self) private var state
+    @Environment(\.scenePhase) private var scenePhase
     var onSection: (ChromeSection) -> Void = { _ in }
     var onHorizon: (SkyHorizon) -> Void = { _ in }
     var onMenu: () -> Void = {}
+    @State private var day = DayDecreeComposer.utcDayNumber(Date())
     @State private var loaded: (key: SkyDayKey, page: SkyDayPage)?
+    @State private var heldSpans: (key: SpanKey, spans: [TransitSpan])?
 
     var body: some View {
         let culture = state.cultureOrDefault
-        let key = SkyDayKey(culture: culture, chart: state.chart, day: DayDecreeComposer.utcDayNumber(Date()))
+        let key = SkyDayKey(culture: culture, chart: state.chart, day: day)
         GlassScreen(culture: culture, section: .sky, horizon: .day, contentBottom: SkyDayMetrics.bottom,
                     onSection: onSection, onHorizon: onHorizon, onMenu: onMenu) {
-            if let loaded, loaded.key == key {
-                SkyDayContent(culture: culture, page: loaded.page, onSection: onSection)
+            if let loaded {
+                SkyDayContent(culture: loaded.key.culture, page: loaded.page, onSection: onSection)
             } else {
                 Working(text: "Reading the sky…")
             }
         }
-        .task(id: key) {
-            let store = state.store
-            let zone = state.zone
-            let page = await Task.detached(priority: .userInitiated) {
-                SkyDayView.compose(culture: key.culture, chart: key.chart, now: Date(), zone: zone, store: store)
-            }.value
-            loaded = (key, page)
+        .task(id: key) { await load(key) }
+        .task {
+            // A minute clock: iOS 17 has no scene-level day-change event for
+            // UTC midnight, so the day is read again once a minute.
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(60))
+                refreshDay()
+            }
         }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { refreshDay() }
+        }
+    }
+
+    private func refreshDay() {
+        let now = DayDecreeComposer.utcDayNumber(Date())
+        if now != day { day = now }
+    }
+
+    private func load(_ key: SkyDayKey) async {
+        let store = state.store
+        let zone = state.zone
+        let spanKey = SpanKey(chart: key.chart, day: key.day)
+        let cached = heldSpans?.key == spanKey ? heldSpans?.spans : nil
+        let result = await Task.detached(priority: .userInitiated) { () -> ([TransitSpan]?, SkyDayPage) in
+            let now = Date()
+            let spans = cached ?? key.chart.map {
+                LongTransitPick.spans(natal: $0.longitudes, ascendant: $0.ascendant, midheaven: $0.midheaven, now: now)
+            }
+            let page = SkyDayBuilder.build(culture: key.culture, now: now, zone: zone, natal: key.chart,
+                                           spans: spans, store: store)
+            return (spans, page)
+        }.value
+        guard !Task.isCancelled else { return }
+        if let spans = result.0 { heldSpans = (spanKey, spans) }
+        loaded = (key, result.1)
     }
 
     /// The whole page, the long-transit spans included.
@@ -51,6 +85,12 @@ struct SkyDayView: View {
 /// What a composed page depends on.
 struct SkyDayKey: Hashable, Sendable {
     let culture: Culture
+    let chart: NatalChart?
+    let day: Int
+}
+
+/// What the long-transit spans depend on: the chart and the UTC day.
+struct SpanKey: Hashable, Sendable {
     let chart: NatalChart?
     let day: Int
 }

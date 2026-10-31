@@ -53,8 +53,8 @@ public struct SkyDayPage: Sendable, Hashable {
     public let seasonStart: String
     public let seasonToGo: String
     public let seasonEnd: String
-    /// The four house groups that hold a contact, in the groups' fixed
-    /// order; nil without a chart.
+    /// The house groups that hold a contact, in the groups' fixed order;
+    /// nil without a chart or when no group holds one.
     public let chartRows: [ChartRow]?
     /// Nil without a chart, or when no slow body comes within reach.
     public let longTransit: LongTransitCard?
@@ -119,12 +119,14 @@ public enum SkyDayBuilder {
             let today = Ephemeris.computeChart(DayDecreeComposer.utcDayStart(now))
             let groups = DayPressure.compute(
                 natal: natal.longitudes, ascendant: natal.ascendant, today: today, culture: culture, store: store)
-            rows = groups.compactMap { g in
+            let live = groups.compactMap { g -> SkyDayPage.ChartRow? in
                 guard let lead = g.lead else { return nil }
                 return SkyDayPage.ChartRow(
                     planet: lead.transit, sentence: g.sentence, data: dataLine(lead, store: store),
                     tone: toneWord(lead.kind), tension: lead.kind.isHard)
             }
+            // No contact anywhere: no rows, so no label over nothing.
+            rows = live.isEmpty ? nil : live
             if let spans,
                let lt = LongTransitPick.pick(spans: spans, now: now, today: today, culture: culture, store: store) {
                 let ahead = lt.span.passes.filter { $0 > now }.count
