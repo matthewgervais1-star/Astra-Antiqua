@@ -23,8 +23,9 @@ Tags: FACT (source) / INFERENCE / CANNOT CONFIRM. This branch's handoff; the des
 - FACT (`ios/AstraAntiqua/Theme/Glass.swift`): step 1, the chrome, written: P17, P1, P3, P55, P2, P20,
   `GlassScreen`, the pressed style for P163 to P170; not yet wired into `MainTabs` (step 2 does). Six
   captures at 390x844 on an iPhone 16e; CI checks 30 rects to 1 pt (`ios/placement/chrome.json`).
-- CANNOT CONFIRM: that it compiles. Actions disabled since 2026-10-30 (design worktree `HANDOFF.md`);
-  only `swiftc -parse` under WSL ran. AstraCore unchanged.
+- CANNOT CONFIRM: that it compiles; only `swiftc -parse` under WSL ran. FACT (message from the session
+  that started this one, 2026-10-31): Actions runs again (repo public); `swift` run 41234333850 on
+  `claude/ios-branch-parity-895dbc` passed both jobs. This branch is not pushed; push on Matthew's word.
 
 ## Decisions taken, and why
 - 2026-10-31, Matthew (popup): top row at max(safe top, 62), so a 390x844 phone (safe top 47) keeps the
