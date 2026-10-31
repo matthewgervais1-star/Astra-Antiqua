@@ -170,7 +170,8 @@ struct GlassSurface<S: InsettableShape>: ViewModifier {
         self.interactive = interactive
     }
 
-    func body(content: Content) -> some View {
+    // Self.Content: a bare Content names the app's corpus (Ink.swift).
+    func body(content: Self.Content) -> some View {
         if #available(iOS 26.0, *) {
             if systemGlass && !reduceTransparency {
                 let glass = Glass.regular.tint(GlassInk.fill)
@@ -566,7 +567,7 @@ extension View {
 private struct PlacementProbe: ViewModifier {
     let id: String
 
-    func body(content: Content) -> some View {
+    func body(content: Self.Content) -> some View {
         if ScreenshotMode.requested == nil {
             content
         } else {
