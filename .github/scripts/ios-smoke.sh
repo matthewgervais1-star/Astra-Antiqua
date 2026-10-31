@@ -63,20 +63,21 @@ with open(os.environ["LOG"], "w") as log:
     log.write("runtime " + runtime + "\n")
     log.write("devices: " + ", ".join(d["name"] for d in phones) + "\n")
     log.write("types: " + ", ".join(t["name"] for t in supported) + "\n")
+duo = next((d["udid"] for d in phones if "Duo" in d["name"]), "-")
 for pref in prefs:
     hit = [d for d in phones if d["name"] == pref]
     if hit:
-        print("use", hit[0]["udid"], runtime, pref.replace(" ", "_")); sys.exit()
+        print("use", hit[0]["udid"], runtime, pref.replace(" ", "_"), duo); sys.exit()
     typ = [t for t in supported if t["name"] == pref]
     if typ:
-        print("create", typ[0]["identifier"], runtime, pref.replace(" ", "_")); sys.exit()
+        print("create", typ[0]["identifier"], runtime, pref.replace(" ", "_"), duo); sys.exit()
 plain = [d for d in phones if not any(w in d["name"] for w in ("Duo", "Fold", "Flip"))] or phones
 if not plain:
     sys.exit("no iPhone on " + runtime)
-print("use", plain[0]["udid"], runtime, plain[0]["name"].replace(" ", "_"))
+print("use", plain[0]["udid"], runtime, plain[0]["name"].replace(" ", "_"), duo)
 ') || exit 1
 cat "$OUT/logs/phones.txt"
-read -r ACTION ID RUNTIME NAME <<< "$PICK"
+read -r ACTION ID RUNTIME NAME DUO <<< "$PICK"
 NAME="${NAME//_/ }"
 if [ "$ACTION" = "create" ]; then
   UDID=$(xcrun simctl create "$NAME" "$ID" "$RUNTIME" 2>"$OUT/logs/create.txt") \
@@ -182,6 +183,27 @@ shot 22-chrome-approx chrome-approx 10
 shot 23-chrome-pressed chrome-pressed 10
 shot 24-chrome-pushed chrome-pushed 10
 shot 25-chrome-pushed-pressed chrome-pushed-pressed 10
+
+# The iPhone Duo (Matthew, 2026-10-31): no canvas board, so pictures only, in
+# duo/ where check-placement.py does not look. Its failures are reported and do
+# not fail the run.
+if [ "$DUO" != "-" ] && [ "$DUO" != "$UDID" ]; then
+  MAIN_UDID="$UDID"; MAIN_OUT="$OUT"; MAIN_FAILURES=(${FAILURES[@]+"${FAILURES[@]}"})
+  UDID="$DUO"; OUT="$MAIN_OUT/duo"; FAILURES=()
+  mkdir -p "$OUT/logs"
+  xcrun simctl shutdown "$MAIN_UDID" || true
+  xcrun simctl boot "$UDID" || true
+  if xcrun simctl bootstatus "$UDID" -b && xcrun simctl install "$UDID" "$APP"; then
+    xcrun simctl status_bar "$UDID" override --time "9:41" --batteryState charged --batteryLevel 100 || true
+    shot 20-chrome chrome 10
+    shot 21-chrome-scrolled chrome-scrolled 10
+    shot 24-chrome-pushed chrome-pushed 10
+  else
+    FAILURES+=("boot or install")
+  fi
+  [ "${#FAILURES[@]}" -gt 0 ] && echo "WARNING: on the iPhone Duo: ${FAILURES[*]} (not counted)"
+  UDID="$MAIN_UDID"; OUT="$MAIN_OUT"; FAILURES=(${MAIN_FAILURES[@]+"${MAIN_FAILURES[@]}"})
+fi
 
 if [ "${#FAILURES[@]}" -gt 0 ]; then
   echo "Failed screens on iOS $MAJOR: ${FAILURES[*]}"
