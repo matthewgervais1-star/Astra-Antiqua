@@ -170,8 +170,6 @@ dependencies {
 
     // The Liquid Glass chrome's backdrop: lens on API 33+, blur on 31 and 32
     implementation(libs.backdrop)
-    // The frosted-blur alternative, under comparison with the lens (2026-10-31)
-    implementation(libs.haze)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

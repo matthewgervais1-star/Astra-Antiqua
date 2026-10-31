@@ -35,10 +35,10 @@ import com.astra.antiqua.ui.theme.LocalAccent
 val CapsuleShape = RoundedCornerShape(percent = 50)
 
 /**
- * The seam between the chrome and a glass library. [GlassScreen] marks its
+ * The seam between the chrome and the glass library. [GlassScreen] marks its
  * ground and content with [source]; each capsule draws itself with [surface].
- * One implementation per library (KyantGlass.kt, HazeGlass.kt), so the one
- * not kept comes out with its file, its [GlassEngine] entry and its dependency.
+ * KyantGlass.kt is the one implementation: Matthew kept Kyant over Haze on
+ * 2026-10-31 (docs/design/android-glass.md, "The library comparison").
  */
 interface GlassBackdrop {
     /** Records what scrolls beneath the chrome. */
@@ -48,23 +48,8 @@ interface GlassBackdrop {
     fun Modifier.surface(shape: Shape, tier: GlassTier): Modifier
 }
 
-/** The glass libraries under comparison (Matthew, 2026-10-31: "Compare both"). */
-enum class GlassEngine {
-    /** Kyant0/AndroidLiquidGlass: lens refraction on API 33+ (KyantGlass.kt). */
-    KYANT,
-
-    /** chrisbanes/haze: frosted blur, no lens (HazeGlass.kt). */
-    HAZE,
-}
-
-/** The library the chrome draws with. A screenshot test sets it to compare the two. */
-val LocalGlassEngine = staticCompositionLocalOf { GlassEngine.KYANT }
-
 @Composable
-fun rememberGlassBackdrop(engine: GlassEngine = LocalGlassEngine.current): GlassBackdrop = when (engine) {
-    GlassEngine.KYANT -> rememberKyantBackdrop()
-    GlassEngine.HAZE -> rememberHazeBackdrop()
-}
+fun rememberGlassBackdrop(): GlassBackdrop = rememberKyantBackdrop()
 
 /**
  * What the glass blurs: the screen's ground and content, recorded by
@@ -124,7 +109,7 @@ private fun DrawScope.drawGlassShadow(shape: Shape) {
 
 /**
  * Puts a view on glass, in the tier this phone draws ([LocalGlassTier]): on
- * API 31+ the library's blur (and, with Kyant on 33+, its lens), on 26 to 30
+ * API 31+ the library's blur (and on 33+ its lens), on 26 to 30
  * the tint fill. Every tier then draws the canvas's 1px inset highlight and
  * hairline, and the shadow.
  */

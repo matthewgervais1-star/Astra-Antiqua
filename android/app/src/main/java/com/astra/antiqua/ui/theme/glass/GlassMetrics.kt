@@ -1,7 +1,6 @@
 package com.astra.antiqua.ui.theme.glass
 
 import android.os.Build
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -187,9 +186,3 @@ val LocalGlassTier = staticCompositionLocalOf { GlassTier.forSdk(Build.VERSION.S
  * "P163.sky", a segment "P166.week", a switcher side "P167.next".
  */
 val LocalPressedPreview = staticCompositionLocalOf { emptySet<String>() }
-
-/**
- * True draws the chrome's labels transparent, so a contrast check can read the
- * glass beneath each label (GlassLibraryComparisonTest). Never set in the app.
- */
-internal val LocalChromeLabelsHidden = compositionLocalOf { false }

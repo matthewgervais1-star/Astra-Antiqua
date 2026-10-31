@@ -130,4 +130,6 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 - FACT (`GlassLibraryComparisonTest`): at the canvas numbers the two draw the same glass (at most 9
   levels of 255 apart). Worst dim label over solid bone: Kyant 3.49, Haze 3.47, tint .90 4.70; at rest
   and scrolled every variant holds 5.4 or better.
-- Pending: Matthew picks the library (popup); the loser comes out. Step 2 waits; push and PR on his word.
+- FACT (Matthew's popup, 2026-10-31): keep Kyant; keep the canvas fill .80 over bright areas. Haze removed
+  (its comparison test stays in commit 432bf29).
+- Pending: step 2, Sky Day, on Matthew's word; push and PR on his word.

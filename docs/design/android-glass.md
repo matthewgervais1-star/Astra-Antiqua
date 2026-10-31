@@ -161,3 +161,14 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
   push Kyant 2026-08-26, Haze 2026-10-30. Both need a Kotlin move for their current releases.
 - CANNOT CONFIRM: how either looks on a phone; Robolectric drew every frame.
 - FACT (local, 2026-10-31): `./gradlew compileDebugSources testDebugUnitTest` 249 tests, 0 failures.
+
+### Matthew's answers on the comparison (popup, 2026-10-31, after the four sheets were shown in the chat)
+
+- FACT: "Kyant AndroidLiquidGlass" is kept; "Keep the canvas .80" over a bright patch, so dim labels
+  on the blurred tiers fall to about 3.5:1 over solid bone (Kyant 3.49), as on the canvas. The tint
+  tier keeps .90 (his earlier answer).
+- FACT (git, next commit after 432bf29): Haze came out through the seam: `HazeGlass.kt`,
+  `GlassLibraryComparisonTest.kt`, the `GlassEngine` switch, the labels-hidden hook and the
+  `dev.chrisbanes.haze:haze` dependency are gone; `GlassBackdrop` stays with Kyant as its one
+  implementation. The sheets and `contrast.txt` in `docs/design/android-glass/compare/` stay as the
+  record; commit 432bf29 holds the test that made them.
