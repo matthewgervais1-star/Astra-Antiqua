@@ -1,7 +1,7 @@
 package com.astra.antiqua.domain
 
 import com.astra.antiqua.data.AstronomyEngine
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.searchMoonQuarter
 import io.github.cosinekitty.astronomy.nextMoonQuarter
@@ -24,7 +24,7 @@ enum class SkyEventKind { INGRESS, RETROGRADE, DIRECT, MOON_QUARTER }
 data class SkyEvent(
     val kind: SkyEventKind,
     val date: Date,
-    val body: ClassicalPlanet,
+    val body: Planet,
     val sign: ZodiacSign,
     /** The sign a body left, on an ingress. */
     val fromSign: ZodiacSign? = null,
@@ -42,31 +42,31 @@ object SkyEvents {
      * Bodies that visibly retrograde. The Sun and Moon never do as seen from
      * Earth, so asking about them would only find floating-point noise.
      */
-    private val RETROGRADE_BODIES = ClassicalPlanet.entries.filter {
-        it != ClassicalPlanet.SUN && it != ClassicalPlanet.MOON
+    private val RETROGRADE_BODIES = Planet.entries.filter {
+        it != Planet.SUN && it != Planet.MOON
     }
 
     /** How often a body must be sampled for a sign change not to slip past. */
-    private fun ingressStepDays(body: ClassicalPlanet): Int = when (body) {
-        ClassicalPlanet.MOON -> 1
-        ClassicalPlanet.SUN, ClassicalPlanet.MERCURY, ClassicalPlanet.VENUS -> 2
-        ClassicalPlanet.MARS -> 5
-        ClassicalPlanet.URANUS, ClassicalPlanet.NEPTUNE, ClassicalPlanet.PLUTO -> 20
+    private fun ingressStepDays(body: Planet): Int = when (body) {
+        Planet.MOON -> 1
+        Planet.SUN, Planet.MERCURY, Planet.VENUS -> 2
+        Planet.MARS -> 5
+        Planet.URANUS, Planet.NEPTUNE, Planet.PLUTO -> 20
         else -> 14
     }
 
-    private fun stationStepDays(body: ClassicalPlanet): Int = when (body) {
-        ClassicalPlanet.URANUS, ClassicalPlanet.NEPTUNE, ClassicalPlanet.PLUTO -> 5
-        ClassicalPlanet.SATURN, ClassicalPlanet.JUPITER -> 3
+    private fun stationStepDays(body: Planet): Int = when (body) {
+        Planet.URANUS, Planet.NEPTUNE, Planet.PLUTO -> 5
+        Planet.SATURN, Planet.JUPITER -> 3
         else -> 1
     }
 
     private fun julianDayOf(date: Date): Double = date.time / 86_400_000.0 + 2440587.5
 
-    private fun longitudeAt(engine: AstronomyEngine, body: ClassicalPlanet, date: Date): Double =
+    private fun longitudeAt(engine: AstronomyEngine, body: Planet, date: Date): Double =
         engine.getPlanetPosition(julianDayOf(date), TransitSpans.bodyOf(body)).longitude
 
-    private fun velocityAt(engine: AstronomyEngine, body: ClassicalPlanet, date: Date): Double =
+    private fun velocityAt(engine: AstronomyEngine, body: Planet, date: Date): Double =
         engine.getPlanetPosition(julianDayOf(date), TransitSpans.bodyOf(body)).velocity
 
     private fun signIndexOf(longitude: Double): Int =
@@ -79,7 +79,7 @@ object SkyEvents {
         engine: AstronomyEngine,
         start: Date,
         days: Int,
-        bodies: List<ClassicalPlanet>,
+        bodies: List<Planet>,
     ): List<SkyEvent> {
         val out = mutableListOf<SkyEvent>()
         for (body in bodies) {
@@ -153,8 +153,8 @@ object SkyEvents {
             out += SkyEvent(
                 kind = SkyEventKind.MOON_QUARTER,
                 date = date,
-                body = ClassicalPlanet.MOON,
-                sign = signOf(longitudeAt(engine, ClassicalPlanet.MOON, date)),
+                body = Planet.MOON,
+                sign = signOf(longitudeAt(engine, Planet.MOON, date)),
                 quarter = QUARTER_NAMES.getOrElse(quarter.quarter) { "New Moon" },
             )
             quarter = nextMoonQuarter(quarter)
@@ -177,20 +177,20 @@ object SkyEvents {
      * signs are not equal in time: the Sun takes longer through some of them.
      */
     fun currentSeason(engine: AstronomyEngine, date: Date): SeasonWindow {
-        val sign = signOf(longitudeAt(engine, ClassicalPlanet.SUN, date))
+        val sign = signOf(longitudeAt(engine, Planet.SUN, date))
         var start = date
-        while (signOf(longitudeAt(engine, ClassicalPlanet.SUN, Date(start.time - MS_PER_DAY))) == sign) {
+        while (signOf(longitudeAt(engine, Planet.SUN, Date(start.time - MS_PER_DAY))) == sign) {
             start = Date(start.time - MS_PER_DAY)
             if (date.time - start.time > 40L * MS_PER_DAY) break
         }
-        start = bisectIngress(engine, ClassicalPlanet.SUN, Date(start.time - MS_PER_DAY), start)
+        start = bisectIngress(engine, Planet.SUN, Date(start.time - MS_PER_DAY), start)
 
         var end = date
-        while (signOf(longitudeAt(engine, ClassicalPlanet.SUN, Date(end.time + MS_PER_DAY))) == sign) {
+        while (signOf(longitudeAt(engine, Planet.SUN, Date(end.time + MS_PER_DAY))) == sign) {
             end = Date(end.time + MS_PER_DAY)
             if (end.time - date.time > 40L * MS_PER_DAY) break
         }
-        end = bisectIngress(engine, ClassicalPlanet.SUN, end, Date(end.time + MS_PER_DAY))
+        end = bisectIngress(engine, Planet.SUN, end, Date(end.time + MS_PER_DAY))
 
         val total = (localDayIndex(start, end) + 1).coerceAtLeast(1)
         val day = (localDayIndex(start, date) + 1).coerceIn(1, total)
@@ -218,7 +218,7 @@ object SkyEvents {
 
     private fun bisectIngress(
         engine: AstronomyEngine,
-        body: ClassicalPlanet,
+        body: Planet,
         lo: Date,
         hi: Date,
     ): Date {
@@ -236,7 +236,7 @@ object SkyEvents {
 
     private fun bisectStation(
         engine: AstronomyEngine,
-        body: ClassicalPlanet,
+        body: Planet,
         lo: Date,
         hi: Date,
     ): Date {

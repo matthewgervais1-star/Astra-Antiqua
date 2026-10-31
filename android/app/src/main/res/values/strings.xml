@@ -1,3 +1,100 @@
 <resources>
     <string name="app_name">Astra Antiqua</string>
+
+    <!-- THE RECORD: sign in or a first entry. Wording from web's /signin. -->
+    <string name="record_context">The record · sync is optional</string>
+    <string name="record_kicker">THE RECORD</string>
+    <string name="record_headline">AN ACCOUNT ADDS SYNC, NOTHING ELSE</string>
+    <string name="record_sub">Your voice, charts and feedback already live on this device. Sign in only to carry them to another.</string>
+    <string name="record_tab_sign_in">SIGN IN</string>
+    <string name="record_tab_first_entry">FIRST ENTRY</string>
+    <string name="record_email">EMAIL</string>
+    <string name="record_password">PASSWORD</string>
+    <string name="record_confirm">CONFIRM</string>
+    <string name="record_display_name">DISPLAY NAME (OPTIONAL)</string>
+    <string name="record_open">OPEN THE RECORD</string>
+    <string name="record_opening">OPENING…</string>
+    <string name="record_enter">ENTER THE RECORD</string>
+    <string name="record_entering">ENTERING…</string>
+    <string name="record_microcopy">EMAIL AND A PASSWORD, KEPT HASHED · NOTHING ELSE STORED</string>
+    <string name="record_continue_without">CONTINUE WITHOUT AN ACCOUNT</string>
+    <string name="record_to_roll">THE ROLL IS OPEN →</string>
+
+    <!-- ACCOUNT. Wording from web's /account. -->
+    <string name="account_context">The record</string>
+    <string name="account_kicker">THE RECORD · %1$s</string>
+    <string name="account_reading">READING THE RECORD…</string>
+    <string name="account_sync_on">SYNC ON</string>
+    <string name="account_sync_off">SYNC OFF</string>
+    <string name="account_culture">CULTURE</string>
+    <string name="account_change">CHANGE →</string>
+    <string name="account_your_chart">YOUR CHART</string>
+    <string name="account_synced">SYNCED</string>
+    <string name="account_not_cast">NOT CAST</string>
+    <string name="account_devices">DEVICES</string>
+    <string name="account_this_one">THIS ONE</string>
+    <string name="account_sign_out">SIGN OUT</string>
+    <string name="account_signing_out">SIGNING OUT…</string>
+    <string name="account_strike">STRIKE THE RECORD</string>
+    <string name="account_strike_note">STRIKING DELETES THE SERVER COPY; THIS DEVICE KEEPS ITS OWN.</string>
+    <string name="account_strike_confirm">TYPE %1$s TO CONFIRM</string>
+    <string name="account_strike_permanently">STRIKE THE RECORD PERMANENTLY</string>
+    <string name="account_striking">STRIKING…</string>
+    <string name="account_export">EXPORT THE RECORD</string>
+    <string name="account_export_action">SHARE %1$s\'S DATA →</string>
+    <string name="account_export_preparing">PREPARING…</string>
+    <string name="account_export_chooser">Export the record</string>
+    <string name="account_email_unknown">UNKNOWN</string>
+
+    <!-- THE ROLL. Wording from web's /waitlist and WaitListForm. -->
+    <string name="roll_context">SYNC ACCOUNTS · LIMITED ADMISSION</string>
+    <string name="roll_headline">THE ROLL IS OPEN</string>
+    <string name="roll_sub">Names are called in order, a cohort at a time. Everything else already works without one.</string>
+    <string name="roll_email_hint">scribe@example.com</string>
+    <string name="roll_enter">ENTER</string>
+    <string name="roll_entering">ENTERING</string>
+    <string name="roll_position">YOU ARE %1$s ON THE ROLL · WE EMAIL ONCE, WHEN CALLED</string>
+    <string name="roll_footer">WE EMAIL ONCE, WHEN CALLED</string>
+    <string name="roll_failed">The roll did not open. Try again.</string>
+
+    <!-- What an account call reports. The server's own sentence is shown as received. -->
+    <string name="account_error_unreachable">The record cannot be reached. Check the connection and try again.</string>
+    <string name="account_error_unreadable">The record answered in a form this device cannot read. Try again later.</string>
+    <string name="record_refused">THE RECORD DOES NOT ANSWER. CHECK THE EMAIL OR THE PASSWORD.</string>
+    <string name="record_missing">Enter an email and a password.</string>
+    <string name="account_error_passwords_disagree">The two passwords do not agree.</string>
+    <string name="account_error_export_not_written">This device could not write the export. Try again.</string>
+
+    <!-- The device could not keep the session or the server's chart, in each culture's register. -->
+    <string name="account_error_device_write_egypt">The temple rejected your papyrus. Try again.</string>
+    <string name="account_error_device_write_greece">This device could not keep the key to your record. Try again.</string>
+    <string name="account_error_device_write_canaan">The temple could not keep your clay tablet. Try again.</string>
+    <string name="account_error_device_write_carthage">This device could not keep the merchant\'s seal on your record. Try again.</string>
+    <string name="account_error_device_write_rome">This device could not keep the signet on your record. Try again.</string>
+
+    <!-- LICENCES: third-party material the app ships. Copyright lines are quoted from each font's name table (nameID 0). -->
+    <string name="account_licences">LICENCES</string>
+    <string name="account_licences_open">VIEW →</string>
+    <string name="licences_context">Licences</string>
+    <string name="licences_kicker">OPEN-SOURCE LICENCES</string>
+    <string name="licences_headline">WHAT THIS APP CARRIES</string>
+    <string name="licences_fonts">FONTS</string>
+    <string name="licences_ofl_name">SIL Open Font License 1.1</string>
+    <string name="licences_ofl_heading">SIL OPEN FONT LICENSE 1.1</string>
+    <string name="licences_data">DATA</string>
+    <string name="licences_libraries">LIBRARIES</string>
+    <string name="licences_tz_lookup">tz-lookup, CC0 1.0 Universal. The bundled birthplace timezone lookup derives from it.</string>
+    <string name="licences_astronomy">Astronomy Engine (cosinekitty/astronomy), MIT License. The ephemeris behind every position.</string>
+    <string name="licences_apache">OkHttp and the AndroidX libraries: Apache License 2.0.</string>
+    <string name="licences_font_cinzel">Copyright 2020 The Cinzel Project Authors (https://github.com/NDISCOVER/Cinzel)</string>
+    <string name="licences_font_spectral">Copyright 2017 The Spectral Project Authors (https://github.com/productiontype/Spectral)</string>
+    <string name="licences_font_spectral_sc">Copyright 2017 The Spectral Project Authors (https://github.com/productiontype/Spectral)</string>
+    <string name="licences_font_ibm_plex_mono">Copyright 2017 IBM Corp. All rights reserved.</string>
+    <string name="licences_font_noto_sans_symbols">Copyright 2022 The Noto Project Authors (https://github.com/notofonts/symbols)</string>
+    <string name="licences_font_noto_sans_egyptian_hieroglyphs">Copyright 2022 The Noto Project Authors (https://github.com/notofonts/egyptian-hieroglyphs)</string>
+    <string name="licences_font_noto_sans_ugaritic">Copyright 2022 The Noto Project Authors (https://github.com/notofonts/ugaritic)</string>
+    <string name="licences_font_noto_sans_phoenician">Copyright 2022 The Noto Project Authors (https://github.com/notofonts/phoenician)</string>
+    <string name="licences_font_gfs_didot">Copyright (c) Takis Katsoulidis and George D. Matthiopoulos, 2001. All rights reserved.</string>
+    <string name="figure_failed">This figure could not be drawn. Try again.</string>
+    <string name="figure_try_again">Try again</string>
 </resources>

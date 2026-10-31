@@ -140,10 +140,11 @@ These are binary and could not be pulled through the browser bridge. They need
 either `/design-login` run once in an interactive session, so `DesignSync` can
 read the project directly, or a download.
 
-- `assets/icon-shewolf.png`, `assets/icon-augustus.png` (Rome tier 2, chosen)
-- `assets/icon-baal-stele.png`, `assets/icon-baal.png` (Canaan)
-- `assets/canaan-baal-stele.png`, `assets/rome-augustus.png`, `assets/rome-shewolf.png`
-- `uploads/BAAL.jpg`, `uploads/Statue-Augustus.jpg`, `uploads/rqgvol5zn55g1.jpeg`
+Updated 2026-09-29. Every raster this section listed now sits in `assets/`,
+except one:
+
+- `uploads/rqgvol5zn55g1.jpeg`, which is over the sync size cap. It needs a
+  download from the design project.
 
 ## Greece at tier 1: the omega shipped, not the tripod
 

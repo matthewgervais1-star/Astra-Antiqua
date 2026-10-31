@@ -10,13 +10,18 @@ import androidx.lifecycle.viewModelScope
 import com.astra.antiqua.data.CityEntry
 import com.astra.antiqua.data.Cities
 import com.astra.antiqua.data.ProfileRepository
+import com.astra.antiqua.data.account.AccountRepository
+import com.astra.antiqua.data.account.AccountResult
 import com.astra.antiqua.data.local.room.UserProfile
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -39,8 +44,17 @@ data class Place(
     val offline: Boolean,
 )
 
+/**
+ * The birth form's ViewModel. When [account] is given and a session is
+ * stored, every save is mirrored to the server with a PUT, after the device
+ * save has finished and been announced. The PUT runs in [mirrorScope] (the
+ * app's scope in the running app, so leaving the form does not cancel it).
+ * A failed PUT is logged by its kind and ignored, as web ignores it.
+ */
 class LocationSearchViewModel(
     private val profiles: ProfileRepository,
+    private val account: AccountRepository? = null,
+    private val mirrorScope: CoroutineScope? = null,
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
@@ -126,34 +140,62 @@ class LocationSearchViewModel(
      * Saves the one birth record this app keeps.
      *
      * [timezoneId] is the zone [birthDateUtc] was resolved against (see
-     * `resolveBirthDateUtcMillis` and `estimateZoneOffsetForLongitude`): an
-     * explicit caller-supplied input, not read from the device here, so the
-     * stored profile stays consistent with the zone actually used to compute
-     * the birth instant. It is typically a fixed UTC offset derived from the
-     * birth location's longitude rather than a real IANA zone id.
+     * `resolveBirthDateUtcMillis` and `birthZoneFor`): an explicit
+     * caller-supplied input, not read from the device here, so the stored
+     * profile stays consistent with the zone used to compute the birth
+     * instant. It is the birth place's IANA zone id, or a fixed offset when
+     * the lookup found none. [birthDate] and [birthTime] are the wall
+     * clock as typed (`YYYY-MM-DD`, `HH:MM`), kept beside the instant.
      */
     fun saveProfile(
         name: String,
         birthDateUtc: Long,
         timezoneId: String,
         place: Place,
+        birthDate: String? = null,
+        birthTime: String? = null,
         onSaved: () -> Unit,
     ) {
         viewModelScope.launch {
+            val profile = UserProfile(
+                name = name,
+                birthDateUtc = birthDateUtc,
+                latitude = place.latitude,
+                longitude = place.longitude,
+                cityName = place.cityName,
+                timezoneId = timezoneId,
+                birthDate = birthDate,
+                birthTime = birthTime,
+            )
             try {
-                profiles.save(
-                    UserProfile(
-                        name = name,
-                        birthDateUtc = birthDateUtc,
-                        latitude = place.latitude,
-                        longitude = place.longitude,
-                        cityName = place.cityName,
-                        timezoneId = timezoneId,
-                    )
-                )
-                onSaved()
+                profiles.save(profile)
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Log.e(TAG, "Error saving profile", e)
+                return@launch
+            }
+            onSaved()
+            mirror(profile)
+        }
+    }
+
+    private fun mirror(profile: UserProfile) {
+        val account = account ?: return
+        (mirrorScope ?: viewModelScope).launch {
+            val signedIn = try {
+                account.isSignedIn.first()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                false
+            }
+            if (!signedIn) return@launch
+            val result = account.putChart(profile)
+            if (result is AccountResult.Failed) {
+                // The kind only: the error never carries the session, and
+                // the server's sentence is not needed in a log.
+                Log.w(TAG, "The chart did not reach the account: ${result.error::class.simpleName}")
             }
         }
     }

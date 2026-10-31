@@ -86,6 +86,7 @@ function SeasonContent({
   return (
     <div className="mx-auto max-w-[640px]">
       <NaveHead
+        culture={culture}
         kicker={`THE SEASON · ${enDashRange(formatDayMonth(window.start), formatDayMonth(window.end))}`}
         sub={
           <div className="mx-auto flex max-w-[560px] flex-col items-center gap-2">
@@ -147,7 +148,7 @@ function SeasonContent({
         </div>
       ) : null}
 
-      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-display text-[11.5px] tracking-[0.2em]">
+      <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-mono text-data-xs tracking-microcopy">
         <Link href="/" className="text-bone/65 hover:text-bone">
           ← THE DAY
         </Link>

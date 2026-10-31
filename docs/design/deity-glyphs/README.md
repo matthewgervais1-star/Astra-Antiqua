@@ -82,10 +82,10 @@ it curves it becomes Baal Hammon the elder's sickle.
 composed while its fifty table rows said 28 and 21. The tables are the record
 and the summary was miscounted; `../deity-glyphs.md` now agrees with itself.
 
-## Not done
+## Wired in
 
-These glyphs are not wired into either surface. `PLANET_SYMBOLS` in
-`web/src/data/cultures.ts` still maps the ten bodies to the Unicode classical
-signs, which are Byzantine abstractions of Greek and Roman attributes, so the
-running app still prints ♀ beside **Isis** and ☿ beside **Kothar**. Replacing
-that is the reason this set exists.
+Both surfaces render these glyphs. Web reads them through `DeityGlyph`
+(`9759fb6`), and Android through ImageVectors that
+`web/scripts/gen-android-glyphs.mjs` generates (`bb3d43c`). The running app
+prints Isis's own mark beside her name. The commits and screenshots are in
+[`../IMPLEMENTATION.md`](../IMPLEMENTATION.md).

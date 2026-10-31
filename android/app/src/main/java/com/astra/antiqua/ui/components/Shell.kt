@@ -6,6 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +24,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.domain.ScriptReveal
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.label
 import com.astra.antiqua.ui.nav.Horizon
@@ -31,6 +36,7 @@ import com.astra.antiqua.ui.theme.FaintInk
 import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 
 /**
  * The chrome every reading screen sits inside, the Compose counterpart of
@@ -43,7 +49,10 @@ import com.astra.antiqua.ui.theme.Spacing
  * makes a second screen worth building.
  */
 
-/** The top bar: the drawn lockup, with the sections either side of it. */
+/**
+ * The top bar: the drawn lockup, the sections under it, and ACCOUNT at the
+ * lockup's right end, where web's lintel keeps it.
+ */
 @Composable
 fun Lintel(
     active: Section?,
@@ -55,10 +64,26 @@ fun Lintel(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = Spacing.Gutter, vertical = Spacing.Snug),
+                .padding(horizontal = Spacing.Gutter),
             contentAlignment = Alignment.Center,
         ) {
-            Wordmark(capHeight = 11.dp)
+            Box(Modifier.padding(vertical = Spacing.Snug)) { Wordmark(capHeight = 11.dp) }
+            val account = Section.ACCOUNT
+            // A 48dp touch target around the label; the label is drawn as
+            // the sections are.
+            Text(
+                text = account.label,
+                style = MaterialTheme.typography.labelSmall,
+                color = if (account == active) accent else Dim,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .minimumInteractiveComponentSize()
+                    .clickable(
+                        onClickLabel = account.label,
+                        role = Role.Tab,
+                        onClick = { onNavigate(account.route) },
+                    ),
+            )
         }
         Row(
             modifier = Modifier
@@ -67,7 +92,7 @@ fun Lintel(
                 .padding(bottom = Spacing.Snug),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            Section.entries.forEach { section ->
+            Section.entries.filter { it != Section.ACCOUNT }.forEach { section ->
                 val isActive = section == active
                 Text(
                     text = section.label,
@@ -242,14 +267,25 @@ fun MethodFooter(onOpenMethod: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
-/** A centred page head: kicker, accent rule, headline, closing rule. */
+/**
+ * A centred page head: kicker, accent rule, headline, closing rule.
+ *
+ * With [culture], the culture's own name stands large above the kicker, in
+ * its script first, resolving to Latin after the intro hold (web's NaveHead
+ * culture, docs/superpowers/specs/2026-10-20-script-reveal.md). With
+ * [headlineContent], that composable takes the headline's place, for a page
+ * whose title is itself a name.
+ */
 @Composable
 fun NaveHead(
-    kicker: String,
+    kicker: String = "",
     headline: String,
     modifier: Modifier = Modifier,
     emblem: (@Composable () -> Unit)? = null,
     sub: String? = null,
+    culture: AncientCulture? = null,
+    headlineContent: (@Composable () -> Unit)? = null,
+    kickerContent: (@Composable () -> Unit)? = null,
 ) {
     Column(
         modifier = modifier.fillMaxWidth().padding(vertical = Spacing.Step),
@@ -259,25 +295,37 @@ fun NaveHead(
             emblem()
             Box(Modifier.height(Spacing.Step))
         }
-        Text(
-            text = kicker.uppercase(),
-            style = MaterialTheme.typography.labelSmall,
-            color = Dim,
-            textAlign = TextAlign.Center,
-            // A long institution line has to keep the screen's gutter, or it
-            // runs to both edges and stops looking set.
-            modifier = Modifier.padding(horizontal = Spacing.Gutter),
-        )
+        if (culture != null) {
+            CultureNameHead(culture)
+            Box(Modifier.height(Spacing.Snug))
+        }
+        if (kickerContent != null) {
+            kickerContent()
+        } else {
+            Text(
+                text = kicker.uppercase(),
+                style = MaterialTheme.typography.labelSmall,
+                color = Dim,
+                textAlign = TextAlign.Center,
+                // A long institution line has to keep the screen's gutter, or it
+                // runs to both edges and stops looking set.
+                modifier = Modifier.padding(horizontal = Spacing.Gutter),
+            )
+        }
         Box(Modifier.height(Spacing.Step))
         AccentRule()
         Box(Modifier.height(Spacing.Step))
-        Text(
-            text = headline.uppercase(),
-            style = MaterialTheme.typography.displaySmall,
-            color = Bone,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = Spacing.Gutter),
-        )
+        if (headlineContent != null) {
+            headlineContent()
+        } else {
+            Text(
+                text = displayCase(headline.uppercase()),
+                style = MaterialTheme.typography.displaySmall,
+                color = Bone,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = Spacing.Gutter),
+            )
+        }
         if (sub != null) {
             Box(Modifier.height(Spacing.Snug))
             Text(
@@ -291,4 +339,45 @@ fun NaveHead(
         Box(Modifier.height(Spacing.Step))
         AccentRule()
     }
+}
+
+/**
+ * A kicker line that ends in (or holds) the culture's institution as a
+ * [ScriptName]: [before] and [after] are Latin text around it, set in the
+ * kicker's own style. Web's `<ScriptName heading="institution" />` in a kicker.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun InstitutionKicker(culture: AncientCulture, before: String? = null, after: String? = null) {
+    val style = MaterialTheme.typography.labelSmall
+    FlowRow(
+        horizontalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.Gutter),
+    ) {
+        if (before != null) Text(text = "${before.uppercase()} · ", style = style, color = Dim)
+        ScriptName(culture = culture, key = ScriptNameKey.Institution, style = style, color = Dim, upper = true)
+        if (after != null) Text(text = " · ${after.uppercase()}", style = style, color = Dim)
+    }
+}
+
+/**
+ * The culture's name large at the head of a culture screen, in the accent:
+ * script on arrival, Latin after [ScriptReveal.INTRO_HOLD_MILLIS], then the
+ * band rule. Canaan has no attested script for its own name, so it shows Latin.
+ */
+@Composable
+fun CultureNameHead(culture: AncientCulture, modifier: Modifier = Modifier) {
+    ScriptName(
+        culture = culture,
+        key = ScriptNameKey.CultureName,
+        style = MaterialTheme.typography.displayMedium,
+        color = LocalAccent.current,
+        intro = true,
+        upper = true,
+        displayFace = true,
+        textAlign = TextAlign.Center,
+        contentAlignment = Alignment.Center,
+        modifier = modifier.padding(horizontal = Spacing.Gutter),
+    )
 }

@@ -1,7 +1,7 @@
 package com.astra.antiqua.ui.nav
 
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 
 /**
  * Every place this app can be, and the one place their names are written.
@@ -17,16 +17,34 @@ object Route {
     const val YEAR = "year"
     const val TRANSITS = "transits"
     const val TRANSIT_DETAIL = "transits/{id}"
+    /** One day's figure, web's /day/[date]/figure/[id]: date is YYYY-MM-DD (UTC). */
+    const val FIGURE = "day/{date}/figure/{id}"
     const val VOICES = "voices"
     const val VOICE = "voices/{culture}"
     const val MATRIX = "matrix"
     const val PLACEMENTS = "placements"
     const val PLACEMENT = "placements/{body}"
-    /** Casting a chart again, the counterpart of web's /reading. */
-    const val READING = "reading"
+    /**
+     * Casting a chart again, the counterpart of web's birth form. Its route
+     * must differ from [DAY]'s: when it shared "reading", the NavHost kept
+     * the form under both names and TODAY opened the birth form.
+     */
+    const val READING = "cast"
     const val FORECAST = "forecast"
     const val SYNASTRY = "synastry"
     const val METHOD = "method"
+
+    /** The open-source licences the app carries, reached from the account and the method page. */
+    const val LICENCES = "licences"
+
+    /** The account, web's /account. Signed out, it sends the reader to [SIGN_IN]. */
+    const val ACCOUNT = "account"
+
+    /** THE RECORD, web's /signin: sign in or a first entry. */
+    const val SIGN_IN = "signin"
+
+    /** THE ROLL, web's /waitlist. */
+    const val WAIT_LIST = "waitlist"
 
     /**
      * The Learn sections. Their web hrefs are "/learn" and "/learn/<slug>";
@@ -36,9 +54,10 @@ object Route {
     const val LEARN = "learn/{slug}"
 
     fun transitDetail(id: String) = "transits/$id"
+    fun figure(date: String, id: String) = "day/$date/figure/$id"
     fun voice(culture: AncientCulture) = "voices/${culture.name.lowercase()}"
 
-    fun placement(body: ClassicalPlanet) = "placements/${body.name.lowercase()}"
+    fun placement(body: Planet) = "placements/${body.name.lowercase()}"
 
     fun learn(href: String): String {
         val slug = href.removePrefix("/learn").removePrefix("/")
@@ -75,4 +94,10 @@ enum class Section(val label: String, val route: String) {
     LEARN("LEARN", "learn/${Route.LEARN_INDEX}"),
     MATRIX("MATRIX", Route.MATRIX),
     CHART("CHART", Route.PLACEMENTS),
+
+    /**
+     * Web's lintel sets ACCOUNT apart, at the right end. The lintel here
+     * does the same: it sits beside the wordmark, not in the row of sections.
+     */
+    ACCOUNT("ACCOUNT", Route.ACCOUNT),
 }

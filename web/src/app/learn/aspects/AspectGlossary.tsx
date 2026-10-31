@@ -50,7 +50,7 @@ export function AspectGlossary() {
               <div className="mt-1">{rule.angle}°</div>
             </div>
             <div>
-              <div className="font-display text-[14px] tracking-[0.1em] text-bone">
+              <div className="font-display text-display-xs tracking-[0.1em] text-bone">
                 {rule.kind.toUpperCase()}
               </div>
               <p className="mt-2 font-body text-prose-s leading-prose text-prose">

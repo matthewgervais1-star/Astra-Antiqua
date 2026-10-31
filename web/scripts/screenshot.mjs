@@ -13,6 +13,9 @@
  *   --clip X,Y,W,H         capture one rectangle, in CSS px
  *   --seed-chart           first seed localStorage on the app origin with the onboarding
  *                          flag and one saved chart, so /charts and /transits render
+ *   --seed-onboarded       seed the onboarding flag alone, for a reader with no chart
+ *   --report-scroll        after load, print document scrollWidth against the viewport
+ *                          width, to check a narrow capture for horizontal scroll
  *   --chrome PATH          Chromium binary (default: Google Chrome, then Edge)
  *
  * The dev server must already be running (npm run dev). Exits 1 on any failure.
@@ -28,18 +31,25 @@ const CHROME_CANDIDATES = [
   "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
 ];
 
+// One chart under the key savedCharts.ts reads (astra-antiqua.chart.v3), plus
+// the flag onboarding.ts sets when /welcome mounts, so AuthGate lets a seeded
+// capture through to the route it asked for.
 const SEED = `
   localStorage.setItem("astra-antiqua.onboarded", "1");
-  localStorage.setItem("astra-antiqua.saved-charts.v2", JSON.stringify([{
-    id: "seed-verify", name: "Verification", relationship: "self",
+  localStorage.setItem("astra-antiqua.chart.v3", JSON.stringify({
+    id: "seed-verify", name: "Verification",
     date: "1990-06-15", time: "14:30", cityLabel: "Rome, Italy",
-    latitude: 41.9028, longitude: 12.4964, primary: true,
+    latitude: 41.9028, longitude: 12.4964,
     createdAt: "2026-09-09T00:00:00.000Z",
-  }]));
+  }));
   "seeded"`;
 
+const SEED_ONBOARDED = `localStorage.setItem("astra-antiqua.onboarded", "1"); "seeded"`;
+
+const SCROLL_PROBE = `({ scrollWidth: document.documentElement.scrollWidth, innerWidth: window.innerWidth })`;
+
 function parseArgs(argv) {
-  const opts = { width: 1440, height: 900, scale: 2, wait: 2500, full: false, clip: null, seed: false, chrome: null };
+  const opts = { width: 1440, height: 900, scale: 2, wait: 2500, full: false, clip: null, seed: false, seedOnboarded: false, reportScroll: false, chrome: null };
   const positional = [];
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
@@ -49,6 +59,8 @@ function parseArgs(argv) {
     else if (a === "--wait") opts.wait = Number(argv[++i]);
     else if (a === "--full") opts.full = true;
     else if (a === "--seed-chart") opts.seed = true;
+    else if (a === "--seed-onboarded") opts.seedOnboarded = true;
+    else if (a === "--report-scroll") opts.reportScroll = true;
     else if (a === "--chrome") opts.chrome = argv[++i];
     else if (a === "--clip") {
       const [x, y, width, height] = argv[++i].split(",").map(Number);
@@ -56,7 +68,7 @@ function parseArgs(argv) {
     } else positional.push(a);
   }
   if (positional.length !== 2) {
-    console.error("usage: node scripts/screenshot.mjs <url> <out.png> [--width N] [--height N] [--scale N] [--wait MS] [--full] [--clip X,Y,W,H] [--seed-chart]");
+    console.error("usage: node scripts/screenshot.mjs <url> <out.png> [--width N] [--height N] [--scale N] [--wait MS] [--full] [--clip X,Y,W,H] [--seed-chart] [--seed-onboarded] [--report-scroll]");
     process.exit(1);
   }
   return { url: positional[0], out: positional[1], ...opts };
@@ -139,6 +151,7 @@ const proc = spawn(
     `--user-data-dir=${profile}`,
     `--window-size=${args.width},${args.height}`,
     "--hide-scrollbars",
+    "--disable-lcd-text",
     "--no-first-run",
     "--no-default-browser-check",
     "--disable-gpu",
@@ -167,14 +180,22 @@ try {
     mobile: false,
   });
 
-  if (args.seed) {
+  if (args.seed || args.seedOnboarded) {
     await navigate(cdp, new URL("/", args.url).toString());
-    const seeded = await cdp.send("Runtime.evaluate", { expression: SEED, returnByValue: true });
+    const expression = args.seed ? SEED : SEED_ONBOARDED;
+    const seeded = await cdp.send("Runtime.evaluate", { expression, returnByValue: true });
     if (seeded.result?.value !== "seeded") throw new Error("screenshot: seeding localStorage failed");
   }
 
   await navigate(cdp, args.url);
   await sleep(args.wait);
+
+  if (args.reportScroll) {
+    const probe = await cdp.send("Runtime.evaluate", { expression: SCROLL_PROBE, returnByValue: true });
+    const { scrollWidth, innerWidth } = probe.result?.value ?? {};
+    const verdict = scrollWidth > innerWidth ? "HORIZONTAL SCROLL" : "no horizontal scroll";
+    console.log(`screenshot: scrollWidth ${scrollWidth} innerWidth ${innerWidth} (${verdict})`);
+  }
 
   const shot = await cdp.send("Page.captureScreenshot", {
     format: "png",

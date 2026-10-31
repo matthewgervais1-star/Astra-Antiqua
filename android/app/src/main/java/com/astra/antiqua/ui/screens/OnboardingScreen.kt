@@ -50,7 +50,8 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.astra.antiqua.domain.estimateZoneOffsetForLongitude
+import com.astra.antiqua.domain.birthZoneFor
+import com.astra.antiqua.domain.typedWallClock
 import com.astra.antiqua.domain.resolveBirthDateUtcMillis
 import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.components.PrimaryAction
@@ -59,6 +60,7 @@ import com.astra.antiqua.ui.theme.Dim
 import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.LocationSearchViewModel
 import com.astra.antiqua.viewmodel.Place
@@ -192,7 +194,7 @@ fun OnboardingScreen(
         }
 
         Text(
-            text = "Enter Your Birth Data",
+            text = displayCase("Enter Your Birth Data"),
             style = MaterialTheme.typography.displaySmall,
             color = Bone,
             modifier = Modifier.padding(bottom = Spacing.Section)
@@ -363,11 +365,8 @@ fun OnboardingScreen(
                 }
             }
             Text(
-                text = "The birth time above is read using an estimated time zone for " +
-                    "this city (based on its longitude), not your device's time zone. " +
-                    "This estimate does not account for daylight saving time or historical " +
-                    "zone changes, so charts near a time-zone boundary or on a daylight-saving " +
-                    "transition date may be off by up to an hour.",
+                text = "The birth time above is read in this city's own time zone, with " +
+                    "its daylight-saving history, not your device's time zone.",
                 style = MaterialTheme.typography.bodySmall,
                 color = Dim,
                 modifier = Modifier.padding(top = Spacing.Snug)
@@ -384,30 +383,37 @@ fun OnboardingScreen(
             onClick = {
                 val addr = selectedPlace ?: return@PrimaryAction
 
-                // We have no birth-location timezone lookup (see
-                // estimateZoneOffsetForLongitude's doc), so the birth
-                // location's longitude stands in for its real IANA zone --
-                // NOT the device's current zone, which would depend on
-                // wherever the phone entering this data happens to be
-                // configured rather than on the birth itself.
+                // The birth place's own IANA zone (birthZoneFor, the
+                // lookup web uses), NOT the device's current zone, which
+                // would depend on wherever the phone entering this data
+                // happens to be configured rather than on the birth itself.
                 // selectedDateMillis is UTC midnight of the picked calendar
                 // date (Material3's DatePickerState contract), not a real
                 // instant, so it must be combined with the picked
                 // hour/minute THROUGH a zone conversion, not by adding
                 // clock-offset millis onto it.
-                val assumedBirthZone = estimateZoneOffsetForLongitude(addr.longitude)
+                val assumedBirthZone = birthZoneFor(addr.latitude, addr.longitude)
                 val birthDateUtc = resolveBirthDateUtcMillis(
                     utcMidnightMillis = selectedDateMillis ?: 0L,
                     hour = selectedHour,
                     minute = selectedMinute,
                     zoneId = assumedBirthZone
                 )
+                // The wall clock as typed, kept beside the instant: inside
+                // a daylight-saving gap the instant cannot give it back.
+                val (typedDate, typedTime) = typedWallClock(
+                    utcMidnightMillis = selectedDateMillis ?: 0L,
+                    hour = selectedHour,
+                    minute = selectedMinute,
+                )
                 viewModel.saveProfile(
                     name = name,
                     birthDateUtc = birthDateUtc,
                     timezoneId = assumedBirthZone.id,
                     place = addr,
-                    onSaved = onLocationSaved
+                    onSaved = onLocationSaved,
+                    birthDate = typedDate,
+                    birthTime = typedTime,
                 )
             },
         )

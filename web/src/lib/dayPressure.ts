@@ -24,8 +24,9 @@ export interface PressureGroup {
   sub: string;
   level: PressureLevel;
   levelLabel: string;
-  /** The tightest hit's orb, for the OrbBar; null when the group is
-   *  genuinely empty (nothing in orb touches it today). */
+  /** The orb of the contact the group reads (rankContacts: a body that
+   *  moves daily first, a slow one only when no fast body touches the
+   *  group), for the OrbBar; null when nothing in orb touches it today. */
   orb: number | null;
   maxOrb: number;
   tone: OrbTone;
@@ -70,21 +71,62 @@ function ordinal(house: number): string {
   return ORDINAL_WORDS[house] ?? `${house}th`;
 }
 
+const FAST_TRANSITS: ReadonlySet<Planet> = new Set(["moon", "sun", "mercury", "venus", "mars"]);
+
+/**
+ * A group's contacts in the order the day page reads them, so the day
+ * pressure module and the dive deeper name the same contact: a body that
+ * moves daily before a slow one (a slow body's contact holds for months and
+ * belongs to the long transits), a body against its own natal place after
+ * the other contacts of its speed, then by orb. The Moon against the natal
+ * Moon comes last of all: it keys no relation and no consequence, so when
+ * nothing else touches the group the dive deeper prints its concrete line
+ * alone.
+ */
+export function rankContacts(hits: readonly TransitAspect[]): TransitAspect[] {
+  const key = (h: TransitAspect): [number, number, number] => [
+    h.transit === "moon" && h.natal === "moon" ? 1 : 0,
+    FAST_TRANSITS.has(h.transit) ? 0 : 1,
+    h.transit === h.natal ? 1 : 0,
+  ];
+  return hits
+    .map((h, i) => ({ h, i, k: key(h) }))
+    .sort((x, y) => x.k[0] - y.k[0] || x.k[1] - y.k[1] || x.k[2] - y.k[2] || x.h.orb - y.h.orb || x.i - y.i)
+    .map(({ h }) => h);
+}
+
 function levelFor(hits: readonly TransitAspect[]): PressureLevel {
   if (hits.length === 0) return "quiet";
-  const sorted = [...hits].sort((a, b) => a.orb - b.orb);
-  const tightest = sorted[0]!;
-  if (tightest.orb < 1.5) return "loud";
+  const lead = rankContacts(hits)[0]!;
+  if (lead.orb < 1.5) return "loud";
   const tensionCount = hits.filter((h) => toneOf(h.kind) === "tension").length;
-  if (tightest.orb < 4 && tensionCount > hits.length / 2) return "strained";
+  if (lead.orb < 4 && tensionCount > hits.length / 2) return "strained";
   return "quiet";
 }
 
 /**
- * Buckets today's transits (computeTransits against the natal chart) by the
- * whole-sign house of the natal point each hit touches, and composes one
- * honest sentence per group: the tightest hit in the culture's own aspect
- * register when the group is live, or a plain "nothing exact" line when it
+ * Today's transits (computeTransits against the natal chart), bucketed by the
+ * whole-sign house of the natal point each hit touches, in the four groups'
+ * fixed order. Each hit lands in exactly one group. The day pressure module
+ * and the day page's dive deeper (lib/diveDeeper.ts) read the same buckets.
+ */
+export function transitsByGroup(
+  natalChart: Readonly<Record<Planet, Longitude>>,
+  ascendant: Longitude,
+  todayChart: Readonly<Record<Planet, Longitude>>,
+): readonly (readonly TransitAspect[])[] {
+  const houses = computeWholeSignHouses(ascendant);
+  const hits = computeTransits(todayChart, natalChart);
+  return HOUSE_GROUPS.map((houseNumbers) =>
+    hits.filter((h) => houseNumbers.includes(houseOfLongitude(natalChart[h.natal], houses.ascendantSignIndex))),
+  );
+}
+
+/**
+ * Buckets today's transits by group (transitsByGroup) and composes one
+ * honest sentence per group: the contact rankContacts puts first (a body
+ * that moves daily before a slow one, then by orb) in the culture's own
+ * aspect register when the group is live, or a plain "nothing exact" line when it
  * truly is quiet.
  */
 export function dayPressure(
@@ -93,14 +135,12 @@ export function dayPressure(
   culture: Culture,
 ): readonly PressureGroup[] {
   const houses = computeWholeSignHouses(natal.angles.ascendant);
-  const hits = computeTransits(todayChart, natal.chart);
+  const buckets = transitsByGroup(natal.chart, natal.angles.ascendant, todayChart);
   const voiceGroups = CULTURE_VOICES[culture].houseGroups;
 
   return HOUSE_GROUPS.map((houseNumbers, i) => {
     const voice = voiceGroups[i] ?? { name: `GROUP ${i + 1}`, sub: "" };
-    const groupHits = hits.filter((h) =>
-      houseNumbers.includes(houseOfLongitude(natal.chart[h.natal], houses.ascendantSignIndex)),
-    );
+    const groupHits = buckets[i] ?? [];
     const level = levelFor(groupHits);
 
     if (groupHits.length === 0) {
@@ -117,11 +157,12 @@ export function dayPressure(
       };
     }
 
-    const tightest = [...groupHits].sort((a, b) => a.orb - b.orb)[0]!;
-    const tDeity = DEITY_MATRIX[culture][tightest.transit];
-    const nDeity = DEITY_MATRIX[culture][tightest.natal];
-    const verb = ASPECT_VERBS[culture][tightest.kind];
-    const natalHouse = houseOfLongitude(natal.chart[tightest.natal], houses.ascendantSignIndex);
+    // The contact the dive deeper reads for this group (rankContacts).
+    const lead = rankContacts(groupHits)[0]!;
+    const tDeity = DEITY_MATRIX[culture][lead.transit];
+    const nDeity = DEITY_MATRIX[culture][lead.natal];
+    const verb = ASPECT_VERBS[culture][lead.kind];
+    const natalHouse = houseOfLongitude(natal.chart[lead.natal], houses.ascendantSignIndex);
     const arena = getHouseMeaning(natalHouse).arena;
     const sentence = `${tDeity.name} ${verb} your ${nDeity.name} in the ${ordinal(natalHouse)}. It touches ${arena}.`;
 
@@ -130,8 +171,8 @@ export function dayPressure(
       sub: voice.sub,
       level,
       levelLabel: LEVEL_LABEL[level],
-      orb: tightest.orb,
-      maxOrb: orbFor(tightest.kind),
+      orb: lead.orb,
+      maxOrb: orbFor(lead.kind),
       tone: LEVEL_TONE[level],
       sentence,
     };

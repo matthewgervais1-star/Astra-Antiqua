@@ -66,6 +66,13 @@ const notoUgaritic = localFont({
   src: [{ path: "../fonts/noto-sans-ugaritic-400.woff2", weight: "400", style: "normal" }],
 });
 
+const notoPhoenician = localFont({
+  variable: "--font-noto-phoenician",
+  display: "swap",
+  preload: false,
+  src: [{ path: "../fonts/noto-sans-phoenician-400.woff2", weight: "400", style: "normal" }],
+});
+
 const notoSymbols = localFont({
   variable: "--font-noto-symbols",
   display: "swap",
@@ -78,6 +85,13 @@ const gfsDidot = localFont({
   display: "swap",
   preload: false,
   src: [{ path: "../fonts/gfs-didot-400.woff2", weight: "400", style: "normal" }],
+});
+
+const gfsDidotExt = localFont({
+  variable: "--font-gfs-didot-ext",
+  display: "swap",
+  preload: false,
+  src: [{ path: "../fonts/gfs-didot-greek-ext-400.woff2", weight: "400", style: "normal" }],
 });
 
 const SITE_DESCRIPTION =
@@ -131,9 +145,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cinzel.variable} ${spectral.variable} ${spectralSc.variable} ${plexMono.variable} ${notoHieroglyphs.variable} ${notoUgaritic.variable} ${notoSymbols.variable} ${gfsDidot.variable}`}
+      className={`${cinzel.variable} ${spectral.variable} ${spectralSc.variable} ${plexMono.variable} ${notoHieroglyphs.variable} ${notoUgaritic.variable} ${notoPhoenician.variable} ${notoSymbols.variable} ${gfsDidot.variable} ${gfsDidotExt.variable}`}
     >
       <body className="flex min-h-screen flex-col text-bone">
+        {/* A script-first ScriptName (the large culture title) paints its script before hydration;
+            with no JavaScript the band never runs, so the Latin form shows instead. */}
+        <noscript>
+          <style>{`.script-name--script-first:not([data-reveal])>.script-name__latin{opacity:1}.script-name--script-first:not([data-reveal])>.script-name__script{opacity:0}`}</style>
+        </noscript>
         <AuthProvider>
           <PantheonProvider>
             <PantheonBodyAttribute />

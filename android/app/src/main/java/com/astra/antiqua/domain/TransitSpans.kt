@@ -1,7 +1,7 @@
 package com.astra.antiqua.domain
 
 import com.astra.antiqua.data.AstronomyEngine
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import io.github.cosinekitty.astronomy.Body
 import java.util.Date
 import kotlin.math.abs
@@ -21,7 +21,7 @@ import kotlin.math.floor
 data class TransitSpan(
     /** "jupiter-square-sun": the id a detail screen is opened by. */
     val id: String,
-    val transitPlanet: ClassicalPlanet,
+    val transitPlanet: Planet,
     val natalKey: String,
     val natalLongitude: Double,
     val aspect: AspectType,
@@ -35,16 +35,23 @@ data class TransitSpan(
 /** A natal point a transit can be measured against. */
 data class NatalPoint(val key: String, val longitude: Double)
 
+/** The natal Sun, Moon and Ascendant, the points the long transits are walked against. */
+fun natalPointsOf(chart: NatalChartData): List<NatalPoint> = buildList {
+    chart.planets[Planet.SUN]?.let { add(NatalPoint("sun", it.longitude)) }
+    chart.planets[Planet.MOON]?.let { add(NatalPoint("moon", it.longitude)) }
+    add(NatalPoint("asc", chart.ascendant))
+}
+
 /**
  * The five slow bodies. Anything faster crosses a natal degree so often that
  * a span stops meaning anything.
  */
-val SLOW_BODIES: List<ClassicalPlanet> = listOf(
-    ClassicalPlanet.JUPITER,
-    ClassicalPlanet.SATURN,
-    ClassicalPlanet.URANUS,
-    ClassicalPlanet.NEPTUNE,
-    ClassicalPlanet.PLUTO,
+val SLOW_BODIES: List<Planet> = listOf(
+    Planet.JUPITER,
+    Planet.SATURN,
+    Planet.URANUS,
+    Planet.NEPTUNE,
+    Planet.PLUTO,
 )
 
 object TransitSpans {
@@ -59,17 +66,17 @@ object TransitSpans {
     private const val SLOW_SAMPLE_DAYS = 8
     private const val FAST_SAMPLE_DAYS = 2
 
-    fun bodyOf(planet: ClassicalPlanet): Body = when (planet) {
-        ClassicalPlanet.SUN -> Body.Sun
-        ClassicalPlanet.MOON -> Body.Moon
-        ClassicalPlanet.MERCURY -> Body.Mercury
-        ClassicalPlanet.VENUS -> Body.Venus
-        ClassicalPlanet.MARS -> Body.Mars
-        ClassicalPlanet.JUPITER -> Body.Jupiter
-        ClassicalPlanet.SATURN -> Body.Saturn
-        ClassicalPlanet.URANUS -> Body.Uranus
-        ClassicalPlanet.NEPTUNE -> Body.Neptune
-        ClassicalPlanet.PLUTO -> Body.Pluto
+    fun bodyOf(planet: Planet): Body = when (planet) {
+        Planet.SUN -> Body.Sun
+        Planet.MOON -> Body.Moon
+        Planet.MERCURY -> Body.Mercury
+        Planet.VENUS -> Body.Venus
+        Planet.MARS -> Body.Mars
+        Planet.JUPITER -> Body.Jupiter
+        Planet.SATURN -> Body.Saturn
+        Planet.URANUS -> Body.Uranus
+        Planet.NEPTUNE -> Body.Neptune
+        Planet.PLUTO -> Body.Pluto
     }
 
     /**
@@ -80,7 +87,7 @@ object TransitSpans {
     fun compute(
         engine: AstronomyEngine,
         natalPoints: List<NatalPoint>,
-        transitPlanets: List<ClassicalPlanet>,
+        transitPlanets: List<Planet>,
         start: Date,
         days: Int,
     ): List<TransitSpan> {
@@ -111,7 +118,7 @@ object TransitSpans {
     }
 
     private data class Peak(
-        val planet: ClassicalPlanet,
+        val planet: Planet,
         val natalKey: String,
         val natalLongitude: Double,
         val aspect: AspectType,
@@ -120,7 +127,7 @@ object TransitSpans {
         val degreeInSign: Double,
     )
 
-    private fun longitudeAt(engine: AstronomyEngine, planet: ClassicalPlanet, date: Date): Double =
+    private fun longitudeAt(engine: AstronomyEngine, planet: Planet, date: Date): Double =
         engine.getPlanetPosition(julianDayOf(date), bodyOf(planet)).longitude
 
     private fun julianDayOf(date: Date): Double = date.time / 86_400_000.0 + 2440587.5
@@ -170,7 +177,7 @@ object TransitSpans {
     private fun findExactPasses(
         engine: AstronomyEngine,
         natalPoints: List<NatalPoint>,
-        transitPlanets: List<ClassicalPlanet>,
+        transitPlanets: List<Planet>,
         start: Date,
         days: Int,
     ): List<Peak> {
@@ -224,7 +231,7 @@ object TransitSpans {
 
     private fun bisect(
         engine: AstronomyEngine,
-        planet: ClassicalPlanet,
+        planet: Planet,
         target: Double,
         lo: Date,
         hi: Date,

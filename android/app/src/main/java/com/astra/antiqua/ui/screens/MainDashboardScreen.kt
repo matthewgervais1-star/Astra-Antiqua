@@ -1,8 +1,10 @@
 package com.astra.antiqua.ui.screens
 
+import com.astra.antiqua.ui.components.CultureNameHead
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -44,11 +46,17 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.astra.antiqua.domain.FigureReadingComposer
 import com.astra.antiqua.domain.AccuratePlanetPosition
 import com.astra.antiqua.domain.AspectType
+import com.astra.antiqua.domain.DayDecree
+import com.astra.antiqua.domain.DayPermissions
+import com.astra.antiqua.domain.DiveDeeper
+import com.astra.antiqua.domain.permissionPair
 import com.astra.antiqua.domain.NatalChartData
 import com.astra.antiqua.domain.NatalPlacementReading
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.components.DeityGlyph
 import com.astra.antiqua.ui.glyphs.deityGlyph
 import com.astra.antiqua.model.AncientCulture
@@ -58,8 +66,11 @@ import com.astra.antiqua.ui.components.BadgeTone
 import com.astra.antiqua.ui.components.Kicker
 import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.components.NaveShell
+import com.astra.antiqua.ui.components.RowRule
+import com.astra.antiqua.ui.components.ScriptName
 import com.astra.antiqua.ui.components.SectionDivider
 import com.astra.antiqua.ui.nav.Horizon
+import com.astra.antiqua.ui.nav.Route
 import com.astra.antiqua.ui.nav.Section
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.Conflict
@@ -70,6 +81,7 @@ import com.astra.antiqua.ui.theme.LocalLexicon
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.ChartState
 import com.astra.antiqua.viewmodel.DashboardViewModel
@@ -82,10 +94,13 @@ fun MainDashboardScreen(
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
     onOpenMethod: () -> Unit = {},
+    onOpenFigure: (String) -> Unit = {},
 ) {
     val dashboardViewModel: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
 
     val chartState by dashboardViewModel.chartState.collectAsState()
+    val dayDecree by dashboardViewModel.dayDecree.collectAsState()
+    val dayExtras by dashboardViewModel.dayExtras.collectAsState()
     val lexicon = LocalLexicon.current
     val accent = LocalAccent.current
 
@@ -106,16 +121,58 @@ fun MainDashboardScreen(
     ) {
         item {
             Spacer(modifier = Modifier.height(Spacing.Step))
-            Text(
-                text = lexicon.dashboardTitle,
+            CultureNameHead(culture, modifier = Modifier.padding(top = Spacing.Step))
+            ScriptName(
+                culture = culture,
+                key = ScriptNameKey.Institution,
                 style = MaterialTheme.typography.displayMedium,
                 color = Bone,
+                displayFace = true,
                 textAlign = TextAlign.Center,
+                contentAlignment = Alignment.Center,
                 modifier = Modifier.padding(top = Spacing.Step)
             )
             Spacer(modifier = Modifier.height(Spacing.Snug))
             AccentRule()
             Spacer(modifier = Modifier.height(Spacing.Step))
+        }
+
+        dayDecree?.let { decree ->
+            item {
+                DayDecreeCard(
+                    decree = decree,
+                    onOpenFigure = decree.figures.firstOrNull()?.let { top ->
+                        {
+                            onOpenFigure(
+                                Route.figure(
+                                    FigureReadingComposer.isoDateUtc(java.util.Date()),
+                                    FigureReadingComposer.figureId(top),
+                                ),
+                            )
+                        }
+                    },
+                )
+                Spacer(modifier = Modifier.height(Spacing.Step))
+            }
+            dayExtras?.let { extras ->
+                item {
+                    DayListsCard(culture = culture, permissions = extras.permissions, fromChart = extras.listsFromChart)
+                }
+                item {
+                    DiveDeeperSection(diveDeeper = extras.diveDeeper)
+                }
+            }
+            item {
+                // The culture's come-back line closes the day page, under the dive deeper.
+                Text(
+                    text = decree.comeBack.uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Dim,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.Step),
+                )
+                Spacer(modifier = Modifier.height(Spacing.Step))
+            }
         }
 
         item {
@@ -192,6 +249,106 @@ fun MainDashboardScreen(
     }
 }
 
+/**
+ * The day page, as web's CenterDecree draws it: the headline to the reader,
+ * the evidence line beneath it, and the paragraph. The Do and Don't lists,
+ * the dive deeper and the come-back line follow it on the dashboard.
+ */
+@Composable
+fun DayDecreeCard(decree: DayDecree, onOpenFigure: (() -> Unit)? = null) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        // The headline opens the figure page for the day's headline figure, as on web.
+        Text(
+            text = displayCase(decree.headline),
+            style = MaterialTheme.typography.headlineMedium,
+            color = Bone,
+            textAlign = TextAlign.Center,
+            modifier = if (onOpenFigure != null) {
+                Modifier.clickable(onClickLabel = "Read the figure", role = Role.Button, onClick = onOpenFigure)
+            } else {
+                Modifier
+            },
+        )
+        if (decree.evidence.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(Spacing.Snug))
+            Text(
+                text = decree.evidence,
+                style = MaterialTheme.typography.labelSmall,
+                color = Dim,
+                textAlign = TextAlign.Center,
+            )
+        }
+        Spacer(modifier = Modifier.height(Spacing.Step))
+        Text(
+            text = decree.paragraph,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Prose,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+/**
+ * The day's Do and Don't lists, as web's PermissionsModule draws them: two
+ * columns under the culture's own pair, from the day's transits to the
+ * reader's chart when there is one, from the decree's figures otherwise.
+ */
+@Composable
+fun DayListsCard(culture: AncientCulture, permissions: DayPermissions, fromChart: Boolean) {
+    val (proceedLabel, refrainLabel) = permissionPair(culture)
+    Column(modifier = Modifier.fillMaxWidth()) {
+        SectionDivider(label = "The day's permissions")
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(Spacing.Step)) {
+            listOf(Triple(proceedLabel, permissions.proceed, Harmony), Triple(refrainLabel, permissions.refrain, Conflict))
+                .forEach { (label, items, ink) ->
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(text = label, style = MaterialTheme.typography.titleSmall, color = ink)
+                        Spacer(modifier = Modifier.height(Spacing.Tight))
+                        items.forEach { item ->
+                            Text(text = item, style = MaterialTheme.typography.bodyMedium, color = Prose)
+                        }
+                    }
+                }
+        }
+        Spacer(modifier = Modifier.height(Spacing.Snug))
+        Kicker(
+            text = if (fromChart) "Derived from today's transits to your chart" else "Derived from today's aspects",
+        )
+        Spacer(modifier = Modifier.height(Spacing.Step))
+    }
+}
+
+/**
+ * The dive deeper, as web's DiveDeeper draws it: the four house groups, each
+ * a title in the culture's names, the figure it reads in mono, and its
+ * paragraph, between the faint data rules.
+ */
+@Composable
+fun DiveDeeperSection(diveDeeper: DiveDeeper) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        SectionDivider(label = if (diveDeeper.natal) "Dive deeper · from your chart" else "Dive deeper")
+        diveDeeper.groups.forEach { group ->
+            RowRule()
+            Spacer(modifier = Modifier.height(Spacing.Snug))
+            Text(text = displayCase(group.title), style = MaterialTheme.typography.titleMedium, color = Bone)
+            if (group.evidence.isNotEmpty()) {
+                Text(text = group.evidence, style = MaterialTheme.typography.labelSmall, color = Dim)
+            }
+            Spacer(modifier = Modifier.height(Spacing.Tight))
+            Text(
+                text = group.sentences.joinToString(" "),
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (group.quiet) Dim else Prose,
+            )
+            Spacer(modifier = Modifier.height(Spacing.Snug))
+        }
+        RowRule()
+    }
+}
+
 @Composable
 fun OracleDecreeCard(reading: NatalPlacementReading, culture: AncientCulture) {
     val lexicon = LocalLexicon.current
@@ -219,7 +376,7 @@ fun OracleDecreeCard(reading: NatalPlacementReading, culture: AncientCulture) {
                     )
                     Spacer(modifier = Modifier.width(Spacing.Tight))
                     Text(
-                        text = reading.deityName.uppercase(),
+                        text = displayCase(reading.deityName.uppercase()),
                         style = MaterialTheme.typography.headlineSmall,
                         color = accent,
                     )
@@ -381,7 +538,7 @@ fun NatalWheel(chartData: NatalChartData, culture: AncientCulture) {
     // by hue: five of them were brighter than any ink in the palette, and a
     // colour-deficient reader got nothing from them. The glyphs differ by
     // drawing hand, which is what tells them apart at this size.
-    val glyphs = ClassicalPlanet.entries.associateWith {
+    val glyphs = Planet.entries.associateWith {
         rememberVectorPainter(deityGlyph(culture, it))
     }
 
@@ -416,7 +573,7 @@ fun NatalWheel(chartData: NatalChartData, culture: AncientCulture) {
                         val center = Offset(size.width / 2f, size.height / 2f)
                         val hitRadiusPx = 20.dp.toPx()
 
-                        var tappedPlanet: ClassicalPlanet? = null
+                        var tappedPlanet: Planet? = null
                         var closestDistance = Float.MAX_VALUE
                         chartData.planets.forEach { (planet, pos) ->
                             val angle = ((pos.longitude - 90) * PI / 180).toFloat()

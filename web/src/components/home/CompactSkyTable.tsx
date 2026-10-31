@@ -26,7 +26,7 @@ export function CompactSkyTable({ className, culture, rows }: CompactSkyTablePro
                   row.received ? "text-accent" : "text-bone",
                 )}
               >
-                <DeityGlyph body={row.planet} culture={culture} size={16} />
+                <DeityGlyph body={row.planet} culture={culture} size={16} decorative />
                 {row.name}
               </span>
               <span className={row.retrograde ? "text-conflict" : "text-dim"}>

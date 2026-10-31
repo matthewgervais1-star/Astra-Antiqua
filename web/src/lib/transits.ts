@@ -17,8 +17,8 @@ function angularDelta(a: number, b: number): number {
 
 /**
  * Compute today-to-natal aspects: each transit planet against each natal
- * planet. Uses tighter orbs than the natal-internal aspect detector because
- * transit hits are more clinically meaningful when close.
+ * planet. Natal, transit and synastry detection share one orb table,
+ * ASPECT_RULES in data/sampleChart.ts.
  */
 export function computeTransits(
   transitChart: Readonly<Record<Planet, Longitude>>,

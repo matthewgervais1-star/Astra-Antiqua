@@ -23,13 +23,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.domain.HouseMeanings
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.ui.components.ActionButton
 import com.astra.antiqua.ui.components.ActionWeight
 import com.astra.antiqua.ui.components.Badge
 import com.astra.antiqua.ui.components.BadgeTone
 import com.astra.antiqua.ui.components.DeityGlyph
+import com.astra.antiqua.ui.components.InstitutionKicker
 import com.astra.antiqua.ui.components.NaveHead
 import com.astra.antiqua.ui.components.NaveShell
 import com.astra.antiqua.ui.components.Panel
@@ -59,10 +60,10 @@ import com.astra.antiqua.viewmodel.DashboardViewModel
  */
 @Composable
 fun PlacementScreen(
-    body: ClassicalPlanet,
+    body: Planet,
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
-    onOpenPlacement: (ClassicalPlanet) -> Unit,
+    onOpenPlacement: (Planet) -> Unit,
 ) {
     val viewModel: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
     val state by viewModel.chartState.collectAsState()
@@ -71,7 +72,7 @@ fun PlacementScreen(
 
     LaunchedEffect(Unit) { viewModel.calculateChart() }
 
-    val bodies = ClassicalPlanet.entries
+    val bodies = Planet.entries
     val index = bodies.indexOf(body)
     val previous = bodies[(index - 1 + bodies.size) % bodies.size]
     val next = bodies[(index + 1) % bodies.size]
@@ -116,7 +117,7 @@ fun PlacementScreen(
                         val house = HouseMeanings.get(position.house)
                         item {
                             NaveHead(
-                                kicker = "${lexicon.dashboardTitle} · your standing placement",
+                                kickerContent = { InstitutionKicker(culture, after = "your standing placement") },
                                 headline = "Your ${deity.name} in ${position.zodiacSign.signName}",
                                 emblem = {
                                     DeityGlyph(
@@ -126,9 +127,8 @@ fun PlacementScreen(
                                         tint = accent,
                                     )
                                 },
-                                sub = "%02d°%02d′ %s · the %s house · fixed at your birth".format(
-                                    position.degreeInSign,
-                                    position.minuteInSign,
+                                sub = "%s %s · the %s house · fixed at your birth".format(
+                                    position.degMin,
                                     position.zodiacSign.signName,
                                     house.ordinal,
                                 ),
@@ -222,7 +222,7 @@ fun PlacementScreen(
  * the shared corpus covers all of them; the fallback exists so a hole in the
  * corpus drops one paragraph rather than the screen.
  */
-private fun placementTextFor(state: ChartState.Success, body: ClassicalPlanet): String =
+private fun placementTextFor(state: ChartState.Success, body: Planet): String =
     state.placements[body]?.placementText
         ?: "The position is computed and stated above. Its paragraph could not be read."
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug only. Merged over src/main/AndroidManifest.xml so the debug APK may
+  speak plain HTTP to the emulator's host alias, where `pnpm dev` serves the
+  web API. The release manifest carries no network security config, so it
+  keeps the platform default: no cleartext traffic at all.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application android:networkSecurityConfig="@xml/network_security_config" />
+</manifest>

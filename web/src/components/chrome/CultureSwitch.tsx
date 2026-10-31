@@ -1,10 +1,11 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { CULTURES, CULTURE_LABELS, type Culture } from "@/data/cultures";
+import { CULTURES, type Culture } from "@/data/cultures";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { CULTURE_ACCENTS } from "@/data/palettes";
 import { CultureEmblem } from "@/components/chrome/CultureEmblem";
+import { ScriptName } from "@/components/chrome/ScriptName";
 import { cn } from "@/lib/classNames";
 
 export interface CultureSwitchProps {
@@ -21,11 +22,23 @@ export interface CultureSwitchProps {
  * only thing on screen wearing the accent: its own accent, since this picker
  * stands on the neutral ground where no culture is yet in force, and the row
  * sets --accent for itself so the shared utilities resolve to it.
+ *
+ * Each name is a large ScriptName (owner, 2026-10-20). The list does not
+ * scroll, so the band rule alone would leave it all in script: the names
+ * resolve to Latin one after another after the page paints: the first holds
+ * its script PICKER_INTRO_MS, each next one PICKER_STAGGER_MS longer, and
+ * hover or keyboard focus resolves a name at once.
+ * The institution sits under the name, since the larger name and the
+ * institution side by side overflow the column for Carthage.
  */
+/** How long the first picker name holds its script after the page paints (owner, 2026-10-20). */
+const PICKER_INTRO_MS = 1200;
+const PICKER_STAGGER_MS = 200;
+
 export function CultureSwitch({ value, onChange, showSurface = true }: CultureSwitchProps) {
   return (
     <div role="radiogroup" className="flex flex-col">
-      {CULTURES.map((culture) => {
+      {CULTURES.map((culture, index) => {
         const active = culture === value;
         const style = active ? ({ "--accent": CULTURE_ACCENTS[culture] } as CSSProperties) : undefined;
         return (
@@ -41,15 +54,22 @@ export function CultureSwitch({ value, onChange, showSurface = true }: CultureSw
               active ? "text-accent" : "text-bone",
             )}
           >
-            <CultureEmblem culture={culture} size={20} decorative />
-            <span className="font-display text-[15px] tracking-[0.14em]">
-              {CULTURE_LABELS[culture].toUpperCase()}
-            </span>
-            {showSurface ? (
-              <span className="ml-auto font-mono text-data-xs lowercase tracking-data text-dim">
-                {CULTURE_VOICES[culture].institution}
+            <CultureEmblem culture={culture} size={28} decorative />
+            <span className="flex min-w-0 flex-col gap-[var(--space-1)]">
+              <span className="font-display text-display-m leading-display tracking-display">
+                <ScriptName
+                  culture={culture}
+                  heading="culture"
+                  upper
+                  intro={PICKER_INTRO_MS + index * PICKER_STAGGER_MS}
+                />
               </span>
-            ) : null}
+              {showSurface ? (
+                <span className="font-mono text-data-xs lowercase tracking-data text-dim">
+                  {CULTURE_VOICES[culture].institution}
+                </span>
+              ) : null}
+            </span>
           </button>
         );
       })}

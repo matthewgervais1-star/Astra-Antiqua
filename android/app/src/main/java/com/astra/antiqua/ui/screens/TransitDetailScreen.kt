@@ -24,6 +24,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.domain.AspectVerbs
+import com.astra.antiqua.domain.FigureReadingComposer
+import com.astra.antiqua.domain.OrbWindow
+import com.astra.antiqua.domain.Recurrence
 import com.astra.antiqua.domain.SpanTone
 import com.astra.antiqua.domain.TransitSpan
 import com.astra.antiqua.domain.TransitSpans
@@ -33,11 +36,13 @@ import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.ui.components.Badge
 import com.astra.antiqua.ui.components.BadgeTone
 import com.astra.antiqua.ui.components.DeityGlyph
+import com.astra.antiqua.ui.components.InstitutionKicker
 import com.astra.antiqua.ui.components.NaveHead
 import com.astra.antiqua.ui.components.NaveShell
 import com.astra.antiqua.ui.components.Panel
 import com.astra.antiqua.ui.components.RowRule
 import com.astra.antiqua.ui.components.SectionDivider
+import com.astra.antiqua.ui.nav.Route
 import com.astra.antiqua.ui.nav.Section
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.Conflict
@@ -113,10 +118,21 @@ fun TransitDetailScreen(
                     val deity = DeityRegistry.getDeity(culture, span.transitPlanet)
                     val verb = AspectVerbs.of(culture, span.aspect)
                     val natal = natalPointLabel(culture, span.natalKey)
+                    val ready = current as SpansState.Ready
+                    val figure = ready.natal?.let { points ->
+                        FigureReadingComposer.composeSpan(
+                            culture,
+                            span,
+                            points,
+                            ready.skyNow[span.transitPlanet] ?: span.natalLongitude,
+                            now,
+                        )
+                    }
                     item {
                         NaveHead(
-                            kicker = "${LocalLexicon.current.dashboardTitle} · A LONG TRANSIT",
-                            headline = "${deity.name} $verb $natal",
+                            kickerContent = { InstitutionKicker(culture, after = "A long transit") },
+                            headline = figure?.first ?: "${deity.name} $verb $natal",
+                            sub = if (figure != null) "${deity.name} $verb $natal" else null,
                             emblem = {
                                 DeityGlyph(
                                     body = span.transitPlanet,
@@ -128,11 +144,8 @@ fun TransitDetailScreen(
                         )
                     }
                     item { SpanProgress(span, now) }
-                    item {
-                        SectionDivider(
-                            label = "What is meeting what",
-                            modifier = Modifier.padding(horizontal = Spacing.Gutter),
-                        )
+                    val meeting: @Composable () -> Unit = {
+                        SectionDivider(label = "What is meeting what")
                         Text(
                             text = "${deity.name}, ${deity.epithet.lowercase()}, holds within " +
                                 "${TransitSpans.SPAN_ORB.toInt()} degrees of exact against " +
@@ -141,8 +154,24 @@ fun TransitDetailScreen(
                                 "are the ephemeris read forward.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = Prose,
-                            modifier = Modifier.padding(horizontal = Spacing.Gutter),
                         )
+                    }
+                    item {
+                        if (figure != null) {
+                            // The anatomy wraps the span: hero, two moves, then what is
+                            // meeting what, then the figure in space and the rest.
+                            FigureAnatomySection(
+                                culture = culture,
+                                anatomy = figure.second,
+                                timeline = Recurrence.timeline(OrbWindow(span.start, span.end), now, now),
+                                caption = "${monthYear(span.start)} → ${monthYear(span.end)}",
+                                centerLabel = "YOU",
+                                onOpenGlossary = { onNavigate(Route.learn("/learn/aspects")) },
+                                afterParagraph = meeting,
+                            )
+                        } else {
+                            Column(Modifier.padding(horizontal = Spacing.Gutter)) { meeting() }
+                        }
                     }
                     item {
                         SectionDivider(

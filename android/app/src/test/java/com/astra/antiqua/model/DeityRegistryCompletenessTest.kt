@@ -5,7 +5,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * DeityRegistry used to be a `Map<AncientCulture, Map<ClassicalPlanet, Deity>>`
+ * DeityRegistry used to be a `Map<AncientCulture, Map<Planet, Deity>>`
  * read via `getValue()`, so a missing (culture, planet) pair only failed at
  * runtime. Now that `getDeity` is a nested exhaustive `when`, a missing pair
  * is a compile error and can't reach this test at all -- what's left to check
@@ -16,7 +16,7 @@ class DeityRegistryCompletenessTest {
     @Test
     fun `every culture by planet pair resolves to a non-blank name and epithet`() {
         for (culture in AncientCulture.values()) {
-            for (planet in ClassicalPlanet.values()) {
+            for (planet in Planet.values()) {
                 val deity = DeityRegistry.getDeity(culture, planet)
 
                 assertTrue("Blank deity name for $culture/$planet", deity.name.isNotBlank())
@@ -31,8 +31,8 @@ class DeityRegistryCompletenessTest {
             val deities = DeityRegistry.getDeitiesFor(culture)
 
             assertEquals(
-                "Expected one Deity per ClassicalPlanet for $culture",
-                ClassicalPlanet.values().toSet(),
+                "Expected one Deity per Planet for $culture",
+                Planet.values().toSet(),
                 deities.keys
             )
         }

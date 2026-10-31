@@ -17,11 +17,12 @@ research behind every decision here.
 ## Index
 
 - `styles.css`, the entry point. Consumers link this one file.
-- `tokens/fonts.css`, the three product faces, the small-caps prototype face, four
+- `tokens/fonts.css`, the three product faces, the small-caps display face, four
   epigraphic faces.
 - `tokens/colors.css`, grounds, accents, inks, signals, light ground, `[data-culture]`
   scopes.
-- `tokens/typography.css`, display, prose, data and glyph scales with tracking.
+- `tokens/typography.css`, display, prose, data and glyph scales with tracking, and the
+  `[data-culture]` scopes that set display in Spectral SC on four cultures.
 - `tokens/rules.css`, rule weights, spacing, tile sizes, square corners.
 - `guidelines/`, the cards. Colors, Type, Brand, Marks, Glyphs.
 - `assets/marks/`, the twelve drawn brand marks, 512 grid, `currentColor`.
@@ -53,10 +54,13 @@ method note, data at 0.04em, microcopy at 0.18em. Four epigraphic faces exist so
 attested signs (hieroglyphs, Ugaritic cuneiform, Greek inscriptional caps, the ankh) and
 must never be used for copy.
 
-**The small-caps prototype.** A Roman inscriptional cap sets the titles for four cultures
-that are not Roman. The web build carries a prototype that drops display on Egypt, Greece,
-Canaan and Carthage to Spectral SC, true small capitals, tracked at 0.06em, with Cinzel kept
-for Rome and the app shell. It is a prototype to be looked at, not yet the rule.
+**Small capitals on the four non-Roman surfaces.** A Roman inscriptional cap should not set
+the titles for four cultures that are not Roman. Display on Egypt, Greece, Canaan and
+Carthage is Spectral SC, true small capitals, tracked at 0.06em (`--track-display-sc`), on
+the same five sizes as Cinzel. Rome and the app shell keep Cinzel at its own tracking.
+Spectral SC draws its small capitals on the lowercase codepoints, so display text on those
+four surfaces is set lowercased; it never reads as lowercase. This is the rule on web and
+Android since 2026-10-06.
 
 **Corners, depth, motion.** Square corners everywhere. The app icon is the single exemption,
 because the platform masks it. No shadows, bevels, glow or glass; `--shadow: none` is a

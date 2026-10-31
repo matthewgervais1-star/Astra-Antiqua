@@ -14,6 +14,7 @@ import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
 import { FeedbackRow } from "@/components/chrome/FeedbackRow";
 import { NaveHead } from "@/components/chrome/NaveHead";
+import { ScriptName } from "@/components/chrome/ScriptName";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { Skeleton } from "@/components/chrome/Skeleton";
@@ -21,9 +22,12 @@ import { Votive } from "@/components/chrome/Votive";
 import { TransitEmptyState } from "@/components/transits/TransitEmptyState";
 import { TransitSubBar } from "@/components/transits/TransitSubBar";
 import { useSpans } from "@/components/transits/useSpans";
+import { FigureAnatomy } from "@/components/figure/FigureAnatomy";
+import { composeSpanFigure } from "@/lib/figureReading";
+import { buildTimeline } from "@/lib/recurrence";
+import { computeGeocentricLongitude } from "@/lib/ephemeris";
 import {
   ASPECT_KIND_GLYPH,
-  elapsedFraction,
   formatDegMin,
   houseGroupIndex,
   isPointPlanetKey,
@@ -104,7 +108,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
   const natalWords = pointKey ? natalSide.slice(NATAL_PREFIX.length) : natalSide;
   const degreesLine = (
     <span className="inline-flex flex-wrap items-center justify-center gap-x-[var(--space-1)]">
-      <DeityGlyph body={span.transitPlanet} culture={culture} size={16} />
+      <DeityGlyph body={span.transitPlanet} culture={culture} size={16} decorative />
       <span>{transitDeity.toUpperCase()}</span>
       <span>{formatDegMin(span.transitDegree)}</span>
       <span>{span.transitSign.toUpperCase()}</span>
@@ -112,7 +116,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
       {pointKey ? (
         <>
           <span>{NATAL_PREFIX.trim()}</span>
-          <DeityGlyph body={pointKey} culture={culture} size={16} />
+          <DeityGlyph body={pointKey} culture={culture} size={16} decorative />
         </>
       ) : null}
       <span>{natalWords}</span>
@@ -141,8 +145,15 @@ export function TransitDetail({ id }: TransitDetailProps) {
     touchesParagraph = span.natalKey === "asc" ? TOUCHES_ASC[culture] : TOUCHES_MC[culture];
   }
 
-  const fraction = elapsedFraction(span, now);
   const statusLine = passStatusLine(span, now);
+  const figure = composeSpanFigure(
+    culture,
+    span,
+    { chart: natal.chart, ascendant: natal.angles.ascendant },
+    computeGeocentricLongitude(span.transitPlanet, now),
+    now,
+  );
+  const timeline = buildTimeline({ start: span.start, end: span.end }, now, now);
   const receivedBody = isReceived(span.transitPlanet);
 
   return (
@@ -154,9 +165,15 @@ export function TransitDetail({ id }: TransitDetailProps) {
       <main className="mx-auto max-w-[720px] px-5 py-12 md:py-16">
         <div className="mx-auto max-w-[640px]">
           <NaveHead
-            kicker={`${voice.institution} · A READING SCOPED TO THE TRANSIT'S WHOLE SPAN`}
+            kicker={
+              <>
+                <ScriptName culture={culture} heading="institution" /> · A READING SCOPED TO THE TRANSIT&apos;S WHOLE SPAN
+              </>
+            }
             sub={
               <div className="font-mono text-data-xs leading-data tracking-label text-dim">
+                {transitDeity.toUpperCase()} {verb.toUpperCase()} {natalLabel}
+                <br />
                 {degreesLine}
                 <br />
                 <span className="text-accent">
@@ -165,47 +182,38 @@ export function TransitDetail({ id }: TransitDetailProps) {
               </div>
             }
           >
-            {transitDeity.toUpperCase()}
-            <br />
-            {verb.toUpperCase()} {natalLabel}
+            {figure.headline}
           </NaveHead>
 
-          <div className="mx-auto max-w-[560px]">
-            <div className="relative h-[3px] bg-rule-row">
-              <span
-                className="absolute left-0 top-0 h-[3px] bg-accent"
-                style={{ width: `${fraction * 100}%` }}
-              />
-              <span
-                className="absolute top-1/2 h-[9px] w-[9px] -translate-y-1/2 bg-accent"
-                style={{ left: `${fraction * 100}%` }}
-              />
-            </div>
-            <div className="mt-2 text-center font-mono text-data-xs tracking-label text-dim">
-              {statusLine}
-            </div>
-          </div>
-
-          <div className="mt-9 flex flex-col gap-6 text-left">
-            <div>
-              <SectionDivider label="WHAT IS CHANGING" />
-              <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">
-                {spine.changing} {changingClose}
-              </p>
-            </div>
-            <div>
-              <SectionDivider label="WHERE IT BEGINS" />
-              <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{beginsParagraph}</p>
-            </div>
-            <div>
-              <SectionDivider label="WHAT IT TOUCHES" />
-              <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{touchesParagraph}</p>
-            </div>
-            <div>
-              <SectionDivider label="WHAT IT LEAVES BEHIND" />
-              <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{spine.leaves[tone]}</p>
-            </div>
-          </div>
+          <FigureAnatomy
+            culture={culture}
+            anatomy={figure}
+            timeline={timeline}
+            timelineCaption={statusLine}
+            centerLabel="YOU"
+            afterParagraph={
+              <div className="flex flex-col gap-6 text-left">
+                <div>
+                  <SectionDivider label="WHAT IS CHANGING" />
+                  <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">
+                    {spine.changing} {changingClose}
+                  </p>
+                </div>
+                <div>
+                  <SectionDivider label="WHERE IT BEGINS" />
+                  <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{beginsParagraph}</p>
+                </div>
+                <div>
+                  <SectionDivider label="WHAT IT TOUCHES" />
+                  <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{touchesParagraph}</p>
+                </div>
+                <div>
+                  <SectionDivider label="WHAT IT LEAVES BEHIND" />
+                  <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{spine.leaves[tone]}</p>
+                </div>
+              </div>
+            }
+          />
 
           <div className="mt-9">
             <Votive>{spine.votive[tone]}</Votive>
@@ -221,7 +229,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
             </div>
           ) : null}
 
-          <div className="mt-9 flex justify-center gap-8 font-display text-[11.5px] tracking-[0.2em]">
+          <div className="mt-9 flex justify-center gap-8 font-mono text-data-xs tracking-microcopy">
             <Link href="/year" className="text-bone/65 hover:text-bone">
               ← THE YEAR
             </Link>

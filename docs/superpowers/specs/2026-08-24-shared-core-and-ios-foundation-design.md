@@ -119,6 +119,11 @@ concern), transits/synastry/forecast/week/season/year composition, the
 FNV-1a-seeded permissions PRNG (needs exact JS 32-bit wraparound semantics —
 port it only with a bit-level parity test, later), persistence, auth.
 
+> **Note, 2026-09-29.** Section 1 says Android is not rewired to this JSON in
+> this iteration. It was rewired the next day, 2026-08-25: `13f428d` wires
+> `shared/content` in as a build-time asset with a cached placement loader, and
+> `9922e1c` tests the loader, deity parity and a composed golden.
+
 ### 3. Parity tests (`dotnet/AstraAntiqua.Core.Tests`)
 
 xUnit on net8.0, runnable here with `dotnet test`.

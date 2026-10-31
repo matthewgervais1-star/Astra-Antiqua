@@ -47,6 +47,7 @@ import com.astra.antiqua.ui.theme.NotoSymbols
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.TypeScale
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 
 /**
  * One Learn section, web's /learn and its six siblings.
@@ -109,7 +110,7 @@ private fun BlockView(block: LearnBlock, culture: AncientCulture) {
             )
             Box(Modifier.padding(vertical = Spacing.Step)) { AccentRule() }
             Text(
-                text = block.headline.uppercase(),
+                text = displayCase(block.headline.uppercase()),
                 style = MaterialTheme.typography.displaySmall,
                 color = Bone,
                 textAlign = TextAlign.Center,
@@ -124,7 +125,7 @@ private fun BlockView(block: LearnBlock, culture: AncientCulture) {
         )
 
         is LearnBlock.Heading -> Text(
-            text = block.text,
+            text = displayCase(block.text),
             style = MaterialTheme.typography.headlineSmall,
             color = Bone,
             textAlign = TextAlign.Center,
@@ -166,7 +167,7 @@ private fun TableView(table: LearnTable, culture: AncientCulture) {
                         modifier = Modifier.padding(end = Spacing.Snug),
                     )
                     Text(
-                        text = verb.name,
+                        text = displayCase(verb.name),
                         style = MaterialTheme.typography.titleMedium,
                         color = Bone,
                         modifier = Modifier.weight(1f),
@@ -194,7 +195,7 @@ private fun TableView(table: LearnTable, culture: AncientCulture) {
                             modifier = Modifier.padding(end = Spacing.Snug),
                         )
                         Text(
-                            text = sign.sign.uppercase(),
+                            text = displayCase(sign.sign.uppercase()),
                             style = MaterialTheme.typography.headlineSmall,
                             color = Bone,
                             modifier = Modifier.weight(1f),
@@ -242,7 +243,7 @@ private fun TableView(table: LearnTable, culture: AncientCulture) {
                             modifier = Modifier.width(78.dp),
                         )
                         Text(
-                            text = house.title,
+                            text = displayCase(house.title),
                             style = MaterialTheme.typography.headlineSmall,
                             color = Bone,
                         )
@@ -265,7 +266,7 @@ private fun TableView(table: LearnTable, culture: AncientCulture) {
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = system.name.uppercase(),
+                            text = displayCase(system.name.uppercase()),
                             style = MaterialTheme.typography.headlineSmall,
                             color = Bone,
                             modifier = Modifier.weight(1f),
@@ -308,7 +309,7 @@ private fun TableView(table: LearnTable, culture: AncientCulture) {
                             modifier = Modifier.width(56.dp),
                         )
                         Text(
-                            text = aspect.name,
+                            text = displayCase(aspect.name),
                             style = MaterialTheme.typography.headlineSmall,
                             color = Bone,
                         )
@@ -355,7 +356,7 @@ private fun TocRow(section: LearnSection, current: String, onOpenSection: (Strin
         )
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = section.title.uppercase(),
+                text = displayCase(section.title.uppercase()),
                 style = MaterialTheme.typography.titleMedium,
                 color = if (isCurrent) accent else Bone,
             )

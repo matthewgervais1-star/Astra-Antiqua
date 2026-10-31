@@ -7,6 +7,7 @@ import { Button } from "@/components/chrome/Button";
 import { CultureGate } from "@/components/chrome/CultureGate";
 import { CultureChip } from "@/components/chrome/CultureChip";
 import { DeityGlyph } from "@/components/chrome/DeityGlyph";
+import { ScriptName } from "@/components/chrome/ScriptName";
 import { MethodFooter } from "@/components/chrome/MethodFooter";
 import { NaveHead } from "@/components/chrome/NaveHead";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
@@ -121,7 +122,11 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
       <TopBar body={body} />
       <main className="mx-auto max-w-[560px] px-5 py-11 text-center md:py-[var(--space-6)]">
         <NaveHead
-          kicker={`${voice.institution} · YOUR STANDING PLACEMENT`}
+          kicker={
+            <>
+              <ScriptName culture={culture} heading="institution" /> · YOUR STANDING PLACEMENT
+            </>
+          }
           sub={
             <div className="inline-flex items-center gap-[var(--space-1)] font-mono text-data-xs uppercase leading-data tracking-label text-dim">
               <DeityGlyph body={body} culture={culture} size={16} />
@@ -133,7 +138,9 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
             </div>
           }
         >
-          <span className="whitespace-pre-line">{`YOUR ${deity.name.toUpperCase()}\nIN THE ${SIGN_PHRASE[sign]}`}</span>
+          YOUR <ScriptName culture={culture} planet={body} upper />
+          <br />
+          IN THE {SIGN_PHRASE[sign]}
         </NaveHead>
 
         <div className="flex flex-col gap-[var(--space-4)] text-left">
@@ -171,7 +178,7 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
           <FeedbackRow readingId={`placement-${chartId}-${body}`} noun="PLACEMENT" />
         </div>
 
-        <div className="mt-7 flex justify-center gap-[var(--space-4)] font-display text-[11px] tracking-[0.18em]">
+        <div className="mt-7 flex flex-wrap justify-center gap-x-[var(--space-4)] gap-y-[var(--space-2)] font-mono text-data-xs tracking-microcopy [&>a]:whitespace-nowrap">
           <Link href={`/charts/${chartId}/${prevPlanet}`} className="text-bone/65 hover:text-bone">
             ← YOUR {prevDeity.name.toUpperCase()}
           </Link>

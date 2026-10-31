@@ -1,5 +1,7 @@
 package com.astra.antiqua.ui.screens
 
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.ui.components.ScriptName
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.astra.antiqua.data.content.CultureContentStore
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.model.label
 import com.astra.antiqua.ui.components.ActionButton
@@ -51,6 +53,7 @@ import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Prose
 import com.astra.antiqua.ui.theme.Spacing
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
+import com.astra.antiqua.ui.theme.displayCase
 
 /**
  * One culture's doorway, the counterpart of web's /voices/[culture]: the
@@ -74,7 +77,10 @@ import com.astra.antiqua.ui.theme.AstraAntiquaTheme
  * and the accent is never applied twice on one screen.
  */
 private fun figuresFor(culture: AncientCulture): List<TileMark> = when (culture) {
-    AncientCulture.EGYPT -> listOf(TileMark.Sign(TypesetSign.ANKH))
+    AncientCulture.EGYPT -> listOf(
+        TileMark.Sign(TypesetSign.ANKH),
+        TileMark.Sign(TypesetSign.BALANCE),
+    )
     AncientCulture.GREECE -> listOf(TileMark.Sign(TypesetSign.OMEGA))
     AncientCulture.CANAAN -> listOf(
         TileMark.Sign(TypesetSign.IL),
@@ -108,8 +114,8 @@ private fun VoiceScreenContent(
     val store = remember(context) { CultureContentStore.forContext(context) }
     val copy = remember(voice) { runCatching { store.copyFor(voice) }.getOrNull() }
     val accent = LocalAccent.current
-    val classical = ClassicalPlanet.entries.filterNot { it.isReceived }
-    val received = ClassicalPlanet.entries.filter { it.isReceived }
+    val classical = Planet.entries.filterNot { it.isReceived }
+    val received = Planet.entries.filter { it.isReceived }
 
     NaveShell(
         context = "The ${voice.label} doorway",
@@ -124,6 +130,21 @@ private fun VoiceScreenContent(
                     headline = voice.label,
                     emblem = { CultureEmblem(culture = voice, size = 64.dp, tint = accent) },
                     sub = copy?.subtitle,
+                    // The title is the culture's own name, so it takes the intro and no second name.
+                    headlineContent = {
+                        ScriptName(
+                            culture = voice,
+                            key = ScriptNameKey.CultureName,
+                            style = MaterialTheme.typography.displaySmall,
+                            color = Bone,
+                            intro = true,
+                            upper = true,
+                            displayFace = true,
+                            textAlign = TextAlign.Center,
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.padding(horizontal = Spacing.Gutter),
+                        )
+                    },
                 )
             }
             val figures = figuresFor(voice)
@@ -223,7 +244,7 @@ private fun VoiceScreenContent(
 /** One seat in the pantheon: the body, the name this culture gives it, the epithet. */
 @Composable
 private fun DeityRow(
-    body: ClassicalPlanet,
+    body: Planet,
     voice: AncientCulture,
     accent: androidx.compose.ui.graphics.Color,
 ) {
@@ -249,10 +270,12 @@ private fun DeityRow(
             modifier = Modifier.width(62.dp),
         )
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = deity.name,
+            ScriptName(
+                culture = voice,
+                key = ScriptNameKey.Deity(body),
                 style = MaterialTheme.typography.titleMedium,
                 color = if (body.isReceived) accent else Bone,
+                displayFace = true,
             )
             Text(
                 text = deity.epithet,

@@ -2,7 +2,7 @@ package com.astra.antiqua.domain
 
 import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.data.local.room.UserProfile
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import java.time.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -36,13 +36,13 @@ class GoldenChartTest {
         val chart = useCase.execute(goldenProfile)
 
         val expectedLongitudes = mapOf(
-            ClassicalPlanet.SUN to 84.7796,
-            ClassicalPlanet.MOON to 250.1562,
-            ClassicalPlanet.MERCURY to 107.6989,
-            ClassicalPlanet.VENUS to 85.9182,
-            ClassicalPlanet.MARS to 89.3847,
-            ClassicalPlanet.JUPITER to 56.8199,
-            ClassicalPlanet.SATURN to 54.9165
+            Planet.SUN to 84.7796,
+            Planet.MOON to 250.1562,
+            Planet.MERCURY to 107.6989,
+            Planet.VENUS to 85.9182,
+            Planet.MARS to 89.3847,
+            Planet.JUPITER to 56.8199,
+            Planet.SATURN to 54.9165
         )
 
         expectedLongitudes.forEach { (planet, expected) ->

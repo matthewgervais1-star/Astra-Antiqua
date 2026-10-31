@@ -1,5 +1,7 @@
 package com.astra.antiqua.ui.screens
 
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.ui.components.ScriptName
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.ui.components.ActionButton
 import com.astra.antiqua.ui.components.ActionWeight
@@ -50,7 +52,7 @@ import com.astra.antiqua.viewmodel.DashboardViewModel
 fun PlacementsScreen(
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
-    onOpenPlacement: (ClassicalPlanet) -> Unit = {},
+    onOpenPlacement: (Planet) -> Unit = {},
     onOpenForecast: () -> Unit = {},
     onRecast: () -> Unit = {},
     onOpenSynastry: () -> Unit = {},
@@ -95,24 +97,32 @@ fun PlacementsScreen(
                     item {
                         Box(Modifier.padding(horizontal = Spacing.Gutter)) { DataRowHead() }
                     }
-                    items(ClassicalPlanet.entries.size) { index ->
-                        val body = ClassicalPlanet.entries[index]
+                    items(Planet.entries.size) { index ->
+                        val body = Planet.entries[index]
                         val position = current.chartData.planets[body]
                         if (position != null) {
                             Column(Modifier.padding(horizontal = Spacing.Gutter)) {
                                 RowRule()
                                 DataRow(
                                     name = DeityRegistry.getDeity(culture, body).name,
-                                    position = "%02d°%02d′".format(
-                                        position.degreeInSign,
-                                        position.minuteInSign,
-                                    ),
-                                    sign = position.zodiacSign.signName.take(3),
+                                    position = position.degMin,
+                                    sign = position.zodiacSign.abbr,
                                     house = position.house,
                                     retrograde = position.isRetrograde,
                                     received = body.isReceived,
                                     leading = {
                                         DeityGlyph(body = body, culture = culture, size = 14.dp)
+                                    },
+                                    nameContent = { style, ink, interactionSource ->
+                                        ScriptName(
+                                            culture = culture,
+                                            key = ScriptNameKey.Deity(body),
+                                            style = style,
+                                            color = ink,
+                                            upper = true,
+                                            maxLines = 1,
+                                            interactionSource = interactionSource,
+                                        )
                                     },
                                     onClick = { onOpenPlacement(body) },
                                 )
@@ -120,9 +130,10 @@ fun PlacementsScreen(
                         }
                     }
                     item {
+                        // Web's /charts footer: the Ascendant and the house system first.
                         Text(
-                            text = "WHOLE-SIGN HOUSES · R IS RETROGRADE, READ FROM THE BODY'S " +
-                                "OWN VELOCITY · NOTHING HERE IS ESTIMATED",
+                            text = current.chartData.ascendantLine + "\n" +
+                                "R IS RETROGRADE, READ FROM THE BODY'S OWN VELOCITY · NOTHING HERE IS ESTIMATED",
                             style = MaterialTheme.typography.labelSmall,
                             color = Dim,
                             modifier = Modifier.padding(Spacing.Gutter),

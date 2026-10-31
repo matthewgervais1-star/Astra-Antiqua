@@ -32,7 +32,7 @@ export function TransitEmptyState({ showAllLink }: TransitEmptyStateProps) {
       </div>
       {showAllLink ? (
         <div className="mt-5">
-          <Link href="/transits" className="font-display text-[11.5px] tracking-[0.18em] text-accent">
+          <Link href="/transits" className="font-mono text-data-xs tracking-microcopy text-accent">
             SEE ALL LONG TRANSITS →
           </Link>
         </div>

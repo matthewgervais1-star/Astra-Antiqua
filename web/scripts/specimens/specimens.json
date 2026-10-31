@@ -153,10 +153,10 @@
     "file": "components/home/CenterDecree.tsx",
     "name": "CenterDecree",
     "exportKind": "named",
-    "role": "The day's reading: institution kicker, headline, two prose paragraphs, the votive instruction, the feedback row, and the three horizon links (week, season, year).",
+    "role": "The day's reading: institution kicker, the headline to the reader, the evidence line in mono, one five-sentence paragraph, the votive, the feedback row, the three horizon links (week, season, year), and the come-back line.",
     "spec": "Card",
     "viewport": "700x360",
-    "sampleProps": "{ institution: 'THE AUSPICES OF THE DAY', weekday: 'SUNDAY', dateLong: 'SEPTEMBER 6, 2026', reading: { headline: 'MARS SQUARES SATURNUS IN THE SCORPION', paragraphs: ['Mars at 14°22′ Scorpio meets Saturnus at 13°01′ Aquarius by square, one degree and twenty-one minutes from exact. The augurs read a wall where the road was expected.', 'Venus at 2°35′ from a trine to Iuppiter softens the afternoon. What is offered in good faith is received; what is forced is refused.'], tone: 'tension' }, votive: 'FINISH THE WORK ALREADY BEGUN.\\nSTART NOTHING NEW BEFORE DUSK.', now: new Date('2026-09-06T00:00:00Z') }",
+    "sampleProps": "{ culture: 'rome', weekday: \"TUESDAY\", dateLong: \"SEPTEMBER 29, 2026\", reading: { headline: \"Walk into the forum as if you own it.\", evidence: \"SOL △ CAELUS · 0°19′\", paragraphs: [\"Your public standing and your sudden orders sit on the same side of the Senate, exact to the augur's line. Your motion passes, and Caelus votes for it. The Vestals feed the hearth in Sol's name, and the flame burns clear. Elsewhere in the sky, Luna raises the spear against Dis Pater: your household affairs and your inheritance block each other's road. Push your public standing forward today, and hang a garland for Sol on the way.\"], tone: \"harmony\", figures: [{ a: 'sun', b: 'uranus', kind: 'trine', orb: 19 / 60 }] }, votive: \"ASK THE FAVOR OWED YOU;\\nTHE AUSPICES ARE TAKEN ON THE RIGHT\", comeBack: \"The augur takes the auspices again at dawn, so come back tomorrow.\", now: new Date('2026-09-29T00:00:00Z') }",
     "culture": "rome"
   },
   {
@@ -166,7 +166,7 @@
     "role": "Mobile-only compact ephemeris: the Sun plus the bodies carrying the day's tightest aspects, as a bordered four-row box.",
     "spec": "DataRow",
     "viewport": "700x420",
-    "sampleProps": "{ culture: 'rome', rows: [{ planet: 'sun', name: 'SOL', deg: '13', min: '48', sign3: 'VIR', retrograde: false, received: false }, { planet: 'mars', name: 'MARS', deg: '14', min: '22', sign3: 'SCO', retrograde: false, received: false }, { planet: 'saturn', name: 'SATURNUS', deg: '13', min: '01', sign3: 'AQU', retrograde: true, received: false }, { planet: 'uranus', name: 'CAELUS', deg: '29', min: '55', sign3: 'TAU', retrograde: true, received: true }] }",
+    "sampleProps": "{ culture: 'rome', rows: [{ planet: 'sun', name: 'SOL', deg: '13', min: '48', sign3: 'VIR', retrograde: false, received: false }, { planet: 'mars', name: 'MARS', deg: '14', min: '22', sign3: 'SCO', retrograde: false, received: false }, { planet: 'saturn', name: 'SATURNUS', deg: '13', min: '01', sign3: 'AQR', retrograde: true, received: false }, { planet: 'uranus', name: 'CAELUS', deg: '29', min: '55', sign3: 'TAU', retrograde: true, received: true }] }",
     "culture": "rome"
   },
   {
@@ -186,7 +186,7 @@
     "role": "Desktop left rail: the ten-body 00:00 UTC ephemeris, the next stations and ingresses within ninety days, and the method line linking to /method.",
     "spec": "DataRow",
     "viewport": "700x420",
-    "sampleProps": "{ culture: 'rome', rows: [{ planet: 'sun', name: 'SOL', deg: '13', min: '48', sign3: 'VIR', retrograde: false, received: false }, { planet: 'moon', name: 'LUNA', deg: '27', min: '10', sign3: 'CNC', retrograde: false, received: false }, { planet: 'mercury', name: 'MERCURIUS', deg: '02', min: '19', sign3: 'LIB', retrograde: false, received: false }, { planet: 'venus', name: 'VENUS', deg: '08', min: '40', sign3: 'LIB', retrograde: false, received: false }, { planet: 'mars', name: 'MARS', deg: '14', min: '22', sign3: 'SCO', retrograde: false, received: false }, { planet: 'jupiter', name: 'IUPPITER', deg: '11', min: '15', sign3: 'AQU', retrograde: false, received: false }, { planet: 'saturn', name: 'SATURNUS', deg: '13', min: '01', sign3: 'AQU', retrograde: true, received: false }, { planet: 'uranus', name: 'CAELUS', deg: '29', min: '55', sign3: 'TAU', retrograde: true, received: true }, { planet: 'neptune', name: 'NEPTUNUS', deg: '01', min: '12', sign3: 'ARI', retrograde: true, received: true }, { planet: 'pluto', name: 'DIS PATER', deg: '02', min: '48', sign3: 'AQU', retrograde: true, received: true }], stationsAndIngresses: [{ key: 'saturn-direct', date: new Date('2026-09-28T00:00:00Z'), dateLabel: '28 SEP', text: 'SATURNUS STATIONS DIRECT · 12°44′ AQU', conflict: false }, { key: 'mars-ingress-sag', date: new Date('2026-10-14T00:00:00Z'), dateLabel: '14 OCT', text: 'MARS ENTERS THE ARCHER', conflict: true }, { key: 'mercury-rx', date: new Date('2026-11-02T00:00:00Z'), dateLabel: '02 NOV', text: 'MERCURIUS STATIONS RETROGRADE · 27°30′ SCO', conflict: true }] }",
+    "sampleProps": "{ culture: 'rome', rows: [{ planet: 'sun', name: 'SOL', deg: '13', min: '48', sign3: 'VIR', retrograde: false, received: false }, { planet: 'moon', name: 'LUNA', deg: '27', min: '10', sign3: 'CNC', retrograde: false, received: false }, { planet: 'mercury', name: 'MERCURIUS', deg: '02', min: '19', sign3: 'LIB', retrograde: false, received: false }, { planet: 'venus', name: 'VENUS', deg: '08', min: '40', sign3: 'LIB', retrograde: false, received: false }, { planet: 'mars', name: 'MARS', deg: '14', min: '22', sign3: 'SCO', retrograde: false, received: false }, { planet: 'jupiter', name: 'IUPPITER', deg: '11', min: '15', sign3: 'AQR', retrograde: false, received: false }, { planet: 'saturn', name: 'SATURNUS', deg: '13', min: '01', sign3: 'AQR', retrograde: true, received: false }, { planet: 'uranus', name: 'CAELUS', deg: '29', min: '55', sign3: 'TAU', retrograde: true, received: true }, { planet: 'neptune', name: 'NEPTUNUS', deg: '01', min: '12', sign3: 'ARI', retrograde: true, received: true }, { planet: 'pluto', name: 'DIS PATER', deg: '02', min: '48', sign3: 'AQR', retrograde: true, received: true }], stationsAndIngresses: [{ key: 'saturn-direct', date: new Date('2026-09-28T00:00:00Z'), dateLabel: '28 SEP', text: 'SATURNUS STATIONS DIRECT · 12°44′ AQR', conflict: false }, { key: 'mars-ingress-sag', date: new Date('2026-10-14T00:00:00Z'), dateLabel: '14 OCT', text: 'MARS ENTERS THE ARCHER', conflict: true }, { key: 'mercury-rx', date: new Date('2026-11-02T00:00:00Z'), dateLabel: '02 NOV', text: 'MERCURIUS STATIONS RETROGRADE · 27°30′ SCO', conflict: true }] }",
     "culture": "rome"
   },
   {
@@ -203,7 +203,7 @@
     "file": "components/home/PermissionsModule.tsx",
     "name": "PermissionsModule",
     "exportKind": "named",
-    "role": "The day's permissions in the culture's own pair (PROCEED/REFRAIN, OFFER/WITHHOLD, ASK/DO NOT ASK, BRING/HOLD BACK, PAY/DEFER): two columns derived from today's aspects. Rendered only when a natal chart exists.",
+    "role": "The day's permissions in the culture's own pair (PROCEED/REFRAIN, OFFER/WITHHOLD, ASK/DO NOT ASK, BRING/HOLD BACK, PAY/DEFER): two columns derived from today's aspects. Rendered for every reader, seeded from the sky figures when no chart is saved.",
     "spec": "Card",
     "viewport": "700x300",
     "sampleProps": "{ culture: 'rome', permissions: { proceed: ['Settle a debt owed since spring', 'Repair what is already standing', 'Speak plainly to the one above you'], refrain: ['Signing what you have not read twice', 'Opening a quarrel with a neighbour', 'Beginning the journey before dusk'] }, tone: 'tension' }",
@@ -330,5 +330,99 @@
     "spec": "Card",
     "viewport": "700x520",
     "sampleProps": "{ onCompare: () => {}, onClear: () => {}, active: false }"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x220",
+    "sampleProps": "{}",
+    "file": "components/chrome/Button.tsx",
+    "name": "Button",
+    "role": "The mono-caps action button in three weights: primary (hairline on the incised rule), ghost (no rule) and votive (the accent rule, one per screen).",
+    "spec": "Button",
+    "sampleJsx": "<div className=\"flex flex-wrap items-center gap-4\"><{C} variant=\"primary\">PRIMARY</{C}><{C} variant=\"ghost\">GHOST</{C}><{C} variant=\"votive\">VOTIVE</{C}></div>"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x220",
+    "sampleProps": "{}",
+    "file": "components/chrome/Badge.tsx",
+    "name": "Badge",
+    "role": "The small mono-caps label chip in its four tones: outline, accent, dim and conflict.",
+    "spec": "Badge",
+    "sampleJsx": "<div className=\"flex flex-wrap items-center gap-4\"><{C} tone=\"outline\">OUTLINE</{C}><{C} tone=\"accent\">ACCENT</{C}><{C} tone=\"dim\">DIM</{C}><{C} tone=\"conflict\">CONFLICT</{C}></div>"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x260",
+    "sampleProps": "{}",
+    "file": "components/chrome/IconTile.tsx",
+    "name": "IconTile",
+    "role": "The square culture tile: an attested sign set as type (the ankh) beside a traced alpha-mask figure (the Baal stele) in the accent.",
+    "spec": "none",
+    "culture": "egypt",
+    "sampleJsx": "<div className=\"flex flex-wrap items-center gap-4\"><{C} mark=\"ankh\" size=\"md\" ink=\"bone\" /><{C} mark=\"baal-stele\" size=\"md\" ink=\"accent\" /></div>"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x260",
+    "sampleProps": "{}",
+    "file": "components/chrome/DataRow.tsx",
+    "name": "DataRow",
+    "role": "One ephemeris row: body with its glyph, position, sign, whole-sign house and motion (D direct, R retrograde), with an optional quality square; a received body takes the accent.",
+    "spec": "DataRow",
+    "culture": "egypt",
+    "sampleJsx": "<div className=\"font-mono text-data-s\"><{C} body={<><DeityGlyph body=\"sun\" culture=\"egypt\" size={16} decorative /><span>RA</span></>} position=\"14°22'\" sign=\"SCO\" house={10} motion=\"direct\" received quality=\"harmony\" /><{C} body={<><DeityGlyph body=\"saturn\" culture=\"egypt\" size={16} decorative /><span>SOBEK</span></>} position=\"02°05'\" sign=\"PSC\" house={6} motion=\"retrograde\" quality=\"conflict\" /></div>",
+    "extraImports": [
+      "import { DeityGlyph } from \"@/components/chrome/DeityGlyph\";"
+    ]
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x300",
+    "sampleProps": "{ value: \"greece\", onChange: () => {} }",
+    "file": "components/chrome/CultureSwitch.tsx",
+    "name": "CultureSwitch",
+    "role": "The five-culture picker: each row is the culture's emblem beside its name and institution, and only the active culture wears its accent.",
+    "spec": "CultureSwitch",
+    "culture": "greece"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x220",
+    "sampleProps": "{ height: 96 }",
+    "file": "components/chrome/Monogram.tsx",
+    "name": "Monogram",
+    "role": "The monogram: two A's as a ruined temple front, the architrave taking the accent of the active culture.",
+    "spec": "none"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x180",
+    "sampleProps": "{ capHeight: 24 }",
+    "file": "components/chrome/Wordmark.tsx",
+    "name": "Wordmark",
+    "role": "The ASTRA ANTIQVA wordmark in its ruined-capital lettering, sized by cap height.",
+    "spec": "none"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x260",
+    "sampleProps": "{}",
+    "file": "components/chrome/DeityGlyph.tsx",
+    "name": "DeityGlyph",
+    "role": "Egypt's ten deity glyphs at 16px, one per tracked body, painted in currentColor with the body name beside each.",
+    "spec": "none",
+    "culture": "egypt",
+    "sampleJsx": "<ul className=\"m-0 grid list-none grid-cols-2 gap-x-6 gap-y-2 p-0 font-mono text-data-s uppercase tracking-data text-bone\">{[\"sun\",\"moon\",\"mercury\",\"venus\",\"mars\",\"jupiter\",\"saturn\",\"uranus\",\"neptune\",\"pluto\"].map((b) => (<li key={b} className=\"flex items-center gap-2\"><{C} body={b as any} culture=\"egypt\" size={16} /><span>{b}</span></li>))}</ul>"
+  },
+  {
+    "exportKind": "named",
+    "viewport": "700x220",
+    "sampleProps": "{}",
+    "file": "components/chrome/CultureEmblem.tsx",
+    "name": "CultureEmblem",
+    "role": "The five culture emblems at tier 2: the wedjat, Athena's owl, the name of El, the sign of Tanit and the aquila.",
+    "spec": "none",
+    "sampleJsx": "<div className=\"flex flex-wrap items-center gap-6 text-bone\">{[\"egypt\",\"greece\",\"canaan\",\"carthage\",\"rome\"].map((c) => (<{C} key={c} culture={c as any} size={48} />))}</div>"
   }
 ]

@@ -21,9 +21,10 @@ import java.time.ZoneOffset
  * an ambient default (`TimeZone.getDefault()` / `ZoneId.systemDefault()`)
  * inside this function. That is what makes a birth outside the caller's own
  * timezone computed correctly: the caller decides and states the zone, this
- * function never guesses one. See [estimateZoneOffsetForLongitude] for how
- * OnboardingScreen derives that zone from the birth location instead of the
- * device.
+ * function never guesses one. See [birthZoneFor] for how OnboardingScreen
+ * derives that zone from the birth location instead of the device, and
+ * [resolveWallClockMillis] for how a time inside a daylight-saving gap or
+ * overlap is resolved (the way web resolves it).
  *
  * Pre-fix rows: profiles saved before this function existed carry a
  * `birthDateUtc` built by the old, wrong arithmetic (UTC-midnight + local
@@ -43,41 +44,22 @@ fun resolveBirthDateUtcMillis(
         .atZone(ZoneOffset.UTC)
         .toLocalDate()
     val wallClockBirth = LocalDateTime.of(calendarDate, LocalTime.of(hour, minute))
-    return wallClockBirth.atZone(zoneId).toInstant().toEpochMilli()
+    return resolveWallClockMillis(wallClockBirth, zoneId)
 }
 
 /**
- * Estimates the standard-time UTC offset for a birth from the birth
- * LOCATION's longitude, as a stand-in for a real IANA-zone lookup.
+ * Estimates the standard-time UTC offset for a place from its longitude:
+ * `round(longitude / 15)` hours, clamped to -12..+14.
  *
- * This app has no birth-location timezone database: Android's Geocoder
- * returns coordinates and address text, not a UTC offset, and bundling one
- * (e.g. a timezone-boundary polygon library) costs tens of megabytes of APK
- * size that hasn't been signed off on. Standard civil time zones track
- * longitude in ~15-degree (one hour) bands to keep clocks close to local
- * solar time, so `round(longitude / 15)` hours recovers the correct
- * STANDARD offset for the large majority of the globe. It is still only an
- * estimate:
- *  - it never reflects daylight saving time (there is no birth-date-aware
- *    DST rule table here, only a fixed offset),
- *  - it cannot know about the fractional-hour offsets some regions use
- *    (India UTC+5:30, Nepal UTC+5:45, parts of Australia UTC+9:30/+10:30,
- *    Newfoundland UTC-3:30, ...) since those aren't derivable from longitude
- *    alone, and
- *  - it ignores political zone boundaries, which do not follow meridians.
- *
- * Earlier this app used the DEVICE's current zone as the stand-in instead.
- * That was exactly correct when the user entered their own birth data on a
- * device set to their birth zone, but for a birth entered on a device in a
- * different zone than the birth, it could be off by however many hours
- * separate the device's zone from the birth's -- as much as +/-12 hours in
- * the worst case, and often WORSE than doing nothing at all. This
- * longitude-based estimate depends only on the birth location (which the
- * user has already searched for and confirmed on screen), never on the
- * device, so it no longer regresses based on where the phone happens to be
- * configured. Its own error is bounded to roughly the width of one
- * time-zone band (usually well under an hour, occasionally more at zone
- * boundaries or in fractional-offset regions) instead of being unbounded.
+ * This is the FALLBACK only. A birth's zone comes from [birthZoneFor], which
+ * looks the place up in the same IANA zone map web uses and applies that
+ * zone's daylight-saving history. [birthZoneFor] falls back to this estimate
+ * when the lookup names no zone (coordinates off the globe) or names one the
+ * runtime's tz database does not know. The estimate ignores daylight saving,
+ * fractional offsets (India +5:30, Nepal +5:45) and political boundaries
+ * (Spain and France keep Central European Time west of 7.5 E; western China
+ * keeps +8), so it is wrong by an hour or more in much of the world and is
+ * never the first choice.
  */
 fun estimateZoneOffsetForLongitude(longitudeDegrees: Double): ZoneOffset {
     val clampedLongitude = longitudeDegrees.coerceIn(-180.0, 180.0)

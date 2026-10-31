@@ -1,7 +1,7 @@
 package com.astra.antiqua.data.content
 
 import com.astra.antiqua.domain.ZodiacSign
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.IOException
@@ -29,7 +29,7 @@ class PlacementContentStoreTest {
         assertTrue("Expected to find ${assetFile.path}", assetFile.exists())
         val store = realStore()
 
-        for (planet in ClassicalPlanet.values()) {
+        for (planet in Planet.values()) {
             for (sign in ZodiacSign.values()) {
                 val text = store.textFor(planet, sign)
                 assertTrue("Blank placement text for $planet/$sign", text.isNotBlank())
@@ -46,10 +46,10 @@ class PlacementContentStoreTest {
         }
 
         // Multiple lookups, across multiple planets and signs.
-        store.textFor(ClassicalPlanet.SUN, ZodiacSign.ARIES)
-        store.textFor(ClassicalPlanet.SUN, ZodiacSign.LEO)
-        store.textFor(ClassicalPlanet.MOON, ZodiacSign.CANCER)
-        store.textFor(ClassicalPlanet.SATURN, ZodiacSign.CAPRICORN)
+        store.textFor(Planet.SUN, ZodiacSign.ARIES)
+        store.textFor(Planet.SUN, ZodiacSign.LEO)
+        store.textFor(Planet.MOON, ZodiacSign.CANCER)
+        store.textFor(Planet.SATURN, ZodiacSign.CAPRICORN)
 
         assertEquals("openStream should run once per store instance, not once per lookup", 1, openCount)
     }
@@ -63,7 +63,7 @@ class PlacementContentStoreTest {
         }
 
         assertThrows(ContentLoadException.Io::class.java) {
-            store.textFor(ClassicalPlanet.SUN, ZodiacSign.ARIES)
+            store.textFor(Planet.SUN, ZodiacSign.ARIES)
         }
     }
 
@@ -72,7 +72,7 @@ class PlacementContentStoreTest {
         val store = PlacementContentStore { ByteArrayInputStream("{ not valid json".toByteArray()) }
 
         assertThrows(ContentLoadException.Malformed::class.java) {
-            store.textFor(ClassicalPlanet.SUN, ZodiacSign.ARIES)
+            store.textFor(Planet.SUN, ZodiacSign.ARIES)
         }
     }
 
@@ -82,7 +82,7 @@ class PlacementContentStoreTest {
         val store = PlacementContentStore { ByteArrayInputStream("""{"moon": {"Aries": "text"}}""".toByteArray()) }
 
         assertThrows(ContentLoadException.MissingKey::class.java) {
-            store.textFor(ClassicalPlanet.SUN, ZodiacSign.ARIES)
+            store.textFor(Planet.SUN, ZodiacSign.ARIES)
         }
     }
 
@@ -92,7 +92,7 @@ class PlacementContentStoreTest {
         val store = PlacementContentStore { ByteArrayInputStream("""{"sun": {"Taurus": "text"}}""".toByteArray()) }
 
         assertThrows(ContentLoadException.MissingKey::class.java) {
-            store.textFor(ClassicalPlanet.SUN, ZodiacSign.ARIES)
+            store.textFor(Planet.SUN, ZodiacSign.ARIES)
         }
     }
 }

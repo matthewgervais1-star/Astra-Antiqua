@@ -1,14 +1,10 @@
 package com.astra.antiqua.viewmodel
 
-import com.astra.antiqua.data.ProfileRepository
-import com.astra.antiqua.data.SettingsRepository
 import com.astra.antiqua.data.local.room.UserProfile
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.AppPhase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -24,38 +20,8 @@ import org.junit.Test
  * What the container bought: this whole file. AppViewModel used to take a
  * Context into every method and build a DataStore and a Room database from
  * it, so none of this could run without a device. It now takes two
- * interfaces, and the fakes below are the entire test harness.
+ * interfaces, and the fakes in Fakes.kt are the entire test harness.
  */
-private class FakeSettings(
-    culture: AncientCulture? = null,
-    onboardingCompleted: Boolean = false,
-) : SettingsRepository {
-    private val culture = MutableStateFlow(culture)
-    private val completed = MutableStateFlow(onboardingCompleted)
-
-    override val selectedCulture: Flow<AncientCulture?> = this.culture
-    override val isOnboardingCompleted: Flow<Boolean> = completed
-
-    override suspend fun saveCulture(culture: AncientCulture) {
-        this.culture.value = culture
-    }
-
-    override suspend fun setOnboardingCompleted(completed: Boolean) {
-        this.completed.value = completed
-    }
-
-    fun storedCulture() = culture.value
-    fun storedCompleted() = completed.value
-}
-
-private class FakeProfiles(profile: UserProfile? = null) : ProfileRepository {
-    private val state = MutableStateFlow(profile)
-    override val profile: Flow<UserProfile?> = state
-    override suspend fun save(profile: UserProfile) {
-        state.value = profile
-    }
-}
-
 private fun aProfile() = UserProfile(
     id = 1,
     name = "Test",
@@ -121,6 +87,34 @@ class AppViewModelTest {
 
         assertEquals(AncientCulture.CANAAN, settings.storedCulture())
         assertEquals(AncientCulture.CANAAN, model.selectedCulture.value)
+        assertEquals(AppPhase.ONBOARDING, model.currentPhase.value)
+    }
+
+    @Test
+    fun `choosing a culture with a kept chart and a completed flow goes to the dashboard`() = runTest(dispatcher) {
+        // The strike's return: the device chart and the flag are kept.
+        val settings = FakeSettings(AncientCulture.ROME, onboardingCompleted = true)
+        val model = AppViewModel(settings, FakeProfiles(aProfile()))
+        model.start()
+        advanceUntilIdle()
+        model.returnToCultureSelection()
+        assertEquals(AppPhase.CULTURE_SELECTION, model.currentPhase.value)
+
+        model.selectCulture(AncientCulture.CARTHAGE)
+        advanceUntilIdle()
+
+        assertEquals(AncientCulture.CARTHAGE, settings.storedCulture())
+        assertEquals(AppPhase.MAIN_DASHBOARD, model.currentPhase.value)
+    }
+
+    @Test
+    fun `choosing a culture with a chart but no completed flow goes to the birth details`() = runTest(dispatcher) {
+        val settings = FakeSettings(onboardingCompleted = false)
+        val model = AppViewModel(settings, FakeProfiles(aProfile()))
+
+        model.selectCulture(AncientCulture.EGYPT)
+        advanceUntilIdle()
+
         assertEquals(AppPhase.ONBOARDING, model.currentPhase.value)
     }
 

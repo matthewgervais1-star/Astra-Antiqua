@@ -20,6 +20,7 @@ import type { LegalCopy } from "@/lib/legal/legalTypes";
  * Tokens in braces are substituted at render from policyFacts.ts.
  */
 export const TERMS_EN: LegalCopy = {
+  lang: "en-CA",
   metaTitle: "Terms of Service",
   metaDescription:
     "The agreement for using Astra Antiqua: what the service is, what it is not, your account, and the limits of what we promise.",
@@ -124,6 +125,7 @@ export const TERMS_EN: LegalCopy = {
 };
 
 export const TERMS_FR: LegalCopy = {
+  lang: "fr-CA",
   metaTitle: "Conditions d'utilisation",
   metaDescription:
     "L'entente régissant l'utilisation d'Astra Antiqua : ce qu'est le service, ce qu'il n'est pas, votre compte et les limites de nos engagements.",

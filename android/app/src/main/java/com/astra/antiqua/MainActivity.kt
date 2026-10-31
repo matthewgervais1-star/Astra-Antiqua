@@ -33,10 +33,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.AppPhase
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.LauncherIcon
+import com.astra.antiqua.ui.components.AnimationsOffProvider
 import com.astra.antiqua.ui.components.Monogram
 import com.astra.antiqua.ui.nav.Route
+import com.astra.antiqua.ui.screens.AccountScreen
+import com.astra.antiqua.ui.screens.LicencesScreen
+import com.astra.antiqua.ui.screens.SignInScreen
+import com.astra.antiqua.ui.screens.WaitListScreen
 import com.astra.antiqua.ui.screens.CultureSelectionScreen
 import com.astra.antiqua.ui.screens.ForecastScreen
 import com.astra.antiqua.ui.screens.LearnScreen
@@ -49,6 +54,7 @@ import com.astra.antiqua.ui.screens.PlacementsScreen
 import com.astra.antiqua.ui.screens.SynastryScreen
 import com.astra.antiqua.ui.screens.SeasonScreen
 import com.astra.antiqua.ui.screens.YearScreen
+import com.astra.antiqua.ui.screens.FigureScreen
 import com.astra.antiqua.ui.screens.TransitDetailScreen
 import com.astra.antiqua.ui.screens.TransitsScreen
 import com.astra.antiqua.ui.screens.VoiceScreen
@@ -57,6 +63,7 @@ import com.astra.antiqua.ui.screens.WeekScreen
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.LocalAccent
+import com.astra.antiqua.ui.theme.ShellType
 import com.astra.antiqua.viewmodel.AppViewModel
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 
@@ -80,50 +87,50 @@ class MainActivity : ComponentActivity() {
             val currentPhase by viewModel.currentPhase.collectAsState()
             val selectedCulture by viewModel.selectedCulture.collectAsState()
 
-            AstraAntiquaTheme(selectedCulture = selectedCulture) {
-                LaunchedEffect(Unit) { viewModel.start() }
+            // One observer of the animator scale for the whole activity; the script names read it.
+            AnimationsOffProvider {
+                AstraAntiquaTheme(selectedCulture = selectedCulture) {
+                    LaunchedEffect(Unit) { viewModel.start() }
 
-                // Edge-to-edge is enforced from SDK 35. The Surface must fill the
-                // whole window so the culture's ground paints behind the system
-                // bars; the inset is applied to the CONTENT inside it, not to the
-                // Surface, or the bars show the bare window background instead.
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Box(modifier = Modifier.safeDrawingPadding()) {
-                        AnimatedContent(
-                            targetState = currentPhase,
-                            transitionSpec = {
-                                // A plain opacity fade, which is the only motion
-                                // this identity allows. Nothing moves or scales.
-                                fadeIn(animationSpec = tween(FADE_MS)) togetherWith
-                                    fadeOut(animationSpec = tween(FADE_MS))
-                            },
-                            label = "PhaseTransition"
-                        ) { phase ->
-                            when (phase) {
-                                AppPhase.ENGINE_WARMUP -> EngineWarmupScreen()
-                                AppPhase.CULTURE_SELECTION -> CultureSelectionScreen { culture ->
-                                    viewModel.selectCulture(culture)
+                    // Edge-to-edge is enforced from SDK 35. The Surface must fill the
+                    // whole window so the culture's ground paints behind the system
+                    // bars; the inset is applied to the CONTENT inside it, not to the
+                    // Surface, or the bars show the bare window background instead.
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        Box(modifier = Modifier.safeDrawingPadding()) {
+                            AnimatedContent(
+                                targetState = currentPhase,
+                                transitionSpec = {
+                                    // A plain opacity fade, which is the only motion
+                                    // this identity allows. Nothing moves or scales.
+                                    fadeIn(animationSpec = tween(AppPhase.FADE_MILLIS)) togetherWith
+                                        fadeOut(animationSpec = tween(AppPhase.FADE_MILLIS))
+                                },
+                                label = "PhaseTransition"
+                            ) { phase ->
+                                when (phase) {
+                                    AppPhase.ENGINE_WARMUP -> EngineWarmupScreen()
+                                    AppPhase.CULTURE_SELECTION -> CultureSelectionScreen { culture ->
+                                        viewModel.selectCulture(culture)
+                                    }
+                                    AppPhase.ONBOARDING -> OnboardingScreen(
+                                        onLocationSaved = { viewModel.completeOnboarding() },
+                                    )
+                                    AppPhase.MAIN_DASHBOARD -> AstraNavHost(
+                                        culture = selectedCulture,
+                                        onChooseCulture = viewModel::switchCulture,
+                                        onStruck = viewModel::returnToCultureSelection,
+                                    )
                                 }
-                                AppPhase.ONBOARDING -> OnboardingScreen(
-                                    onLocationSaved = { viewModel.completeOnboarding() },
-                                )
-                                AppPhase.MAIN_DASHBOARD -> AstraNavHost(
-                                    culture = selectedCulture,
-                                    onChooseCulture = viewModel::switchCulture,
-                                )
                             }
                         }
                     }
                 }
             }
         }
-    }
-
-    private companion object {
-        const val FADE_MS = 400
     }
 }
 
@@ -139,6 +146,7 @@ class MainActivity : ComponentActivity() {
 fun AstraNavHost(
     culture: AncientCulture,
     onChooseCulture: (AncientCulture) -> Unit,
+    onStruck: () -> Unit = {},
 ) {
     val navController = rememberNavController()
 
@@ -154,10 +162,11 @@ fun AstraNavHost(
                 culture = culture,
                 onNavigate = go,
                 onOpenMethod = { open(Route.METHOD) },
+                onOpenFigure = open,
             )
         }
         composable(Route.WEEK) {
-            WeekScreen(culture = culture, onNavigate = go)
+            WeekScreen(culture = culture, onNavigate = go, onOpenFigure = open)
         }
         composable(Route.SEASON) {
             SeasonScreen(culture = culture, onNavigate = go)
@@ -201,6 +210,15 @@ fun AstraNavHost(
                 onBack = { navController.popBackStack() },
             )
         }
+        composable(Route.FIGURE) { entry ->
+            FigureScreen(
+                date = entry.arguments?.getString("date").orEmpty(),
+                id = entry.arguments?.getString("id").orEmpty(),
+                culture = culture,
+                onNavigate = go,
+                onOpen = open,
+            )
+        }
         composable(Route.MATRIX) {
             MatrixScreen(culture = culture, onNavigate = go)
         }
@@ -216,7 +234,7 @@ fun AstraNavHost(
         }
         composable(Route.PLACEMENT) { entry ->
             val name = entry.arguments?.getString("body").orEmpty()
-            val body = runCatching { ClassicalPlanet.valueOf(name.uppercase()) }.getOrNull()
+            val body = runCatching { Planet.valueOf(name.uppercase()) }.getOrNull()
             if (body == null) {
                 PlacementsScreen(
                     culture = culture,
@@ -269,7 +287,47 @@ fun AstraNavHost(
             )
         }
         composable(Route.METHOD) {
-            MethodScreen(onBack = { navController.popBackStack() })
+            MethodScreen(
+                onBack = { navController.popBackStack() },
+                onOpenLicences = { open(Route.LICENCES) },
+            )
+        }
+        composable(Route.LICENCES) {
+            LicencesScreen(culture = culture, onNavigate = go)
+        }
+        composable(Route.ACCOUNT) {
+            AccountScreen(
+                culture = culture,
+                onNavigate = go,
+                // Signed out, the account is THE RECORD, as web's /account
+                // sends an anonymous visitor to /signin. The swap replaces
+                // this entry, so back does not return to a redirect.
+                onSignIn = {
+                    navController.navigate(Route.SIGN_IN) {
+                        popUpTo(Route.ACCOUNT) { inclusive = true }
+                    }
+                },
+                onSignedOut = { go(Route.DAY) },
+                onStruck = onStruck,
+                onChangeCulture = { go(Route.VOICES) },
+                onOpenLicences = { open(Route.LICENCES) },
+            )
+        }
+        composable(Route.SIGN_IN) {
+            SignInScreen(
+                culture = culture,
+                onNavigate = go,
+                onSignedIn = {
+                    navController.navigate(Route.ACCOUNT) {
+                        popUpTo(Route.SIGN_IN) { inclusive = true }
+                    }
+                },
+                onContinue = { go(Route.DAY) },
+                onOpenRoll = { open(Route.WAIT_LIST) },
+            )
+        }
+        composable(Route.WAIT_LIST) {
+            WaitListScreen(culture = culture, onNavigate = go)
         }
     }
 }
@@ -303,7 +361,9 @@ private fun NavHostController.openDetail(route: String) {
 }
 
 @Composable
-fun EngineWarmupScreen() {
+fun EngineWarmupScreen() = ShellType {
+    // The warmup runs before start() loads the saved culture, while the theme
+    // holds the GREECE default, so it keeps the shell's Cinzel for every reader.
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

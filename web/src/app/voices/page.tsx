@@ -3,7 +3,8 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { NaveShell } from "@/components/chrome/NaveShell";
 import { NaveHead } from "@/components/chrome/NaveHead";
-import { CULTURES, CULTURE_LABELS } from "@/data/cultures";
+import { ScriptName } from "@/components/chrome/ScriptName";
+import { CULTURES } from "@/data/cultures";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { CULTURE_ACCENTS } from "@/data/palettes";
 
@@ -34,8 +35,8 @@ export default function VoicesPage() {
               className="flex items-baseline gap-4 border-t border-rule px-4 py-5 last:border-b hover:bg-bone/5"
             >
               <span className="h-2 w-2 shrink-0 self-center bg-[var(--row-accent)]" />
-              <span className="font-display text-[16px] tracking-[0.14em] text-bone">
-                {CULTURE_LABELS[culture].toUpperCase()}
+              <span className="font-display text-display-xs tracking-[0.14em] text-bone">
+                <ScriptName culture={culture} heading="culture" upper />
               </span>
               <span className="ml-auto font-mono text-data-xs tracking-data text-dim lowercase">
                 {CULTURE_VOICES[culture].institution}

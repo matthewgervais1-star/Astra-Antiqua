@@ -1,5 +1,7 @@
 package com.astra.antiqua.ui.screens
 
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.ui.components.ScriptName
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.astra.antiqua.model.AncientCulture
-import com.astra.antiqua.model.ClassicalPlanet
+import com.astra.antiqua.model.Planet
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.model.label
 import com.astra.antiqua.ui.components.CultureEmblem
@@ -35,6 +37,7 @@ import com.astra.antiqua.ui.theme.FaintInk
 import com.astra.antiqua.ui.theme.Harmony
 import com.astra.antiqua.ui.theme.Spacing
 import com.astra.antiqua.ui.theme.accentFor
+import com.astra.antiqua.ui.theme.displayCase
 
 private val BODY_COLUMN = 74.dp
 private val CULTURE_COLUMN = 104.dp
@@ -54,8 +57,8 @@ fun MatrixScreen(
     onNavigate: (String) -> Unit,
 ) {
     val scroll = rememberScrollState()
-    val classical = ClassicalPlanet.entries.filterNot { it.isReceived }
-    val received = ClassicalPlanet.entries.filter { it.isReceived }
+    val classical = Planet.entries.filterNot { it.isReceived }
+    val received = Planet.entries.filter { it.isReceived }
 
     NaveShell(
         context = "The translation matrix",
@@ -93,12 +96,13 @@ fun MatrixScreen(
                                     size = 14.dp,
                                     tint = accentFor(each),
                                 )
-                                Text(
-                                    text = each.label.uppercase(),
+                                ScriptName(
+                                    culture = each,
+                                    key = ScriptNameKey.CultureName,
                                     style = MaterialTheme.typography.labelSmall,
                                     color = accentFor(each),
+                                    upper = true,
                                     maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
@@ -131,7 +135,7 @@ fun MatrixScreen(
 }
 
 @Composable
-private fun MatrixRow(body: ClassicalPlanet) {
+private fun MatrixRow(body: Planet) {
     Column {
         Box(
             Modifier
@@ -149,12 +153,13 @@ private fun MatrixRow(body: ClassicalPlanet) {
                 modifier = Modifier.width(BODY_COLUMN),
             )
             AncientCulture.entries.forEach { each ->
-                Text(
-                    text = DeityRegistry.getDeity(each, body).name,
+                ScriptName(
+                    culture = each,
+                    key = ScriptNameKey.Deity(body),
                     style = MaterialTheme.typography.titleMedium,
                     color = if (body.isReceived) accentFor(each) else Bone,
+                    displayFace = true,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.width(CULTURE_COLUMN),
                 )
             }

@@ -1,8 +1,12 @@
 package com.astra.antiqua.ui.components
 
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.foundation.background
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +36,7 @@ import com.astra.antiqua.ui.theme.LocalAccent
 import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.RuleRow
 import com.astra.antiqua.ui.theme.Spacing
+import com.astra.antiqua.ui.theme.displayCase
 
 /**
  * The identity's component vocabulary, the Compose half of what
@@ -84,7 +90,7 @@ fun Votive(text: String, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
         Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
         Text(
-            text = text.uppercase(),
+            text = displayCase(text.uppercase()),
             style = MaterialTheme.typography.headlineSmall,
             color = accent,
             textAlign = TextAlign.Center,
@@ -269,15 +275,27 @@ fun DataRow(
     received: Boolean = false,
     leading: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null,
+    /**
+     * Draws the name in place of the plain text, given the row's style, ink and
+     * interaction source (a ScriptName, which resolves when the row takes focus).
+     */
+    nameContent: (@Composable (style: TextStyle, ink: Color, interactionSource: InteractionSource) -> Unit)? = null,
 ) {
     val accent = LocalAccent.current
     val ink = if (received) accent else Bone
+    val interactionSource = remember { MutableInteractionSource() }
     Row(
         modifier = modifier
             .fillMaxWidth()
             .then(
                 if (onClick != null) {
-                    Modifier.clickable(onClickLabel = name, role = Role.Button, onClick = onClick)
+                    Modifier.clickable(
+                        interactionSource = interactionSource,
+                        indication = LocalIndication.current,
+                        onClickLabel = name,
+                        role = Role.Button,
+                        onClick = onClick,
+                    )
                 } else {
                     Modifier
                 }
@@ -292,7 +310,11 @@ fun DataRow(
             horizontalArrangement = Arrangement.spacedBy(Spacing.Tight),
         ) {
             if (leading != null) leading()
-            Text(name.uppercase(), style = style, color = ink, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (nameContent != null) {
+                nameContent(style, ink, interactionSource)
+            } else {
+                Text(name.uppercase(), style = style, color = ink, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
         }
         Text(position, style = style, color = Dim, modifier = Modifier.width(POSITION_WIDTH))
         Text(sign.uppercase(), style = style, color = Dim, modifier = Modifier.width(SIGN_WIDTH))

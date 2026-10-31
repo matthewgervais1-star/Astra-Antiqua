@@ -2,37 +2,68 @@ import Link from "next/link";
 import { NaveHead } from "@/components/chrome/NaveHead";
 import { Votive } from "@/components/chrome/Votive";
 import { FeedbackRow } from "@/components/chrome/FeedbackRow";
+import { EvidenceLine } from "@/components/chrome/EvidenceLine";
+import { ScriptName } from "@/components/chrome/ScriptName";
+import type { Culture } from "@/data/cultures";
 import type { DayDecree } from "@/lib/decree";
 import { isoDateUtc } from "@/components/home/format";
 import { cn } from "@/lib/classNames";
 
 export interface CenterDecreeProps {
   className?: string;
-  institution: string;
+  culture: Culture;
   weekday: string;
   dateLong: string;
-  reading: DayDecree;
+  reading: Pick<DayDecree, "headline" | "evidence" | "paragraphs" | "tone" | "figures">;
   votive: string;
   now: Date;
+  /** The figure page for the day's headline figure; the headline links to it. Null on a quiet day. */
+  figureHref?: string | null;
+  /** A dated view (/?date=): a link back to today closes the column. */
+  dated?: boolean;
 }
 
-/** The day's reading: institution kicker, the day's headline, two prose
- * paragraphs, the votive instruction, feedback, and the horizon links.
- * Shared between the desktop grid and the mobile stack. */
+/** The day's reading: institution kicker, the headline to the reader in
+ * display type (a link to the figure page for the day's headline figure), the evidence line in mono beneath it, the paragraph, the
+ * votive, feedback, the horizon links, and on a dated view the way back to
+ * today. The come-back line closes the whole page, under the dive deeper
+ * (DiveDeeper.tsx). Shared between the desktop grid and the mobile stack. */
 export function CenterDecree({
   className,
-  institution,
+  culture,
   weekday,
   dateLong,
   reading,
   votive,
   now,
+  figureHref = null,
+  dated = false,
 }: CenterDecreeProps) {
   const readingId = `day-${isoDateUtc(now)}`;
   return (
-    <main className={cn("flex flex-col items-center px-6 py-11 text-center md:px-14 md:py-[var(--space-6)]", className)}>
-      <NaveHead kicker={`${weekday} · ${dateLong} · ${institution}`}>
-        <span className="uppercase">{reading.headline}</span>
+    <main id="day-figure" className={cn("flex flex-col items-center px-6 py-11 text-center md:px-14 md:py-[var(--space-6)]", className)}>
+      <NaveHead
+        culture={culture}
+        kicker={
+          <>
+            {weekday} · {dateLong} · <ScriptName culture={culture} heading="institution" />
+          </>
+        }
+        sub={
+          reading.figures[0] ? (
+            <div className="font-mono text-data-xs tracking-data text-dim">
+              <EvidenceLine culture={culture} figure={reading.figures[0]} />
+            </div>
+          ) : undefined
+        }
+      >
+        {figureHref ? (
+          <Link href={figureHref} className="hover:text-accent">
+            {reading.headline}
+          </Link>
+        ) : (
+          reading.headline
+        )}
       </NaveHead>
 
       <div className="mx-auto max-w-[560px] text-left">
@@ -54,7 +85,7 @@ export function CenterDecree({
         <FeedbackRow readingId={readingId} noun="DECREE" />
       </div>
 
-      <div className="mt-10 flex justify-center gap-[var(--space-4)] font-display text-[11.5px] tracking-[0.2em] text-dim">
+      <div className="mt-10 flex flex-wrap justify-center gap-x-[var(--space-2)] gap-y-[var(--space-2)] font-mono text-data-xs tracking-microcopy text-dim sm:gap-x-[var(--space-4)] [&>a]:whitespace-nowrap">
         <Link href="/week" className="hover:text-bone">
           THE WEEK →
         </Link>
@@ -65,6 +96,12 @@ export function CenterDecree({
           THE YEAR →
         </Link>
       </div>
+
+      {dated ? (
+        <Link href="/" className="mt-8 font-mono text-data-xs uppercase tracking-label text-bone hover:text-accent">
+          ← BACK TO TODAY
+        </Link>
+      ) : null}
     </main>
   );
 }
