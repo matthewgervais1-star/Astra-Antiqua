@@ -103,3 +103,24 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   check. Consequence: the MAUI and SwiftUI iOS heads build only in CI and cannot build until a workflow
   is re-enabled (Actions tab, "Enable workflow"); web, Android and dotnet checks run locally as before.
 - Pending: Round 7 of the glass design on Matthew's word.
+
+## Added 2026-10-31: Liquid Glass on Android, step 1 (the chrome)
+
+- FACT (Matthew, 2026-10-31, relayed by the session that started this one): Android to look like the
+  iPhone glass design; "Start now" on a port built on Kyant0/AndroidLiquidGlass. Branch
+  `claude/android-glass-7a8074`, committed, not pushed, no PR. Record: `docs/design/android-glass.md`.
+- FACT (`android/app/src/main/java/com/astra/antiqua/ui/theme/glass/`): the chrome as composables,
+  P17 tab bar, P1 wordmark, P3 culture menu, P55 back button, P2 horizon control, P56 accessory and
+  body switcher, P20 scroll edge, `GlassScreen`; constants named as the iPhone port's (`Chrome`,
+  `GlassInk`). No screen uses them yet; Sky Day (step 2) waits for Matthew's word.
+- FACT (`android/gradle/libs.versions.toml`): `io.github.kyant0:backdrop` 1.0.6 (Apache-2.0); the
+  current 2.0.1 needs Kotlin 2.4. Compose BOM 2024.09.02 to 2026.02.00. Test-only: Robolectric 4.17,
+  Roborazzi 1.77.0.
+- FACT (`GlassChromeScreenshotTest`, `docs/design/android-glass/step1/placement.txt`): eight JVM
+  renders at 390x844 dp; every ID within 1 dp of the Round 7 table (P1 off 0.87, the rest 0.00).
+- FACT (local, 2026-10-31): `./gradlew compileDebugSources testDebugUnitTest` 234 tests, 0 failures.
+- FACT (`GlassContrastTest`): the tint tier (API 26 to 30) uses fill .90, 4.64:1 over a bone stroke;
+  the canvas's .80 gives 3.45:1 there.
+- INFERENCE: the iPhone answer "Fixed at 11 pt" applies to Android's chrome type too.
+- Pending, Matthew's popup: system-bar floors 62 and 34, the tint tier's fill, the lens under blur 24,
+  backdrop 1.0.6 or a Kotlin 2.4 move.

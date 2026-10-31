@@ -102,6 +102,15 @@ android {
             // the Android jar; without this, calling it from a JVM unit test
             // throws instead of being a no-op.
             isReturnDefaultValues = true
+            // Robolectric reads the merged resources and the fonts in res/font.
+            isIncludeAndroidResources = true
+            all {
+                // The glass chrome's screenshots (GlassChromeScreenshotTest) write
+                // their PNGs on every run, under build/outputs/roborazzi, and draw
+                // through the hardware renderer so RenderEffect and AGSL run.
+                it.systemProperty("roborazzi.test.record", "true")
+                it.systemProperty("robolectric.pixelCopyRenderMode", "hardware")
+            }
         }
     }
 }
@@ -159,12 +168,21 @@ dependencies {
     // The web account's HTTP client
     implementation(libs.okhttp)
 
+    // The Liquid Glass chrome's backdrop: lens on API 33+, blur on 31 and 32
+    implementation(libs.backdrop)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.okhttp.mockwebserver)
     // A real SQLite on the JVM for the Room migration test. Pinned to the
     // androidx.sqlite version Room 2.8.4 resolves, so its API classes match.
     testImplementation(libs.sqlite.bundled.jvm)
+    // The glass chrome's JVM screenshots and placement checks (ui/theme/glass)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
