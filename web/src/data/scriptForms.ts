@@ -414,7 +414,7 @@ export const INSTITUTION_FORMS: Readonly<Record<Culture, ScriptForm>> = {
   },
   greece: {
     script: "χρηστήριον",
-    en: "THE DAY'S ORACLE",
+    en: "THE DAY’S ORACLE",
     fr: "L’ORACLE DU JOUR",
     source: "Herodotus 1.46-47 (Croesus tests the χρηστήρια); LSJ s.v. χρηστήριον",
     note: "The script reads chrēstērion, the oracle.",

@@ -17,8 +17,9 @@ import {
   type Longitude,
   type ZodiacSign,
 } from "@/data/sampleChart";
-import { findRetrogradeStations, findYearIngresses, SLOW_BODIES } from "@/lib/yearForecast";
-import { computeTransitSpans, type TransitSpan } from "@/lib/transitSpans";
+import { findRetrogradeStations, findYearIngresses } from "@/lib/yearForecast";
+import type { TransitSpan } from "@/lib/transitSpans";
+import { readerSpans } from "@/lib/screens/transits";
 import { composeDayPage, utcDayNumber, type DayDecree } from "@/lib/decree";
 import { DECREE_BANKS } from "@/data/decreeBanks";
 import { toneOf, type Tone } from "@/lib/tone";
@@ -30,14 +31,15 @@ import type { OrbTone } from "@/components/chrome/OrbBar";
 import {
   formatLongitude,
   formatOrbDegMin,
-  formatMonthYear,
-  weekdayUpper,
-  dateLongUpper,
-  shortDateUpper,
+  dateDayUpper,
   natalPointLabel,
   shortRulingClause,
-  SIGN_IMAGE,
 } from "@/components/home/format";
+import { fmt, str } from "@/strings";
+import { SPAN_TONE_WORDS } from "@/strings/formats";
+import { spanTone } from "@/components/transits/spanDisplay";
+import { computeMoonPhase, type MoonPhase } from "@/lib/moonPhase";
+import { getCurrentSeason, type SeasonWindow } from "@/lib/season";
 
 const DAY_MS = 86_400_000;
 const CARDINAL_SIGNS: ReadonlySet<ZodiacSign> = new Set(["Aries", "Cancer", "Libra", "Capricorn"]);
@@ -88,6 +90,8 @@ export interface LongTransitData {
   title1?: string;
   title2?: string;
   rangeLabel?: string;
+  /** "3 EXACT · 2 AHEAD · EASE" (day.longTransit.footer). */
+  footerLabel?: string;
   progressPct?: number;
   href?: string;
 }
@@ -96,8 +100,11 @@ export interface HomeBundle {
   now: Date;
   culture: Culture;
   institution: string;
-  weekday: string;
-  dateLong: string;
+  /** "WED 21 OCT 2026" (F1, the UTC day) for the day kicker. */
+  dateLabel: string;
+  /** The Moon and the season for the sky box (P11). */
+  moon: MoonPhase;
+  season: SeasonWindow;
   todayChart: Readonly<Record<Planet, Longitude>>;
   natal: SavedNatal | null;
   reading: DayDecree;
@@ -172,7 +179,7 @@ function buildStationsAndIngresses(culture: Culture, now: Date): readonly Statio
   const stationRows: StationOrIngressRow[] = stations.map((s) => ({
     key: `station-${s.planet}-${s.date.toISOString()}`,
     date: s.date,
-    dateLabel: shortDateUpper(s.date),
+    dateLabel: fmt("date.dayMonth", s.date, "UTC"),
     text: `${DEITY_MATRIX[culture][s.planet].name.toUpperCase()} STATIONED${
       s.kind === "retrograde" ? " ℞" : " DIRECT"
     } · ${s.sign.toUpperCase()}`,
@@ -184,7 +191,7 @@ function buildStationsAndIngresses(culture: Culture, now: Date): readonly Statio
     return {
       key: `ingress-${ev.planet}-${ev.date.toISOString()}`,
       date: ev.date,
-      dateLabel: shortDateUpper(ev.date),
+      dateLabel: fmt("date.dayMonth", ev.date, "UTC"),
       text: `${DEITY_MATRIX[culture][ev.planet].name.toUpperCase()} → ${ev.toSign.toUpperCase()}${
         seasonTurn ? " · SEASON TURNS" : ""
       }`,
@@ -219,6 +226,24 @@ function buildAspectRows(
   });
 }
 
+/**
+ * The span the Day's long-transit card reads: of the spans open now, the one
+ * closest to exact today; with none open, the next to begin. Null when the
+ * window holds neither. The transit detail screen's goldens read this span.
+ */
+export function pickLongTransitSpan(
+  spans: readonly TransitSpan[],
+  now: Date,
+  todayChart: Readonly<Record<Planet, Longitude>> = computeChart(startOfUtcDay(now)),
+): { span: TransitSpan; open: boolean } | null {
+  const active = spans.filter((s) => s.start.getTime() <= now.getTime() && now.getTime() <= s.end.getTime());
+  if (active.length > 0) {
+    return { span: [...active].sort((a, b) => currentOrbForSpan(a, todayChart) - currentOrbForSpan(b, todayChart))[0]!, open: true };
+  }
+  const ahead = spans.filter((s) => s.start.getTime() > now.getTime()).sort((a, b) => a.start.getTime() - b.start.getTime());
+  return ahead[0] ? { span: ahead[0], open: false } : null;
+}
+
 function buildLongTransit(
   culture: Culture,
   now: Date,
@@ -227,42 +252,36 @@ function buildLongTransit(
 ): LongTransitData {
   if (!natal) return { status: "cta" };
 
-  const natalPoints = [
-    { key: "sun", longitude: natal.chart.sun },
-    { key: "moon", longitude: natal.chart.moon },
-    { key: "asc", longitude: natal.angles.ascendant },
-    { key: "mc", longitude: natal.angles.midheaven },
-  ];
-  const start = new Date(now.getTime() - 420 * DAY_MS);
-  const spans = computeTransitSpans(natalPoints, SLOW_BODIES, start, 1200);
-  if (spans.length === 0) return { status: "none" };
-
-  const active = spans.filter((s) => s.start.getTime() <= now.getTime() && now.getTime() <= s.end.getTime());
-  const pool = active.length > 0 ? active : spans.filter((s) => s.start.getTime() > now.getTime());
-  if (pool.length === 0) return { status: "none" };
-
-  const chosen =
-    active.length > 0
-      ? [...pool].sort((a, b) => currentOrbForSpan(a, todayChart) - currentOrbForSpan(b, todayChart))[0]!
-      : [...pool].sort((a, b) => a.start.getTime() - b.start.getTime())[0]!;
+  const picked = pickLongTransitSpan(readerSpans(natal, now), now, todayChart);
+  if (!picked) return { status: "none" };
+  const { span: chosen, open } = picked;
 
   const transitDeity = DEITY_MATRIX[culture][chosen.transitPlanet];
-  const title1 = `${transitDeity.name.toUpperCase()} IN THE ${SIGN_IMAGE[chosen.transitSign]}`;
-  const title2 = `${ASPECT_VERBS[culture][chosen.aspectKind].toUpperCase()} YOUR NATAL ${natalPointLabel(
-    culture,
-    chosen.natalKey,
-  )}`;
-  const rangeLabel = `${formatMonthYear(chosen.start)} → ${formatMonthYear(chosen.end)}`;
+  const title1 = str("day.longTransit.title1", culture, {
+    deity: transitDeity.name.toUpperCase(),
+    signPhrase: fmt("sign.phrase", chosen.transitSign),
+  });
+  const title2 = str("day.longTransit.title2", culture, {
+    verb: ASPECT_VERBS[culture][chosen.aspectKind].toUpperCase(),
+    natal: natalPointLabel(culture, chosen.natalKey),
+  });
+  const rangeLabel = fmt("range.months", [chosen.start, chosen.end], "UTC");
+  const footerLabel = str("day.longTransit.footer", culture, {
+    exact: chosen.passes.length,
+    ahead: chosen.passes.filter((p) => p.getTime() > now.getTime()).length,
+    tone: SPAN_TONE_WORDS[spanTone(chosen)],
+  });
   const span = chosen.end.getTime() - chosen.start.getTime();
   const progressPct =
     span > 0 ? Math.min(100, Math.max(0, ((now.getTime() - chosen.start.getTime()) / span) * 100)) : 0;
 
   return {
-    status: active.length > 0 ? "active" : "upcoming",
+    status: open ? "active" : "upcoming",
     span: chosen,
     title1,
     title2,
     rangeLabel,
+    footerLabel,
     progressPct,
     href: `/transits/${chosen.id}`,
   };
@@ -319,8 +338,9 @@ export function buildHomeBundle(culture: Culture, now: Date, natal: SavedNatal |
     now,
     culture,
     institution: CULTURE_VOICES[culture].institution,
-    weekday: weekdayUpper(now),
-    dateLong: dateLongUpper(now),
+    dateLabel: dateDayUpper(now),
+    moon: computeMoonPhase(now),
+    season: getCurrentSeason(now),
     todayChart,
     natal,
     reading,

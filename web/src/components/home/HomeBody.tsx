@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
 import { Skeleton } from "@/components/chrome/Skeleton";
@@ -16,6 +16,8 @@ import { TransitTeaser } from "@/components/home/TransitTeaser";
 import { PermissionsModule } from "@/components/home/PermissionsModule";
 import { DayPressureModule } from "@/components/home/DayPressureModule";
 import { DiveDeeper } from "@/components/home/DiveDeeper";
+import { dayModelFromBundle } from "@/lib/screens/day";
+import { localZone } from "@/strings/formats";
 
 /**
  * The home body: the culture is guaranteed non-null here (CultureGate only
@@ -28,6 +30,7 @@ import { DiveDeeper } from "@/components/home/DiveDeeper";
 export function HomeBody() {
   const culture = useActivePantheon();
   const [bundle, setBundle] = useState<HomeBundle | null>(null);
+  const slots = useMemo(() => (bundle ? dayModelFromBundle(bundle, localZone()) : null), [bundle]);
   // A figure page links back to its own day as /?date=YYYY-MM-DD: the day
   // page then reads 00:00 UTC on that date, the same instant the figure read.
   const dated = useDatedDay();
@@ -42,7 +45,7 @@ export function HomeBody() {
 
   if (!culture) return null;
 
-  if (!bundle) {
+  if (!bundle || !slots) {
     return (
       <div className="mx-auto max-w-[720px] px-5 py-16 md:px-14">
         <Skeleton />
@@ -63,10 +66,9 @@ export function HomeBody() {
 
         <CenterDecree
           culture={bundle.culture}
-          weekday={bundle.weekday}
-          dateLong={bundle.dateLong}
+          dateLabel={bundle.dateLabel}
           reading={bundle.reading}
-          votive={bundle.votive}
+          slots={slots}
           dated={dated !== null}
           now={bundle.now}
           figureHref={bundle.reading.figures[0] ? figureHref(isoDateUtc(bundle.now), bundle.reading.figures[0]) : null}
@@ -76,6 +78,7 @@ export function HomeBody() {
           className="px-6 pb-8 min-[1100px]:hidden md:px-14"
           culture={bundle.culture}
           rows={bundle.compactSkyRows}
+          slots={slots}
         />
 
         <AspectsRail

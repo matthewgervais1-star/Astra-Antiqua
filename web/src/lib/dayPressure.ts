@@ -1,4 +1,6 @@
 import type { Culture, Planet } from "@/data/cultures";
+import { fmt, str } from "@/strings";
+import { ASPECT_GLYPH as ASPECT_GLYPH_OF } from "@/lib/decree";
 import type { Longitude } from "@/data/sampleChart";
 import { orbFor } from "@/data/sampleChart";
 import { DEITY_MATRIX } from "@/data/deities";
@@ -31,6 +33,8 @@ export interface PressureGroup {
   maxOrb: number;
   tone: OrbTone;
   sentence: string;
+  /** "MERCURY ⚹ NATAL SATURN · 3.0° FROM EXACT · EASE" (day.chart.row.data, board P13); null with no contact. */
+  data: string | null;
 }
 
 const HOUSE_GROUPS: readonly (readonly number[])[] = [
@@ -154,6 +158,7 @@ export function dayPressure(
         maxOrb: 8,
         tone: LEVEL_TONE[level],
         sentence: `Nothing exact touches your ${ordinal(primaryHouse)}.`,
+        data: null,
       };
     }
 
@@ -175,6 +180,13 @@ export function dayPressure(
       maxOrb: orbFor(lead.kind),
       tone: LEVEL_TONE[level],
       sentence,
+      data: str("day.chart.row.data", culture, {
+        planet: fmt("planet.name", lead.transit),
+        aspectGlyph: ASPECT_GLYPH_OF[lead.kind],
+        natalPlanet: fmt("planet.name", lead.natal),
+        orb: fmt("angle.orbDecimal", lead.orb),
+        tone: fmt("tone.word", lead.kind),
+      }),
     };
   });
 }

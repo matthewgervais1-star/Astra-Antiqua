@@ -15,9 +15,14 @@
     "specimens": "node scripts/specimens/gen-specimens.mjs && node scripts/specimens/render.mjs && node scripts/specimens/build-css.mjs && node scripts/specimens/wrap-cards.mjs",
     "export:content": "node scripts/export-content.mjs",
     "export:goldens": "node scripts/export-goldens.mjs",
+    "export:strings": "node scripts/export-strings.mjs",
+    "export:screen-goldens": "node scripts/export-screen-goldens.mjs",
+    "check:shared": "node scripts/check-shared.mjs",
+    "gen:android-strings": "node scripts/gen-android-strings.mjs",
     "export:glyphs": "node scripts/export-glyphs.mjs",
     "export:marks": "node scripts/export-marks.mjs",
-    "gen:android-tz": "node scripts/gen-android-tz.mjs"
+    "gen:android-tz": "node scripts/gen-android-tz.mjs",
+    "export:learn": "node scripts/gen-android-learn.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

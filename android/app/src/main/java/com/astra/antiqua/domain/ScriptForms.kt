@@ -95,7 +95,7 @@ object ScriptForms {
     /** The institution heading, where a native word is attested. */
     fun institution(culture: AncientCulture): ScriptForm = when (culture) {
         AncientCulture.EGYPT -> ScriptForm("𓌷𓂝𓏏𓁦", "THE HALL OF MA’AT", "LA SALLE DE MAÂT")
-        AncientCulture.GREECE -> ScriptForm("χρηστήριον", "THE DAY'S ORACLE", "L’ORACLE DU JOUR")
+        AncientCulture.GREECE -> ScriptForm("χρηστήριον", "THE DAY’S ORACLE", "L’ORACLE DU JOUR")
         AncientCulture.CANAAN -> ScriptForm("𐎔𐎃𐎗𐎟𐎎𐎓𐎄", "THE COUNCIL OF EL", "LE CONSEIL D’EL")
         AncientCulture.CARTHAGE -> ScriptForm(null, "THE DECREE OF THE TOPHET", "LE DÉCRET DU TOPHET")
         AncientCulture.ROME -> ScriptForm("AVSPICIA", "THE AUSPICES OF THE DAY", "LES AUSPICES DU JOUR")

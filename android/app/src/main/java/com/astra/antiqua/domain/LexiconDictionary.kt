@@ -10,7 +10,7 @@ private fun deityName(culture: AncientCulture, planet: Planet): String =
 
 object LexiconDictionary {
     val Greek = CulturalLexicon(
-        dashboardTitle = "The Day's Oracle",
+        dashboardTitle = "The Day’s Oracle",
         birthChartMenu = "Thread of the Fates",
         ephemerisMenu = "The Antikythera",
         settingsTitle = "Mt. Olympus",

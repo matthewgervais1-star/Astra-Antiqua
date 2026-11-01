@@ -9,7 +9,7 @@ import { getHouseMeaning } from "@/data/houses";
  * pulled from a bank, while staying in each pantheon's voice via the deity
  * name.
  */
-const PLANET_CONCERN: Readonly<Record<Planet, string>> = {
+export const PLANET_CONCERN: Readonly<Record<Planet, string>> = {
   sun: "the work of being seen, and of ruling what is yours to rule",
   moon: "the tides of mood, memory, and what the body needs",
   mercury: "the work of the mind, the message, and the bargain",

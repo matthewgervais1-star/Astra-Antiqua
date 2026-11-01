@@ -388,3 +388,31 @@ await writeFile(path.join(OUT, "LearnContent.kt"), file);
 console.log("gen-android-learn: wrote LearnContent.kt");
 for (const line of report) console.log(`  ${line}`);
 console.log(`  ${signs.length} signs, ${verbs.length} planet verbs, ${KINDS.length} geometry lines`);
+
+// --- the same content as data, for the surfaces that read shared/content ---
+// The iOS core (dotnet/AstraAntiqua.Core) embeds shared/content/*.json rather
+// than generated source, so the Learn sections travel there as JSON from the
+// very blocks written into LearnContent.kt above: one extraction, two forms.
+const SHARED = path.join(REPO, "shared", "content");
+const learn = {
+  sections: pages.map((p) => ({
+    n: p.n,
+    title: p.title,
+    href: p.href,
+    blurb: p.blurb,
+    table: p.table,
+    blocks: p.blocks.map((b) =>
+      b.kind === "head" ? { kind: b.kind, kicker: b.kicker, text: b.text } : { kind: b.kind, text: b.text },
+    ),
+  })),
+  planetVerbs: verbs,
+  houseSystems: systems,
+  aspectRulings: rulings,
+  aspectGeometry: geometry,
+};
+await mkdir(SHARED, { recursive: true });
+const learnTarget = path.join(SHARED, "learn.json");
+await writeFile(`${learnTarget}.tmp`, `${JSON.stringify(learn, null, 2)}\n`, "utf8");
+const { rename } = await import("node:fs/promises");
+await rename(`${learnTarget}.tmp`, learnTarget);
+console.log(`gen-android-learn: wrote shared/content/learn.json (${learn.sections.length} sections)`);

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { readFeedback, writeFeedback, type FeedbackVerdict } from "@/lib/feedback";
 import { cn } from "@/lib/classNames";
+import { text } from "@/strings";
 
 export interface FeedbackRowProps {
   readingId: string;
@@ -31,13 +32,13 @@ export function FeedbackRow({ readingId, noun }: FeedbackRowProps) {
 
   return (
     <div className="font-mono text-data-xs tracking-label text-dim">
-      AGAINST THIS {noun} →{" "}
+      {text("chrome.feedback.lead", { noun })}{" "}
       <button
         type="button"
         onClick={() => choose("so")}
         className={cn(LINK_BASE, verdict === "so" ? LINK_SELECTED : LINK_UNSELECTED)}
       >
-        IT WAS SO
+        {text("chrome.feedback.so")}
       </button>{" "}
       ·{" "}
       <button
@@ -45,9 +46,9 @@ export function FeedbackRow({ readingId, noun }: FeedbackRowProps) {
         onClick={() => choose("notso")}
         className={cn(LINK_BASE, verdict === "notso" ? LINK_SELECTED : LINK_UNSELECTED)}
       >
-        IT WAS NOT SO
+        {text("chrome.feedback.notSo")}
       </button>{" "}
-      <span className="text-faint-ink">· KEPT ON THIS DEVICE</span>
+      <span className="text-faint-ink">· {text("chrome.feedback.kept")}</span>
     </div>
   );
 }

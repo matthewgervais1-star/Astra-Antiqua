@@ -7,14 +7,14 @@ import org.junit.Test
 
 /**
  * The three-letter sign labels. Web's /charts placements table
- * (`web/src/components/charts/chartFormat.ts`, `SIGN_ABBR3`) is the canonical
+ * (`web/src/strings/formats.ts`, `SIGN_ABBR3`, format rule F8) is the canonical
  * set; the parity case reads that table off disk the way
  * PlacementContentStoreTest reads `shared/content/`, from the Gradle test
  * task's working directory (`app/`), so the two surfaces cannot drift.
  */
 class ZodiacSignAbbrTest {
 
-    private val chartFormat = File("../../web/src/components/charts/chartFormat.ts")
+    private val chartFormat = File("../../web/src/strings/formats.ts")
 
     @Test
     fun `every sign carries the canonical abbreviation`() {
