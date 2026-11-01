@@ -219,3 +219,30 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 - FACT (local, 2026-11-01): `./gradlew compileDebugSources testDebugUnitTest` 299 tests, 0 failures (279 before).
 - FACT (Matthew's popup, 2026-11-01): votive tracking tightened to fit two lines (built, 299/0); spine headlines
   and TODAY kept as built; Sky Year approved. Next: step 6, Transits, in a fresh session; push and PR on his word.
+
+## Added 2026-11-01 (late): Android glass port, step 6 Transits (built)
+
+- FACT (task from the session running the port, 2026-11-01): branch `claude/android-glass-step6-transits-30fec3`, cut
+  from step 5's branch (PR #15, open), so its PR stacks on #15. Committed, not pushed, no PR.
+- FACT (`ui/screens/LongTransitsScreen.kt`, `domain/LongTransits.kt`, `MainActivity.kt`): Route.TRANSITS opens the long
+  transits on the glass chrome: kicker, web's title, count line, year axis with NOW, OPEN NOW and AHEAD with web's nine
+  spans and the board's bars. Rows open the flat transit detail until step 9. The flat `TransitsScreen` stays on disk.
+- FACT (`TransitsViewModel.kt`, `ScreenGoldenTest`): spans now walk the Midheaven as web's do; the 10 transits goldens
+  equal web's; Sky Year's Midheaven spine rows link. Record: `docs/design/android-glass.md` (step 6), renders
+  `docs/design/android-glass/step6/`.
+- FACT (review, one Opus reviewer): nothing Critical; one Important (year labels overlapping) and the Minors fixed in
+  two rounds. Local: 329 tests, 0 failures (299 before).
+- Pending: Matthew's popup on step 6 (READ →, capitals or small caps, approval); push and PR on his word.
+- FACT (Matthew, 2026-11-01): "the lines and spacing is sloppy work... design round now to fix". Three variants
+  rendered; his popup chose C (titles on two balanced lines, data split range / counts, bars and axis on the text's
+  edge, NOW as ticks), first year label dropped when crowded, no READ →, and a no-lone-word test on Day, Week, Season,
+  Year and Transits in every culture at 390 and 360. Built on this branch; one Opus review, two fix rounds. Local:
+  353 tests, 0 failures. Record: `docs/design/android-glass.md` (step 6, design round).
+- Pending: Matthew's popup on Greece's Year spine at 360, the mixed spine size at 360, and approval; push and PR on
+  his word.
+- FACT (Matthew's popup, 2026-11-01): "End month under headline", "One size for the list", "Approved after the spine
+  fix". Built: Year spine rows set the headline full width at 18sp .08em with the end month 4 under it; no named
+  spine exceptions remain. Local: 353 tests, 0 failures. Step 6 approved. Next: step 7, Chart, in a fresh session;
+  push and PR (stacked on #15) on Matthew's word.
+- FACT (Matthew, 2026-11-01, "Push and open PR"): branch pushed; PR #16 opened against
+  `claude/android-glass-step5-year-e880ad` (stacked on #15). No CI checks reported on it yet (app PR status).

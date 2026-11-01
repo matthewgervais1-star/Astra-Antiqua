@@ -8,6 +8,40 @@ sky-day-rome P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off
 sky-day-rome P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
 sky-day-rome P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
 sky-day-rome P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-day 360 EGYPT rest lone word prose [P14] "transformed." in "Isis rows in time with your Amun" / "in the eighth. It touches what is" / "shared, inherited, hidden, and" / "transformed." (17.0.sp Unspecified in 816 px)
+sky-day 360 EGYPT rest lone word prose [row-3] "home." in "Ra tips the scales against your Isis" / "in the third. It touches your words," / "your kin, and the road close to" / "home." (17.0.sp Unspecified in 816 px)
+sky-day 360 EGYPT end lone word prose [P14] "transformed." in "Isis rows in time with your Amun" / "in the eighth. It touches what is" / "shared, inherited, hidden, and" / "transformed." (17.0.sp Unspecified in 816 px)
+sky-day 360 EGYPT end lone word prose [row-3] "home." in "Ra tips the scales against your Isis" / "in the third. It touches your words," / "your kin, and the road close to" / "home." (17.0.sp Unspecified in 816 px)
+sky-day 360 GREECE rest lone word prose [P13] "yours." in "Hermes offers fair counsel to your" / "Kronos in the second. It touches" / "what you earn, hold, and count as" / "yours." (17.0.sp Unspecified in 816 px)
+sky-day 360 GREECE rest lone word prose [row-3] "home." in "Helios challenges your Aphrodite" / "in the third. It touches your words," / "your kin, and the road close to" / "home." (17.0.sp Unspecified in 816 px)
+sky-day 360 GREECE end lone word prose [P13] "yours." in "Hermes offers fair counsel to your" / "Kronos in the second. It touches" / "what you earn, hold, and count as" / "yours." (17.0.sp Unspecified in 816 px)
+sky-day 360 GREECE end lone word prose [row-3] "home." in "Helios challenges your Aphrodite" / "in the third. It touches your words," / "your kin, and the road close to" / "home." (17.0.sp Unspecified in 816 px)
+sky-day 360 CANAAN rest lone words: none
+sky-day 360 CANAAN end lone words: none
+sky-day 360 CARTHAGE rest lone words: none
+sky-day 360 CARTHAGE end lone words: none
+sky-day 360 ROME rest lone word prose [P9] "week." in "Your courtship and your inheritance" / "obstruct each other, and the pontiff" / "marks it in the calendar. An old family" / "claim blocks your way. Venus quarrels" / "with the bride's mother over the match," / "and the wedding is postponed. Below" / "the Capitol, where Venus meets Dis" / "Pater, Luna sits on the opposite bench" / "from Iuppiter: your household affairs" / "and your run for office pull in different" / "directions. Let the courtship rest a" / "week." (18.0.sp Unspecified in 936 px)
+sky-day 360 ROME rest lone word prose [P13] "yours." in "Mercurius strikes a treaty with your" / "Saturnus in the second. It touches" / "what you earn, hold, and count as" / "yours." (17.0.sp Unspecified in 816 px)
+sky-day 360 ROME end lone word prose [P9] "week." in "Your courtship and your inheritance" / "obstruct each other, and the pontiff" / "marks it in the calendar. An old family" / "claim blocks your way. Venus quarrels" / "with the bride's mother over the match," / "and the wedding is postponed. Below" / "the Capitol, where Venus meets Dis" / "Pater, Luna sits on the opposite bench" / "from Iuppiter: your household affairs" / "and your run for office pull in different" / "directions. Let the courtship rest a" / "week." (18.0.sp Unspecified in 936 px)
+sky-day 360 ROME end lone word prose [P13] "yours." in "Mercurius strikes a treaty with your" / "Saturnus in the second. It touches" / "what you earn, hold, and count as" / "yours." (17.0.sp Unspecified in 816 px)
+sky-day 390 EGYPT rest lone words: none
+sky-day 390 EGYPT end lone words: none
+sky-day 390 GREECE rest lone word prose [P14] "transformed." in "Aphrodite moves in accord with your" / "Zeus in the eighth. It touches what is" / "shared, inherited, hidden, and" / "transformed." (17.0.sp Unspecified in 906 px)
+sky-day 390 GREECE end lone word prose [P14] "transformed." in "Aphrodite moves in accord with your" / "Zeus in the eighth. It touches what is" / "shared, inherited, hidden, and" / "transformed." (17.0.sp Unspecified in 906 px)
+sky-day 390 CANAAN rest lone word prose [P14] "transformed." in "Attart speaks favor over your Baal" / "Hadad in the eighth. It touches what is" / "shared, inherited, hidden, and" / "transformed." (17.0.sp Unspecified in 906 px)
+sky-day 390 CANAAN rest lone word prose [row-3] "home." in "Shapash draws the bow against your" / "Attart in the third. It touches your" / "words, your kin, and the road close to" / "home." (17.0.sp Unspecified in 906 px)
+sky-day 390 CANAAN end lone word prose [P14] "transformed." in "Attart speaks favor over your Baal" / "Hadad in the eighth. It touches what is" / "shared, inherited, hidden, and" / "transformed." (17.0.sp Unspecified in 906 px)
+sky-day 390 CANAAN end lone word prose [row-3] "home." in "Shapash draws the bow against your" / "Attart in the third. It touches your" / "words, your kin, and the road close to" / "home." (17.0.sp Unspecified in 906 px)
+sky-day 390 CARTHAGE rest lone word prose [P13] "yours." in "Sakun trades safe passage with your" / "Baal Hammon in the second. It touches" / "what you earn, hold, and count as" / "yours." (17.0.sp Unspecified in 906 px)
+sky-day 390 CARTHAGE rest lone word prose [P14] "transformed." in "Astarte lights the harbor for your Baal" / "Hammon in the eighth. It touches what" / "is shared, inherited, hidden, and" / "transformed." (17.0.sp Unspecified in 906 px)
+sky-day 390 CARTHAGE rest lone word prose [row-3] "home." in "Semes turns the prow against your" / "Astarte in the third. It touches your" / "words, your kin, and the road close to" / "home." (17.0.sp Unspecified in 906 px)
+sky-day 390 CARTHAGE end lone word prose [P13] "yours." in "Sakun trades safe passage with your" / "Baal Hammon in the second. It touches" / "what you earn, hold, and count as" / "yours." (17.0.sp Unspecified in 906 px)
+sky-day 390 CARTHAGE end lone word prose [P14] "transformed." in "Astarte lights the harbor for your Baal" / "Hammon in the eighth. It touches what" / "is shared, inherited, hidden, and" / "transformed." (17.0.sp Unspecified in 906 px)
+sky-day 390 CARTHAGE end lone word prose [row-3] "home." in "Semes turns the prow against your" / "Astarte in the third. It touches your" / "words, your kin, and the road close to" / "home." (17.0.sp Unspecified in 906 px)
+sky-day 390 ROME rest lone word prose [P14] "transformed." in "Venus clasps the right hand of your" / "Iuppiter in the eighth. It touches what" / "is shared, inherited, hidden, and" / "transformed." (17.0.sp Unspecified in 906 px)
+sky-day 390 ROME end lone word prose [P14] "transformed." in "Venus clasps the right hand of your" / "Iuppiter in the eighth. It touches what" / "is shared, inherited, hidden, and" / "transformed." (17.0.sp Unspecified in 906 px)
+sky-day 390 1.3 EGYPT rest lone words: none
+sky-day 390 1.3 EGYPT end lone words: none
 sky-day-scrolled P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 sky-day-scrolled P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
 sky-day-scrolled P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0

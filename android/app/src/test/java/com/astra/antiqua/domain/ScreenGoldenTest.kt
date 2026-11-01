@@ -22,7 +22,7 @@ import java.util.TimeZone
 /**
  * Android's composers against web's screen goldens (shared/goldens/screens,
  * written by web/scripts/export-screen-goldens.mjs from web/src/lib/screens):
- * for every case in day.json, week.json, season.json and year.json, the slot map the
+ * for every case in day.json, week.json, season.json, year.json and transits.json, the slot map the
  * Sky screens draw from equals the golden, character for character.
  *
  * A slot Android has not built yet is listed in the builder's NOT_BUILT set
@@ -124,6 +124,17 @@ class ScreenGoldenTest {
             null
         }
         SkyYearSlots.build(SkyYearComposer.compose(engine, c.culture, c.now, natal), c.culture, c.zone)
+    }
+
+    @Test
+    fun `the long transits print web's transits golden`() = compare("transits", TransitsSlots.NOT_BUILT) { c ->
+        val transits = if (c.smoke) {
+            val natal = SkySeasonComposer.natal(engine, smokeChart(), SkyDayTest.smokeBirth.latitude, SkyDayTest.smokeBirth.longitude)
+            LongTransits(c.now, LongTransitsComposer.readerSpans(engine, natal, c.now))
+        } else {
+            null
+        }
+        TransitsSlots.build(transits, c.culture, c.zone)
     }
 
     @Test

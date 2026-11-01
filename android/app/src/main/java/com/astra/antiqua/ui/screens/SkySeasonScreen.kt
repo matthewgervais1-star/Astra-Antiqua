@@ -53,6 +53,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
@@ -203,6 +204,7 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavig
             lineHeight = 26.sp * 1.35f,
             letterSpacing = if (smallCaps) 0.06.em else 0.08.em,
             lineHeightStyle = CssLeading,
+            lineBreak = LineBreak.Heading,
         ),
         color = Bone,
         textAlign = TextAlign.Center,
@@ -251,7 +253,7 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavig
         SeasonLabel(slots.text("season.chart.label"), "P37", bottom = 16.dp)
         Text(
             slots.text("season.chart.houseHeading"),
-            style = TextStyle(fontFamily = SpectralSc, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 16.sp * 1.45f, letterSpacing = 0.06.em, lineHeightStyle = CssLeading),
+            style = TextStyle(fontFamily = SpectralSc, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 16.sp * 1.45f, letterSpacing = 0.06.em, lineHeightStyle = CssLeading, lineBreak = LineBreak.Heading),
             color = Bone,
             textAlign = TextAlign.Center,
             modifier = side.testTag("P38").semantics { heading() },
@@ -322,6 +324,7 @@ private fun WebSeasonSections(season: SkySeason, slots: SlotMap, onNavigate: (St
                 lineHeight = 18.sp * 1.6f,
                 letterSpacing = 0.14.em,
                 lineHeightStyle = CssLeading,
+                lineBreak = LineBreak.Heading,
             ),
             color = LocalAccent.current,
             textAlign = TextAlign.Center,
@@ -429,7 +432,7 @@ private fun SkyRow(row: SeasonSkyRow, text: String, id: String) {
                     withStyle(SpanStyle(color = ink)) { append(date) }
                     append(head.removePrefix(date))
                 },
-                style = mono(11.sp, 1.4f, 0.1f),
+                style = mono(11.sp, 1.4f, 0.1f).copy(lineBreak = LineBreak.Heading),
                 color = Prose,
             )
             if (prose.isNotEmpty()) {

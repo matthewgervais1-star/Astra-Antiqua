@@ -107,7 +107,7 @@ class SkySeasonScreenshotTest {
     private val opened = mutableListOf<String>()
     private lateinit var focus: androidx.compose.ui.focus.FocusManager
 
-    private fun render(name: String, culture: AncientCulture, scroll: Int, withChart: Boolean = true, fontScale: Float = 1f) {
+    private fun render(name: String, culture: AncientCulture, scroll: Int, withChart: Boolean = true, fontScale: Float = 1f, capture: Boolean = true) {
         val engine = AstronomyEngine()
         val asc = if (withChart) SkySeasonComposer.natal(engine, CalculateNatalChartUseCase(engine).execute(SkyDayTest.smokeBirth), SkyDayTest.smokeBirth.latitude, SkyDayTest.smokeBirth.longitude) else null
         val season = SkySeasonComposer.compose(engine, culture, SkyDayTest.sampleNow, asc)
@@ -123,7 +123,7 @@ class SkySeasonScreenshotTest {
             }
         }
         compose.waitForIdle()
-        compose.onRoot().captureRoboImage(File(out, "$name.png").path)
+        if (capture) compose.onRoot().captureRoboImage(File(out, "$name.png").path)
     }
 
     /** Writes each ID's measured box beside the table's; returns those off by more than 1 dp. */
@@ -319,4 +319,45 @@ class SkySeasonScreenshotTest {
         val misses = gaps("sky-season-no-chart", listOf(Triple("P37", "P39", 16f), Triple("P39", "P40", 36f), Triple("P40", "P41", 4f)))
         assertTrue("gaps off by more than 1 dp:\n" + misses.joinToString("\n"), misses.isEmpty())
     }
+
+    private lateinit var sweepState: androidx.compose.foundation.ScrollState
+
+    /**
+     * Sets the screen once and walks [cultures], each at rest and at its end, through [LoneWords.sweep]; a hit
+     * outside prose fails unless [allowed] names it (each exception is written with its reason).
+     */
+    private fun loneSweep(screen: String, cultures: List<AncientCulture> = AncientCulture.entries, fontScale: Float = 1f, allowed: Map<String, String> = emptyMap()) {
+        val engine = AstronomyEngine()
+        val asc = SkySeasonComposer.natal(engine, CalculateNatalChartUseCase(engine).execute(SkyDayTest.smokeBirth), SkyDayTest.smokeBirth.latitude, SkyDayTest.smokeBirth.longitude)
+        val data = cultures.associateWith { SkySeasonComposer.compose(engine, it, SkyDayTest.sampleNow, asc) }
+        val shown = androidx.compose.runtime.mutableStateOf(cultures.first())
+        compose.setContent {
+            val base = LocalDensity.current
+            androidx.compose.runtime.CompositionLocalProvider(LocalDensity provides androidx.compose.ui.unit.Density(base.density, fontScale)) {
+                val c = shown.value
+                AstraAntiquaTheme(selectedCulture = c) {
+                    androidx.compose.runtime.key(c) {
+                        sweepState = rememberScrollState()
+                        SkySeasonFrame(culture = c, season = data.getValue(c), onNavigate = {}, onOpen = {}, scrollState = sweepState)
+                    }
+                }
+            }
+        }
+        LoneWords.sweep(
+            compose, out, screen, cultures,
+            select = { shown.value = it },
+            scroll = { end -> kotlinx.coroutines.runBlocking { sweepState.scrollTo(if (end) sweepState.maxValue else 0) } },
+            allowed = allowed,
+        )
+    }
+
+    @Test
+    fun noLoneWordInAnyCultureAt390() = loneSweep("sky-season 390")
+
+    @Test
+    @Config(qualifiers = "w360dp-h780dp-xxhdpi")
+    fun noLoneWordInAnyCultureAt360() = loneSweep("sky-season 360")
+
+    @Test
+    fun noLoneWordAtFontScale130() = loneSweep("sky-season 390 1.3", listOf(AncientCulture.EGYPT), fontScale = 1.3f)
 }

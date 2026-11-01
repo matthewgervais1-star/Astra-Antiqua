@@ -142,7 +142,7 @@ class SkyYearScreenshotTest {
         return SkyYearComposer.compose(engine, culture, now, natal)
     }
 
-    private fun render(name: String, culture: AncientCulture, scroll: Int, withChart: Boolean = true, fontScale: Float = 1f) {
+    private fun render(name: String, culture: AncientCulture, scroll: Int, withChart: Boolean = true, fontScale: Float = 1f, capture: Boolean = true) {
         shown = composeYear(culture, withChart)
         compose.setContent {
             val base = LocalDensity.current
@@ -156,7 +156,7 @@ class SkyYearScreenshotTest {
             }
         }
         compose.waitForIdle()
-        compose.onRoot().captureRoboImage(File(out, "$name.png").path)
+        if (capture) compose.onRoot().captureRoboImage(File(out, "$name.png").path)
     }
 
     private fun box(id: String): Rect {
@@ -256,12 +256,38 @@ class SkyYearScreenshotTest {
         compose.onNodeWithTag("year-segments").assertDoesNotExist()
     }
 
+    /**
+     * The spine rows (Matthew's popup, 2026-11-01, "End month under headline", "One size for the list"): the
+     * headline across the row's full width, the end month 4 under it (web's gap-1) on the headline's left edge,
+     * every row 48 or taller. Notes each row's height.
+     */
+    private fun unmergedBox(id: String): Rect =
+        compose.onNodeWithTag(id, useUnmergedTree = true).getUnclippedBoundsInRoot().let { Rect(it.left.value, it.top.value, (it.right - it.left).value, (it.bottom - it.top).value) }
+
+    private fun assertSpine(name: String) {
+        var i = 1
+        while (compose.onAllNodes(androidx.compose.ui.test.hasTestTag("spine-$i"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) {
+            val row = box("spine-$i")
+            // Inside the row's cleared semantics: the unmerged tree.
+            val head = unmergedBox("spine-$i-headline")
+            val end = unmergedBox("spine-$i-end")
+            note("%s spine-%d %.1f tall (headline %.1f, end month %.1f)".format(name, i, row.h, head.h, end.h))
+            assertTrue("$name spine-$i headline spans the row: $head $row", abs(head.x - row.x) <= 0.5f && abs(head.w - row.w) <= 0.5f)
+            assertTrue("$name spine-$i end month 4 under the headline: $head $end", abs(end.y - (head.y + head.h) - 4f) <= 0.5f)
+            assertTrue("$name spine-$i end month on the headline's edge: $end", abs(end.x - head.x) <= 0.5f)
+            assertTrue("$name spine-$i under 48: $row", row.h >= 48f)
+            i++
+        }
+        assertTrue("$name: no spine rows", i > 1)
+    }
+
     @Test
     fun skyYearLargeFont() {
         // At 1.3 the title, the count line and the rows grow; the gaps between them hold.
         render("sky-year-font-130", AncientCulture.EGYPT, 0, fontScale = 1.3f)
         assertGaps("sky-year-font-130", boardGaps.take(7))
         note("sky-year-font-130 P44 %.1f tall, P45 %.1f, P47 %.1f".format(box("P44").h, box("P45").h, box("P47").h))
+        assertSpine("sky-year-font-130")
     }
 
     @Test
@@ -272,6 +298,7 @@ class SkyYearScreenshotTest {
         assertGaps("sky-year-360", boardGaps.take(7))
         val row = box("P47")
         note("sky-year-360 P47 got %.1f, %.1f · %.1fx%.1f".format(row.x, row.y, row.w, row.h))
+        assertSpine("sky-year-360")
         assertTrue("$row", abs(row.x - 45f) <= 1f && abs(row.w - 291f) <= 1f)
     }
 
@@ -296,6 +323,7 @@ class SkyYearScreenshotTest {
     fun skyYearEnd() {
         // The page's foot: web's opening, the segments, the spine, the votive, the feedback row and the links.
         render("sky-year-end", AncientCulture.EGYPT, 6000)
+        assertSpine("sky-year-end")
         assertChrome("sky-year-end")
         listOf("year-opening", "year-segments", "segment-1", "segment-2", "segment-3", "year-spine", "year-votive", "year-feedback", "year-links").forEach {
             noteBox("sky-year-end", it)
@@ -323,14 +351,14 @@ class SkyYearScreenshotTest {
         compose.onNode(hasContentDescription("The season") and hasClickAction())
             .performTouchInput { click(Offset(centerX, -10.dp.toPx())) }
         assertTrue("$opened $routes", opened == listOf(Route.FORECAST) && routes == listOf(Route.SEASON))
-        // web links each spine row to its transit. Jupiter trine the Ascendant opens its detail on
-        // top; Saturn opposite the Midheaven stays a D-pad stop, as Android's transit detail walks
-        // the Sun, Moon and Ascendant only.
+        // web links each spine row to its transit. Jupiter trine the Ascendant and Saturn opposite the
+        // Midheaven each open their detail on top (the detail walks the Midheaven since step 6).
         opened.clear()
         compose.onNodeWithTag("spine-1").assert(hasClickAction())
-        compose.onNodeWithTag("spine-2").assert(androidx.compose.ui.test.hasNoClickAction())
+        compose.onNodeWithTag("spine-2").assert(hasClickAction())
         compose.onNodeWithTag("spine-1").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
-        assertTrue("$opened", opened == listOf(Route.transitDetail("jupiter-trine-asc")))
+        compose.onNodeWithTag("spine-2").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
+        assertTrue("$opened", opened == listOf(Route.transitDetail("jupiter-trine-asc"), Route.transitDetail("saturn-opposition-mc")))
         compose.onNode(hasContentDescription("The year's long transits, its spine")).assertExists()
         compose.onNode(hasContentDescription("akhet, the flood, 21 oct to 20 jan, day 1 of 92.", substring = true)).assertExists()
     }
@@ -398,4 +426,43 @@ class SkyYearScreenshotTest {
         assertTrue("spine-1 sits under the tab bar: $row", row.y + row.h <= 748f + 0.5f)
         assertTrue("spine-1 sits under the top glass: $row", row.y >= 173f - 0.5f)
     }
+
+    private lateinit var sweepState: androidx.compose.foundation.ScrollState
+
+    /**
+     * Sets the screen once and walks [cultures], each at rest and at its end, through [LoneWords.sweep]; a hit
+     * outside prose fails unless [allowed] names it (each exception is written with its reason).
+     */
+    private fun loneSweep(screen: String, cultures: List<AncientCulture> = AncientCulture.entries, fontScale: Float = 1f, allowed: Map<String, String> = emptyMap()) {
+        val data = cultures.associateWith { composeYear(it, true) }
+        val shown = androidx.compose.runtime.mutableStateOf(cultures.first())
+        compose.setContent {
+            val base = LocalDensity.current
+            androidx.compose.runtime.CompositionLocalProvider(LocalDensity provides androidx.compose.ui.unit.Density(base.density, fontScale)) {
+                val c = shown.value
+                AstraAntiquaTheme(selectedCulture = c) {
+                    androidx.compose.runtime.key(c) {
+                        sweepState = rememberScrollState()
+                        SkyYearFrame(culture = c, year = data.getValue(c), onNavigate = {}, onOpen = {}, scrollState = sweepState)
+                    }
+                }
+            }
+        }
+        LoneWords.sweep(
+            compose, out, screen, cultures,
+            select = { shown.value = it },
+            scroll = { end -> kotlinx.coroutines.runBlocking { sweepState.scrollTo(if (end) sweepState.maxValue else 0) } },
+            allowed = allowed,
+        )
+    }
+
+    @Test
+    fun noLoneWordInAnyCultureAt390() = loneSweep("sky-year 390")
+
+    @Test
+    @Config(qualifiers = "w360dp-h780dp-xxhdpi")
+    fun noLoneWordInAnyCultureAt360() = loneSweep("sky-year 360")
+
+    @Test
+    fun noLoneWordAtFontScale130() = loneSweep("sky-year 390 1.3", listOf(AncientCulture.EGYPT), fontScale = 1.3f)
 }

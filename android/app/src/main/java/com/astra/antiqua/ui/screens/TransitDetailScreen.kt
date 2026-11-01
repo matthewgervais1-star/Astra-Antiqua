@@ -76,10 +76,21 @@ fun TransitDetailScreen(
 ) {
     val viewModel: TransitsViewModel = viewModel(factory = AstraViewModelFactory)
     val state by viewModel.state.collectAsState()
-    val accent = LocalAccent.current
 
     LaunchedEffect(Unit) { viewModel.load() }
 
+    TransitDetailBody(spanId = spanId, culture = culture, state = state, onNavigate = onNavigate)
+}
+
+/** The detail for [spanId] from a spans [state]; a test draws this without the ViewModel. */
+@Composable
+internal fun TransitDetailBody(
+    spanId: String,
+    culture: AncientCulture,
+    state: SpansState,
+    onNavigate: (String) -> Unit,
+) {
+    val accent = LocalAccent.current
     val current = state
     val span = (current as? SpansState.Ready)?.spans?.firstOrNull { it.id == spanId }
     val now = (current as? SpansState.Ready)?.now ?: Date()

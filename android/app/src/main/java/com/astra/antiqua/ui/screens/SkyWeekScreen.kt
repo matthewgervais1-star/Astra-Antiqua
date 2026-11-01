@@ -51,6 +51,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -206,8 +207,11 @@ private fun SkyWeekContent(
 
     // P22: the voice's week title in its own case; Rome keeps Cinzel at .08em.
     val smallCaps = LocalSmallCapsDisplay.current
-    Text(
+    // A title that cannot wrap without leaving a word alone tightens (LoneWordFit.kt): at 360 dp,
+    // SEVEN DAYS WEIGHED takes one line.
+    NoLoneWordText(
         text = slots.text("week.title"),
+        minSize = 22.sp,
         style = TextStyle(
             fontFamily = if (smallCaps) SpectralSc else Cinzel,
             fontWeight = FontWeight.Medium,
@@ -215,16 +219,18 @@ private fun SkyWeekContent(
             lineHeight = 26.sp * 1.35f,
             letterSpacing = if (smallCaps) 0.06.em else 0.08.em,
             lineHeightStyle = CssLeading,
+            lineBreak = LineBreak.Heading,
         ),
         color = Bone,
         textAlign = TextAlign.Center,
-        modifier = side.padding(top = 18.dp).testTag("P22").semantics { heading() },
+        modifier = side.padding(top = 18.dp),
+        textModifier = Modifier.fillMaxWidth().testTag("P22").semantics { heading() },
     )
 
     // P23: the count line.
     Text(
         text = slots.text("week.countLine"),
-        style = mono(11.sp, 1.6f, 0.14f),
+        style = mono(11.sp, 1.6f, 0.14f).copy(lineBreak = LineBreak.Heading),
         color = Dim,
         textAlign = TextAlign.Center,
         modifier = side.padding(top = 10.dp).testTag("P23"),
@@ -291,6 +297,7 @@ private fun WebWeekSections(week: SkyWeek, slots: SlotMap, onNavigate: (String) 
                 lineHeight = 18.sp * 1.6f,
                 letterSpacing = 0.14.em,
                 lineHeightStyle = CssLeading,
+                lineBreak = LineBreak.Heading,
             ),
             color = LocalAccent.current,
             textAlign = TextAlign.Center,
@@ -472,7 +479,7 @@ private fun RowBody(day: WeekDay, text: RowText) {
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             val ink = if (day.tone == DayTone.TENSION) Conflict else Dim
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(text.shorthand, style = mono(11.sp, 1.4f, 0.1f), color = ink, modifier = Modifier.weight(1f, fill = false))
+                Text(text.shorthand, style = mono(11.sp, 1.4f, 0.1f).copy(lineBreak = LineBreak.Heading), color = ink, modifier = Modifier.weight(1f, fill = false))
                 if (text.today.isNotEmpty()) Text(text.today, style = mono(11.sp, 1.4f, 0.1f), color = Bone)
             }
             // The web's headline above the line (Matthew, 2026-10-31, "Add the web's headline"):
@@ -487,6 +494,7 @@ private fun RowBody(day: WeekDay, text: RowText) {
                             fontSize = 18.sp,
                             lineHeight = 18.sp * 1.1f,
                             lineHeightStyle = CssLeading,
+                            lineBreak = LineBreak.Heading,
                         ),
                         color = Bone,
                     )

@@ -41,6 +41,7 @@ import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -209,8 +210,11 @@ private fun SkyYearContent(culture: AncientCulture, year: SkyYear, onNavigate: (
 
     // P44: web's title in its own case; Rome keeps Cinzel at .08em.
     val smallCaps = LocalSmallCapsDisplay.current
-    Text(
+    // Its own break unless a word would stand alone; then a narrower measure (LoneWordFit.kt): Rome's
+    // MMXXVI · THE GREAT CIRCUIT. Balancing every title would move Egypt's break without need.
+    NoLoneWordText(
         text = slots.text("year.title"),
+        minSize = 22.sp,
         style = TextStyle(
             fontFamily = if (smallCaps) SpectralSc else Cinzel,
             fontWeight = FontWeight.Medium,
@@ -221,13 +225,14 @@ private fun SkyYearContent(culture: AncientCulture, year: SkyYear, onNavigate: (
         ),
         color = Bone,
         textAlign = TextAlign.Center,
-        modifier = side.padding(top = 18.dp).testTag("P44").semantics { heading() },
+        modifier = side.padding(top = 18.dp),
+        textModifier = Modifier.fillMaxWidth().testTag("P44").semantics { heading() },
     )
 
     // P45: the count line.
     Text(
         slots.text("year.countLine"),
-        style = mono(11.sp, 1.6f, 0.14f),
+        style = mono(11.sp, 1.6f, 0.14f).copy(lineBreak = LineBreak.Heading),
         color = Dim,
         textAlign = TextAlign.Center,
         modifier = side.padding(top = 10.dp).testTag("P45"),
@@ -363,7 +368,7 @@ private fun WebYearSections(year: SkyYear, slots: SlotMap, onNavigate: (String) 
         if (year.festivals) {
             Text(
                 SkyYearComposer.FESTIVALS_NOTE,
-                style = mono(11.sp, 1.65f, 0.14f),
+                style = mono(11.sp, 1.65f, 0.14f).copy(lineBreak = LineBreak.Heading),
                 color = Dim,
                 textAlign = TextAlign.Center,
                 modifier = side.padding(top = 12.dp).testTag("year-festivals"),
@@ -377,7 +382,7 @@ private fun WebYearSections(year: SkyYear, slots: SlotMap, onNavigate: (String) 
             ) {
                 Text(
                     SharedStrings.YEAR_SPINE_LABEL,
-                    style = mono(11.sp, 1.65f, 0.14f),
+                    style = mono(11.sp, 1.65f, 0.14f).copy(lineBreak = LineBreak.Heading),
                     color = accent,
                     modifier = Modifier.padding(bottom = 12.dp).semantics {
                         heading()
@@ -396,7 +401,7 @@ private fun WebYearSections(year: SkyYear, slots: SlotMap, onNavigate: (String) 
             Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
             BoxWithConstraints(Modifier.fillMaxWidth().padding(vertical = 16.dp)) {
                 val votive = slots.text("year.votive")
-                val base = TextStyle(fontFamily = display, fontSize = 18.sp, lineHeight = 18.sp * 1.6f, letterSpacing = 0.14.em, lineHeightStyle = CssLeading)
+                val base = TextStyle(fontFamily = display, fontSize = 18.sp, lineHeight = 18.sp * 1.6f, letterSpacing = 0.14.em, lineHeightStyle = CssLeading, lineBreak = LineBreak.Heading)
                 val measurer = rememberTextMeasurer()
                 val width = constraints.maxWidth
                 val tracking = remember(votive, width, base) { votiveTracking(measurer, votive, base, width) }
@@ -493,7 +498,7 @@ private fun SegmentRow(seg: YearSegment, last: Boolean, id: String) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text("${seg.label}\n${seg.dateRange}", style = mono(11.sp, 2f, 0f), color = ink, modifier = Modifier.weight(1f))
+                Text("${seg.label}\n${seg.dateRange}", style = mono(11.sp, 2f, 0f).copy(lineBreak = LineBreak.Heading), color = ink, modifier = Modifier.weight(1f))
                 Text(seg.status, style = mono(11.sp, 2f, 0f), color = ink, softWrap = false)
             }
             Text(
@@ -507,41 +512,39 @@ private fun SegmentRow(seg: YearSegment, last: Boolean, id: String) {
 }
 
 /**
- * One row of web's spine: spanHeadline in the display face at .08em, the end
- * month in mono, dim. web links each row to /transits/{id}. Android's
- * transit detail finds a span among TransitsViewModel's spans, walked against
- * the Sun, Moon and Ascendant (natalPointsOf), so a Midheaven span would open
- * on nothing: those rows stay D-pad stops; the rest open the detail on top.
+ * One row of web's spine: spanHeadline in the display face at 18/1.65 .08em
+ * across the spine's full width, balanced, one size for the list; the end
+ * month in mono, dim, on its own line 4 under it (web's gap-1, as Week's
+ * headline over its line). Matthew's popup, 2026-11-01: "End month under
+ * headline", "One size for the list". web links each row to /transits/{id}; each opens the
+ * transit detail on top, Midheaven spans included (TransitsViewModel walks
+ * the Midheaven as web's readerSpans does, step 6).
  */
 @Composable
 private fun SpineRow(row: YearSpineRow, display: androidx.compose.ui.text.font.FontFamily, id: String, onOpen: (String) -> Unit) {
     val spoken = "${row.headline.lowercase()}, until ${row.end.removePrefix("→ ").lowercase()}"
-    val opens = !row.id.endsWith("-mc")
     val source = remember { MutableInteractionSource() }
-    Row(
+    Column(
         Modifier
             .fillMaxWidth()
             .testTag(id)
-            .then(
-                if (opens) {
-                    Modifier
-                        .glassClearFocus()
-                        .focusOutline(source)
-                        .clickable(source, indication = null, role = Role.Button, onClickLabel = "Open") { onOpen(Route.transitDetail(row.id)) }
-                        .clearAndSetSemantics { contentDescription = spoken }
-                } else {
-                    Modifier.dpadStop().clearAndSetSemantics { contentDescription = spoken }
-                },
-            ),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+            .glassClearFocus()
+            .focusOutline(source)
+            .clickable(source, indication = null, role = Role.Button, onClickLabel = "Open") { onOpen(Route.transitDetail(row.id)) }
+            .clearAndSetSemantics { contentDescription = spoken },
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        Text(
+        // Balanced at one size: minSize 18 keeps the list's size; where the balanced breaker still leaves a word
+        // alone (ASCENDANT at 1.3), LoneWordFit.kt breaks the lines by hand.
+        NoLoneWordText(
             row.headline,
-            style = TextStyle(fontFamily = display, fontSize = 18.sp, lineHeight = 18.sp * 1.65f, letterSpacing = 0.08.em, lineHeightStyle = CssLeading),
+            style = TextStyle(fontFamily = display, fontSize = 18.sp, lineHeight = 18.sp * 1.65f, letterSpacing = 0.08.em, lineHeightStyle = CssLeading, lineBreak = LineBreak.Heading),
             color = Prose,
-            modifier = Modifier.weight(1f).alignByBaseline(),
+            minSize = 18.sp,
+            modifier = Modifier.fillMaxWidth(),
+            textModifier = Modifier.fillMaxWidth().testTag("$id-headline"),
         )
-        Text(row.end, style = mono(11.sp, 1.65f, 0f), color = Dim, softWrap = false, modifier = Modifier.alignByBaseline())
+        Text(row.end, style = mono(11.sp, 1.65f, 0f), color = Dim, softWrap = false, modifier = Modifier.testTag("$id-end"))
     }
 }
 

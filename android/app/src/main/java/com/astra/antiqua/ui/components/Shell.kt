@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -254,7 +255,8 @@ fun MethodFooter(onOpenMethod: () -> Unit, modifier: Modifier = Modifier) {
         Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
         Text(
             text = "ASTRONOMY-ENGINE EPHEMERIS · WHOLE-SIGN · ORBS DOCUMENTED → METHOD",
-            style = MaterialTheme.typography.labelSmall,
+            // Balanced, so a wrap never leaves METHOD alone on its line.
+            style = MaterialTheme.typography.labelSmall.copy(lineBreak = LineBreak.Heading),
             color = Dim,
             modifier = Modifier
                 .clickable(
