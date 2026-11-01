@@ -245,3 +245,17 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
   with no birth record the next return composes again; the section label's comment says its glyphs
   overflow at large font scales, as CSS line-height 1 does.
 - FACT (local, 2026-10-31): `./gradlew compileDebugSources testDebugUnitTest` 241 tests, 0 failures.
+
+### Matthew's answers on Sky Day (popup, 2026-10-31, after the renders were shown in the chat)
+
+- FACT: "Approved, go to Week"; "Web's full sentence" on the contact rows (as built); MORE opens "The
+  Learn hub" until step 10 (`GlassSection.route()`, Route.learn("/learn")); the old Day page's
+  sections: "Keep them below Sky Day".
+- FACT (`ui/screens/SkyDayScreen.kt`, `OldDaySections`): under the long transit and before the method
+  line, flat, inside the board's 24 margins, with their own components and data
+  (`DashboardViewModel`): the Do and Don't lists, the dive deeper, the natal wheel, and the Sun and Moon
+  readings under "Decrees of the Oracle". They keep their old styling (accent kickers), which the glass
+  design moved to dim elsewhere. The high priest summary and the come-back line stay off; Matthew
+  named neither.
+- FACT (`SkyDayFullPageTest`, `docs/design/android-glass/step2/sky-day-full-sheet.png`): the whole page
+  on one 390x5200 frame, in four columns. Local suite: 242 tests, 0 failures.

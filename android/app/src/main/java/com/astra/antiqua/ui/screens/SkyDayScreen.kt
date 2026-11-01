@@ -77,6 +77,10 @@ import com.astra.antiqua.ui.theme.glass.GlassScreen
 import com.astra.antiqua.ui.theme.glass.GlassSection
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.SkyDayViewModel
+import com.astra.antiqua.viewmodel.ChartState
+import com.astra.antiqua.viewmodel.DashboardViewModel
+import com.astra.antiqua.viewmodel.DayExtras
+import com.astra.antiqua.ui.components.SectionDivider
 import java.util.Calendar
 import java.util.Date
 
@@ -100,20 +104,58 @@ fun SkyDayScreen(
     val model: SkyDayViewModel = viewModel(factory = AstraViewModelFactory)
     val day by model.day.collectAsState()
     LaunchedEffect(culture) { model.load(culture) }
+
+    // The old Day page's sections, below Sky Day (Matthew, 2026-10-31: "Keep them
+    // below Sky Day"), from the view model that has always composed them.
+    val dashboard: DashboardViewModel = viewModel(factory = AstraViewModelFactory)
+    val chartState by dashboard.chartState.collectAsState()
+    val extras by dashboard.dayExtras.collectAsState()
+    LaunchedEffect(culture) { dashboard.calculateChart() }
+
     SkyDayFrame(
         culture = culture,
         day = day,
         onNavigate = onNavigate,
         onOpen = onOpen,
-    )
+    ) {
+        OldDaySections(culture, chartState, extras)
+    }
 }
 
-/** The tab a section opens; MORE opens the account until step 10 builds More. */
+/**
+ * The old Day page's natal wheel, Sun and Moon readings, Do and Don't lists
+ * and dive deeper, flat on the ground under the board's sections. Not on the
+ * canvas: drawn with the components they always had, inside the board's margins.
+ */
+@Composable
+internal fun OldDaySections(culture: AncientCulture, chartState: ChartState, extras: DayExtras?) {
+    Column(
+        Modifier.fillMaxWidth().padding(horizontal = Board.side).padding(top = 40.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        extras?.let {
+            DayListsCard(culture = culture, permissions = it.permissions, fromChart = it.listsFromChart)
+            DiveDeeperSection(diveDeeper = it.diveDeeper)
+        }
+        if (chartState is ChartState.Success) {
+            Box(Modifier.fillMaxWidth().height(360.dp), contentAlignment = Alignment.Center) {
+                NatalWheel(chartData = chartState.chartData, culture = culture)
+            }
+            SectionDivider(label = "Decrees of the Oracle")
+            chartState.bigThreePlacements.forEach { reading ->
+                OracleDecreeCard(reading = reading, culture = culture)
+                Spacer(Modifier.height(18.dp))
+            }
+        }
+    }
+}
+
+/** The tab a section opens; MORE opens the Learn hub until step 10 builds More (Matthew, 2026-10-31). */
 fun GlassSection.route(): String = when (this) {
     GlassSection.SKY -> Route.DAY
     GlassSection.TRANSITS -> Route.TRANSITS
     GlassSection.CHART -> Route.PLACEMENTS
-    GlassSection.MORE -> Route.ACCOUNT
+    GlassSection.MORE -> Route.learn("/learn")
 }
 
 /** Sky Day inside its chrome, from a composed [day]; the screenshot test draws this. */
@@ -124,6 +166,8 @@ fun SkyDayFrame(
     onNavigate: (String) -> Unit = {},
     onOpen: (String) -> Unit = {},
     scrollState: androidx.compose.foundation.ScrollState = androidx.compose.foundation.rememberScrollState(),
+    /** Sections under the board's, before the method line. */
+    below: @Composable () -> Unit = {},
 ) {
     GlassScreen(
         culture = culture,
@@ -137,7 +181,7 @@ fun SkyDayFrame(
         // where the account's "change culture" already goes.
         onMenu = { onNavigate(Route.VOICES) },
     ) {
-        if (day != null) SkyDayContent(culture, day, onNavigate, onOpen)
+        if (day != null) SkyDayContent(culture, day, onNavigate, onOpen, below)
     }
 }
 
@@ -210,6 +254,7 @@ private fun SkyDayContent(
     day: SkyDay,
     onNavigate: (String) -> Unit,
     onOpen: (String) -> Unit,
+    below: @Composable () -> Unit,
 ) {
     val side = Modifier.fillMaxWidth().padding(horizontal = Board.side)
 
@@ -297,6 +342,8 @@ private fun SkyDayContent(
         SectionLabel("THE LONG TRANSIT", "P15", bottom = 14.dp)
         LongTransitCard(culture, pick, day.date, onClick = { onOpen(Route.transitDetail(pick.span.id)) })
     }
+
+    below()
 
     // The line every reading closes with, and the only way to the Method page
     // until More (step 10). Not on the board.

@@ -136,4 +136,7 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   (`ui/screens/SkyDayScreen.kt`, `domain/SkyDay.kt`); chrome within 1 dp, every gap between blocks equals
   the board's, heights follow the web's longer copy. Review fixes in. Local: 241 tests, 0 failures.
   Record: `docs/design/android-glass.md` (step 2), renders `docs/design/android-glass/step2/`.
-- Pending: Matthew's word on Sky Day; step 3 (Week with the Moon) after it; push and PR on his word.
+- FACT (Matthew's popup, 2026-10-31): Sky Day approved; MORE opens Learn until step 10; the old Day
+  sections (lists, dive deeper, natal wheel, Sun and Moon readings) sit below Sky Day. 242 tests, 0 failures.
+- Pending: step 3, Sky Week with the Moon, in a fresh session (prompt
+  `docs/design/prompts/android-glass-step3.md`); push and PR on Matthew's word.
