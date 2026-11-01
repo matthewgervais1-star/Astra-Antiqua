@@ -26,10 +26,11 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   (its HANDOFF.md and `docs/design/ios-layout-2026-10-21.md`; round 8b at ddc7553, newest f1438db), canvas
   https://claude.ai/artifact/LKiWRGTi16LRZ5GvyHbD3V. Ports: SwiftUI on `claude/ios-glass-phase-b-881817`
   (pushed), Android on `claude/android-glass-7a8074`, Swift base `claude/ios-branch-parity-895dbc`; none on `master`.
-- FACT (git, 2026-10-31; cleanup account `_archive/2026-10-26_folder-cleanup/README.md`): worktree `planner-buildout-completion-495257` had lost its git registration
-  (HEAD, index, gitdir); re-registered on `claude/loving-morse-42eacf` (= `master`). It holds 24 modified
-  and 36 untracked files of earlier work, not reviewed. Its last commits (Phase B step 3, Sky Week) are
-  safe on `claude/ios-glass-phase-b-week`. INFERENCE: git's automatic `worktree prune` stripped it.
+- FACT (git, 2026-10-31): worktree `planner-buildout-completion-495257` lost HEAD, index and gitdir; re-registered
+  on `claude/loving-morse-42eacf` (= `master`); 24 modified and 36 untracked files there, not reviewed; its Sky Week
+  commits are safe on `claude/ios-glass-phase-b-week`. FACT (disk): hundreds of repo folders carry the Windows
+  read-only attribute (77 in `web/src`, 259 in `.git/objects`); it broke a Gradle build here. INFERENCE: it also
+  stopped git's automatic `worktree prune` halfway. Cause unknown. Cleanup account: `_archive/2026-10-26_folder-cleanup/`.
 
 ## Decisions taken, and why
 - 2026-09-29 to 2026-10-22: reading anatomy, recurrence, fast-first, Android sync and reveal
@@ -45,7 +46,7 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   commit the prompt sheet and references; repair the planner worktree.
 
 ## Pending, in order
-1. FACT: the PR of `claude/deferred-minors` against `master` waits for the owner's merge.
+1. FACT (GitHub, 2026-10-31): PR #10 (`claude/deferred-minors` into `master`) waits for the owner's merge.
 2. FACT (design-rounds worktree HANDOFF): the glass design and its two ports continue there.
 3. INFERENCE (ledgers): later-pass items, none blocking: `MainActivity.kt` reads the internal `currentBackStack`;
    `TodaySpecimen.html` shows an old headline (`pnpm specimens` before the next Claude Design push); three Rome
