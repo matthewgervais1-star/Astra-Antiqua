@@ -264,6 +264,25 @@
       "neptune": "NEPTUNE",
       "pluto": "PLUTO"
     },
+    "planetSymbols": {
+      "sun": "☉",
+      "moon": "☽",
+      "mercury": "☿",
+      "venus": "♀",
+      "mars": "♂",
+      "jupiter": "♃",
+      "saturn": "♄",
+      "uranus": "♅",
+      "neptune": "♆",
+      "pluto": "♇"
+    },
+    "aspectGlyphs": {
+      "conjunction": "☌",
+      "sextile": "⚹",
+      "square": "□",
+      "trine": "△",
+      "opposition": "☍"
+    },
     "toneWords": {
       "conjunction": "UNION",
       "sextile": "EASE",

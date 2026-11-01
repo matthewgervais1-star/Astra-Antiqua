@@ -76,6 +76,26 @@ object SharedFormats {
         "neptune" to "NEPTUNE",
         "pluto" to "PLUTO",
     )
+    val PLANET_SYMBOLS: Map<String, String> = mapOf(
+        "sun" to "☉",
+        "moon" to "☽",
+        "mercury" to "☿",
+        "venus" to "♀",
+        "mars" to "♂",
+        "jupiter" to "♃",
+        "saturn" to "♄",
+        "uranus" to "♅",
+        "neptune" to "♆",
+        "pluto" to "♇",
+    )
+    /** Keyed by the aspect kind ("trine"). */
+    val ASPECT_GLYPHS: Map<String, String> = mapOf(
+        "conjunction" to "☌",
+        "sextile" to "⚹",
+        "square" to "□",
+        "trine" to "△",
+        "opposition" to "☍",
+    )
     /** Keyed by the aspect kind ("trine"). */
     val TONE_WORDS: Map<String, String> = mapOf(
         "conjunction" to "UNION",

@@ -267,7 +267,7 @@ fun AnimationsOffProvider(content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun rememberAnimationsOff(): Boolean {
+internal fun rememberAnimationsOff(): Boolean {
     if (LocalInspectionMode.current) return false
     val shared = LocalAnimationsOff.current
     if (shared != null) return shared.value

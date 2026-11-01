@@ -45,15 +45,28 @@ class WeekShorthandParityTest {
 
         assertEquals(
             listOf(
-                WeekShorthand.Aspect(Planet.SUN, AspectType.SQUARE, Planet.URANUS, tight = true),
-                WeekShorthand.Aspect(Planet.MERCURY, AspectType.TRINE, Planet.JUPITER, tight = true),
+                WeekShorthand.Aspect(Planet.SUN, AspectType.SQUARE, Planet.URANUS, tight = true, sign = ZodiacSign.AQUARIUS),
+                WeekShorthand.Aspect(Planet.MERCURY, AspectType.TRINE, Planet.JUPITER, tight = true, sign = ZodiacSign.PISCES),
                 WeekShorthand.Ingress(Planet.SUN, ZodiacSign.PISCES),
-                WeekShorthand.Aspect(Planet.MOON, AspectType.CONJUNCTION, Planet.MERCURY, tight = true),
+                WeekShorthand.Aspect(Planet.MOON, AspectType.CONJUNCTION, Planet.MERCURY, tight = true, sign = ZodiacSign.PISCES),
                 WeekShorthand.Quiet,
-                WeekShorthand.Aspect(Planet.MOON, AspectType.SQUARE, Planet.JUPITER, tight = false),
-                WeekShorthand.Aspect(Planet.VENUS, AspectType.TRINE, Planet.JUPITER, tight = false),
+                WeekShorthand.Aspect(Planet.MOON, AspectType.SQUARE, Planet.JUPITER, tight = false, sign = ZodiacSign.ARIES),
+                WeekShorthand.Aspect(Planet.VENUS, AspectType.TRINE, Planet.JUPITER, tight = false, sign = ZodiacSign.PISCES),
             ),
             days.map { it.shorthand },
+        )
+        // node, TZ UTC, 2026-11-01: web's shorthandText for the same week (week.row.shorthand.*).
+        assertEquals(
+            listOf(
+                "☉ □ ♅ · TIGHT · TENSION",
+                "☿ △ ♃ · TIGHT · EASE",
+                "☉ INTO PISCES",
+                "☽ ☌ ☿ · TIGHT · PISCES · UNION",
+                "QUIET",
+                "☽ □ ♃ · TENSION",
+                "♀ △ ♃ · EASE",
+            ),
+            days.map { it.shorthand.text() },
         )
     }
 

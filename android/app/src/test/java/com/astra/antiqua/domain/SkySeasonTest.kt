@@ -1,0 +1,228 @@
+package com.astra.antiqua.domain
+
+import com.astra.antiqua.data.AstronomyEngine
+import com.astra.antiqua.model.AncientCulture
+import com.astra.antiqua.ui.screens.houseSector
+import com.astra.antiqua.ui.screens.wheelAngle
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import kotlin.math.cos
+import kotlin.math.sin
+
+/**
+ * Sky Season at the canvas's sample state (2026-10-21 06:00 UTC, read in Rome,
+ * the smoke birth): the expected strings are web's, from a node run of
+ * `getCurrentSeason`, `getSeasonSkyEvents`, `buildSeasonSkyRows`,
+ * `composeWhatItTouchesSky` and `composeWhatItTouchesNatal` against `web/src`
+ * with TZ Europe/Rome on 2026-10-31. The kicker, the day line and the sky rows
+ * moved to the shared catalog on 2026-11-01; ScreenGoldenTest pins them
+ * against web's season goldens.
+ */
+class SkySeasonTest {
+
+    @get:org.junit.Rule
+    val zone = RomeZoneRule()
+
+    private val engine = AstronomyEngine()
+
+    private val chart by lazy { CalculateNatalChartUseCase(engine).execute(SkyDayTest.smokeBirth) }
+
+    private fun season(culture: AncientCulture, withChart: Boolean = true) =
+        SkySeasonComposer.compose(engine, culture, SkyDayTest.sampleNow, if (withChart) SkySeasonComposer.natal(engine, chart, SkyDayTest.smokeBirth.latitude, SkyDayTest.smokeBirth.longitude) else null)
+
+    @Test
+    fun `the sample season is the Scales, day 29 of 31, two to go`() {
+        val s = season(AncientCulture.EGYPT)
+        assertEquals(ZodiacSign.LIBRA, s.window.sign)
+        assertEquals("23 SEP → 23 OCT 2026", SkyWeekComposer.range(s.window.start, s.window.end))
+        assertEquals("THE SEASON OF THE SCALES", s.headline)
+        assertEquals("DAY 29 OF 31 · 2 TO GO", s.dayLine)
+        assertEquals(2, s.daysRemaining)
+        // web OrbBar: round((1 - 2/31) * 100).
+        assertEquals(94, s.barPercent)
+        assertEquals("The scales; forever balancing, reluctant to settle, at its best in partnership.", s.signProse)
+    }
+
+    @Test
+    fun `the house is the eleventh, in web's sentence`() {
+        val egypt = season(AncientCulture.EGYPT).house!!
+        assertEquals(11, egypt.house)
+        assertEquals("The eleventh house · The Assembly", egypt.title)
+        assertEquals(
+            "The season sits in your eleventh house, which this culture keeps under the ferry. It works on your allies, your assembly, and the things you hope for.",
+            egypt.prose,
+        )
+        assertEquals(
+            "The season sits in your eleventh house, which this culture keeps under via. It works on your allies, your assembly, and the things you hope for.",
+            season(AncientCulture.ROME).house!!.prose,
+        )
+    }
+
+    @Test
+    fun `without a chart the section reads the sky's ingresses`() {
+        val s = season(AncientCulture.EGYPT, withChart = false)
+        assertNull(s.house)
+        assertEquals("Horus the Red enters the Lion on 28 SEP. Sebegu enters the Scorpion on 30 SEP.", s.touchesSky)
+        assertEquals("Mars enters the Lion on 28 SEP. Mercurius enters the Scorpion on 30 SEP.", season(AncientCulture.ROME, false).touchesSky)
+    }
+
+    @Test
+    fun `web's status and fill at the edges`() {
+        assertEquals("OPENING", SkySeasonComposer.status(30, 4, 26))
+        assertEquals("MIDPOINT PASSED", SkySeasonComposer.status(30, 6, 24))
+        assertEquals("CLOSING", SkySeasonComposer.status(30, 26, 4))
+        assertEquals(6, SkySeasonComposer.barPercent(30, 31))
+        assertEquals("Water-Bearer", SkySeasonComposer.properCase("WATER-BEARER"))
+        assertEquals("The Two Lands", SkySeasonComposer.properCase("THE TWO LANDS"))
+        // web's edge is max(3, round(31 * .15)) = 5: day 5 opens, 5 left closes.
+        assertEquals("OPENING", SkySeasonComposer.status(31, 5, 26))
+        assertEquals("MIDPOINT PASSED", SkySeasonComposer.status(31, 6, 25))
+        assertEquals("CLOSING", SkySeasonComposer.status(31, 26, 5))
+        assertEquals("No fast planet changes sign this month; the season holds its shape.", SkySeasonComposer.touchesSky(AncientCulture.EGYPT, emptyList()))
+    }
+
+    private fun at(iso: String) = SkySeasonComposer.compose(engine, AncientCulture.EGYPT, java.util.Date.from(java.time.Instant.parse(iso)), null)
+
+    @Test
+    fun `a season mid-way, its day line and the sky's ingresses`() {
+        // node, TZ Europe/Rome: web's season for 2025-03-01 12:00 UTC.
+        val s = at("2025-03-01T12:00:00Z")
+        assertEquals("DAY 12 OF 31 · 19 TO GO", s.dayLine)
+        assertEquals("Sebegu enters the Ram on 3 MAR.", s.touchesSky)
+    }
+
+    @Test
+    fun `a season across the year's end`() {
+        // node, TZ Europe/Rome: web's season for 2026-12-30 12:00 UTC.
+        val s = at("2026-12-30T12:00:00Z")
+        assertEquals("21 DEC 2026 → 20 JAN 2027", SkyWeekComposer.range(s.window.start, s.window.end))
+        assertEquals("THE SEASON OF THE GOAT", s.headline)
+        assertEquals("DAY 10 OF 31 · 21 TO GO", s.dayLine)
+        assertEquals(
+            "Sebegu enters the Goat on 25 DEC. Isis enters the Archer on 7 JAN. Sebegu enters the Water-Bearer on 13 JAN.",
+            s.touchesSky,
+        )
+    }
+
+    private val natal by lazy { SkySeasonComposer.natal(engine, chart, SkyDayTest.smokeBirth.latitude, SkyDayTest.smokeBirth.longitude) }
+
+    private fun atNatal(iso: String, culture: AncientCulture) =
+        SkySeasonComposer.compose(engine, culture, java.util.Date.from(java.time.Instant.parse(iso)), natal)
+
+    @Test
+    fun `the smoke birth's angles are web's`() {
+        // web computeAngularPoints for 1990-01-15 04:30 UTC, Rome: 262.398, 195.599.
+        assertEquals(262.398, natal.ascendant, 0.01)
+        assertEquals(195.599, natal.midheaven, 0.01)
+    }
+
+    @Test
+    fun `the web's sections for the sample, with and without the chart`() {
+        // node, TZ Europe/Rome, 2026-10-31: web's composeWhatIsChanging, composeWhereItBegins,
+        // composeWhatItLeavesBehind, SEASON_VOTIVE and seasonReadingId.
+        val egypt = season(AncientCulture.EGYPT)
+        assertEquals(
+            "Full Moon in Aries. The month's full light. What was building since the New Moon shows its results, ready or not. Behind it: amun rows in time with your Ascendant.",
+            egypt.whatIsChanging,
+        )
+        assertEquals("It opened when the Scales received Ra, 29 days past. It closes soon.", egypt.whereItBegins)
+        assertEquals("The scale does not carry Scales's excuses into Scorpion.", egypt.whatItLeavesBehind)
+        assertEquals("THE ORDINARY MONTH\nSTILL FEEDS THE GRANARY", egypt.votive)
+        assertEquals("season-libra-2026", egypt.readingId)
+        val rome = season(AncientCulture.ROME)
+        assertEquals(
+            "Full Moon in Aries. The month's full light. What was building since the New Moon shows its results, ready or not. Behind it: iuppiter clasps the right hand of your Ascendant.",
+            rome.whatIsChanging,
+        )
+        assertEquals("It opened when the Scales received Sol, 29 days past. It closes soon.", rome.whereItBegins)
+        assertEquals("The censor does not re-hear what this month already judged.", rome.whatItLeavesBehind)
+        assertEquals("AN ORDINARY MONTH\nIS STILL GOVERNED BY LAW", rome.votive)
+        assertEquals(
+            "Full Moon in Aries. The month's full light. What was building since the New Moon shows its results, ready or not. Behind it: new Moon in Libra.",
+            season(AncientCulture.EGYPT, withChart = false).whatIsChanging,
+        )
+    }
+
+    @Test
+    fun `a season of tension transits, a companion and the tension votive`() {
+        // node, TZ Europe/Rome: 2025-03-01 12:00 UTC with the smoke birth.
+        val egypt = atNatal("2025-03-01T12:00:00Z", AncientCulture.EGYPT)
+        assertEquals(
+            "Amun tips the scales against your Khonsu. The urge to expand and to trust is contested on this date. Decide what gives before the date decides it. Behind it: geb tips the scales against your Ascendant.",
+            egypt.whatIsChanging,
+        )
+        assertEquals(
+            "It opened when the Fishes received Ra, 12 days past. Its middle is now, past the crossing point. Geb stands with it this month.",
+            egypt.whereItBegins,
+        )
+        assertEquals("BRING WHAT IS HEAVY\nTO THE SCALE NOW", egypt.votive)
+        assertEquals("season-pisces-2025", egypt.readingId)
+        val rome = atNatal("2025-03-01T12:00:00Z", AncientCulture.ROME)
+        assertEquals(
+            "Iuppiter raises the spear against your Luna. The urge to expand and to trust is contested on this date. Decide what gives before the date decides it. Behind it: saturnus raises the spear against your Ascendant.",
+            rome.whatIsChanging,
+        )
+        // Three more voices: web's verbs and names.
+        assertEquals(
+            "Zeus challenges your Selene. The urge to expand and to trust is contested on this date. Decide what gives before the date decides it. Behind it: kronos challenges your Ascendant.",
+            atNatal("2025-03-01T12:00:00Z", AncientCulture.GREECE).whatIsChanging,
+        )
+        assertEquals(
+            "Baal Hammon turns the prow against your Tanit. The urge to expand and to trust is contested on this date. Decide what gives before the date decides it. Behind it: baal Hammon turns the prow against your Ascendant.",
+            atNatal("2025-03-01T12:00:00Z", AncientCulture.CARTHAGE).whatIsChanging,
+        )
+        assertEquals(
+            "Baal Hadad draws the bow against your Yarikh. The urge to expand and to trust is contested on this date. Decide what gives before the date decides it. Behind it: el draws the bow against your Ascendant.",
+            atNatal("2025-03-01T12:00:00Z", AncientCulture.CANAAN).whatIsChanging,
+        )
+        // Without the chart the 14 March 2025 lunar eclipse (5 + its obscuration × 2) ranks first,
+        // and the Full Moon before it in date leads the sentence; web's votive reads that quiet first beat.
+        val sky = at("2025-03-01T12:00:00Z")
+        assertEquals(
+            "Full Moon in Virgo. The month's full light. What was building since the New Moon shows its results, ready or not. Behind it: what you buried comes up now.",
+            sky.whatIsChanging,
+        )
+        assertEquals("THE ORDINARY MONTH\nSTILL FEEDS THE GRANARY", sky.votive)
+        // Capricorn 2026, no chart: the reading id keeps the year the season opened.
+        assertEquals("season-capricorn-2026", at("2026-12-30T12:00:00Z").readingId)
+        assertEquals("The scale does not carry Goat's excuses into Water-Bearer.", at("2026-12-30T12:00:00Z").whatItLeavesBehind)
+    }
+
+    @Test
+    fun `the filled sector holds its house and the Sun`() {
+        // Compose angles run clockwise and the sweep is negative: the sector is [lo + sweep, lo].
+        fun inside(angle: Float, sector: Pair<Float, Float>): Boolean {
+            val (lo, sweep) = sector
+            val d = (((lo - angle) % 360f) + 360f) % 360f
+            return d <= -sweep
+        }
+        val asc = 240 + 22 + 23 / 60.0
+        // The sample: the Sun at 207.94 sits in the eleventh, not in the tenth or the twelfth.
+        assertTrue(inside(wheelAngle(207.94, asc), houseSector(asc, 11)))
+        assertTrue(!inside(wheelAngle(207.94, asc), houseSector(asc, 10)))
+        assertTrue(!inside(wheelAngle(207.94, asc), houseSector(asc, 12)))
+        // Aries 10 rising: the first house holds the Ascendant; the fourth holds 100.
+        assertTrue(inside(wheelAngle(10.0, 10.0), houseSector(10.0, 1)))
+        assertTrue(inside(wheelAngle(100.0, 10.0), houseSector(10.0, 4)))
+        assertTrue(!inside(wheelAngle(100.0, 10.0), houseSector(10.0, 3)))
+    }
+
+    @Test
+    fun `the wheel places the board's points`() {
+        // r3-common.mjs at Sagittarius 22°23′ rising: the eleventh house's outer corner
+        // at -7.42, -55.51 and the Sun's mark (Libra 27°56′) at -25, -34.98.
+        val asc = 240 + 22 + 23 / 60.0
+        fun pt(lon: Double, r: Double): Pair<Double, Double> {
+            val a = Math.toRadians(wheelAngle(lon, asc).toDouble())
+            return r * cos(a) to r * sin(a)
+        }
+        val near = { a: Pair<Double, Double>, x: Double, y: Double -> kotlin.math.abs(a.first - x) < 0.02 && kotlin.math.abs(a.second - y) < 0.02 }
+        assertTrue(pt(540.0, 56.0).toString(), near(pt(540.0, 56.0), -7.42, -55.51))
+        assertTrue(pt(207.94, 43.0).toString(), near(pt(207.94, 43.0), -25.0, -34.98))
+        assertTrue(pt(asc, 56.0).toString(), near(pt(asc, 56.0), -56.0, 0.0))
+        // The smoke birth is the brief's chart: Sagittarius rising.
+        assertEquals(ZodiacSign.SAGITTARIUS, ZodiacSign.entries[(chart.ascendant / 30).toInt()])
+    }
+}

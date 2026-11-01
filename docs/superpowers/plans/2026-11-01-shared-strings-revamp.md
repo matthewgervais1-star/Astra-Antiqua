@@ -301,6 +301,26 @@ month arrays; move `gen-android-reading-banks` and `gen-android-learn` onto the 
 - [ ] Implement on top of `claude/android-glass-7a8074` (steps 1 to 4); the screenshot tests' gap checks
   still hold to 0.1.
 - [ ] `./gradlew compileDebugSources testDebugUnitTest` green (275 at 95afe84, plus the new tests); commit.
+- [x] Moved out of Task 4 (2026-11-01, review of 2ea0cd4): "move `gen-android-reading-banks` and
+  `gen-android-learn` onto the JSON" now sits in Task 4a below. INFERENCE: the lead or Matthew still
+  confirms this move or sends the item back to Task 4. Until Task 4a lands, the line "one pipeline runs TS
+  to JSON to Kotlin" under "How each surface loads it" holds for `gen-android-strings` only.
+
+### Task 4a: move the two TypeScript-reading Android generators onto the JSON (1 session, follow-up)
+
+FACT (`shared/content/reading-banks.json`, `web/scripts/gen-android-reading-banks.mjs`,
+`web/scripts/gen-android-learn.mjs`, checked 2026-11-01): `reading-banks.json` holds no decree, figure or
+dive-deeper banks and no permissions register; `gen-android-reading-banks` also runs web's composers to
+write the golden test files; `gen-android-learn` is itself the writer of `shared/content/learn.json`, and
+`LearnContent.kt` carries the zodiac signs, which `learn.json` does not hold.
+- [ ] Widen `export-content.mjs` so `reading-banks.json` carries the decree, figure and dive-deeper banks
+  and the permissions register; `check:shared` covers the new keys.
+- [ ] Split the golden writing out of `gen-android-reading-banks` into a web-side exporter (the
+  `export-goldens` pattern), then point the Kotlin generation at the JSON; the DayDecree, Figure and
+  DiveDeeper parity tests stay byte-equal.
+- [ ] Split `gen-android-learn` into an exporter that writes `learn.json` (with the zodiac signs added)
+  and a generator that reads it.
+- [ ] `./gradlew compileDebugSources testDebugUnitTest` and `pnpm test` green; commit.
 
 ### Task 5: Swift loads the catalog (2 sessions)
 

@@ -83,7 +83,7 @@ fun CultureSelectionScreen(
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             itemsIndexed(AncientCulture.entries, key = { _, it -> it.name }) { index, culture ->
-                val institution = LexiconDictionary.forCulture(culture).dashboardTitle
+                val institution = com.astra.antiqua.domain.generated.SharedStrings.COMMON_INSTITUTION.getValue(culture)
                 // The panel and the name share one source, so focus on the panel resolves the name.
                 val interactionSource = remember { MutableInteractionSource() }
                 Panel(

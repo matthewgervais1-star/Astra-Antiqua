@@ -75,7 +75,7 @@ fun WeekScreen(
     LaunchedEffect(Unit) { viewModel.loadWeek() }
 
     NaveShell(
-        context = "${lexicon.dashboardTitle} · the week",
+        context = "${com.astra.antiqua.domain.generated.SharedStrings.COMMON_INSTITUTION.getValue(culture)} · the week",
         culture = culture,
         onNavigate = onNavigate,
         horizon = Horizon.WEEK,
@@ -102,7 +102,7 @@ fun WeekScreen(
                 is WeekState.Ready -> {
                     item {
                         NaveHead(
-                            kicker = "${lexicon.dashboardTitle} · the week",
+                            kicker = "${com.astra.antiqua.domain.generated.SharedStrings.COMMON_INSTITUTION.getValue(culture)} · the week",
                             culture = culture,
                             headline = "Seven days",
                             sub = "${dayMonth(current.start)} – ${dayMonth(current.end)} " +
@@ -223,16 +223,7 @@ private fun toneInk(tone: DayTone): Color = when (tone) {
     DayTone.QUIET -> Dim
 }
 
-private val MONTHS_SHORT = listOf(
-    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
-)
-
-private fun dayMonth(date: Date): String {
-    val calendar = Calendar.getInstance().apply { time = date }
-    val month = MONTHS_SHORT.getOrElse(calendar.get(Calendar.MONTH)) { "JAN" }
-    return "${calendar.get(Calendar.DAY_OF_MONTH)} $month"
-}
+private fun dayMonth(date: Date): String = com.astra.antiqua.domain.SharedFormat.dayMonth(date)
 
 private fun year(date: Date): String {
     val calendar = Calendar.getInstance().apply { time = date }

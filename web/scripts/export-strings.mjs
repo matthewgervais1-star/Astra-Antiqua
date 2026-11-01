@@ -26,7 +26,8 @@ import { fileURLToPath } from "node:url";
 register("./resolve-at-alias.mjs", import.meta.url);
 
 const { CATALOG, SCREENS, COMPOSED } = await import("../src/strings/index.ts");
-const { CULTURES } = await import("../src/data/cultures.ts");
+const { CULTURES, PLANET_SYMBOLS } = await import("../src/data/cultures.ts");
+const { ASPECT_GLYPH } = await import("../src/lib/decree.ts");
 const F = await import("../src/strings/formats.ts");
 const { FORMAT_CASES, caseInput } = await import("../src/strings/formatCases.ts");
 
@@ -82,6 +83,8 @@ const formats = {
     signAbbr: F.SIGN_ABBR3,
     signPhrases: F.SIGN_PHRASES,
     planetNames: F.PLANET_NAMES,
+    planetSymbols: PLANET_SYMBOLS,
+    aspectGlyphs: ASPECT_GLYPH,
     toneWords: F.TONE_WORDS,
     spanToneWords: F.SPAN_TONE_WORDS,
     retrogradeMark: F.RETROGRADE_MARK,
