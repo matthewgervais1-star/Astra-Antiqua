@@ -43,9 +43,10 @@ Tags: FACT (source) / INFERENCE / CANNOT CONFIRM. This branch's handoff; the des
 1b. FACT (git, 2026-10-31): step 3, Sky Week, built on `claude/ios-glass-phase-b-week` (e37d418, 0a35efc,
    492b93a, 036a162, cut at 0c2246f; not pushed). Swift core 48/0; SwiftUI unproven until a swift run. Web's
    kicker and title replace the board's; seven rows off the table by copy length; Monday's TENSION line sits
-   over the Moon at 3.57:1 (layout record, step 3). Questions for Matthew in the session's popup.
+   over the Moon at 3.57:1 (layout record, step 3). Matthew (popup, 2026-10-31): the board's kicker and
+   title; accept the 3.57:1; Reduce Motion scrolls the Moon with the text; fast-forward and push.
 2. Steps 2 to 11 of the brief: Sky Day; Week with P53 and P171 (Reduce Motion: the Moon scrolls with
-   the text, INFERENCE for Matthew); Season with P54; Year; Transits; Chart; Placement with P55 and P56;
+   the text, Matthew's ruling of 2026-10-31); Season with P54; Year; Transits; Chart; Placement with P55 and P56;
    Transit detail; More, the culture sheet P146, the Doorway; the five cultures live.
 3. FACT (message from the session that started this one, 2026-10-31): Matthew approved Round 8,
    Glass-Explain, built in step 10 with More: canvas version 43 (id 1793475970-ffe5), row y 26500, a

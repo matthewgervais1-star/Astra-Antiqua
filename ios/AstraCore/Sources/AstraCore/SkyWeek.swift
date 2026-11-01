@@ -1,9 +1,9 @@
 import Foundation
 
 /// Everything Sky Week prints, in its order (the Glass-Week board): the
-/// kicker, the title, the count line, the Moon band and the seven rows. The
-/// kicker, the title and each row's line are the web's own strings
-/// (WeekNave.tsx, weekReading.ts); the count line, the shorthand's tone and
+/// kicker, the title, the count line, the Moon band and the seven rows. Each
+/// row's line is the web's own string (weekReading.ts); the kicker and title
+/// (Matthew's ruling of 2026-10-31), the count line, the shorthand's tone and
 /// conjunction sign, and the Moon band are the board's forms built from the
 /// web's numbers and the Moon ports.
 public struct SkyWeekPage: Sendable, Hashable {
@@ -39,14 +39,14 @@ public enum SkyWeekBuilder {
     private static let utc = TimeZone(secondsFromGMT: 0)!
     private static let numberWords = ["NO", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN"]
 
-    /// "THE HALL OF MA’AT · THE WEEK": the web's head kicker (WeekNave.tsx).
+    /// "THE HALL OF MA’AT · THE WEEK": the web's head kicker (WeekNave.tsx),
+    /// not printed; the page prints the board's kicker.
     public static func kicker(_ culture: Culture, store: ContentStore) -> String {
         "\(store.day.institution(culture)) · THE WEEK"
     }
 
     /// "19 → 25 OCT 2026 · THE HALL OF MA’AT": the board's kicker, the week's
-    /// first and last local dates. Kept for Matthew's ruling; the page prints
-    /// the web's kicker.
+    /// first and last local dates, printed by Matthew's ruling of 2026-10-31.
     public static func boardKicker(_ culture: Culture, days: [WeekDay], store: ContentStore) -> String {
         guard let first = days.first, let last = days.last else { return store.day.institution(culture) }
         let lastNoon = Instant.noonUTC(year: last.year, month: last.month, day: last.day)
@@ -113,6 +113,9 @@ public enum SkyWeekBuilder {
         ]
     }
 
+    /// The board's title, in place of the web's weekTitle (Matthew, 2026-10-31).
+    public static let headline = "The week"
+
     /// The page for the week `now` falls in, Monday to Sunday in `zone`.
     public static func build(culture: Culture, now: Date, zone: TimeZone, store: ContentStore) -> SkyWeekPage {
         let start = WeekReading.mondayOf(now, zone: zone)
@@ -138,8 +141,8 @@ public enum SkyWeekBuilder {
         }
         let moon = MoonPhaseCalculator.compute(now)
         return SkyWeekPage(
-            kicker: kicker(culture, store: store),
-            headline: store.day.weekTitle(culture),
+            kicker: boardKicker(culture, days: days, store: store),
+            headline: headline,
             count: countLine(days),
             moonLines: moonLines(moon, zone: zone),
             moonLit: moon.illuminationFraction,

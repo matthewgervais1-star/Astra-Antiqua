@@ -12,10 +12,10 @@ final class SkyWeekTests: XCTestCase {
             culture: .egypt, now: try Fixtures.instant("2026-10-21T06:00:00.000Z"), zone: Fixtures.utc, store: store)
     }
 
-    func test_theSampleWeekPrintsTheWebsHeadAndTheBoardsCount() throws {
+    func test_theSampleWeekPrintsTheBoardsHeadAndCount() throws {
         let page = try samplePage()
-        XCTAssertEqual(page.kicker, "THE HALL OF MA’AT · THE WEEK")
-        XCTAssertEqual(page.headline, "SEVEN DAYS WEIGHED")
+        XCTAssertEqual(page.kicker, "19 → 25 OCT 2026 · THE HALL OF MA’AT")
+        XCTAssertEqual(page.headline, "The week")
         XCTAssertEqual(page.count, "SEVEN DAYS · SEVEN WEIGHED")
     }
 
@@ -90,7 +90,7 @@ final class SkyWeekTests: XCTestCase {
             let page = SkyWeekBuilder.build(culture: culture, now: start, zone: Fixtures.utc, store: store)
             XCTAssertEqual(page.rows.map(\.line), golden.days.map(\.line), golden.culture)
             XCTAssertEqual(page.rows.map(\.tension), golden.days.map { $0.tone == "tension" }, golden.culture)
-            XCTAssertEqual(page.headline, store.day.weekTitle(culture), golden.culture)
+            XCTAssertEqual(page.headline, "The week", golden.culture)
             for (row, day) in zip(page.rows, golden.days) {
                 let label = day.label.split(separator: " ").map(String.init)
                 let weekday = day.flag.map { "\(label[0]) \($0)" } ?? label[0]
