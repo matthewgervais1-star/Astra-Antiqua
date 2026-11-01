@@ -17,8 +17,8 @@ public enum ShorthandKind: String, CaseIterable, Sendable, Hashable {
 }
 
 /// The day's shorthand as data, for the screen to draw: an aspect's two bodies
-/// and its glyph (flagged tight under half a degree), an ingress's body and
-/// sign, or nothing on a quiet day.
+/// and its glyph (flagged tight under half a degree) with the sign the first
+/// body stands in, an ingress's body and sign, or nothing on a quiet day.
 public struct WeekShorthand: Sendable, Hashable {
     public let kind: ShorthandKind
     public let a: Planet?
@@ -157,7 +157,10 @@ public enum WeekReading {
                 let dayNumber = DayDecreeComposer.utcDayNumber(instant)
                 line = DayDecreeComposer.meaning(culture, figure, day: dayNumber, store: store) + " "
                     + DayDecreeComposer.consequence(culture, figure, store: store)
-                shorthand = WeekShorthand(kind: .aspect, a: figure.a, aspect: figure.kind, b: figure.b, tight: tight)
+                // The first body's sign at the row's instant, as web's shorthand carries it.
+                let sign = chart[figure.a].map { ZodiacMath.longitudeToSign($0).sign }
+                shorthand = WeekShorthand(kind: .aspect, a: figure.a, aspect: figure.kind, b: figure.b, tight: tight,
+                                          sign: sign)
             } else if let ingress = dayIngress {
                 tone = .harmony
                 headline = nil
@@ -189,7 +192,7 @@ public enum WeekReading {
                 year: dateLocal.year,
                 month: dateLocal.month,
                 day: dateLocal.day,
-                label: "\(Format.weekday(instant, zone: utc)) \(dateLocal.day)",
+                label: "\(store.formats.weekday(instant, zone: utc)) \(dateLocal.day)",
                 isToday: isToday,
                 headline: headline,
                 line: line,

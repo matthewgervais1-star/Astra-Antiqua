@@ -59,12 +59,9 @@ public enum DayDecreeComposer {
         return nil
     }
 
-    /// "0°19′", minutes carried at 60.
+    /// "0°19′", minutes carried at 60 (F5 `angle.degMin`).
     public static func formatOrb(_ orb: Double) -> String {
-        let deg = Int(orb.rounded(.down))
-        let min = Int(jsRound((orb - Double(deg)) * 60))
-        let (d, m) = min == 60 ? (deg + 1, 0) : (deg, min)
-        return "\(d)°\(m < 10 ? "0" : "")\(m)′"
+        Format.degree(orb)
     }
 
     /// The measured orb, or "EXACT" only under one minute of arc.
@@ -74,9 +71,13 @@ public enum DayDecreeComposer {
 
     /// "RA △ NUT · 0°19′".
     public static func evidence(_ culture: Culture, _ f: DayFigure, store: ContentStore) -> String {
-        let nameA = store.deity(culture, f.a).name.uppercased()
-        let nameB = store.deity(culture, f.b).name.uppercased()
-        return "\(nameA) \(store.day.aspectGlyph(f.kind)) \(nameB) · \(orbMeasure(f.orb))"
+        // The frame is the catalog's day.evidence; deity names are content, upper-cased as web does.
+        store.strings.fill("day.evidence", culture, [
+            "deityA": store.deity(culture, f.a).name.uppercased(),
+            "aspectGlyph": store.day.aspectGlyph(f.kind),
+            "deityB": store.deity(culture, f.b).name.uppercased(),
+            "angle": orbMeasure(f.orb),
+        ])
     }
 
     /// The unpunctuated meaning clause: two domains and the day's relation.

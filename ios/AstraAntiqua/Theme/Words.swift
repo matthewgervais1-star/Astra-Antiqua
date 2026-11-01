@@ -29,16 +29,14 @@ struct Words {
         }
     }
 
-    /// "23 JUL 2026"
-    func dayMonthYear(_ date: Date) -> String {
-        "\(Format.dayMonth(date, zone: zone)) \(Instant.localYMD(date, zone).year)"
-    }
+    /// "23 JUL 2026" (date.dayMonthYear, shared/strings/formats.json)
+    func dayMonthYear(_ date: Date) -> String { store.formats.dayMonthYear(date, zone: zone) }
 
-    /// "JUL 2026"
-    func monthYear(_ date: Date) -> String { Format.monthYear(date, zone: zone) }
+    /// "JUL 2026" (date.monthYear)
+    func monthYear(_ date: Date) -> String { store.formats.monthYear(date, zone: zone) }
 
-    /// "WED 21 OCT 2026"
-    func weekdayDate(_ date: Date) -> String { "\(Format.weekday(date, zone: zone)) \(dayMonthYear(date))" }
+    /// "WED 21 OCT 2026" (date.day, read in the reader's zone)
+    func weekdayDate(_ date: Date) -> String { store.formats.dateDay(date, zone: zone) }
 
     /// "Hermes goes on to the shrine of the Scorpion. {ruling}" (web's ingress line).
     func ingressLine(_ planet: Planet, _ sign: ZodiacSign) -> String {
@@ -47,17 +45,9 @@ struct Words {
             + banks.ingressFrame(culture, banks.deityCharge(culture, planet))
     }
 
-    /// "☉ □ ♄ · TIGHT", "♂ → SCO", or "QUIET", as web's week strip prints it.
+    /// "☉ □ ♄ · TIGHT · TENSION", "♂ INTO SCORPIO", or "QUIET": the catalog's
+    /// week.row.shorthand forms, as Sky Week prints them.
     func shorthand(_ s: WeekShorthand) -> String {
-        switch s.kind {
-        case .aspect:
-            guard let a = s.a, let b = s.b, let k = s.aspect else { return "" }
-            return "\(symbol(a)) \(store.banks.aspectGlyph(k)) \(symbol(b))\(s.tight ? " · TIGHT" : "")"
-        case .ingress:
-            guard let p = s.planet, let sign = s.sign else { return "" }
-            return "\(symbol(p)) \u{2192} \(store.banks.signAbbreviation(sign))"
-        case .quiet:
-            return "QUIET"
-        }
+        SkyWeekBuilder.shorthand(s, culture: culture, store: store)
     }
 }

@@ -65,7 +65,9 @@ extension Color {
     }
 }
 
-/// The corpus, loaded once from the bundle's copy of shared/content. A
+/// The corpus, loaded once from the bundle's copy of shared/content, with the
+/// strings catalog from its copy of shared/strings (the sibling folder
+/// "strings", which ContentStore reads by default). A
 /// corpus with a hole stops the app at launch with the missing cells named,
 /// which is the same discipline web's buildMatrix() keeps.
 enum Content {
@@ -76,7 +78,7 @@ enum Content {
         do {
             return try ContentStore(directory: base)
         } catch {
-            fatalError("shared/content could not be loaded: \(error)")
+            fatalError("shared/content or shared/strings could not be loaded: \(error)")
         }
     }()
 }

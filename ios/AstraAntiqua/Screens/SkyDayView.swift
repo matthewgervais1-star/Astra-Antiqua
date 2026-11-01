@@ -175,7 +175,7 @@ struct SkyDayContent: View {
             CSSText(page.paragraph, style: M.prose)
                 .placement("P9")
 
-            SkyDaySectionLabel(text: "THE SKY, COMPUTED")
+            SkyDaySectionLabel(text: page.skyLabel)
                 .placement("P10")
                 .padding(.top, M.sectionGap)
                 .padding(.bottom, M.labelGap)
@@ -183,7 +183,7 @@ struct SkyDayContent: View {
                 .placement("P11")
 
             if let rows = page.chartRows {
-                SkyDaySectionLabel(text: "ON YOUR CHART TODAY")
+                SkyDaySectionLabel(text: page.chartLabel)
                     .placement("P12")
                     .padding(.top, M.sectionGap)
                     .padding(.bottom, M.chartLabelGap)
@@ -197,7 +197,7 @@ struct SkyDayContent: View {
             }
 
             if let card = page.longTransit {
-                SkyDaySectionLabel(text: "THE LONG TRANSIT")
+                SkyDaySectionLabel(text: page.longTransitLabel)
                     .placement("P15")
                     .padding(.top, M.sectionGap)
                     .padding(.bottom, M.labelGap)
@@ -248,9 +248,9 @@ struct SkyBox: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            dataRow("MOON", page.moon, bottom: 13, rule: true)
+            dataRow(page.moonLabel, page.moon, bottom: 13, rule: true)
             dataRow(page.nextQuarterName, page.nextQuarterDate, bottom: 13, rule: true)
-            dataRow("SEASON", page.season, bottom: 10, rule: false)
+            dataRow(page.seasonLabel, page.season, bottom: 10, rule: false)
             VStack(spacing: 9) {
                 Rectangle().fill(SkyDayMetrics.barTrack)
                     .frame(height: 3)
@@ -345,7 +345,7 @@ struct LongTransitCardView: View {
             HStack(spacing: 0) {
                 BoxLabel(text: card.footer, height: 11, tracking: 11 * 0.1)
                 Spacer(minLength: 0)
-                BoxLabel(text: "READ →", height: 11, tracking: 11 * 0.1, color: Ink.bone)
+                BoxLabel(text: card.link, height: 11, tracking: 11 * 0.1, color: Ink.bone)
             }
             .padding(.top, 10)
         }

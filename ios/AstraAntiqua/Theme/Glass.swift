@@ -325,7 +325,7 @@ struct GlassTabBar: View {
 /// P1: the wordmark, on the ground.
 struct Wordmark: View {
     var body: some View {
-        Text("ASTRA ANTIQVA")
+        Text(verbatim: Content.store.strings.text("chrome.wordmark"))
             .font(.custom(Ink.displayMedium, fixedSize: 13))
             .tracking(13 * 0.28)
             .foregroundStyle(Ink.bone)
@@ -367,7 +367,7 @@ struct CultureMenu: View {
         .buttonStyle(PressedFill(shape: Capsule(), id: "P164", fill: !systemPress))
         .glassSurface(Capsule(), interactive: true)
         .placement("P3")
-        .accessibilityLabel("Culture: \(name). Change culture")
+        .accessibilityLabel(Content.store.strings.fill("chrome.cultureChip.a11y", nil, ["name": name]))
         .accessibilityShowsLargeContentViewer()
     }
 }

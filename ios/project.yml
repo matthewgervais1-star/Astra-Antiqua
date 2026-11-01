@@ -4,9 +4,11 @@
 #
 #   cd ios && xcodegen generate
 #
-# The bundle copies shared/content (as the folder "content") and the shared
-# font files (as the folder "font") straight from where the repository keeps
-# them, so the Swift app, the .NET app, Android and web read one copy.
+# The bundle copies shared/content (as the folder "content"), the strings
+# catalog and formats in shared/strings (as the folder "strings", which
+# ContentStore reads beside "content") and the shared font files (as the
+# folder "font") straight from where the repository keeps them, so the Swift
+# app, the .NET app, Android and web read one copy.
 name: AstraAntiqua
 options:
   bundleIdPrefix: com.astra.antiqua
@@ -27,6 +29,9 @@ targets:
     sources:
       - path: AstraAntiqua
       - path: ../shared/content
+        type: folder
+        buildPhase: resources
+      - path: ../shared/strings
         type: folder
         buildPhase: resources
       - path: ../android/app/src/main/res/font

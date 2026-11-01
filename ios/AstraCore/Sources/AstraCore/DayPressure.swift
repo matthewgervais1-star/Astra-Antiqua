@@ -41,12 +41,6 @@ public struct PressureGroup: Sendable, Hashable {
 public enum DayPressure {
     private static let houseGroups: [[Int]] = [[2, 6, 10], [4, 8], [3, 7, 11], [1, 5, 9, 12]]
     private static let fastTransits: Set<Planet> = [.moon, .sun, .mercury, .venus, .mars]
-    private static let ordinals = ["", "first", "second", "third", "fourth", "fifth", "sixth",
-                                   "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"]
-
-    static func ordinal(_ house: Int) -> String {
-        (1...12).contains(house) ? ordinals[house] : "\(house)th"
-    }
 
     /// The contacts in the order the day page reads them: a body that moves
     /// daily before a slow one, a body against its own natal place after the
@@ -96,6 +90,8 @@ public enum DayPressure {
         let ascIndex = ZodiacMath.longitudeToSign(ascendant).sign.index
         let buckets = byGroup(natal: natal, ascendant: ascendant, today: today, store: store)
         let voices = store.day.houseGroups(culture)
+        // F12: the ordinal word, lower, from shared/strings/formats.json.
+        let ordinal = store.formats.ordinalWord
         return houseGroups.enumerated().map { i, houses in
             let voice = voices[i]
             let hits = buckets[i]
@@ -188,11 +184,17 @@ public enum LongTransitPick {
                 x.element.start != y.element.start ? x.element.start < y.element.start : x.offset < y.offset
             }[0].element
         }
-        let deity = store.deity(culture, chosen.transitPlanet).name.uppercased()
-        let title1 = "\(deity) IN THE \(store.day.signImage(chosen.transitSign))"
-        let verb = store.banks.aspectVerb(culture, chosen.kind).uppercased()
-        let title2 = "\(verb) YOUR NATAL \(natalPointLabel(culture, chosen.natalKey, store: store))"
-        let range = "\(Format.monthYear(chosen.start, zone: utc)) → \(Format.monthYear(chosen.end, zone: utc))"
+        // Deity names and verbs are content, upper-cased as web's buildLongTransit does;
+        // the frames are the catalog's day.longTransit.title1 and title2.
+        let title1 = store.strings.fill("day.longTransit.title1", culture, [
+            "deity": store.deity(culture, chosen.transitPlanet).name.uppercased(),
+            "signPhrase": store.formats.signPhrase(chosen.transitSign),
+        ])
+        let title2 = store.strings.fill("day.longTransit.title2", culture, [
+            "verb": store.banks.aspectVerb(culture, chosen.kind).uppercased(),
+            "natal": natalPointLabel(culture, chosen.natalKey, store: store),
+        ])
+        let range = store.formats.rangeMonths(chosen.start, chosen.end, zone: utc)
         let length = chosen.end.timeIntervalSince(chosen.start)
         let pct = length > 0 ? min(100, max(0, now.timeIntervalSince(chosen.start) / length * 100)) : 0
         return LongTransit(active: !active.isEmpty, span: chosen, title1: title1, title2: title2,

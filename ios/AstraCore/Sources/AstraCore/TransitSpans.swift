@@ -81,8 +81,8 @@ public struct TransitSpan: Sendable, Hashable, Identifiable {
     }
 }
 
-/// How a span reads: ease or tension (web's spanTone).
-public enum SpanTone: Sendable, Hashable {
+/// How a span reads: ease or tension (web's spanTone). Raw values are web's tone strings.
+public enum SpanTone: String, CaseIterable, Sendable, Hashable {
     case ease, tension
 }
 

@@ -7,7 +7,9 @@ import Foundation
 ///
 /// The store reads from a directory it is handed: the app passes its bundle's
 /// resource folder (where the build copies shared/content), the tests pass
-/// the repository's shared/content.
+/// the repository's shared/content. The strings catalog and the formats
+/// (shared/strings) are read from the sibling folder "strings", where the
+/// repository keeps them and where the app bundle copies them.
 public final class ContentStore: @unchecked Sendable {
     public let aspectRules: [AspectRule]
     public let banks: ReadingBanks
@@ -17,6 +19,10 @@ public final class ContentStore: @unchecked Sendable {
     public let method: MethodContent
     public let learn: LearnContent
     public let neutralPalette: Palette
+    /// The shared strings catalog (shared/strings/en.json).
+    public let strings: Strings
+    /// The named formats and their word lists (shared/strings/formats.json).
+    public let formats: Formats
 
     private let deities: [String: Deity]
     private let placements: [String: String]
@@ -104,8 +110,17 @@ public final class ContentStore: @unchecked Sendable {
     }
 
     /// Loads and checks the whole corpus from a directory holding the
-    /// shared/content files.
-    public init(directory: URL) throws {
+    /// shared/content files, and the strings from `stringsDirectory`
+    /// (by default the sibling folder "strings").
+    public convenience init(directory: URL) throws {
+        try self.init(
+            directory: directory,
+            stringsDirectory: directory.deletingLastPathComponent().appendingPathComponent("strings"))
+    }
+
+    public init(directory: URL, stringsDirectory: URL) throws {
+        let strings = try Strings(directory: stringsDirectory)
+        let formats = try Formats(directory: stringsDirectory)
         var gaps: [String] = []
 
         var deities: [String: Deity] = [:]
@@ -247,5 +262,7 @@ public final class ContentStore: @unchecked Sendable {
         self.learn = learn
         self.banks = banks
         self.day = day
+        self.strings = strings
+        self.formats = formats
     }
 }
