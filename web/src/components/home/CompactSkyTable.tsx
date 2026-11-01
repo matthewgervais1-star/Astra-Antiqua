@@ -58,7 +58,7 @@ export function CompactSkyTable({ className, culture, rows, moon, season }: Comp
           <div>
             <div className="text-dim">{str("day.sky.nextQuarter", culture, { quarter: str(moonPhaseKey(moon.nextQuarter.name), culture) })}</div>
             <div className="text-bone">
-              {str("day.sky.nextQuarter.date", culture, { date: fmt("date.dayMonthYear", moon.nextQuarter.date, "UTC") })}
+              {str("day.sky.nextQuarter.date", culture, { date: fmt("date.dayMonthYear", moon.nextQuarter.date, "local") })}
             </div>
           </div>
           <div className="col-span-2">

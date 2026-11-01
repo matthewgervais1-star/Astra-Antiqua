@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/classNames";
+import { text } from "@/strings";
 
 export type Horizon = "day" | "week" | "season" | "year";
 
@@ -14,14 +15,14 @@ interface Cell {
 }
 
 const CELLS: readonly Cell[] = [
-  { key: "day", label: "D", href: "/" },
-  { key: "week", label: "W", href: "/week" },
-  { key: "season", label: "S", href: "/season" },
-  { key: "year", label: "Y", href: "/year" },
+  { key: "day", label: text("chrome.horizon.day"), href: "/" },
+  { key: "week", label: text("chrome.horizon.week"), href: "/week" },
+  { key: "season", label: text("chrome.horizon.season"), href: "/season" },
+  { key: "year", label: text("chrome.horizon.year"), href: "/year" },
 ];
 
 /**
- * D · W · S · Y segmented control: one bordered row of Link cells. The active
+ * DAY · WEEK · SEASON · YEAR segmented control: one bordered row of Link cells. The active
  * cell wears the accent as ink and as the rule under it, never as a fill: the
  * accent is never a background.
  */

@@ -13,6 +13,7 @@ import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
 import {
   findEclipses,
   findMajorTransits,
+  findMoonPhases,
   findRetrogradeStations,
   findSolarReturn,
   findYearIngresses,
@@ -119,7 +120,10 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
     if (!now || natal) return null;
     const stations = findRetrogradeStations(now, YEAR_DAYS);
     const ingresses = findYearIngresses(now, YEAR_DAYS, SLOW_BODIES);
-    return { stations, ingresses };
+    // year.countLine names lunations, so n counts the window's moon quarters
+    // with the stations and ingresses the timeline lists.
+    const lunations = findMoonPhases(now, YEAR_DAYS).length;
+    return { stations, ingresses, lunations };
   }, [now, natal]);
 
   if (!culture || !now) {
@@ -144,7 +148,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
         sub={
           timeline ? (
             <div className="font-mono text-data-xs tracking-label text-dim">
-              {str("year.countLine", culture, { n: timeline.length })}
+              {str("year.countLine", culture, { n: timeline.length + (skyOnly?.lunations ?? 0) })}
             </div>
           ) : undefined
         }
