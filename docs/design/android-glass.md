@@ -511,3 +511,84 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
   chat (a wrong path), and they were sent right after. CANNOT CONFIRM: which changes he wants.
 - FACT: the master revamp (one set of strings for web, iPhone and Android, layout the only difference): "Pause
   the port until it lands". INFERENCE: steps 5 to 11 wait for the revamp; Sky Season stays as built until then.
+
+## Step 5, Sky Year (2026-11-01)
+
+- FACT (task from the session that ran the shared-strings revamp, 2026-11-01): Matthew chose to resume the port
+  after PR #12 merged, from master (a16a73e); branch `claude/android-glass-step5-year-e880ad`. Board Glass-Year
+  (canvas version 1793493664-ced5, read 2026-11-01, file `project/Glass-Year.dc.html`); table `report-r3b.md` in
+  the design worktree, Year P43 to P52 (page 981.7, scrolls to 136, scrolled frame 100).
+- FACT (`domain/SkyYear.kt`, `domain/YearNarrative.kt`, `domain/ScreenSlots.kt` `SkyYearSlots`): web's
+  `buildYearScreen` slots (`lib/screens/year.ts`) and a port of what the page prints from `buildAnnualReport`
+  (`lib/annualReport.ts`: the theme's body, its dominant transit, the four quarters), `buildYearSegments`,
+  `spanHeadline`, `SKY_ONLY_OPENING`, `yearVotiveTone`, `buildSkyOnlyTimeline` (`yearContent.ts`) and
+  YearNave's spine filter. Left out because the page does not print them: the theme's headline and context,
+  hardest and easiest stretches, standouts, solar return, narrative headlines and beats. `YearNarrative.kt` was
+  generated from web's `getYearTheme`, `getSeason`, `getSpecialYear` through node.
+- FACT (`ScreenGoldenTest`): the 10 cases of `shared/goldens/screens/year.json` equal web's on every slot.
+- FACT (node run of `web/src` through jiti, `process.env.TZ = "Europe/Rome"` inside the script, 2026-11-01;
+  script `year-parity.mjs` in this session's scratchpad, not kept): opening body, dominant aspect, segments
+  (label, range, summary, status), spine headlines with their end month, votive and row tones equal Android's
+  (`SkyYearTest` literals) for the five cultures at the sample with and without the chart, for 2025-03-01,
+  2026-12-30 and 2026-09-29. Web's own wording is kept as written ("against your the top of your chart").
+- FACT (`ui/screens/SkyYearScreen.kt`): the board's sections in order with the catalog's strings: the kicker
+  "FROM 21 OCT 2026 · THE HALL OF MA’AT" (institution through `ScriptName`, so the reveal runs), web's title
+  "MMXXVI · THE YEAR OF THE RIVER" (two lines), the count "70 TURNINGS · …", then web's 21 turnings in the
+  board's spine form: a month label (30 above, 18 below) over each month's ruled list, rows 20 apart, the
+  retrograde words in conflict ink, an ingress's prose line from web, no prose line on stations.
+- INFERENCE (same file): web's timeline starts at the instant, so TODAY (P49) leads its month and no row sits
+  above it; the board shows 3 OCT and 16 OCT above it. When today's month has no row (29 SEP, 30 DEC), TODAY
+  takes its own month label; web has no such slot.
+- FACT (`placement.txt`, same file): with a chart web prints neither the count line nor the timeline (YearNave
+  shows them only without one); Android prints both in both states because the board does.
+- FACT (same file): the web's sections below the board, in YearNave's order: the opening (the year's theme, or
+  the sky-only opening), with a chart the quarter segments (stacked: label and dates beside the status, the
+  summary below, since web's three columns leave about 70 dp at 342), Greece's festivals note, the spine box
+  (six rows, each a link to its transit except Midheaven rows, which Android's transit detail cannot open), the
+  votive; without a chart the CAST A CHART box (opens the cast screen on top); the feedback row (`year-2026`,
+  kept on the device); ← THE SEASON and THE YEAR AHEAD → (the forecast, on top). Web's spacing holds.
+- FACT (`MainActivity.kt`): Route.YEAR opens `SkyYearScreen`. The flat `YearScreen` and
+  `HorizonViewModel.loadYear` stay on disk, out of the graph. Ways in: the horizon control on Day, Week, Season
+  and Year, Season's THE YEAR →. The flat screen's only exits were its NaveShell's tabs and horizons, which the
+  glass chrome covers.
+- FACT (same file): every row, TODAY, the opening, each segment, spine row and the votive is a D-pad stop shown
+  clear of the glass (173 above, 96 below); spoken labels carry no glyphs ("24 oct mercury turns retrograde",
+  "day 1 of 92").
+
+## Step 5 checks (2026-11-01)
+
+- FACT (`SkyYearScreenshotTest`, `docs/design/android-glass/step5/placement.txt`): renders at rest, scrolled 100,
+  Rome, without a chart, at font scale 1.3, on a 360x780 dp phone, the end with and without a chart, Greece's
+  end, and with row-7 focused. Chrome in all: P1 off 0.9, P2, P3, P17, P20 0.0.
+- FACT (same, at rest): every gap equals the board's to 0.1 (18, 10, 30, 18, 19.9 as 20.0, rows 20; each further
+  month 30 and 18), and holds in the scrolled, Rome, no-chart, 1.3 and 360 frames. Boxes against the table: P43
+  18.3 against 17.6 (the script face's line); P44 75.3 against 35.1 (web's title on two lines); P45 41.0 lower;
+  P46 41.1 lower; rows 15.7 against 45.9 and 122.4 (IBM Plex Mono's glyphs; stations carry no prose line). The
+  page scrolls to 2928.3 with a chart and 1401.0 without, against the board's 136.
+- FACT (same): D-pad Down from TODAY walks P47, P48, P50, P51, P52, row-6, row-7; with row-7 focused the page
+  scrolls to 39.3 and the row's bottom sits at 748. THE SEASON, THE YEAR AHEAD and CAST A CHART take a 48 dp touch.
+- CANNOT CONFIRM: how the frames look on a phone; Robolectric drew them. Web's `toLocaleDateString(undefined, …)`
+  follows the runtime locale; Android and the node check use en-US ("June 8").
+- FACT (review, one Opus reviewer, 2026-11-01): nothing Critical; the ports equal web against the node dump.
+  Important, fixed in round 1: spine rows did not link to their transit as web's do (now they do, except
+  Midheaven spans: `TransitsViewModel` reads only Sun, Moon and Ascendant). Minors fixed: spoken label for the
+  spine heading, segment status spoken "day 1 of 92", the both-states note, a chart that fails to compute is
+  retried on the next load.
+- FACT (scoped re-review, same reviewer, 2026-11-01): round 1's fixes hold. Minor, fixed in round 2: the linked
+  spine rows had lost the scroll clear of the glass (now `glassClearFocus()`, split out of `dpadStop()` in
+  `SkySeasonScreen.kt`); a D-pad test ends on spine-1, top 658.0, bottom 748.0 (render `sky-year-spine-focus.png`).
+  Second and last round.
+- Deferred: the votive's second line leaves "YOU" alone on a third line at 342 (asked); spine headlines wrap to
+  three lines (asked); `SkyYearComposer` formats in the device zone while `SkyYearSlots` takes a zone (web's
+  "local" both ways); `SkyEvents` ingress search to 60 s (inherited from step 4).
+- FACT (local, 2026-11-01): `./gradlew compileDebugSources testDebugUnitTest` 299 tests, 0 failures (279 before
+  step 5).
+
+### Matthew's answers on Sky Year (popup, 2026-11-01, after the ten renders were shown in the chat)
+
+- FACT: the votive "Tighten tracking"; the spine headlines "Leave as built"; TODAY "Keep web's" (turnings from
+  today only); step 5 "Approved, step 6 next".
+- FACT (`SkyYearScreen.kt` `votiveTracking`, `SkyYearScreenshotTest.skyYearEnd`): the votive's tracking steps down
+  from web's .14em by .01 (floor .04em) until each of the catalog's lines fits; at 342 Egypt's votive takes two
+  lines, 92.0 tall against 121.0 before. Local: 299 tests, 0 failures.
+- Next: step 6, Transits, in a fresh session; push and PR on Matthew's word.

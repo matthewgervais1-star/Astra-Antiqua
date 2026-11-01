@@ -205,3 +205,17 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   decree banks exported for Swift and C#; Swift branch's `ReadingBanks.cs` and `ContentStore.cs` read banks
   master dropped; eclipse labels and season lunation prose need a copy pass; Android `day.votive` not ported.
 - Pending: Matthew's word to push the three branches and open PRs; then the glass port resumes on the catalog.
+
+## Added 2026-11-01 (late): Android glass port resumed, step 5 Sky Year (built)
+
+- FACT (task from the revamp session, 2026-11-01): Matthew chose to resume the port after PR #12, from master
+  a16a73e; branch `claude/android-glass-step5-year-e880ad`, committed, not pushed, no PR.
+- FACT (`ui/screens/SkyYearScreen.kt`, `domain/SkyYear.kt`, `MainActivity.kt`): Route.YEAR opens Sky Year on the
+  glass chrome; the board's sections with the catalog's strings and web's timeline, then the web's own sections
+  (opening, segments, spine with transit links, votive or CAST A CHART, feedback, links). Record:
+  `docs/design/android-glass.md` (step 5), renders `docs/design/android-glass/step5/`.
+- FACT (`ScreenGoldenTest`, node check of `web/src`): the 10 year goldens and the page's prose equal web's.
+- FACT (review, one Opus reviewer): nothing Critical; one Important (spine links) and the Minors fixed in two rounds.
+- FACT (local, 2026-11-01): `./gradlew compileDebugSources testDebugUnitTest` 299 tests, 0 failures (279 before).
+- FACT (Matthew's popup, 2026-11-01): votive tracking tightened to fit two lines (built, 299/0); spine headlines
+  and TODAY kept as built; Sky Year approved. Next: step 6, Transits, in a fresh session; push and PR on his word.

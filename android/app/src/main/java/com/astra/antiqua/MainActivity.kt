@@ -55,7 +55,7 @@ import com.astra.antiqua.ui.screens.PlacementScreen
 import com.astra.antiqua.ui.screens.PlacementsScreen
 import com.astra.antiqua.ui.screens.SynastryScreen
 import com.astra.antiqua.ui.screens.SkySeasonScreen
-import com.astra.antiqua.ui.screens.YearScreen
+import com.astra.antiqua.ui.screens.SkyYearScreen
 import com.astra.antiqua.ui.screens.FigureScreen
 import com.astra.antiqua.ui.screens.TransitDetailScreen
 import com.astra.antiqua.ui.screens.TransitsScreen
@@ -174,8 +174,9 @@ fun AstraNavHost(
         composable(Route.SEASON) {
             SkySeasonScreen(culture = culture, onNavigate = go, onOpen = open)
         }
-        flat(Route.YEAR) {
-            YearScreen(culture = culture, onNavigate = go)
+        // SKY · YEAR on the glass chrome (step 5); the flat YearScreen leaves the graph.
+        composable(Route.YEAR) {
+            SkyYearScreen(culture = culture, onNavigate = go, onOpen = open)
         }
         flat(Route.VOICES) {
             VoicesScreen(culture = culture, onNavigate = go, onOpenVoice = openVoice)

@@ -1,0 +1,145 @@
+sky-year P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-year P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-year P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-year P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-year P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-year P43 want 24.0, 189.0 · 342.0x17.6 got 24.0, 189.0 · 342.0x18.3 off 0.7
+sky-year P44 want 24.0, 224.6 · 342.0x35.1 got 24.0, 225.3 · 342.0x75.3 off 40.2
+sky-year P45 want 24.0, 269.7 · 342.0x35.2 got 24.0, 310.7 · 342.0x35.3 off 41.0
+sky-year P46 want 24.0, 334.9 · 342.0x11.0 got 24.0, 376.0 · 342.0x11.0 off 41.1
+sky-year P47 want 45.0, 363.9 · 321.0x45.9 got 45.0, 440.7 · 321.0x15.7 off 76.8
+sky-year P48 want 45.0, 429.8 · 321.0x45.9 got 45.0, 515.3 · 321.0x15.7 off 85.5
+sky-year P49 want 45.0, 495.7 · 321.0x15.4 got 45.0, 405.0 · 321.0x15.7 off 90.7
+sky-year P50 want 45.0, 531.0 · 321.0x122.4 got 45.0, 551.0 · 321.0x15.7 off 106.7
+sky-year P51 want 45.0, 673.4 · 321.0x45.9 got 45.0, 625.7 · 321.0x15.7 off 47.7
+sky-year P52 want 45.0, 739.3 · 321.0x122.4 got 45.0, 661.3 · 321.0x15.7 off 106.7
+sky-year P43 reason: 18.3 against 17.6: the script face's line, as Day's P4; web's kicker "FROM 21 OCT 2026 · THE HALL OF MA’AT" on one line as the board's
+sky-year P44 reason: 75.3 against 35.1: web's title "MMXXVI · THE YEAR OF THE RIVER" on two lines, each 37.6 for Spectral SC's glyphs (as Season's P34); the board's "The year ahead" takes one
+sky-year P45 reason: web's count "70 TURNINGS · …" on two lines as the board's "72 TURNINGS"; sits 41.0 lower, under P44's second line
+sky-year P46 reason: web's first month label "OCT 2026", as the board's; 41.1 lower
+sky-year P49 reason: TODAY leads October: web's timeline starts at the instant, so no row sits above it (the board shows 3 OCT and 16 OCT above); 15.7 for IBM Plex Mono's glyphs at 11 over CSS's 15.4 line
+sky-year P47 reason: web's first row, 24 OCT MERCURY TURNS RETROGRADE: a station, so no prose line (the board's station sentence has no web source, CANNOT CONFIRM in the catalog); 15.7 against 45.9
+sky-year P48 reason: web's 13 NOV MERCURY TURNS DIRECT under its own NOV 2026 label (30 above, 18 below); no prose line
+sky-year P50 reason: web's 14 NOV VENUS TURNS DIRECT: no prose line, 15.7 against the board's two-line ingress 122.4
+sky-year P51 reason: web's 11 DEC SATURN TURNS DIRECT under DEC 2026; no prose line
+sky-year P52 reason: web's 12 DEC NEPTUNE TURNS DIRECT: no prose line, 15.7 against 122.4; 16 more rows follow (row-6 to row-21), one ingress among them with web's prose
+sky-year note: with a chart web prints neither the count line (P45) nor the timeline (P46 to P52); YearNave shows them only without one. Android prints both in both states because the board does.
+sky-year month-2 (no board ID) got 24.0, 486.3 · 342.0x11.0
+sky-year month-3 (no board ID) got 24.0, 596.7 · 342.0x11.0
+sky-year row-6 (no board ID) got 45.0, 697.0 · 321.0x15.7
+sky-year page scrolls to 2899.3 (board 136)
+sky-year gap P43 to P44 want 18.0 got 18.0
+sky-year gap P44 to P45 want 10.0 got 10.0
+sky-year gap P45 to P46 want 30.0 got 30.0
+sky-year gap P46 to P49 want 18.0 got 18.0
+sky-year gap P49 to P47 want 19.9 got 20.0
+sky-year gap P47 to month-2 want 30.0 got 30.0
+sky-year gap month-2 to P48 want 18.0 got 18.0
+sky-year gap P48 to P50 want 20.0 got 20.0
+sky-year gap P50 to month-3 want 30.0 got 30.0
+sky-year gap month-3 to P51 want 18.0 got 18.0
+sky-year gap P51 to P52 want 20.0 got 20.0
+sky-year gap P52 to row-6 want 20.0 got 20.0
+sky-year-360 gap P43 to P44 want 18.0 got 18.0
+sky-year-360 gap P44 to P45 want 10.0 got 10.0
+sky-year-360 gap P45 to P46 want 30.0 got 30.0
+sky-year-360 gap P46 to P49 want 18.0 got 18.0
+sky-year-360 gap P49 to P47 want 19.9 got 20.0
+sky-year-360 gap P47 to month-2 want 30.0 got 30.0
+sky-year-360 gap month-2 to P48 want 18.0 got 18.0
+sky-year-360 P47 got 45.0, 440.7 · 291.0x15.7
+sky-year-no-chart P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-year-no-chart P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-year-no-chart P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-year-no-chart P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-year-no-chart P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-year-no-chart gap P43 to P44 want 18.0 got 18.0
+sky-year-no-chart gap P44 to P45 want 10.0 got 10.0
+sky-year-no-chart gap P45 to P46 want 30.0 got 30.0
+sky-year-no-chart gap P46 to P49 want 18.0 got 18.0
+sky-year-no-chart gap P49 to P47 want 19.9 got 20.0
+sky-year-no-chart gap P47 to month-2 want 30.0 got 30.0
+sky-year-no-chart gap month-2 to P48 want 18.0 got 18.0
+sky-year-no-chart gap P48 to P50 want 20.0 got 20.0
+sky-year-no-chart gap P50 to month-3 want 30.0 got 30.0
+sky-year-no-chart gap month-3 to P51 want 18.0 got 18.0
+sky-year-no-chart gap P51 to P52 want 20.0 got 20.0
+sky-year-no-chart gap P52 to row-6 want 20.0 got 20.0
+sky-year-rome P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-year-rome P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-year-rome P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-year-rome P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-year-rome P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-year-rome gap P43 to P44 want 18.0 got 18.0
+sky-year-rome gap P44 to P45 want 10.0 got 10.0
+sky-year-rome gap P45 to P46 want 30.0 got 30.0
+sky-year-rome gap P46 to P49 want 18.0 got 18.0
+sky-year-rome gap P49 to P47 want 19.9 got 20.0
+sky-year-rome gap P47 to month-2 want 30.0 got 30.0
+sky-year-greece-end gap year-segments to year-festivals want 12.0 got 12.0
+sky-year-greece-end gap year-festivals to year-spine want 32.0 got 32.0
+sky-year-end P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-year-end P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-year-end P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-year-end P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-year-end P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-year-end year-opening (no board ID) got 24.0, -1190.7 · 342.0x340.0
+sky-year-end year-segments (no board ID) got 24.0, -818.7 · 342.0x693.0
+sky-year-end segment-1 (no board ID) got 24.0, -818.7 · 342.0x289.0
+sky-year-end segment-2 (no board ID) got 24.0, -529.7 · 342.0x239.0
+sky-year-end segment-3 (no board ID) got 24.0, -290.7 · 342.0x165.0
+sky-year-end year-spine (no board ID) got 24.0, -93.7 · 342.0x574.7
+sky-year-end year-votive (no board ID) got 24.0, 513.0 · 342.0x92.0
+sky-year-end year-feedback (no board ID) got 24.0, 629.0 · 342.0x41.3
+sky-year-end year-links (no board ID) got 24.0, 706.3 · 342.0x17.7
+sky-year-end page scrolls to 2899.3
+sky-year-end gap row-21 to year-opening want 40.0 got 40.0
+sky-year-end gap year-opening to year-segments want 32.0 got 32.0
+sky-year-end gap year-segments to year-spine want 32.0 got 32.0
+sky-year-end gap year-spine to year-votive want 32.0 got 32.0
+sky-year-end gap year-votive to year-feedback want 24.0 got 24.0
+sky-year-end gap year-feedback to year-links want 36.0 got 36.0
+sky-year-end year-votive height 92.0 (three lines 121.0)
+sky-year-focus scrolled to 39.3, row-7 top 732.3 bottom 748.0
+sky-year-spine-focus scrolled to 2214.3, spine-1 top 658.0 bottom 748.0
+sky-year-no-chart-end P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-year-no-chart-end P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-year-no-chart-end P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-year-no-chart-end P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-year-no-chart-end P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-year-no-chart-end year-opening (no board ID) got 24.0, 307.7 · 342.0x85.0
+sky-year-no-chart-end year-cast (no board ID) got 24.0, 424.7 · 342.0x180.3
+sky-year-no-chart-end year-cast-link (no board ID) got 118.0, 548.7 · 154.0x38.3
+sky-year-no-chart-end year-feedback (no board ID) got 24.0, 629.0 · 342.0x41.3
+sky-year-no-chart-end year-links (no board ID) got 24.0, 706.3 · 342.0x17.7
+sky-year-no-chart-end page scrolls to 1401.0
+sky-year-no-chart-end gap row-21 to year-opening want 40.0 got 40.0
+sky-year-no-chart-end gap year-opening to year-cast want 32.0 got 32.0
+sky-year-no-chart-end gap year-cast to year-feedback want 24.0 got 24.0
+sky-year-no-chart-end gap year-feedback to year-links want 36.0 got 36.0
+sky-year-scrolled P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-year-scrolled P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-year-scrolled P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-year-scrolled P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-year-scrolled P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-year-scrolled scrolled to 100.0
+sky-year-scrolled gap P43 to P44 want 18.0 got 18.0
+sky-year-scrolled gap P44 to P45 want 10.0 got 10.0
+sky-year-scrolled gap P45 to P46 want 30.0 got 30.0
+sky-year-scrolled gap P46 to P49 want 18.0 got 18.0
+sky-year-scrolled gap P49 to P47 want 19.9 got 20.0
+sky-year-scrolled gap P47 to month-2 want 30.0 got 30.0
+sky-year-scrolled gap month-2 to P48 want 18.0 got 18.0
+sky-year-scrolled gap P48 to P50 want 20.0 got 20.0
+sky-year-scrolled gap P50 to month-3 want 30.0 got 30.0
+sky-year-scrolled gap month-3 to P51 want 18.0 got 18.0
+sky-year-scrolled gap P51 to P52 want 20.0 got 20.0
+sky-year-scrolled gap P52 to row-6 want 20.0 got 20.0
+sky-year-font-130 gap P43 to P44 want 18.0 got 18.0
+sky-year-font-130 gap P44 to P45 want 10.0 got 10.0
+sky-year-font-130 gap P45 to P46 want 30.0 got 30.0
+sky-year-font-130 gap P46 to P49 want 18.0 got 18.0
+sky-year-font-130 gap P49 to P47 want 19.9 got 20.0
+sky-year-font-130 gap P47 to month-2 want 30.0 got 30.0
+sky-year-font-130 gap month-2 to P48 want 18.0 got 18.0
+sky-year-font-130 P44 79.3 tall, P45 46.0, P47 20.3
