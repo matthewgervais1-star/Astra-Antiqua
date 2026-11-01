@@ -56,9 +56,10 @@ const { NEUTRAL_GROUND, NEUTRAL_ACCENT, CULTURE_GROUNDS, CULTURE_ACCENTS } = awa
 const { default: tzLookup } = await import("tz-lookup");
 const { flatten, parseDocument, parseElements } = await import("./svg-shapes.mjs");
 
-const OUT_DIR = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "../../shared/content",
+// ASTRA_SHARED_OUT points the export at another shared/ root (check-shared.mjs uses a temp folder).
+const OUT_DIR = path.join(
+  process.env.ASTRA_SHARED_OUT ?? path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../shared"),
+  "content",
 );
 
 function assert(cond, message) {

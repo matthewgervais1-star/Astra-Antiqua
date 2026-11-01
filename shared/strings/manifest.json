@@ -1,0 +1,33 @@
+{
+  "sourceCommit": "883b7ec8d985e0476fbea42d1fe3b721094c1883",
+  "counts": {
+    "keys": 210,
+    "perCultureKeys": 16,
+    "cultures": 5,
+    "composedRows": 20,
+    "formats": 26,
+    "formatGoldens": 63
+  },
+  "composed": {
+    "day.headline": "lib/decree.ts composeDayDecree headline (P6)",
+    "day.paragraph": "lib/decree.ts composeDayDecree paragraphs (P9)",
+    "day.votive": "lib/decree.ts votive bank (hidden on the ports)",
+    "day.chart.row.sentence": "lib/dayPressure.ts (P13, P14, P226, P227)",
+    "week.row.headline": "lib/weekReading.ts buildWeekDays headline",
+    "week.row.line": "lib/weekReading.ts buildWeekDays line",
+    "season.signProse": "shared/content/zodiac-signs.json sign blurb (P36)",
+    "season.section.changing.body": "components/horizons/seasonContent.ts composeWhatIsChanging",
+    "season.section.begins.body": "components/horizons/seasonContent.ts composeWhereItBegins",
+    "season.section.touches.body": "components/horizons/seasonContent.ts composeWhatItTouchesSky",
+    "season.section.leaves.body": "components/horizons/seasonContent.ts composeWhatItLeavesBehind",
+    "year.row.prose": "lib/weekReading.ts ingress verbs; the station sentence has no web source (CANNOT CONFIRM)",
+    "year.opening": "lib/annualReport.ts yearTheme.body, or yearContent.ts SKY_ONLY_OPENING",
+    "chart.summary": "lib/reading.ts SUMMARY_INTRO and SUMMARY_TONES (P74)",
+    "placement.prose": "components/charts/placementCopy.ts buildWhatItIs, buildHowItShows, buildKeepInView (P92, P94, P96)",
+    "placement.received": "components/chrome/ReceptionNote.tsx and cultureVoice receptionLine",
+    "placement.votive": "components/charts/placementVotives.ts",
+    "transit.headline": "lib/figureReading.ts composeSpanFigure headline (P101)",
+    "transit.playsOut": "data/figureBanks.ts playsOutTitle, per culture (P120)",
+    "transit.section.body": "data/transitSpine.ts and components/transits/TransitDetail.tsx paragraphs"
+  }
+}
