@@ -369,3 +369,12 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
   main thread (small file); the links and verdicts keep the web's 18 dp tall targets, under Android's 48
   dp minimum (asked in the popup).
 - FACT (local, 2026-10-31): `./gradlew compileDebugSources testDebugUnitTest` 253 tests, 0 failures.
+
+### Matthew's answers after the changes (popup, 2026-10-31, after four renders were shown in the chat)
+
+- FACT: "Approved, go to Season"; tap targets "Grow the tap area only".
+- FACT (`SkyWeekScreenshotTest.theFootsLinksTakeA48DpTouch`): Compose's hit test already widens a small
+  clickable to the 48 dp minimum touch size when nothing else claims the touch; a tap 10 dp above THE DAY
+  and THE SEASON, 10 dp below THE LONG TRANSITS and 10 dp above IT WAS SO each lands. No layout changed;
+  the test pins it. Local: 254 tests, 0 failures.
+- Step 4 prompt: `docs/design/prompts/android-glass-step4.md`.

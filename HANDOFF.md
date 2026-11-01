@@ -152,3 +152,6 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   "Changes first" before Season. Pending: those two changes, then his look.
 - FACT (Matthew, 2026-10-31, "Yes, build them"): row headlines and the web's thesis, note, votive, feedback
   (kept on the device) and links below the rows built; 253 tests, 0 failures. Pending: his look at the renders.
+- FACT (Matthew's popup, 2026-10-31): Sky Week approved; "Grow the tap area only" (Compose's hit test
+  already gives 48 dp; a test pins it). 254 tests, 0 failures. Next: step 4, Sky Season, in a fresh
+  session (prompt `docs/design/prompts/android-glass-step4.md`); push and PR on Matthew's word.

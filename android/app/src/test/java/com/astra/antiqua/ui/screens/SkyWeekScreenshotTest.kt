@@ -16,6 +16,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelected
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.dp
 import com.astra.antiqua.data.AstronomyEngine
@@ -102,12 +104,14 @@ class SkyWeekScreenshotTest {
 
     private lateinit var state: ScrollState
 
+    private val routes = mutableListOf<String>()
+
     private fun render(name: String, culture: AncientCulture, scroll: Int) {
         val week = SkyWeekComposer.compose(AstronomyEngine(), culture, SkyDayTest.sampleNow)
         compose.setContent {
             AstraAntiquaTheme(selectedCulture = culture) {
                 state = rememberScrollState(with(LocalDensity.current) { scroll.dp.roundToPx() })
-                SkyWeekFrame(culture = culture, week = week, scrollState = state)
+                SkyWeekFrame(culture = culture, week = week, onNavigate = { routes += it }, scrollState = state)
             }
         }
         compose.waitForIdle()
@@ -218,8 +222,29 @@ class SkyWeekScreenshotTest {
     }
 
     @Test
-    fun skyWeekMidway() {
-        // The proposal's middle frame: the lit part reaches Tuesday's line.
+    fun theFootsLinksTakeA48DpTouch() {
+        // The links are about 18 dp tall, as on web. Compose's hit test widens a small
+        // clickable to the 48 dp minimum when nothing else claims the touch, so a tap
+        // 10 dp above or below the text still lands; the layout keeps web's spacing.
+        render("sky-week-end", AncientCulture.EGYPT, 4000)
+        listOf("The day" to com.astra.antiqua.ui.nav.Route.DAY, "The season" to com.astra.antiqua.ui.nav.Route.SEASON).forEach { (label, route) ->
+            routes.clear()
+            compose.onNode(androidx.compose.ui.test.hasContentDescription(label) and hasClickAction())
+                .performTouchInput { click(androidx.compose.ui.geometry.Offset(centerX, -10.dp.toPx())) }
+            assertTrue("a tap 10 dp above $label missed: $routes", routes == listOf(route))
+        }
+        routes.clear()
+        compose.onNode(androidx.compose.ui.test.hasContentDescription("The long transits") and hasClickAction())
+            .performTouchInput { click(androidx.compose.ui.geometry.Offset(centerX, height + 10.dp.toPx())) }
+        assertTrue("a tap 10 dp below the long transits missed: $routes", routes == listOf(com.astra.antiqua.ui.nav.Route.TRANSITS))
+        // A verdict: a tap 10 dp above IT WAS SO selects it.
+        compose.onNodeWithText("IT WAS SO").performTouchInput { click(androidx.compose.ui.geometry.Offset(centerX, -10.dp.toPx())) }
+        compose.onNode(hasText("IT WAS SO") and isSelected()).assertExists()
+        compose.onNodeWithText("IT WAS SO").performClick()
+    }
+
+    @Test
+    fun skyWeekMidway() {        // The proposal's middle frame: the lit part reaches Tuesday's line.
         render("sky-week-280", AncientCulture.EGYPT, 280)
         measure("sky-week-280", mapOf("P171" to scrolled(280f, 0.5f).getValue("P171")))
         // The text moved 280 and the Moon 140, so the Moon now leads the band by 140 less.
