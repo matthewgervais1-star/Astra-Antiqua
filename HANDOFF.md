@@ -1,4 +1,4 @@
-# HANDOFF, Astra Antiqua, state at 2026-10-27
+# HANDOFF, Astra Antiqua, state at 2026-10-31
 
 Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFERENCE / CANNOT CONFIRM.
 
@@ -8,25 +8,28 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   head built only in CI). `shared/content/*.json` is generated from web; never hand-edit it.
 
 ## Where things stand
-- FACT (GitHub, 2026-10-26): `master` (2f38e6e) holds PRs #2, #4, #5 and #6: the second wave,
-  the script reveal (names in attested script resolve on scroll, 56 of 60 sourced) and Android
-  institution titles. Their ledgers stay in worktree `planner-buildout-completion-495257`.
-- FACT (disk, 2026-10-26): folder cleanup ran; ledger copies and the full account are in `_archive/2026-10-26_folder-cleanup/` (`ledgers/`, `README.md`).
-- FACT (GitHub, 2026-10-26): PR #7 (`claude/continue-next-stage-7bf3d6`, 5f96a05) is open and
-  unmerged: four Android reveal fixes (no Latin frame before script, live animation setting,
-  picker hold after the phase fade, D-pad focus as on web). Android 223/0 local.
-- FACT (git, 2026-10-26): branch `claude/deferred-minors` sits on PR #7's head, not pushed. It
-  closes deferred review Minors (plan `2026-10-26-deferred-minors.md`):
+- FACT (git, 2026-10-31): `master` (45df0fc) holds PRs #2, #4, #5, #6, #7 (a9c1508, Android reveal
+  fixes), #8 (5cd7669, script name on the large title) and #9. #8's full account: `git show 45df0fc:HANDOFF.md`.
+- FACT (`git show 45df0fc:HANDOFF.md`, Matthew 2026-10-30): the four Actions workflows are disabled and
+  PRs merge on local verification; the MAUI and SwiftUI iOS heads cannot build until one is re-enabled.
+- FACT (git, 2026-10-31): branch `claude/deferred-minors`, master merged in, closes the deferred review
+  Minors (plan `docs/superpowers/plans/2026-10-26-deferred-minors.md`, ledger `.superpowers/sdd/2026-10-26-deferred-minors/`):
   - Android: long transits walk the natal midheaven; a figure's "← The day" opens its own date
     (live day when it is today), with `← BACK TO TODAY`. Web: `/year` fits 375px; no `--:--`.
   - About a dozen reading lines reworded (see Decisions). Schema bootstrap: transaction-scoped
-    lock, failed connect retried (`docs/deploy.md`). CI jobs have timeouts. Reviews clean
-    after one final fix wave (ledger `.superpowers/sdd/2026-10-26-deferred-minors/`).
-  - Merged in at the owner's word (popup, 2026-10-26), each reviewed in its own session: the
-    home clock reads its time and UTC at 375px (05fa59d, 8fba41c); Android's season, year and
+    lock, failed connect retried (`docs/deploy.md`). CI jobs have timeouts.
+  - The home clock reads its time and UTC at 375px (05fa59d, 8fba41c); Android's season, year and
     day read the long transits against the chart as web's do (acf168f..afe5a46, merge ade0dd9).
-  - Counts at ade0dd9: web 128 (111 pass, 17 skipped), Android 256/0; test:db 128/128 at 3a9fad1.
-- FACT (git): native Swift iOS app on `claude/ios-branch-parity-895dbc`, 18 commits off `master`; waits on pending 3.
+  - Docs: Draw Things prompt sheet `docs/design/prompts/draw-things-image-prompts.md`; the owner's
+    references in `docs/design/references/2026-10-27_phone-screenshots/` and `2026-10-28_draw-things-model-picker/`.
+- FACT (git, 2026-10-31): the Liquid Glass record lives in worktree `astra-antiqua-design-rounds-a1291d`
+  (its HANDOFF.md and `docs/design/ios-layout-2026-10-21.md`; round 8b at ddc7553, newest f1438db), canvas
+  https://claude.ai/artifact/LKiWRGTi16LRZ5GvyHbD3V. Ports: SwiftUI on `claude/ios-glass-phase-b-881817`
+  (pushed), Android on `claude/android-glass-7a8074`, Swift base `claude/ios-branch-parity-895dbc`; none on `master`.
+- FACT (git, 2026-10-31; cleanup account `_archive/2026-10-26_folder-cleanup/README.md`): worktree `planner-buildout-completion-495257` had lost its git registration
+  (HEAD, index, gitdir); re-registered on `claude/loving-morse-42eacf` (= `master`). It holds 24 modified
+  and 36 untracked files of earlier work, not reviewed. Its last commits (Phase B step 3, Sky Week) are
+  safe on `claude/ios-glass-phase-b-week`. INFERENCE: git's automatic `worktree prune` stripped it.
 
 ## Decisions taken, and why
 - 2026-09-29 to 2026-10-22: reading anatomy, recurrence, fast-first, Android sync and reveal
@@ -37,22 +40,20 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   `, and Thoth records it foremost`; Greece's `, and the seer needs no second look`; Canaan
   `Your temper at work`, `A mourner's lament`; two Rome items reworded. Reasons in the plan's
   "As shipped" note: each earlier wording repeated a word on the page or read wrong.
+- Owner (popups): Liquid Glass for the iPhone app, chrome A (2026-10-27); the large title is "Script until scrolled" (2026-10-29, PR #8).
+- 2026-10-31, owner (popup): merge master into `claude/deferred-minors` and open its PR to `master`;
+  commit the prompt sheet and references; repair the planner worktree.
 
 ## Pending, in order
-1. FACT: PR #7 waits for the owner's merge. `claude/deferred-minors` stays local by the owner's
-   choice (popup, 2026-10-26); its PR, when asked for, takes base PR #7's branch.
-2. FACT (check-run annotation, 2026-10-22): GitHub Actions jobs do not start: "recent account
-   payments have failed or your spending limit needs to be increased". Owner fixes billing.
-3. FACT (canvas v18, 2026-10-27): owner chose Liquid Glass, chrome A; rounds 1 and 2 (Sky Day) sit on the Glass
-   page of https://claude.ai/artifact/LKiWRGTi16LRZ5GvyHbD3V. Round 3 (Week, Season, Year) next; port after.
-   Content references (popup): `docs/design/references/2026-10-27_phone-screenshots/` (Co-Star, untracked).
-4. INFERENCE (ledger): left for a later pass, none blocking: `MainActivity.kt` reads the
-   library-internal `currentBackStack`; `TodaySpecimen.html` shows an old headline (run
-   `pnpm specimens` before the next Claude Design push); three Rome items strain after "Prepare for".
+1. FACT: the PR of `claude/deferred-minors` against `master` waits for the owner's merge.
+2. FACT (design-rounds worktree HANDOFF): the glass design and its two ports continue there.
+3. INFERENCE (ledgers): later-pass items, none blocking: `MainActivity.kt` reads the internal `currentBackStack`;
+   `TodaySpecimen.html` shows an old headline (`pnpm specimens` before the next Claude Design push); three Rome
+   items strain after "Prepare for"; Android's title holds script 1.2 s (owner's call); no unhydrated fallback.
 - Owner inputs still needed: mail vendor; deployed API origin for Android release builds;
   `web/src/lib/legal/policyFacts.ts` values; Law 25 assessments; Play keystore; French UI.
 - Deadlines, CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 
 ## Files that matter
-- Plan: `docs/superpowers/plans/2026-10-26-deferred-minors.md`. Composition in `web/src/lib/`; banks
-  in `web/src/data/`, mirrored by `web/scripts/gen-android-reading-banks.mjs`; voice rules `docs/design/reading-voice.md`.
+- Plans in `docs/superpowers/plans/`; composition `web/src/lib/`; banks `web/src/data/` (mirrored by
+  `web/scripts/gen-android-*.mjs`); script forms `web/src/data/scriptForms.ts`; voice `docs/design/reading-voice.md`.

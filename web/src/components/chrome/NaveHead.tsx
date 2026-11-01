@@ -2,9 +2,6 @@ import type { ReactNode } from "react";
 import type { Culture } from "@/data/cultures";
 import { ScriptName } from "@/components/chrome/ScriptName";
 
-/** How long the culture name holds its script after the page paints (owner, 2026-10-20). */
-export const CULTURE_NAME_INTRO_MS = 1200;
-
 export interface NaveHeadProps {
   kicker: ReactNode;
   children: ReactNode;
@@ -17,9 +14,11 @@ export interface NaveHeadProps {
   emblem?: ReactNode;
   /**
    * The culture whose name heads the page, set large above the kicker as a
-   * ScriptName: script on load, Latin after CULTURE_NAME_INTRO_MS, then the
-   * band rule (owner, 2026-10-20: the name larger and more prominent). A
-   * page whose headline is already the culture's name passes none.
+   * ScriptName (owner, 2026-10-20: the name larger and more prominent). It
+   * is script from the first paint and holds until the reader scrolls; then
+   * the band rule applies, and hover shows the Latin form meanwhile (owner,
+   * 2026-10-29: script until scrolled). A page whose headline is already the
+   * culture's name passes none.
    */
   culture?: Culture;
 }
@@ -45,7 +44,7 @@ export function NaveHead({ kicker, children, sub, emblem, culture }: NaveHeadPro
       {emblem ? <div className="mb-[var(--space-3)] flex justify-center">{emblem}</div> : null}
       {culture ? (
         <div className="mb-[var(--space-3)] font-display text-display-l leading-display tracking-display text-accent">
-          <ScriptName culture={culture} heading="culture" upper intro={CULTURE_NAME_INTRO_MS} />
+          <ScriptName culture={culture} heading="culture" upper scriptFirst />
         </div>
       ) : null}
       <div className="font-mono text-data-xs tracking-microcopy text-dim">{kicker}</div>

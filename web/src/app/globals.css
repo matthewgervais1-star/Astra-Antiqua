@@ -403,21 +403,33 @@ samp {
   letter-spacing: var(--tracking-display);
 }
 
-.script-name[data-reveal="script"] > .script-name__latin {
+/*
+ * The script shows when the band rule says so, and on a script-first name
+ * (ScriptName's scriptFirst prop: the large culture title, owner 2026-10-29,
+ * script until scrolled) before hydration writes data-reveal. Hover or focus
+ * shows the Latin form in either case.
+ */
+.script-name[data-reveal="script"] > .script-name__latin,
+.script-name--script-first:not([data-reveal]) > .script-name__latin {
   opacity: 0;
 }
 
-.script-name[data-reveal="script"] > .script-name__script {
+.script-name[data-reveal="script"] > .script-name__script,
+.script-name--script-first:not([data-reveal]) > .script-name__script {
   opacity: 1;
 }
 
 .script-name[data-reveal="script"]:hover > .script-name__latin,
-:is(a, button):is(:hover, :focus-visible) .script-name[data-reveal="script"] > .script-name__latin {
+.script-name--script-first:not([data-reveal]):hover > .script-name__latin,
+:is(a, button):is(:hover, :focus-visible) .script-name[data-reveal="script"] > .script-name__latin,
+:is(a, button):is(:hover, :focus-visible) .script-name--script-first:not([data-reveal]) > .script-name__latin {
   opacity: 1;
 }
 
 .script-name[data-reveal="script"]:hover > .script-name__script,
-:is(a, button):is(:hover, :focus-visible) .script-name[data-reveal="script"] > .script-name__script {
+.script-name--script-first:not([data-reveal]):hover > .script-name__script,
+:is(a, button):is(:hover, :focus-visible) .script-name[data-reveal="script"] > .script-name__script,
+:is(a, button):is(:hover, :focus-visible) .script-name--script-first:not([data-reveal]) > .script-name__script {
   opacity: 0;
 }
 
@@ -474,6 +486,10 @@ samp {
   .script-name--intro > .script-name__latin,
   .script-name--intro > .script-name__script {
     animation: none;
+  }
+  /* The effect never writes data-reveal here, so the script-first rule above must not hide the Latin. */
+  .script-name--script-first:not([data-reveal]) > .script-name__latin {
+    opacity: 1;
   }
 }
 
