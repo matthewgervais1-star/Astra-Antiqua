@@ -1,0 +1,280 @@
+{
+  "rules": {
+    "date.day": {
+      "rule": "F1",
+      "pattern": "EEE d MMM yyyy, upper",
+      "zone": "UTC"
+    },
+    "date.dayMonth": {
+      "rule": "F3",
+      "pattern": "d MMM, upper",
+      "zone": "slot"
+    },
+    "date.dayMonthYear": {
+      "rule": "F3",
+      "pattern": "d MMM yyyy, upper",
+      "zone": "slot"
+    },
+    "date.monthYear": {
+      "rule": "F3",
+      "pattern": "MMM yyyy, upper",
+      "zone": "slot"
+    },
+    "date.weekday": {
+      "rule": "F1",
+      "pattern": "EEE, upper",
+      "zone": "slot"
+    },
+    "date.dayOfMonth": {
+      "rule": "F3",
+      "pattern": "d",
+      "zone": "slot"
+    },
+    "date.year": {
+      "rule": "F3",
+      "pattern": "yyyy",
+      "zone": "slot"
+    },
+    "time.hm": {
+      "rule": "F3",
+      "pattern": "HH:mm, 24 hour",
+      "zone": "slot"
+    },
+    "range.days": {
+      "rule": "F2",
+      "pattern": "same month: d → d MMM yyyy; across months: d MMM → d MMM yyyy; across years: d MMM yyyy → d MMM yyyy",
+      "zone": "slot"
+    },
+    "range.months": {
+      "rule": "F4",
+      "pattern": "MMM yyyy → MMM yyyy",
+      "zone": "slot"
+    },
+    "angle.degMin": {
+      "rule": "F5",
+      "pattern": "d°mm′, degree unpadded, minutes rounded, 29°59′ ceiling inside a sign",
+      "zone": "none"
+    },
+    "angle.orbDecimal": {
+      "rule": "F6",
+      "pattern": "0.0°",
+      "zone": "none"
+    },
+    "percent": {
+      "rule": "F6",
+      "pattern": "fraction × 100, whole, then %",
+      "zone": "none"
+    },
+    "count.word": {
+      "rule": "F7",
+      "pattern": "NONE, ONE to TWELVE, digits above",
+      "zone": "none"
+    },
+    "count.digits": {
+      "rule": "F7",
+      "pattern": "digits (data lines)",
+      "zone": "none"
+    },
+    "ordinal.word": {
+      "rule": "F12",
+      "pattern": "first to twelfth, lower",
+      "zone": "none"
+    },
+    "ordinal.wordUpper": {
+      "rule": "F12",
+      "pattern": "FIRST to TWELFTH, upper",
+      "zone": "none"
+    },
+    "ordinal.wordTitle": {
+      "rule": "F12",
+      "pattern": "First to Twelfth, first letter upper",
+      "zone": "none"
+    },
+    "house.roman": {
+      "rule": "F12",
+      "pattern": "I to XII",
+      "zone": "none"
+    },
+    "year.roman": {
+      "rule": "F12",
+      "pattern": "roman numerals",
+      "zone": "slot"
+    },
+    "sign.full": {
+      "rule": "F8",
+      "pattern": "full sign name, upper",
+      "zone": "none"
+    },
+    "sign.abbr": {
+      "rule": "F8",
+      "pattern": "three letters, upper (web desktop table only)",
+      "zone": "none"
+    },
+    "sign.phrase": {
+      "rule": "F8",
+      "pattern": "the sign's figure, upper",
+      "zone": "none"
+    },
+    "planet.name": {
+      "rule": "F8",
+      "pattern": "planet name, upper",
+      "zone": "none"
+    },
+    "tone.word": {
+      "rule": "F9",
+      "pattern": "EASE (trine, sextile), TENSION (square, opposition), UNION (conjunction)",
+      "zone": "none"
+    },
+    "motion.mark": {
+      "rule": "F11",
+      "pattern": "R when retrograde, nothing when direct",
+      "zone": "none"
+    }
+  },
+  "characterRules": {
+    "F10": "Apostrophe: ’ (U+2019) in every catalog value; no ASCII apostrophe.",
+    "F11": "Chart rows print R for retrograde and nothing for direct; event rows print TURNS RETROGRADE and TURNS DIRECT; ℞ leaves the printed chrome.",
+    "F13": "Separators: · (U+00B7) with one space each side; → (U+2192) spaced between dates; no – in chrome.",
+    "F14": "Case: the catalog stores the printed case; no surface transforms a catalog string."
+  },
+  "zoneRule": "A date format reads the calendar day in the zone the slot names: UTC for the Day screen, the reader's zone for Week and Season.",
+  "separators": {
+    "dot": " · ",
+    "arrow": " → "
+  },
+  "words": {
+    "monthAbbr": [
+      "JAN",
+      "FEB",
+      "MAR",
+      "APR",
+      "MAY",
+      "JUN",
+      "JUL",
+      "AUG",
+      "SEP",
+      "OCT",
+      "NOV",
+      "DEC"
+    ],
+    "monthFull": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "weekdayAbbr": [
+      "SUN",
+      "MON",
+      "TUE",
+      "WED",
+      "THU",
+      "FRI",
+      "SAT"
+    ],
+    "countWords": [
+      "NONE",
+      "ONE",
+      "TWO",
+      "THREE",
+      "FOUR",
+      "FIVE",
+      "SIX",
+      "SEVEN",
+      "EIGHT",
+      "NINE",
+      "TEN",
+      "ELEVEN",
+      "TWELVE"
+    ],
+    "ordinalWords": [
+      "",
+      "first",
+      "second",
+      "third",
+      "fourth",
+      "fifth",
+      "sixth",
+      "seventh",
+      "eighth",
+      "ninth",
+      "tenth",
+      "eleventh",
+      "twelfth"
+    ],
+    "signFull": {
+      "Aries": "ARIES",
+      "Taurus": "TAURUS",
+      "Gemini": "GEMINI",
+      "Cancer": "CANCER",
+      "Leo": "LEO",
+      "Virgo": "VIRGO",
+      "Libra": "LIBRA",
+      "Scorpio": "SCORPIO",
+      "Sagittarius": "SAGITTARIUS",
+      "Capricorn": "CAPRICORN",
+      "Aquarius": "AQUARIUS",
+      "Pisces": "PISCES"
+    },
+    "signAbbr": {
+      "Aries": "ARI",
+      "Taurus": "TAU",
+      "Gemini": "GEM",
+      "Cancer": "CNC",
+      "Leo": "LEO",
+      "Virgo": "VIR",
+      "Libra": "LIB",
+      "Scorpio": "SCO",
+      "Sagittarius": "SAG",
+      "Capricorn": "CAP",
+      "Aquarius": "AQR",
+      "Pisces": "PSC"
+    },
+    "signPhrases": {
+      "Aries": "RAM",
+      "Taurus": "BULL",
+      "Gemini": "TWINS",
+      "Cancer": "CRAB",
+      "Leo": "LION",
+      "Virgo": "MAIDEN",
+      "Libra": "SCALES",
+      "Scorpio": "SCORPION",
+      "Sagittarius": "ARCHER",
+      "Capricorn": "GOAT",
+      "Aquarius": "WATER-BEARER",
+      "Pisces": "FISHES"
+    },
+    "planetNames": {
+      "sun": "SUN",
+      "moon": "MOON",
+      "mercury": "MERCURY",
+      "venus": "VENUS",
+      "mars": "MARS",
+      "jupiter": "JUPITER",
+      "saturn": "SATURN",
+      "uranus": "URANUS",
+      "neptune": "NEPTUNE",
+      "pluto": "PLUTO"
+    },
+    "toneWords": {
+      "conjunction": "UNION",
+      "sextile": "EASE",
+      "trine": "EASE",
+      "square": "TENSION",
+      "opposition": "TENSION"
+    },
+    "spanToneWords": {
+      "ease": "EASE",
+      "tension": "TENSION"
+    },
+    "retrogradeMark": "R"
+  }
+}
