@@ -1,10 +1,32 @@
+transits 360 EGYPT rest lone words: none
+transits 360 EGYPT end lone words: none
+transits 360 GREECE rest lone words: none
+transits 360 GREECE end lone words: none
+transits 360 CANAAN rest lone words: none
+transits 360 CANAAN end lone words: none
+transits 360 CARTHAGE rest lone words: none
+transits 360 CARTHAGE end lone words: none
+transits 360 ROME rest lone words: none
+transits 360 ROME end lone words: none
+transits 390 EGYPT rest lone words: none
+transits 390 EGYPT end lone words: none
+transits 390 GREECE rest lone words: none
+transits 390 GREECE end lone words: none
+transits 390 CANAAN rest lone words: none
+transits 390 CANAAN end lone words: none
+transits 390 CARTHAGE rest lone words: none
+transits 390 CARTHAGE end lone words: none
+transits 390 ROME rest lone words: none
+transits 390 ROME end lone words: none
 transits-end P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 transits-end P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
 transits-end P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
 transits-end P20 want 0.0, 0.0 · 390.0x122.0 got 0.0, 0.0 · 390.0x122.0 off 0.0
-transits-end scrolled to 791.7; row-9 bottom 724.0 (page end 120 below: 120.0)
-transits-axis-dec axis 2027 at 48.0 to 78.3, 2028 at 253.3 to 283.7
-transits-axis-nov-360 axis 2027 at 62.3 to 92.7, 2028 at 249.3 to 279.7
+transits-end scrolled to 875.7; row-9 bottom 724.0 (page end 120 below: 120.0)
+transits-axis-dec axis 2027 at 61.3 to 91.7, 2028 at 258.3 to 288.7
+transits 390 1.3 EGYPT rest lone words: none
+transits 390 1.3 EGYPT end lone words: none
+transits-axis-nov-360 axis 2027 at 74.7 to 105.0, 2028 at 253.7 to 284.0
 transits-scrolled P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 transits-scrolled P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
 transits-scrolled P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
@@ -57,7 +79,18 @@ transits-360 gap P66-title to P66-bar want 12.0 got 12.0
 transits-360 gap P66-bar to P66-data want 10.0 got 10.0
 transits-360 gap P66-data to P66 end (18 and the 1 px rule) want 19.0 got 19.0
 transits-360 P60 got 24.0, 304.7 · 312.0x23.0
-transits-focus scrolled to 497.0, row-7 top 633.7 bottom 748.0
+transits-360 P63 131.3 tall, title 2 lines, data 2 lines
+transits-360 P65 131.3 tall, title 2 lines, data 2 lines
+transits-360 P66 135.3 tall, title 2 lines, data 2 lines
+transits-360 P67 135.3 tall, title 2 lines, data 2 lines
+transits-360 P68 135.3 tall, title 2 lines, data 2 lines
+transits-360 row-6 135.3 tall, title 2 lines, data 2 lines
+transits-360 row-7 135.3 tall, title 2 lines, data 2 lines
+transits-360 row-8 135.3 tall, title 2 lines, data 2 lines
+transits-360 row-9 135.3 tall, title 2 lines, data 2 lines
+transits-360 axis track x 38.0 w 298.0; rules 2027 32.0, 2028 159.7, 2029 287.3; labels 2027 39.0 to 69.3, 2028 166.7 to 197.0; NOW 7.3 (x 45.3), 14.0 under the axis's top, 9.0 tall
+transits-360 axis 2027 at 77.0 to 107.3, 2028 at 204.7 to 235.0
+transits-focus scrolled to 581.0, row-7 top 612.7 bottom 748.0
 transits-rome P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 transits-rome P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
 transits-rome P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
@@ -108,6 +141,16 @@ transits-font-130 gap P66 top to P66-title want 16.0 got 16.0
 transits-font-130 gap P66-title to P66-bar want 12.0 got 12.0
 transits-font-130 gap P66-bar to P66-data want 10.0 got 10.0
 transits-font-130 gap P66-data to P66 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-font-130 P63 154.0 tall
+transits-font-130 P65 154.0 tall
+transits-font-130 P66 158.0 tall
+transits-font-130 P67 158.0 tall
+transits-font-130 P68 158.0 tall
+transits-font-130 row-6 158.0 tall
+transits-font-130 row-7 158.0 tall
+transits-font-130 row-8 158.0 tall
+transits-font-130 row-9 158.0 tall
+transits-font-130 axis track x 38.0 w 328.0; rules 2027 35.0, 2028 175.7, 2029 316.3; labels 2027 42.0 to 80.0, 2028 182.7 to 220.7; NOW 8.0 (x 46.0), 14.0 under the axis's top, 9.0 tall
 transits-font-130 P58 79.3 tall, P59 23.0, P63 154.0, P65 154.0
 transits-no-chart P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 transits-no-chart P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
@@ -124,31 +167,31 @@ transits P57 want 24.0, 138.0 · 342.0x17.6 got 24.0, 138.0 · 342.0x17.7 off 0.
 transits P58 want 24.0, 171.6 · 342.0x35.1 got 24.0, 171.7 · 342.0x75.3 off 40.2
 transits P59 want 24.0, 216.7 · 342.0x17.6 got 24.0, 257.0 · 342.0x17.7 off 40.3
 transits P60 want 24.0, 264.3 · 342.0x23.0 got 24.0, 304.7 · 342.0x23.0 off 40.4
-transits P61 want 33.9, 286.3 · 1.0x573.3 got 32.3, 326.7 · 1.0x1189.0 off 615.7
+transits P61 want 33.9, 286.3 · 1.0x573.3 got 46.0, 318.7 · 1.0x9.0 off 564.3
 transits P62 want 24.0, 305.3 · 342.0x11.0 got 24.0, 345.7 · 342.0x11.0 off 40.4
 transits P63 want 24.0, 316.3 · 342.0x107.8 got 24.0, 356.7 · 342.0x131.3 off 40.4
 transits P64 want 24.0, 446.1 · 342.0x11.0 got 24.0, 510.0 · 342.0x11.0 off 63.9
 transits P65 want 24.0, 457.1 · 342.0x92.4 got 24.0, 521.0 · 342.0x131.3 off 63.9
-transits P66 want 24.0, 549.5 · 342.0x96.4 got 24.0, 652.3 · 342.0x114.3 off 102.8
-transits P67 want 24.0, 645.8 · 342.0x96.4 got 24.0, 766.7 · 342.0x114.3 off 120.9
-transits P68 want 24.0, 742.2 · 342.0x117.4 got 24.0, 881.0 · 342.0x114.3 off 138.8
+transits P66 want 24.0, 549.5 · 342.0x96.4 got 24.0, 652.3 · 342.0x135.3 off 102.8
+transits P67 want 24.0, 645.8 · 342.0x96.4 got 24.0, 787.7 · 342.0x135.3 off 141.9
+transits P68 want 24.0, 742.2 · 342.0x117.4 got 24.0, 923.0 · 342.0x135.3 off 180.8
 transits P57 reason: web's kicker READ AGAINST YOUR OWN SKY, the board's words; no institution, so no script reveal on this page
 transits P58 reason: web's title "WHAT DOES NOT PASS IN A DAY" (catalog transits.title, Matthew's "Web headlines") in its own case on two lines, each 37.6 for Spectral SC's capitals; the board's "The long transits" takes one line of 35.1
 transits P59 reason: web's count "NINE SPANS · OCT 2026 → JAN 2029" (all nine spans, the Midheaven's two included) against the board's SIX SPANS · OCT 2026 → AUG 2028; sits lower by P58's second line
-transits P60 reason: web's axis 2026 to 2029 over 28 months (OCT 2026 to JAN 2029) against the board's 23; 2027 at 10.7%, 2028 at 53.6%, 2029 at 96.4% with its label set to the left of its rule so it stays on the page
-transits P61 reason: NOW at (21/31)/28 = 2.4% of 342 (x 32.3) against the board's 2.9% of 23 months (x 33.9); it runs to the end of nine rows, not five
+transits P60 reason: web's axis 2026 to 2029 over 28 months (OCT 2026 to JAN 2029) against the board's 23; its rules, labels and foot rule run on the rows' text column (x 38, 328 wide, Matthew's variant C); 2027 at 10.7%, 2028 at 53.6%, 2029 at 96.4%; 2026's label goes (it would end within 8 of 2027's rule; the count line carries OCT 2026) and 2029's (it cannot end before the axis's end), 2029 keeps its rule
+transits P61 reason: NOW a 1x9 mark in the axis's lower band (14 under its top, through its rule) at (21/31)/28 = 2.4% of 328 (x 45.9) against the board's line from the axis to the list's end; each bar carries a 1x7 bone tick at the same x (variant C)
 transits P62 reason: OPEN NOW, the board's label and words; lower by P58's second line
-transits P63 reason: web's AMUN ROWS IN TIME WITH YOUR RISING in capitals (web's case) takes two lines (RISING wraps), and its data line two (· EASE wraps at 328, as the board's own P63 data line wraps): 131.3 against 107.8
+transits P63 reason: web's AMUN ROWS IN TIME WITH YOUR RISING in capitals (web's case) on two balanced lines, its data on two deliberate lines (OCT 2026 → JUN 2027, then 3 EXACT · 2 AHEAD · EASE): 131.3 against 107.8
 transits P64 reason: AHEAD, the board's label
-transits P65 reason: web's first ahead span is GEB BARS THE DOOR AGAINST YOUR MIDHEAVEN (web walks the Midheaven; the board has no Midheaven row); title and data line each on two lines: 131.3 against 92.4
-transits P66 reason: web's GEB ROWS IN TIME WITH YOUR RISING (the board's P65) on one line; its data line "… · 3 EXACT · 3 AHEAD · EASE" (web's spanRowText counts passes ahead on ahead rows too, the board prints "3 EXACT · EASE") wraps to two: 114.3 against 96.4
-transits P67 reason: web's GEB TIPS THE SCALES AGAINST RA (the board's P66); the data line wraps for its AHEAD count: 114.3 against 96.4
-transits P68 reason: web's AMUN JOINS THE BARQUE OF KHONSU (the board's P67), title on one line, data on two: 114.3 against the board's P68 117.4; four more rows follow (row-6 to row-9), the board's P68 among them, then JUN 2028 NUT and OCT 2028 AMUN against YOUR MIDHEAVEN
-transits row-6 (no board ID) got 24.0, 995.3 · 342.0x135.3
-transits row-7 (no board ID) got 24.0, 1130.7 · 342.0x114.3
-transits row-8 (no board ID) got 24.0, 1245.0 · 342.0x135.3
-transits row-9 (no board ID) got 24.0, 1380.3 · 342.0x135.3
-transits page scrolls to 791.7 (board 134)
+transits P65 reason: web's first ahead span is GEB BARS THE DOOR AGAINST YOUR MIDHEAVEN (web walks the Midheaven; the board has no Midheaven row); title and data each on two lines: 131.3 against 92.4
+transits P66 reason: web's GEB ROWS IN TIME WITH YOUR RISING (the board's P65), set on two balanced lines though it fits one (a measured narrower width); its data's second line "3 EXACT · 3 AHEAD · EASE" (web's spanRowText counts passes ahead on ahead rows too, the board prints "3 EXACT · EASE"): 135.3 against 96.4
+transits P67 reason: web's GEB TIPS THE SCALES AGAINST RA (the board's P66) on two balanced lines, data on two: 135.3 against 96.4
+transits P68 reason: web's AMUN JOINS THE BARQUE OF KHONSU (the board's P67) on two balanced lines, data on two: 135.3 against the board's P68 117.4; every row after the first of its group is 135.3; four more rows follow (row-6 to row-9), the board's P68 among them, then JUN 2028 NUT and OCT 2028 AMUN against YOUR MIDHEAVEN
+transits row-6 (no board ID) got 24.0, 1058.3 · 342.0x135.3
+transits row-7 (no board ID) got 24.0, 1193.7 · 342.0x135.3
+transits row-8 (no board ID) got 24.0, 1329.0 · 342.0x135.3
+transits row-9 (no board ID) got 24.0, 1464.3 · 342.0x135.3
+transits page scrolls to 875.7 (board 134)
 transits gap P57 to P58 want 16.0 got 16.0
 transits gap P58 to P59 want 10.0 got 10.0
 transits gap P59 to P60 want 30.0 got 30.0
@@ -172,10 +215,21 @@ transits gap P66 top to P66-title want 16.0 got 16.0
 transits gap P66-title to P66-bar want 12.0 got 12.0
 transits gap P66-bar to P66-data want 10.0 got 10.0
 transits gap P66-data to P66 end (18 and the 1 px rule) want 19.0 got 19.0
-transits P65-bar track 342.0 wide at 24.0
+transits P63 131.3 tall, title 2 lines, data 2 lines
+transits P65 131.3 tall, title 2 lines, data 2 lines
+transits P66 135.3 tall, title 2 lines, data 2 lines
+transits P67 135.3 tall, title 2 lines, data 2 lines
+transits P68 135.3 tall, title 2 lines, data 2 lines
+transits row-6 135.3 tall, title 2 lines, data 2 lines
+transits row-7 135.3 tall, title 2 lines, data 2 lines
+transits row-8 135.3 tall, title 2 lines, data 2 lines
+transits row-9 135.3 tall, title 2 lines, data 2 lines
+transits axis track x 38.0 w 328.0; rules 2027 35.0, 2028 175.7, 2029 316.3; labels 2027 42.0 to 72.3, 2028 182.7 to 213.0; NOW 8.0 (x 46.0), 14.0 under the axis's top, 9.0 tall
+transits axis 2027 at 80.0 to 110.3, 2028 at 220.7 to 251.0
+transits P65-bar track 328.0 wide at 38.0
 transits-loading P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 transits-loading P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
 transits-loading P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
 transits-loading P20 want 0.0, 0.0 · 390.0x122.0 got 0.0, 0.0 · 390.0x122.0 off 0.0
 transits-loading transits-loading (no board ID) got 24.0, 138.0 · 342.0x17.7
-transits-axis-130 axis 2027 at 67.7 to 105.7, 2028 at 214.3 to 252.3, 2029 at 309.7 to 347.7
+transits-axis-130 axis 2027 at 80.0 to 118.0, 2028 at 220.7 to 258.7

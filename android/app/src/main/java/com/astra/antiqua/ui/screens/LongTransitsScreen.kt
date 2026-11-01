@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,9 +40,12 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -81,11 +86,14 @@ import java.util.Locale
  * P57 to P68 in the design worktree's `.superpowers/sdd/glass-build/report-r4.md`).
  * The board's sections in its order, filled with web's index
  * (`lib/screens/transits.ts`, TransitsIndex.tsx): the kicker, web's title,
- * the count line, the shared year axis with the NOW line, then OPEN NOW and
+ * the count line, the shared year axis with its NOW mark, then OPEN NOW and
  * AHEAD with every span web lists, each a bar on the axis over web's data
  * line. The whole row opens the transit, as on the board; web's READ → at
  * each row's right is left off (the board omits it). Without a birth record
- * the page prints web's TransitEmptyState.
+ * the page prints web's TransitEmptyState. Lines and marks follow Matthew's
+ * design round (2026-11-01, variant C): titles on two balanced lines, the
+ * data on two deliberate lines, the axis and the bars on the text's left
+ * edge, NOW a short mark on the axis and a tick on each bar.
  */
 @Composable
 fun LongTransitsScreen(
@@ -146,15 +154,19 @@ private object TransitsBoard {
     /** The lever sectionGap: above AHEAD. */
     val sectionGap = 22.dp
 
-    /** The axis: 22 tall over a 1 px rule; a year's rule 1 px, its label 6 in from it. */
+    /** The axis: 22 tall over a 1 px rule; a year's rule 1 px, its label 6 right of it. */
     val axisH = 22.dp
     val axisRule = Color(0xFFE6DECC).copy(alpha = 0.16f)
     val yearPad = 6.dp
 
-    /** P61: 1 wide, from the axis's foot to the list's end. */
+    /** P61: 1 wide, in the axis's lower band, from 14 under its top through its rule. */
     val nowInk = Color(0xFFE6DECC).copy(alpha = 0.4f)
+    val nowTop = 14.dp
 
-    /** A span: its title, data line and labels 14 in; bar track and row rule bone 10%. */
+    /** NOW on a bar: 1 by 7, bone, centred on the 3 tall track (the detail's span timeline marks the present so). */
+    val nowTick = 7.dp
+
+    /** A span: its title, data lines and labels 14 in, the axis and the bars on the same edge; bar track and row rule bone 10%. */
     val inset = 14.dp
     val track = Color(0xFFE6DECC).copy(alpha = 0.10f)
     val ruleRow = Color(0xFFE6DECC).copy(alpha = 0.10f)
@@ -227,28 +239,14 @@ private fun LongTransitsContent(culture: AncientCulture, transits: LongTransits,
         )
     }
 
-    // P60 to P68: the axis, the NOW line behind the groups, the groups.
+    // P60 to P68: the axis with its NOW mark, the groups. The axis and the bars span the text's
+    // column, from 14 in on the rows' edge to their right end.
     BoxWithConstraints(side.padding(top = 30.dp)) {
-        val width = maxWidth
-        if (axis != null && axis.now in 0f..1f) {
-            // P61: from the axis's foot (22, over its rule as on the board) to the list's end.
-            Box(
-                Modifier
-                    .matchParentSize()
-                    .padding(top = TransitsBoard.axisH),
-            ) {
-                Box(
-                    Modifier
-                        .offset(x = width * axis.now)
-                        .width(1.dp)
-                        .fillMaxHeight()
-                        .background(TransitsBoard.nowInk)
-                        .testTag("P61"),
-                )
-            }
-        }
+        val track = maxWidth - TransitsBoard.inset
+        // NOW is marked only where it lies inside the axis.
+        val now = axis?.now?.takeIf { it in 0f..1f }
         Column(Modifier.fillMaxWidth()) {
-            if (axis != null) YearAxis(slots.list("transits.axis"), axis.years.map { it.second }, width)
+            if (axis != null) YearAxis(slots.list("transits.axis"), axis.years.map { it.second }, track, now)
             val bars = axis?.bars.orEmpty()
             GroupLabel(slots.text("transits.group.open"), Bone, top = 18.dp, id = "P62")
             if (open.isEmpty()) {
@@ -257,7 +255,7 @@ private fun LongTransitsContent(culture: AncientCulture, transits: LongTransits,
                 val titles = slots.list("transits.row.title.open")
                 val data = slots.list("transits.row.data.open")
                 open.forEachIndexed { i, span ->
-                    SpanRow(span, titles[i], data[i], bars[i], first = i == 0, id = transitsRowId(i, open.size), zone = zone, onOpen = onOpen)
+                    SpanRow(span, titles[i], data[i], bars[i], now, first = i == 0, id = transitsRowId(i, open.size), zone = zone, onOpen = onOpen)
                 }
             }
             GroupLabel(slots.text("transits.group.ahead"), Dim, top = TransitsBoard.sectionGap, id = "P64")
@@ -268,7 +266,7 @@ private fun LongTransitsContent(culture: AncientCulture, transits: LongTransits,
                 val data = slots.list("transits.row.data.ahead")
                 ahead.forEachIndexed { j, span ->
                     val i = open.size + j
-                    SpanRow(span, titles[j], data[j], bars[i], first = j == 0, id = transitsRowId(i, open.size), zone = zone, onOpen = onOpen)
+                    SpanRow(span, titles[j], data[j], bars[i], now, first = j == 0, id = transitsRowId(i, open.size), zone = zone, onOpen = onOpen)
                 }
             }
         }
@@ -278,46 +276,57 @@ private fun LongTransitsContent(culture: AncientCulture, transits: LongTransits,
 /** P60's type: mono 11/1 at .1em. */
 private val axisStyle = mono(11.sp, 1f, 0.1f)
 
-/** The gap a year label keeps from the one before it. */
+/** The gap a year label keeps from the next year's rule and from the label before it. */
 private val axisLabelGap = 8.dp
 
 /**
- * Where each year label of P60 stands: the year's index, its rule's x (null
- * for the first year, which has none) and its label's left edge, every value
- * in dp. A year after the first stands at its January's position behind its
- * rule, 6 in; one too near the right edge for its label keeps its rule and
- * sets the label to the rule's left, 6 from it. When a label would start
- * within the one before it plus [axisLabelGap], the earlier year (label and
- * rule) is dropped, so the later January wins: a first month of NOV or DEC
- * puts the next January a month or two in.
+ * Where each year of P60 stands: the year's index, its rule's x (null for the
+ * first year, which has none) and its label's left edge (null when the label
+ * is dropped), every value in dp from the axis's left end. The first year's
+ * label stands at the axis's start; a later year's rule at its January, its
+ * label 6 right of the rule. A label is dropped, its rule kept, when it
+ * cannot end before the axis's end, or when it would end within
+ * [axisLabelGap] of the next year's rule (the count line carries the first
+ * month, so a first label crowded by the next January goes). When a label
+ * would still start within the kept one before it plus [axisLabelGap], the
+ * earlier label goes.
  */
-internal data class AxisMark(val index: Int, val rule: Dp?, val left: Dp, val width: Dp)
+internal data class AxisMark(val index: Int, val rule: Dp?, val left: Dp?, val width: Dp)
 
 internal fun axisMarks(positions: List<Float>, widths: List<Dp>, width: Dp): List<AxisMark> {
-    val kept = mutableListOf<AxisMark>()
-    positions.forEachIndexed { i, p ->
-        val mark = if (i == 0) {
-            AxisMark(0, null, 0.dp, widths[0])
-        } else {
-            val x = width * p
-            val fits = x + 1.dp + TransitsBoard.yearPad + widths[i] <= width
-            AxisMark(i, x, if (fits) x + 1.dp + TransitsBoard.yearPad else x - TransitsBoard.yearPad - widths[i], widths[i])
+    val rules = positions.mapIndexed { i, p -> if (i == 0) null else width * p }
+    val marks = positions.indices.map { i ->
+        val left = rules[i]?.let { it + 1.dp + TransitsBoard.yearPad } ?: 0.dp
+        val end = left + widths[i]
+        val next = rules.getOrNull(i + 1)
+        val shown = end <= width && (next == null || end <= next - axisLabelGap)
+        AxisMark(i, rules[i], if (shown) left else null, widths[i])
+    }.toMutableList()
+    var before: Int? = null
+    marks.indices.forEach { i ->
+        val left = marks[i].left ?: return@forEach
+        before?.let { b ->
+            val prev = marks[b]
+            if (left < prev.left!! + prev.width + axisLabelGap) marks[b] = prev.copy(left = null)
         }
-        while (kept.isNotEmpty() && mark.left < kept.last().left + kept.last().width + axisLabelGap) kept.removeAt(kept.lastIndex)
-        kept += mark
+        before = i
     }
-    return kept
+    return marks
 }
 
-/** P60: the years over a 1 px rule, mono 11/1 at .1em, dim, placed by [axisMarks]. */
+/**
+ * P60: the years over a 1 px rule, mono 11/1 at .1em, dim, placed by
+ * [axisMarks] on the [track] (the rows' text column, 14 in), and P61, NOW's
+ * short mark in its lower band.
+ */
 @Composable
-private fun YearAxis(labels: List<String>, positions: List<Float>, width: Dp) {
+private fun YearAxis(labels: List<String>, positions: List<Float>, track: Dp, now: Float?) {
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
     val widths = remember(labels, density) {
         labels.map { with(density) { measurer.measure(it, axisStyle).size.width.toDp() } }
     }
-    val marks = remember(positions, widths, width) { axisMarks(positions, widths, width) }
+    val marks = remember(positions, widths, track) { axisMarks(positions, widths, track) }
     val first = labels.firstOrNull().orEmpty()
     val last = labels.lastOrNull().orEmpty()
     Box(
@@ -327,11 +336,24 @@ private fun YearAxis(labels: List<String>, positions: List<Float>, width: Dp) {
             .testTag("P60")
             .clearAndSetSemantics { contentDescription = if (labels.size > 1) "The years $first to $last" else "The year $first" },
     ) {
-        marks.forEach { mark ->
-            mark.rule?.let { Box(Modifier.offset(x = it).width(1.dp).height(TransitsBoard.axisH).background(TransitsBoard.axisRule)) }
-            AxisLabel(labels[mark.index], axisStyle, Modifier.offset(x = mark.left).testTag("axis-${labels[mark.index]}"))
+        Box(Modifier.padding(start = TransitsBoard.inset).width(track).fillMaxHeight().testTag("axis-track")) {
+            marks.forEach { mark ->
+                mark.rule?.let { Box(Modifier.offset(x = it).width(1.dp).height(TransitsBoard.axisH).background(TransitsBoard.axisRule).testTag("axis-rule-${labels[mark.index]}")) }
+                mark.left?.let { AxisLabel(labels[mark.index], axisStyle, Modifier.offset(x = it).testTag("axis-${labels[mark.index]}")) }
+            }
+            Box(Modifier.align(Alignment.BottomStart).fillMaxWidth().height(1.dp).background(TransitsBoard.axisRule))
+            now?.let {
+                Box(
+                    Modifier
+                        // At 1.0 the mark stays on the axis: its last dp, not one past it.
+                        .offset(x = minOf(track * it, track - 1.dp), y = TransitsBoard.nowTop)
+                        .width(1.dp)
+                        .height(TransitsBoard.axisH + 1.dp - TransitsBoard.nowTop)
+                        .background(TransitsBoard.nowInk)
+                        .testTag("P61"),
+                )
+            }
         }
-        Box(Modifier.align(Alignment.BottomStart).fillMaxWidth().height(1.dp).background(TransitsBoard.axisRule))
     }
 }
 
@@ -378,10 +400,12 @@ private fun EmptyGroup(text: String, id: String) {
 /**
  * P63, P65 to P68: a span. 12 above the first of its group, 16 above the
  * rest, 18 below, a 1 px rule under it. Web's title (Spectral SC 500 15/1.4
- * at .06em, the accent for a received body as web's isReceived), 12 above the
- * bar: a 3 tall track with the span's months filled, harmony for ease,
- * conflict for tension. Web's data line 10 under it, the tension word in the
- * conflict ink. The whole row opens the transit on top, with the pressed fill
+ * at .06em, the accent for a received body as web's isReceived) on two
+ * balanced lines ([twoLineWidth]), 12 above the bar: a 3 tall track on the
+ * text's edge with the span's months filled, harmony for ease, conflict for
+ * tension, and NOW's tick. Web's data 10 under it on two lines
+ * ([rowDataLines]): the months, then the counts and the tone word, the
+ * tension word in the conflict ink. The whole row opens the transit on top, with the pressed fill
  * P170 under the finger and web's focus outline for a D-pad, shown clear of
  * the glass.
  */
@@ -391,6 +415,7 @@ private fun SpanRow(
     title: String,
     data: String,
     bar: TransitBar,
+    now: Float?,
     first: Boolean,
     id: String,
     zone: ZoneId,
@@ -398,7 +423,16 @@ private fun SpanRow(
 ) {
     val tense = spanTone(span) == SpanTone.TENSION
     val smallCaps = LocalSmallCapsDisplay.current
-    val toneAt = data.lastIndexOf(" · ") + 3
+    val (range, counts) = rowDataLines(data)
+    // The tone word, inked: after the counts' last separator; the whole line when it is the tone word alone; none
+    // when the line has no separator and is not the tone word.
+    val toneAt = counts.lastIndexOf(" · ").let { at ->
+        when {
+            at >= 0 -> at + 3
+            counts == LongTransitsComposer.toneWord(span) -> 0
+            else -> counts.length
+        }
+    }
     val spoken = remember(title, data, span, zone) { spokenRow(title, span, data, zone) }
     Column(
         Modifier
@@ -409,37 +443,47 @@ private fun SpanRow(
             .clearAndSetSemantics { contentDescription = spoken },
     ) {
         Column(Modifier.fillMaxWidth().padding(top = if (first) 12.dp else 16.dp, bottom = 18.dp)) {
-            Text(
+            TwoLineTitle(
                 title,
-                style = TextStyle(
+                TextStyle(
                     fontFamily = if (smallCaps) SpectralSc else Cinzel,
                     fontWeight = FontWeight.Medium,
                     fontSize = 15.sp,
                     lineHeight = 15.sp * 1.4f,
                     letterSpacing = if (smallCaps) 0.06.em else 0.08.em,
                     lineHeightStyle = CssLeading,
+                    lineBreak = LineBreak.Heading,
                 ),
                 color = if (span.transitPlanet.isReceived) LocalAccent.current else Bone,
                 modifier = Modifier.padding(start = TransitsBoard.inset).testTag("$id-title"),
             )
-            SpanBar(bar, if (tense) Conflict else Harmony, Modifier.padding(top = 12.dp).testTag("$id-bar"))
-            Text(
-                buildAnnotatedString {
-                    append(data.substring(0, toneAt))
-                    if (tense) withStyle(SpanStyle(color = Conflict)) { append(data.substring(toneAt)) } else append(data.substring(toneAt))
-                },
-                style = mono(11.sp, 1.4f, 0.08f),
-                color = Dim,
-                modifier = Modifier.padding(top = 10.dp, start = TransitsBoard.inset).testTag("$id-data"),
-            )
+            SpanBar(bar, now, if (tense) Conflict else Harmony, Modifier.padding(top = 12.dp, start = TransitsBoard.inset).testTag("$id-bar"), "$id-now")
+            Column(Modifier.padding(top = 10.dp, start = TransitsBoard.inset).testTag("$id-data")) {
+                val style = mono(11.sp, 1.4f, 0.08f)
+                Text(range, style = style, color = Dim)
+                if (counts.isNotEmpty()) {
+                    Text(
+                        buildAnnotatedString {
+                            append(counts.substring(0, toneAt))
+                            if (tense) withStyle(SpanStyle(color = Conflict)) { append(counts.substring(toneAt)) } else append(counts.substring(toneAt))
+                        },
+                        style = style,
+                        color = Dim,
+                    )
+                }
+            }
         }
         Box(Modifier.fillMaxWidth().height(1.dp).background(TransitsBoard.ruleRow))
     }
 }
 
-/** The 3 tall track across the axis's width, its fill from the span's start month over the months it covers. */
+/**
+ * The 3 tall track across the axis's width, its fill from the span's start
+ * month over the months it covers, and NOW's 1 by 7 bone tick centred on it
+ * when [now] lies inside the axis.
+ */
 @Composable
-private fun SpanBar(bar: TransitBar, fill: Color, modifier: Modifier) {
+private fun SpanBar(bar: TransitBar, now: Float?, fill: Color, modifier: Modifier, nowTag: String) {
     BoxWithConstraints(modifier.fillMaxWidth().height(3.dp).background(TransitsBoard.track)) {
         Box(
             Modifier
@@ -448,6 +492,53 @@ private fun SpanBar(bar: TransitBar, fill: Color, modifier: Modifier) {
                 .fillMaxHeight()
                 .background(fill),
         )
+        now?.let {
+            // requiredHeight centres the 7 on the 3 tall track.
+            Box(Modifier.offset(x = minOf(maxWidth * it, maxWidth - 1.dp)).width(1.dp).requiredHeight(TransitsBoard.nowTick).background(Bone).testTag(nowTag))
+        }
+    }
+}
+
+/**
+ * The row's data on its two lines: the catalog's formatted `transits.row.data`
+ * (or `dataNoAhead`) split at its first " · ", after the range. "OCT 2026 →
+ * JUN 2027 · 3 EXACT · 2 AHEAD · EASE" gives "OCT 2026 → JUN 2027" and "3
+ * EXACT · 2 AHEAD · EASE"; a string without the separator stays on one line.
+ */
+internal fun rowDataLines(data: String): Pair<String, String> {
+    val at = data.indexOf(" · ")
+    return if (at < 0) data to "" else data.substring(0, at) to data.substring(at + 3)
+}
+
+/**
+ * The width, in px, that sets a [text] which fits on one line of [maxWidth]
+ * on two balanced lines (Matthew, 2026-11-01): one pixel under its one-line
+ * width, so [style]'s LineBreak.Heading balances the break. Null keeps
+ * [maxWidth]: the title already wraps (LineBreak.Heading balances it), or
+ * two lines would leave a word alone.
+ */
+internal fun twoLineWidth(measurer: TextMeasurer, text: String, style: TextStyle, maxWidth: Int): Int? {
+    val one = measurer.measure(text, style, constraints = Constraints(maxWidth = maxWidth))
+    if (one.lineCount != 1) return null
+    // The line's own width (the layout's is the whole measure), less a pixel.
+    val narrow = kotlin.math.ceil(one.getLineRight(0) - one.getLineLeft(0)).toInt() - 1
+    if (narrow <= 0) return null
+    val two = measurer.measure(text, style, constraints = Constraints(maxWidth = narrow))
+    if (two.lineCount != 2) return null
+    val lines = (0 until 2).map { text.substring(two.getLineStart(it), two.getLineEnd(it)) }
+    return narrow.takeIf { lines.all { wordCount(it) >= 2 } }
+}
+
+/** A row title on two balanced lines at every width ([twoLineWidth]). */
+@Composable
+private fun TwoLineTitle(text: String, style: TextStyle, color: Color, modifier: Modifier) {
+    BoxWithConstraints(modifier) {
+        val measurer = rememberTextMeasurer()
+        val maxPx = constraints.maxWidth
+        val set = LocalTextStyle.current.merge(style)
+        val narrow = remember(text, set, maxPx, measurer) { twoLineWidth(measurer, text, set, maxPx) }
+        val width = narrow?.let { with(LocalDensity.current) { Modifier.widthIn(max = it.toDp()) } } ?: Modifier
+        Text(text, style = style, color = color, modifier = width)
     }
 }
 

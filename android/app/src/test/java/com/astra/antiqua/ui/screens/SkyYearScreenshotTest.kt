@@ -142,7 +142,7 @@ class SkyYearScreenshotTest {
         return SkyYearComposer.compose(engine, culture, now, natal)
     }
 
-    private fun render(name: String, culture: AncientCulture, scroll: Int, withChart: Boolean = true, fontScale: Float = 1f) {
+    private fun render(name: String, culture: AncientCulture, scroll: Int, withChart: Boolean = true, fontScale: Float = 1f, capture: Boolean = true) {
         shown = composeYear(culture, withChart)
         compose.setContent {
             val base = LocalDensity.current
@@ -156,7 +156,7 @@ class SkyYearScreenshotTest {
             }
         }
         compose.waitForIdle()
-        compose.onRoot().captureRoboImage(File(out, "$name.png").path)
+        if (capture) compose.onRoot().captureRoboImage(File(out, "$name.png").path)
     }
 
     private fun box(id: String): Rect {
@@ -398,4 +398,63 @@ class SkyYearScreenshotTest {
         assertTrue("spine-1 sits under the tab bar: $row", row.y + row.h <= 748f + 0.5f)
         assertTrue("spine-1 sits under the top glass: $row", row.y >= 173f - 0.5f)
     }
+
+    private lateinit var sweepState: androidx.compose.foundation.ScrollState
+
+    /**
+     * Sets the screen once and walks [cultures], each at rest and at its end, through [LoneWords.sweep]; a hit
+     * outside prose fails unless [allowed] names it (each exception is written with its reason).
+     */
+    private fun loneSweep(screen: String, cultures: List<AncientCulture> = AncientCulture.entries, fontScale: Float = 1f, allowed: Map<String, String> = emptyMap()) {
+        val data = cultures.associateWith { composeYear(it, true) }
+        val shown = androidx.compose.runtime.mutableStateOf(cultures.first())
+        compose.setContent {
+            val base = LocalDensity.current
+            androidx.compose.runtime.CompositionLocalProvider(LocalDensity provides androidx.compose.ui.unit.Density(base.density, fontScale)) {
+                val c = shown.value
+                AstraAntiquaTheme(selectedCulture = c) {
+                    androidx.compose.runtime.key(c) {
+                        sweepState = rememberScrollState()
+                        SkyYearFrame(culture = c, year = data.getValue(c), onNavigate = {}, onOpen = {}, scrollState = sweepState)
+                    }
+                }
+            }
+        }
+        LoneWords.sweep(
+            compose, out, screen, cultures,
+            select = { shown.value = it },
+            scroll = { end -> kotlinx.coroutines.runBlocking { sweepState.scrollTo(if (end) sweepState.maxValue else 0) } },
+            allowed = allowed,
+        )
+    }
+
+    @Test
+    fun noLoneWordInAnyCultureAt390() = loneSweep("sky-year 390")
+
+    @Test
+    @Config(qualifiers = "w360dp-h780dp-xxhdpi")
+    fun noLoneWordInAnyCultureAt360() = loneSweep("sky-year 360", allowed = narrowSpine)
+
+    /**
+     * The named exceptions at 360 (Greece's spine). A spine headline has 181 dp beside its end month; at the
+     * floor (16sp, .04em) KRONOS CHALLENGES and every two-word run holding SHOULDER WITH YOUR NATAL SELENE's
+     * last line are still wider, so no break gives each line two words. Only a string change (web's
+     * spanHeadline) or a different row layout clears them.
+     */
+    private val narrowSpine = mapOf(
+        "sky-year 360 GREECE [spine-4] KRONOS" to "KRONOS CHALLENGES YOUR NATAL HELIOS: KRONOS CHALLENGES does not fit 181 dp at 16sp; needs a string or layout change",
+        "sky-year 360 GREECE [spine-4] CHALLENGES" to "as KRONOS, same row",
+        "sky-year 360 GREECE [spine-4] HELIOS" to "as KRONOS, same row",
+        "sky-year 360 GREECE [spine-5] SHOULDER" to "ZEUS STANDS SHOULDER TO SHOULDER WITH YOUR NATAL SELENE: nine words need five lines of two at 181 dp; needs a string or layout change",
+    )
+
+    /** Accepted at 1.3 (Matthew's fix round, "record the rest"): the spine's 181 dp holds no two-word line of the longer words at 23.4sp. */
+    private val spineAt130 = mapOf(
+        "sky-year 390 1.3 EGYPT [spine-1] ASCENDANT" to "accepted at 1.3: YOUR ASCENDANT does not fit beside the end month at 1.3, even at 16sp .04em",
+        "sky-year 390 1.3 EGYPT [spine-2] MIDHEAVEN" to "accepted at 1.3: YOUR MIDHEAVEN does not fit beside the end month at 1.3, even at 16sp .04em",
+        "sky-year 390 1.3 EGYPT [spine-3] ASCENDANT" to "accepted at 1.3: as spine-1",
+    )
+
+    @Test
+    fun noLoneWordAtFontScale130() = loneSweep("sky-year 390 1.3", listOf(AncientCulture.EGYPT), fontScale = 1.3f, allowed = spineAt130)
 }

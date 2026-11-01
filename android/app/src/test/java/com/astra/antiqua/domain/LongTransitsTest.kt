@@ -221,16 +221,62 @@ class LongTransitsTest {
         assertEquals("YOUR MIDHEAVEN", LongTransitsComposer.natalLabel(AncientCulture.EGYPT, "mc"))
     }
 
+    /** The years whose labels are drawn, by index. */
+    private fun labelled(marks: List<com.astra.antiqua.ui.screens.AxisMark>) = marks.filter { it.left != null }.map { it.index }
+
     @Test
-    fun `a year label that would overlap the one before it drops the earlier`() {
-        // 342 wide, labels 31 wide. DEC first month over 20 months: 2027 at 1/20 (17.1), so 2026 goes.
+    fun `a first year label that ends within 8 of the next rule is dropped, its place kept`() {
+        // 328 wide (the 390 phone's axis), labels 31 wide. The sample: 2027's rule at 3/28 (35.1); 2026's
+        // label would end at 31, within 8 of it, so it goes (the count line carries OCT 2026).
         val w = 31.dp
-        val dec = com.astra.antiqua.ui.screens.axisMarks(listOf(0f, 1 / 20f, 13 / 20f), listOf(w, w, w), 342.dp)
-        assertEquals(listOf(1, 2), dec.map { it.index })
-        // The sample: 2027 at 3/28 (36.6) leaves 2026 its place; 2029 at 27/28 sets its label left of its rule.
-        val sample = com.astra.antiqua.ui.screens.axisMarks(listOf(0f, 3 / 28f, 15 / 28f, 27 / 28f), listOf(w, w, w, w), 342.dp)
-        assertEquals(listOf(0, 1, 2, 3), sample.map { it.index })
-        assertTrue(sample[3].left + w <= sample[3].rule!!)
-        sample.zipWithNext().forEach { (a, b) -> assertTrue(b.left >= a.left + a.width + 8.dp) }
+        val sample = com.astra.antiqua.ui.screens.axisMarks(listOf(0f, 3 / 28f, 15 / 28f, 27 / 28f), listOf(w, w, w, w), 328.dp)
+        assertEquals(listOf(1, 2), labelled(sample))
+        // Every year after the first keeps its rule, a dropped label's included.
+        assertEquals(4, sample.size)
+        assertNull(sample[0].rule)
+        assertTrue(sample.drop(1).all { it.rule != null })
+        // Every drawn label stands 7 right of its rule (1 of rule, 6 of pad) and ends 8 or more before the next rule.
+        sample.filter { it.left != null && it.rule != null }.forEach { assertEquals(it.rule!!.value + 7f, it.left!!.value, 1e-3f) }
+        sample.zipWithNext().filter { it.first.left != null }.forEach { (a, b) -> assertTrue(a.left!! + a.width <= b.rule!! - 8.dp) }
+        // With room before the next rule, the first label stays: 2027 at 6/28 (70.3) leaves 2026 ending at 31.
+        val room = com.astra.antiqua.ui.screens.axisMarks(listOf(0f, 6 / 28f, 18 / 28f), listOf(w, w, w), 328.dp)
+        assertEquals(listOf(0, 1, 2), labelled(room))
+        // A DEC first month over 20 months: 2027's rule at 1/20 (16.4), so 2026's label goes.
+        val dec = com.astra.antiqua.ui.screens.axisMarks(listOf(0f, 1 / 20f, 13 / 20f), listOf(w, w, w), 328.dp)
+        assertEquals(listOf(1, 2), labelled(dec))
+    }
+
+    @Test
+    fun `a last year label that cannot fit before the axis end is dropped, its rule kept`() {
+        // The sample's 2029 at 27/28 of 328 (316.3): its label would run to 354.3, past 328.
+        val w = 31.dp
+        val sample = com.astra.antiqua.ui.screens.axisMarks(listOf(0f, 3 / 28f, 15 / 28f, 27 / 28f), listOf(w, w, w, w), 328.dp)
+        assertNull(sample[3].left)
+        assertEquals(328f * 27 / 28f, sample[3].rule!!.value, 1e-3f)
+        // At 1.3 the labels grow to 40: 2027 and 2028 still fit and keep 8 from the next rule.
+        val big = com.astra.antiqua.ui.screens.axisMarks(listOf(0f, 3 / 28f, 15 / 28f, 27 / 28f), listOf(40.dp, 40.dp, 40.dp, 40.dp), 328.dp)
+        assertEquals(listOf(1, 2), labelled(big))
+        // A last label with room stays: 2029 at 20/28 (234.3) ends at 272.3.
+        val fits = com.astra.antiqua.ui.screens.axisMarks(listOf(0f, 3 / 28f, 15 / 28f, 20 / 28f), listOf(w, w, w, w), 328.dp)
+        assertEquals(listOf(1, 2, 3), labelled(fits))
+    }
+
+    @Test
+    fun `a row's data splits at its first separator, after the range`() {
+        val (range, counts) = com.astra.antiqua.ui.screens.rowDataLines("OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE")
+        assertEquals("OCT 2026 → JUN 2027", range)
+        assertEquals("3 EXACT · 2 AHEAD · EASE", counts)
+        // dataNoAhead keeps its own words on line 2; the sample's rows all split so.
+        assertEquals("FEB 2027 → APR 2027" to "1 EXACT · TENSION", com.astra.antiqua.ui.screens.rowDataLines("FEB 2027 → APR 2027 · 1 EXACT · TENSION"))
+        val t = transits(SkyDayTest.sampleNow)
+        t.listed.forEach { span ->
+            val data = LongTransitsComposer.rowData(span, t.now, rome)
+            val (a, b) = com.astra.antiqua.ui.screens.rowDataLines(data)
+            assertEquals(data, "$a · $b")
+            assertTrue(a, a.contains(" → ") && !a.contains(" · "))
+            assertTrue(b, b.endsWith(LongTransitsComposer.toneWord(span)))
+        }
+        // No separator: one line.
+        assertEquals("OCT 2026" to "", com.astra.antiqua.ui.screens.rowDataLines("OCT 2026"))
     }
 }

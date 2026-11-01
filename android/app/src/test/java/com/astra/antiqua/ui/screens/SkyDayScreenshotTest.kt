@@ -84,7 +84,7 @@ class SkyDayScreenshotTest {
         "P16" to Rect(24f, 1070.4f, 342f, 147.8f),
     )
 
-    private fun render(name: String, culture: AncientCulture, scroll: Int) {
+    private fun render(name: String, culture: AncientCulture, scroll: Int, capture: Boolean = true) {
         val engine = AstronomyEngine()
         val chart = CalculateNatalChartUseCase(engine).execute(SkyDayTest.smokeBirth)
         val day = SkyDayComposer.compose(engine, culture, SkyDayTest.sampleNow, chart)
@@ -95,7 +95,7 @@ class SkyDayScreenshotTest {
             }
         }
         compose.waitForIdle()
-        compose.onRoot().captureRoboImage(File(out, "$name.png").path)
+        if (capture) compose.onRoot().captureRoboImage(File(out, "$name.png").path)
     }
 
     /** Writes each ID's measured box beside the table's; returns those off by more than 1 dp. */
@@ -153,4 +153,45 @@ class SkyDayScreenshotTest {
         val chromeMisses = measure("sky-day-rome", chrome)
         assertTrue("chrome off by more than 1 dp:\n" + chromeMisses.joinToString("\n"), chromeMisses.isEmpty())
     }
+
+    private lateinit var sweepState: androidx.compose.foundation.ScrollState
+
+    /**
+     * Sets the screen once and walks [cultures], each at rest and at its end, through [LoneWords.sweep]; a hit
+     * outside prose fails unless [allowed] names it (each exception is written with its reason).
+     */
+    private fun loneSweep(screen: String, cultures: List<AncientCulture> = AncientCulture.entries, fontScale: Float = 1f, allowed: Map<String, String> = emptyMap()) {
+        val engine = AstronomyEngine()
+        val chart = CalculateNatalChartUseCase(engine).execute(SkyDayTest.smokeBirth)
+        val data = cultures.associateWith { SkyDayComposer.compose(engine, it, SkyDayTest.sampleNow, chart) }
+        val shown = androidx.compose.runtime.mutableStateOf(cultures.first())
+        compose.setContent {
+            val base = LocalDensity.current
+            androidx.compose.runtime.CompositionLocalProvider(LocalDensity provides androidx.compose.ui.unit.Density(base.density, fontScale)) {
+                val c = shown.value
+                AstraAntiquaTheme(selectedCulture = c) {
+                    androidx.compose.runtime.key(c) {
+                        sweepState = rememberScrollState()
+                        SkyDayFrame(culture = c, day = data.getValue(c), scrollState = sweepState)
+                    }
+                }
+            }
+        }
+        LoneWords.sweep(
+            compose, out, screen, cultures,
+            select = { shown.value = it },
+            scroll = { end -> kotlinx.coroutines.runBlocking { sweepState.scrollTo(if (end) sweepState.maxValue else 0) } },
+            allowed = allowed,
+        )
+    }
+
+    @Test
+    fun noLoneWordInAnyCultureAt390() = loneSweep("sky-day 390")
+
+    @Test
+    @Config(qualifiers = "w360dp-h780dp-xxhdpi")
+    fun noLoneWordInAnyCultureAt360() = loneSweep("sky-day 360")
+
+    @Test
+    fun noLoneWordAtFontScale130() = loneSweep("sky-day 390 1.3", listOf(AncientCulture.EGYPT), fontScale = 1.3f)
 }

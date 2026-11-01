@@ -1,3 +1,35 @@
+sky-week 360 EGYPT rest lone word prose [P30] "daylight." in "Your moods and your dreams go" / "out together, and Thoth records it" / "to the hair. A dream comes true by" / "daylight." (16.5.sp Unspecified in 744 px)
+sky-week 360 EGYPT end lone word prose [P30] "daylight." in "Your moods and your dreams go" / "out together, and Thoth records it" / "to the hair. A dream comes true by" / "daylight." (16.5.sp Unspecified in 744 px)
+sky-week 360 GREECE rest lone word prose [P28] "moment." in "Your household and your sudden" / "notions argue at the same gate." / "Your plan breaks at the worst" / "moment." (16.5.sp Unspecified in 744 px)
+sky-week 360 GREECE rest lone word prose [P31] "enter." in "Your household and your fighting" / "strength keep step with each" / "other. You win the contest you" / "enter." (16.5.sp Unspecified in 744 px)
+sky-week 360 GREECE rest lone word prose [week-thesis] "order." in "One question goes up to Delphi each" / "day; the week is the art of asking them in" / "order." (17.0.sp Unspecified in 936 px)
+sky-week 360 GREECE end lone word prose [P28] "moment." in "Your household and your sudden" / "notions argue at the same gate." / "Your plan breaks at the worst" / "moment." (16.5.sp Unspecified in 744 px)
+sky-week 360 GREECE end lone word prose [P31] "enter." in "Your household and your fighting" / "strength keep step with each" / "other. You win the contest you" / "enter." (16.5.sp Unspecified in 744 px)
+sky-week 360 GREECE end lone word prose [week-thesis] "order." in "One question goes up to Delphi each" / "day; the week is the art of asking them in" / "order." (17.0.sp Unspecified in 936 px)
+sky-week 360 CANAAN rest lone word prose [P28] "warning." in "Your kin at home and your change" / "of pasture quarrel with each other." / "Your routine breaks without" / "warning." (16.5.sp Unspecified in 744 px)
+sky-week 360 CANAAN end lone word prose [P28] "warning." in "Your kin at home and your change" / "of pasture quarrel with each other." / "Your routine breaks without" / "warning." (16.5.sp Unspecified in 744 px)
+sky-week 360 CARTHAGE rest lone word prose [P25] "interest." in "Your pleasure fund and the debts" / "you inherited fight over the same" / "silver. An old debt grows new" / "interest." (16.5.sp Unspecified in 744 px)
+sky-week 360 CARTHAGE end lone word prose [P25] "interest." in "Your pleasure fund and the debts" / "you inherited fight over the same" / "silver. An old debt grows new" / "interest." (16.5.sp Unspecified in 744 px)
+sky-week 360 ROME rest lone word prose [P31] "ground." in "Your household affairs and your" / "campaign sit on the same side of" / "the Senate. Your campaign takes" / "ground." (16.5.sp Unspecified in 744 px)
+sky-week 360 ROME rest lone word prose [week-thesis] "days." in "Each day is marked lawful or unlawful" / "for business before it begins; act on the F" / "days." (17.0.sp Unspecified in 936 px)
+sky-week 360 ROME end lone word prose [P31] "ground." in "Your household affairs and your" / "campaign sit on the same side of" / "the Senate. Your campaign takes" / "ground." (16.5.sp Unspecified in 744 px)
+sky-week 360 ROME end lone word prose [week-thesis] "days." in "Each day is marked lawful or unlawful" / "for business before it begins; act on the F" / "days." (17.0.sp Unspecified in 936 px)
+sky-week 390 EGYPT rest lone word prose [P26] "anew." in "Your beloved and what you have buried" / "get in each other's way, and the cord is" / "drawn tight. An old grievance is aired" / "anew." (16.5.sp Unspecified in 834 px)
+sky-week 390 EGYPT rest lone word prose [P31] "it." in "Your moods and your temper like each" / "other. Your effort lands where you aim" / "it." (16.5.sp Unspecified in 834 px)
+sky-week 390 EGYPT end lone word prose [P26] "anew." in "Your beloved and what you have buried" / "get in each other's way, and the cord is" / "drawn tight. An old grievance is aired" / "anew." (16.5.sp Unspecified in 834 px)
+sky-week 390 EGYPT end lone word prose [P31] "it." in "Your moods and your temper like each" / "other. Your effort lands where you aim" / "it." (16.5.sp Unspecified in 834 px)
+sky-week 390 GREECE rest lone word prose [P29] "deed." in "Helios goes on to the shrine of the" / "Scorpion. The priests there begin the" / "sacrifice for the eye that misses no" / "deed." (16.5.sp Unspecified in 834 px)
+sky-week 390 GREECE end lone word prose [P29] "deed." in "Helios goes on to the shrine of the" / "Scorpion. The priests there begin the" / "sacrifice for the eye that misses no" / "deed." (16.5.sp Unspecified in 834 px)
+sky-week 390 CANAAN rest lone words: none
+sky-week 390 CANAAN end lone words: none
+sky-week 390 CARTHAGE rest lone word prose [P28] "you." in "Your household accounts and your new" / "routes fight over the same silver. A" / "ship changes course without telling" / "you." (16.5.sp Unspecified in 834 px)
+sky-week 390 CARTHAGE rest lone word prose [week-thesis] "crossing." in "Seven entries, debits and credits of the sky;" / "the ledger is balanced before the next" / "crossing." (17.0.sp Unspecified in 1026 px)
+sky-week 390 CARTHAGE end lone word prose [P28] "you." in "Your household accounts and your new" / "routes fight over the same silver. A" / "ship changes course without telling" / "you." (16.5.sp Unspecified in 834 px)
+sky-week 390 CARTHAGE end lone word prose [week-thesis] "crossing." in "Seven entries, debits and credits of the sky;" / "the ledger is balanced before the next" / "crossing." (17.0.sp Unspecified in 1026 px)
+sky-week 390 ROME rest lone word prose [P26] "way." in "Your courtship and your inheritance" / "clash, and the augur marks it in his" / "book. An old family claim blocks your" / "way." (16.5.sp Unspecified in 834 px)
+sky-week 390 ROME rest lone word prose [P30] "cup." in "Your household affairs and your days" / "at the baths go together, and the" / "pontiff marks it in the calendar." / "Pleasure and confusion come in one" / "cup." (16.5.sp Unspecified in 834 px)
+sky-week 390 ROME end lone word prose [P26] "way." in "Your courtship and your inheritance" / "clash, and the augur marks it in his" / "book. An old family claim blocks your" / "way." (16.5.sp Unspecified in 834 px)
+sky-week 390 ROME end lone word prose [P30] "cup." in "Your household affairs and your days" / "at the baths go together, and the" / "pontiff marks it in the calendar." / "Pleasure and confusion come in one" / "cup." (16.5.sp Unspecified in 834 px)
 sky-week P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 sky-week P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
 sky-week P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
@@ -30,6 +62,16 @@ sky-week gap P29 to P30 want 0.0 got 0.0
 sky-week gap P30 to P31 want 0.0 got 0.0
 sky-week-280 P171 want 0.0, 138.3 · 170.0x220.0 got 0.0, 144.0 · 170.0x220.0 off 5.7
 sky-week-280 P171 top minus P53 top 98.0 (want -42 + 140 = 98)
+sky-week 390 1.3 EGYPT rest lone word prose [P25] "anew." in "Your beloved and what you" / "have buried haul each other" / "down. An old grievance is aired" / "anew." (16.5.sp Unspecified in 834 px)
+sky-week 390 1.3 EGYPT rest lone word prose [P26] "anew." in "Your beloved and what you" / "have buried get in each other's" / "way, and the cord is drawn" / "tight. An old grievance is aired" / "anew." (16.5.sp Unspecified in 834 px)
+sky-week 390 1.3 EGYPT rest lone word prose [P27] "anew." in "Your beloved and what you" / "have buried pull at each other," / "and Thoth records it to the" / "hair. An old grievance is aired" / "anew." (16.5.sp Unspecified in 828 px)
+sky-week 390 1.3 EGYPT rest lone word [P30] "☽ ☌ ♆ · TIGHT" in "☽ ☌ ♆ · TIGHT" / "· ARIES · UNION" (11.0.sp 0.1.em in 834 px) EXCEPTION: accepted at 1.3: glyphs beside one word; any break of this shorthand leaves a line with one word
+sky-week 390 1.3 EGYPT rest lone word prose [week-thesis] "week." in "The day is laid on the scale at" / "evening and the pans settle" / "overnight. Seven weighings make the" / "week." (17.0.sp Unspecified in 1026 px)
+sky-week 390 1.3 EGYPT end lone word prose [P25] "anew." in "Your beloved and what you" / "have buried haul each other" / "down. An old grievance is aired" / "anew." (16.5.sp Unspecified in 834 px)
+sky-week 390 1.3 EGYPT end lone word prose [P26] "anew." in "Your beloved and what you" / "have buried get in each other's" / "way, and the cord is drawn" / "tight. An old grievance is aired" / "anew." (16.5.sp Unspecified in 834 px)
+sky-week 390 1.3 EGYPT end lone word prose [P27] "anew." in "Your beloved and what you" / "have buried pull at each other," / "and Thoth records it to the" / "hair. An old grievance is aired" / "anew." (16.5.sp Unspecified in 828 px)
+sky-week 390 1.3 EGYPT end lone word [P30] "☽ ☌ ♆ · TIGHT" in "☽ ☌ ♆ · TIGHT" / "· ARIES · UNION" (11.0.sp 0.1.em in 834 px) EXCEPTION: accepted at 1.3: glyphs beside one word; any break of this shorthand leaves a line with one word
+sky-week 390 1.3 EGYPT end lone word prose [week-thesis] "week." in "The day is laid on the scale at" / "evening and the pans settle" / "overnight. Seven weighings make the" / "week." (17.0.sp Unspecified in 1026 px)
 sky-week-rome P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 sky-week-rome P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
 sky-week-rome P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0

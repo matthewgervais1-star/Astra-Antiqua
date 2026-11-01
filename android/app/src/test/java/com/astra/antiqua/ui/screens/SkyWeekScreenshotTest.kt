@@ -106,7 +106,7 @@ class SkyWeekScreenshotTest {
 
     private val routes = mutableListOf<String>()
 
-    private fun render(name: String, culture: AncientCulture, scroll: Int) {
+    private fun render(name: String, culture: AncientCulture, scroll: Int, capture: Boolean = true) {
         val week = SkyWeekComposer.compose(AstronomyEngine(), culture, SkyDayTest.sampleNow)
         compose.setContent {
             AstraAntiquaTheme(selectedCulture = culture) {
@@ -115,7 +115,7 @@ class SkyWeekScreenshotTest {
             }
         }
         compose.waitForIdle()
-        compose.onRoot().captureRoboImage(File(out, "$name.png").path)
+        if (capture) compose.onRoot().captureRoboImage(File(out, "$name.png").path)
     }
 
     /** Writes each ID's measured box beside the table's; returns those off by more than 1 dp. */
@@ -302,4 +302,48 @@ class SkyWeekScreenshotTest {
         assertTrue(lit(0.05f, false, -45f) && !lit(0.05f, false, 165f))
         assertTrue(lit(0.74f, true, 20f) && !lit(0.74f, true, 0f))
     }
+
+    private lateinit var sweepState: androidx.compose.foundation.ScrollState
+
+    /**
+     * Sets the screen once and walks [cultures], each at rest and at its end, through [LoneWords.sweep]; a hit
+     * outside prose fails unless [allowed] names it (each exception is written with its reason).
+     */
+    private fun loneSweep(screen: String, cultures: List<AncientCulture> = AncientCulture.entries, fontScale: Float = 1f, allowed: Map<String, String> = emptyMap()) {
+        val data = cultures.associateWith { SkyWeekComposer.compose(AstronomyEngine(), it, SkyDayTest.sampleNow) }
+        val shown = androidx.compose.runtime.mutableStateOf(cultures.first())
+        compose.setContent {
+            val base = LocalDensity.current
+            androidx.compose.runtime.CompositionLocalProvider(LocalDensity provides androidx.compose.ui.unit.Density(base.density, fontScale)) {
+                val c = shown.value
+                AstraAntiquaTheme(selectedCulture = c) {
+                    androidx.compose.runtime.key(c) {
+                        sweepState = rememberScrollState()
+                        SkyWeekFrame(culture = c, week = data.getValue(c), onNavigate = {}, scrollState = sweepState)
+                    }
+                }
+            }
+        }
+        LoneWords.sweep(
+            compose, out, screen, cultures,
+            select = { shown.value = it },
+            scroll = { end -> kotlinx.coroutines.runBlocking { sweepState.scrollTo(if (end) sweepState.maxValue else 0) } },
+            allowed = allowed,
+        )
+    }
+
+    @Test
+    fun noLoneWordInAnyCultureAt390() = loneSweep("sky-week 390")
+
+    @Test
+    @Config(qualifiers = "w360dp-h780dp-xxhdpi")
+    fun noLoneWordInAnyCultureAt360() = loneSweep("sky-week 360")
+
+    @Test
+    fun noLoneWordAtFontScale130() = loneSweep(
+        "sky-week 390 1.3", listOf(AncientCulture.EGYPT), fontScale = 1.3f,
+        // Accepted at 1.3: the shorthand's glyphs are not words, so any two-line break of it at 14.3sp leaves one
+        // word (TIGHT, or UNION) beside them or alone; balanced and greedy breaking both do.
+        allowed = mapOf("sky-week 390 1.3 EGYPT [P30] ☽ ☌ ♆ · TIGHT" to "accepted at 1.3: glyphs beside one word; any break of this shorthand leaves a line with one word"),
+    )
 }

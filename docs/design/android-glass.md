@@ -648,3 +648,104 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
 2. Row titles and the headline in the catalog's capitals (built, as steps 4 and 5), or small caps from lower case as
    the board and web's CSS draw them; capitals take more lines.
 3. Sky Transits approved, go to step 7 (Chart)?
+
+### Matthew's rulings on the lines (popup, 2026-11-01, after the design round's three variants)
+
+- FACT (Matthew's first popup, 2026-11-01): capitals kept; on READ → "show me diffs"; on approval "show me". After the
+  READ → comparison he wrote: "the lines and spacing is sloppy work... why is this happening.... design round now to
+  fix". INFERENCE: the cause was text never checked against its box; the tests asserted the gaps between blocks only.
+- FACT (Matthew's popup after the three variants): variant C; the first year's label goes when it ends within 8 of
+  the next rule (generalized: any label); no READ → (the whole row stays the link); the no-lone-word rule applies to
+  Day, Week, Season and Year too. The design round's code was thrown away; its renders sat in that session's
+  scratchpad.
+
+### Variant C and the no-lone-word rule, built (2026-11-01)
+
+- FACT (`ui/screens/LongTransitsScreen.kt`): each row title (Spectral SC 500 15/1.4 .06em, catalog capitals) sets
+  with `LineBreak.Heading`; a title that fits one line is narrowed one pixel under its own line width so the
+  balanced breaker sets it on two (`twoLineWidth`), unless two lines would leave a word alone. The data is the
+  catalog string split at its first " · " (`rowDataLines`): the range on line 1, the counts and the tone word on
+  line 2, the tone word in its ink; the spoken label is unchanged. The axis's rules, labels and foot rule and every
+  bar run from x 38 (the text's edge) to the content's right end: 328 wide at 390, 298 at 360. NOW is a 1x9 mark
+  from 14 under the axis's top through its rule (P61) and a 1x7 bone tick centred on each bar (`<row>-now`), only
+  when NOW lies inside the axis; the line down the text column is gone. `axisMarks`: every label 7 right of its
+  rule; a label goes, its rule kept, when it cannot end before the axis's end or would end within 8 of the next
+  rule; the label-to-label rule stays.
+- FACT (`LongTransitsScreenshotTest`, `step6/placement.txt`): every row's title and data on two lines at 390 and
+  360. Rows 131.3 (P63, P65, first of their group) and 135.3 (the rest) at 390 and 360; at 1.3, 154.0 and 158.0.
+  Axis at 390: rules 2027 35.0, 2028 175.7, 2029 316.3 (from the axis's left end); labels 2027 42.0 to 72.3, 2028
+  182.7 to 213.0; 2026 and 2029 labels dropped; NOW at 8.0 (x 46.0). At 360: rules 32.0, 159.7, 287.3; labels 2027
+  39.0 to 69.3, 2028 166.7 to 197.0; NOW at 7.3 (x 45.3). At 1.3: rules as 390; labels 2027 42.0 to 80.0, 2028
+  182.7 to 220.7. Gaps and chrome as before; the page now scrolls to 875.7 (791.7 before).
+- FACT (`ui/screens/LoneWords.kt`, test): one helper reads every laid-out text's TextLayoutResult and fails when a
+  wrapped paragraph holds a one-word line (words split on spaces, "·" and "→" not words, "\n" a deliberate break).
+  It runs on Day, Week, Season, Year and Transits in every culture at 390 and 360, rest and end, and in Egypt at 1.3
+  (`LoneWords.sweep`, three tests a screen; fix round 1). Prose
+  (Spectral body) hits are listed in each placement.txt and not failed.
+- FACT (`ui/screens/LoneWordFit.kt`): where `LineBreak.Heading` alone leaves a lone word, `NoLoneWordText` sets the
+  text by a measured rule: a narrower measure (bisected between 70% and the full width, skipped for three words or
+  fewer), then breaks chosen by hand (fewest lines of two words or more, longest line shortest), then tracking down
+  to .04em, then size down by .5. Hand-broken text draws with line breaks; its semantics carry the original string.
+- Hits and fixes (FACT, lone-word runs):
+  - Day: P6 headline at 360 ("linen." alone) and the contact rows' data lines at 390 ("TENSION", "· UNION" alone):
+    `LineBreak.Heading`. The method footer at 360 ("METHOD" alone): `LineBreak.Heading` in `MethodFooter`
+    (`ui/components/Shell.kt`; Sky Day is its only caller).
+  - Week: P23 count line at 360, the row headlines (P25 "linen.", P31 "tonight." at 390) and the votive at 390 and
+    360: `LineBreak.Heading`. P22 "SEVEN DAYS WEIGHED" at 360 (three words that cannot share one line at
+    26/.06em): `NoLoneWordText` sets it on one line at 25sp, .04em (a size change, 360 only).
+  - Season: P34 title at 390 and 360, P38 house heading at 360: `LineBreak.Heading`.
+  - Year: P45 count line and the spine label at 390 and 360, the votive's second line at 360: `LineBreak.Heading`.
+    Spine rows: at 390, rows 1 and 3 broken by hand ("AMUN ROWS / IN TIME WITH / YOUR ASCENDANT"); at 360 rows 1
+    to 3 at 17.5sp, .04em (a size and tracking change; rows 4 and 5 stay 18sp .08em).
+  - Transits: every title and data line before variant C; none after.
+  - Prose, not fixed: `LineBreak.Paragraph` cleared none, so it was not kept: Day P14 and row-3 at 360; Season
+    season-changing at 360 and season-leaves at 390; Week P26 and P31 at 390, P30 at 360; Year year-opening at 360.
+- FACT (`LongTransitsTest`): the label rules (first label crowding the next rule, last label without room, a first
+  label with room, DEC) and the data split, over every sample row.
+- FACT (local, 2026-11-01): `./gradlew compileDebugSources testDebugUnitTest` 351 tests, 0 failures (329 before);
+  superseded by fix round 1 below.
+- Renders regenerated (FACT, pixel diff against the committed ones): step 2 `sky-day-end`, `sky-day-scrolled`;
+  step 3 `sky-week`, `-scrolled`, `-end`, `-rome`, `-280`, `-280-reduced-motion`; step 4 `sky-season`,
+  `-scrolled`, `-rome`, `-360`, `-focus`, `-font-130`, `-no-chart`; step 5 `sky-year`, `-scrolled`, `-rome`,
+  `-360`, `-end`, `-focus`, `-greece-end`, `-no-chart`, `-spine-focus`; step 6 every render but
+  `transit-detail-mc`, `transits-loading`, `transits-no-chart`; every placement.txt of steps 2 to 6.
+- CANNOT CONFIRM: how the frames look on a phone; Robolectric drew them.
+
+### Fix round 1 from the Opus review (2026-11-01)
+
+- FACT (`LoneWords.sweep`, the five `*ScreenshotTest` files): the lone-word check runs on every culture (Egypt,
+  Greece, Canaan, Carthage, Rome) at 390 and at 360, rest and end, and on Egypt at 1.3 at 390: three tests a
+  screen, 15 in all, replacing the 20 Egypt-only ones. A hit outside prose fails unless the test names it as an
+  exception; each exception is written to placement.txt with its reason.
+- New hits and fixes (FACT, sweep runs):
+  - Year, Rome P44 "MMXXVI · THE GREAT / CIRCUIT" at 390: `NoLoneWordText` (a narrower measure gives "MMXXVI · THE
+    / GREAT CIRCUIT"). `LineBreak.Heading` would also fix it but moved Egypt's title without need, so P44 keeps
+    its own break otherwise.
+  - Year, Greece year-festivals ("QUARTERS" alone) at 390 and 360, Carthage segment-2 ("MONTHS" alone) at 360:
+    `LineBreak.Heading`.
+  - Year, Greece spine-4 (KRONOS CHALLENGES YOUR NATAL HELIOS) and spine-5 (ZEUS STANDS SHOULDER TO SHOULDER WITH
+    YOUR NATAL SELENE) at 360: named exceptions. The headline has 181 dp beside its end month; even at 16sp and
+    .04em no break gives each line two words. Clearing them needs a string change (web's spanHeadline) or a
+    different row layout.
+  - At 1.3 (Egypt, 390): Day P16's meta line, Season row-9's data line and the votive, fixed with
+    `LineBreak.Heading`. Accepted at 1.3, by name: Week P30's shorthand ("☽ ☌ ♆ · TIGHT / · ARIES · UNION": the
+    glyphs are not words, so every break leaves one word beside them); Year spine-1, spine-2 and spine-3
+    (ASCENDANT or MIDHEAVEN alone; the two-word last line does not fit beside the end month at 1.3).
+  - Prose hits are listed per culture in each placement.txt and not fixed (LineBreak.Paragraph cleared none).
+- FACT (`LoneWordFit.kt`): the narrower measure is skipped for three words or fewer and bisected
+  (`narrowerMeasure`) instead of 30 linear steps; `wordCount` is shared with `LongTransitsScreen.kt`. Hand-broken
+  text draws in a box whose semantics carry the original string, so the line breaks never reach TalkBack or the
+  merged finders.
+- FACT (`LongTransitsScreen.kt`): a counts line without " · " inks nothing, or all of it when it is the tone word;
+  NOW at 1.0 is held to the axis's last dp (the mark and the bar ticks).
+- FACT (`LoneWordFitTest`, new): `wordCount`, `hasLoneWord`, `breakLines` (the word-count gate and the line-count
+  range), `narrowerMeasure`, `fitWithoutLoneWord` and `twoLineWidth` on a TextMeasurer in a monospace face.
+- FACT (local, 2026-11-01): `./gradlew compileDebugSources testDebugUnitTest` 352 tests, 0 failures.
+- Renders against the committed ones after this round (FACT, pixel diff): as listed above, except that step 5
+  `sky-year-font-130` no longer changes; step 5 `sky-year`, `-scrolled`, `-360`, `-focus`, `-no-chart` and
+  `-spine-focus` changed again in this round (P44 back to Egypt's own break). Every placement.txt of steps 2 to 6
+  regenerated.
+- FACT (fix round 2, the last, 2026-11-01): a hand-broken centred text now fills its box, so its lines centre in the box's width (`NoLoneWordTextTest`); `NoLoneWordText`'s KDoc says such a text exposes no layout in the merged tree. Local: 353 tests, 0 failures; no render changed.
+- Open for Matthew (asked in one popup, 2026-11-01): Greece's Year spine rows 4 and 5 at 360 (string change, a
+  different row layout, or accept); Year spine rows 1 to 3 at 17.5sp at 360 beside rows 4 and 5 at 18sp; approval
+  of steps 6 and the lone-word fixes to steps 2 to 5.

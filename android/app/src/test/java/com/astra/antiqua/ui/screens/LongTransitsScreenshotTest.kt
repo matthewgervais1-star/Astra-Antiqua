@@ -137,15 +137,15 @@ class LongTransitsScreenshotTest {
         "P57" to "web's kicker READ AGAINST YOUR OWN SKY, the board's words; no institution, so no script reveal on this page",
         "P58" to "web's title \"WHAT DOES NOT PASS IN A DAY\" (catalog transits.title, Matthew's \"Web headlines\") in its own case on two lines, each 37.6 for Spectral SC's capitals; the board's \"The long transits\" takes one line of 35.1",
         "P59" to "web's count \"NINE SPANS · OCT 2026 → JAN 2029\" (all nine spans, the Midheaven's two included) against the board's SIX SPANS · OCT 2026 → AUG 2028; sits lower by P58's second line",
-        "P60" to "web's axis 2026 to 2029 over 28 months (OCT 2026 to JAN 2029) against the board's 23; 2027 at 10.7%, 2028 at 53.6%, 2029 at 96.4% with its label set to the left of its rule so it stays on the page",
-        "P61" to "NOW at (21/31)/28 = 2.4% of 342 (x 32.3) against the board's 2.9% of 23 months (x 33.9); it runs to the end of nine rows, not five",
+        "P60" to "web's axis 2026 to 2029 over 28 months (OCT 2026 to JAN 2029) against the board's 23; its rules, labels and foot rule run on the rows' text column (x 38, 328 wide, Matthew's variant C); 2027 at 10.7%, 2028 at 53.6%, 2029 at 96.4%; 2026's label goes (it would end within 8 of 2027's rule; the count line carries OCT 2026) and 2029's (it cannot end before the axis's end), 2029 keeps its rule",
+        "P61" to "NOW a 1x9 mark in the axis's lower band (14 under its top, through its rule) at (21/31)/28 = 2.4% of 328 (x 45.9) against the board's line from the axis to the list's end; each bar carries a 1x7 bone tick at the same x (variant C)",
         "P62" to "OPEN NOW, the board's label and words; lower by P58's second line",
-        "P63" to "web's AMUN ROWS IN TIME WITH YOUR RISING in capitals (web's case) takes two lines (RISING wraps), and its data line two (· EASE wraps at 328, as the board's own P63 data line wraps): 131.3 against 107.8",
+        "P63" to "web's AMUN ROWS IN TIME WITH YOUR RISING in capitals (web's case) on two balanced lines, its data on two deliberate lines (OCT 2026 → JUN 2027, then 3 EXACT · 2 AHEAD · EASE): 131.3 against 107.8",
         "P64" to "AHEAD, the board's label",
-        "P65" to "web's first ahead span is GEB BARS THE DOOR AGAINST YOUR MIDHEAVEN (web walks the Midheaven; the board has no Midheaven row); title and data line each on two lines: 131.3 against 92.4",
-        "P66" to "web's GEB ROWS IN TIME WITH YOUR RISING (the board's P65) on one line; its data line \"… · 3 EXACT · 3 AHEAD · EASE\" (web's spanRowText counts passes ahead on ahead rows too, the board prints \"3 EXACT · EASE\") wraps to two: 114.3 against 96.4",
-        "P67" to "web's GEB TIPS THE SCALES AGAINST RA (the board's P66); the data line wraps for its AHEAD count: 114.3 against 96.4",
-        "P68" to "web's AMUN JOINS THE BARQUE OF KHONSU (the board's P67), title on one line, data on two: 114.3 against the board's P68 117.4; four more rows follow (row-6 to row-9), the board's P68 among them, then JUN 2028 NUT and OCT 2028 AMUN against YOUR MIDHEAVEN",
+        "P65" to "web's first ahead span is GEB BARS THE DOOR AGAINST YOUR MIDHEAVEN (web walks the Midheaven; the board has no Midheaven row); title and data each on two lines: 131.3 against 92.4",
+        "P66" to "web's GEB ROWS IN TIME WITH YOUR RISING (the board's P65), set on two balanced lines though it fits one (a measured narrower width); its data's second line \"3 EXACT · 3 AHEAD · EASE\" (web's spanRowText counts passes ahead on ahead rows too, the board prints \"3 EXACT · EASE\"): 135.3 against 96.4",
+        "P67" to "web's GEB TIPS THE SCALES AGAINST RA (the board's P66) on two balanced lines, data on two: 135.3 against 96.4",
+        "P68" to "web's AMUN JOINS THE BARQUE OF KHONSU (the board's P67) on two balanced lines, data on two: 135.3 against the board's P68 117.4; every row after the first of its group is 135.3; four more rows follow (row-6 to row-9), the board's P68 among them, then JUN 2028 NUT and OCT 2028 AMUN against YOUR MIDHEAVEN",
     )
 
     private lateinit var state: ScrollState
@@ -200,6 +200,34 @@ class LongTransitsScreenshotTest {
         note("%s %s (no board ID) got %.1f, %.1f · %.1fx%.1f".format(name, id, b.x, b.y, b.w, b.h))
     }
 
+    /** The rows in the page's order. */
+    private val rows = listOf("P63", "P65", "P66", "P67", "P68", "row-6", "row-7", "row-8", "row-9")
+
+    /**
+     * Notes each row's height and its title's and data's line counts (title 15/1.4 = 21 a line, data 11/1.4
+     * = 15.4) and asserts both blocks take two lines on every row (Matthew's variant C).
+     */
+    private fun assertTwoLineRows(name: String) {
+        rows.forEach { id ->
+            val title = Math.round(box("$id-title").h / 21f)
+            val data = Math.round(box("$id-data").h / 15.4f)
+            note("%s %s %.1f tall, title %d lines, data %d lines".format(name, id, box(id).h, title, data))
+            assertTrue("$name $id title on $title lines", title == 2)
+            assertTrue("$name $id data on $data lines", data == 2)
+        }
+    }
+
+    private fun exists(tag: String) = compose.onAllNodes(androidx.compose.ui.test.hasTestTag(tag), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
+
+    /** Notes the axis's rules, drawn labels and NOW mark, x from the axis's left end (x 38 at 390). */
+    private fun noteAxis(name: String, years: List<String>) {
+        val track = box("axis-track")
+        val rules = years.filter { exists("axis-rule-$it") }.joinToString { "%s %.1f".format(it, box("axis-rule-$it").x - track.x) }
+        val labels = years.filter { exists("axis-$it") }.joinToString { box("axis-$it").let { b -> "%s %.1f to %.1f".format(it, b.x - track.x, b.x + b.w - track.x) } }
+        val now = if (exists("P61")) box("P61").let { "%.1f (x %.1f), %.1f under the axis's top, %.1f tall".format(it.x - track.x, it.x, it.y - box("P60").y, it.h) } else "none"
+        note("$name axis track x %.1f w %.1f; rules $rules; labels $labels; NOW $now".format(track.x, track.w))
+    }
+
     private fun assertChrome(name: String) {
         val misses = measure(name, chrome)
         assertTrue("chrome off by more than 1 dp:\n" + misses.joinToString("\n"), misses.isEmpty())
@@ -237,16 +265,35 @@ class LongTransitsScreenshotTest {
         compose.onNodeWithText("READ →", useUnmergedTree = true).assertDoesNotExist()
         // Spoken without the arrow or the dots.
         compose.onNode(hasContentDescription("amun rows in time with your rising, october 2026 to june 2027, 3 exact, 2 ahead, ease")).assertExists()
-        // NOW at (21/31)/28 of the axis's 342.
+        assertTwoLineRows("transits")
+        noteAxis("transits", listOf("2026", "2027", "2028", "2029"))
+        assertAxisLabelsApart("transits", listOf("2026", "2027", "2028", "2029"))
+        // The axis and the bars share the text's left edge: x 38, 328 wide.
+        val track = box("axis-track")
+        assertTrue("$track", abs(track.x - 38f) <= 0.5f && abs(track.w - 328f) <= 0.5f)
+        rows.forEach { id ->
+            val bar = box("$id-bar")
+            assertTrue("$id-bar $bar", abs(bar.x - 38f) <= 0.5f && abs(bar.w - 328f) <= 0.5f)
+            assertTrue("$id-title starts on the bar's edge", abs(box("$id-title").x - 38f) <= 0.5f)
+        }
+        note("transits P65-bar track %.1f wide at %.1f".format(box("P65-bar").w, box("P65-bar").x))
+        // 2026's label goes (it would end within 8 of 2027's rule), 2029's (no room before the axis's end); 2029 keeps its rule.
+        assertTrue(!exists("axis-2026") && exists("axis-2027") && exists("axis-2028") && !exists("axis-2029"))
+        assertTrue(exists("axis-rule-2027") && exists("axis-rule-2028") && exists("axis-rule-2029"))
+        // NOW at (21/31)/28 of the axis's 328: a 1x9 mark from 14 under the axis's top through its rule ...
+        val nowX = 38f + 328f * (21f / 31f) / 28f
         val now = box("P61")
-        assertTrue("$now", abs(now.x - (24f + 342f * (21f / 31f) / 28f)) <= 0.5f && abs(now.w - 1f) <= 0.5f)
-        assertTrue("NOW starts under the axis's 22: $now", abs(now.y - (box("P60").y + 22f)) <= 0.5f)
-        assertTrue("NOW runs to the list's end: $now", abs(now.y + now.h - bottom("row-9")) <= 0.5f)
-        // The bars follow the axis: Geb's Midheaven span FEB to APR 2027 is 4/28 in and 3/28 wide.
-        val bar = compose.onNodeWithTag("P65-bar", useUnmergedTree = true).getUnclippedBoundsInRoot()
-        note("transits P65-bar track %.1f wide at %.1f".format((bar.right - bar.left).value, bar.left.value))
+        assertTrue("$now", abs(now.x - nowX) <= 0.5f && abs(now.w - 1f) <= 0.5f)
+        assertTrue("NOW sits in the axis's lower band: $now", abs(now.y - (box("P60").y + 14f)) <= 0.5f && abs(now.y + now.h - bottom("P60")) <= 0.5f)
+        // ... and a 1x7 tick centred on every bar at the same x.
+        rows.forEach { id ->
+            val tick = box("$id-now")
+            val bar = box("$id-bar")
+            assertTrue("$id-now $tick", abs(tick.x - nowX) <= 0.5f && abs(tick.w - 1f) <= 0.5f && abs(tick.h - 7f) <= 0.5f)
+            assertTrue("$id-now centred on the bar: $tick $bar", abs((tick.y + tick.h / 2) - (bar.y + bar.h / 2)) <= 0.5f)
+        }
         // Every row takes a 48 dp or taller touch.
-        listOf("P63", "P65", "P66", "P67", "P68", "row-6", "row-7", "row-8", "row-9").forEach {
+        rows.forEach {
             assertTrue("$it", box(it).h >= 48f)
             compose.onNodeWithTag(it).assert(hasClickAction())
         }
@@ -304,22 +351,27 @@ class LongTransitsScreenshotTest {
         // At 1.3 the title, the count, the labels and the rows grow; the gaps between them hold.
         render("transits-font-130", AncientCulture.EGYPT, 0, fontScale = 1.3f)
         assertGaps("transits-font-130")
+        rows.forEach { note("transits-font-130 %s %.1f tall".format(it, box(it).h)) }
+        noteAxis("transits-font-130", listOf("2026", "2027", "2028", "2029"))
         note("transits-font-130 P58 %.1f tall, P59 %.1f, P63 %.1f, P65 %.1f".format(box("P58").h, box("P59").h, box("P63").h, box("P65").h))
     }
 
     @Test
     @Config(qualifiers = "w360dp-h780dp-xxhdpi")
     fun transitsOnA360DpPhone() {
-        // 312 dp of content: the axis, the bars and NOW scale to it.
+        // 312 dp of content: the axis, the bars and NOW scale to it, 298 of track from x 38.
         render("transits-360", AncientCulture.EGYPT, 0)
         assertGaps("transits-360")
         val axis = box("P60")
         note("transits-360 P60 got %.1f, %.1f · %.1fx%.1f".format(axis.x, axis.y, axis.w, axis.h))
         assertTrue("$axis", abs(axis.w - 312f) <= 1f)
-        // 2029's label stays inside the axis.
-        compose.onNodeWithText("2029", useUnmergedTree = true).getUnclippedBoundsInRoot().let {
-            assertTrue("2029 runs off the axis: ${it.right}", it.right.value <= axis.x + axis.w + 0.5f)
-        }
+        val track = box("axis-track")
+        assertTrue("$track", abs(track.x - 38f) <= 0.5f && abs(track.w - 298f) <= 0.5f)
+        assertTwoLineRows("transits-360")
+        noteAxis("transits-360", listOf("2026", "2027", "2028", "2029"))
+        // 2029's label cannot end before the axis's end: it goes, its rule stays.
+        assertTrue(!exists("axis-2029") && exists("axis-rule-2029"))
+        assertAxisLabelsApart("transits-360", listOf("2026", "2027", "2028", "2029"))
     }
 
     @Test
@@ -393,14 +445,25 @@ class LongTransitsScreenshotTest {
         transitSign = com.astra.antiqua.domain.ZodiacSign.ARIES, transitDegree = 0.0,
     )
 
-    /** Asserts the axis's labels do not overlap; returns the years drawn. */
+    /**
+     * Asserts the axis's labels do not overlap, each stands right of its rule and ends 8 or more before the
+     * next year's rule, and none runs off the axis; returns the years drawn.
+     */
     private fun assertAxisLabelsApart(name: String, years: List<String>): List<String> {
-        val drawn = years.filter { compose.onAllNodes(androidx.compose.ui.test.hasTestTag("axis-$it"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        val drawn = years.filter { exists("axis-$it") }
         val boxes = drawn.map { box("axis-$it") }
         note("$name axis " + drawn.zip(boxes).joinToString { (y, b) -> "%s at %.1f to %.1f".format(y, b.x, b.x + b.w) })
         boxes.zipWithNext().forEach { (a, b) -> assertTrue("$name labels overlap: $a $b", b.x >= a.x + a.w + 7.5f) }
-        val axis = box("P60")
+        val axis = box("axis-track")
         boxes.forEach { assertTrue("$name label off the axis: $it", it.x >= axis.x - 0.5f && it.x + it.w <= axis.x + axis.w + 0.5f) }
+        drawn.forEachIndexed { i, y ->
+            val b = boxes[i]
+            if (exists("axis-rule-$y")) assertTrue("$name $y's label left of its rule", b.x >= box("axis-rule-$y").x + 1f - 0.5f)
+            val next = years.getOrNull(years.indexOf(y) + 1)
+            if (next != null && exists("axis-rule-$next")) {
+                assertTrue("$name $y's label ends within 8 of $next's rule", b.x + b.w <= box("axis-rule-$next").x - 8f + 0.5f)
+            }
+        }
         return drawn
     }
 
@@ -427,4 +490,43 @@ class LongTransitsScreenshotTest {
         render("transits-axis-130", AncientCulture.EGYPT, 0, fontScale = 1.3f, capture = false)
         assertAxisLabelsApart("transits-axis-130", listOf("2026", "2027", "2028", "2029"))
     }
+
+    private lateinit var sweepState: androidx.compose.foundation.ScrollState
+
+    /**
+     * Sets the screen once and walks [cultures], each at rest and at its end, through [LoneWords.sweep]; a hit
+     * outside prose fails unless [allowed] names it (each exception is written with its reason).
+     */
+    private fun loneSweep(screen: String, cultures: List<AncientCulture> = AncientCulture.entries, fontScale: Float = 1f, allowed: Map<String, String> = emptyMap()) {
+        val data = cultures.associateWith { ready }
+        val shown = androidx.compose.runtime.mutableStateOf(cultures.first())
+        compose.setContent {
+            val base = LocalDensity.current
+            androidx.compose.runtime.CompositionLocalProvider(LocalDensity provides androidx.compose.ui.unit.Density(base.density, fontScale)) {
+                val c = shown.value
+                AstraAntiquaTheme(selectedCulture = c) {
+                    androidx.compose.runtime.key(c) {
+                        sweepState = rememberScrollState()
+                        LongTransitsFrame(culture = c, state = data.getValue(c), scrollState = sweepState)
+                    }
+                }
+            }
+        }
+        LoneWords.sweep(
+            compose, out, screen, cultures,
+            select = { shown.value = it },
+            scroll = { end -> kotlinx.coroutines.runBlocking { sweepState.scrollTo(if (end) sweepState.maxValue else 0) } },
+            allowed = allowed,
+        )
+    }
+
+    @Test
+    fun noLoneWordInAnyCultureAt390() = loneSweep("transits 390")
+
+    @Test
+    @Config(qualifiers = "w360dp-h780dp-xxhdpi")
+    fun noLoneWordInAnyCultureAt360() = loneSweep("transits 360")
+
+    @Test
+    fun noLoneWordAtFontScale130() = loneSweep("transits 390 1.3", listOf(AncientCulture.EGYPT), fontScale = 1.3f)
 }

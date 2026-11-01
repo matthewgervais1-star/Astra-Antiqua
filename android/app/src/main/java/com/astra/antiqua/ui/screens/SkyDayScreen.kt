@@ -42,6 +42,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
@@ -268,6 +269,7 @@ private fun SkyDayContent(
             lineHeight = 26.sp * 1.35f,
             letterSpacing = if (smallCaps) 0.06.em else 0.08.em,
             lineHeightStyle = CssLeading,
+            lineBreak = LineBreak.Heading,
         ),
         color = Bone,
         textAlign = TextAlign.Center,
@@ -425,7 +427,7 @@ private fun ContactRow(culture: AncientCulture, contact: ChartContact, sentence:
                     style = TextStyle(fontFamily = Spectral, fontWeight = FontWeight.Normal, fontSize = 17.sp, lineHeight = 17.sp * 1.5f, lineHeightStyle = CssLeading),
                     color = Bone,
                 )
-                Text(data, style = mono(11.sp, 1.4f, 0.1f), color = Dim)
+                Text(data, style = mono(11.sp, 1.4f, 0.1f).copy(lineBreak = LineBreak.Heading), color = Dim)
             }
         }
         Box(Modifier.fillMaxWidth().height(1.dp).background(Board.ruleRow))
@@ -444,7 +446,7 @@ private fun LongTransitCard(pick: LongTransitPick, slots: SlotMap, onClick: () -
             .rowPress("Read the long transit", onClick, pressFill = false)
             .padding(start = 18.dp, end = 18.dp, top = 18.dp, bottom = 16.dp),
     ) {
-        Text(slots.text("day.longTransit.meta"), style = mono(11.sp, 1.4f, 0.14f), color = Dim)
+        Text(slots.text("day.longTransit.meta"), style = mono(11.sp, 1.4f, 0.14f).copy(lineBreak = LineBreak.Heading), color = Dim)
         Text(
             slots.text("day.longTransit.title"),
             style = TextStyle(fontFamily = SpectralSc, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 16.sp * 1.45f, letterSpacing = 0.06.em, lineHeightStyle = CssLeading),

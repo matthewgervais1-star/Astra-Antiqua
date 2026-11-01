@@ -233,3 +233,10 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 - FACT (review, one Opus reviewer): nothing Critical; one Important (year labels overlapping) and the Minors fixed in
   two rounds. Local: 329 tests, 0 failures (299 before).
 - Pending: Matthew's popup on step 6 (READ →, capitals or small caps, approval); push and PR on his word.
+- FACT (Matthew, 2026-11-01): "the lines and spacing is sloppy work... design round now to fix". Three variants
+  rendered; his popup chose C (titles on two balanced lines, data split range / counts, bars and axis on the text's
+  edge, NOW as ticks), first year label dropped when crowded, no READ →, and a no-lone-word test on Day, Week, Season,
+  Year and Transits in every culture at 390 and 360. Built on this branch; one Opus review, two fix rounds. Local:
+  353 tests, 0 failures. Record: `docs/design/android-glass.md` (step 6, design round).
+- Pending: Matthew's popup on Greece's Year spine at 360, the mixed spine size at 360, and approval; push and PR on
+  his word.
