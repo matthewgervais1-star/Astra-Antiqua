@@ -16,8 +16,8 @@ import { text } from "@/strings";
 import { localZone } from "@/strings/formats";
 import { cn } from "@/lib/classNames";
 
-/** One span's row: title and data line from the model's row slots, row `i`. */
-function SpanRow({ span, slots, i }: { span: TransitSpan; slots: SlotMap; i: number }) {
+/** One span's row: title and data line from row `i` of its group's row slots. */
+function SpanRow({ span, slots, group, i }: { span: TransitSpan; slots: SlotMap; group: "open" | "ahead"; i: number }) {
   return (
     <Link
       href={`/transits/${span.id}`}
@@ -30,25 +30,25 @@ function SpanRow({ span, slots, i }: { span: TransitSpan; slots: SlotMap; i: num
             isReceived(span.transitPlanet) ? "text-accent" : "text-bone",
           )}
         >
-          {(slots["transits.row.title"] as string[])[i]}
+          {(slots[`transits.row.title.${group}`] as string[])[i]}
         </div>
-        <div className="mt-1.5 font-mono text-data-xs text-dim">{(slots["transits.row.data"] as string[])[i]}</div>
+        <div className="mt-1.5 font-mono text-data-xs text-dim">{(slots[`transits.row.data.${group}`] as string[])[i]}</div>
       </div>
       <span className="whitespace-nowrap font-mono text-data-xs text-accent">{slots["transits.row.link"]}</span>
     </Link>
   );
 }
 
-/** A group's rows, which start at row `offset` of the model's row slots; its empty line when it has none. */
+/** A group's rows from that group's row slots; its empty line when it has none. */
 function SpanList({
   spans,
   slots,
-  offset,
+  group,
   empty,
 }: {
   spans: readonly TransitSpan[];
   slots: SlotMap;
-  offset: number;
+  group: "open" | "ahead";
   empty: string | string[] | undefined;
 }) {
   if (spans.length === 0) {
@@ -57,7 +57,7 @@ function SpanList({
   return (
     <div className="flex flex-col">
       {spans.map((span, i) => (
-        <SpanRow key={span.id} span={span} slots={slots} i={offset + i} />
+        <SpanRow key={span.id} span={span} slots={slots} group={group} i={i} />
       ))}
     </div>
   );
@@ -75,7 +75,7 @@ export function TransitsIndex() {
   if (!culture) return null;
   if (!natal || !slots) return <TransitEmptyState />;
 
-  // The model lists the open spans first, then those ahead.
+  // The model keeps one row list per group, in the order groupSpans returns.
   const { open, ahead } = groupSpans(spans, now);
 
   return (
@@ -94,11 +94,11 @@ export function TransitsIndex() {
       <div className="mt-10 flex flex-col gap-12">
         <section>
           <SectionDivider label={slots["transits.group.open"] as string} />
-          <SpanList spans={open} slots={slots} offset={0} empty={slots["transits.empty.open"]} />
+          <SpanList spans={open} slots={slots} group="open" empty={slots["transits.empty.open"]} />
         </section>
         <section>
           <SectionDivider label={slots["transits.group.ahead"] as string} />
-          <SpanList spans={ahead} slots={slots} offset={open.length} empty={slots["transits.empty.ahead"]} />
+          <SpanList spans={ahead} slots={slots} group="ahead" empty={slots["transits.empty.ahead"]} />
         </section>
       </div>
     </>

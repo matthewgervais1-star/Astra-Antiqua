@@ -26,9 +26,12 @@ export const ASPECT_KIND_GLYPH: Readonly<Record<AspectKind, string>> = {
   opposition: "☍",
 };
 
-/** sun/moon show the natal point's own deity name; asc/mc show a fixed label. */
+/**
+ * sun/moon show the natal point's own deity name; asc/mc show a fixed label.
+ * Upper case throughout: every caller prints it inside an upper-case title.
+ */
 export function natalPointLabel(culture: Culture, key: string): string {
-  if (isPointPlanetKey(key)) return DEITY_MATRIX[culture][key].name;
+  if (isPointPlanetKey(key)) return DEITY_MATRIX[culture][key].name.toUpperCase();
   if (key === "asc") return "YOUR RISING";
   if (key === "mc") return "YOUR MIDHEAVEN";
   return key.toUpperCase();

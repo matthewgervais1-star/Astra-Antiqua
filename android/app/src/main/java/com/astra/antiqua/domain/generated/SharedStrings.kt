@@ -206,10 +206,14 @@ object SharedStrings {
     const val SEASON_SKY_EVENT_INGRESS: String = "{planet} INTO {sign}"
     /** `season.sky.event.retrograde` */
     const val SEASON_SKY_EVENT_RETROGRADE: String = "{planet} TURNS RETROGRADE"
-    /** `season.sky.event.conjunction` */
-    const val SEASON_SKY_EVENT_CONJUNCTION: String = "{planet} ☌ {planetB}"
-    /** `season.sky.event.conjunctionExact` */
-    const val SEASON_SKY_EVENT_CONJUNCTION_EXACT: String = "{planet} ☌ {planetB} EXACT"
+    /** `season.sky.event.direct` */
+    const val SEASON_SKY_EVENT_DIRECT: String = "{planet} TURNS DIRECT"
+    /** `season.sky.event.phase` */
+    const val SEASON_SKY_EVENT_PHASE: String = "{phase} · {sign}"
+    /** `season.sky.event.eclipseLunar` */
+    const val SEASON_SKY_EVENT_ECLIPSE_LUNAR: String = "LUNAR ECLIPSE · {sign}"
+    /** `season.sky.event.eclipseSolar` */
+    const val SEASON_SKY_EVENT_ECLIPSE_SOLAR: String = "SOLAR ECLIPSE · {sign}"
     /** `season.noChart.line` */
     const val SEASON_NO_CHART_LINE: String = "CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES →"
     /** `season.noChart.link` */

@@ -77,9 +77,10 @@ export function buildSeasonScreen(input: ScreenInput): SeasonScreen {
   slots["season.votive"] = seasonVotive(culture, seasonVotiveTone(standouts));
   slots["season.sky.label"] = str("season.sky.label", culture);
   const rows = buildSeasonSkyRows(culture, window, events);
-  slots["season.sky.row"] = rows.map((row) =>
-    str("season.sky.row", culture, { date: fmt("date.dayMonthYear", row.date, zone), event: row.label }),
-  );
+  slots["season.sky.row"] = rows.map((row) => {
+    const head = str("season.sky.row", culture, { date: fmt("date.dayMonthYear", row.date, zone), event: row.label });
+    return row.prose ? lines(head, row.prose) : head;
+  });
   if (!birth) slots["season.noChart"] = [str("season.noChart.line", culture), str("season.noChart.link", culture)];
   slots["season.footer"] = footerLinks([
     "chrome.footer.toDay",

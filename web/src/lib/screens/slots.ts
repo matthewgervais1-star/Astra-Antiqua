@@ -5,8 +5,10 @@ import type { ScreenName } from "@/lib/screens/types";
  * (docs/design/shared-strings-table-2026-11.md), in the table's order. The
  * table writes three Transit detail keys with a space (`transit.section
  * labels`); a slot key puts a dot there. Rows whose DEFAULT drops the slot
- * (`transits.group.behind`) have no key. screens.test.ts reads the table and
- * fails when this list and the table differ.
+ * (`transits.group.behind`) have no key. A row slot in GROUPED_ROWS prints
+ * one list per group heading, keyed `<slot>.<group>`, in place of the
+ * table's one key. screens.test.ts reads the table and fails when this list
+ * and the table differ.
  */
 export const SCREEN_SLOTS: Readonly<Record<ScreenName, readonly string[]>> = {
   day: [
@@ -82,8 +84,10 @@ export const SCREEN_SLOTS: Readonly<Record<ScreenName, readonly string[]>> = {
     "transits.axis",
     "transits.group.open",
     "transits.group.ahead",
-    "transits.row.title",
-    "transits.row.data",
+    "transits.row.title.open",
+    "transits.row.data.open",
+    "transits.row.title.ahead",
+    "transits.row.data.ahead",
     "transits.row.link",
     "transits.empty.open",
     "transits.empty.ahead",
@@ -128,6 +132,17 @@ export const SCREEN_SLOTS: Readonly<Record<ScreenName, readonly string[]>> = {
   ],
 };
 
+/**
+ * Row slots the screen prints under group headings, with the groups in
+ * printed order. The model holds one list per group (`transits.row.title.open`,
+ * `transits.row.title.ahead`), so the goldens record which heading each row
+ * sits under. A group with no rows has no list; its empty line prints instead.
+ */
+export const GROUPED_ROWS: Readonly<Record<string, readonly string[]>> = {
+  "transits.row.title": ["open", "ahead"],
+  "transits.row.data": ["open", "ahead"],
+};
+
 /** Slots a screen prints only without a birth record (the cast-a-chart lines). */
 export const NO_CHART_ONLY: ReadonlySet<string> = new Set(["season.noChart", "year.noChart", "chart.empty"]);
 
@@ -162,6 +177,10 @@ export const CONDITIONAL: Readonly<Record<string, string>> = {
   "day.longTransit.title": "absent when no span is open or ahead",
   "day.longTransit.footer": "absent when no span is open or ahead",
   "day.longTransit.link": "absent when no span is open or ahead",
+  "transits.row.title.open": "absent when no span is open",
+  "transits.row.data.open": "absent when no span is open",
+  "transits.row.title.ahead": "absent when no span is ahead",
+  "transits.row.data.ahead": "absent when no span is ahead",
   "transits.empty.open": "present only when no span is open",
   "transits.empty.ahead": "present only when no span is ahead",
   "placement.received": "present only for a received body (Uranus, Neptune, Pluto)",

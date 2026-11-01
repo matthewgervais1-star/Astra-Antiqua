@@ -1,6 +1,6 @@
 import type { Culture, Planet } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
-import { ZODIAC_SIGNS, longitudeToSign } from "@/data/sampleChart";
+import { ZODIAC_SIGNS, longitudeToSign, type ZodiacSign } from "@/data/sampleChart";
 import { computeGeocentricLongitude } from "@/lib/ephemeris";
 import { SLOW_BODIES, type YearIngressEvent } from "@/lib/yearForecast";
 import type { HouseMeaning } from "@/data/houses";
@@ -8,9 +8,9 @@ import type { SeasonSkyEvents, SeasonStandout, SeasonWindow } from "@/lib/season
 import { SIGN_PHRASES } from "@/components/horizons/signPhrase";
 import { formatDayMonth, properCase } from "@/components/horizons/format";
 import { houseGroupName } from "@/components/horizons/houseGroups";
-import { fmt, str } from "@/strings";
+import { fmt, moonPhaseKey, str } from "@/strings";
+import { INGRESS_VERB } from "@/lib/weekReading";
 
-const DAY_MS = 86_400_000;
 
 export type SeasonStatus = "OPENING" | "MIDPOINT PASSED" | "CLOSING";
 export type SeasonTone = "harmony" | "tension" | "quiet";
@@ -129,67 +129,78 @@ export interface SeasonSkyRow {
   key: string;
   date: Date;
   label: string;
+  /** Web's sentence under the row, where web has one (ingresses); null otherwise. */
+  prose: string | null;
   tone: "conflict" | "harmony" | "dim";
 }
 
-/** The dated rows for the bordered "THE SEASON'S SKY" box: the sign's open
- *  and close, any retrograde stations inside the window, and the closest
- *  approach of any slow body sharing the season's sign with the Sun. */
+/** Web's ingress sentence (lib/weekReading.ts verbs): "Horus the Red is ferried into the Lion." */
+export function ingressSentence(culture: Culture, planet: Planet, toSign: ZodiacSign): string {
+  return `${DEITY_MATRIX[culture][planet].name} ${INGRESS_VERB[culture]} the ${properCase(SIGN_PHRASES[toSign])}.`;
+}
+
+/**
+ * The dated rows for the bordered "THE SEASON'S SKY" box, the board's event
+ * set (table row season.sky.row): the Sun's ingress that opens the season and
+ * the one that closes it, the Moon's quarters, the ingresses of Mercury,
+ * Venus and Mars, the retrograde and direct stations, and the eclipses, all
+ * inside the window, in date order. Ingress rows carry web's ingress
+ * sentence; the other rows have no web sentence (the lunation sentence the
+ * board draws has no web source, CANNOT CONFIRM), so their prose is null.
+ */
 export function buildSeasonSkyRows(culture: Culture, window: SeasonWindow, events: SeasonSkyEvents): SeasonSkyRow[] {
   const rows: SeasonSkyRow[] = [];
-
-  rows.push({
-    key: "open",
-    date: window.start,
-    label: str("season.sky.event.ingress", culture, { planet: fmt("planet.name", "sun"), sign: fmt("sign.full", window.sign) }),
+  const ingress = (key: string, date: Date, planet: Planet, toSign: ZodiacSign): SeasonSkyRow => ({
+    key,
+    date,
+    label: str("season.sky.event.ingress", culture, { planet: fmt("planet.name", planet), sign: fmt("sign.full", toSign) }),
+    prose: ingressSentence(culture, planet, toSign),
     tone: "dim",
   });
 
+  rows.push(ingress("open", window.start, "sun", window.sign));
+
+  for (const q of events.moonPhases) {
+    rows.push({
+      key: `phase-${q.date.toISOString()}`,
+      date: q.date,
+      label: str("season.sky.event.phase", culture, { phase: str(moonPhaseKey(q.name), culture), sign: fmt("sign.full", q.sign) }),
+      prose: null,
+      tone: "dim",
+    });
+  }
+
+  for (const ing of events.ingresses) {
+    rows.push(ingress(`ingress-${ing.planet}-${ing.date.toISOString()}`, ing.date, ing.planet, ing.toSign));
+  }
+
   for (const r of events.retrogrades) {
-    if (r.kind !== "retrograde") continue;
     rows.push({
       key: `station-${r.planet}-${r.date.toISOString()}`,
       date: r.date,
-      label: str("season.sky.event.retrograde", culture, { planet: fmt("planet.name", r.planet) }),
+      label: str(r.kind === "retrograde" ? "season.sky.event.retrograde" : "season.sky.event.direct", culture, {
+        planet: fmt("planet.name", r.planet),
+      }),
+      prose: null,
+      tone: r.kind === "retrograde" ? "conflict" : "harmony",
+    });
+  }
+
+  for (const e of events.eclipses) {
+    rows.push({
+      key: `eclipse-${e.scope}-${e.date.toISOString()}`,
+      date: e.date,
+      label: str(e.scope === "lunar" ? "season.sky.event.eclipseLunar" : "season.sky.event.eclipseSolar", culture, {
+        sign: fmt("sign.full", e.sign),
+      }),
+      prose: null,
       tone: "conflict",
     });
   }
 
-  const windowDays = Math.min(60, Math.round((window.end.getTime() - window.start.getTime()) / DAY_MS) + 1);
-  for (const body of SLOW_BODIES) {
-    const startSign = longitudeToSign(computeGeocentricLongitude(body, window.start)).sign;
-    if (startSign !== window.sign) continue;
-    let best: { date: Date; sep: number } | null = null;
-    for (let d = 0; d <= windowDays; d += 1) {
-      const date = new Date(window.start.getTime() + d * DAY_MS);
-      if (date > window.end) break;
-      const sunLon = computeGeocentricLongitude("sun", date);
-      const bodyLon = computeGeocentricLongitude(body, date);
-      const raw = Math.abs(sunLon - bodyLon) % 360;
-      const sep = raw > 180 ? 360 - raw : raw;
-      if (!best || sep < best.sep) best = { date, sep };
-    }
-    if (best && best.sep <= 3) {
-      rows.push({
-        key: `conj-${body}`,
-        date: best.date,
-        label: str(best.sep < 1 ? "season.sky.event.conjunctionExact" : "season.sky.event.conjunction", culture, {
-          planet: fmt("planet.name", "sun"),
-          planetB: fmt("planet.name", body),
-        }),
-        tone: "harmony",
-      });
-    }
-  }
-
   const closeIdx = (ZODIAC_SIGNS.indexOf(window.sign) + 1) % 12;
   const closeSign = ZODIAC_SIGNS[closeIdx] ?? window.sign;
-  rows.push({
-    key: "close",
-    date: window.end,
-    label: str("season.sky.event.ingress", culture, { planet: fmt("planet.name", "sun"), sign: fmt("sign.full", closeSign) }),
-    tone: "dim",
-  });
+  rows.push(ingress("close", window.end, "sun", closeSign));
 
   rows.sort((a, b) => a.date.getTime() - b.date.getTime());
   return rows;

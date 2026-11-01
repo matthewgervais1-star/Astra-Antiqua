@@ -22,13 +22,18 @@ export const SEASON = {
   "season.section.touches": "WHAT IT TOUCHES",
   // P40. F10: ’.
   "season.sky.label": "THE SEASON’S SKY",
-  // P41, P42. date: date.dayMonthYear (local); event: one of season.sky.event.*.
+  // P41, P42. date: date.dayMonthYear (local); event: one of season.sky.event.*. The board's event set:
+  // quarters, ingresses, stations, eclipses. An ingress row stacks web's ingress sentence under it.
   "season.sky.row": "{date} · {event}",
   // Planet names (planet.name), full signs (sign.full); F11 words in place of ℞.
   "season.sky.event.ingress": "{planet} INTO {sign}",
   "season.sky.event.retrograde": "{planet} TURNS RETROGRADE",
-  "season.sky.event.conjunction": "{planet} ☌ {planetB}",
-  "season.sky.event.conjunctionExact": "{planet} ☌ {planetB} EXACT",
+  "season.sky.event.direct": "{planet} TURNS DIRECT",
+  // P41: `FULL MOON · ARIES`. phase: common.moon.* (quarters only).
+  "season.sky.event.phase": "{phase} · {sign}",
+  // No board row drawn; the board's set names eclipses (table, season.sky.row).
+  "season.sky.event.eclipseLunar": "LUNAR ECLIPSE · {sign}",
+  "season.sky.event.eclipseSolar": "SOLAR ECLIPSE · {sign}",
   // No board slot; web's words.
   "season.noChart.line": "CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES →",
   "season.noChart.link": "READING",

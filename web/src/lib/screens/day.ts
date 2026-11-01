@@ -38,10 +38,11 @@ export function dayModelFromBundle(bundle: HomeBundle, zone: string): SlotMap {
       total: season.totalDays,
     }),
   );
+  // The caps read in the zone the day count uses, so they agree with day.sky.season.
   slots["day.sky.bar"] = [
-    fmt("date.dayMonth", season.start, "UTC"),
+    fmt("date.dayMonth", season.start, zone),
     str("day.sky.bar.toGo", culture, { remaining: Math.max(0, season.totalDays - season.dayOfSeason) }),
-    fmt("date.dayMonth", season.end, "UTC"),
+    fmt("date.dayMonth", season.end, zone),
   ];
 
   if (bundle.natal && bundle.pressureGroups) {

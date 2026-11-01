@@ -59,8 +59,9 @@ export function spanRowText(culture: Culture, span: TransitSpan, now: Date, zone
 
 /**
  * The long transits index (board Glass-Transits; table section "Transits").
- * Rows run open first, then ahead; `transits.row.*` hold one entry per row in
- * that order, and the open group's rows are the first `open` entries. With no
+ * Each group's rows sit in their own lists (`transits.row.title.open`,
+ * `transits.row.title.ahead` and the matching data lists; see GROUPED_ROWS),
+ * so the goldens say which heading a row prints under. With no
  * birth the screen prints only its loading line (web shows its cast prompt,
  * which has no catalog slot yet).
  */
@@ -87,12 +88,13 @@ export function transitsModelFromSpans(input: ScreenInput, spans: readonly Trans
     }
     slots["transits.group.open"] = str("transits.group.open", culture);
     slots["transits.group.ahead"] = str("transits.group.ahead", culture);
-    if (listed.length > 0) {
-      const rows = listed.map((s) => spanRowText(culture, s, instant, zone));
-      slots["transits.row.title"] = rows.map((r) => r.title);
-      slots["transits.row.data"] = rows.map((r) => r.data);
-      slots["transits.row.link"] = str("transits.row.link", culture);
+    for (const [group, spansOf] of [["open", open], ["ahead", ahead]] as const) {
+      if (spansOf.length === 0) continue;
+      const rows = spansOf.map((s) => spanRowText(culture, s, instant, zone));
+      slots[`transits.row.title.${group}`] = rows.map((r) => r.title);
+      slots[`transits.row.data.${group}`] = rows.map((r) => r.data);
     }
+    if (listed.length > 0) slots["transits.row.link"] = str("transits.row.link", culture);
     if (open.length === 0) slots["transits.empty.open"] = str("transits.empty.open", culture);
     if (ahead.length === 0) slots["transits.empty.ahead"] = str("transits.empty.ahead", culture);
   }

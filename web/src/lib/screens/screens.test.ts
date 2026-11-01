@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCREEN_BUILDERS, buildPlacementModel, type ScreenName, type SlotMap } from "@/lib/screens";
-import { CHART_ONLY, CONDITIONAL, NO_CHART_ONLY, SCREEN_SLOTS } from "@/lib/screens/slots";
+import { CHART_ONLY, CONDITIONAL, GROUPED_ROWS, NO_CHART_ONLY, SCREEN_SLOTS } from "@/lib/screens/slots";
 import { GOLDEN_CASES, caseId, smokeNatal, type GoldenCase } from "@/lib/screens/cases";
 import type { ScreenInput } from "@/lib/screens/types";
 
@@ -26,7 +26,9 @@ const SECTIONS: Readonly<Record<ScreenName, string>> = {
 /**
  * The slot keys of one screen's section of the ruled table: the first cell of
  * each row, a space read as a dot, leaving out rows whose DEFAULT drops the
- * slot ("Swift drops it", "none (").
+ * slot ("Swift drops it", "none ("). A grouped row slot reads as its
+ * per-group keys, the order slots.ts records: every row slot of one group,
+ * then the next group's.
  */
 function tableSlots(screen: ScreenName): string[] {
   const doc = fs.readFileSync(TABLE, "utf8").replaceAll("\r\n", "\n");
@@ -47,7 +49,16 @@ function tableSlots(screen: ScreenName): string[] {
     if (def.startsWith("Swift drops it") || def.startsWith("none (")) continue;
     keys.push((cells[0] ?? "").replace(/\s+/g, "."));
   }
-  return keys;
+  const out: string[] = [];
+  for (const k of keys) {
+    const groups = GROUPED_ROWS[k];
+    if (!groups) out.push(k);
+    else if (k === keys.find((g) => GROUPED_ROWS[g])) {
+      const grouped = keys.filter((g) => GROUPED_ROWS[g]);
+      for (const group of groups) for (const g of grouped) out.push(`${g}.${group}`);
+    }
+  }
+  return out;
 }
 
 function inputOf(c: GoldenCase): ScreenInput {
@@ -125,11 +136,12 @@ test("row slots stay aligned with their screen's rows", () => {
       "week.row.shorthand.quiet",
     ],
     year: ["year.monthLabel", "year.row.head", "year.row.prose"],
-    transits: ["transits.row.title", "transits.row.data"],
+    transitsOpen: ["transits.row.title.open", "transits.row.data.open"],
+    transitsAhead: ["transits.row.title.ahead", "transits.row.data.ahead"],
     day: ["day.chart.row.sentence", "day.chart.row.data"],
   };
   for (const [s, keys] of Object.entries(groups)) {
-    for (const m of MODELS[s as ScreenName]) {
+    for (const m of MODELS[(s.startsWith("transits") ? "transits" : s) as ScreenName]) {
       const lengths = keys.filter((k) => k in m.slots).map((k) => (m.slots[k] as string[]).length);
       assert.ok(lengths.every((n) => n === lengths[0]), `${m.id}: ${keys.join(", ")} differ in length`);
     }
@@ -157,4 +169,29 @@ test("the week across a month end and the season across a year end print one ran
   assert.equal(week["week.kicker"], "28 SEP → 4 OCT 2026 · THE HALL OF MA’AT");
   const season = MODELS.season.find((m) => m.c.instant.startsWith("2026-12-30"))!.slots;
   assert.match(season["season.kicker"] as string, /^\d+ DEC 2026 → \d+ JAN 2027 · /);
+});
+
+test("the Day bar's caps read in the zone the day count uses", () => {
+  const rome = MODELS.day[0]!.slots;
+  assert.deepEqual(rome["day.sky.bar"], ["23 SEP", "2 TO GO", "23 OCT"]);
+  const montreal = MODELS.day.find((m) => m.c.zone === "America/Montreal")!.slots;
+  assert.equal(montreal["day.sky.season"], "SEASON\nSUN IN LIBRA · DAY 30 OF 32");
+  assert.deepEqual(montreal["day.sky.bar"], ["22 SEP", "2 TO GO", "23 OCT"]);
+});
+
+test("the season's sky prints the board's event set, with web's ingress sentence under an ingress", () => {
+  const rows = MODELS.season[0]!.slots["season.sky.row"] as string[];
+  assert.ok(rows.includes("26 SEP 2026 · FULL MOON · ARIES"), rows.join(" | "));
+  assert.ok(rows.includes("28 SEP 2026 · MARS INTO LEO\nHorus the Red is ferried into the Lion."), rows.join(" | "));
+  assert.ok(rows.some((r) => r.startsWith("23 SEP 2026 · SUN INTO LIBRA\n")), rows.join(" | "));
+});
+
+test("transit titles print every deity in upper case", () => {
+  for (const m of [...MODELS.transits, ...MODELS.transit]) {
+    for (const k of ["transits.row.title.open", "transits.row.title.ahead", "transit.meta.title"]) {
+      const v = m.slots[k];
+      if (v === undefined) continue;
+      for (const t of Array.isArray(v) ? v : [v]) assert.equal(t, t.toUpperCase(), `${m.id} ${k}`);
+    }
+  }
 });

@@ -108,15 +108,20 @@ function SeasonContent({
         <div className="mb-3 font-mono text-data-xs tracking-label text-dim">{slots["season.sky.label"]}</div>
         <div className="flex flex-col gap-2 font-mono text-data-xs leading-data text-prose">
           {skyRows.map((row, i) => {
-            // season.sky.row is "{date} · {event}"; web colours the date by the row's tone.
-            const at = row.indexOf(" · ");
+            // season.sky.row is "{date} · {event}", then web's sentence on its own line where
+            // the row has one; web colours the date by the row's tone.
+            const [head = "", prose] = row.split("\n");
+            const at = head.indexOf(" · ");
             const tone = rowTones[i];
             return (
               <div key={`${i}-${row}`}>
-                <span className={cn(tone === "conflict" ? "text-conflict" : tone === "harmony" ? "text-accent" : "text-dim")}>
-                  {row.slice(0, at)}
-                </span>
-                {row.slice(at)}
+                <div>
+                  <span className={cn(tone === "conflict" ? "text-conflict" : tone === "harmony" ? "text-accent" : "text-dim")}>
+                    {head.slice(0, at)}
+                  </span>
+                  {head.slice(at)}
+                </div>
+                {prose ? <p className="mt-1 font-body text-prose-s leading-prose text-prose">{prose}</p> : null}
               </div>
             );
           })}

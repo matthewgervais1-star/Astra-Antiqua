@@ -18,8 +18,10 @@
     "transits.axis",
     "transits.group.open",
     "transits.group.ahead",
-    "transits.row.title",
-    "transits.row.data",
+    "transits.row.title.open",
+    "transits.row.data.open",
+    "transits.row.title.ahead",
+    "transits.row.data.ahead",
     "transits.row.link",
     "transits.empty.open",
     "transits.empty.ahead",
@@ -44,19 +46,23 @@
         ],
         "transits.group.open": "OPEN NOW",
         "transits.group.ahead": "AHEAD",
-        "transits.row.title": [
-          "AMUN ROWS IN TIME WITH YOUR RISING",
+        "transits.row.title.open": [
+          "AMUN ROWS IN TIME WITH YOUR RISING"
+        ],
+        "transits.row.data.open": [
+          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE"
+        ],
+        "transits.row.title.ahead": [
           "GEB BARS THE DOOR AGAINST YOUR MIDHEAVEN",
           "GEB ROWS IN TIME WITH YOUR RISING",
-          "GEB TIPS THE SCALES AGAINST Ra",
-          "AMUN JOINS THE BARQUE OF Khonsu",
+          "GEB TIPS THE SCALES AGAINST RA",
+          "AMUN JOINS THE BARQUE OF KHONSU",
           "AMUN TIPS THE SCALES AGAINST YOUR RISING",
-          "AMUN ROWS IN TIME WITH Ra",
-          "NUT TIPS THE SCALES AGAINST Khonsu",
+          "AMUN ROWS IN TIME WITH RA",
+          "NUT TIPS THE SCALES AGAINST KHONSU",
           "AMUN JOINS THE BARQUE OF YOUR MIDHEAVEN"
         ],
-        "transits.row.data": [
-          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE",
+        "transits.row.data.ahead": [
           "FEB 2027 → APR 2027 · 1 EXACT · 1 AHEAD · TENSION",
           "APR 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · EASE",
           "MAY 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · TENSION",
@@ -88,19 +94,23 @@
         ],
         "transits.group.open": "OPEN NOW",
         "transits.group.ahead": "AHEAD",
-        "transits.row.title": [
-          "ZEUS MOVES IN ACCORD WITH YOUR RISING",
+        "transits.row.title.open": [
+          "ZEUS MOVES IN ACCORD WITH YOUR RISING"
+        ],
+        "transits.row.data.open": [
+          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE"
+        ],
+        "transits.row.title.ahead": [
           "KRONOS HOLDS THE FAR END OF THE AGORA AGAINST YOUR MIDHEAVEN",
           "KRONOS MOVES IN ACCORD WITH YOUR RISING",
-          "KRONOS CHALLENGES Helios",
-          "ZEUS STANDS SHOULDER TO SHOULDER WITH Selene",
+          "KRONOS CHALLENGES HELIOS",
+          "ZEUS STANDS SHOULDER TO SHOULDER WITH SELENE",
           "ZEUS CHALLENGES YOUR RISING",
-          "ZEUS MOVES IN ACCORD WITH Helios",
-          "OURANOS CHALLENGES Selene",
+          "ZEUS MOVES IN ACCORD WITH HELIOS",
+          "OURANOS CHALLENGES SELENE",
           "ZEUS STANDS SHOULDER TO SHOULDER WITH YOUR MIDHEAVEN"
         ],
-        "transits.row.data": [
-          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE",
+        "transits.row.data.ahead": [
           "FEB 2027 → APR 2027 · 1 EXACT · 1 AHEAD · TENSION",
           "APR 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · EASE",
           "MAY 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · TENSION",
@@ -132,19 +142,23 @@
         ],
         "transits.group.open": "OPEN NOW",
         "transits.group.ahead": "AHEAD",
-        "transits.row.title": [
-          "BAAL HADAD SPEAKS FAVOR OVER YOUR RISING",
+        "transits.row.title.open": [
+          "BAAL HADAD SPEAKS FAVOR OVER YOUR RISING"
+        ],
+        "transits.row.data.open": [
+          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE"
+        ],
+        "transits.row.title.ahead": [
           "EL CONVENES THE COUNCIL AGAINST YOUR MIDHEAVEN",
           "EL SPEAKS FAVOR OVER YOUR RISING",
-          "EL DRAWS THE BOW AGAINST Shapash",
-          "BAAL HADAD SHARES THE COUNCIL SEAT WITH Yarikh",
+          "EL DRAWS THE BOW AGAINST SHAPASH",
+          "BAAL HADAD SHARES THE COUNCIL SEAT WITH YARIKH",
           "BAAL HADAD DRAWS THE BOW AGAINST YOUR RISING",
-          "BAAL HADAD SPEAKS FAVOR OVER Shapash",
-          "SHAMEM DRAWS THE BOW AGAINST Yarikh",
+          "BAAL HADAD SPEAKS FAVOR OVER SHAPASH",
+          "SHAMEM DRAWS THE BOW AGAINST YARIKH",
           "BAAL HADAD SHARES THE COUNCIL SEAT WITH YOUR MIDHEAVEN"
         ],
-        "transits.row.data": [
-          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE",
+        "transits.row.data.ahead": [
           "FEB 2027 → APR 2027 · 1 EXACT · 1 AHEAD · TENSION",
           "APR 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · EASE",
           "MAY 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · TENSION",
@@ -176,19 +190,23 @@
         ],
         "transits.group.open": "OPEN NOW",
         "transits.group.ahead": "AHEAD",
-        "transits.row.title": [
-          "BAAL HAMMON LIGHTS THE HARBOR FOR YOUR RISING",
+        "transits.row.title.open": [
+          "BAAL HAMMON LIGHTS THE HARBOR FOR YOUR RISING"
+        ],
+        "transits.row.data.open": [
+          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE"
+        ],
+        "transits.row.title.ahead": [
           "BAAL HAMMON DEMANDS A PRICE OF YOUR MIDHEAVEN",
           "BAAL HAMMON LIGHTS THE HARBOR FOR YOUR RISING",
-          "BAAL HAMMON TURNS THE PROW AGAINST Semes",
-          "BAAL HAMMON SAILS UNDER ONE BANNER WITH Tanit",
+          "BAAL HAMMON TURNS THE PROW AGAINST SEMES",
+          "BAAL HAMMON SAILS UNDER ONE BANNER WITH TANIT",
           "BAAL HAMMON TURNS THE PROW AGAINST YOUR RISING",
-          "BAAL HAMMON LIGHTS THE HARBOR FOR Semes",
-          "BAAL SHAMEM TURNS THE PROW AGAINST Tanit",
+          "BAAL HAMMON LIGHTS THE HARBOR FOR SEMES",
+          "BAAL SHAMEM TURNS THE PROW AGAINST TANIT",
           "BAAL HAMMON SAILS UNDER ONE BANNER WITH YOUR MIDHEAVEN"
         ],
-        "transits.row.data": [
-          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE",
+        "transits.row.data.ahead": [
           "FEB 2027 → APR 2027 · 1 EXACT · 1 AHEAD · TENSION",
           "APR 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · EASE",
           "MAY 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · TENSION",
@@ -220,19 +238,23 @@
         ],
         "transits.group.open": "OPEN NOW",
         "transits.group.ahead": "AHEAD",
-        "transits.row.title": [
-          "IUPPITER CLASPS THE RIGHT HAND OF YOUR RISING",
+        "transits.row.title.open": [
+          "IUPPITER CLASPS THE RIGHT HAND OF YOUR RISING"
+        ],
+        "transits.row.data.open": [
+          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE"
+        ],
+        "transits.row.title.ahead": [
           "SATURNUS SITS ON THE OPPOSITE BENCH FROM YOUR MIDHEAVEN",
           "SATURNUS CLASPS THE RIGHT HAND OF YOUR RISING",
-          "SATURNUS RAISES THE SPEAR AGAINST Sol",
-          "IUPPITER MARCHES UNDER THE SAME EAGLE AS Luna",
+          "SATURNUS RAISES THE SPEAR AGAINST SOL",
+          "IUPPITER MARCHES UNDER THE SAME EAGLE AS LUNA",
           "IUPPITER RAISES THE SPEAR AGAINST YOUR RISING",
-          "IUPPITER CLASPS THE RIGHT HAND OF Sol",
-          "CAELUS RAISES THE SPEAR AGAINST Luna",
+          "IUPPITER CLASPS THE RIGHT HAND OF SOL",
+          "CAELUS RAISES THE SPEAR AGAINST LUNA",
           "IUPPITER MARCHES UNDER THE SAME EAGLE AS YOUR MIDHEAVEN"
         ],
-        "transits.row.data": [
-          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE",
+        "transits.row.data.ahead": [
           "FEB 2027 → APR 2027 · 1 EXACT · 1 AHEAD · TENSION",
           "APR 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · EASE",
           "MAY 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · TENSION",
@@ -264,25 +286,29 @@
         ],
         "transits.group.open": "OPEN NOW",
         "transits.group.ahead": "AHEAD",
-        "transits.row.title": [
-          "NUT ROWS IN TIME WITH Ra",
-          "AMUN TIPS THE SCALES AGAINST Khonsu",
+        "transits.row.title.open": [
+          "NUT ROWS IN TIME WITH RA",
+          "AMUN TIPS THE SCALES AGAINST KHONSU",
           "AMUN ROWS IN TIME WITH YOUR MIDHEAVEN",
-          "GEB TIPS THE SCALES AGAINST YOUR RISING",
-          "GEB OFFERS A STEADY HAND TO Ra",
+          "GEB TIPS THE SCALES AGAINST YOUR RISING"
+        ],
+        "transits.row.data.open": [
+          "APR 2024 → MAY 2025 · 3 EXACT · 1 AHEAD · EASE",
+          "JUL 2024 → APR 2025 · 3 EXACT · 1 AHEAD · TENSION",
+          "JUL 2024 → APR 2025 · 3 EXACT · 1 AHEAD · EASE",
+          "FEB 2025 → APR 2025 · 1 EXACT · 1 AHEAD · TENSION"
+        ],
+        "transits.row.title.ahead": [
+          "GEB OFFERS A STEADY HAND TO RA",
           "AMUN BARS THE DOOR AGAINST YOUR RISING",
-          "AMUN OFFERS A STEADY HAND TO Khonsu",
+          "AMUN OFFERS A STEADY HAND TO KHONSU",
           "AMUN TIPS THE SCALES AGAINST YOUR MIDHEAVEN",
-          "AMUN BARS THE DOOR AGAINST Ra",
+          "AMUN BARS THE DOOR AGAINST RA",
           "AMUN OFFERS A STEADY HAND TO YOUR MIDHEAVEN",
           "AMUN ROWS IN TIME WITH YOUR RISING",
           "GEB BARS THE DOOR AGAINST YOUR MIDHEAVEN"
         ],
-        "transits.row.data": [
-          "APR 2024 → MAY 2025 · 3 EXACT · 1 AHEAD · EASE",
-          "JUL 2024 → APR 2025 · 3 EXACT · 1 AHEAD · TENSION",
-          "JUL 2024 → APR 2025 · 3 EXACT · 1 AHEAD · EASE",
-          "FEB 2025 → APR 2025 · 1 EXACT · 1 AHEAD · TENSION",
+        "transits.row.data.ahead": [
           "MAR 2025 → APR 2025 · 1 EXACT · 1 AHEAD · EASE",
           "APR 2025 → MAY 2025 · 1 EXACT · 1 AHEAD · TENSION",
           "JUL 2025 → AUG 2025 · 1 EXACT · 1 AHEAD · EASE",
@@ -314,21 +340,25 @@
         ],
         "transits.group.open": "OPEN NOW",
         "transits.group.ahead": "AHEAD",
-        "transits.row.title": [
-          "AMUN ROWS IN TIME WITH YOUR RISING",
+        "transits.row.title.open": [
+          "AMUN ROWS IN TIME WITH YOUR RISING"
+        ],
+        "transits.row.data.open": [
+          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE"
+        ],
+        "transits.row.title.ahead": [
           "GEB BARS THE DOOR AGAINST YOUR MIDHEAVEN",
           "GEB ROWS IN TIME WITH YOUR RISING",
-          "GEB TIPS THE SCALES AGAINST Ra",
-          "AMUN JOINS THE BARQUE OF Khonsu",
+          "GEB TIPS THE SCALES AGAINST RA",
+          "AMUN JOINS THE BARQUE OF KHONSU",
           "AMUN TIPS THE SCALES AGAINST YOUR RISING",
-          "AMUN ROWS IN TIME WITH Ra",
-          "NUT TIPS THE SCALES AGAINST Khonsu",
+          "AMUN ROWS IN TIME WITH RA",
+          "NUT TIPS THE SCALES AGAINST KHONSU",
           "AMUN JOINS THE BARQUE OF YOUR MIDHEAVEN",
           "AMUN OFFERS A STEADY HAND TO YOUR RISING",
-          "AMUN TIPS THE SCALES AGAINST Ra"
+          "AMUN TIPS THE SCALES AGAINST RA"
         ],
-        "transits.row.data": [
-          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE",
+        "transits.row.data.ahead": [
           "FEB 2027 → APR 2027 · 1 EXACT · 1 AHEAD · TENSION",
           "APR 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · EASE",
           "MAY 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · TENSION",
@@ -362,18 +392,18 @@
         ],
         "transits.group.open": "OPEN NOW",
         "transits.group.ahead": "AHEAD",
-        "transits.row.title": [
+        "transits.row.title.ahead": [
           "AMUN ROWS IN TIME WITH YOUR RISING",
           "GEB BARS THE DOOR AGAINST YOUR MIDHEAVEN",
           "GEB ROWS IN TIME WITH YOUR RISING",
-          "GEB TIPS THE SCALES AGAINST Ra",
-          "AMUN JOINS THE BARQUE OF Khonsu",
+          "GEB TIPS THE SCALES AGAINST RA",
+          "AMUN JOINS THE BARQUE OF KHONSU",
           "AMUN TIPS THE SCALES AGAINST YOUR RISING",
-          "AMUN ROWS IN TIME WITH Ra",
-          "NUT TIPS THE SCALES AGAINST Khonsu",
+          "AMUN ROWS IN TIME WITH RA",
+          "NUT TIPS THE SCALES AGAINST KHONSU",
           "AMUN JOINS THE BARQUE OF YOUR MIDHEAVEN"
         ],
-        "transits.row.data": [
+        "transits.row.data.ahead": [
           "OCT 2026 → JUN 2027 · 3 EXACT · 3 AHEAD · EASE",
           "FEB 2027 → APR 2027 · 1 EXACT · 1 AHEAD · TENSION",
           "APR 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · EASE",
@@ -417,19 +447,23 @@
         ],
         "transits.group.open": "OPEN NOW",
         "transits.group.ahead": "AHEAD",
-        "transits.row.title": [
-          "AMUN ROWS IN TIME WITH YOUR RISING",
+        "transits.row.title.open": [
+          "AMUN ROWS IN TIME WITH YOUR RISING"
+        ],
+        "transits.row.data.open": [
+          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE"
+        ],
+        "transits.row.title.ahead": [
           "GEB BARS THE DOOR AGAINST YOUR MIDHEAVEN",
           "GEB ROWS IN TIME WITH YOUR RISING",
-          "GEB TIPS THE SCALES AGAINST Ra",
-          "AMUN JOINS THE BARQUE OF Khonsu",
+          "GEB TIPS THE SCALES AGAINST RA",
+          "AMUN JOINS THE BARQUE OF KHONSU",
           "AMUN TIPS THE SCALES AGAINST YOUR RISING",
-          "AMUN ROWS IN TIME WITH Ra",
-          "NUT TIPS THE SCALES AGAINST Khonsu",
+          "AMUN ROWS IN TIME WITH RA",
+          "NUT TIPS THE SCALES AGAINST KHONSU",
           "AMUN JOINS THE BARQUE OF YOUR MIDHEAVEN"
         ],
-        "transits.row.data": [
-          "OCT 2026 → JUN 2027 · 3 EXACT · 2 AHEAD · EASE",
+        "transits.row.data.ahead": [
           "FEB 2027 → APR 2027 · 1 EXACT · 1 AHEAD · TENSION",
           "APR 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · EASE",
           "MAY 2027 → MAR 2028 · 3 EXACT · 3 AHEAD · TENSION",

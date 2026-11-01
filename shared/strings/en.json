@@ -122,8 +122,10 @@
   "season.sky.row": "{date} · {event}",
   "season.sky.event.ingress": "{planet} INTO {sign}",
   "season.sky.event.retrograde": "{planet} TURNS RETROGRADE",
-  "season.sky.event.conjunction": "{planet} ☌ {planetB}",
-  "season.sky.event.conjunctionExact": "{planet} ☌ {planetB} EXACT",
+  "season.sky.event.direct": "{planet} TURNS DIRECT",
+  "season.sky.event.phase": "{phase} · {sign}",
+  "season.sky.event.eclipseLunar": "LUNAR ECLIPSE · {sign}",
+  "season.sky.event.eclipseSolar": "SOLAR ECLIPSE · {sign}",
   "season.noChart.line": "CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES →",
   "season.noChart.link": "READING",
   "season.votive.tension": {

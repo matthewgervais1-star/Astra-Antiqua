@@ -28,6 +28,12 @@ export interface ScreenInput {
  *   order. A row slot (`week.row.line`, `chart.row`) holds one entry per row,
  *   aligned with the screen's other row slots; an entry is "" where that row
  *   prints nothing in the slot.
+ * - A row slot whose rows print under group headings holds one list per
+ *   group, keyed `<slot>.<group>` (`transits.row.title.open`,
+ *   `transits.row.title.ahead`); slots.ts GROUPED_ROWS names them. A group
+ *   with no rows has no list.
+ * - A row whose block stacks a data line over prose (`season.sky.row`) holds
+ *   both, "\n" between them; the prose line is left out where web has none.
  * - A slot the screen does not print in this state (a chart slot with no
  *   birth, an empty-group line when the group has rows) is absent. No slot
  *   is ever "".

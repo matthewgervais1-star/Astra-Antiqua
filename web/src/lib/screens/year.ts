@@ -9,10 +9,7 @@ import {
 } from "@/lib/yearForecast";
 import { buildAnnualReport, type AnnualReport } from "@/lib/annualReport";
 import { buildSkyOnlyTimeline, yearVotive, yearVotiveTone } from "@/components/horizons/yearContent";
-import { INGRESS_VERB } from "@/lib/weekReading";
-import { SIGN_PHRASES } from "@/strings/formats";
-import { properCase } from "@/components/horizons/format";
-import { DEITY_MATRIX } from "@/data/deities";
+import { ingressSentence } from "@/components/horizons/seasonContent";
 import type { SavedNatal } from "@/lib/savedNatal";
 import type { Culture } from "@/data/cultures";
 import { fmt, str } from "@/strings";
@@ -70,7 +67,7 @@ export function buildYearScreen(input: ScreenInput): YearScreen {
   const ingressProse = new Map(
     ingresses.map((ing) => [
       `ingress-${ing.planet}-${ing.date.toISOString()}`,
-      `${DEITY_MATRIX[culture][ing.planet].name} ${INGRESS_VERB[culture]} the ${properCase(SIGN_PHRASES[ing.toSign])}.`,
+      ingressSentence(culture, ing.planet, ing.toSign),
     ]),
   );
 
