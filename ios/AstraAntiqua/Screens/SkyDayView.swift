@@ -301,8 +301,15 @@ struct ChartTodayRow: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack(alignment: .top, spacing: 14) {
-                GlyphView(culture: culture, planet: row.planet, size: 24,
-                          tint: row.planet.isReceived ? Ink.harmony : Ink.bone)
+                Group {
+                    if let planet = row.planet {
+                        GlyphView(culture: culture, planet: planet, size: 24,
+                                  tint: planet.isReceived ? Ink.harmony : Ink.bone)
+                    } else {
+                        // A group nothing touches: the column stays, empty.
+                        Color.clear
+                    }
+                }
                     .frame(width: 24, height: 24)
                     .padding(.top, 3)
                     .frame(width: 26, alignment: .leading)

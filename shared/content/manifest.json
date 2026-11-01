@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "206f66627d12ad5ff8b3dabf34df85e0cd72744e",
+  "sourceCommit": "0f356fe52215a92d90dfef8413ce801f098e1700",
   "counts": {
     "cultures": 5,
     "planets": 10,
@@ -10,6 +10,7 @@
     "aspectRules": 5,
     "pairThemes": 45,
     "cities": 60,
+    "methodSections": 3,
     "glyphs": 50
   }
 }

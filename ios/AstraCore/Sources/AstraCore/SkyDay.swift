@@ -10,8 +10,8 @@ import Foundation
 /// holds the page to shared/goldens/screens/day.json.
 public struct SkyDayPage: Sendable, Hashable {
     public struct ChartRow: Sendable, Hashable {
-        /// The moving body: the row's glyph.
-        public let planet: Planet
+        /// The moving body: the row's glyph, or nil on a group nothing touches.
+        public let planet: Planet?
         /// dayPressure's clause: "Isis rows in time with your Amun in the eighth. It touches …"
         public let sentence: String
         /// "VENUS △ NATAL JUPITER · 0.8° FROM EXACT · ", or nil on a group nothing touches.
@@ -139,15 +139,19 @@ public enum SkyDayBuilder {
             let today = Ephemeris.computeChart(DayDecreeComposer.utcDayStart(now))
             let groups = DayPressure.compute(
                 natal: natal.longitudes, ascendant: natal.ascendant, today: today, culture: culture, store: store)
-            let live = groups.compactMap { g -> SkyDayPage.ChartRow? in
-                guard let lead = g.lead else { return nil }
+            // Every group prints a row, as web's day model does: a group nothing
+            // touches keeps its "Nothing exact touches your ..." sentence with
+            // no glyph, data or tone.
+            rows = groups.map { g -> SkyDayPage.ChartRow in
+                guard let lead = g.lead else {
+                    return SkyDayPage.ChartRow(planet: nil, sentence: g.sentence,
+                                               data: nil, tone: nil, tension: false)
+                }
                 return SkyDayPage.ChartRow(
                     planet: lead.transit, sentence: g.sentence,
                     data: dataLine(lead, culture: culture, store: store),
                     tone: f.toneWord(lead.kind), tension: lead.kind.isHard)
             }
-            // No contact anywhere: no rows, so no label over nothing.
-            rows = live.isEmpty ? nil : live
             if let spans,
                let lt = LongTransitPick.pick(spans: spans, now: now, today: today, culture: culture, store: store) {
                 let ahead = lt.span.passes.filter { $0 > now }.count
