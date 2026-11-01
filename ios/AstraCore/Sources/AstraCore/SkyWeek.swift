@@ -82,6 +82,7 @@ public enum SkyWeekBuilder {
     /// the first body stands in at the row's instant.
     public static func shorthand(_ s: WeekShorthand, tone: WeekTone, conjunctionSign: ZodiacSign?,
                                  store: ContentStore) -> String {
+        // Unicode body symbols, as the board prints them; the web draws each body as a DeityGlyph image.
         switch s.kind {
         case .aspect:
             guard let a = s.a, let b = s.b, let k = s.aspect else { return "" }

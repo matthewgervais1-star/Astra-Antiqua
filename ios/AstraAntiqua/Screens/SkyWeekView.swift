@@ -19,12 +19,15 @@ struct SkyWeekView: View {
     var onSection: (ChromeSection) -> Void = { _ in }
     var onHorizon: (SkyHorizon) -> Void = { _ in }
     var onMenu: () -> Void = {}
-    @State private var day = SkyWeekKey.localDay(Date(), zone: .current)
+    /// The reader's calendar day as last read; nil until the first refresh.
+    @State private var day: Int?
     @State private var loaded: (key: SkyWeekKey, page: SkyWeekPage)?
 
     var body: some View {
         let culture = state.cultureOrDefault
-        let key = SkyWeekKey(culture: culture, day: day)
+        let zone = state.zone
+        let key = SkyWeekKey(culture: culture, zone: zone.identifier,
+                             day: day ?? SkyWeekKey.localDay(Date(), zone: zone))
         GlassScreen(culture: culture, section: .sky, horizon: .week, contentBottom: SkyWeekMetrics.bottom,
                     onSection: onSection, onHorizon: onHorizon, onMenu: onMenu) {
             if let loaded {
@@ -36,7 +39,7 @@ struct SkyWeekView: View {
         .task(id: key) { await load(key) }
         .task {
             while !Task.isCancelled {
-                try? await Task.sleep(for: .seconds(60))
+                do { try await Task.sleep(for: .seconds(60)) } catch { return }
                 refreshDay()
             }
         }
@@ -52,7 +55,7 @@ struct SkyWeekView: View {
 
     private func load(_ key: SkyWeekKey) async {
         let store = state.store
-        let zone = state.zone
+        let zone = TimeZone(identifier: key.zone) ?? state.zone
         let page = await Task.detached(priority: .userInitiated) {
             SkyWeekBuilder.build(culture: key.culture, now: Date(), zone: zone, store: store)
         }.value
@@ -61,10 +64,12 @@ struct SkyWeekView: View {
     }
 }
 
-/// What a composed week depends on: the culture and the reader's calendar
-/// day, which decides the week and its TODAY row.
+/// What a composed week depends on: the culture, the reader's zone and
+/// calendar day, which decide the week and its TODAY row.
 struct SkyWeekKey: Hashable, Sendable {
     let culture: Culture
+    /// The zone's identifier, "Europe/Rome".
+    let zone: String
     let day: Int
 
     /// 20261021 for 21 Oct 2026 in `zone`.
@@ -233,6 +238,10 @@ struct MoonFactsBand: View {
 /// P171: the Moon's disc under the text, its centre on the band's at rest.
 /// It rises `MoonParallax.rate` points for each point the page scrolls, so
 /// within the scrolling content it is moved down by the rest of the scroll.
+/// A screenshot run's drawn scroll (the environment) places it in layout,
+/// where the P171 probe measures it; the live scroll moves it at draw time
+/// (`visualEffect`), read from its own geometry, with no state written per
+/// frame.
 struct MoonBehindText: View {
     @Environment(\.glassScrollOffset) private var scroll
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -250,6 +259,10 @@ struct MoonBehindText: View {
             .accessibilityHidden(true)
             .placement("P171")
             .position(x: P.discShow / 2, y: bandMidY + (1 - rate) * scroll)
+            .visualEffect { content, proxy in
+                let live = proxy.frame(in: .named(GlassScroll.contentSpace)).minY - proxy.frame(in: .scrollView).minY
+                return content.offset(y: (1 - rate) * max(0, live))
+            }
     }
 }
 
@@ -258,7 +271,9 @@ struct MoonBehindText: View {
 /// and the lit part in bone at .1. The terminator is the half-ellipse the
 /// board draws, of semi-axis r × |1 − 2 × lit|, on the lit side's far half
 /// for a gibbous Moon and the near half for a crescent; a waxing Moon is lit
-/// on the right.
+/// on the right. The outline's outer half falls outside the frame at the
+/// top, the bottom and the right, where the board's SVG (viewBox 220 tall,
+/// circle r 110, stroke 1) clips it too; kept as the board draws it.
 struct MoonDiscShape: View {
     let lit: Double
     let waxing: Bool

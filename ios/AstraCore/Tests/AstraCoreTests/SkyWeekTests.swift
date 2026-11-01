@@ -47,6 +47,41 @@ final class SkyWeekTests: XCTestCase {
         XCTAssertEqual(page.moonLit, 0.74, accuracy: 0.005)
     }
 
+    func test_aLateSundayInLosAngelesReadsTheLocalWeek() throws {
+        let store = try Fixtures.store()
+        let zone = try XCTUnwrap(TimeZone(identifier: "America/Los_Angeles"))
+        // Sunday 25 Oct 2026, 23:00 PDT: already Monday 26 in UTC.
+        let page = SkyWeekBuilder.build(
+            culture: .egypt, now: try Fixtures.instant("2026-10-26T06:00:00.000Z"), zone: zone, store: store)
+        XCTAssertEqual(page.rows.map { "\($0.weekday) \($0.dayNumber)" },
+                       ["MON 19", "TUE 20", "WED 21", "THU 22", "FRI 23", "SAT 24", "SUN 25"])
+        XCTAssertEqual(page.rows.map(\.isToday), [false, false, false, false, false, false, true])
+        XCTAssertEqual(page.rows.firstIndex { $0.isToday }, 6)
+    }
+
+    func test_anEarlyMondayInAucklandReadsTheLocalWeek() throws {
+        let store = try Fixtures.store()
+        let zone = try XCTUnwrap(TimeZone(identifier: "Pacific/Auckland"))
+        // Monday 26 Oct 2026, 01:00 NZDT: still Sunday 25 in UTC.
+        let page = SkyWeekBuilder.build(
+            culture: .egypt, now: try Fixtures.instant("2026-10-25T12:00:00.000Z"), zone: zone, store: store)
+        XCTAssertEqual(page.rows.map { "\($0.weekday) \($0.dayNumber)" },
+                       ["MON 26", "TUE 27", "WED 28", "THU 29", "FRI 30", "SAT 31", "SUN 1"])
+        XCTAssertEqual(page.rows.map(\.isToday), [true, false, false, false, false, false, false])
+        XCTAssertEqual(page.rows.firstIndex { $0.isToday }, 0)
+    }
+
+    func test_aWaningMoonIsReadAsWaning() throws {
+        let store = try Fixtures.store()
+        // Ten days after the full Moon of 26 Oct 2026.
+        let page = SkyWeekBuilder.build(
+            culture: .egypt, now: try Fixtures.instant("2026-11-05T06:00:00.000Z"), zone: Fixtures.utc, store: store)
+        XCTAssertFalse(page.moonWaxing)
+        XCTAssertEqual(page.moonLines[1], "WANING CRESCENT")
+        XCTAssertEqual(page.moonLines[3], "NEW MOON")
+        XCTAssertLessThan(page.moonLit, 0.5)
+    }
+
     func test_everyGoldenWeekKeepsTheWebsLinesAndRomesFlags() throws {
         let store = try Fixtures.store()
         for golden in try Fixtures.horizons().weeks {
