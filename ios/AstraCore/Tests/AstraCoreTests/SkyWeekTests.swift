@@ -3,8 +3,10 @@ import Foundation
 import XCTest
 
 /// Sky Week's words: the rows' lines are the web's week (horizons.json, key
-/// `weeks`), and the board's forms built from them are pinned here for the
-/// sample state Sky Day uses, Egypt at 2026-10-21 06:00 UTC, read in UTC.
+/// `weeks`), and the catalog's forms built from them (the ruled table of
+/// 2026-11-01) are pinned here for the sample state Sky Day uses, Egypt at
+/// 2026-10-21 06:00 UTC, read in UTC. ScreenGoldenTests holds every slot to
+/// shared/goldens/screens/week.json.
 final class SkyWeekTests: XCTestCase {
     private func samplePage() throws -> SkyWeekPage {
         let store = try Fixtures.store()
@@ -12,11 +14,11 @@ final class SkyWeekTests: XCTestCase {
             culture: .egypt, now: try Fixtures.instant("2026-10-21T06:00:00.000Z"), zone: Fixtures.utc, store: store)
     }
 
-    func test_theSampleWeekPrintsTheBoardsHeadAndCount() throws {
+    func test_theSampleWeekPrintsTheRuledHeadAndCount() throws {
         let page = try samplePage()
         XCTAssertEqual(page.kicker, "19 → 25 OCT 2026 · THE HALL OF MA’AT")
-        XCTAssertEqual(page.headline, "The week")
-        XCTAssertEqual(page.count, "SEVEN DAYS · SEVEN WEIGHED")
+        XCTAssertEqual(page.headline, "SEVEN DAYS WEIGHED")
+        XCTAssertEqual(page.count, "SEVEN DAYS · SEVEN WEIGHED · NONE QUIET")
     }
 
     func test_theSampleWeekRowsCarryTheWebsLinesInTheBoardsForms() throws {
@@ -32,8 +34,8 @@ final class SkyWeekTests: XCTestCase {
             "♀ □ ♇ · TIGHT · TENSION",
             "♀ □ ♇ · TIGHT · TENSION",
             "☽ □ ♅ · TENSION",
-            "☉ → SCO",
-            "☽ ☌ ♆ · TIGHT · ARIES · EASE",
+            "☉ INTO SCORPIO",
+            "☽ ☌ ♆ · TIGHT · ARIES · UNION",
             "☽ △ ♂ · EASE",
         ])
         XCTAssertEqual(page.rows.map(\.tension), [true, true, true, true, false, false, false])
@@ -90,27 +92,32 @@ final class SkyWeekTests: XCTestCase {
             let page = SkyWeekBuilder.build(culture: culture, now: start, zone: Fixtures.utc, store: store)
             XCTAssertEqual(page.rows.map(\.line), golden.days.map(\.line), golden.culture)
             XCTAssertEqual(page.rows.map(\.tension), golden.days.map { $0.tone == "tension" }, golden.culture)
-            XCTAssertEqual(page.headline, "The week", golden.culture)
+            XCTAssertEqual(page.headline, store.strings.text("week.title", culture), golden.culture)
             for (row, day) in zip(page.rows, golden.days) {
                 let label = day.label.split(separator: " ").map(String.init)
-                let weekday = day.flag.map { "\(label[0]) \($0)" } ?? label[0]
-                XCTAssertEqual(row.weekday, weekday, "\(golden.culture) \(day.label)")
-                XCTAssertEqual(row.dayNumber, label[1], "\(golden.culture) \(day.label)")
+                let number = day.flag.map { "\(label[1]) \($0)" } ?? label[1]
+                XCTAssertEqual(row.weekday, label[0], "\(golden.culture) \(day.label)")
+                XCTAssertEqual(row.dayNumber, number, "\(golden.culture) \(day.label)")
                 if day.tone == "quiet" { XCTAssertEqual(row.shorthand, "QUIET") }
             }
         }
     }
 
-    func test_theCountLineLeavesOutAPartThatCountsNone() {
+    func test_theCountLinePrintsNoneForAPartThatCountsNothing() throws {
+        let store = try Fixtures.store()
         func days(_ tones: [WeekTone]) -> [WeekDay] {
             tones.enumerated().map { i, tone in
                 WeekDay(date: Date(timeIntervalSince1970: 0), year: 2026, month: 10, day: 19 + i, label: "MON \(19 + i)",
                         isToday: false, headline: nil, line: "", shorthand: WeekShorthand(kind: .quiet), tone: tone, flag: nil)
             }
         }
-        XCTAssertEqual(SkyWeekBuilder.countLine(days([.harmony, .tension, .harmony, .quiet, .harmony, .harmony, .harmony])),
+        XCTAssertEqual(SkyWeekBuilder.countLine(days([.harmony, .tension, .harmony, .quiet, .harmony, .harmony, .harmony]),
+                                                culture: .egypt, store: store),
                        "SEVEN DAYS · SIX WEIGHED · ONE QUIET")
-        XCTAssertEqual(SkyWeekBuilder.countLine(days(Array(repeating: .quiet, count: 7))), "SEVEN DAYS · SEVEN QUIET")
+        XCTAssertEqual(SkyWeekBuilder.countLine(days(Array(repeating: .quiet, count: 7)), culture: .egypt, store: store),
+                       "SEVEN DAYS · NONE WEIGHED · SEVEN QUIET")
+        XCTAssertEqual(SkyWeekBuilder.countLine(days([.harmony, .tension]), culture: .egypt, store: store),
+                       "TWO DAYS · TWO WEIGHED · NONE QUIET")
     }
 
     func test_theBoardsKickerSpansTheWeeksDates() throws {

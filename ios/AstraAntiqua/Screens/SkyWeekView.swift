@@ -338,7 +338,7 @@ struct SkyWeekRow: View {
                              color: row.tension ? Ink.conflict : Ink.dim)
                     Spacer(minLength: 0)
                     if row.isToday {
-                        BoxLabel(text: "TODAY", height: 11 * 1.4, tracking: 11 * 0.1, color: Ink.bone)
+                        BoxLabel(text: row.today, height: 11 * 1.4, tracking: 11 * 0.1, color: Ink.bone)
                     }
                 }
                 CSSText(row.line, style: M.line)

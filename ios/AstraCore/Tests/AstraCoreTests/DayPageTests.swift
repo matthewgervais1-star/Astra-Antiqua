@@ -149,7 +149,7 @@ final class DayPageTests: XCTestCase {
         XCTAssertEqual(page.season, "SUN IN LIBRA · DAY 29 OF 31")
         XCTAssertEqual([page.seasonStart, page.seasonToGo, page.seasonEnd], ["23 SEP", "2 TO GO", "23 OCT"])
         let rows = try XCTUnwrap(page.chartRows)
-        XCTAssertEqual(rows.map(\.sentence), egypt.pressure.filter { $0.lead != nil }.map(\.sentence))
+        XCTAssertEqual(rows.map(\.sentence), egypt.pressure.map(\.sentence))
         XCTAssertEqual(rows[1].data, "VENUS △ NATAL JUPITER · 0.8° FROM EXACT · ")
         XCTAssertEqual(rows[1].tone, "EASE")
         let card = try XCTUnwrap(page.longTransit)
@@ -158,5 +158,45 @@ final class DayPageTests: XCTestCase {
         XCTAssertEqual(card.title2, "ROWS IN TIME WITH YOUR NATAL ASCENDANT")
         XCTAssertEqual(card.footer, "3 EXACT · 2 AHEAD · EASE")
         for row in rows { print("SKYDAY row:", row.sentence, "|", row.data ?? "", row.tone ?? "") }
+    }
+    /// Web's day model prints one chart row per house group, a group nothing
+    /// touches included: its "Nothing exact touches your ..." sentence with an
+    /// empty data line (web/src/lib/screens/day.ts). The screen goldens hold no
+    /// such day yet, so this test finds a birth with a group no natal body
+    /// stands in, a group that is empty on every day, and checks its row.
+    func test_aGroupNothingTouchesStillPrintsItsRow() throws {
+        let store = try Fixtures.store()
+        let now = try Fixtures.instant("2026-10-21T06:00:00.000Z")
+        let today = Ephemeris.computeChart(DayDecreeComposer.utcDayStart(now))
+        var found: (NatalChart, [PressureGroup])?
+        search: for day in 1...28 {
+            for hour in stride(from: 0, to: 24, by: 2) {
+                let birth = SavedBirth(
+                    name: "Quiet group", culture: .egypt, year: 1990, month: 1, day: day, hour: hour, minute: 0,
+                    latitude: 41.9028, longitude: 12.4964, placeName: "Rome, Italy",
+                    timeZone: "Europe/Rome", zoneEstimated: false)
+                let chart = birth.cast(rules: store.aspectRules)
+                let groups = DayPressure.compute(
+                    natal: chart.longitudes, ascendant: chart.ascendant, today: today, culture: .egypt, store: store)
+                if groups.contains(where: { $0.lead == nil }) {
+                    found = (chart, groups)
+                    break search
+                }
+            }
+        }
+        let (chart, groups) = try XCTUnwrap(found, "no birth in the search has a group nothing touches")
+        let page = SkyDayBuilder.build(
+            culture: .egypt, now: now, zone: TimeZone(identifier: "Europe/Rome")!, natal: chart, spans: nil, store: store)
+        let rows = try XCTUnwrap(page.chartRows, "the chart section is gone")
+        XCTAssertEqual(rows.count, groups.count)
+        XCTAssertEqual(rows.map(\.sentence), groups.map(\.sentence))
+        for (row, group) in zip(rows, groups) where group.lead == nil {
+            XCTAssertTrue(row.sentence.hasPrefix("Nothing exact touches your "), row.sentence)
+            XCTAssertNil(row.planet)
+            XCTAssertNil(row.data)
+            XCTAssertNil(row.tone)
+            XCTAssertFalse(row.tension)
+            XCTAssertEqual(row.dataLine ?? "", "")
+        }
     }
 }

@@ -117,7 +117,7 @@ struct HorizonsView: View {
         return NaveHead(
             kicker: "\(words.cultureLabel) · the week",
             headline: "The week",
-            sub: Format.enDashRange(Format.dayMonth(monday, zone: zone), words.dayMonthYear(sunday)))
+            sub: Format.enDashRange(words.store.formats.dayMonth(monday, zone: zone), words.dayMonthYear(sunday)))
     }
 
     private var loadedWeek: WeekSky? {
@@ -263,7 +263,7 @@ struct HorizonsView: View {
             if let last = groups.last, last.id == id {
                 groups[groups.count - 1].lines.append(line)
             } else {
-                groups.append(HorizonMonth(id: id, label: Format.monthYear(line.date, zone: zone), lines: [line]))
+                groups.append(HorizonMonth(id: id, label: Content.store.formats.monthYear(line.date, zone: zone), lines: [line]))
             }
         }
         return groups
