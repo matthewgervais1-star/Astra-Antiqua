@@ -54,7 +54,7 @@ import com.astra.antiqua.ui.screens.OnboardingScreen
 import com.astra.antiqua.ui.screens.PlacementScreen
 import com.astra.antiqua.ui.screens.PlacementsScreen
 import com.astra.antiqua.ui.screens.SynastryScreen
-import com.astra.antiqua.ui.screens.SeasonScreen
+import com.astra.antiqua.ui.screens.SkySeasonScreen
 import com.astra.antiqua.ui.screens.YearScreen
 import com.astra.antiqua.ui.screens.FigureScreen
 import com.astra.antiqua.ui.screens.TransitDetailScreen
@@ -170,8 +170,9 @@ fun AstraNavHost(
         composable(Route.WEEK) {
             SkyWeekScreen(culture = culture, onNavigate = go, onOpen = open)
         }
-        flat(Route.SEASON) {
-            SeasonScreen(culture = culture, onNavigate = go)
+        // SKY · SEASON on the glass chrome (step 4); the flat SeasonScreen leaves the graph.
+        composable(Route.SEASON) {
+            SkySeasonScreen(culture = culture, onNavigate = go)
         }
         flat(Route.YEAR) {
             YearScreen(culture = culture, onNavigate = go)

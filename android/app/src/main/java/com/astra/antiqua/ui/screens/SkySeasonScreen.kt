@@ -1,0 +1,335 @@
+package com.astra.antiqua.ui.screens
+
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.astra.antiqua.domain.ScriptNameKey
+import com.astra.antiqua.domain.SeasonRowTone
+import com.astra.antiqua.domain.SeasonSkyRow
+import com.astra.antiqua.domain.SkySeason
+import com.astra.antiqua.domain.SkySeasonComposer
+import com.astra.antiqua.domain.SkyWeekComposer
+import com.astra.antiqua.model.AncientCulture
+import com.astra.antiqua.model.Planet
+import com.astra.antiqua.ui.components.DeityGlyph
+import com.astra.antiqua.ui.components.ScriptName
+import com.astra.antiqua.ui.nav.Horizon
+import com.astra.antiqua.ui.nav.Route
+import com.astra.antiqua.ui.theme.Bone
+import com.astra.antiqua.ui.theme.Cinzel
+import com.astra.antiqua.ui.theme.Conflict
+import com.astra.antiqua.ui.theme.Dim
+import com.astra.antiqua.ui.theme.LocalAccent
+import com.astra.antiqua.ui.theme.LocalSmallCapsDisplay
+import com.astra.antiqua.ui.theme.Prose
+import com.astra.antiqua.ui.theme.Spectral
+import com.astra.antiqua.ui.theme.SpectralSc
+import com.astra.antiqua.ui.theme.glass.GlassScreen
+import com.astra.antiqua.ui.theme.glass.GlassSection
+import com.astra.antiqua.viewmodel.AstraViewModelFactory
+import com.astra.antiqua.viewmodel.SkySeasonViewModel
+import kotlin.math.cos
+import kotlin.math.floor
+import kotlin.math.sin
+
+/**
+ * SKY · SEASON on the glass chrome (canvas boards Glass-Season and
+ * Glass-Season-scrolled; placement table P32 to P42 and P54 in the design
+ * worktree's `.superpowers/sdd/glass-build/report-r3b.md`). The board's
+ * sections in its order, filled with the web's season (SeasonNave.tsx,
+ * seasonContent.ts, lib/season.ts): the institution, the title, the bar's
+ * fill and its day line, the sign's blurb, the house sentence, the season's
+ * sky rows. The kicker's date range, the bar's end dates, the house title and
+ * the wheel are the board's own forms.
+ */
+@Composable
+fun SkySeasonScreen(
+    culture: AncientCulture,
+    onNavigate: (String) -> Unit,
+) {
+    val model: SkySeasonViewModel = viewModel(factory = AstraViewModelFactory)
+    val season by model.season.collectAsState()
+    LaunchedEffect(culture) { model.load(culture) }
+    SkySeasonFrame(culture = culture, season = season, onNavigate = onNavigate)
+}
+
+/** Sky Season inside its chrome, from a composed [season]; the screenshot test draws this. */
+@Composable
+fun SkySeasonFrame(
+    culture: AncientCulture,
+    season: SkySeason?,
+    onNavigate: (String) -> Unit = {},
+    scrollState: ScrollState = rememberScrollState(),
+) {
+    GlassScreen(
+        culture = culture,
+        section = GlassSection.SKY,
+        horizon = Horizon.SEASON,
+        scrollState = scrollState,
+        contentBottom = SeasonBoard.padBottom,
+        onSection = { onNavigate(it.route()) },
+        onHorizon = { onNavigate(it.route) },
+        // The culture sheet is step 10; until then the menu opens the Voices list.
+        onMenu = { onNavigate(Route.VOICES) },
+    ) {
+        if (season != null) SkySeasonContent(culture, season)
+    }
+}
+
+/** The board's numbers, in points read as dp (Glass-Season's markup at default levers). */
+private object SeasonBoard {
+    val side = 24.dp
+    val padBottom = 120.dp
+    val sectionGap = 36.dp
+    val ruleSection = Color(0xFFE6DECC).copy(alpha = 0.16f)
+    val ruleRow = Color(0xFFE6DECC).copy(alpha = 0.10f)
+    val track = Color(0xFFE6DECC).copy(alpha = 0.14f)
+
+    /** P54: the wheel, 120 across in a 120 view box; radii 56, 30 and the Sun's ring on 43. */
+    val wheelSize = 120.dp
+    const val outer = 56f
+    const val inner = 30f
+    const val mark = 43f
+    val houseFill = Color(0xFFE6DECC).copy(alpha = 0.14f)
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun SkySeasonContent(culture: AncientCulture, season: SkySeason) {
+    val side = Modifier.fillMaxWidth().padding(horizontal = SeasonBoard.side)
+    val window = season.window
+
+    // P32: the kicker, the season's dates and the institution, the institution as a script name.
+    val kicker = mono(11.sp, 1.6f, 0.16f)
+    FlowRow(modifier = side.testTag("P32"), horizontalArrangement = Arrangement.Center) {
+        Text("${SkyWeekComposer.range(window.start, window.end)} · ", style = kicker, color = Dim)
+        ScriptName(
+            culture = culture,
+            key = ScriptNameKey.Institution,
+            style = kicker,
+            color = Dim,
+            upper = true,
+            textAlign = TextAlign.Center,
+            contentAlignment = Alignment.Center,
+        )
+    }
+
+    // P33: the Sun's god.
+    Box(Modifier.fillMaxWidth().padding(top = 24.dp), contentAlignment = Alignment.Center) {
+        DeityGlyph(body = Planet.SUN, culture = culture, size = 34.dp, modifier = Modifier.testTag("P33"))
+    }
+
+    // P34: web's title in its own case; Rome keeps Cinzel at .08em.
+    val smallCaps = LocalSmallCapsDisplay.current
+    Text(
+        text = season.headline,
+        style = TextStyle(
+            fontFamily = if (smallCaps) SpectralSc else Cinzel,
+            fontWeight = FontWeight.Medium,
+            fontSize = 26.sp,
+            lineHeight = 26.sp * 1.35f,
+            letterSpacing = if (smallCaps) 0.06.em else 0.08.em,
+            lineHeightStyle = CssLeading,
+        ),
+        color = Bone,
+        textAlign = TextAlign.Center,
+        modifier = side.padding(top = 16.dp).testTag("P34").semantics { heading() },
+    )
+
+    // P35: the bar at web's fill, the board's end dates and web's day line between them.
+    Column(side.padding(top = 22.dp).testTag("P35")) {
+        Box(Modifier.fillMaxWidth().height(3.dp).background(SeasonBoard.track)) {
+            Box(Modifier.fillMaxWidth(season.barPercent / 100f).fillMaxHeight().background(Bone))
+        }
+        // CSS line-height 1: the row is 11 tall and the glyphs overflow it, as on the board,
+        // and further at a large font scale.
+        Row(Modifier.fillMaxWidth().padding(top = 9.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            val small = mono(11.sp, 1f, 0.1f)
+            val box = Modifier.height(11.dp).wrapContentHeight(unbounded = true)
+            Text(SkySeasonComposer.dayMonth(window.start), style = small, color = Dim, modifier = box)
+            Text(season.status, style = small, color = Bone, modifier = box)
+            Text(SkySeasonComposer.dayMonth(window.end), style = small, color = Dim, modifier = box)
+        }
+    }
+
+    // P36: the sign's blurb.
+    Text(
+        season.signProse,
+        style = TextStyle(fontFamily = Spectral, fontWeight = FontWeight.Light, fontSize = 18.sp, lineHeight = 18.sp * 1.65f, lineHeightStyle = CssLeading),
+        color = Prose,
+        modifier = side.padding(top = 26.dp).testTag("P36"),
+    )
+
+    // P37 to P39 and P54: the house the season walks through, centred; with no
+    // birth record, web's WHAT IT TOUCHES sentence for the sky alone.
+    val house = season.house
+    val ascendant = season.ascendant
+    if (house != null && ascendant != null) {
+        SeasonLabel("THROUGH YOUR CHART", "P37", bottom = 16.dp)
+        Text(
+            house.title,
+            style = TextStyle(fontFamily = SpectralSc, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 16.sp * 1.45f, letterSpacing = 0.06.em, lineHeightStyle = CssLeading),
+            color = Bone,
+            textAlign = TextAlign.Center,
+            modifier = side.testTag("P38").semantics { heading() },
+        )
+        Text(
+            house.prose,
+            style = lessonProse,
+            color = Prose,
+            textAlign = TextAlign.Center,
+            modifier = side.padding(top = 10.dp).testTag("P39"),
+        )
+        Box(Modifier.fillMaxWidth().padding(top = 16.dp), contentAlignment = Alignment.Center) {
+            HouseWheel(ascendant, season.sun, house.house, house.ordinal)
+        }
+    } else {
+        SeasonLabel("WHAT IT TOUCHES", "P37", bottom = 16.dp)
+        Text(season.touchesSky, style = lessonProse, color = Prose, textAlign = TextAlign.Center, modifier = side.testTag("P39"))
+    }
+
+    // P40 to P42: the season's sky, web's rows in the board's ruled rows.
+    SeasonLabel("THE SEASON'S SKY", "P40", bottom = 4.dp)
+    season.rows.forEachIndexed { i, row ->
+        // The board draws two rows, P41 and P42; a season with more adds rows past them.
+        SkyRow(row, if (i < 2) "P${41 + i}" else "row-${i + 1}")
+    }
+}
+
+private val lessonProse = TextStyle(fontFamily = Spectral, fontWeight = FontWeight.Light, fontSize = 17.sp, lineHeight = 17.sp * 1.65f, lineHeightStyle = CssLeading)
+
+/** A section label between two rules, the board's section gap above it (P37, P40). */
+@Composable
+private fun SeasonLabel(text: String, id: String, bottom: Dp) {
+    Row(
+        // CSS line-height 1: the box is 11 tall and the glyphs overflow it, as on the board.
+        modifier = Modifier.fillMaxWidth().padding(horizontal = SeasonBoard.side)
+            .padding(top = SeasonBoard.sectionGap, bottom = bottom).heightIn(min = 11.dp).testTag(id),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+    ) {
+        Box(Modifier.weight(1f).height(1.dp).background(SeasonBoard.ruleSection))
+        Text(text, style = mono(11.sp, 1f, 0.2f), color = Dim, modifier = Modifier.height(11.dp).wrapContentHeight(unbounded = true).semantics { heading() })
+        Box(Modifier.weight(1f).height(1.dp).background(SeasonBoard.ruleSection))
+    }
+}
+
+/**
+ * One of web's season-sky rows, "3 OCT ISIS STATIONED ℞", the date in its
+ * tone's ink (conflict, accent or dim) and the label in prose, inside the
+ * board's row: 16 above and below, a rule at bone .10 under it.
+ */
+@Composable
+private fun SkyRow(row: SeasonSkyRow, id: String) {
+    val ink = when (row.tone) {
+        SeasonRowTone.CONFLICT -> Conflict
+        SeasonRowTone.HARMONY -> LocalAccent.current
+        SeasonRowTone.DIM -> Dim
+    }
+    Column(Modifier.padding(horizontal = SeasonBoard.side).fillMaxWidth().testTag(id)) {
+        Text(
+            buildAnnotatedString {
+                withStyle(SpanStyle(color = ink)) { append(SkySeasonComposer.dayMonth(row.date)) }
+                append(" ")
+                append(row.label)
+            },
+            style = mono(11.sp, 1.4f, 0.1f),
+            color = Prose,
+            modifier = Modifier.padding(vertical = 16.dp),
+        )
+        Box(Modifier.fillMaxWidth().height(1.dp).background(SeasonBoard.ruleRow))
+    }
+}
+
+/**
+ * P54: twelve whole-sign houses counter-clockwise from the Ascendant on the
+ * left, the season's house filled at bone 14%, the Sun's mark (a ring and a
+ * dot) at its longitude, a short tick at the Ascendant. A longitude λ sits at
+ * screen angle 180° − (λ − Ascendant), measured clockwise from the right as
+ * Compose draws arcs, which puts the Ascendant at the left and the houses
+ * running down from it.
+ */
+@Composable
+private fun HouseWheel(ascendant: Double, sun: Double, house: Int, ordinal: String) {
+    Box(
+        Modifier
+            .size(SeasonBoard.wheelSize)
+            .testTag("P54")
+            .semantics { contentDescription = "Your houses: the Sun in the $ordinal" }
+            .drawBehind { drawWheel(ascendant, sun, house) },
+    )
+}
+
+internal fun wheelAngle(longitude: Double, ascendant: Double): Float = (180.0 - (longitude - ascendant)).toFloat()
+
+private fun DrawScope.drawWheel(ascendant: Double, sun: Double, house: Int) {
+    val k = size.width / 120f
+    val c = Offset(size.width / 2, size.height / 2)
+    val stroke = Stroke(width = 1.5.dp.toPx())
+    fun at(angle: Float, r: Float) = Offset(
+        c.x + r * k * cos(Math.toRadians(angle.toDouble())).toFloat(),
+        c.y + r * k * sin(Math.toRadians(angle.toDouble())).toFloat(),
+    )
+    fun circle(r: Float) = Rect(c.x - r * k, c.y - r * k, c.x + r * k, c.y + r * k)
+
+    val first = floor(ascendant / 30.0) * 30.0
+    val lo = wheelAngle(first + 30.0 * (house - 1), ascendant)
+    val sector = Path().apply {
+        arcTo(circle(SeasonBoard.outer), lo, -30f, forceMoveTo = true)
+        arcTo(circle(SeasonBoard.inner), lo - 30f, 30f, forceMoveTo = false)
+        close()
+    }
+    drawPath(sector, SeasonBoard.houseFill)
+    drawCircle(Bone, SeasonBoard.outer * k, c, style = stroke)
+    drawCircle(Bone, SeasonBoard.inner * k, c, style = stroke)
+    for (i in 0 until 12) {
+        val a = wheelAngle(first + 30.0 * i, ascendant)
+        drawLine(Bone, at(a, SeasonBoard.inner), at(a, SeasonBoard.outer), strokeWidth = stroke.width)
+    }
+    drawLine(Bone, at(180f, SeasonBoard.outer), at(180f, 60f), strokeWidth = stroke.width)
+    val mark = at(wheelAngle(sun, ascendant), SeasonBoard.mark)
+    drawCircle(Bone, 4f * k, mark, style = stroke)
+    drawCircle(Bone, 1.25f * k, mark)
+}
