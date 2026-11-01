@@ -40,12 +40,13 @@ struct RootView: View {
 }
 
 /// The four sections on the glass tab bar (P17): SKY, TRANSITS, CHART,
-/// MORE. SKY holds the four horizons on the horizon control (P2): DAY is Sky
-/// Day on the glass chrome; WEEK, SEASON and YEAR show the horizon screens
-/// that predate the glass until their steps (Phase B, steps 3 to 5), under
-/// the glass horizon control. TRANSITS, CHART and MORE show their existing
-/// screens under the glass tab bar until theirs. The old Today and Horizons
-/// tabs live on in SKY; the old Today page is linked from More.
+/// MORE. SKY holds the four horizons on the horizon control (P2): DAY and
+/// WEEK are Sky Day and Sky Week on the glass chrome; SEASON and YEAR show
+/// the horizon screens that predate the glass until their steps (Phase B,
+/// steps 4 and 5), under the glass horizon control. TRANSITS, CHART and
+/// MORE show their existing screens under the glass tab bar until theirs.
+/// The old Today and Horizons tabs live on in SKY; the old Today page is
+/// linked from More.
 struct MainTabs: View {
     @Environment(AppState.self) private var state
     @State private var section: ChromeSection
@@ -62,6 +63,8 @@ struct MainTabs: View {
         Group {
             if section == .sky && horizon == .day && !legacyScreenRequested {
                 SkyDayView(onSection: { section = $0 }, onHorizon: { horizon = $0 }, onMenu: { showCultures = true })
+            } else if section == .sky && horizon == .week && !legacyScreenRequested {
+                SkyWeekView(onSection: { section = $0 }, onHorizon: { horizon = $0 }, onMenu: { showCultures = true })
             } else {
                 LegacySection(
                     section: section,

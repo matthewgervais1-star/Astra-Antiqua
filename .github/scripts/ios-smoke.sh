@@ -204,6 +204,12 @@ shot 25-chrome-pushed-pressed chrome-pushed-pressed 10
 # long-transit search.
 shot 26-sky-day sky-day 15
 
+# Sky Week (Phase B, step 3) for the same sample state: the week of 19 to 25
+# Oct, Egypt, read in UTC. The scrolled capture draws the page at the Week
+# table's 556 to place the Moon behind the text at its parallax (P171).
+shot 27-sky-week sky-week 10
+shot 28-sky-week-scrolled sky-week-scrolled 10
+
 # The iPhone Duo (Matthew, 2026-10-31): no canvas board, so pictures only, in
 # duo/ where check-placement.py does not look. Its failures are reported and do
 # not fail the run.

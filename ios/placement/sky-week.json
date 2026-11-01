@@ -1,0 +1,226 @@
+{
+  "source": "Glass-Week board (canvas page Glass, Round 7), its markup at default levers rendered in headless Chrome with the app's font files and the web's copy for the sample state (TestData/horizons.json, key weeks, the week of 2026-10-19, Egypt; the Moon at 2026-10-21 06:00 UTC; dates read in UTC), set in SkyWeekBuilder's forms. The board's own copy reproduces the Week table P21 to P31 and P53 of report-r3b.md and the P171 frames of measure-moon-parallax.json to 0.1, at rest and scrolled 556. The chrome rows are sky-day.json's. sky-week-scrolled draws the page scrolled 556: the content 556 up, the Moon (P171) 278 up. Rects are x, y, width, height in points on the 390x844 frame; content below 844 is measured where the scroll view lays it out.",
+  "tolerance": 1.0,
+  "screens": {
+    "sky-week": {
+      "P1": [
+        24,
+        75,
+        153.8,
+        18
+      ],
+      "P3": [
+        270,
+        62,
+        104,
+        44
+      ],
+      "P2": [
+        16,
+        113,
+        358,
+        44
+      ],
+      "P17": [
+        16,
+        748,
+        358,
+        56
+      ],
+      "P20": [
+        0,
+        0,
+        390,
+        173
+      ],
+      "P21": [
+        24,
+        189,
+        342,
+        17.6
+      ],
+      "P22": [
+        24,
+        224.6,
+        342,
+        35.1
+      ],
+      "P23": [
+        24,
+        269.7,
+        342,
+        17.6
+      ],
+      "P24": [
+        173,
+        311.3,
+        44,
+        1
+      ],
+      "P53": [
+        0,
+        320.3,
+        390,
+        136
+      ],
+      "P25": [
+        24,
+        456.3,
+        342,
+        139.6
+      ],
+      "P26": [
+        24,
+        595.8,
+        342,
+        166
+      ],
+      "P27": [
+        10,
+        771.8,
+        370,
+        167
+      ],
+      "P28": [
+        24,
+        948.8,
+        342,
+        139.6
+      ],
+      "P29": [
+        24,
+        1088.3,
+        342,
+        166
+      ],
+      "P30": [
+        24,
+        1254.3,
+        342,
+        139.6
+      ],
+      "P31": [
+        24,
+        1393.8,
+        342,
+        139.6
+      ],
+      "P171": [
+        0,
+        278.3,
+        170,
+        220
+      ]
+    },
+    "sky-week-scrolled": {
+      "P1": [
+        24,
+        75,
+        153.8,
+        18
+      ],
+      "P3": [
+        270,
+        62,
+        104,
+        44
+      ],
+      "P2": [
+        16,
+        113,
+        358,
+        44
+      ],
+      "P17": [
+        16,
+        748,
+        358,
+        56
+      ],
+      "P20": [
+        0,
+        0,
+        390,
+        173
+      ],
+      "P21": [
+        24,
+        -367,
+        342,
+        17.6
+      ],
+      "P22": [
+        24,
+        -331.4,
+        342,
+        35.1
+      ],
+      "P23": [
+        24,
+        -286.3,
+        342,
+        17.6
+      ],
+      "P24": [
+        173,
+        -244.7,
+        44,
+        1
+      ],
+      "P53": [
+        0,
+        -235.7,
+        390,
+        136
+      ],
+      "P25": [
+        24,
+        -99.7,
+        342,
+        139.6
+      ],
+      "P26": [
+        24,
+        39.8,
+        342,
+        166
+      ],
+      "P27": [
+        10,
+        215.8,
+        370,
+        167
+      ],
+      "P28": [
+        24,
+        392.8,
+        342,
+        139.6
+      ],
+      "P29": [
+        24,
+        532.3,
+        342,
+        166
+      ],
+      "P30": [
+        24,
+        698.3,
+        342,
+        139.6
+      ],
+      "P31": [
+        24,
+        837.8,
+        342,
+        139.6
+      ],
+      "P171": [
+        0,
+        0.3,
+        170,
+        220
+      ]
+    }
+  }
+}

@@ -25,6 +25,8 @@ enum ScreenshotMode {
         case "chrome-pushed": return AnyView(ChromeCapture(variant: .pushed))
         case "chrome-pushed-pressed": return AnyView(ChromeCapture(variant: .pushed).environment(\.pressedPreview, ["P165"]))
         case "sky-day": return AnyView(SkyDayCapture())
+        case "sky-week": return AnyView(SkyWeekCapture(scrolled: 0))
+        case "sky-week-scrolled": return AnyView(SkyWeekCapture(scrolled: SkyWeekCapture.scrolledTo))
         default: return nil
         }
     }
@@ -45,11 +47,11 @@ enum ScreenshotMode {
         }
     }
 
-    /// The screen a name opens in place of the day, or nil for the day itself.
+    /// The screen a name opens in place of the day, or nil for the day itself
+    /// and for the week, which MainTabs draws on the glass.
     @MainActor
     static func view(for screen: String) -> AnyView? {
         switch screen {
-        case "week": return AnyView(HorizonsView(initial: .week, showsSwitcher: false))
         case "season": return AnyView(HorizonsView(initial: .season, showsSwitcher: false))
         case "year": return AnyView(HorizonsView(initial: .year, showsSwitcher: false))
         case "transits": return AnyView(TransitsView())
@@ -129,6 +131,30 @@ struct SkyDayCapture: View {
     var body: some View {
         GlassScreen(culture: .egypt, section: .sky, horizon: .day, contentBottom: SkyDayMetrics.bottom) {
             SkyDayContent(culture: .egypt, page: page)
+        }
+    }
+}
+
+/// Sky Week for the sample state Sky Day's capture uses: 2026-10-21 06:00
+/// UTC, Egypt, dates read in UTC (the week of 19 to 25 Oct, TODAY on WED 21).
+/// The web's week reads no chart. `scrolled` draws the page scrolled, as the
+/// Week table's second frame (556) does, to place the Moon's parallax (P171).
+struct SkyWeekCapture: View {
+    /// The Week table's scrolled frame (report-r3b.md).
+    static let scrolledTo: CGFloat = 556
+    let scrolled: CGFloat
+    private let page: SkyWeekPage
+
+    init(scrolled: CGFloat) {
+        self.scrolled = scrolled
+        page = SkyWeekBuilder.build(culture: .egypt, now: SkyDayCapture.now,
+                                    zone: TimeZone(secondsFromGMT: 0) ?? .current, store: Content.store)
+    }
+
+    var body: some View {
+        GlassScreen(culture: .egypt, section: .sky, horizon: .week, contentBottom: SkyWeekMetrics.bottom,
+                    scrolled: scrolled) {
+            SkyWeekContent(culture: .egypt, page: page)
         }
     }
 }

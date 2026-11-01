@@ -110,7 +110,25 @@ private struct PressedPreviewKey: EnvironmentKey {
     static let defaultValue: Set<String> = []
 }
 
+/// How far the glass screen's content has scrolled, in points (0 at rest),
+/// a screenshot run's drawn scroll included. Sky Week's Moon (P171) reads it
+/// to rise at its own rate.
+private struct GlassScrollOffsetKey: EnvironmentKey {
+    static let defaultValue: CGFloat = 0
+}
+
+/// The scroll view content's top, measured in the scroll view's own space.
+private struct GlassContentTopKey: PreferenceKey {
+    static let defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
+}
+
 extension EnvironmentValues {
+    var glassScrollOffset: CGFloat {
+        get { self[GlassScrollOffsetKey.self] }
+        set { self[GlassScrollOffsetKey.self] = newValue }
+    }
+
     var systemGlass: Bool {
         get { self[SystemGlassKey.self] }
         set { self[SystemGlassKey.self] = newValue }
@@ -504,6 +522,10 @@ struct GlassScreen<Content: View>: View {
     var onBack: () -> Void = {}
     var onMenu: () -> Void = {}
     @ViewBuilder var content: () -> Content
+    @State private var scrollOffset: CGFloat = 0
+
+    /// A generic type holds no stored statics, so the space's name is computed.
+    private static var scrollSpace: String { "glass-scroll" }
 
     var body: some View {
         // The reader keeps to the safe area, so its frame's top in window
@@ -527,7 +549,17 @@ struct GlassScreen<Content: View>: View {
                     .padding(.top, chromeBottom + Chrome.contentGap)
                     .padding(.bottom, contentBottom)
                     .offset(y: -scrolled)
+                    // Measured outside the drawn offset, which is added once below.
+                    .background {
+                        GeometryReader { g in
+                            Color.clear.preference(key: GlassContentTopKey.self,
+                                                   value: g.frame(in: .named(Self.scrollSpace)).minY)
+                        }
+                    }
+                    .environment(\.glassScrollOffset, scrollOffset + scrolled)
                 }
+                .coordinateSpace(.named(Self.scrollSpace))
+                .onPreferenceChange(GlassContentTopKey.self) { top in scrollOffset = max(0, -top) }
                 .scrollIndicators(.hidden)
                 .ignoresSafeArea()
                 ScrollEdge(ground: ground, height: chromeBottom + Chrome.edgeOverhang)
