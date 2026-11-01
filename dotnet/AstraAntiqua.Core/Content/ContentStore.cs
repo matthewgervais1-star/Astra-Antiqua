@@ -20,18 +20,28 @@ public sealed class ContentStore
 
     public IReadOnlyList<AspectRule> AspectRules { get; }
 
+    /// <summary>The shared strings catalog (shared/strings/en.json), five cultures per per-culture key.</summary>
+    public Strings Strings { get; }
+
+    /// <summary>The named formats of shared/strings/formats.json, ported from web's fmt().</summary>
+    public Formats Formats { get; }
+
     private ContentStore(
         IReadOnlyDictionary<(Culture, Planet), Deity> deities,
         IReadOnlyDictionary<(Planet, ZodiacSign), string> placements,
         IReadOnlyDictionary<int, HouseMeaning> houses,
         IReadOnlyDictionary<ZodiacSign, ZodiacSignRecord> signs,
-        IReadOnlyList<AspectRule> aspectRules)
+        IReadOnlyList<AspectRule> aspectRules,
+        Strings strings,
+        Formats formats)
     {
         _deities = deities;
         _placements = placements;
         _houses = houses;
         _signs = signs;
         AspectRules = aspectRules;
+        Strings = strings;
+        Formats = formats;
     }
 
     public Deity GetDeity(Culture culture, Planet planet) => _deities[(culture, planet)];
@@ -122,7 +132,7 @@ public sealed class ContentStore
         }
 
         AssertComplete(deities, placements, houses, signs, rules);
-        return new ContentStore(deities, placements, houses, signs, rules);
+        return new ContentStore(deities, placements, houses, signs, rules, Strings.Load(), Formats.Load());
     }
 
     private static void AssertComplete(

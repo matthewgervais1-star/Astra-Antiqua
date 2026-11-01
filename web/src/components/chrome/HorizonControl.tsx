@@ -37,7 +37,7 @@ export function HorizonControl({ active }: HorizonControlProps) {
             href={cell.href}
             aria-current={isActive ? "page" : undefined}
             className={cn(
-              "-mb-px px-[var(--space-3)] py-2 font-mono text-data-xs",
+              "-mb-px px-2 py-2 font-mono text-data-xs md:px-[var(--space-3)]",
               i > 0 && "border-l border-bone/20",
               isActive ? "border-b border-rule-active text-accent" : "text-dim",
             )}
