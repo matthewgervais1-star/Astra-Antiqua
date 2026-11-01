@@ -465,3 +465,13 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
 2. The kicker: the board's "23 SEP → 23 OCT 2026 · institution" (built, as Day and Week) or web's "THE
    SEASON · 23 SEP – 23 OCT".
 3. Sky Season approved, go to step 5 (Year)?
+
+### Matthew's answers on Sky Season (popup, 2026-10-31, after the six renders were shown in the chat)
+
+- FACT: the web's sections "Below the board, as Week" (WHAT IS CHANGING, WHERE IT BEGINS, WHAT IT LEAVES
+  BEHIND, the votive, the feedback row, the CAST A CHART line, the links; WHAT IS CHANGING and the votive need
+  a port of web's `buildSeasonStandouts`); step 4 "Changes first".
+- FACT (his answer on the kicker, quoted): "Could we not do a master design revamp that merges and
+  standardizes all the versions? this way there's no split or differentials other than layout and thats a
+  screen issue that is solvable?" INFERENCE: the kicker stays as built until he settles that question; it
+  asks for one set of strings shared by web, iPhone and Android, with only layout differing per screen.

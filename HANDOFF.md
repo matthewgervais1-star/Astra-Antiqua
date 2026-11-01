@@ -162,3 +162,7 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   on return). Local: 270 tests, 0 failures. Record: `docs/design/android-glass.md` (step 4), renders `docs/design/android-glass/step4/`.
 - Pending: Matthew's popup on step 4 (the web's sections off the board, the kicker's form, approval); push and
   PR on his word.
+- FACT (Matthew's popup, 2026-10-31): Season's web sections go below the board, as on Week; "Changes first".
+  On the kicker he asked whether a master design revamp could merge web, iPhone and Android into one set of
+  strings, differing only in layout (quoted in `docs/design/android-glass.md`, step 4). Pending: his answer on
+  that, then the web sections (with a port of web's season standouts) and the renders again.
