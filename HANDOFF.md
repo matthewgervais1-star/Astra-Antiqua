@@ -244,3 +244,5 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   fix". Built: Year spine rows set the headline full width at 18sp .08em with the end month 4 under it; no named
   spine exceptions remain. Local: 353 tests, 0 failures. Step 6 approved. Next: step 7, Chart, in a fresh session;
   push and PR (stacked on #15) on Matthew's word.
+- FACT (Matthew, 2026-11-01, "Push and open PR"): branch pushed; PR #16 opened against
+  `claude/android-glass-step5-year-e880ad` (stacked on #15). No CI checks reported on it yet (app PR status).
