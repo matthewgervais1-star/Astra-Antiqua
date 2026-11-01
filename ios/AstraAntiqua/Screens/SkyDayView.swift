@@ -211,14 +211,14 @@ struct SkyDayContent: View {
         .padding(.horizontal, M.side)
     }
 
-    /// The board draws two rows, P13 and P14; the web's day pressure can
-    /// give up to four, and the rows past the second carry P14's ID with a
-    /// suffix.
+    /// The web's day pressure gives up to four rows, one per house group:
+    /// P13, P14, P226, P227 (canvas version 46, 1793493664-ced5).
     static func rowID(_ i: Int) -> String {
         switch i {
         case 0: return "P13"
         case 1: return "P14"
-        default: return "P14+\(i - 1)"
+        case 2: return "P226"
+        default: return "P227"
         }
     }
 

@@ -1,5 +1,5 @@
 {
-  "source": "Glass-Day board (canvas page Glass, version 1793480018-d41d), its markup at default levers rendered in headless Chrome with the app's font files and the web's copy for the sample state (TestData/day.json, Egypt, 2026-10-21 06:00 UTC, the smoke birth). The board's own copy reproduces the Day table P4 to P16 of report.md exactly. P14+1 and P14+2 are the third and fourth chart rows, which the board does not draw. Rects are x, y, width, height in points on the 390x844 frame; content below 844 is measured where the scroll view lays it out.",
+  "source": "Glass-Day board (canvas page Glass, version 1793480018-d41d), its markup at default levers rendered in headless Chrome with the app's font files and the web's copy for the sample state (TestData/day.json, Egypt, 2026-10-21 06:00 UTC, the smoke birth). The board's own copy reproduces the Day table P4 to P16 of report.md exactly. P226 and P227 are the third and fourth chart rows, drawn on the board since canvas version 46 (1793493664-ced5). Rects are x, y, width, height in points on the 390x844 frame; content below 844 is measured where the scroll view lays it out.",
   "tolerance": 1.0,
   "screens": {
     "sky-day": {
@@ -99,13 +99,13 @@
         342,
         146.3
       ],
-      "P14+1": [
+      "P226": [
         24,
         1320.6,
         342,
         146.3
       ],
-      "P14+2": [
+      "P227": [
         24,
         1466.9,
         342,
