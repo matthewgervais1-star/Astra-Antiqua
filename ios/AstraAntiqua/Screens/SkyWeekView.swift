@@ -21,12 +21,14 @@ struct SkyWeekView: View {
     var onMenu: () -> Void = {}
     /// The reader's calendar day as last read; nil until the first refresh.
     @State private var day: Int?
+    /// The reader's zone as last read; a zone change on the same calendar day still recomposes.
+    @State private var zoneID: String?
     @State private var loaded: (key: SkyWeekKey, page: SkyWeekPage)?
 
     var body: some View {
         let culture = state.cultureOrDefault
         let zone = state.zone
-        let key = SkyWeekKey(culture: culture, zone: zone.identifier,
+        let key = SkyWeekKey(culture: culture, zone: zoneID ?? zone.identifier,
                              day: day ?? SkyWeekKey.localDay(Date(), zone: zone))
         GlassScreen(culture: culture, section: .sky, horizon: .week, contentBottom: SkyWeekMetrics.bottom,
                     onSection: onSection, onHorizon: onHorizon, onMenu: onMenu) {
@@ -49,8 +51,10 @@ struct SkyWeekView: View {
     }
 
     private func refreshDay() {
-        let now = SkyWeekKey.localDay(Date(), zone: state.zone)
+        let zone = state.zone
+        let now = SkyWeekKey.localDay(Date(), zone: zone)
         if now != day { day = now }
+        if zone.identifier != zoneID { zoneID = zone.identifier }
     }
 
     private func load(_ key: SkyWeekKey) async {
