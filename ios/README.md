@@ -31,3 +31,4 @@ by XcodeGen and committed, so a Mac with Xcode opens and runs it with nothing el
   whole) and to the committed project: run `xcodegen generate` on a Mac, or add it to
   `project.pbxproj` by hand and commit the project CI regenerates.
 - FACT (2026-10-31, step 2): Sky Day is the SKY section's DAY page on the glass tab bar; capture `sky-day`, placements `placement/sky-day.json` (measured from the board with the web's copy); the day page is composed in AstraCore (`DayDecree.swift`, `DayPressure.swift`, `SkyDay.swift`) and pinned to `dotnet/AstraAntiqua.Core.Tests/TestData/day.json`.
+- FACT (2026-10-31, step 3): Sky Week is the SKY section's WEEK page; captures `sky-week` and `sky-week-scrolled` (556), placements `placement/sky-week.json` (the board measured with the web's copy); the page is composed in AstraCore (`SkyWeek.swift`, tests `SkyWeekTests`). P171, the Moon behind the text, reads the live scroll in its own layer (`MoonParallax` in `SkyWeekView.swift`).

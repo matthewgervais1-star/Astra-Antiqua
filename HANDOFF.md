@@ -40,6 +40,10 @@ Tags: FACT (source) / INFERENCE / CANNOT CONFIRM. This branch's handoff; the des
    `TestData/day.json`, glass MainTabs; Swift core 39/0, dotnet 105/0), pushed to this branch at 0982dc5 on
    Matthew's word; the swift run must prove SwiftUI and `sky-day.json`. Matthew (popup, 2026-10-31): keep all
    four chart rows in web order; a design round redraws Glass-Day with the web's copy; step 3, Sky Week, next.
+1b. FACT (git, 2026-10-31): step 3, Sky Week, built on `claude/ios-glass-phase-b-week` (e37d418, 0a35efc,
+   492b93a, 036a162, cut at 0c2246f; not pushed). Swift core 48/0; SwiftUI unproven until a swift run. Web's
+   kicker and title replace the board's; seven rows off the table by copy length; Monday's TENSION line sits
+   over the Moon at 3.57:1 (layout record, step 3). Questions for Matthew in the session's popup.
 2. Steps 2 to 11 of the brief: Sky Day; Week with P53 and P171 (Reduce Motion: the Moon scrolls with
    the text, INFERENCE for Matthew); Season with P54; Year; Transits; Chart; Placement with P55 and P56;
    Transit detail; More, the culture sheet P146, the Doorway; the five cultures live.
