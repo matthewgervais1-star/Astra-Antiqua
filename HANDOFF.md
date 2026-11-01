@@ -42,8 +42,7 @@ Read first; this file outranks older lines elsewhere. Tags: FACT (source) / INFE
   `Your temper at work`, `A mourner's lament`; two Rome items reworded. Reasons in the plan's
   "As shipped" note: each earlier wording repeated a word on the page or read wrong.
 - Owner (popups): Liquid Glass for the iPhone app, chrome A (2026-10-27); the large title is "Script until scrolled" (2026-10-29, PR #8).
-- 2026-10-31, owner (popup): merge master into `claude/deferred-minors` and open its PR to `master`;
-  commit the prompt sheet and references; repair the planner worktree.
+- 2026-10-31, owner (popup): merge master into this branch, open PR #10, commit the Draw Things docs, repair the planner worktree.
 
 ## Pending, in order
 1. FACT (GitHub, 2026-10-31): PR #10 (`claude/deferred-minors` into `master`) waits for the owner's merge.
