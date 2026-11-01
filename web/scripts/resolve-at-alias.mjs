@@ -12,6 +12,15 @@ const SRC = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../src")
 export function resolve(specifier, context, nextResolve) {
   if (specifier.startsWith("@/")) {
     let p = path.join(SRC, specifier.slice(2));
+    // A directory import ("@/strings") resolves to its index module, as the bundler does.
+    if (fs.existsSync(p) && fs.statSync(p).isDirectory()) {
+      for (const index of ["index.ts", "index.tsx"]) {
+        if (fs.existsSync(path.join(p, index))) {
+          p = path.join(p, index);
+          break;
+        }
+      }
+    }
     if (!fs.existsSync(p)) {
       for (const ext of [".ts", ".tsx"]) {
         if (fs.existsSync(p + ext)) {

@@ -6,6 +6,7 @@ import { FigureDiagram } from "@/components/chrome/FigureDiagram";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { SpanBar } from "@/components/chrome/SpanBar";
 import { ASPECT_GLYPH } from "@/lib/decree";
+import { text } from "@/strings";
 import type { FigureAnatomy as Anatomy } from "@/lib/figureReading";
 import { ASPECT_ANGLE, type Timeline } from "@/lib/recurrence";
 
@@ -22,7 +23,11 @@ export interface FigureAnatomyProps {
 }
 
 const PROSE = "text-pretty font-body text-prose-m font-light leading-prose text-prose";
-const CARD_LABEL = { consider: "CONSIDER", read: "READ", keep: "KEEP" } as const;
+const CARD_LABEL = {
+  consider: text("transit.figure.consider"),
+  read: text("transit.figure.read"),
+  keep: text("transit.figure.keep"),
+} as const;
 
 /** The span the figure holds, four ticks, the present marked with the accent square. */
 function FigureTimeline({ timeline, caption }: { timeline: Timeline; caption: string }) {
@@ -86,7 +91,7 @@ export function FigureAnatomy({ culture, anatomy, timeline, timelineCaption, cen
       {afterParagraph}
 
       <section>
-        <SectionDivider label="WHAT IT LOOKS LIKE IN SPACE" />
+        <SectionDivider label={text("transit.figure.space")} />
         <div className="mt-6">
           <FigureDiagram
             culture={culture}
@@ -124,7 +129,7 @@ export function FigureAnatomy({ culture, anatomy, timeline, timelineCaption, cen
         <FigureTimeline timeline={timeline} caption={timelineCaption} />
         <div className="text-center font-mono text-data-xs tracking-label">
           <Link href="/learn/aspects" className="border-b border-bone/40 pb-[2px] text-bone hover:text-accent">
-            WHAT IS THIS? →
+            {text("transit.figure.whatIsThis")}
           </Link>
         </div>
       </section>
@@ -147,7 +152,7 @@ export function FigureAnatomy({ culture, anatomy, timeline, timelineCaption, cen
       </section>
 
       <section>
-        <SectionDivider label="TRY THIS" />
+        <SectionDivider label={text("transit.figure.tryThis")} />
         <div className="mx-auto mt-5 grid max-w-[640px] grid-cols-1 gap-3 text-left md:grid-cols-3">
           {anatomy.cards.map((card) => (
             <div key={card.kind} className="flex flex-col gap-2 border border-rule p-4">
@@ -160,7 +165,7 @@ export function FigureAnatomy({ culture, anatomy, timeline, timelineCaption, cen
       </section>
 
       <section>
-        <SectionDivider label="THE LESSON" />
+        <SectionDivider label={text("transit.figure.lesson")} />
         <p className="mx-auto mt-5 max-w-[520px] text-balance text-center font-display text-display-xs leading-display text-bone">
           {anatomy.lesson}
         </p>

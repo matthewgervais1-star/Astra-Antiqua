@@ -1,22 +1,17 @@
 package com.astra.antiqua.domain
 
-import com.astra.antiqua.model.Planet
-
+/**
+ * Android-only vocabulary from before the shared catalog. The ruled table
+ * (docs/design/shared-strings-table-2026-11.md, "Android-only vocabulary")
+ * drops every field: dashboardTitle (the catalog's common.institution now),
+ * the three menu names, culturalVoices and the two aspect labels are gone.
+ * The four left feed the old Day sections below Sky Day and the unreached
+ * MainDashboardScreen; they go when the Chart screen takes web's SUMMARY_*
+ * (deferred, plan Task 7).
+ */
 data class CulturalLexicon(
-    val dashboardTitle: String,
-    val birthChartMenu: String,
-    val ephemerisMenu: String,
-    val settingsTitle: String,
-    // A function rather than a `Map` so each culture's definition (see
-    // LexiconDictionary) is forced to be an exhaustive `when` on
-    // Planet: a planet missing its cultural voice is a compile
-    // error instead of the old `map[planet] ?: "The Servant"` fallback,
-    // which silently produced wrong copy for any lookup miss.
-    val culturalVoices: (Planet) -> String,
     val highPriestSummaryTitle: String,
     val officerRole: String,
-    val harmoniousAspectLabel: String = "Divine Harmony",
-    val conflictingAspectLabel: String = "Divine Conflict",
     val aspectFraming: String = "The alignment of the stars",
     // The OracleDecreeCard's first-person "decree" line, composed at render
     // time from the deity's name (DeityRegistry) and the placement's sign
@@ -28,11 +23,6 @@ data class CulturalLexicon(
     // DashboardViewModel's high-priest summary, ported verbatim from the
     // hardcoded `when (culture)` block it used to hold (docs/shared-content
     // -model.md's sixth per-culture copy site) so the per-culture UI
-    // vocabulary lives in exactly one place, alongside dashboardTitle et al.
+    // vocabulary lives in exactly one place.
     val highPriestSummary: (sunSign: String, moonSign: String) -> String
-) {
-    fun getOfficerName(planet: Planet, deityName: String): String {
-        val voice = culturalVoices(planet)
-        return "$voice of $deityName"
-    }
-}
+)

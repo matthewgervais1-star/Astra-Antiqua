@@ -5,34 +5,23 @@ import Link from "next/link";
 import { NaveShell } from "@/components/chrome/NaveShell";
 import { CultureGate } from "@/components/chrome/CultureGate";
 import { NaveHead } from "@/components/chrome/NaveHead";
-import { DeityGlyph } from "@/components/chrome/DeityGlyph";
 import { Votive } from "@/components/chrome/Votive";
 import { FeedbackRow } from "@/components/chrome/FeedbackRow";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
-import {
-  ASPECT_GLYPH,
-  SIGN_ABBR,
-  buildWeekDays,
-  type WeekDay,
-  type WeekShorthand,
-  type WeekTone,
-} from "@/lib/weekReading";
-import { CULTURE_VOICES } from "@/data/cultureVoice";
-import type { Culture } from "@/data/cultures";
+import { buildWeekDays, type WeekDay } from "@/lib/weekReading";
+import { weekModelFromDays } from "@/lib/screens/week";
+import type { SlotMap } from "@/lib/screens/types";
+import { fmt, str } from "@/strings";
+import { localZone } from "@/strings/formats";
 import { cn } from "@/lib/classNames";
-import { formatDayMonth, isoWeek, mondayOf, monthAbbr } from "@/components/horizons/format";
+import { isoWeek, mondayOf } from "@/components/horizons/format";
 
 function weekContextLine(weekStart: Date): string {
   const { week } = isoWeek(weekStart);
   const sunday = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 6);
-  const sameMonth =
-    weekStart.getMonth() === sunday.getMonth() && weekStart.getFullYear() === sunday.getFullYear();
-  const range = sameMonth
-    ? `${weekStart.getDate()}–${sunday.getDate()} ${monthAbbr(sunday)} ${sunday.getFullYear()}`
-    : `${formatDayMonth(weekStart)} – ${formatDayMonth(sunday)} ${sunday.getFullYear()}`;
-  return `WEEK ${String(week).padStart(2, "0")} · ${range}`;
+  return `WEEK ${String(week).padStart(2, "0")} · ${fmt("range.days", [weekStart, sunday], "local")}`;
 }
 
 function weekReadingId(weekStart: Date): string {
@@ -40,104 +29,47 @@ function weekReadingId(weekStart: Date): string {
   return `week-${year}-W${String(week).padStart(2, "0")}`;
 }
 
-function pickHardestDay(days: readonly WeekDay[]): WeekDay | null {
-  return days.find((d) => d.tone === "tension") ?? days.find((d) => d.tone === "harmony") ?? days[0] ?? null;
+/** Row `i` of a row slot (see SlotMap): "" where the row prints nothing. */
+function rowOf(slots: SlotMap, key: string, i: number): string {
+  return (slots[key] as string[] | undefined)?.[i] ?? "";
 }
 
-/** Two-line votive per culture, keyed by the tone of the week's hardest day. */
-const WEEK_VOTIVE: Readonly<Record<Culture, Readonly<Record<WeekTone, string>>>> = {
-  egypt: {
-    tension: "WEIGH WHAT IS HEAVY BEFORE\nYOU CARRY IT INTO FRIDAY",
-    harmony: "TAKE THE CURRENT WHILE\nIT RUNS WITH YOU",
-    quiet: "ORDINARY DAYS ARE NOT\nEMPTY DAYS",
-  },
-  greece: {
-    tension: "ASK THE HARD QUESTION\nBEFORE THE WEEK ASKS IT FOR YOU",
-    harmony: "TAKE THE ANSWER GIVEN FREELY,\nWITHOUT A SECOND ASKING",
-    quiet: "SILENCE FROM THE SHRINE\nIS ALSO AN ANSWER",
-  },
-  canaan: {
-    tension: "LET THE WITNESS SPEAK\nBEFORE THE COUNCIL CLOSES",
-    harmony: "SEAL THE VOW WHILE\nTHE RAINS STILL FAVOR IT",
-    quiet: "THE TENT STANDS EVEN ON\nA DAY WITH NO MATTER BEFORE IT",
-  },
-  carthage: {
-    tension: "LEAVE THE BOOKS OPEN\nUNTIL THE ACCOUNT IS TRUE",
-    harmony: "LOAD WHILE THE HARBOR\nIS STILL OPEN TO YOU",
-    quiet: "A STEADY LEDGER IS\nSTILL A PROFITABLE ONE",
-  },
-  rome: {
-    tension: "PROCEED, BUT KEEP\nTHE DEFENSE READY",
-    harmony: "TAKE THE RIGHT HAND OFFERED\nWITHOUT A SECOND READING",
-    quiet: "AN ORDINARY DAY IS STILL\nTAKEN UNDER AUSPICES",
-  },
-};
-
-/**
- * The items of the shorthand column. The wrapping span in WeekRow is an
- * inline-flex row aligned on the baseline, so the text items keep the same
- * baseline as the other two grid columns; each glyph centres itself on the
- * text with self-center. Measured in Chrome: items-center on the row would
- * make the row's baseline the svg's bottom edge and lift the shorthand
- * about 4px on event days.
- */
-function ShorthandItems({ shorthand, culture }: { shorthand: WeekShorthand; culture: Culture }) {
-  if (shorthand.kind === "aspect") {
-    return (
-      <>
-        <DeityGlyph body={shorthand.a} culture={culture} size={16} className="self-center" />
-        {ASPECT_GLYPH[shorthand.aspect]}
-        <DeityGlyph body={shorthand.b} culture={culture} size={16} className="self-center" />
-        {shorthand.tight ? "TIGHT" : null}
-      </>
-    );
-  }
-  if (shorthand.kind === "ingress") {
-    return (
-      <>
-        <DeityGlyph body={shorthand.planet} culture={culture} size={16} className="self-center" />
-        {"→"}
-        {SIGN_ABBR[shorthand.sign]}
-      </>
-    );
-  }
-  return "QUIET";
-}
-
-function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
+function WeekRow({ day, slots, i }: { day: WeekDay; slots: SlotMap; i: number }) {
+  // week.row.weekday stacks the weekday over the day of the month; web sets them on one line.
+  const [weekday = "", date = ""] = rowOf(slots, "week.row.weekday", i).split("\n");
+  const today = rowOf(slots, "week.row.today", i);
+  const headline = rowOf(slots, "week.row.headline", i);
+  const shorthand =
+    rowOf(slots, "week.row.shorthand.aspect", i) ||
+    rowOf(slots, "week.row.shorthand.ingress", i) ||
+    rowOf(slots, "week.row.shorthand.quiet", i);
   return (
     <div
       className={cn(
         "grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 sm:grid-cols-[104px_1fr_auto] border-t border-rule px-3 py-3.5 last:border-b",
-        day.isToday && "bg-[color-mix(in_srgb,var(--accent)_7%,transparent)]",
+        today && "bg-[color-mix(in_srgb,var(--accent)_7%,transparent)]",
       )}
     >
-      <span
-        className={cn(
-          "font-mono text-data-xs leading-data",
-          day.isToday ? "text-accent" : "text-dim",
-        )}
-      >
-        {day.label}
-        {day.flag ? ` ${day.flag}` : ""}
-        {day.isToday ? (
+      <span className={cn("font-mono text-data-xs leading-data", today ? "text-accent" : "text-dim")}>
+        {weekday} {date}
+        {today ? (
           <>
             <br />
-            TODAY
+            {today}
           </>
         ) : null}
       </span>
       <span className="order-3 col-span-2 flex flex-col gap-1 sm:order-none sm:col-span-1">
-        {day.headline ? (
+        {headline ? (
           day.figureHref ? (
             <Link href={day.figureHref} className="font-display text-display-xs leading-display text-bone hover:text-accent">
-              {day.headline}
+              {headline}
             </Link>
           ) : (
-            <span className="font-display text-display-xs leading-display text-bone">{day.headline}</span>
+            <span className="font-display text-display-xs leading-display text-bone">{headline}</span>
           )
         ) : null}
-        <span className="font-body text-prose-s leading-prose text-prose">{day.line}</span>
+        <span className="font-body text-prose-s leading-prose text-prose">{rowOf(slots, "week.row.line", i)}</span>
       </span>
       <span
         className={cn(
@@ -145,63 +77,88 @@ function WeekRow({ day, culture }: { day: WeekDay; culture: Culture }) {
           day.tone === "tension" ? "text-conflict" : "text-dim",
         )}
       >
-        <ShorthandItems shorthand={day.shorthand} culture={culture} />
+        {shorthand}
       </span>
     </div>
   );
 }
 
+const FOOTER_HREFS = ["/", "/season", "/transits"] as const;
+
 function WeekContent({
   weekStart,
+  today,
   natal,
 }: {
   weekStart: Date | null;
+  today: Date | null;
   natal: SavedNatal | null;
 }) {
   const culture = useActivePantheon();
   const days = useMemo(
-    () => (culture && weekStart ? buildWeekDays(culture, weekStart, natal) : null),
-    [culture, weekStart, natal],
+    () => (culture && weekStart && today ? buildWeekDays(culture, weekStart, natal, today) : null),
+    [culture, weekStart, today, natal],
+  );
+  const slots = useMemo(
+    () => (culture && today && days ? weekModelFromDays({ culture, instant: today, zone: localZone(), birth: natal }, days) : null),
+    [culture, today, natal, days],
   );
 
-  if (!culture || !days || !weekStart) {
+  if (!culture || !days || !weekStart || !slots) {
     return <Skeleton />;
   }
 
-  const voice = CULTURE_VOICES[culture];
-  const hardest = pickHardestDay(days);
+  // week.moon stacks five lines: label, phase, lit, next quarter, its date.
+  const [moonLabel, moonPhase, moonLit, quarter, quarterDate] = (slots["week.moon"] as string).split("\n");
+  const footer = slots["week.footer"] as string[];
 
   return (
     <div className="mx-auto max-w-[640px]">
-      <NaveHead culture={culture} kicker={`${voice.institution} · THE WEEK`}>{voice.weekTitle}</NaveHead>
+      <NaveHead
+        culture={culture}
+        kicker={slots["week.kicker"]}
+        sub={<div className="font-mono text-data-xs tracking-label text-dim">{slots["week.countLine"]}</div>}
+      >
+        {slots["week.title"]}
+      </NaveHead>
       <p className="mx-auto max-w-[560px] text-left font-body text-prose-m leading-prose text-prose">
-        {voice.weekThesis}
+        {slots["week.thesis"]}
       </p>
+      <div className="mx-auto mt-6 grid max-w-[560px] grid-cols-2 gap-x-4 border border-rule px-4 py-[var(--space-2)] text-left font-mono text-data-xs leading-data">
+        <div>
+          <div className="text-dim">{moonLabel}</div>
+          <div className="text-bone">{moonPhase}</div>
+          <div className="text-dim">{moonLit}</div>
+        </div>
+        <div>
+          <div className="text-dim">{quarter}</div>
+          <div className="text-bone">{quarterDate}</div>
+        </div>
+      </div>
       <div className="mt-8 flex flex-col">
-        {days.map((day) => (
-          <WeekRow key={day.date.toISOString()} day={day} culture={culture} />
+        {days.map((day, i) => (
+          <WeekRow key={day.date.toISOString()} day={day} slots={slots} i={i} />
         ))}
       </div>
       <div className="mx-auto mt-6 max-w-[560px] text-center font-mono text-data-xs tracking-label text-dim">
-        {voice.weekNote}
-        {voice.dayFlags ? " · F LAWFUL · N UNLAWFUL · C MIXED" : ""}
+        {slots["week.note"]}
       </div>
       <div className="mt-8">
-        <Votive>{WEEK_VOTIVE[culture][hardest?.tone ?? "quiet"]}</Votive>
+        <Votive>{slots["week.votive"]}</Votive>
       </div>
       <div className="mt-6 flex justify-center">
-        <FeedbackRow readingId={weekReadingId(weekStart)} noun="WEEK" />
+        <FeedbackRow readingId={weekReadingId(weekStart)} noun={str("week.feedback.noun", culture)} />
       </div>
       <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-mono text-data-xs tracking-microcopy">
-        <Link href="/" className="text-bone/65 hover:text-bone">
-          ← THE DAY
-        </Link>
-        <Link href="/season" className="text-bone/65 hover:text-bone">
-          THE SEASON →
-        </Link>
-        <Link href="/transits" className="text-accent">
-          THE LONG TRANSITS →
-        </Link>
+        {footer.map((label, i) => (
+          <Link
+            key={label}
+            href={FOOTER_HREFS[i] ?? "/"}
+            className={i === footer.length - 1 ? "text-accent" : "text-bone/65 hover:text-bone"}
+          >
+            {label}
+          </Link>
+        ))}
       </div>
     </div>
   );
@@ -209,7 +166,8 @@ function WeekContent({
 
 /**
  * The full `/week` client experience: chassis, seven day-rows composed by
- * lib/weekReading.ts, votive, feedback, and the horizon nav. Owns its own
+ * lib/weekReading.ts and printed from the week's screen model
+ * (lib/screens/week.ts), votive, feedback, and the horizon nav. Owns its own
  * "today" state (client-only, matching the rest of the reading surfaces)
  * so the sub-bar context line and the day rows never disagree on the date.
  */
@@ -229,7 +187,7 @@ export function WeekNave() {
   return (
     <NaveShell context={context} horizon="week" active="today">
       <CultureGate>
-        <WeekContent weekStart={weekStart} natal={natal} />
+        <WeekContent weekStart={weekStart} today={today} natal={natal} />
       </CultureGate>
     </NaveShell>
   );

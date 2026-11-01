@@ -18,15 +18,13 @@ import { Skeleton } from "@/components/chrome/Skeleton";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { readChart } from "@/lib/savedCharts";
 import { resolveSavedChart, type SavedNatal } from "@/lib/savedNatal";
-import { computeWholeSignHouses, houseOfSign } from "@/lib/houses";
-import { getHouseMeaning } from "@/data/houses";
-import { longitudeToSign } from "@/data/sampleChart";
 import { DEITY_MATRIX } from "@/data/deities";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { PLANETS, isReceived, type Planet } from "@/data/cultures";
-import { SIGN_PHRASE, formatDegMin } from "@/components/charts/chartFormat";
-import { buildHowItShows, buildKeepInView, buildWhatItIs } from "@/components/charts/placementCopy";
-import { PLACEMENT_VOTIVES } from "@/components/charts/placementVotives";
+import { str } from "@/strings";
+import { localZone } from "@/strings/formats";
+import { Fill } from "@/strings/Fill";
+import { buildPlacementModel } from "@/lib/screens/placement";
 
 export interface PlacementReadingProps {
   chartId: string;
@@ -104,12 +102,11 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
     );
   }
 
-  const longitude = natal.chart[body];
-  const { sign, degree } = longitudeToSign(longitude);
-  const { ascendantSignIndex } = computeWholeSignHouses(natal.angles.ascendant);
-  const house = houseOfSign(sign, ascendantSignIndex);
-  const houseMeaning = getHouseMeaning(house);
-  const deity = DEITY_MATRIX[culture][body];
+  const slots = buildPlacementModel({ culture, instant: new Date(), zone: localZone(), birth: natal, body });
+  const prose = slots["placement.prose"] as string[];
+  // The title's second line, and the house title under the house label (SlotMap stacks lines).
+  const titleSecond = String(slots["placement.title"]).split("\n")[1];
+  const [houseLabel, houseTitle] = String(slots["placement.section.house"]).split("\n");
   const voice = CULTURE_VOICES[culture];
   const index = PLANETS.indexOf(body);
   const prevPlanet = PLANETS[(index - 1 + PLANETS.length) % PLANETS.length]!;
@@ -122,50 +119,42 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
       <TopBar body={body} />
       <main className="mx-auto max-w-[560px] px-5 py-11 text-center md:py-[var(--space-6)]">
         <NaveHead
-          kicker={
-            <>
-              <ScriptName culture={culture} heading="institution" /> · YOUR STANDING PLACEMENT
-            </>
-          }
+          kicker={slots["placement.kicker"]}
           sub={
-            <div className="inline-flex items-center gap-[var(--space-1)] font-mono text-data-xs uppercase leading-data tracking-label text-dim">
+            <div className="inline-flex items-center gap-[var(--space-1)] font-mono text-data-xs leading-data tracking-label text-dim">
               <DeityGlyph body={body} culture={culture} size={16} />
-              <span>
-                {formatDegMin(degree)} {sign.toUpperCase()} ·{" "}
-                {houseMeaning.ordinal.toUpperCase()} HOUSE · FIXED AT YOUR BIRTH
-              </span>
+              <span>{slots["placement.epithet"]}</span>
               {isReceived(body) ? <Badge tone="accent">RECEIVED</Badge> : null}
             </div>
           }
         >
-          YOUR <ScriptName culture={culture} planet={body} upper />
+          <Fill k="placement.title1" culture={culture} slots={{ deity: <ScriptName culture={culture} planet={body} upper /> }} />
           <br />
-          IN THE {SIGN_PHRASE[sign]}
+          {titleSecond}
         </NaveHead>
 
         <div className="flex flex-col gap-[var(--space-4)] text-left">
           <section className="flex flex-col gap-[var(--space-2)]">
-            <SectionDivider label="WHAT IT IS" />
-            <p className="text-pretty font-body text-prose-m leading-prose text-prose">
-              {buildWhatItIs(culture, body, sign)}
-            </p>
+            <SectionDivider label={slots["placement.section.governs"] as string} />
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{prose[0]}</p>
           </section>
           <section className="flex flex-col gap-[var(--space-2)]">
-            <SectionDivider label="HOW IT SHOWS" />
-            <p className="text-pretty font-body text-prose-m leading-prose text-prose">
-              {buildHowItShows(culture, body, house)}
-            </p>
+            <SectionDivider label={slots["placement.section.sign"] as string} />
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{prose[1]}</p>
           </section>
           <section className="flex flex-col gap-[var(--space-2)]">
-            <SectionDivider label="WHAT TO KEEP IN VIEW" />
-            <p className="text-pretty font-body text-prose-m leading-prose text-prose">
-              {buildKeepInView(body, sign)}
-            </p>
+            <SectionDivider label={houseLabel ?? ""} />
+            <div className="text-center font-display text-display-xs leading-display text-bone">{houseTitle}</div>
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{prose[2]}</p>
+          </section>
+          <section className="flex flex-col gap-[var(--space-2)]">
+            <SectionDivider label={slots["placement.section.keep"] as string} />
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{prose[3]}</p>
           </section>
         </div>
 
         <div className="mt-[var(--space-5)]">
-          <Votive>{PLACEMENT_VOTIVES[culture](deity.name)}</Votive>
+          <Votive>{slots["placement.votive"]}</Votive>
         </div>
 
         {isReceived(body) ? (
@@ -175,7 +164,7 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
         ) : null}
 
         <div className="mt-4">
-          <FeedbackRow readingId={`placement-${chartId}-${body}`} noun="PLACEMENT" />
+          <FeedbackRow readingId={`placement-${chartId}-${body}`} noun={str("placement.feedback.noun", culture)} />
         </div>
 
         <div className="mt-7 flex flex-wrap justify-center gap-x-[var(--space-4)] gap-y-[var(--space-2)] font-mono text-data-xs tracking-microcopy [&>a]:whitespace-nowrap">

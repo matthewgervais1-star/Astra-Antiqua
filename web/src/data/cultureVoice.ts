@@ -1,4 +1,6 @@
 import type { Culture } from "@/data/cultures";
+import { COMMON } from "@/strings/common";
+import { WEEK } from "@/strings/week";
 
 /**
  * The finite per-culture surface configuration: the titles, structures, and
@@ -30,9 +32,9 @@ export interface CultureVoice {
 
 export const CULTURE_VOICES: Readonly<Record<Culture, CultureVoice>> = {
   egypt: {
-    institution: "THE HALL OF MA’AT",
-    weekTitle: "SEVEN DAYS WEIGHED",
-    weekThesis: "The day is laid on the scale at evening and the pans settle overnight. Seven weighings make the week.",
+    institution: COMMON["common.institution"].egypt,
+    weekTitle: WEEK["week.title"].egypt,
+    weekThesis: WEEK["week.thesis"].egypt,
     weekNote: "DAYS TALLIED AGAINST THE FEATHER",
     yearTitle: "THE YEAR OF THE RIVER",
     yearStructure: "seasons3",
@@ -50,9 +52,9 @@ export const CULTURE_VOICES: Readonly<Record<Culture, CultureVoice>> = {
     receptionLine: "The roll carries three names that no scribe of Memphis ever wrote. A late name weighs no less than an old one.",
   },
   greece: {
-    institution: "THE DAY'S ORACLE",
-    weekTitle: "SEVEN QUESTIONS",
-    weekThesis: "One question goes up to Delphi each day; the week is the art of asking them in order.",
+    institution: COMMON["common.institution"].greece,
+    weekTitle: WEEK["week.title"].greece,
+    weekThesis: WEEK["week.thesis"].greece,
     weekNote: "EACH DAY NAMES ITS QUESTION",
     yearTitle: "THE FESTIVAL CIRCUIT",
     yearStructure: "festivals",
@@ -70,9 +72,9 @@ export const CULTURE_VOICES: Readonly<Record<Culture, CultureVoice>> = {
     receptionLine: "Three questions were put that Delphi had never been asked. The god answered them at the usual fee.",
   },
   canaan: {
-    institution: "THE COUNCIL OF EL",
-    weekTitle: "SEVEN SITTINGS",
-    weekThesis: "The council convenes each day on one matter; El presides at the seventh and closes the session.",
+    institution: COMMON["common.institution"].canaan,
+    weekTitle: WEEK["week.title"].canaan,
+    weekThesis: WEEK["week.thesis"].canaan,
     weekNote: "THE SEVENTH DAY SEALS THE SIX",
     yearTitle: "THE YEAR OF THE RAINS",
     yearStructure: "halvesRains",
@@ -90,9 +92,9 @@ export const CULTURE_VOICES: Readonly<Record<Culture, CultureVoice>> = {
     receptionLine: "Three took seats that were empty when the council first sat. Their word stands as witness with the rest.",
   },
   carthage: {
-    institution: "THE DECREE OF THE TOPHET",
-    weekTitle: "THE WEEK'S LEDGER",
-    weekThesis: "Seven entries, debits and credits of the sky; the ledger is balanced before the next crossing.",
+    institution: COMMON["common.institution"].carthage,
+    weekTitle: WEEK["week.title"].carthage,
+    weekThesis: WEEK["week.thesis"].carthage,
     weekNote: "ENTRIES CARRY FORWARD, VOWS DO NOT",
     yearTitle: "THE OPEN AND CLOSED SEA",
     yearStructure: "halvesSea",
@@ -110,9 +112,9 @@ export const CULTURE_VOICES: Readonly<Record<Culture, CultureVoice>> = {
     receptionLine: "Three hulls put in from a sea no master out of Carthage has sailed. The harbor weighs their cargo and does not discount it.",
   },
   rome: {
-    institution: "THE AUSPICES OF THE DAY",
-    weekTitle: "FASTUS AND NEFASTUS",
-    weekThesis: "Each day is marked lawful or unlawful for business before it begins; act on the F days.",
+    institution: COMMON["common.institution"].rome,
+    weekTitle: WEEK["week.title"].rome,
+    weekThesis: WEEK["week.thesis"].rome,
     weekNote: "DAYS FLAGGED F · N · C IN THE LIST",
     yearTitle: "THE GREAT CIRCUIT",
     yearStructure: "quarters4",

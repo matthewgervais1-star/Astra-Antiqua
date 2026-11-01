@@ -13,7 +13,8 @@ import { EvidenceLine } from "@/components/chrome/EvidenceLine";
 import { ReceptionNote } from "@/components/chrome/ReceptionNote";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { FigureAnatomy } from "@/components/figure/FigureAnatomy";
-import { dateLongUpper, weekdayUpper } from "@/components/home/format";
+import { fmt } from "@/strings";
+import { Fill } from "@/strings/Fill";
 import { composeFigurePage, figureMissing, isoDateUtc, parseIsoDate, type FigureMissing } from "@/lib/figureReading";
 import { buildTimeline, type OrbWindow } from "@/lib/recurrence";
 import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
@@ -104,16 +105,18 @@ export function FigureDetail({ date, id }: FigureDetailProps) {
   }
 
   const timeline = buildTimeline(page.window, state.now, page.instant);
-  const marker = timeline.presentInside ? "NOW" : dateLongUpper(instant);
+  const marker = timeline.presentInside ? "NOW" : fmt("date.dayMonthYear", instant, "UTC");
 
   return (
     <div className="mx-auto max-w-[640px]">
       <NaveHead
         culture={culture}
         kicker={
-          <>
-            {weekdayUpper(instant)} · {dateLongUpper(instant)} · <ScriptName culture={culture} heading="institution" />
-          </>
+          <Fill
+            k="day.kicker"
+            culture={culture}
+            slots={{ date: fmt("date.day", instant, "UTC"), institution: <ScriptName culture={culture} heading="institution" /> }}
+          />
         }
         sub={
           <div className="font-mono text-data-xs tracking-data text-dim">

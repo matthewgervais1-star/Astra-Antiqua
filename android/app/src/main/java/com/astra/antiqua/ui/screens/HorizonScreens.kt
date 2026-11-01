@@ -70,7 +70,7 @@ fun SeasonScreen(
     LaunchedEffect(Unit) { viewModel.loadSeason() }
 
     NaveShell(
-        context = "${lexicon.dashboardTitle} · the season",
+        context = "${com.astra.antiqua.domain.generated.SharedStrings.COMMON_INSTITUTION.getValue(culture)} · the season",
         culture = culture,
         onNavigate = onNavigate,
         horizon = Horizon.SEASON,
@@ -87,7 +87,7 @@ fun SeasonScreen(
                     val window = current.window
                     item {
                         NaveHead(
-                            kicker = "${lexicon.dashboardTitle} · the season",
+                            kicker = "${com.astra.antiqua.domain.generated.SharedStrings.COMMON_INSTITUTION.getValue(culture)} · the season",
                             culture = culture,
                             headline = "The Sun in ${window.sign.signName}",
                             sub = "Day ${window.dayOfSeason} of ${window.totalDays} · " +
@@ -134,7 +134,7 @@ fun YearScreen(
     LaunchedEffect(Unit) { viewModel.loadYear() }
 
     NaveShell(
-        context = "${lexicon.dashboardTitle} · the year",
+        context = "${com.astra.antiqua.domain.generated.SharedStrings.COMMON_INSTITUTION.getValue(culture)} · the year",
         culture = culture,
         onNavigate = onNavigate,
         horizon = Horizon.YEAR,
@@ -150,7 +150,7 @@ fun YearScreen(
                 is YearState.Ready -> {
                     item {
                         NaveHead(
-                            kicker = "${lexicon.dashboardTitle} · the year",
+                            kicker = "${com.astra.antiqua.domain.generated.SharedStrings.COMMON_INSTITUTION.getValue(culture)} · the year",
                             culture = culture,
                             headline = "The year ahead",
                             sub = "${dayMonthYear(current.start)} onward · " +
@@ -277,29 +277,15 @@ private fun Tail(text: String) {
     Column(Modifier.padding(Spacing.Chapter)) {}
 }
 
-private val MONTHS = listOf(
-    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
-)
-
 private fun calendarOf(date: Date): Calendar = Calendar.getInstance().apply { time = date }
 
-private fun dayMonth(date: Date): String {
-    val calendar = calendarOf(date)
-    return "${calendar.get(Calendar.DAY_OF_MONTH)} ${MONTHS[calendar.get(Calendar.MONTH)]}"
-}
+private fun dayMonth(date: Date): String = com.astra.antiqua.domain.SharedFormat.dayMonth(date)
 
-private fun dayMonthYear(date: Date): String {
-    val calendar = calendarOf(date)
-    return "${dayMonth(date)} ${calendar.get(Calendar.YEAR)}"
-}
+private fun dayMonthYear(date: Date): String = com.astra.antiqua.domain.SharedFormat.dayMonthYear(date)
 
 private fun monthKey(date: Date): Int {
     val calendar = calendarOf(date)
     return calendar.get(Calendar.YEAR) * 12 + calendar.get(Calendar.MONTH)
 }
 
-private fun monthYearLabel(date: Date): String {
-    val calendar = calendarOf(date)
-    return "${MONTHS[calendar.get(Calendar.MONTH)]} ${calendar.get(Calendar.YEAR)}"
-}
+private fun monthYearLabel(date: Date): String = com.astra.antiqua.domain.SharedFormat.monthYear(date)

@@ -1,24 +1,7 @@
 import type { Culture } from "@/data/cultures";
-import type { ZodiacSign } from "@/data/sampleChart";
 
-/**
- * The plain-word sign phrases used in mono microcopy across the forecast
- * ("→ THE RAM", "STATIONS RETROGRADE AT THE BULL"), per the build brief.
- */
-export const SIGN_PHRASES: Readonly<Record<ZodiacSign, string>> = {
-  Aries: "RAM",
-  Taurus: "BULL",
-  Gemini: "TWINS",
-  Cancer: "CRAB",
-  Leo: "LION",
-  Virgo: "MAIDEN",
-  Libra: "SCALES",
-  Scorpio: "SCORPION",
-  Sagittarius: "ARCHER",
-  Capricorn: "GOAT",
-  Aquarius: "WATER-BEARER",
-  Pisces: "FISHES",
-};
+/** The sign phrases ("→ THE RAM") live once, in strings/formats.ts. */
+export { SIGN_PHRASES } from "@/strings/formats";
 
 /** Short per-culture verb phrase for a retrograde station, in institutional register. */
 export const STATION_PHRASES: Readonly<Record<Culture, { retrograde: string; direct: string }>> = {

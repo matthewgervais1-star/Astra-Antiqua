@@ -10,31 +10,23 @@ import { FeedbackRow } from "@/components/chrome/FeedbackRow";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { loadSavedNatal, type SavedNatal } from "@/lib/savedNatal";
-import {
-  findEclipses,
-  findMajorTransits,
-  findRetrogradeStations,
-  findSolarReturn,
-  findYearIngresses,
-  SLOW_BODIES,
-} from "@/lib/yearForecast";
-import { buildAnnualReport, type AnnualReport } from "@/lib/annualReport";
+import { SLOW_BODIES } from "@/lib/yearForecast";
 import { computeTransitSpans, type TransitSpan } from "@/lib/transitSpans";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { formatMonthYear, toRoman } from "@/components/horizons/format";
+import { str } from "@/strings";
+import { localZone } from "@/strings/formats";
+import { buildYearScreen, yearNatalPoints, YEAR_DAYS } from "@/lib/screens/year";
 import {
   SKY_ONLY_OPENING,
-  YEAR_VOTIVE,
-  buildSkyOnlyTimeline,
   buildYearSegments,
   spanHeadline,
-  yearVotiveTone,
   type YearSegment,
 } from "@/components/horizons/yearContent";
 import { cn } from "@/lib/classNames";
 
-const YEAR_DAYS = 365;
 const DAY_MS = 86_400_000;
+const FOOTER_HREFS = ["/season", "/forecast"] as const;
 
 function yearReadingId(now: Date): string {
   return `year-${now.getFullYear()}`;
@@ -78,63 +70,43 @@ function SegmentRow({ seg }: { seg: YearSegment }) {
 function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | null }) {
   const culture = useActivePantheon();
 
-  const natalPoints = useMemo(
-    () =>
-      natal
-        ? [
-            { key: "sun", longitude: natal.chart.sun },
-            { key: "moon", longitude: natal.chart.moon },
-            { key: "asc", longitude: natal.angles.ascendant },
-            { key: "mc", longitude: natal.angles.midheaven },
-          ]
-        : null,
-    [natal],
+  const screen = useMemo(
+    () => (culture && now ? buildYearScreen({ culture, instant: now, zone: localZone(), birth: natal }) : null),
+    [culture, now, natal],
   );
-
-  const report: AnnualReport | null = useMemo(() => {
-    if (!culture || !now || !natal || !natalPoints) return null;
-    const majorTransits = findMajorTransits(natalPoints, SLOW_BODIES, now, YEAR_DAYS);
-    const eclipses = findEclipses(now, YEAR_DAYS);
-    const retrogrades = findRetrogradeStations(now, YEAR_DAYS);
-    const solarReturn = findSolarReturn(natal.chart.sun, now);
-    return buildAnnualReport({
-      now,
-      natalName: natal.meta.name,
-      culture,
-      majorTransits,
-      eclipses,
-      retrogrades,
-      solarReturn,
-    });
-  }, [culture, now, natal, natalPoints]);
+  const report = screen?.report ?? null;
 
   const spans: readonly TransitSpan[] = useMemo(() => {
-    if (!now || !natalPoints) return [];
-    const all = computeTransitSpans(natalPoints, SLOW_BODIES, now, YEAR_DAYS);
+    if (!now || !natal) return [];
+    const all = computeTransitSpans(yearNatalPoints(natal), SLOW_BODIES, now, YEAR_DAYS);
     return all.filter((s) => s.end.getTime() >= now.getTime()).sort((a, b) => a.start.getTime() - b.start.getTime());
-  }, [now, natalPoints]);
-
-  const skyOnly = useMemo(() => {
-    if (!now || natal) return null;
-    const stations = findRetrogradeStations(now, YEAR_DAYS);
-    const ingresses = findYearIngresses(now, YEAR_DAYS, SLOW_BODIES);
-    return { stations, ingresses };
   }, [now, natal]);
 
-  if (!culture || !now) {
+  if (!culture || !now || !screen) {
     return <Skeleton />;
   }
 
+  const { slots, rowTones } = screen;
   const voice = CULTURE_VOICES[culture];
-  const roman = toRoman(now.getFullYear());
   const segments = report ? buildYearSegments(culture, report.quarters, now) : [];
   const isFestivals = voice.yearStructure === "festivals";
-  const votiveTone = report ? yearVotiveTone(report.yearTheme.dominantTransit?.aspectKind) : null;
+  const heads = slots["year.row.head"] as string[];
+  const months = slots["year.monthLabel"] as string[];
+  const prose = slots["year.row.prose"] as string[];
+  const noChart = slots["year.noChart"] as string[] | undefined;
 
   return (
     <div className="mx-auto max-w-[640px]">
-      <NaveHead culture={culture} kicker={`${voice.institution} · THE YEAR`}>
-        {roman} · {voice.yearTitle}
+      <NaveHead
+        culture={culture}
+        kicker={slots["year.kicker"]}
+        sub={
+          report ? undefined : (
+            <div className="font-mono text-data-xs tracking-label text-dim">{slots["year.countLine"]}</div>
+          )
+        }
+      >
+        {slots["year.title"]}
       </NaveHead>
 
       <p className="mx-auto max-w-[560px] text-left font-body text-prose-m leading-prose text-prose">
@@ -157,7 +129,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
           {spans.length > 0 ? (
             <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-[var(--space-4)] py-[var(--space-3)] text-left">
               <div className="mb-3 font-mono text-data-xs tracking-label text-accent">
-                THE YEAR&apos;S LONG TRANSITS · ITS SPINE
+                {str("year.spine.label", culture)}
               </div>
               <div className="flex flex-col gap-2.5">
                 {spans.slice(0, 6).map((span) => (
@@ -178,54 +150,50 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
             </div>
           ) : null}
 
-          {votiveTone ? (
+          {slots["year.votive"] ? (
             <div className="mt-8">
-              <Votive>{YEAR_VOTIVE[culture][votiveTone]}</Votive>
+              <Votive>{slots["year.votive"]}</Votive>
             </div>
           ) : null}
         </>
-      ) : skyOnly ? (
+      ) : (
         <>
           <div className="mx-auto mt-8 max-w-[560px] border border-rule px-[var(--space-4)] py-[var(--space-3)] text-left">
-            <div className="mb-3 font-mono text-data-xs tracking-label text-dim">
-              STATIONS AND INGRESSES · THE YEAR AHEAD
-            </div>
+            <div className="mb-2 font-mono text-data-xs tracking-label text-accent">{slots["year.today"]}</div>
             <div className="flex max-h-[420px] flex-col gap-2 overflow-y-auto font-mono text-data-xs leading-data text-prose">
-              {buildSkyOnlyTimeline(culture, skyOnly.stations, skyOnly.ingresses).map((row) => (
-                <div key={row.key}>
-                  <span className={row.tone === "conflict" ? "text-conflict" : "text-dim"}>
-                    {formatMonthYear(row.date)}
-                  </span>{" "}
-                  {row.label}
+              {heads.map((head, i) => (
+                <div key={`${i}-${head}`}>
+                  {months[i] ? <div className="mt-2 text-dim">{months[i]}</div> : null}
+                  <span className={rowTones[i] === "conflict" ? "text-conflict" : undefined}>{head}</span>
+                  {prose[i] ? <div className="font-body text-prose-s leading-prose text-dim">{prose[i]}</div> : null}
                 </div>
               ))}
             </div>
           </div>
-          <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-[var(--space-4)] py-[var(--space-3)] text-center">
-            <div className="font-display text-display-xs tracking-[0.1em] text-bone">
-              CAST A CHART TO READ THE YEAR AGAINST YOUR OWN SKY
+          {noChart ? (
+            <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-[var(--space-4)] py-[var(--space-3)] text-center">
+              <div className="font-display text-display-xs tracking-[0.1em] text-bone">{noChart[0]}</div>
+              <Link
+                href="/reading"
+                className="mt-4 inline-block border border-[var(--accent-strong-border)] px-5 py-2.5 font-mono text-data-xs tracking-label text-accent"
+              >
+                {noChart[1]}
+              </Link>
             </div>
-            <Link
-              href="/reading"
-              className="mt-4 inline-block border border-[var(--accent-strong-border)] px-5 py-2.5 font-mono text-data-xs tracking-label text-accent"
-            >
-              CAST A CHART →
-            </Link>
-          </div>
+          ) : null}
         </>
-      ) : null}
+      )}
 
       <div className="mt-6 flex justify-center">
-        <FeedbackRow readingId={yearReadingId(now)} noun="YEAR" />
+        <FeedbackRow readingId={yearReadingId(now)} noun={str("year.feedback.noun", culture)} />
       </div>
 
       <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-mono text-data-xs tracking-microcopy">
-        <Link href="/season" className="text-bone/65 hover:text-bone">
-          ← THE SEASON
-        </Link>
-        <Link href="/forecast" className="text-bone/65 hover:text-bone">
-          THE FORECAST →
-        </Link>
+        {(slots["year.footer"] as string[]).map((label, i) => (
+          <Link key={label} href={FOOTER_HREFS[i] ?? "/"} className="text-bone/65 hover:text-bone">
+            {label}
+          </Link>
+        ))}
       </div>
     </div>
   );

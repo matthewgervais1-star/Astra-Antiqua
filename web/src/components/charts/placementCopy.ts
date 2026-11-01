@@ -116,8 +116,17 @@ function extractCostClause(paragraph: string): string | null {
 /** WHAT IT IS: one deity-lens sentence, then the universal planet-in-sign
  *  paragraph. */
 export function buildWhatItIs(culture: Culture, body: Planet, sign: ZodiacSign): string {
-  const lens = `Your ${getDeityInscription(culture, body)}`;
-  return `${lens} ${PLANET_IN_SIGN[body][sign]}`;
+  return `${buildGoverns(culture, body)} ${buildInSign(body, sign)}`;
+}
+
+/** WHAT THE BODY GOVERNS (board P93): the first half of buildWhatItIs, the deity's inscription. */
+export function buildGoverns(culture: Culture, body: Planet): string {
+  return `Your ${getDeityInscription(culture, body)}`;
+}
+
+/** IN {SIGN} (board P95): the second half of buildWhatItIs, the planet-in-sign paragraph. */
+export function buildInSign(body: Planet, sign: ZodiacSign): string {
+  return PLANET_IN_SIGN[body][sign];
 }
 
 /** HOW IT SHOWS: the whole-sign house's arena, the deity's concern turned

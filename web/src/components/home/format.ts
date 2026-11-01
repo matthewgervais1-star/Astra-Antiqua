@@ -1,6 +1,6 @@
 import type { Culture, Planet } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
-import { SIGN_ABBR3 } from "@/components/charts/chartFormat";
+import { SIGN_ABBR3, SIGN_PHRASES, fmt } from "@/strings/formats";
 import { longitudeToSign, type Longitude, type ZodiacSign } from "@/data/sampleChart";
 
 /** Pure formatting helpers local to the home route: degree/minute display,
@@ -11,25 +11,12 @@ function pad2(n: number): string {
   return Math.trunc(n).toString().padStart(2, "0");
 }
 
-/** The /charts placements table's abbreviations, the one table on web. */
+/** The /charts placements table's abbreviations, the one table on web (F8). */
 export const SIGN3 = SIGN_ABBR3;
 
 /** The classical figure each sign is named for, used in "{DEITY} IN THE
- *  {IMAGE}" headlines ("SATURNUS IN THE RAM"). */
-export const SIGN_IMAGE: Readonly<Record<ZodiacSign, string>> = {
-  Aries: "RAM",
-  Taurus: "BULL",
-  Gemini: "TWINS",
-  Cancer: "CRAB",
-  Leo: "LION",
-  Virgo: "MAIDEN",
-  Libra: "SCALES",
-  Scorpio: "SCORPION",
-  Sagittarius: "ARCHER",
-  Capricorn: "GOAT",
-  Aquarius: "WATER-BEARER",
-  Pisces: "FISH",
-};
+ *  {IMAGE}" headlines ("SATURNUS IN THE RAM"): the one sign-phrase source. */
+export const SIGN_IMAGE = SIGN_PHRASES;
 
 export interface LongitudeParts {
   deg: string;
@@ -38,50 +25,27 @@ export interface LongitudeParts {
   sign3: string;
 }
 
-/** Two-digit degree, two-digit minute: "19°08′ LEO". Used for the ephemeris
- * rail, where every row lines up in a fixed-width mono column. */
+/** Degree and minute of a longitude inside its sign, as F5 prints them
+ * ("19°08′", "3°37′": degree unpadded, minutes two digits). */
 export function formatLongitude(longitude: Longitude): LongitudeParts {
   const { sign, degree } = longitudeToSign(longitude);
-  const deg = Math.floor(degree);
-  const min = Math.round((degree - deg) * 60);
-  const carried = min === 60 ? { deg: (deg + 1) % 30, min: 0 } : { deg, min };
-  return {
-    deg: pad2(carried.deg),
-    min: pad2(carried.min),
-    sign,
-    sign3: SIGN3[sign],
-  };
+  const [deg = "0", rest = "00′"] = fmt("angle.degMin", degree).split("°");
+  return { deg, min: rest.replace("′", ""), sign, sign3: SIGN3[sign] };
 }
 
-/** Un-padded degree, two-digit minute: "2°35′". Matches the mock's orb
- * display, which never zero-pads the degree. */
+/** An orb as F5 prints it: "2°35′". */
 export function formatOrbDegMin(orbDegrees: number): string {
-  const deg = Math.floor(orbDegrees);
-  const min = Math.round((orbDegrees - deg) * 60);
-  const carried = min === 60 ? { deg: deg + 1, min: 0 } : { deg, min };
-  return `${carried.deg}°${pad2(carried.min)}′`;
+  return fmt("angle.degMin", orbDegrees);
 }
 
+/** "OCT 2026" (F3), read in UTC as the home bundle's dates are. */
 export function formatMonthYear(date: Date): string {
-  return date
-    .toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "UTC" })
-    .toUpperCase();
+  return fmt("date.monthYear", date, "UTC");
 }
 
-export function weekdayUpper(date: Date): string {
-  return date.toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" }).toUpperCase();
-}
-
-export function dateLongUpper(date: Date): string {
-  return date
-    .toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
-    .toUpperCase();
-}
-
-export function shortDateUpper(date: Date): string {
-  return date
-    .toLocaleDateString("en-US", { day: "2-digit", month: "short", timeZone: "UTC" })
-    .toUpperCase();
+/** "WED 21 OCT 2026" (F1, the UTC day). */
+export function dateDayUpper(date: Date): string {
+  return fmt("date.day", date, "UTC");
 }
 
 /** The label for a natal point in a long-transit headline or spine: deity

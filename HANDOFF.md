@@ -103,3 +103,82 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   check. Consequence: the MAUI and SwiftUI iOS heads build only in CI and cannot build until a workflow
   is re-enabled (Actions tab, "Enable workflow"); web, Android and dotnet checks run locally as before.
 - Pending: Round 7 of the glass design on Matthew's word.
+
+## Added 2026-10-31: Liquid Glass on Android, step 1 (the chrome)
+
+- FACT (Matthew, 2026-10-31, relayed by the session that started this one): Android to look like the
+  iPhone glass design; "Start now" on a port built on Kyant0/AndroidLiquidGlass. Branch
+  `claude/android-glass-7a8074`, committed, not pushed, no PR. Record: `docs/design/android-glass.md`.
+- FACT (`android/app/src/main/java/com/astra/antiqua/ui/theme/glass/`): the chrome as composables,
+  P17 tab bar, P1 wordmark, P3 culture menu, P55 back button, P2 horizon control, P56 accessory and
+  body switcher, P20 scroll edge, `GlassScreen`; constants named as the iPhone port's (`Chrome`,
+  `GlassInk`). No screen uses them yet; Sky Day (step 2) waits for Matthew's word.
+- FACT (`android/gradle/libs.versions.toml`): `io.github.kyant0:backdrop` 1.0.6 (Apache-2.0); the
+  current 2.0.1 needs Kotlin 2.4. Compose BOM 2024.09.02 to 2026.02.00. Test-only: Robolectric 4.17,
+  Roborazzi 1.77.0.
+- FACT (`GlassChromeScreenshotTest`, `docs/design/android-glass/step1/placement.txt`): eight JVM
+  renders at 390x844 dp; every ID within 1 dp of the Round 7 table (P1 off 0.87, the rest 0.00).
+- FACT (local, 2026-10-31): `./gradlew compileDebugSources testDebugUnitTest` 234 tests, 0 failures.
+- FACT (`GlassContrastTest`): the tint tier (API 26 to 30) uses fill .90, 4.64:1 over a bone stroke;
+  the canvas's .80 gives 3.45:1 there.
+- INFERENCE: the iPhone answer "Fixed at 11 pt" applies to Android's chrome type too.
+- FACT (Matthew's popup, 2026-10-31): canvas 62 and 34 as floors; tint fill .90; keep blur 24 (the
+  lens barely shows under it); stay on backdrop 1.0.6. Step 1 stands as built.
+- FACT (Matthew's popup answer relayed 2026-10-31, "Compare both"): Kyant 1.0.6 against chrisbanes/haze
+  1.7.2 (Apache-2.0; 2.0.1 is Haze's current stable, needs Compose 1.12 and Kotlin 2.4) behind one seam
+  (`GlassBackdrop`, `GlassEngine` in `ui/theme/glass/`). Sheets: `docs/design/android-glass/compare/`.
+- FACT (`GlassLibraryComparisonTest`): at the canvas numbers the two draw the same glass (at most 9
+  levels of 255 apart). Worst dim label over solid bone: Kyant 3.49, Haze 3.47, tint .90 4.70; at rest
+  and scrolled every variant holds 5.4 or better.
+- FACT (Matthew's popup, 2026-10-31): keep Kyant; keep the canvas fill .80 over bright areas. Haze removed
+  (its comparison test stays in commit 432bf29).
+- FACT (Matthew, 2026-10-31, "go ahead"): step 2 built. Route.DAY opens Sky Day on the glass chrome
+  (`ui/screens/SkyDayScreen.kt`, `domain/SkyDay.kt`); chrome within 1 dp, every gap between blocks equals
+  the board's, heights follow the web's longer copy. Review fixes in. Local: 241 tests, 0 failures.
+  Record: `docs/design/android-glass.md` (step 2), renders `docs/design/android-glass/step2/`.
+- FACT (Matthew's popup, 2026-10-31): Sky Day approved; MORE opens Learn until step 10; the old Day
+  sections (lists, dive deeper, natal wheel, Sun and Moon readings) sit below Sky Day. 242 tests, 0 failures.
+- Pending: step 3, Sky Week with the Moon, in a fresh session (prompt
+  `docs/design/prompts/android-glass-step3.md`); push and PR on Matthew's word.
+- FACT (prompt pasted by Matthew, 2026-10-31): step 3 built. Route.WEEK opens Sky Week on the glass chrome
+  (`ui/screens/SkyWeekScreen.kt`, `domain/SkyWeek.kt`) with the Moon P171 behind the text at 0.5 rate, moving
+  with the text when animations are off; rows equal the web's week (node check); chrome within 1 dp, every
+  gap the board's. One Opus review, two fix rounds. Local: 252 tests, 0 failures. Record:
+  `docs/design/android-glass.md` (step 3), renders `docs/design/android-glass/step3/`.
+- Pending: Matthew's popup on step 3 (Reduce Motion, row headlines, the web's sections off the board,
+  approval); push and PR on his word.
+- FACT (Matthew's popup, 2026-10-31): Moon scrolls with the text under Reduce Motion (as built); add the
+  web's headline to each week row; put the web's thesis, note, votive, feedback and links below the rows;
+  "Changes first" before Season. Pending: those two changes, then his look.
+- FACT (Matthew, 2026-10-31, "Yes, build them"): row headlines and the web's thesis, note, votive, feedback
+  (kept on the device) and links below the rows built; 253 tests, 0 failures. Pending: his look at the renders.
+- FACT (Matthew's popup, 2026-10-31): Sky Week approved; "Grow the tap area only" (Compose's hit test
+  already gives 48 dp; a test pins it). 254 tests, 0 failures. Next: step 4, Sky Season, in a fresh
+  session (prompt `docs/design/prompts/android-glass-step4.md`); push and PR on Matthew's word.
+- FACT (prompt pasted by Matthew, 2026-10-31): step 4 built. Route.SEASON opens Sky Season on the glass chrome
+  (`ui/screens/SkySeasonScreen.kt`, `domain/SkySeason.kt`) with the house wheel P54; rows, house sentence, title
+  and day line equal the web's (node check, three dates); chrome within 1 dp, every gap the board's. One Opus
+  review, two fix rounds (D-pad reach, the day line at large fonts and on 360 dp phones, the chart-less blank
+  on return). Local: 270 tests, 0 failures. Record: `docs/design/android-glass.md` (step 4), renders `docs/design/android-glass/step4/`.
+- Pending: Matthew's popup on step 4 (the web's sections off the board, the kicker's form, approval); push and
+  PR on his word.
+- FACT (Matthew's popup, 2026-10-31): Season's web sections go below the board, as on Week; "Changes first".
+  On the kicker he asked whether a master design revamp could merge web, iPhone and Android into one set of
+  strings, differing only in layout (quoted in `docs/design/android-glass.md`, step 4). Pending: his answer on
+  that, then the web sections (with a port of web's season standouts) and the renders again.
+- FACT (Matthew, 2026-10-31, "Build sections now"): the web's season sections, votive, feedback, CAST A CHART and
+  links sit below Sky Season, with a port of web's season standouts and the Midheaven; text equals web's on four
+  dates (node). One scoped review, Minors fixed. 275 tests, 0 failures. Pending: his look at the renders, his
+  answer on a master revamp of shared strings; push and PR on his word.
+- FACT (Matthew's popup, 2026-11-01): Sky Season "Changes first" (none named yet); the Android port pauses until
+  the master revamp of shared strings lands. Pending: his changes for Season; a plan for the revamp.
+
+## Added 2026-11-01: shared strings revamp, planned
+
+- FACT (`docs/superpowers/plans/2026-11-01-shared-strings-revamp.md`, branch `claude/shared-strings-revamp-plan`):
+  one set of strings for web, iPhone and Android, layout the only difference. Web authors a typed catalog in
+  `web/src/strings/`, exported to `shared/strings/`; screen goldens in `shared/goldens/` pin each surface.
+- FACT (Matthew's popup, 2026-11-01): board form for chrome, web words for prose, by default; web catalog
+  exported; one name per destination; the Swift branch's exporters land on master first (Task 0), MAUI out.
+- Pending: Matthew's word to start Task 0; Task 1 is his ruling on the conflict table. The Android glass port
+  (steps 5 to 11) stays paused until Task 4.

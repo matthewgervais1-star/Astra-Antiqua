@@ -20,12 +20,12 @@ class ScriptFormsParityTest {
     private fun pin(expected: ScriptForm, actual: ScriptForm) = assertEquals(expected, actual)
 
     @Test
-    fun institutionTitlesMatchTheLexiconHeadings() {
+    fun institutionTitlesMatchTheCatalog() {
         for (culture in AncientCulture.entries) {
             assertEquals(
                 culture.name,
                 ScriptForms.institution(culture).en,
-                LexiconDictionary.forCulture(culture).dashboardTitle.uppercase(java.util.Locale.ENGLISH),
+                com.astra.antiqua.domain.generated.SharedStrings.COMMON_INSTITUTION.getValue(culture),
             )
         }
     }

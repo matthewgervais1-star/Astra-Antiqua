@@ -155,8 +155,6 @@ object Recurrence {
 
     // --- the four-tick timeline ---------------------------------------------
 
-    private val MONTHS = listOf("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC")
-
     private fun utc(d: Date): Calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply { time = d }
 
     /** Four ticks across the window, labelled in UTC at the window's scale, the present marked. */
@@ -167,7 +165,7 @@ object Recurrence {
         val crossesYear = utc(window.start).get(Calendar.YEAR) != utc(window.end).get(Calendar.YEAR)
         val ticks = (0..3).map { i ->
             val c = utc(Date(start + (span * i / 3.0).roundToLong()))
-            val month = MONTHS[c.get(Calendar.MONTH)]
+            val month = com.astra.antiqua.domain.generated.SharedFormats.MONTH_ABBR[c.get(Calendar.MONTH)]
             val day = c.get(Calendar.DAY_OF_MONTH)
             val pct = i * 100f / 3f
             when {

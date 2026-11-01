@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { fmt } from "@/strings/formats";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/classNames";
 import type { Motion } from "@/lib/motion";
@@ -72,9 +73,9 @@ export function DataRow({
       <span className="flex min-w-0 items-center gap-[var(--space-1)]">{body}</span>
       <span className="text-dim">{position}</span>
       <span className="text-dim">{sign}</span>
-      <span className="text-dim">{String(house).padStart(2, "0")}</span>
+      <span className="text-dim">{fmt("house.roman", house)}</span>
       <span className={retrograde ? "text-bone" : "text-faint-ink"}>
-        {retrograde ? "R" : "D"}
+        {fmt("motion.mark", retrograde)}
         <span className="sr-only">{retrograde ? ", retrograde" : ", direct"}</span>
       </span>
       <span

@@ -45,7 +45,6 @@ import com.astra.antiqua.ui.theme.displayCase
 import com.astra.antiqua.viewmodel.AstraViewModelFactory
 import com.astra.antiqua.viewmodel.SpansState
 import com.astra.antiqua.viewmodel.TransitsViewModel
-import java.util.Calendar
 import java.util.Date
 
 /**
@@ -248,14 +247,4 @@ internal fun natalPointLabel(culture: AncientCulture, key: String): String = whe
     else -> key
 }
 
-private val MONTHS_SHORT = listOf(
-    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
-)
-
-internal fun monthYear(date: Date): String {
-    val calendar = Calendar.getInstance()
-    calendar.time = date
-    val month = MONTHS_SHORT.getOrElse(calendar.get(Calendar.MONTH)) { "JAN" }
-    return "$month ${calendar.get(Calendar.YEAR)}"
-}
+internal fun monthYear(date: Date): String = com.astra.antiqua.domain.SharedFormat.monthYear(date)

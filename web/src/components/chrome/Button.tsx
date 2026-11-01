@@ -31,7 +31,7 @@ export interface ButtonProps
  * is no transition, because --transition is none.
  */
 const BASE =
-  "inline-flex items-center justify-center gap-[var(--space-1)] px-[var(--space-4)] py-[var(--space-2)] text-center font-mono text-data-s uppercase tracking-microcopy disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex items-center justify-center gap-[var(--space-1)] px-[var(--space-4)] py-[var(--space-2)] text-center font-mono text-data-s tracking-microcopy disabled:cursor-not-allowed disabled:opacity-50";
 
 const VARIANT: Readonly<Record<ButtonVariant, string>> = {
   primary: "border border-rule text-bone hover:border-rule-active",

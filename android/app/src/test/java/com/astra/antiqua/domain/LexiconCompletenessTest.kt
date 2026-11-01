@@ -1,16 +1,13 @@
 package com.astra.antiqua.domain
 
-import com.astra.antiqua.model.Planet
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * `CulturalLexicon.getOfficerName` used to fall back to "The Servant" when a
- * planet was missing from a culture's `culturalVoices` map, silently
- * producing wrong copy. `culturalVoices` is now a function backed by an
- * exhaustive `when` per culture (see LexiconDictionary), so a missing planet
- * is a compile error; this test is the data-completeness check for what's
- * left, that every culture's copy is real (non-blank) text.
+ * The Android-only vocabulary left in LexiconDictionary after the shared
+ * strings table dropped the rest (culturalVoices and getOfficerName went
+ * with it on 2026-11-01): every culture's remaining copy is real, non-blank
+ * text.
  */
 class LexiconCompletenessTest {
 
@@ -23,25 +20,12 @@ class LexiconCompletenessTest {
     )
 
     @Test
-    fun `every culture's culturalVoices covers every planet with non-blank copy`() {
+    fun `every culture's remaining lexicon copy is non-blank`() {
         for ((name, lexicon) in lexiconsByName) {
-            for (planet in Planet.values()) {
-                val voice = lexicon.culturalVoices(planet)
-                assertTrue("$name has blank cultural-voice copy for $planet", voice.isNotBlank())
-            }
-        }
-    }
-
-    @Test
-    fun `getOfficerName never falls back to the old Servant placeholder`() {
-        for ((name, lexicon) in lexiconsByName) {
-            for (planet in Planet.values()) {
-                val officerName = lexicon.getOfficerName(planet, "Deity")
-                assertTrue(
-                    "$name/$planet produced the old fallback copy",
-                    !officerName.startsWith("The Servant")
-                )
-            }
+            assertTrue("$name has a blank officer role", lexicon.officerRole.isNotBlank())
+            assertTrue("$name has a blank summary title", lexicon.highPriestSummaryTitle.isNotBlank())
+            assertTrue("$name has a blank decree line", lexicon.decreeLine("Deity", "Aries").isNotBlank())
+            assertTrue("$name has a blank summary", lexicon.highPriestSummary("Aries", "Taurus").isNotBlank())
         }
     }
 }

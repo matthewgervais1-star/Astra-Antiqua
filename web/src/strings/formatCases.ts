@@ -1,0 +1,105 @@
+import type { FormatInput, FormatName, Zone } from "@/strings/formats";
+
+/**
+ * The input and output pairs every surface's formatter must reproduce. The
+ * outputs are typed by hand from the ruled table (F1 to F14), so a change to
+ * formats.ts that moves a character fails formats.test.ts before it reaches
+ * shared/goldens/formats.json (written from this list by export-strings.mjs).
+ *
+ * Dates are ISO instants; a range is two instants. Review Focus 1 (month and
+ * year ends), 2 (UTC against local), and 4 (counts 0, 1, 2, 7) of the plan
+ * are covered.
+ */
+export interface FormatCase<N extends FormatName = FormatName> {
+  name: N;
+  /** JSON form of the input: an ISO instant, a pair of them, a number, a string, or a boolean. */
+  input: string | readonly [string, string] | number | boolean;
+  zone: Zone;
+  out: string;
+  note?: string;
+}
+
+export const FORMAT_CASES: readonly FormatCase[] = [
+  // F1 date.day, UTC day.
+  { name: "date.day", input: "2026-10-21T06:00:00Z", zone: "UTC", out: "WED 21 OCT 2026" },
+  { name: "date.day", input: "2026-10-22T02:00:00Z", zone: "UTC", out: "THU 22 OCT 2026", note: "UTC day" },
+  { name: "date.day", input: "2026-10-22T02:00:00Z", zone: "America/Montreal", out: "WED 21 OCT 2026", note: "local day, same instant" },
+  { name: "date.day", input: "2026-12-31T23:30:00Z", zone: "Europe/Rome", out: "FRI 1 JAN 2027", note: "year end, local" },
+  // F2 range.days: same month, across a month end, across a year end.
+  { name: "range.days", input: ["2026-10-19T12:00:00Z", "2026-10-25T12:00:00Z"], zone: "UTC", out: "19 → 25 OCT 2026" },
+  { name: "range.days", input: ["2026-09-29T12:00:00Z", "2026-10-05T12:00:00Z"], zone: "UTC", out: "29 SEP → 5 OCT 2026", note: "month end" },
+  { name: "range.days", input: ["2026-12-28T12:00:00Z", "2027-01-03T12:00:00Z"], zone: "UTC", out: "28 DEC 2026 → 3 JAN 2027", note: "year end" },
+  { name: "range.days", input: ["2026-09-23T06:00:00Z", "2026-10-23T06:00:00Z"], zone: "Europe/Rome", out: "23 SEP → 23 OCT 2026", note: "season" },
+  { name: "range.days", input: ["2026-12-21T22:30:00Z", "2027-01-20T12:00:00Z"], zone: "America/Montreal", out: "21 DEC 2026 → 20 JAN 2027", note: "Capricorn season, local" },
+  { name: "range.days", input: ["2026-12-21T22:30:00Z", "2027-01-20T12:00:00Z"], zone: "Europe/Rome", out: "21 DEC 2026 → 20 JAN 2027" },
+  { name: "range.days", input: ["2026-10-19T03:00:00Z", "2026-10-25T03:00:00Z"], zone: "America/Montreal", out: "18 → 24 OCT 2026", note: "local days differ from UTC" },
+  // F3.
+  { name: "date.dayMonth", input: "2026-09-23T06:00:00Z", zone: "UTC", out: "23 SEP" },
+  { name: "date.dayMonthYear", input: "2026-10-26T04:12:00Z", zone: "UTC", out: "26 OCT 2026" },
+  { name: "date.dayMonthYear", input: "2026-10-26T02:12:00Z", zone: "America/Montreal", out: "25 OCT 2026", note: "local" },
+  { name: "date.monthYear", input: "2027-06-15T00:00:00Z", zone: "UTC", out: "JUN 2027" },
+  { name: "date.weekday", input: "2026-10-19T12:00:00Z", zone: "UTC", out: "MON" },
+  { name: "date.dayOfMonth", input: "2026-10-19T12:00:00Z", zone: "UTC", out: "19" },
+  { name: "date.year", input: "2026-12-31T23:30:00Z", zone: "UTC", out: "2026" },
+  { name: "date.year", input: "2026-12-31T23:30:00Z", zone: "Europe/Rome", out: "2027", note: "year end, local" },
+  { name: "time.hm", input: "1990-01-15T04:30:00Z", zone: "Europe/Rome", out: "05:30", note: "birth zone" },
+  { name: "time.hm", input: "1990-01-15T04:30:00Z", zone: "UTC", out: "04:30" },
+  // F4.
+  { name: "range.months", input: ["2026-10-02T00:00:00Z", "2027-06-20T00:00:00Z"], zone: "UTC", out: "OCT 2026 → JUN 2027" },
+  // F5.
+  { name: "angle.degMin", input: 24.75, zone: "UTC", out: "24°45′" },
+  { name: "angle.degMin", input: 3.6167, zone: "UTC", out: "3°37′", note: "degree unpadded" },
+  { name: "angle.degMin", input: 0.8667, zone: "UTC", out: "0°52′" },
+  { name: "angle.degMin", input: 0.4167, zone: "UTC", out: "0°25′" },
+  { name: "angle.degMin", input: 12.9999, zone: "UTC", out: "13°00′", note: "minutes carry" },
+  { name: "angle.degMin", input: 29.9999, zone: "UTC", out: "29°59′", note: "never the next sign" },
+  // F6.
+  { name: "angle.orbDecimal", input: 3, zone: "UTC", out: "3.0°" },
+  { name: "angle.orbDecimal", input: 0.04, zone: "UTC", out: "0.0°" },
+  { name: "angle.orbDecimal", input: 2.46, zone: "UTC", out: "2.5°" },
+  { name: "percent", input: 0.7412, zone: "UTC", out: "74%" },
+  { name: "percent", input: 0, zone: "UTC", out: "0%" },
+  { name: "percent", input: 1, zone: "UTC", out: "100%" },
+  // F7.
+  { name: "count.word", input: 0, zone: "UTC", out: "NONE" },
+  { name: "count.word", input: 1, zone: "UTC", out: "ONE" },
+  { name: "count.word", input: 2, zone: "UTC", out: "TWO" },
+  { name: "count.word", input: 7, zone: "UTC", out: "SEVEN" },
+  { name: "count.word", input: 12, zone: "UTC", out: "TWELVE" },
+  { name: "count.word", input: 13, zone: "UTC", out: "13", note: "digits above twelve" },
+  { name: "count.digits", input: 0, zone: "UTC", out: "0" },
+  { name: "count.digits", input: 72, zone: "UTC", out: "72" },
+  // F12.
+  { name: "ordinal.word", input: 1, zone: "UTC", out: "first" },
+  { name: "ordinal.word", input: 2, zone: "UTC", out: "second" },
+  { name: "ordinal.word", input: 11, zone: "UTC", out: "eleventh" },
+  { name: "ordinal.wordUpper", input: 2, zone: "UTC", out: "SECOND" },
+  { name: "ordinal.wordTitle", input: 11, zone: "UTC", out: "Eleventh" },
+  { name: "house.roman", input: 2, zone: "UTC", out: "II" },
+  { name: "house.roman", input: 9, zone: "UTC", out: "IX" },
+  { name: "house.roman", input: 12, zone: "UTC", out: "XII" },
+  { name: "year.roman", input: 2026, zone: "UTC", out: "MMXXVI" },
+  // F8.
+  { name: "sign.full", input: "Capricorn", zone: "UTC", out: "CAPRICORN" },
+  { name: "sign.abbr", input: "Capricorn", zone: "UTC", out: "CAP" },
+  { name: "sign.phrase", input: "Pisces", zone: "UTC", out: "FISHES" },
+  { name: "sign.phrase", input: "Libra", zone: "UTC", out: "SCALES" },
+  { name: "planet.name", input: "mercury", zone: "UTC", out: "MERCURY" },
+  // F9.
+  { name: "tone.word", input: "trine", zone: "UTC", out: "EASE" },
+  { name: "tone.word", input: "sextile", zone: "UTC", out: "EASE" },
+  { name: "tone.word", input: "square", zone: "UTC", out: "TENSION" },
+  { name: "tone.word", input: "opposition", zone: "UTC", out: "TENSION" },
+  { name: "tone.word", input: "conjunction", zone: "UTC", out: "UNION" },
+  // F11.
+  { name: "motion.mark", input: true, zone: "UTC", out: "R" },
+  { name: "motion.mark", input: false, zone: "UTC", out: "" },
+];
+
+/** Turns a case's JSON input into the value fmt() takes. */
+export function caseInput(c: FormatCase): FormatInput[FormatName] {
+  const { input } = c;
+  if (Array.isArray(input)) return [new Date(input[0] as string), new Date(input[1] as string)] as const;
+  if (typeof input === "string" && /^\d{4}-\d{2}-\d{2}T/.test(input)) return new Date(input);
+  return input as FormatInput[FormatName];
+}

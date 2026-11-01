@@ -6,8 +6,8 @@ import type { AnnualQuarter } from "@/lib/annualReport";
 import type { AspectKind } from "@/data/sampleChart";
 import type { RetrogradeEvent, YearIngressEvent } from "@/lib/yearForecast";
 import type { TransitSpan } from "@/lib/transitSpans";
-import { SIGN_PHRASES } from "@/components/horizons/signPhrase";
-import { enDashRange, formatDayMonth } from "@/components/horizons/format";
+import { arrowRange, formatDayMonth } from "@/components/horizons/format";
+import { fmt, str } from "@/strings";
 
 const DAY_MS = 86_400_000;
 
@@ -35,7 +35,7 @@ function mergeSummary(a: AnnualQuarter, b: AnnualQuarter): string {
 }
 
 function rangeOf(start: Date, end: Date): string {
-  return enDashRange(formatDayMonth(start), formatDayMonth(end));
+  return arrowRange(formatDayMonth(start), formatDayMonth(end));
 }
 
 /**
@@ -128,34 +128,10 @@ export function buildYearSegments(
   }
 }
 
-/** Two-line year votive, keyed by the dominant tone of the year's headline transit. */
-export const YEAR_VOTIVE: Readonly<Record<Culture, Readonly<Record<"harmony" | "tension" | "quiet", string>>>> = {
-  egypt: {
-    tension: "WEIGH THIS YEAR BEFORE\nTHE FLOOD WEIGHS IT FOR YOU",
-    harmony: "BUILD WHILE THE RIVER\nRISES IN YOUR FAVOR",
-    quiet: "AN ORDINARY YEAR\nSTILL FILLS THE GRANARY",
-  },
-  greece: {
-    tension: "ASK THIS YEAR'S HARD QUESTION\nBEFORE THE ORACLE CLOSES",
-    harmony: "TAKE THE YEAR'S ANSWER\nAND BUILD ON IT",
-    quiet: "A QUIET YEAR IS\nSTILL COUNSEL GIVEN",
-  },
-  canaan: {
-    tension: "BRING THIS YEAR'S MATTER\nBEFORE THE COUNCIL WHILE IT SITS",
-    harmony: "BUILD WHILE BAAL\nHOLDS THE RAINS FOR YOU",
-    quiet: "AN ORDINARY YEAR STILL\nSTANDS UNDER EL'S TENT",
-  },
-  carthage: {
-    tension: "CLOSE THIS YEAR'S ACCOUNT\nBEFORE THE AUDIT CLOSES IT",
-    harmony: "SAIL WHILE THIS YEAR\nKEEPS THE SEA OPEN",
-    quiet: "A STEADY YEAR IN THE\nLEDGER IS STILL PROFIT",
-  },
-  rome: {
-    tension: "BUILD THIS YEAR WHAT THE\nCENSOR CANNOT STRIKE",
-    harmony: "TAKE THE HONORS OFFERED;\nTHE REVIEW WILL BEAR THEM OUT",
-    quiet: "GOVERN THE ORDINARY YEAR\nAS IF IT WERE WATCHED",
-  },
-};
+/** Two-line year votive, keyed by the dominant tone of the year's headline transit (year.votive.*). */
+export function yearVotive(culture: Culture, tone: "harmony" | "tension" | "quiet"): string {
+  return str(`year.votive.${tone}` as const, culture);
+}
 
 export function yearVotiveTone(kind: AspectKind | undefined): "harmony" | "tension" | "quiet" {
   if (!kind) return "quiet";
@@ -199,20 +175,25 @@ export function buildSkyOnlyTimeline(
 ): readonly SkyTimelineRow[] {
   const rows: SkyTimelineRow[] = [];
   for (const s of stations) {
-    const deity = DEITY_MATRIX[culture][s.planet].name.toUpperCase();
     rows.push({
       key: `station-${s.planet}-${s.date.toISOString()}`,
       date: s.date,
-      label: s.kind === "retrograde" ? `${deity} STATIONS RETROGRADE ℞` : `${deity} STATIONS DIRECT`,
+      label: str(s.kind === "retrograde" ? "year.row.retrograde" : "year.row.direct", culture, {
+        date: fmt("date.dayMonth", s.date, "local"),
+        planet: fmt("planet.name", s.planet),
+      }),
       tone: s.kind === "retrograde" ? "conflict" : "dim",
     });
   }
   for (const ing of ingresses) {
-    const deity = DEITY_MATRIX[culture][ing.planet].name.toUpperCase();
     rows.push({
       key: `ingress-${ing.planet}-${ing.date.toISOString()}`,
       date: ing.date,
-      label: `${deity} ENTERS THE ${SIGN_PHRASES[ing.toSign]}`,
+      label: str("year.row.ingress", culture, {
+        date: fmt("date.dayMonth", ing.date, "local"),
+        planet: fmt("planet.name", ing.planet),
+        sign: fmt("sign.full", ing.toSign),
+      }),
       tone: "dim",
     });
   }

@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { fmt, str } from "@/strings";
+import { localZone } from "@/strings/formats";
+import { buildTransitModel } from "@/lib/screens/transit";
+import { Fill } from "@/strings/Fill";
 import { isReceived } from "@/data/cultures";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { DEITY_MATRIX } from "@/data/deities";
-import { ASPECT_VERBS } from "@/data/aspectVerbs";
 import { getHouseMeaning } from "@/data/houses";
 import { longitudeToSign } from "@/data/sampleChart";
 import { TRANSIT_SPINE, type SlowBody } from "@/data/transitSpine";
@@ -31,15 +34,12 @@ import {
   formatDegMin,
   houseGroupIndex,
   isPointPlanetKey,
-  monthYear,
   monthYearProse,
   signPhraseProse,
   natalDegreeSide,
   natalPointLabel,
   ordinalWord,
   passNarrative,
-  passStatusLine,
-  seasonWord,
   spanTone,
   wholeSignHouse,
 } from "@/components/transits/spanDisplay";
@@ -50,6 +50,8 @@ import {
   TOUCHES_REGISTER_LINE,
   WHERE_BEGINS_CADENCE,
 } from "@/components/transits/spineTemplates";
+
+const FOOTER_HREFS = ["/year", "/forecast", "/transits"] as const;
 
 const FALLBACK_HOUSE_GROUP = { name: "", sub: "" } as const;
 
@@ -98,7 +100,6 @@ export function TransitDetail({ id }: TransitDetailProps) {
   const spine = TRANSIT_SPINE[culture][span.transitPlanet as SlowBody];
   const tone = spanTone(span);
   const transitDeity = DEITY_MATRIX[culture][span.transitPlanet].name;
-  const verb = ASPECT_VERBS[culture][span.aspectKind];
   const kindGlyph = ASPECT_KIND_GLYPH[span.aspectKind];
   const natalLabel = natalPointLabel(culture, span.natalKey);
   const pointKey = isPointPlanetKey(span.natalKey) ? span.natalKey : null;
@@ -111,7 +112,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
       <DeityGlyph body={span.transitPlanet} culture={culture} size={16} decorative />
       <span>{transitDeity.toUpperCase()}</span>
       <span>{formatDegMin(span.transitDegree)}</span>
-      <span>{span.transitSign.toUpperCase()}</span>
+      <span>{fmt("sign.full", span.transitSign)}</span>
       <span>{kindGlyph}</span>
       {pointKey ? (
         <>
@@ -123,8 +124,9 @@ export function TransitDetail({ id }: TransitDetailProps) {
     </span>
   );
 
-  const season = seasonWord(span.end);
-  const releaseYear = span.end.getFullYear();
+  const slots = buildTransitModel({ culture, instant: now, zone: localZone(), birth: natal, span });
+  const sectionLabels = slots["transit.section.labels"] as string[];
+  const footer = slots["transit.footer"] as string[];
 
   const changingClose = pointKey
     ? `It is set against your ${DEITY_MATRIX[culture][pointKey].name}, ${DEITY_MATRIX[culture][pointKey].epithet}.`
@@ -145,7 +147,6 @@ export function TransitDetail({ id }: TransitDetailProps) {
     touchesParagraph = span.natalKey === "asc" ? TOUCHES_ASC[culture] : TOUCHES_MC[culture];
   }
 
-  const statusLine = passStatusLine(span, now);
   const figure = composeSpanFigure(
     culture,
     span,
@@ -160,55 +161,57 @@ export function TransitDetail({ id }: TransitDetailProps) {
     <>
       <TransitSubBar
         context={`LONG TRANSIT · ${transitDeity.toUpperCase()} ${kindGlyph} NATAL ${natalLabel}`}
-        span={`${monthYear(span.start)} → ${monthYear(span.end)}`}
+        span={fmt("range.months", [span.start, span.end], "local")}
       />
       <main className="mx-auto max-w-[720px] px-5 py-12 md:py-16">
         <div className="mx-auto max-w-[640px]">
           <NaveHead
             kicker={
               <>
-                <ScriptName culture={culture} heading="institution" /> · A READING SCOPED TO THE TRANSIT&apos;S WHOLE SPAN
+                <Fill
+                  k="transit.kicker"
+                  culture={culture}
+                  slots={{ institution: <ScriptName culture={culture} heading="institution" /> }}
+                />
               </>
             }
             sub={
               <div className="font-mono text-data-xs leading-data tracking-label text-dim">
-                {transitDeity.toUpperCase()} {verb.toUpperCase()} {natalLabel}
+                {slots["transit.meta.title"]}
                 <br />
                 {degreesLine}
                 <br />
-                <span className="text-accent">
-                  THROUGH THE {season} OF {releaseYear}
-                </span>
+                <span className="text-accent">{slots["transit.meta.release"]}</span>
               </div>
             }
           >
-            {figure.headline}
+            {slots["transit.headline"]}
           </NaveHead>
 
           <FigureAnatomy
             culture={culture}
             anatomy={figure}
             timeline={timeline}
-            timelineCaption={statusLine}
-            centerLabel="YOU"
+            timelineCaption={slots["transit.statusLine"] as string}
+            centerLabel={str("transit.figure.you", culture)}
             afterParagraph={
               <div className="flex flex-col gap-6 text-left">
                 <div>
-                  <SectionDivider label="WHAT IS CHANGING" />
+                  <SectionDivider label={sectionLabels[0] ?? ""} />
                   <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">
                     {spine.changing} {changingClose}
                   </p>
                 </div>
                 <div>
-                  <SectionDivider label="WHERE IT BEGINS" />
+                  <SectionDivider label={sectionLabels[1] ?? ""} />
                   <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{beginsParagraph}</p>
                 </div>
                 <div>
-                  <SectionDivider label="WHAT IT TOUCHES" />
+                  <SectionDivider label={sectionLabels[2] ?? ""} />
                   <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{touchesParagraph}</p>
                 </div>
                 <div>
-                  <SectionDivider label="WHAT IT LEAVES BEHIND" />
+                  <SectionDivider label={sectionLabels[3] ?? ""} />
                   <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{spine.leaves[tone]}</p>
                 </div>
               </div>
@@ -220,7 +223,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
           </div>
 
           <div className="mt-4">
-            <FeedbackRow readingId={`transit-${span.id}`} noun="READING" />
+            <FeedbackRow readingId={`transit-${span.id}`} noun={str("transit.feedback.noun", culture)} />
           </div>
 
           {receivedBody ? (
@@ -230,15 +233,15 @@ export function TransitDetail({ id }: TransitDetailProps) {
           ) : null}
 
           <div className="mt-9 flex justify-center gap-8 font-mono text-data-xs tracking-microcopy">
-            <Link href="/year" className="text-bone/65 hover:text-bone">
-              ← THE YEAR
-            </Link>
-            <Link href="/forecast" className="text-bone/65 hover:text-bone">
-              THE FORECAST
-            </Link>
-            <Link href="/transits" className="text-accent">
-              ALL LONG TRANSITS →
-            </Link>
+            {footer.map((label, i) => (
+              <Link
+                key={label}
+                href={FOOTER_HREFS[i] ?? "/"}
+                className={i === footer.length - 1 ? "text-accent" : "text-bone/65 hover:text-bone"}
+              >
+                {label}
+              </Link>
+            ))}
           </div>
         </div>
       </main>

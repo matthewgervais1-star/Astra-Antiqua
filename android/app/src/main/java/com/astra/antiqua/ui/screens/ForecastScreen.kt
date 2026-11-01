@@ -318,23 +318,10 @@ private fun ForecastNote(text: String) {
     )
 }
 
-private val MONTHS_SHORT = listOf(
-    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
-)
-
-private val MONTHS_FULL = listOf(
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
-)
-
-private fun dayMonthOf(date: Date): String {
-    val calendar = Calendar.getInstance().apply { time = date }
-    return "${calendar.get(Calendar.DAY_OF_MONTH)} ${MONTHS_SHORT[calendar.get(Calendar.MONTH)]}"
-}
+private fun dayMonthOf(date: Date): String = com.astra.antiqua.domain.SharedFormat.dayMonth(date)
 
 private fun fullDateOf(date: Date): String {
     val calendar = Calendar.getInstance().apply { time = date }
     return "${calendar.get(Calendar.DAY_OF_MONTH)} " +
-        "${MONTHS_FULL[calendar.get(Calendar.MONTH)]} ${calendar.get(Calendar.YEAR)}"
+        "${com.astra.antiqua.domain.generated.SharedFormats.MONTH_FULL[calendar.get(Calendar.MONTH)]} ${calendar.get(Calendar.YEAR)}"
 }
