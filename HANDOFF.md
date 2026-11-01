@@ -36,10 +36,10 @@ Tags: FACT (source) / INFERENCE / CANNOT CONFIRM. This branch's handoff; the des
   check in CI will flag it until the regenerated project is committed.
 
 ## Pending, in order
-1. FACT (git, 2026-10-31): step 2, Sky Day, built and committed on `claude/ios-glass-phase-b-sky-day-0e20cf`
-   (cut at this branch's 1c48d4d; this branch is checked out in another worktree): master merged (0f356fe),
-   day page ported to AstraCore and pinned to `TestData/day.json`, Sky Day on GlassScreen, glass MainTabs.
-   Swift core 39/0, dotnet 105/0; SwiftUI unproven until CI. Push and fast-forward on Matthew's word.
+1. FACT (git, 2026-10-31): step 2, Sky Day, built (master merged 0f356fe, day page in AstraCore pinned to
+   `TestData/day.json`, glass MainTabs; Swift core 39/0, dotnet 105/0), pushed to this branch at 0982dc5 on
+   Matthew's word; the swift run must prove SwiftUI and `sky-day.json`. Matthew (popup, 2026-10-31): keep all
+   four chart rows in web order; a design round redraws Glass-Day with the web's copy; step 3, Sky Week, next.
 2. Steps 2 to 11 of the brief: Sky Day; Week with P53 and P171 (Reduce Motion: the Moon scrolls with
    the text, INFERENCE for Matthew); Season with P54; Year; Transits; Chart; Placement with P55 and P56;
    Transit detail; More, the culture sheet P146, the Doorway; the five cultures live.
