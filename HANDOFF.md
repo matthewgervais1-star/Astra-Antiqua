@@ -103,3 +103,13 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   check. Consequence: the MAUI and SwiftUI iOS heads build only in CI and cannot build until a workflow
   is re-enabled (Actions tab, "Enable workflow"); web, Android and dotnet checks run locally as before.
 - Pending: Round 7 of the glass design on Matthew's word.
+
+## Added 2026-11-01: shared strings revamp, planned
+
+- FACT (`docs/superpowers/plans/2026-11-01-shared-strings-revamp.md`, branch `claude/shared-strings-revamp-plan`):
+  one set of strings for web, iPhone and Android, layout the only difference. Web authors a typed catalog in
+  `web/src/strings/`, exported to `shared/strings/`; screen goldens in `shared/goldens/` pin each surface.
+- FACT (Matthew's popup, 2026-11-01): board form for chrome, web words for prose, by default; web catalog
+  exported; one name per destination; the Swift branch's exporters land on master first (Task 0), MAUI out.
+- Pending: Matthew's word to start Task 0; Task 1 is his ruling on the conflict table. The Android glass port
+  (steps 5 to 11) stays paused until Task 4.
