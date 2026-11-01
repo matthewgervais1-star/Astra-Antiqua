@@ -17,6 +17,8 @@ data class MoonToday(
     val phase: String,
     /** 0 to 100, (1 - cos angle) / 2 as web computes it. */
     val percentLit: Int,
+    /** The lit fraction, 0 to 1, that F6 `percent` prints. */
+    val litFraction: Double,
     /** The next quarter's name, "Full Moon" while waxing gibbous. */
     val nextName: String,
     /** Null when the library's search finds no quarter within 40 days; the line is then left out. */
@@ -69,11 +71,6 @@ object SkyDayComposer {
     private const val LOOKBACK_DAYS = 420L
     private const val WINDOW_DAYS = 1200
 
-    private val ORDINAL_WORDS = listOf(
-        "first", "second", "third", "fourth", "fifth", "sixth",
-        "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth",
-    )
-
     private fun normalize(v: Double): Double = ((v % 360.0) + 360.0) % 360.0
 
     /** web moonPhase.ts nameForAngle. */
@@ -109,6 +106,7 @@ object SkyDayComposer {
         return MoonToday(
             phase = phaseName(angle),
             percentLit = (lit * 100).roundToInt(),
+            litFraction = lit,
             nextName = name,
             nextDate = next?.let { Date(((it.ut + 2451545.0 - 2440587.5) * DAY_MS).toLong()) },
             waxing = angle < 180,
@@ -143,7 +141,7 @@ object SkyDayComposer {
             val t = DeityRegistry.getDeity(culture, lead.a).name
             val n = DeityRegistry.getDeity(culture, lead.b).name
             val verb = AspectVerbs.of(culture, lead.aspect)
-            val sentence = "$t $verb your $n in the ${ORDINAL_WORDS[house - 1]}. It touches ${HouseMeanings.get(house).arena}."
+            val sentence = "$t $verb your $n in the ${SharedFormat.ordinalWord(house)}. It touches ${HouseMeanings.get(house).arena}."
             ChartContact(lead.a, lead.b, lead.aspect, lead.orb, sentence)
         }
     }

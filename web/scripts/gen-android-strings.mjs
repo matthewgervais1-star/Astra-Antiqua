@@ -12,7 +12,7 @@
  *                     as the key in UPPER_SNAKE ("season.kicker" becomes
  *                     SEASON_KICKER), so a missing key fails the compile.
  *   SharedFormats.kt  data only: the month, weekday, count, ordinal, sign,
- *                     planet and tone word lists, the separators, and each
+ *                     planet, planet symbol, aspect glyph and tone word lists, the separators, and each
  *                     format's pattern, rule and zone rule.
  *
  * The JSON is the input, never the TS, so one pipeline runs TS to JSON to
@@ -134,6 +134,9 @@ ${map("SIGN_ABBR", w.signAbbr)}
 ${map("SIGN_PHRASES", w.signPhrases)}
     /** Keyed by the planet id ("mercury"). */
 ${map("PLANET_NAMES", w.planetNames)}
+${map("PLANET_SYMBOLS", w.planetSymbols)}
+    /** Keyed by the aspect kind ("trine"). */
+${map("ASPECT_GLYPHS", w.aspectGlyphs)}
     /** Keyed by the aspect kind ("trine"). */
 ${map("TONE_WORDS", w.toneWords)}
 ${map("SPAN_TONE_WORDS", w.spanToneWords)}

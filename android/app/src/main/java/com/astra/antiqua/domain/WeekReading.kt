@@ -1,6 +1,8 @@
 package com.astra.antiqua.domain
 
 import com.astra.antiqua.data.AstronomyEngine
+import com.astra.antiqua.domain.generated.SharedFormats
+import com.astra.antiqua.domain.generated.SharedStrings
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.Planet
 import java.util.Calendar
@@ -24,20 +26,52 @@ enum class RomeDayFlag { F, N, C }
  * around the glyphs.
  */
 sealed interface WeekShorthand {
-    data class Aspect(val a: Planet, val aspect: AspectType, val b: Planet, val tight: Boolean) : WeekShorthand {
+    /** [sign] is the first body's sign that day, which a conjunction prints. */
+    data class Aspect(val a: Planet, val aspect: AspectType, val b: Planet, val tight: Boolean, val sign: ZodiacSign? = null) : WeekShorthand {
         /** Web's ASPECT_GLYPH, printed between the two bodies. */
         val glyph: String get() = DayDecreeComposer.glyph(aspect)
 
-        /** Printed after the second body: TIGHT under the tight orb, nothing otherwise. */
+        /** The master-era Week screen's tail after the second body: TIGHT under the tight orb. */
         val tail: String? get() = if (tight) "TIGHT" else null
     }
 
     data class Ingress(val planet: Planet, val sign: ZodiacSign) : WeekShorthand {
-        /** Printed after the body: the arrow and the sign it enters. */
+        /** The master-era Week screen's tail after the body: the arrow and the sign's abbreviation. */
         val tail: String get() = "→ ${sign.abbr}"
     }
 
     data object Quiet : WeekShorthand
+
+    /**
+     * The shorthand as the catalog prints it (week.row.shorthand.*), web's
+     * shorthandText: planet symbols, the aspect glyph, TIGHT under the tight
+     * orb, the sign for a conjunction and the tone word; an ingress prints the
+     * full sign.
+     */
+    fun text(): String = when (this) {
+        is Aspect -> {
+            val slots = mapOf(
+                "a" to SharedFormats.PLANET_SYMBOLS.getValue(a.name.lowercase()),
+                "b" to SharedFormats.PLANET_SYMBOLS.getValue(b.name.lowercase()),
+                "aspectGlyph" to SharedFormats.ASPECT_GLYPHS.getValue(aspect.name.lowercase()),
+                "sign" to (sign?.let { SharedFormat.signFull(it) } ?: ""),
+                "tone" to SharedFormat.toneWord(aspect),
+            )
+            val template = if (aspect == AspectType.CONJUNCTION) {
+                if (tight) SharedStrings.WEEK_ROW_SHORTHAND_CONJUNCTION_TIGHT else SharedStrings.WEEK_ROW_SHORTHAND_CONJUNCTION
+            } else {
+                if (tight) SharedStrings.WEEK_ROW_SHORTHAND_ASPECT_TIGHT else SharedStrings.WEEK_ROW_SHORTHAND_ASPECT
+            }
+            SharedStrings.fill(template, slots)
+        }
+
+        is Ingress -> SharedStrings.fill(
+            SharedStrings.WEEK_ROW_SHORTHAND_INGRESS,
+            mapOf("symbol" to SharedFormats.PLANET_SYMBOLS.getValue(planet.name.lowercase()), "sign" to SharedFormat.signFull(sign)),
+        )
+
+        Quiet -> SharedStrings.WEEK_ROW_SHORTHAND_QUIET
+    }
 }
 
 data class WeekDay(
@@ -84,25 +118,12 @@ object WeekReading {
         Planet.MARS,
     )
 
-    private val WEEKDAYS = listOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")
 
     /** The culture's quiet-day line, generated from web (ReadingBanks.kt). */
     fun quietLine(culture: AncientCulture): String = quietDayLine(culture)
 
-    private fun signPhrase(sign: ZodiacSign): String = when (sign) {
-        ZodiacSign.ARIES -> "Ram"
-        ZodiacSign.TAURUS -> "Bull"
-        ZodiacSign.GEMINI -> "Twins"
-        ZodiacSign.CANCER -> "Crab"
-        ZodiacSign.LEO -> "Lion"
-        ZodiacSign.VIRGO -> "Maiden"
-        ZodiacSign.LIBRA -> "Scales"
-        ZodiacSign.SCORPIO -> "Scorpion"
-        ZodiacSign.SAGITTARIUS -> "Archer"
-        ZodiacSign.CAPRICORN -> "Goat"
-        ZodiacSign.AQUARIUS -> "Water-Bearer"
-        ZodiacSign.PISCES -> "Fishes"
-    }
+    /** web's sign figure in proper case, "Water-Bearer" (F8 `sign.phrase`). */
+    private fun signPhrase(sign: ZodiacSign): String = SkySeasonComposer.properCase(SharedFormat.signPhrase(sign))
 
     /**
      * Square and opposition read as tension; everything else, the conjunction
@@ -178,7 +199,8 @@ object WeekReading {
                 line = DayDecreeComposer.composeMeaning(culture, tightest, Math.floorDiv(instant, DAY_MS)) + " " +
                     DayDecreeComposer.composeConsequence(culture, tightest)
                 figure = FigureReadingComposer.isoDateUtc(Date(instant)) to FigureReadingComposer.figureId(tightest)
-                shorthand = WeekShorthand.Aspect(tightest.a, tightest.aspect, tightest.b, tight)
+                val sign = ZodiacSign.entries[((chart.getValue(tightest.a) % 360.0 + 360.0) % 360.0 / 30.0).toInt() % 12]
+                shorthand = WeekShorthand.Aspect(tightest.a, tightest.aspect, tightest.b, tight, sign)
             } else {
                 // Nothing in orb. A body crossing into a new sign that day is
                 // still something the sky did, and it is reported before the
@@ -251,7 +273,7 @@ object WeekReading {
     private fun weekdayAbbr(date: Date): String {
         val calendar = Calendar.getInstance()
         calendar.time = date
-        return WEEKDAYS[calendar.get(Calendar.DAY_OF_WEEK) - 1]
+        return com.astra.antiqua.domain.generated.SharedFormats.WEEKDAY_ABBR[calendar.get(Calendar.DAY_OF_WEEK) - 1]
     }
 
     private fun startOfDay(date: Date): Date = Calendar.getInstance().apply {

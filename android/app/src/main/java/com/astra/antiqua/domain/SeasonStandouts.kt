@@ -274,7 +274,7 @@ object SeasonStandouts {
     }
 
     /** web's findEclipses: lunar and global solar eclipses by peak, with the obscuration (0 where none is given). */
-    private fun eclipses(start: Date, days: Int): List<Triple<Date, Boolean, Double>> {
+    internal fun eclipses(start: Date, days: Int): List<Triple<Date, Boolean, Double>> {
         val end = start.time + days * DAY_MS
         val out = mutableListOf<Triple<Date, Boolean, Double>>()
         var lunar = searchLunarEclipse(timeOf(start))
@@ -295,7 +295,7 @@ object SeasonStandouts {
     }
 
     /** web's findMoonPhases: each quarter from the library's search, with the Moon's sign then. */
-    private fun moonPhases(engine: AstronomyEngine, start: Date, days: Int): List<Triple<Date, Int, ZodiacSign>> {
+    internal fun moonPhases(engine: AstronomyEngine, start: Date, days: Int): List<Triple<Date, Int, ZodiacSign>> {
         val end = start.time + days * DAY_MS
         val out = mutableListOf<Triple<Date, Int, ZodiacSign>>()
         var q = searchMoonQuarter(timeOf(start))
@@ -342,7 +342,7 @@ object SeasonStandouts {
 
     /** web's composeWhereItBegins. */
     fun whereItBegins(culture: AncientCulture, window: SkyEvents.SeasonWindow, status: String, companion: Planet?): String {
-        val signWord = SkySeasonComposer.properCase(SkySeasonComposer.SIGN_PHRASES.getValue(window.sign))
+        val signWord = SkySeasonComposer.properCase(SharedFormat.signPhrase(window.sign))
         val day = window.dayOfSeason
         val opened = "It opened when the $signWord received ${deity(culture, Planet.SUN)}, $day day${if (day == 1) "" else "s"} past."
         val with = companion?.let { " ${deity(culture, it)} stands with it this month." } ?: ""
@@ -351,8 +351,8 @@ object SeasonStandouts {
 
     /** web's composeWhatItLeavesBehind. */
     fun whatItLeavesBehind(culture: AncientCulture, window: SkyEvents.SeasonWindow): String {
-        val out = SkySeasonComposer.properCase(SkySeasonComposer.SIGN_PHRASES.getValue(window.sign))
-        val into = SkySeasonComposer.properCase(SkySeasonComposer.SIGN_PHRASES.getValue(ZodiacSign.entries[(window.sign.ordinal + 1) % 12]))
+        val out = SkySeasonComposer.properCase(SharedFormat.signPhrase(window.sign))
+        val into = SkySeasonComposer.properCase(SharedFormat.signPhrase(ZodiacSign.entries[(window.sign.ordinal + 1) % 12]))
         return when (culture) {
             AncientCulture.EGYPT -> "The scale does not carry $out's excuses into $into."
             AncientCulture.GREECE -> "The oracle does not carry $out's unanswered question into $into."

@@ -95,6 +95,12 @@ android {
             // since oracle_decrees.json is retired) src/main/assets.
             assets.srcDir(rootProject.file("../shared/content"))
         }
+        getByName("test") {
+            // The goldens web exports (shared/goldens/formats.json and
+            // screens/*.json) as test resources, so SharedFormatsTest and
+            // ScreenGoldenTest read the one generated copy on the classpath.
+            resources.srcDir(rootProject.file("../shared/goldens"))
+        }
     }
     testOptions {
         unitTests {

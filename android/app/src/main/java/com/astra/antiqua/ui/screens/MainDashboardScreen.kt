@@ -107,7 +107,7 @@ fun MainDashboardScreen(
     LaunchedEffect(Unit) { dashboardViewModel.calculateChart() }
 
     NaveShell(
-        context = lexicon.dashboardTitle,
+        context = com.astra.antiqua.domain.generated.SharedStrings.COMMON_INSTITUTION.getValue(culture),
         culture = culture,
         onNavigate = onNavigate,
         section = Section.TODAY,

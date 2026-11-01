@@ -1,23 +1,28 @@
 package com.astra.antiqua.domain
 
 import com.astra.antiqua.data.AstronomyEngine
+import com.astra.antiqua.domain.generated.SharedStrings
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.model.Planet
 import java.util.Calendar
 import java.util.Date
-import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
-/** A dated row of THE SEASON'S SKY, web's SeasonSkyRow: the date's ink follows the tone. */
-data class SeasonSkyRow(val date: Date, val label: String, val tone: SeasonRowTone)
+/**
+ * A dated row of THE SEASON’S SKY, web's SeasonSkyRow: the event as the
+ * catalog prints it ("MARS INTO LEO"), web's ingress sentence under an
+ * ingress (null on the other rows), and the tone the date's ink follows.
+ */
+data class SeasonSkyRow(val date: Date, val label: String, val prose: String?, val tone: SeasonRowTone)
 
 enum class SeasonRowTone { CONFLICT, HARMONY, DIM }
 
 /**
- * The house the season's sign takes in the reader's chart: the board's title
- * ("The eleventh house · The Assembly") and the web's sentence.
+ * The house the season's sign takes in the reader's chart: the board's
+ * heading ("The eleventh house · The Assembly", season.chart.houseHeading)
+ * and the web's sentence (season.chart.prose).
  */
 data class SeasonHouse(val house: Int, val ordinal: String, val title: String, val prose: String)
 
@@ -27,10 +32,10 @@ data class SkySeason(
     val daysRemaining: Int,
     /** The Sun's longitude at the instant read, for the wheel's mark. */
     val sun: Double,
-    /** web's NaveHead title, "THE SEASON OF THE SCALES". */
+    /** season.title, web's NaveHead title: "THE SEASON OF THE SCALES". */
     val headline: String,
-    /** web's line under the bar, "DAY 29 OF 31 · CLOSING". */
-    val status: String,
+    /** season.dayLine, the board's line under the bar: "DAY 29 OF 31 · 2 TO GO". */
+    val dayLine: String,
     /** web OrbBar's fill, in percent. */
     val barPercent: Int,
     /** web's sign blurb (zodiacSigns.ts). */
@@ -61,22 +66,6 @@ object SkySeasonComposer {
 
     private const val DAY_MS = 86_400_000L
 
-    /** web's SIGN_PHRASES (`components/horizons/signPhrase.ts`). */
-    val SIGN_PHRASES: Map<ZodiacSign, String> = mapOf(
-        ZodiacSign.ARIES to "RAM",
-        ZodiacSign.TAURUS to "BULL",
-        ZodiacSign.GEMINI to "TWINS",
-        ZodiacSign.CANCER to "CRAB",
-        ZodiacSign.LEO to "LION",
-        ZodiacSign.VIRGO to "MAIDEN",
-        ZodiacSign.LIBRA to "SCALES",
-        ZodiacSign.SCORPIO to "SCORPION",
-        ZodiacSign.SAGITTARIUS to "ARCHER",
-        ZodiacSign.CAPRICORN to "GOAT",
-        ZodiacSign.AQUARIUS to "WATER-BEARER",
-        ZodiacSign.PISCES to "FISHES",
-    )
-
     /**
      * web's CULTURE_VOICES houseGroups names (`data/cultureVoice.ts`), in the
      * order of `FigureReadingComposer.houseGroupIndex`: work, home, words, inner.
@@ -91,9 +80,6 @@ object SkySeasonComposer {
 
     /** web's SEASON_INGRESS_PLANETS. */
     private val INGRESS_BODIES = listOf(Planet.MERCURY, Planet.VENUS, Planet.MARS)
-
-    /** web's SLOW_BODIES (`lib/yearForecast.ts`). */
-    private val SLOW_BODIES = listOf(Planet.JUPITER, Planet.SATURN, Planet.URANUS, Planet.NEPTUNE, Planet.PLUTO)
 
     /** web's finder sampling pad: scan this far past the window, then trim to its end. */
     private const val SAMPLING_PAD_DAYS = 6
@@ -117,6 +103,8 @@ object SkySeasonComposer {
         val span = window.end.time - window.start.time
         val days = ceil(span.toDouble() / DAY_MS).toInt() + SAMPLING_PAD_DAYS
         val stations = SkyEvents.stations(engine, window.start, days).filter { it.date.time <= window.end.time }
+        val phases = SeasonStandouts.moonPhases(engine, window.start, days).filter { it.first.time <= window.end.time }
+        val eclipses = SeasonStandouts.eclipses(window.start, days).filter { it.first.time <= window.end.time }
         val ingresses = SkyEvents.ingresses(engine, window.start, days, INGRESS_BODIES).filter { it.date.time <= window.end.time }
         val sun = DayDecreeComposer.chartAt(engine, now).getValue(Planet.SUN)
         val status = status(window.totalDays, window.dayOfSeason, remaining)
@@ -126,14 +114,17 @@ object SkySeasonComposer {
             window = window,
             daysRemaining = remaining,
             sun = sun,
-            headline = "THE SEASON OF THE ${SIGN_PHRASES.getValue(window.sign)}",
-            status = "DAY ${window.dayOfSeason} OF ${window.totalDays} · $status",
+            headline = SharedStrings.fill(SharedStrings.SEASON_TITLE, mapOf("signPhrase" to SharedFormat.signPhrase(window.sign))),
+            dayLine = SharedStrings.fill(
+                SharedStrings.SEASON_DAY_LINE,
+                mapOf("n" to "${window.dayOfSeason}", "total" to "${window.totalDays}", "remaining" to "$remaining"),
+            ),
             barPercent = barPercent(remaining, window.totalDays),
             signProse = Learn.SIGNS.first { it.sign == window.sign.signName }.blurb,
             ascendant = ascendant,
             house = ascendant?.let { house(culture, window.sign, it) },
             touchesSky = touchesSky(culture, ingresses),
-            rows = skyRows(engine, culture, window, stations),
+            rows = skyRows(engine, culture, window, phases, ingresses, stations, eclipses),
             whatIsChanging = SeasonStandouts.whatIsChanging(culture, standouts),
             whereItBegins = SeasonStandouts.whereItBegins(culture, window, status, SeasonStandouts.companion(engine, window, now)),
             whatItLeavesBehind = SeasonStandouts.whatItLeavesBehind(culture, window),
@@ -171,18 +162,21 @@ object SkySeasonComposer {
         return out.append(lower.substring(last).replaceFirstChar { it.uppercase() }).toString()
     }
 
-    /** web's getSeasonHouse with composeWhatItTouchesNatal; the title is the board's form. */
+    /** web's getSeasonHouse with seasonHouseHeading and composeWhatItTouchesNatal. */
     fun house(culture: AncientCulture, sign: ZodiacSign, ascendant: Double): SeasonHouse {
         val number = FigureReadingComposer.wholeSignHouse(sign.ordinal * 30.0 + 15.0, ascendant)
         val meaning = HouseMeanings.get(number)
-        val ordinal = meaning.ordinal.lowercase()
+        val ordinal = SharedFormat.ordinalWord(number)
         val group = HOUSE_GROUPS.getValue(culture)[FigureReadingComposer.houseGroupIndex(number)].lowercase()
         val arena = meaning.arena.replaceFirstChar { it.lowercase() }
         return SeasonHouse(
             house = number,
             ordinal = ordinal,
-            title = "The $ordinal house · ${meaning.title}",
-            prose = "The season sits in your $ordinal house, which this culture keeps under $group. It works on $arena.",
+            title = SharedStrings.fill(SharedStrings.SEASON_CHART_HOUSE_HEADING, mapOf("ordinal" to ordinal, "title" to meaning.title)),
+            prose = SharedStrings.fill(
+                SharedStrings.SEASON_CHART_PROSE,
+                mapOf("ordinal" to ordinal, "group" to group, "arena" to arena),
+            ),
         )
     }
 
@@ -191,42 +185,86 @@ object SkySeasonComposer {
         if (ingresses.isEmpty()) return "No fast planet changes sign this month; the season holds its shape."
         return ingresses.take(3).joinToString(" ") {
             val deity = DeityRegistry.getDeity(culture, it.body).name
-            "$deity enters the ${properCase(SIGN_PHRASES.getValue(it.sign))} on ${dayMonth(it.date)}."
+            "$deity enters the ${properCase(SharedFormat.signPhrase(it.sign))} on ${dayMonth(it.date)}."
         }
     }
 
+    /** web's ingressSentence: "Ra is ferried into the Scales.", the prose under an ingress row. */
+    fun ingressSentence(culture: AncientCulture, planet: Planet, sign: ZodiacSign): String =
+        "${DeityRegistry.getDeity(culture, planet).name} ${ingressVerb(culture)} the ${properCase(SharedFormat.signPhrase(sign))}."
+
+    /** A Moon quarter's name in the catalog (common.moon.*), by the library's quarter index. */
+    private fun quarterName(quarter: Int): String = when (quarter) {
+        0 -> SharedStrings.COMMON_MOON_NEW_MOON
+        1 -> SharedStrings.COMMON_MOON_FIRST_QUARTER
+        2 -> SharedStrings.COMMON_MOON_FULL_MOON
+        else -> SharedStrings.COMMON_MOON_LAST_QUARTER
+    }
+
     /**
-     * web's buildSeasonSkyRows: the season's open and close, every turn to
-     * retrograde inside it, and the closest approach of a slow body that sits
-     * in the sign when the season opens, if the Sun comes within 3° of it.
+     * web's buildSeasonSkyRows, the board's event set (table row
+     * season.sky.row): the Sun's ingress that opens the season and the one
+     * that closes it, the Moon's quarters, the ingresses of Mercury, Venus and
+     * Mars, the stations both ways and the eclipses, in date order. Ingress
+     * rows carry web's ingress sentence.
      */
-    fun skyRows(engine: AstronomyEngine, culture: AncientCulture, window: SkyEvents.SeasonWindow, stations: List<SkyEvent>): List<SeasonSkyRow> {
-        val sunDeity = DeityRegistry.getDeity(culture, Planet.SUN).name.uppercase()
-        val rows = mutableListOf(
-            SeasonSkyRow(window.start, "$sunDeity → THE ${SIGN_PHRASES.getValue(window.sign)} · SEASON OPENS", SeasonRowTone.DIM),
+    fun skyRows(
+        engine: AstronomyEngine,
+        culture: AncientCulture,
+        window: SkyEvents.SeasonWindow,
+        phases: List<Triple<Date, Int, ZodiacSign>>,
+        ingresses: List<SkyEvent>,
+        stations: List<SkyEvent>,
+        eclipses: List<Triple<Date, Boolean, Double>>,
+    ): List<SeasonSkyRow> {
+        fun ingress(date: Date, planet: Planet, sign: ZodiacSign) = SeasonSkyRow(
+            date,
+            SharedStrings.fill(
+                SharedStrings.SEASON_SKY_EVENT_INGRESS,
+                mapOf("planet" to SharedFormat.planetName(planet), "sign" to SharedFormat.signFull(sign)),
+            ),
+            ingressSentence(culture, planet, sign),
+            SeasonRowTone.DIM,
         )
-        stations.filter { it.kind == SkyEventKind.RETROGRADE }.forEach {
-            rows += SeasonSkyRow(it.date, "${DeityRegistry.getDeity(culture, it.body).name.uppercase()} STATIONED ℞", SeasonRowTone.CONFLICT)
+        val rows = mutableListOf(ingress(window.start, Planet.SUN, window.sign))
+        phases.forEach { (date, quarter, sign) ->
+            rows += SeasonSkyRow(
+                date,
+                SharedStrings.fill(
+                    SharedStrings.SEASON_SKY_EVENT_PHASE,
+                    mapOf("phase" to quarterName(quarter), "sign" to SharedFormat.signFull(sign)),
+                ),
+                null,
+                SeasonRowTone.DIM,
+            )
         }
-        val span = minOf(60, ((window.end.time - window.start.time).toDouble() / DAY_MS).roundToInt() + 1)
-        for (body in SLOW_BODIES) {
-            val startSign = ZodiacSign.entries[signIndex(longitude(engine, body, window.start))]
-            if (startSign != window.sign) continue
-            var best: Pair<Date, Double>? = null
-            for (d in 0..span) {
-                val date = Date(window.start.time + d * DAY_MS)
-                if (date.time > window.end.time) break
-                val raw = abs(longitude(engine, Planet.SUN, date) - longitude(engine, body, date)) % 360.0
-                val sep = if (raw > 180) 360 - raw else raw
-                if (best == null || sep < best.second) best = date to sep
-            }
-            best?.takeIf { it.second <= 3 }?.let { (date, sep) ->
-                val deity = DeityRegistry.getDeity(culture, body).name.uppercase()
-                rows += SeasonSkyRow(date, "$sunDeity ☌ $deity${if (sep < 1) " EXACT" else ""}", SeasonRowTone.HARMONY)
-            }
+        ingresses.forEach { rows += ingress(it.date, it.body, it.sign) }
+        stations.forEach {
+            val retro = it.kind == SkyEventKind.RETROGRADE
+            rows += SeasonSkyRow(
+                it.date,
+                SharedStrings.fill(
+                    if (retro) SharedStrings.SEASON_SKY_EVENT_RETROGRADE else SharedStrings.SEASON_SKY_EVENT_DIRECT,
+                    mapOf("planet" to SharedFormat.planetName(it.body)),
+                ),
+                null,
+                if (retro) SeasonRowTone.CONFLICT else SeasonRowTone.HARMONY,
+            )
         }
-        val close = ZodiacSign.entries[(window.sign.ordinal + 1) % 12]
-        rows += SeasonSkyRow(window.end, "$sunDeity → THE ${SIGN_PHRASES.getValue(close)} · SEASON CLOSES", SeasonRowTone.DIM)
+        eclipses.forEach { (date, lunar, _) ->
+            // web reads the Moon's sign at a lunar eclipse's peak and the Sun's at a solar one.
+            val sign = ZodiacSign.entries[signIndex(longitude(engine, if (lunar) Planet.MOON else Planet.SUN, date))]
+            rows += SeasonSkyRow(
+                date,
+                SharedStrings.fill(
+                    if (lunar) SharedStrings.SEASON_SKY_EVENT_ECLIPSE_LUNAR else SharedStrings.SEASON_SKY_EVENT_ECLIPSE_SOLAR,
+                    mapOf("sign" to SharedFormat.signFull(sign)),
+                ),
+                null,
+                SeasonRowTone.CONFLICT,
+            )
+        }
+        rows += ingress(window.end, Planet.SUN, ZodiacSign.entries[(window.sign.ordinal + 1) % 12])
         return rows.sortedBy { it.date.time }
     }
 
@@ -236,9 +274,6 @@ object SkySeasonComposer {
 
     private fun signIndex(longitude: Double): Int = ((((longitude % 360.0) + 360.0) % 360.0) / 30.0).toInt() % 12
 
-    /** web's formatDayMonth, "3 OCT", on the local calendar. */
-    fun dayMonth(date: Date): String {
-        val c = Calendar.getInstance().apply { time = date }
-        return "${c.get(Calendar.DAY_OF_MONTH)} ${SkyWeekComposer.MONTHS[c.get(Calendar.MONTH)]}"
-    }
+    /** F3 `date.dayMonth`, "3 OCT", on the local calendar. */
+    fun dayMonth(date: Date): String = SharedFormat.dayMonth(date)
 }

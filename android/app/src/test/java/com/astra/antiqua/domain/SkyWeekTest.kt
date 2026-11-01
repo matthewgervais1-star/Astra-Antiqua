@@ -50,7 +50,7 @@ class SkyWeekTest {
             week.days.map { it.line },
         )
         assertEquals(
-            WeekShorthand.Aspect(com.astra.antiqua.model.Planet.VENUS, AspectType.SQUARE, com.astra.antiqua.model.Planet.PLUTO, tight = true),
+            WeekShorthand.Aspect(com.astra.antiqua.model.Planet.VENUS, AspectType.SQUARE, com.astra.antiqua.model.Planet.PLUTO, tight = true, sign = ZodiacSign.SCORPIO),
             week.days[1].shorthand,
         )
         assertEquals(WeekShorthand.Ingress(com.astra.antiqua.model.Planet.SUN, ZodiacSign.SCORPIO), week.days[4].shorthand)
@@ -78,7 +78,8 @@ class SkyWeekTest {
 
     @Test
     fun `the count line counts weighed and quiet days`() {
-        val day = { s: WeekShorthand -> WeekDay(Date(0), "MON 1", false, null, "", DayTone.QUIET, false, s, null) }
+        // web counts a day quiet by its tone; an ingress day reads as harmony.
+        val day = { s: WeekShorthand -> WeekDay(Date(0), "MON 1", false, null, "", if (s == WeekShorthand.Quiet) DayTone.QUIET else DayTone.HARMONY, false, s, null) }
         val ingress = WeekShorthand.Ingress(com.astra.antiqua.model.Planet.MOON, ZodiacSign.PISCES)
         assertEquals("SEVEN DAYS · SIX WEIGHED · ONE QUIET", SkyWeekComposer.countLine(List(6) { day(ingress) } + day(WeekShorthand.Quiet)))
         assertEquals("SEVEN DAYS · SEVEN WEIGHED · NONE QUIET", SkyWeekComposer.countLine(List(7) { day(ingress) }))

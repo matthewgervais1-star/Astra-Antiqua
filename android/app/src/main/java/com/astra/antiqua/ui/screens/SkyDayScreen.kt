@@ -56,6 +56,9 @@ import com.astra.antiqua.domain.DayTone
 import com.astra.antiqua.domain.LongTransitPick
 import com.astra.antiqua.domain.ScriptNameKey
 import com.astra.antiqua.domain.SkyDay
+import com.astra.antiqua.domain.SkyDaySlots
+import com.astra.antiqua.domain.SlotMap
+import com.astra.antiqua.domain.generated.SharedStrings
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.ui.components.DeityGlyph
@@ -91,9 +94,11 @@ import java.util.Date
  * (Matthew's popup answers of 2026-10-31 for the iPhone, carried to Android):
  * the kicker with the institution, the day page's headline, evidence line and
  * paragraph, the Moon and the season, web's "where the day falls" contacts,
- * and web's long-transit pick. The kicker date, the section labels and the
- * data lines are the board's own forms. The votive, the lists, the dive
- * deeper and the come-back line stay off Sky Day.
+ * and web's long-transit pick. Every printed string comes from the slot map
+ * [SkyDaySlots] builds over the shared catalog (shared/strings/en.json), the
+ * map ScreenGoldenTest holds to web's day golden. The votive, the footer
+ * links, the feedback row, the lists, the dive deeper and the come-back line
+ * stay off Sky Day (layout).
  */
 @Composable
 fun SkyDayScreen(
@@ -212,41 +217,6 @@ internal fun mono(size: TextUnit, lineHeight: Float, tracking: Float, weight: Fo
     lineHeightStyle = CssLeading,
 )
 
-private val MONTHS = listOf("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC")
-private val WEEKDAYS = listOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")
-
-private fun calendar(date: Date): Calendar = Calendar.getInstance().apply { time = date }
-
-private fun utcCalendar(date: Date): Calendar =
-    Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC")).apply { time = date }
-
-/**
- * The board's kicker date form, "WED 21 OCT 2026", for the UTC day the decree
- * reads, as web's weekdayUpper and dateLongUpper format it (timeZone UTC).
- */
-private fun kickerDate(date: Date): String {
-    val c = utcCalendar(date)
-    return "${WEEKDAYS[c.get(Calendar.DAY_OF_WEEK) - 1]} ${c.get(Calendar.DAY_OF_MONTH)} ${MONTHS[c.get(Calendar.MONTH)]} ${c.get(Calendar.YEAR)}"
-}
-
-/** "26 OCT 2026". */
-private fun dayMonthYear(date: Date): String {
-    val c = calendar(date)
-    return "${c.get(Calendar.DAY_OF_MONTH)} ${MONTHS[c.get(Calendar.MONTH)]} ${c.get(Calendar.YEAR)}"
-}
-
-/** "OCT 2026", in UTC as web's formatMonthYear. */
-private fun utcMonthYear(date: Date): String {
-    val c = utcCalendar(date)
-    return "${MONTHS[c.get(Calendar.MONTH)]} ${c.get(Calendar.YEAR)}"
-}
-
-/** "23 SEP". */
-private fun dayMonth(date: Date): String {
-    val c = calendar(date)
-    return "${c.get(Calendar.DAY_OF_MONTH)} ${MONTHS[c.get(Calendar.MONTH)]}"
-}
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun SkyDayContent(
@@ -257,14 +227,16 @@ private fun SkyDayContent(
     below: @Composable () -> Unit,
 ) {
     val side = Modifier.fillMaxWidth().padding(horizontal = Board.side)
+    val slots = remember(day, culture) { SkyDaySlots.build(day, culture) }
 
-    // P4: the kicker, the date and the institution, the institution as a script name.
+    // P4: the kicker, the date and the institution, the institution as a script name
+    // (its Latin form is the catalog's common.institution).
     val kicker = mono(11.sp, 1.6f, 0.16f)
     FlowRow(
         modifier = side.testTag("P4"),
         horizontalArrangement = Arrangement.Center,
     ) {
-        Text("${kickerDate(day.date)} · ", style = kicker, color = Dim)
+        Text(slots.text("day.kicker").removeSuffix(SharedStrings.COMMON_INSTITUTION.getValue(culture)), style = kicker, color = Dim)
         ScriptName(
             culture = culture,
             key = ScriptNameKey.Institution,
@@ -288,7 +260,7 @@ private fun SkyDayContent(
     // .08em (Round 6), which has capitals only.
     val smallCaps = LocalSmallCapsDisplay.current
     Text(
-        text = day.decree.headline,
+        text = slots.text("day.headline"),
         style = TextStyle(
             fontFamily = if (smallCaps) SpectralSc else Cinzel,
             fontWeight = FontWeight.Medium,
@@ -303,9 +275,9 @@ private fun SkyDayContent(
     )
 
     // P7: the evidence line.
-    if (day.decree.evidence.isNotEmpty()) {
+    slots.textOrNull("day.evidence")?.let { evidence ->
         Text(
-            text = day.decree.evidence,
+            text = evidence,
             style = mono(11.sp, 1.6f, 0.14f),
             color = Dim,
             textAlign = TextAlign.Center,
@@ -320,27 +292,29 @@ private fun SkyDayContent(
 
     // P9: the paragraph.
     Text(
-        text = day.decree.paragraph,
+        text = slots.list("day.paragraph").joinToString("\n\n"),
         style = TextStyle(fontFamily = Spectral, fontWeight = FontWeight.Light, fontSize = 18.sp, lineHeight = 18.sp * 1.65f, lineHeightStyle = CssLeading),
         color = Prose,
         modifier = side.testTag("P9"),
     )
 
-    SectionLabel("THE SKY, COMPUTED", "P10", bottom = 14.dp)
-    SkyBox(day, Modifier.padding(horizontal = Board.side).testTag("P11"))
+    SectionLabel(slots.text("day.sky.label"), "P10", bottom = 14.dp)
+    SkyBox(day, slots, Modifier.padding(horizontal = Board.side).testTag("P11"))
 
     day.contacts?.takeIf { it.isNotEmpty() }?.let { contacts ->
-        SectionLabel("ON YOUR CHART TODAY", "P12", bottom = 4.dp)
+        SectionLabel(slots.text("day.chart.label"), "P12", bottom = 4.dp)
+        val sentences = slots.list("day.chart.row.sentence")
+        val data = slots.list("day.chart.row.data")
         contacts.forEachIndexed { i, contact ->
             // The board draws two rows, P13 and P14; a day with more contacts adds rows past them.
             val id = if (i < 2) "P${13 + i}" else "row-${i + 1}"
-            ContactRow(culture, contact, onClick = { onNavigate(Route.TRANSITS) }, modifier = Modifier.testTag(id))
+            ContactRow(culture, contact, sentences[i], data[i], onClick = { onNavigate(Route.TRANSITS) }, modifier = Modifier.testTag(id))
         }
     }
 
     day.longTransit?.let { pick ->
-        SectionLabel("THE LONG TRANSIT", "P15", bottom = 14.dp)
-        LongTransitCard(culture, pick, day.date, onClick = { onOpen(Route.transitDetail(pick.span.id)) })
+        SectionLabel(slots.text("day.longTransit.label"), "P15", bottom = 14.dp)
+        LongTransitCard(pick, slots, onClick = { onOpen(Route.transitDetail(pick.span.id)) })
     }
 
     below()
@@ -367,9 +341,9 @@ private fun SectionLabel(text: String, id: String, bottom: Dp) {
     }
 }
 
-/** P11: the Moon, the next quarter and the season, with the season's bar. */
+/** P11: the Moon, the next quarter and the season, with the season's bar; each slot's lines are label then value. */
 @Composable
-private fun SkyBox(day: SkyDay, modifier: Modifier) {
+private fun SkyBox(day: SkyDay, slots: SlotMap, modifier: Modifier) {
     val data = mono(12.sp, 1.4f, 0.06f)
     @Composable
     fun line(label: String, value: String, ruled: Boolean, bottom: Dp = 13.dp) {
@@ -386,21 +360,16 @@ private fun SkyBox(day: SkyDay, modifier: Modifier) {
     }
     val season = day.season
     Column(modifier.fillMaxWidth().border(1.dp, Board.ruleSection).padding(horizontal = 16.dp, vertical = 4.dp)) {
-        line("MOON", "${day.moon.phase.uppercase()} · ${day.moon.percentLit}% LIT", ruled = true)
-        day.moon.nextDate?.let { line(day.moon.nextName.uppercase(), dayMonthYear(it), ruled = true) }
-        line(
-            "SEASON",
-            "SUN IN ${season.sign.name} · DAY ${season.dayOfSeason} OF ${season.totalDays}",
-            ruled = false,
-            bottom = 10.dp,
-        )
+        val (moonLabel, moonValue) = slots.lines("day.sky.moon")
+        line(moonLabel, moonValue, ruled = true)
+        slots.textOrNull("day.sky.nextQuarter")?.split("\n")?.let { (quarter, date) -> line(quarter, date, ruled = true) }
+        val (seasonLabel, seasonValue) = slots.lines("day.sky.season")
+        line(seasonLabel, seasonValue, ruled = false, bottom = 10.dp)
         Column(Modifier.padding(top = 4.dp, bottom = 14.dp)) {
             Bar(season.dayOfSeason.toFloat() / season.totalDays, Bone)
             Row(Modifier.fillMaxWidth().padding(top = 9.dp), horizontalArrangement = Arrangement.SpaceBetween) {
                 val small = mono(11.sp, 1f, 0.1f)
-                Text(dayMonth(season.start), style = small, color = Dim)
-                Text("${season.totalDays - season.dayOfSeason} TO GO", style = small, color = Dim)
-                Text(dayMonth(season.end), style = small, color = Dim)
+                slots.list("day.sky.bar").forEach { Text(it, style = small, color = Dim) }
             }
         }
     }
@@ -430,14 +399,14 @@ private fun Bar(fraction: Float, fill: Color) {
     }
 }
 
-/** One contact: the glyph, the web's sentence, and the board's data line. */
+/** One contact: the glyph, the web's sentence, and the board's data line, its tension word in the conflict ink. */
 @Composable
-private fun ContactRow(culture: AncientCulture, contact: ChartContact, onClick: () -> Unit, modifier: Modifier) {
+private fun ContactRow(culture: AncientCulture, contact: ChartContact, sentence: String, dataLine: String, onClick: () -> Unit, modifier: Modifier) {
     val tense = DayDecreeComposer.toneFor(contact.aspect) == DayTone.TENSION
-    val orb = "%.1f°".format(java.util.Locale.ROOT, contact.orb)
+    val toneAt = dataLine.lastIndexOf(" · ") + 3
     val data = buildAnnotatedString {
-        append("${contact.transit.name} ${DayDecreeComposer.glyph(contact.aspect)} NATAL ${contact.natal.name} · $orb FROM EXACT · ")
-        if (tense) withStyle(SpanStyle(color = Conflict)) { append("TENSION") } else append("EASE")
+        append(dataLine.substring(0, toneAt))
+        if (tense) withStyle(SpanStyle(color = Conflict)) { append(dataLine.substring(toneAt)) } else append(dataLine.substring(toneAt))
     }
     Column(Modifier.padding(horizontal = Board.side).then(modifier)) {
         Row(
@@ -452,7 +421,7 @@ private fun ContactRow(culture: AncientCulture, contact: ChartContact, onClick: 
             Spacer(Modifier.width(14.dp))
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(
-                    contact.sentence,
+                    sentence,
                     style = TextStyle(fontFamily = Spectral, fontWeight = FontWeight.Normal, fontSize = 17.sp, lineHeight = 17.sp * 1.5f, lineHeightStyle = CssLeading),
                     color = Bone,
                 )
@@ -463,16 +432,9 @@ private fun ContactRow(culture: AncientCulture, contact: ChartContact, onClick: 
     }
 }
 
-/** P16: the long transit, from web's pick, in the board's card. */
+/** P16: the long transit, from web's pick, in the board's card: web's two title lines, the board's meta and footer. */
 @Composable
-private fun LongTransitCard(culture: AncientCulture, pick: LongTransitPick, now: Date, onClick: () -> Unit) {
-    val span = pick.span
-    val deity = DeityRegistry.getDeity(culture, span.transitPlanet).name
-    val verb = com.astra.antiqua.domain.AspectVerbs.of(culture, span.aspect)
-    val title = "$deity $verb ${natalPointLabel(culture, span.natalKey)}"
-    val remaining = span.passes.count { it.time > now.time }
-    val tone = if (DayDecreeComposer.toneFor(span.aspect) == DayTone.TENSION) "TENSION" else "EASE"
-    val status = if (pick.active) "OPEN NOW" else "NEXT"
+private fun LongTransitCard(pick: LongTransitPick, slots: SlotMap, onClick: () -> Unit) {
     Column(
         Modifier
             .padding(horizontal = Board.side)
@@ -482,9 +444,9 @@ private fun LongTransitCard(culture: AncientCulture, pick: LongTransitPick, now:
             .rowPress("Read the long transit", onClick, pressFill = false)
             .padding(start = 18.dp, end = 18.dp, top = 18.dp, bottom = 16.dp),
     ) {
-        Text("$status · ${utcMonthYear(span.start)} → ${utcMonthYear(span.end)}", style = mono(11.sp, 1.4f, 0.14f), color = Dim)
+        Text(slots.text("day.longTransit.meta"), style = mono(11.sp, 1.4f, 0.14f), color = Dim)
         Text(
-            title,
+            slots.text("day.longTransit.title"),
             style = TextStyle(fontFamily = SpectralSc, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 16.sp * 1.45f, letterSpacing = 0.06.em, lineHeightStyle = CssLeading),
             color = Bone,
             modifier = Modifier.padding(top = 10.dp, bottom = 16.dp),
@@ -492,8 +454,8 @@ private fun LongTransitCard(culture: AncientCulture, pick: LongTransitPick, now:
         Bar(pick.progress, LocalAccent.current)
         Row(Modifier.fillMaxWidth().padding(top = 10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
             val small = mono(11.sp, 1f, 0.1f)
-            Text("${span.passes.size} EXACT · $remaining AHEAD · $tone", style = small, color = Dim)
-            Text("READ →", style = small, color = Bone)
+            Text(slots.text("day.longTransit.footer"), style = small, color = Dim)
+            Text(slots.text("day.longTransit.link"), style = small, color = Bone)
         }
     }
 }

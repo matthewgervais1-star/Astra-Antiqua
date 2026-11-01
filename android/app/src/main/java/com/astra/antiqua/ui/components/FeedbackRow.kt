@@ -26,6 +26,7 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.astra.antiqua.domain.generated.SharedStrings
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.Dim
 import com.astra.antiqua.ui.theme.FaintInk
@@ -37,8 +38,9 @@ private const val FEEDBACK_PREFS = "astra-antiqua.feedback.v1"
 
 /**
  * web's FeedbackRow: "AGAINST THIS WEEK → IT WAS SO · IT WAS NOT SO · KEPT ON
- * THIS DEVICE". The verdict stays on the device, as on web, where it lives in
- * localStorage; tapping the chosen verdict again clears it.
+ * THIS DEVICE", from the shared catalog (chrome.feedback.*; [noun] is the
+ * screen's `<screen>.feedback.noun`). The verdict stays on the device, as on
+ * web, where it lives in localStorage; tapping the chosen verdict again clears it.
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -53,15 +55,15 @@ fun FeedbackRow(readingId: String, noun: String, style: TextStyle, modifier: Mod
     }
     FlowRow(modifier.selectableGroup(), horizontalArrangement = Arrangement.Center, itemVerticalAlignment = Alignment.Top) {
         Text(
-            "AGAINST THIS $noun → ",
+            SharedStrings.fill(SharedStrings.CHROME_FEEDBACK_LEAD, mapOf("noun" to noun)) + " ",
             style = style,
             color = Dim,
             modifier = Modifier.semantics { contentDescription = "Against this ${noun.lowercase()}" },
         )
-        Verdict("IT WAS SO", verdict == "so", style) { choose("so") }
+        Verdict(SharedStrings.CHROME_FEEDBACK_SO, verdict == "so", style) { choose("so") }
         Text(" · ", style = style, color = Dim)
-        Verdict("IT WAS NOT SO", verdict == "notso", style) { choose("notso") }
-        Text(" · KEPT ON THIS DEVICE", style = style, color = FaintInk)
+        Verdict(SharedStrings.CHROME_FEEDBACK_NOT_SO, verdict == "notso", style) { choose("notso") }
+        Text(" · ${SharedStrings.CHROME_FEEDBACK_KEPT}", style = style, color = FaintInk)
     }
 }
 

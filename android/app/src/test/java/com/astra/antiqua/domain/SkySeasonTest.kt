@@ -16,7 +16,9 @@ import kotlin.math.sin
  * the smoke birth): the expected strings are web's, from a node run of
  * `getCurrentSeason`, `getSeasonSkyEvents`, `buildSeasonSkyRows`,
  * `composeWhatItTouchesSky` and `composeWhatItTouchesNatal` against `web/src`
- * with TZ Europe/Rome on 2026-10-31.
+ * with TZ Europe/Rome on 2026-10-31. The kicker, the day line and the sky rows
+ * moved to the shared catalog on 2026-11-01; ScreenGoldenTest pins them
+ * against web's season goldens.
  */
 class SkySeasonTest {
 
@@ -31,37 +33,16 @@ class SkySeasonTest {
         SkySeasonComposer.compose(engine, culture, SkyDayTest.sampleNow, if (withChart) SkySeasonComposer.natal(engine, chart, SkyDayTest.smokeBirth.latitude, SkyDayTest.smokeBirth.longitude) else null)
 
     @Test
-    fun `the sample season is the Scales, day 29 of 31, closing`() {
+    fun `the sample season is the Scales, day 29 of 31, two to go`() {
         val s = season(AncientCulture.EGYPT)
         assertEquals(ZodiacSign.LIBRA, s.window.sign)
         assertEquals("23 SEP → 23 OCT 2026", SkyWeekComposer.range(s.window.start, s.window.end))
         assertEquals("THE SEASON OF THE SCALES", s.headline)
-        assertEquals("DAY 29 OF 31 · CLOSING", s.status)
+        assertEquals("DAY 29 OF 31 · 2 TO GO", s.dayLine)
         assertEquals(2, s.daysRemaining)
         // web OrbBar: round((1 - 2/31) * 100).
         assertEquals(94, s.barPercent)
         assertEquals("The scales; forever balancing, reluctant to settle, at its best in partnership.", s.signProse)
-    }
-
-    @Test
-    fun `the rows are web's for Egypt and Rome`() {
-        fun rows(c: AncientCulture) = season(c).rows.map { "${SkySeasonComposer.dayMonth(it.date)} ${it.label} ${it.tone}" }
-        assertEquals(
-            listOf(
-                "23 SEP RA → THE SCALES · SEASON OPENS DIM",
-                "3 OCT ISIS STATIONED ℞ CONFLICT",
-                "23 OCT RA → THE SCORPION · SEASON CLOSES DIM",
-            ),
-            rows(AncientCulture.EGYPT),
-        )
-        assertEquals(
-            listOf(
-                "23 SEP SOL → THE SCALES · SEASON OPENS DIM",
-                "3 OCT VENUS STATIONED ℞ CONFLICT",
-                "23 OCT SOL → THE SCORPION · SEASON CLOSES DIM",
-            ),
-            rows(AncientCulture.ROME),
-        )
     }
 
     @Test
@@ -104,24 +85,11 @@ class SkySeasonTest {
 
     private fun at(iso: String) = SkySeasonComposer.compose(engine, AncientCulture.EGYPT, java.util.Date.from(java.time.Instant.parse(iso)), null)
 
-    private fun rows(s: SkySeason) = s.rows.map { "${SkySeasonComposer.dayMonth(it.date)} ${it.label} ${it.tone}" }
-
     @Test
-    fun `a season with slow bodies in its sign prints web's conjunction rows`() {
-        // node, TZ Europe/Rome: web's buildSeasonSkyRows for 2025-03-01 12:00 UTC.
+    fun `a season mid-way, its day line and the sky's ingresses`() {
+        // node, TZ Europe/Rome: web's season for 2025-03-01 12:00 UTC.
         val s = at("2025-03-01T12:00:00Z")
-        assertEquals("DAY 12 OF 31 · MIDPOINT PASSED", s.status)
-        assertEquals(
-            listOf(
-                "18 FEB RA → THE FISHES · SEASON OPENS DIM",
-                "2 MAR ISIS STATIONED ℞ CONFLICT",
-                "12 MAR RA ☌ GEB EXACT HARMONY",
-                "15 MAR SEBEGU STATIONED ℞ CONFLICT",
-                "19 MAR RA ☌ NUN EXACT HARMONY",
-                "20 MAR RA → THE RAM · SEASON CLOSES DIM",
-            ),
-            rows(s),
-        )
+        assertEquals("DAY 12 OF 31 · 19 TO GO", s.dayLine)
         assertEquals("Sebegu enters the Ram on 3 MAR.", s.touchesSky)
     }
 
@@ -131,15 +99,7 @@ class SkySeasonTest {
         val s = at("2026-12-30T12:00:00Z")
         assertEquals("21 DEC 2026 → 20 JAN 2027", SkyWeekComposer.range(s.window.start, s.window.end))
         assertEquals("THE SEASON OF THE GOAT", s.headline)
-        assertEquals("DAY 10 OF 31 · MIDPOINT PASSED", s.status)
-        assertEquals(
-            listOf(
-                "21 DEC RA → THE GOAT · SEASON OPENS DIM",
-                "10 JAN HORUS THE RED STATIONED ℞ CONFLICT",
-                "20 JAN RA → THE WATER-BEARER · SEASON CLOSES DIM",
-            ),
-            rows(s),
-        )
+        assertEquals("DAY 10 OF 31 · 21 TO GO", s.dayLine)
         assertEquals(
             "Sebegu enters the Goat on 25 DEC. Isis enters the Archer on 7 JAN. Sebegu enters the Water-Bearer on 13 JAN.",
             s.touchesSky,

@@ -100,6 +100,9 @@ class SkySeasonScreenshotTest {
     )
 
     private lateinit var state: ScrollState
+
+    /** The tag of the season's last sky row, past the board's two. */
+    private var lastRow = "row-3"
     private val routes = mutableListOf<String>()
     private val opened = mutableListOf<String>()
     private lateinit var focus: androidx.compose.ui.focus.FocusManager
@@ -108,6 +111,7 @@ class SkySeasonScreenshotTest {
         val engine = AstronomyEngine()
         val asc = if (withChart) SkySeasonComposer.natal(engine, CalculateNatalChartUseCase(engine).execute(SkyDayTest.smokeBirth), SkyDayTest.smokeBirth.latitude, SkyDayTest.smokeBirth.longitude) else null
         val season = SkySeasonComposer.compose(engine, culture, SkyDayTest.sampleNow, asc)
+        lastRow = "row-${season.rows.size}"
         compose.setContent {
             val base = LocalDensity.current
             androidx.compose.runtime.CompositionLocalProvider(LocalDensity provides androidx.compose.ui.unit.Density(base.density, fontScale)) {
@@ -157,7 +161,7 @@ class SkySeasonScreenshotTest {
         render("sky-season", AncientCulture.EGYPT, 0)
         assertChrome("sky-season")
         measure("sky-season", content)
-        // The season's third row (the close) has no board ID.
+        // The season's third row has no board ID.
         val third = compose.onNodeWithTag("row-3").getUnclippedBoundsInRoot()
         note("sky-season row-3 (no board ID) got %.1f, %.1f · %.1fx%.1f".format(third.left.value, third.top.value, (third.right - third.left).value, (third.bottom - third.top).value))
         val density = RuntimeEnvironment.getApplication().resources.displayMetrics.density
@@ -165,7 +169,7 @@ class SkySeasonScreenshotTest {
         val misses = gaps("sky-season") + gaps("sky-season", listOf(Triple("P42", "row-3", 0f)))
         assertTrue("gaps off the board's by more than 1 dp:\n" + misses.joinToString("\n"), misses.isEmpty())
         compose.onNodeWithText("THE SEASON OF THE SCALES").assertExists()
-        compose.onNodeWithText("DAY 29 OF 31 · CLOSING").assertExists()
+        compose.onNodeWithText("DAY 29 OF 31 · 2 TO GO").assertExists()
         compose.onNodeWithText("The eleventh house · The Assembly").assertExists()
         compose.onNode(hasContentDescription("Your houses: the Sun in the eleventh house, The Assembly")).assertExists()
         // The wheel keeps the board's box: centred, 120 across.
@@ -174,7 +178,7 @@ class SkySeasonScreenshotTest {
             "$wheel",
             abs(wheel.left.value - 135f) <= 1f && abs((wheel.right - wheel.left).value - 120f) <= 1f && abs((wheel.bottom - wheel.top).value - 120f) <= 1f,
         )
-        compose.onNode(hasContentDescription("3 oct isis stationed retrograde")).assertExists()
+        compose.onNode(hasContentDescription("3 oct 2026, venus turns retrograde")).assertExists()
     }
 
     @Test
@@ -193,7 +197,7 @@ class SkySeasonScreenshotTest {
     @Test
     @Config(qualifiers = "w360dp-h780dp-xxhdpi")
     fun skySeasonOnA360DpPhone() {
-        // 312 dp of content: MIDPOINT PASSED, the longest status, wraps between the dates,
+        // 312 dp of content: the day line wraps between the dates when it is long enough,
         // and its row takes both lines instead of drawing over the bar or the blurb.
         val engine = AstronomyEngine()
         val season = SkySeasonComposer.compose(engine, AncientCulture.EGYPT, java.util.Date.from(java.time.Instant.parse("2026-10-08T06:00:00Z")), null)
@@ -204,11 +208,14 @@ class SkySeasonScreenshotTest {
         }
         compose.waitForIdle()
         compose.onRoot().captureRoboImage(File(out, "sky-season-360.png").path)
-        compose.onNodeWithText(season.status).assertExists()
+        compose.onNodeWithText(season.dayLine).assertExists()
         val status = compose.onNodeWithTag("season-status").getUnclippedBoundsInRoot()
         val bar = compose.onNodeWithTag("P35").getUnclippedBoundsInRoot()
-        note("sky-season-360 %s: P35 height %.1f, day line %.1f tall".format(season.status, (bar.bottom - bar.top).value, (status.bottom - status.top).value))
-        assertTrue("the day line overflows the bar's block", status.bottom <= bar.bottom)
+        note("sky-season-360 %s: P35 height %.1f, day line %.1f tall".format(season.dayLine, (bar.bottom - bar.top).value, (status.bottom - status.top).value))
+        // On one line (14.3 dp of glyphs) the row keeps the board's 11 dp box and the glyphs overflow it, as at
+        // rest; a day line that wraps must grow the row instead of drawing over the bar.
+        val wrapped = (status.bottom - status.top).value > 20f
+        assertTrue("the day line overflows the bar's block", !wrapped || status.bottom <= bar.bottom)
         val misses = gaps("sky-season-360", listOf(Triple("P35", "P36", 26f)))
         assertTrue(misses.joinToString("\n"), misses.isEmpty())
     }
@@ -247,7 +254,7 @@ class SkySeasonScreenshotTest {
         // Rome sets the title in Cinzel and keeps its house group, "via", in web's sentence.
         render("sky-season-rome", AncientCulture.ROME, 0)
         assertChrome("sky-season-rome")
-        compose.onNode(hasContentDescription("23 sep sol into the scales, season opens")).assertExists()
+        compose.onNode(hasContentDescription("23 sep 2026, sun into libra. sol enters the augur's boundary of the scales.")).assertExists()
         compose.onNodeWithText(
             "The season sits in your eleventh house, which this culture keeps under via. It works on your allies, your assembly, and the things you hope for.",
         ).assertExists()
@@ -267,7 +274,7 @@ class SkySeasonScreenshotTest {
         val misses = gaps(
             "sky-season-end",
             listOf(
-                Triple("row-3", "season-changing-label", 40f), Triple("season-changing-label", "season-changing", 10f),
+                Triple(lastRow, "season-changing-label", 40f), Triple("season-changing-label", "season-changing", 10f),
                 Triple("season-changing", "season-begins-label", 28f), Triple("season-leaves", "season-votive", 32f),
                 Triple("season-votive", "season-feedback", 24f), Triple("season-feedback", "season-links", 36f),
             ),

@@ -61,9 +61,10 @@ import com.astra.antiqua.domain.DayTone
 import com.astra.antiqua.domain.MoonToday
 import com.astra.antiqua.domain.ScriptNameKey
 import com.astra.antiqua.domain.SkyWeek
-import com.astra.antiqua.domain.SkyWeekComposer
+import com.astra.antiqua.domain.SkyWeekSlots
+import com.astra.antiqua.domain.SlotMap
+import com.astra.antiqua.domain.generated.SharedStrings
 import com.astra.antiqua.domain.WeekDay
-import com.astra.antiqua.domain.WeekShorthand
 import com.astra.antiqua.domain.WeekVoice
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.ui.components.DeityGlyph
@@ -94,10 +95,11 @@ import kotlin.math.roundToInt
  * worktree's `.superpowers/sdd/glass-build/report-r3b.md`, P171 in
  * `docs/design/ios-layout-2026-10-21.md`, 2026-10-31). The board's sections in
  * its order, filled with the web's week (WeekNave.tsx, lib/weekReading.ts):
- * the institution, the voice's week title, each row's line and shorthand. The
- * kicker's date range, the count line, the Moon band's five facts and the
- * TODAY frame are the board's own forms. The thesis, the note, the votive,
- * the feedback row and the links stay off, as the votive did on Sky Day.
+ * the institution, the voice's week title, each row's line and shorthand.
+ * Every printed string comes from the slot map [SkyWeekSlots] builds over the
+ * shared catalog, the map ScreenGoldenTest holds to web's week golden. The
+ * thesis, the note, the votive, the feedback row and the links sit below the
+ * rows (Matthew, 2026-10-31).
  *
  * The Moon (P171) is a layer on the ground under the scrolling text: at rest
  * its centre sits on the band's, 60 from the left, and it rises 0.5 dp for
@@ -185,11 +187,12 @@ private fun SkyWeekContent(
     onOpen: (String) -> Unit,
 ) {
     val side = Modifier.fillMaxWidth().padding(horizontal = WeekBoard.side)
+    val slots = remember(week, culture) { SkyWeekSlots.build(week, culture) }
 
     // P21: the kicker, the week's dates and the institution, the institution as a script name.
     val kicker = mono(11.sp, 1.6f, 0.16f)
     FlowRow(modifier = side.testTag("P21"), horizontalArrangement = Arrangement.Center) {
-        Text("${SkyWeekComposer.range(week.start, week.end)} · ", style = kicker, color = Dim)
+        Text(slots.text("week.kicker").removeSuffix(SharedStrings.COMMON_INSTITUTION.getValue(culture)), style = kicker, color = Dim)
         ScriptName(
             culture = culture,
             key = ScriptNameKey.Institution,
@@ -204,7 +207,7 @@ private fun SkyWeekContent(
     // P22: the voice's week title in its own case; Rome keeps Cinzel at .08em.
     val smallCaps = LocalSmallCapsDisplay.current
     Text(
-        text = WeekVoice.title(culture),
+        text = slots.text("week.title"),
         style = TextStyle(
             fontFamily = if (smallCaps) SpectralSc else Cinzel,
             fontWeight = FontWeight.Medium,
@@ -220,7 +223,7 @@ private fun SkyWeekContent(
 
     // P23: the count line.
     Text(
-        text = SkyWeekComposer.countLine(week.days),
+        text = slots.text("week.countLine"),
         style = mono(11.sp, 1.6f, 0.14f),
         color = Dim,
         textAlign = TextAlign.Center,
@@ -235,6 +238,7 @@ private fun SkyWeekContent(
     // P53: the band, full width on the ground; the Moon behind it is P171.
     MoonBand(
         week.moon,
+        slots,
         Modifier.onGloballyPositioned { c ->
             val p = c.positionInRoot()
             anchor.value = Offset(p.x, p.y + scrollState.value + c.size.height / 2f)
@@ -243,10 +247,10 @@ private fun SkyWeekContent(
 
     // P25 to P31: the seven rows.
     week.days.forEachIndexed { i, day ->
-        WeekRow(culture, day, "P${25 + i}", onOpen)
+        WeekRow(day, RowText.of(slots, i), "P${25 + i}", onOpen)
     }
 
-    WebWeekSections(culture, week, onNavigate)
+    WebWeekSections(week, slots, onNavigate)
 }
 
 /**
@@ -259,17 +263,17 @@ private fun SkyWeekContent(
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun WebWeekSections(culture: AncientCulture, week: SkyWeek, onNavigate: (String) -> Unit) {
+private fun WebWeekSections(week: SkyWeek, slots: SlotMap, onNavigate: (String) -> Unit) {
     val side = Modifier.fillMaxWidth().padding(horizontal = WeekBoard.side)
     Text(
-        WeekVoice.thesis(culture),
+        slots.text("week.thesis"),
         style = TextStyle(fontFamily = Spectral, fontSize = 17.sp, lineHeight = 17.sp * 1.65f, lineHeightStyle = CssLeading),
         color = Prose,
         modifier = side.padding(top = 40.dp).testTag("week-thesis"),
     )
     val label = mono(11.sp, 1.6f, 0.14f)
     Text(
-        WeekVoice.note(culture),
+        slots.text("week.note"),
         style = label,
         color = Dim,
         textAlign = TextAlign.Center,
@@ -280,7 +284,7 @@ private fun WebWeekSections(culture: AncientCulture, week: SkyWeek, onNavigate: 
     Column(side.padding(top = 32.dp).testTag("week-votive")) {
         Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
         Text(
-            WeekVoice.votive(culture, week.days),
+            slots.text("week.votive"),
             style = TextStyle(
                 fontFamily = if (LocalSmallCapsDisplay.current) SpectralSc else Cinzel,
                 fontSize = 18.sp,
@@ -296,7 +300,7 @@ private fun WebWeekSections(culture: AncientCulture, week: SkyWeek, onNavigate: 
     }
     FeedbackRow(
         readingId = WeekVoice.readingId(week.start),
-        noun = "WEEK",
+        noun = SharedStrings.WEEK_FEEDBACK_NOUN,
         style = label,
         modifier = side.padding(top = 24.dp).testTag("week-feedback"),
     )
@@ -305,10 +309,11 @@ private fun WebWeekSections(culture: AncientCulture, week: SkyWeek, onNavigate: 
         side.padding(top = 36.dp).testTag("week-links"),
         horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally),
     ) {
+        val footer = slots.list("week.footer")
         listOf(
-            Triple("← THE DAY", Route.DAY, Bone.copy(alpha = 0.65f)),
-            Triple("THE SEASON →", Route.SEASON, Bone.copy(alpha = 0.65f)),
-            Triple("THE LONG TRANSITS →", Route.TRANSITS, LocalAccent.current),
+            Triple(footer[0], Route.DAY, Bone.copy(alpha = 0.65f)),
+            Triple(footer[1], Route.SEASON, Bone.copy(alpha = 0.65f)),
+            Triple(footer[2], Route.TRANSITS, LocalAccent.current),
         ).forEach { (text, route, ink) ->
             // Spoken without the arrows.
             val spoken = text.replace("←", "").replace("→", "").trim().lowercase().replaceFirstChar { it.uppercase() }
@@ -328,7 +333,7 @@ private fun WebWeekSections(culture: AncientCulture, week: SkyWeek, onNavigate: 
 
 /** P53: the five facts at x 194, centred in the 136-tall band. */
 @Composable
-private fun MoonBand(moon: MoonToday, modifier: Modifier) {
+private fun MoonBand(moon: MoonToday, slots: SlotMap, modifier: Modifier) {
     // At least the board's 136; a large font scale grows it, and the Moon follows its centre.
     Box(
         modifier.fillMaxWidth().heightIn(min = WeekBoard.bandHeight).testTag("P53"),
@@ -345,12 +350,9 @@ private fun MoonBand(moon: MoonToday, modifier: Modifier) {
             }
         }
         Column(Modifier.padding(start = WeekBoard.labelLeft).clearAndSetSemantics { contentDescription = spoken }) {
-            Text("MOON", style = style, color = Dim)
-            Text(moon.phase.uppercase(), style = style, color = Bone)
-            Text("${moon.percentLit}% LIT", style = style, color = Bone)
-            moon.nextDate?.let { next ->
-                Text(moon.nextName.uppercase(), style = style, color = Dim)
-                Text(SkyWeekComposer.dayMonthYear(next), style = style, color = Dim)
+            // week.moon: the label, the phase, the lit share, then the next quarter and its date.
+            slots.lines("week.moon").forEachIndexed { i, line ->
+                Text(line, style = style, color = if (i == 1 || i == 2) Bone else Dim)
             }
         }
     }
@@ -411,8 +413,21 @@ internal fun discPath(r: Float, show: Float, lit: Float, waxing: Boolean): Path 
  * figure opens the figure's page, as the web's headline link does, with the
  * pressed fill P170 and web's focus outline.
  */
+/** One row's printed slots: week.row.weekday's two lines, TODAY, the headline, the line and the shorthand. */
+private data class RowText(val weekday: String, val date: String, val today: String, val headline: String, val line: String, val shorthand: String) {
+    companion object {
+        fun of(slots: SlotMap, i: Int): RowText {
+            val (weekday, date) = slots.list("week.row.weekday")[i].split("\n")
+            val shorthand = listOf("week.row.shorthand.aspect", "week.row.shorthand.ingress", "week.row.shorthand.quiet")
+                .map { slots.list(it)[i] }
+                .first { it.isNotEmpty() }
+            return RowText(weekday, date, slots.list("week.row.today")[i], slots.list("week.row.headline")[i], slots.list("week.row.line")[i], shorthand)
+        }
+    }
+}
+
 @Composable
-private fun WeekRow(culture: AncientCulture, day: WeekDay, id: String, onOpen: (String) -> Unit) {
+private fun WeekRow(day: WeekDay, text: RowText, id: String, onOpen: (String) -> Unit) {
     val open = day.figure?.let { (date, figureId) -> { onOpen(Route.figure(date, figureId)) } }
     // The label names the day, so TalkBack's actions tell the seven rows apart.
     val press = if (open != null) Modifier.rowPress("Read the figure for ${day.label}", open) else Modifier
@@ -427,11 +442,11 @@ private fun WeekRow(culture: AncientCulture, day: WeekDay, id: String, onOpen: (
                 .border(1.dp, WeekBoard.todayBorder)
                 .padding(1.dp),
         ) {
-            Box(Modifier.fillMaxWidth().then(press).padding(horizontal = 14.dp, vertical = 18.dp)) { RowBody(culture, day) }
+            Box(Modifier.fillMaxWidth().then(press).padding(horizontal = 14.dp, vertical = 18.dp)) { RowBody(day, text) }
         }
     } else {
         Column(Modifier.padding(horizontal = WeekBoard.side).fillMaxWidth().testTag(id)) {
-            Box(Modifier.fillMaxWidth().then(press).padding(vertical = 18.dp)) { RowBody(culture, day) }
+            Box(Modifier.fillMaxWidth().then(press).padding(vertical = 18.dp)) { RowBody(day, text) }
             Box(Modifier.fillMaxWidth().height(1.dp).background(WeekBoard.ruleRow))
         }
     }
@@ -439,15 +454,16 @@ private fun WeekRow(culture: AncientCulture, day: WeekDay, id: String, onOpen: (
 
 /** The row's two columns: 48 for the date, 16 between, the rest for the reading. */
 @Composable
-private fun RowBody(culture: AncientCulture, day: WeekDay) {
-    val c = Calendar.getInstance().apply { time = day.date }
-    val dow = day.label.substringBefore(' ')
+private fun RowBody(day: WeekDay, text: RowText) {
+    // Rome's day flag rides after the number in the catalog's slot; the board sets the
+    // number large, so the flag moves up beside the weekday here (layout).
+    val number = text.date.substringBefore(' ')
+    val flag = text.date.substringAfter(' ', "")
     Row {
         Column(Modifier.width(48.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            // Rome's day flag rides beside the weekday, as the web prints it beside the label.
-            Text(dow + (day.flag?.let { " ${it.name}" } ?: ""), style = mono(11.sp, 1f, 0.14f), color = Dim)
+            Text(text.weekday + (if (flag.isNotEmpty()) " $flag" else ""), style = mono(11.sp, 1f, 0.14f), color = Dim)
             Text(
-                "${c.get(Calendar.DAY_OF_MONTH)}",
+                number,
                 style = TextStyle(fontFamily = SpectralSc, fontWeight = FontWeight.Medium, fontSize = 24.sp, lineHeight = 24.sp, lineHeightStyle = CssLeading),
                 color = Bone,
             )
@@ -456,16 +472,14 @@ private fun RowBody(culture: AncientCulture, day: WeekDay) {
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             val ink = if (day.tone == DayTone.TENSION) Conflict else Dim
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Shorthand(day.shorthand, culture, ink)
-                }
-                if (day.isToday) Text("TODAY", style = mono(11.sp, 1.4f, 0.1f), color = Bone)
+                Text(text.shorthand, style = mono(11.sp, 1.4f, 0.1f), color = ink, modifier = Modifier.weight(1f, fill = false))
+                if (text.today.isNotEmpty()) Text(text.today, style = mono(11.sp, 1.4f, 0.1f), color = Bone)
             }
             // The web's headline above the line (Matthew, 2026-10-31, "Add the web's headline"):
             // font-display at display-xs 18 with leading 1.1, in its own case, 4 above the line
             // as web's gap-1; none on an ingress day, as on web.
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                day.headline?.let { headline ->
+                text.headline.takeIf { it.isNotEmpty() }?.let { headline ->
                     Text(
                         headline,
                         style = TextStyle(
@@ -478,41 +492,11 @@ private fun RowBody(culture: AncientCulture, day: WeekDay) {
                     )
                 }
                 Text(
-                    day.line,
+                    text.line,
                     style = TextStyle(fontFamily = Spectral, fontWeight = FontWeight.Light, fontSize = 16.5.sp, lineHeight = 16.5.sp * 1.6f, lineHeightStyle = CssLeading),
                     color = Prose,
                 )
             }
         }
-    }
-}
-
-/**
- * Web's WeekNave shorthand: the bodies as deity glyphs in the culture in
- * force, the aspect glyph between them and TIGHT after; on an ingress the
- * body, the arrow and the sign's abbreviation; QUIET on a day with nothing in orb.
- */
-@Composable
-private fun Shorthand(shorthand: WeekShorthand, culture: AncientCulture, ink: Color) {
-    val style = mono(11.sp, 1.4f, 0.1f)
-    when (shorthand) {
-        is WeekShorthand.Aspect -> {
-            DeityGlyph(body = shorthand.a, culture = culture, size = 16.dp)
-            Text(
-                shorthand.glyph,
-                style = style,
-                color = ink,
-                modifier = Modifier.semantics { contentDescription = shorthand.aspect.name.lowercase() },
-            )
-            DeityGlyph(body = shorthand.b, culture = culture, size = 16.dp)
-            shorthand.tail?.let { Text(it, style = style, color = ink) }
-        }
-
-        is WeekShorthand.Ingress -> {
-            DeityGlyph(body = shorthand.planet, culture = culture, size = 16.dp)
-            Text(shorthand.tail, style = style, color = ink)
-        }
-
-        WeekShorthand.Quiet -> Text("QUIET", style = style, color = ink)
     }
 }

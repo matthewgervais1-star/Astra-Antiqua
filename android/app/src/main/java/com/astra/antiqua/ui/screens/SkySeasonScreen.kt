@@ -65,7 +65,9 @@ import com.astra.antiqua.domain.SeasonRowTone
 import com.astra.antiqua.domain.SeasonSkyRow
 import com.astra.antiqua.domain.SkySeason
 import com.astra.antiqua.domain.SkySeasonComposer
-import com.astra.antiqua.domain.SkyWeekComposer
+import com.astra.antiqua.domain.SkySeasonSlots
+import com.astra.antiqua.domain.SlotMap
+import com.astra.antiqua.domain.generated.SharedStrings
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.Planet
 import com.astra.antiqua.ui.components.DeityGlyph
@@ -162,16 +164,17 @@ private object SeasonBoard {
 private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavigate: (String) -> Unit, onOpen: (String) -> Unit) {
     val side = Modifier.fillMaxWidth().padding(horizontal = SeasonBoard.side)
     val window = season.window
+    val slots = remember(season, culture) { SkySeasonSlots.build(season, culture) }
 
     // P32: the kicker, the season's dates and the institution, the institution as a script name.
     val kicker = mono(11.sp, 1.6f, 0.16f)
     FlowRow(modifier = side.testTag("P32"), horizontalArrangement = Arrangement.Center) {
-        val range = SkyWeekComposer.range(window.start, window.end)
+        val range = slots.text("season.kicker").removeSuffix(SharedStrings.COMMON_INSTITUTION.getValue(culture))
         Text(
-            "$range · ",
+            range,
             style = kicker,
             color = Dim,
-            modifier = Modifier.semantics { contentDescription = range.replace("→", "to") },
+            modifier = Modifier.semantics { contentDescription = range.removeSuffix(" · ").replace("→", "to") },
         )
         ScriptName(
             culture = culture,
@@ -192,7 +195,7 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavig
     // P34: web's title in its own case; Rome keeps Cinzel at .08em.
     val smallCaps = LocalSmallCapsDisplay.current
     Text(
-        text = season.headline,
+        text = slots.text("season.title"),
         style = TextStyle(
             fontFamily = if (smallCaps) SpectralSc else Cinzel,
             fontWeight = FontWeight.Medium,
@@ -216,11 +219,12 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavig
         // dates leave (a 360 dp phone), the row takes the text's own height.
         Row(Modifier.fillMaxWidth().padding(top = 9.dp), verticalAlignment = Alignment.CenterVertically) {
             val small = mono(11.sp, 1f, 0.1f)
-            var lines by remember(season.status) { mutableIntStateOf(1) }
+            val dayLine = slots.text("season.dayLine")
+            var lines by remember(dayLine) { mutableIntStateOf(1) }
             val box = if (LocalDensity.current.fontScale <= 1f && lines == 1) Modifier.height(11.dp).wrapContentHeight(unbounded = true) else Modifier
             Text(SkySeasonComposer.dayMonth(window.start), style = small, color = Dim, modifier = box)
             Text(
-                season.status,
+                dayLine,
                 style = small,
                 color = Bone,
                 textAlign = TextAlign.Center,
@@ -233,7 +237,7 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavig
 
     // P36: the sign's blurb.
     Text(
-        season.signProse,
+        slots.text("season.signProse"),
         style = TextStyle(fontFamily = Spectral, fontWeight = FontWeight.Light, fontSize = 18.sp, lineHeight = 18.sp * 1.65f, lineHeightStyle = CssLeading),
         color = Prose,
         modifier = side.padding(top = 26.dp).testTag("P36").dpadStop(),
@@ -244,16 +248,16 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavig
     val house = season.house
     val ascendant = season.ascendant
     if (house != null && ascendant != null) {
-        SeasonLabel("THROUGH YOUR CHART", "P37", bottom = 16.dp)
+        SeasonLabel(slots.text("season.chart.label"), "P37", bottom = 16.dp)
         Text(
-            house.title,
+            slots.text("season.chart.houseHeading"),
             style = TextStyle(fontFamily = SpectralSc, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 16.sp * 1.45f, letterSpacing = 0.06.em, lineHeightStyle = CssLeading),
             color = Bone,
             textAlign = TextAlign.Center,
             modifier = side.testTag("P38").semantics { heading() },
         )
         Text(
-            house.prose,
+            slots.text("season.chart.prose"),
             style = lessonProse,
             color = Prose,
             textAlign = TextAlign.Center,
@@ -263,18 +267,21 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavig
             HouseWheel(ascendant, season.sun, house)
         }
     } else {
-        SeasonLabel("WHAT IT TOUCHES", "P37", bottom = 16.dp)
-        Text(season.touchesSky, style = lessonProse, color = Prose, textAlign = TextAlign.Center, modifier = side.testTag("P39").dpadStop())
+        // Without a chart web's WHAT IT TOUCHES section stands where the house block would.
+        val touches = slots.list("season.sections")[2].split("\n", limit = 2)
+        SeasonLabel(touches[0], "P37", bottom = 16.dp)
+        Text(touches[1], style = lessonProse, color = Prose, textAlign = TextAlign.Center, modifier = side.testTag("P39").dpadStop())
     }
 
     // P40 to P42: the season's sky, web's rows in the board's ruled rows.
-    SeasonLabel("THE SEASON'S SKY", "P40", bottom = 4.dp)
+    SeasonLabel(slots.text("season.sky.label"), "P40", bottom = 4.dp)
+    val rowText = slots.list("season.sky.row")
     season.rows.forEachIndexed { i, row ->
         // The board draws two rows, P41 and P42; a season with more adds rows past them.
-        SkyRow(row, if (i < 2) "P${41 + i}" else "row-${i + 1}")
+        SkyRow(row, rowText[i], if (i < 2) "P${41 + i}" else "row-${i + 1}")
     }
 
-    WebSeasonSections(culture, season, onNavigate, onOpen)
+    WebSeasonSections(season, slots, onNavigate, onOpen)
 }
 
 /**
@@ -288,13 +295,13 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavig
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun WebSeasonSections(culture: AncientCulture, season: SkySeason, onNavigate: (String) -> Unit, onOpen: (String) -> Unit) {
+private fun WebSeasonSections(season: SkySeason, slots: SlotMap, onNavigate: (String) -> Unit, onOpen: (String) -> Unit) {
     val side = Modifier.fillMaxWidth().padding(horizontal = SeasonBoard.side)
-    listOf(
-        Triple("WHAT IS CHANGING", season.whatIsChanging, "season-changing"),
-        Triple("WHERE IT BEGINS", season.whereItBegins, "season-begins"),
-        Triple("WHAT IT LEAVES BEHIND", season.whatItLeavesBehind, "season-leaves"),
-    ).forEachIndexed { i, (label, body, id) ->
+    // season.sections: each a label over its sentence; WHAT IT TOUCHES (no chart) is drawn above as P37 to P39.
+    val sections = slots.list("season.sections").map { it.split("\n", limit = 2) }
+    val ids = listOf("season-changing", "season-begins", "season-leaves")
+    listOf(sections.first(), sections[1], sections.last()).forEachIndexed { i, (label, body) ->
+        val id = ids[i]
         SeasonLabel(label, "$id-label", bottom = 10.dp, top = if (i == 0) 40.dp else 28.dp)
         Text(
             body,
@@ -308,7 +315,7 @@ private fun WebSeasonSections(culture: AncientCulture, season: SkySeason, onNavi
     Column(side.padding(top = 32.dp).testTag("season-votive").dpadStop()) {
         Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
         Text(
-            season.votive,
+            slots.text("season.votive"),
             style = TextStyle(
                 fontFamily = if (LocalSmallCapsDisplay.current) SpectralSc else Cinzel,
                 fontSize = 18.sp,
@@ -325,15 +332,16 @@ private fun WebSeasonSections(culture: AncientCulture, season: SkySeason, onNavi
     val label = mono(11.sp, 1.6f, 0.14f)
     FeedbackRow(
         readingId = season.readingId,
-        noun = "SEASON",
+        noun = SharedStrings.SEASON_FEEDBACK_NOUN,
         style = label,
         modifier = side.padding(top = 24.dp).testTag("season-feedback"),
     )
-    if (season.house == null) {
+    if (slots.has("season.noChart")) {
         // web: CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES → READING.
+        val (castLine, castLink) = slots.list("season.noChart")
         FlowRow(side.padding(top = 32.dp).testTag("season-cast"), horizontalArrangement = Arrangement.Center) {
             Text(
-                "CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES → ",
+                "$castLine ",
                 style = label,
                 color = Dim,
                 textAlign = TextAlign.Center,
@@ -341,7 +349,7 @@ private fun WebSeasonSections(culture: AncientCulture, season: SkySeason, onNavi
             )
             // Opened on top of the season, as the app's other ways to the cast screen are,
             // so saving the chart comes back here.
-            FootLink("READING", "Cast a chart", Route.READING, LocalAccent.current, label, onOpen)
+            FootLink(castLink, "Cast a chart", Route.READING, LocalAccent.current, label, onOpen)
         }
     }
     val link = mono(11.sp, 1.6f, 0.18f)
@@ -349,11 +357,12 @@ private fun WebSeasonSections(culture: AncientCulture, season: SkySeason, onNavi
         side.padding(top = 36.dp).testTag("season-links"),
         horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally),
     ) {
+        val footer = slots.list("season.footer")
         listOf(
-            Triple("← THE DAY", Route.DAY, Bone.copy(alpha = 0.65f)),
-            Triple("THE WEEK", Route.WEEK, Bone.copy(alpha = 0.65f)),
-            Triple("THE YEAR →", Route.YEAR, Bone.copy(alpha = 0.65f)),
-            Triple("THE LONG TRANSITS →", Route.TRANSITS, LocalAccent.current),
+            Triple(footer[0], Route.DAY, Bone.copy(alpha = 0.65f)),
+            Triple(footer[1], Route.WEEK, Bone.copy(alpha = 0.65f)),
+            Triple(footer[2], Route.YEAR, Bone.copy(alpha = 0.65f)),
+            Triple(footer[3], Route.TRANSITS, LocalAccent.current),
         ).forEach { (text, route, ink) ->
             // Spoken without the arrows.
             val spoken = text.replace("←", "").replace("→", "").trim().lowercase().replaceFirstChar { it.uppercase() }
@@ -396,32 +405,37 @@ private fun SeasonLabel(text: String, id: String, bottom: Dp, top: Dp = SeasonBo
 }
 
 /**
- * One of web's season-sky rows, "3 OCT ISIS STATIONED ℞", the date in its
- * tone's ink (conflict, accent or dim) and the label in prose, inside the
- * board's row: 16 above and below, a rule at bone .10 under it.
+ * One of the season-sky rows, season.sky.row: "28 SEP 2026 · MARS INTO LEO"
+ * with web's ingress sentence under it, the date in its tone's ink (conflict,
+ * accent or dim), inside the board's row: 16 above and below, a rule at bone
+ * .10 under it.
  */
 @Composable
-private fun SkyRow(row: SeasonSkyRow, id: String) {
+private fun SkyRow(row: SeasonSkyRow, text: String, id: String) {
     val ink = when (row.tone) {
         SeasonRowTone.CONFLICT -> Conflict
         SeasonRowTone.HARMONY -> LocalAccent.current
         SeasonRowTone.DIM -> Dim
     }
     // Spoken without the glyphs, which TalkBack would read by their names.
-    val spoken = "${SkySeasonComposer.dayMonth(row.date)} ${row.label}"
-        .replace("℞", "retrograde").replace("☌", "conjunct").replace("→", "into")
-        .replace(" · ", ", ").lowercase()
+    val head = text.substringBefore("\n")
+    val prose = text.substringAfter("\n", "")
+    val date = head.substringBefore(" · ")
+    val spoken = text.replace("\n", ". ").replace(" · ", ", ").lowercase()
     Column(Modifier.padding(horizontal = SeasonBoard.side).fillMaxWidth().testTag(id).dpadStop().clearAndSetSemantics { contentDescription = spoken }) {
-        Text(
-            buildAnnotatedString {
-                withStyle(SpanStyle(color = ink)) { append(SkySeasonComposer.dayMonth(row.date)) }
-                append(" ")
-                append(row.label)
-            },
-            style = mono(11.sp, 1.4f, 0.1f),
-            color = Prose,
-            modifier = Modifier.padding(vertical = 16.dp),
-        )
+        Column(Modifier.padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(
+                buildAnnotatedString {
+                    withStyle(SpanStyle(color = ink)) { append(date) }
+                    append(head.removePrefix(date))
+                },
+                style = mono(11.sp, 1.4f, 0.1f),
+                color = Prose,
+            )
+            if (prose.isNotEmpty()) {
+                Text(prose, style = lessonProse, color = Prose)
+            }
+        }
         Box(Modifier.fillMaxWidth().height(1.dp).background(SeasonBoard.ruleRow))
     }
 }
