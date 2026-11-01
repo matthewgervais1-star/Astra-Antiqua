@@ -302,6 +302,11 @@ class SkyYearScreenshotTest {
         }
         note("sky-year-end page scrolls to %.1f".format(state.maxValue / density))
         assertGaps("sky-year-end", footGaps(withChart = true))
+        // The votive keeps the catalog's two lines at 342 (Matthew, 2026-11-01): a third line adds 28.8 to the
+        // 121.0 it measured with "YOU" alone.
+        val votive = box("year-votive")
+        note("sky-year-end year-votive height %.1f (three lines 121.0)".format(votive.h))
+        assertTrue("the votive wrapped: $votive", votive.h < 105f)
         compose.onNodeWithText("WEIGH THIS YEAR BEFORE\nTHE FLOOD WEIGHS IT FOR YOU").assertExists()
         compose.onNodeWithText("THE YEAR’S LONG TRANSITS · ITS SPINE").assertExists()
         compose.onNodeWithText("GEB TIPS THE SCALES AGAINST YOUR NATAL RA", useUnmergedTree = true).assertExists()

@@ -217,5 +217,5 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 - FACT (`ScreenGoldenTest`, node check of `web/src`): the 10 year goldens and the page's prose equal web's.
 - FACT (review, one Opus reviewer): nothing Critical; one Important (spine links) and the Minors fixed in two rounds.
 - FACT (local, 2026-11-01): `./gradlew compileDebugSources testDebugUnitTest` 299 tests, 0 failures (279 before).
-- Pending: Matthew's popup on step 5 (the votive and spine wraps, TODAY's place, approval); push and PR on his word.
-  Next: step 6, Transits.
+- FACT (Matthew's popup, 2026-11-01): votive tracking tightened to fit two lines (built, 299/0); spine headlines
+  and TODAY kept as built; Sky Year approved. Next: step 6, Transits, in a fresh session; push and PR on his word.

@@ -583,3 +583,12 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
   "local" both ways); `SkyEvents` ingress search to 60 s (inherited from step 4).
 - FACT (local, 2026-11-01): `./gradlew compileDebugSources testDebugUnitTest` 299 tests, 0 failures (279 before
   step 5).
+
+### Matthew's answers on Sky Year (popup, 2026-11-01, after the ten renders were shown in the chat)
+
+- FACT: the votive "Tighten tracking"; the spine headlines "Leave as built"; TODAY "Keep web's" (turnings from
+  today only); step 5 "Approved, step 6 next".
+- FACT (`SkyYearScreen.kt` `votiveTracking`, `SkyYearScreenshotTest.skyYearEnd`): the votive's tracking steps down
+  from web's .14em by .01 (floor .04em) until each of the catalog's lines fits; at 342 Egypt's votive takes two
+  lines, 92.0 tall against 121.0 before. Local: 299 tests, 0 failures.
+- Next: step 6, Transits, in a fresh session; push and PR on Matthew's word.

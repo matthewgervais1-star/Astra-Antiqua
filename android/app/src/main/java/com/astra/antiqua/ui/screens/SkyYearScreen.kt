@@ -36,6 +36,9 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -387,15 +390,24 @@ private fun WebYearSections(year: SkyYear, slots: SlotMap, onNavigate: (String) 
             }
         }
         // web's Votive: a rule above and below, 16 inside them, centred, display-xs 18/1.6 at .14em in the accent.
+        // Web has 560 for it; at phone width the tracking tightens (to .04em at most) until each of the catalog's
+        // lines fits on one (Matthew's popup, 2026-11-01, "Tighten tracking").
         Column(side.padding(top = 32.dp).testTag("year-votive").dpadStop()) {
             Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
-            Text(
-                slots.text("year.votive"),
-                style = TextStyle(fontFamily = display, fontSize = 18.sp, lineHeight = 18.sp * 1.6f, letterSpacing = 0.14.em, lineHeightStyle = CssLeading),
-                color = accent,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-            )
+            BoxWithConstraints(Modifier.fillMaxWidth().padding(vertical = 16.dp)) {
+                val votive = slots.text("year.votive")
+                val base = TextStyle(fontFamily = display, fontSize = 18.sp, lineHeight = 18.sp * 1.6f, letterSpacing = 0.14.em, lineHeightStyle = CssLeading)
+                val measurer = rememberTextMeasurer()
+                val width = constraints.maxWidth
+                val tracking = remember(votive, width, base) { votiveTracking(measurer, votive, base, width) }
+                Text(
+                    votive,
+                    style = base.copy(letterSpacing = tracking.em),
+                    color = accent,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
             Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
         }
     } else if (slots.has("year.noChart")) {
@@ -531,4 +543,19 @@ private fun SpineRow(row: YearSpineRow, display: androidx.compose.ui.text.font.F
         )
         Text(row.end, style = mono(11.sp, 1.65f, 0f), color = Dim, softWrap = false, modifier = Modifier.alignByBaseline())
     }
+}
+
+/**
+ * The widest tracking, from web's .14em down to .04em in steps of .01, at which every line of [text] fits in
+ * [maxWidth] px; .04em when none does (the line then wraps as web's would).
+ */
+internal fun votiveTracking(measurer: TextMeasurer, text: String, style: TextStyle, maxWidth: Int): Float {
+    val lines = text.split('\n')
+    var tracking = 0.14f
+    while (tracking > 0.04f + 1e-4f) {
+        val s = style.copy(letterSpacing = tracking.em)
+        if (lines.all { measurer.measure(it, s, softWrap = false).size.width <= maxWidth }) return tracking
+        tracking -= 0.01f
+    }
+    return 0.04f
 }
