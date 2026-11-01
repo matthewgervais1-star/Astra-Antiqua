@@ -155,3 +155,10 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 - FACT (Matthew's popup, 2026-10-31): Sky Week approved; "Grow the tap area only" (Compose's hit test
   already gives 48 dp; a test pins it). 254 tests, 0 failures. Next: step 4, Sky Season, in a fresh
   session (prompt `docs/design/prompts/android-glass-step4.md`); push and PR on Matthew's word.
+- FACT (prompt pasted by Matthew, 2026-10-31): step 4 built. Route.SEASON opens Sky Season on the glass chrome
+  (`ui/screens/SkySeasonScreen.kt`, `domain/SkySeason.kt`) with the house wheel P54; rows, house sentence, title
+  and day line equal the web's (node check, three dates); chrome within 1 dp, every gap the board's. One Opus
+  review, two fix rounds (D-pad reach, the day line at large fonts and on 360 dp phones, the chart-less blank
+  on return). Local: 270 tests, 0 failures. Record: `docs/design/android-glass.md` (step 4), renders `docs/design/android-glass/step4/`.
+- Pending: Matthew's popup on step 4 (the web's sections off the board, the kicker's form, approval); push and
+  PR on his word.

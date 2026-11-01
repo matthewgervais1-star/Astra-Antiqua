@@ -97,6 +97,7 @@ class SkySeasonScreenshotTest {
     )
 
     private lateinit var state: ScrollState
+    private lateinit var focus: androidx.compose.ui.focus.FocusManager
 
     private fun render(name: String, culture: AncientCulture, scroll: Int, withChart: Boolean = true, fontScale: Float = 1f) {
         val engine = AstronomyEngine()
@@ -107,6 +108,7 @@ class SkySeasonScreenshotTest {
             androidx.compose.runtime.CompositionLocalProvider(LocalDensity provides androidx.compose.ui.unit.Density(base.density, fontScale)) {
                 AstraAntiquaTheme(selectedCulture = culture) {
                     state = rememberScrollState(with(LocalDensity.current) { scroll.dp.roundToPx() })
+                    focus = androidx.compose.ui.platform.LocalFocusManager.current
                     SkySeasonFrame(culture = culture, season = season, scrollState = state)
                 }
             }
@@ -184,13 +186,42 @@ class SkySeasonScreenshotTest {
     }
 
     @Test
+    @Config(qualifiers = "w360dp-h780dp-xxhdpi")
+    fun skySeasonOnA360DpPhone() {
+        // 312 dp of content: MIDPOINT PASSED, the longest status, wraps between the dates,
+        // and its row takes both lines instead of drawing over the bar or the blurb.
+        val engine = AstronomyEngine()
+        val season = SkySeasonComposer.compose(engine, AncientCulture.EGYPT, java.util.Date.from(java.time.Instant.parse("2026-10-08T06:00:00Z")), null)
+        compose.setContent {
+            AstraAntiquaTheme(selectedCulture = AncientCulture.EGYPT) {
+                SkySeasonFrame(culture = AncientCulture.EGYPT, season = season)
+            }
+        }
+        compose.waitForIdle()
+        compose.onRoot().captureRoboImage(File(out, "sky-season-360.png").path)
+        compose.onNodeWithText(season.status).assertExists()
+        val status = compose.onNodeWithTag("season-status").getUnclippedBoundsInRoot()
+        val bar = compose.onNodeWithTag("P35").getUnclippedBoundsInRoot()
+        note("sky-season-360 %s: P35 height %.1f, day line %.1f tall".format(season.status, (bar.bottom - bar.top).value, (status.bottom - status.top).value))
+        assertTrue("the day line overflows the bar's block", status.bottom <= bar.bottom)
+        val misses = gaps("sky-season-360", listOf(Triple("P35", "P36", 26f)))
+        assertTrue(misses.joinToString("\n"), misses.isEmpty())
+    }
+
+    @Test
     fun aDpadReachesTheLastRow() {
         // Nothing on the page is tappable; each block takes D-pad focus and the scroll
-        // brings the focused one into view, so the season's last row can be reached.
+        // brings the focused one into view. From the blurb, D-pad Down walks the stops
+        // in order to the season's last row.
         render("sky-season-focus", AncientCulture.EGYPT, 0)
-        compose.onNodeWithTag("row-3").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.RequestFocus)
+        compose.onNodeWithTag("P36").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.RequestFocus)
         compose.waitForIdle()
-        compose.onNodeWithTag("row-3").assertIsFocused()
+        val order = listOf("P39", "P54", "P41", "P42", "row-3")
+        order.forEach { id ->
+            compose.runOnIdle { focus.moveFocus(androidx.compose.ui.focus.FocusDirection.Down) }
+            compose.waitForIdle()
+            compose.onNodeWithTag(id).assertIsFocused()
+        }
         val row = compose.onNodeWithTag("row-3").getUnclippedBoundsInRoot()
         val density = RuntimeEnvironment.getApplication().resources.displayMetrics.density
         note("sky-season-focus scrolled to %.1f, row-3 bottom %.1f".format(state.value / density, row.bottom.value))

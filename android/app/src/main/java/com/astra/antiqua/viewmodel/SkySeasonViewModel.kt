@@ -58,7 +58,12 @@ class SkySeasonViewModel(
                 // The profile first, so a reader with a chart never sees the page without it.
                 val profile = profiles.profile.first()
                 _season.value = withContext(Dispatchers.Default) {
-                    val ascendant = profile?.let { CalculateNatalChartUseCase(astronomy).execute(it).ascendant }
+                    // A chart that cannot be computed leaves the sky's season, not an empty page.
+                    val ascendant = profile?.let { p ->
+                        runCatching { CalculateNatalChartUseCase(astronomy).execute(p).ascendant }
+                            .onFailure { Log.e(TAG, "Could not compute the chart for Sky Season", it) }
+                            .getOrNull()
+                    }
                     SkySeasonComposer.compose(astronomy, culture, now, ascendant)
                 }
                 // No birth record yet: the next return composes again, so a record saved

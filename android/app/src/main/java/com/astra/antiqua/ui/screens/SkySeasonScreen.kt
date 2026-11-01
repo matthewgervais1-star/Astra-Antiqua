@@ -27,6 +27,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -204,13 +206,21 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason) {
             Box(Modifier.fillMaxWidth(season.barPercent / 100f).fillMaxHeight().background(Bone))
         }
         // CSS line-height 1: at the default font scale the row is 11 tall and the glyphs
-        // overflow it, as on the board. Past it the row takes the text's own height, and the
-        // day line, which takes the width the dates leave, wraps inside it.
+        // overflow it, as on the board. Past it, or when the day line wraps in the width the
+        // dates leave (a 360 dp phone), the row takes the text's own height.
         Row(Modifier.fillMaxWidth().padding(top = 9.dp), verticalAlignment = Alignment.CenterVertically) {
             val small = mono(11.sp, 1f, 0.1f)
-            val box = if (LocalDensity.current.fontScale <= 1f) Modifier.height(11.dp).wrapContentHeight(unbounded = true) else Modifier
+            var lines by remember(season.status) { mutableIntStateOf(1) }
+            val box = if (LocalDensity.current.fontScale <= 1f && lines == 1) Modifier.height(11.dp).wrapContentHeight(unbounded = true) else Modifier
             Text(SkySeasonComposer.dayMonth(window.start), style = small, color = Dim, modifier = box)
-            Text(season.status, style = small, color = Bone, textAlign = TextAlign.Center, modifier = box.weight(1f).testTag("season-status"))
+            Text(
+                season.status,
+                style = small,
+                color = Bone,
+                textAlign = TextAlign.Center,
+                onTextLayout = { lines = it.lineCount },
+                modifier = box.weight(1f).testTag("season-status"),
+            )
             Text(SkySeasonComposer.dayMonth(window.end), style = small, color = Dim, modifier = box)
         }
     }

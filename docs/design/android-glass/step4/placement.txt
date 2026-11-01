@@ -1,0 +1,80 @@
+sky-season-scrolled P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-season-scrolled P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-season-scrolled P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-season-scrolled P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-season-scrolled P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-season-scrolled P32 want 24.0, -67.0 · 342.0x17.6 got 24.0, -67.0 · 342.0x18.3 off 0.7
+sky-season-scrolled P33 want 178.0, -25.4 · 34.0x34.0 got 178.0, -24.7 · 34.0x34.0 off 0.7
+sky-season-scrolled P34 want 24.0, 24.6 · 342.0x35.1 got 24.0, 25.3 · 342.0x75.3 off 40.2
+sky-season-scrolled P35 want 24.0, 81.7 · 342.0x23.0 got 24.0, 122.7 · 342.0x23.0 off 41.0
+sky-season-scrolled P36 want 24.0, 130.7 · 342.0x59.4 got 24.0, 171.7 · 342.0x60.0 off 41.0
+sky-season-scrolled P37 want 24.0, 226.1 · 342.0x11.0 got 24.0, 267.7 · 342.0x11.0 off 41.6
+sky-season-scrolled P38 want 24.0, 253.1 · 342.0x23.2 got 24.0, 294.7 · 342.0x24.7 off 41.6
+sky-season-scrolled P39 want 24.0, 286.3 · 342.0x112.2 got 24.0, 329.3 · 342.0x113.3 off 43.0
+sky-season-scrolled P54 want 135.0, 414.4 · 120.0x120.0 got 135.0, 458.7 · 120.0x120.0 off 44.3
+sky-season-scrolled P40 want 24.0, 570.4 · 342.0x11.0 got 24.0, 614.7 · 342.0x11.0 off 44.3
+sky-season-scrolled P41 want 24.0, 585.4 · 342.0x79.9 got 24.0, 629.7 · 342.0x48.7 off 44.3
+sky-season-scrolled P42 want 24.0, 665.3 · 342.0x156.4 got 24.0, 678.3 · 342.0x48.7 off 107.7
+sky-season-scrolled gap P32 to P33 want 24.0 got 24.0
+sky-season-scrolled gap P33 to P34 want 16.0 got 16.0
+sky-season-scrolled gap P34 to P35 want 22.0 got 22.0
+sky-season-scrolled gap P35 to P36 want 26.0 got 26.0
+sky-season-scrolled gap P36 to P37 want 36.0 got 36.0
+sky-season-scrolled gap P37 to P38 want 16.0 got 16.0
+sky-season-scrolled gap P38 to P39 want 10.0 got 10.0
+sky-season-scrolled gap P39 to P54 want 15.9 got 16.0
+sky-season-scrolled gap P54 to P40 want 36.0 got 36.0
+sky-season-scrolled gap P40 to P41 want 4.0 got 4.0
+sky-season-scrolled gap P41 to P42 want 0.0 got 0.0
+sky-season-font-130 gap P32 to P33 want 24.0 got 24.0
+sky-season-font-130 gap P33 to P34 want 16.0 got 16.0
+sky-season-font-130 gap P34 to P35 want 22.0 got 22.0
+sky-season-font-130 gap P35 to P36 want 26.0 got 26.0
+sky-season-font-130 P35 height 31.0, day line 19.0 tall
+sky-season P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-season P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-season P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-season P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-season P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-season P32 want 24.0, 189.0 · 342.0x17.6 got 24.0, 189.0 · 342.0x18.3 off 0.7
+sky-season P33 want 178.0, 230.6 · 34.0x34.0 got 178.0, 231.3 · 34.0x34.0 off 0.7
+sky-season P34 want 24.0, 280.6 · 342.0x35.1 got 24.0, 281.3 · 342.0x75.3 off 40.2
+sky-season P35 want 24.0, 337.7 · 342.0x23.0 got 24.0, 378.7 · 342.0x23.0 off 41.0
+sky-season P36 want 24.0, 386.7 · 342.0x59.4 got 24.0, 427.7 · 342.0x60.0 off 41.0
+sky-season P37 want 24.0, 482.1 · 342.0x11.0 got 24.0, 523.7 · 342.0x11.0 off 41.6
+sky-season P38 want 24.0, 509.1 · 342.0x23.2 got 24.0, 550.7 · 342.0x24.7 off 41.6
+sky-season P39 want 24.0, 542.3 · 342.0x112.2 got 24.0, 585.3 · 342.0x113.3 off 43.0
+sky-season P54 want 135.0, 670.4 · 120.0x120.0 got 135.0, 714.7 · 120.0x120.0 off 44.3
+sky-season P40 want 24.0, 826.4 · 342.0x11.0 got 24.0, 870.7 · 342.0x11.0 off 44.3
+sky-season P41 want 24.0, 841.4 · 342.0x79.9 got 24.0, 885.7 · 342.0x48.7 off 44.3
+sky-season P42 want 24.0, 921.3 · 342.0x156.4 got 24.0, 934.3 · 342.0x48.7 off 107.7
+sky-season row-3 (no board ID) got 24.0, 983.0 · 342.0x48.7
+sky-season page scrolls to 307.7 (board 352)
+sky-season gap P32 to P33 want 24.0 got 24.0
+sky-season gap P33 to P34 want 16.0 got 16.0
+sky-season gap P34 to P35 want 22.0 got 22.0
+sky-season gap P35 to P36 want 26.0 got 26.0
+sky-season gap P36 to P37 want 36.0 got 36.0
+sky-season gap P37 to P38 want 16.0 got 16.0
+sky-season gap P38 to P39 want 10.0 got 10.0
+sky-season gap P39 to P54 want 15.9 got 16.0
+sky-season gap P54 to P40 want 36.0 got 36.0
+sky-season gap P40 to P41 want 4.0 got 4.0
+sky-season gap P41 to P42 want 0.0 got 0.0
+sky-season gap P42 to row-3 want 0.0 got 0.0
+sky-season-focus scrolled to 283.7, row-3 bottom 748.0
+sky-season-360 DAY 16 OF 31 · MIDPOINT PASSED: P35 height 37.3, day line 25.3 tall
+sky-season-360 gap P35 to P36 want 26.0 got 26.0
+sky-season-rome P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-season-rome P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-season-rome P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-season-rome P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-season-rome P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-season-no-chart P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-season-no-chart P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-season-no-chart P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-season-no-chart P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-season-no-chart P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-season-no-chart gap P37 to P39 want 16.0 got 16.0
+sky-season-no-chart gap P39 to P40 want 36.0 got 36.0
+sky-season-no-chart gap P40 to P41 want 4.0 got 4.0

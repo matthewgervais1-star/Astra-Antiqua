@@ -378,3 +378,90 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
   and THE SEASON, 10 dp below THE LONG TRANSITS and 10 dp above IT WAS SO each lands. No layout changed;
   the test pins it. Local: 254 tests, 0 failures.
 - Step 4 prompt: `docs/design/prompts/android-glass-step4.md`.
+
+## Step 4, Sky Season (2026-10-31)
+
+- FACT (prompt pasted by Matthew, 2026-10-31): build Sky Season on `GlassScreen` (SEASON, SKY); board
+  Glass-Season and Glass-Season-scrolled (canvas version 1793493664-ced5, read 2026-10-31, file
+  `project/Glass-Season.dc.html`); table `report-r3b.md` in the design worktree (page 1197.7, scrolls to
+  352, scrolled frame 256); the wheel from `r3-common.mjs` (`wheelGeom`, `houseWheel`).
+- FACT (`domain/SkySeason.kt`): `SkySeasonComposer` ports web's season page for what the board prints:
+  `seasonStatus`, OrbBar's fill (orb = days left, at least 6%), `SIGN_PHRASES`, `properCase`,
+  `composeWhatItTouchesNatal` (with web's `houseGroups` names, five cultures),
+  `composeWhatItTouchesSky`, `buildSeasonSkyRows` (open, each turn to retrograde, a slow body's closest
+  approach within 3°, close), with web's 6-day sampling pad trimmed to the season's end. The window is
+  `SkyEvents.currentSeason` (local calendar days, as web's).
+- FACT (node run of `web/src` through jiti, `process.env.TZ = "Europe/Rome"`, 2026-10-31; scripts in this
+  session's scratchpad, not kept): for the sample, LIBRA, DAY 29 OF 31, CLOSING, rows "23 SEP RA → THE SCALES
+  · SEASON OPENS", "3 OCT ISIS STATIONED ℞", "23 OCT RA → THE SCORPION · SEASON CLOSES"; Rome SOL, VENUS;
+  the eleventh house; for 2025-03-01 two conjunction rows (RA ☌ GEB EXACT, RA ☌ NUN EXACT); for
+  2026-12-30 the Capricorn season across the year's end. `SkySeasonTest` pins each, and Android equals web.
+  Note: `TZ=Europe/Rome node` from Git Bash did not take; set the zone inside the script.
+- FACT (`ui/screens/SkySeasonScreen.kt`): the board's sections in order. Web strings: the institution
+  (`ScriptName`, so the reveal runs), the title "THE SEASON OF THE SCALES" (P34, own case, two lines), the
+  day line "DAY 29 OF 31 · CLOSING" and the bar's fill 94% (P35), the sign's blurb (P36, web
+  `zodiacSigns.ts`, Android `Learn.SIGNS`), the house sentence (P39), the label THE SEASON'S SKY with web's
+  straight apostrophe and web's rows (P40 on), each one mono line, the date in its tone's ink. Board forms
+  where the web has no string: the kicker's range "23 SEP → 23 OCT 2026" (as Day and Week), the bar's end
+  dates, THROUGH YOUR CHART, the house title "The eleventh house · The Assembly", the wheel P54.
+- INFERENCE: without a birth record, P37 reads web's label WHAT IT TOUCHES over web's sky sentence, with no
+  title and no wheel; the board has no chart-less form.
+- FACT (same file): the wheel draws twelve whole-sign houses from the natal Ascendant at the left, the
+  season's house at bone 14%, the Sun's ring and dot on radius 43 at its longitude now, the Ascendant tick;
+  a longitude sits at 180° − (λ − Ascendant) in Compose's clockwise degrees. It equals the board's points
+  (-7.42, -55.51 and -25, -34.98 at Sagittarius 22°23′ rising).
+- FACT (`MainActivity.kt`): Route.SEASON opens `SkySeasonScreen` (not `flat`). `SeasonScreen` in
+  `HorizonScreens.kt` and `HorizonViewModel.loadSeason` stay on disk, out of the graph; the flat screen had
+  no exit of its own past its NaveShell, whose routes the glass chrome covers. Ways in: the horizon control,
+  Sky Week's THE SEASON →.
+- FACT (same file): nothing on the page is tappable. Each block that can sit below the fold (P36, P39, P54,
+  each row) is a D-pad stop with web's focus outline; a focused block asks the scroll to show it with the
+  glass's 173 above and 96 below. A touch never focuses it. Rows and the wheel carry spoken labels without
+  glyphs ("3 oct isis stationed retrograde"; "Your houses: the Sun in the eleventh house, The Assembly").
+
+## Step 4 checks (2026-10-31)
+
+- FACT (`SkySeasonScreenshotTest`, `docs/design/android-glass/step4/placement.txt`): renders at rest,
+  scrolled 256, Rome, without a chart, at font scale 1.3, on a 360x780 dp phone (2026-10-08, MIDPOINT
+  PASSED), and with the last row focused. Chrome in all: P1
+  off 0.9, P2, P3, P17, P20 0.0.
+- FACT (same, at rest): every gap between blocks equals the board's to 0.1 (P32 to P42, P54). Boxes against
+  the table: P32 18.3 against 17.6 (the script face's line, as Day's P4); P34 75.3 against 35.1 (web's title
+  on two lines, each 37.6 for Spectral SC's glyphs, as Week's P22); P36 60.0 against 59.4; P38 24.7 against
+  23.2 (Spectral SC at 16); P39 113.3 against 112.2; P54 120x120 at x 135 as the board; P41 and P42 48.7
+  against 79.9 and 156.4 (web's rows are one mono line; the board's carry a prose line). A third row (the
+  close, `row-3`) follows. So P35 sits 41.0 lower, P40 44.3; the page scrolls to 307.7 against 352.
+- FACT (same): at 1.3 the day line keeps one line, 19.0 tall, and the gaps around the bar hold. At 360 dp
+  "DAY 16 OF 31 · MIDPOINT PASSED" wraps to two lines between the dates; P35 grows to 37.3 and the gap to
+  P36 stays 26. From P36, D-pad Down (`FocusManager.moveFocus`) walks P39, P54, P41, P42, row-3 in order; with
+  row-3 focused the page scrolls to 283.7 and the row's bottom sits at 748, the tab bar's top.
+- CANNOT CONFIRM: how the frames look on a phone; Robolectric drew them.
+- FACT (review, one Opus reviewer, 2026-10-31): nothing Critical; the ports and the wheel geometry hold.
+  Important, fixed in round 1: no D-pad way down the page (now the stops above); the day line could wrap
+  over the bar at a large font scale (now it takes the width the dates leave, unboxed past scale 1.0); the
+  page went blank on return without a birth record (a separate culture field now). The web's sections not
+  on the board: asked in the popup. Minors fixed: the chart-less page shown first to a reader with a chart
+  (the profile is now read first, one compose); the slow-body walk read ten bodies (now two); spoken labels;
+  `properCase`; tests for conjunction rows, a year-end season, status edges, the filled sector, P54's box.
+- FACT (scoped re-review, same reviewer, 2026-10-31): round 1's fixes hold but one. Important, fixed in round 2:
+  on a 360 dp phone the day line wrapped inside its 11 dp box (the row now takes the text's height whenever
+  the line wraps). Minors fixed: a chart that fails to compute leaves the sky's season, not an empty page;
+  the D-pad test now moves focus down the stops. Second and last round.
+- Deferred (Minors): a focused block is shown clear of the canvas's chrome (173 above, 96 below), not of the
+  device's own bars where those are taller (`GlassScreen` would need to publish its chrome's extents); the
+  kicker's board form (Day and Week precedent, asked); a birth record edited the same
+  day shows at the next local day (Sky Day has the same); the flat `SeasonScreen` stays on disk; `SkyEvents`
+  stops an ingress search at 60 s where web stops at 30 min, so an ingress within 30 min of midnight can
+  print a day apart (inherited).
+- FACT (local, 2026-10-31): `./gradlew compileDebugSources testDebugUnitTest` 270 tests, 0 failures (254
+  before step 4).
+
+## Open for Matthew (asked in one popup, 2026-10-31)
+
+1. The web season's own sections not on the board: WHAT IS CHANGING, WHERE IT BEGINS, WHAT IT LEAVES BEHIND,
+   the votive, the feedback row, the CAST A CHART line and the links. Below the board's sections as on
+   Week, or off. WHAT IS CHANGING and the votive need web's standouts (eclipses, story beats, transit peaks
+   to the chart), which Android has not ported.
+2. The kicker: the board's "23 SEP → 23 OCT 2026 · institution" (built, as Day and Week) or web's "THE
+   SEASON · 23 SEP – 23 OCT".
+3. Sky Season approved, go to step 5 (Year)?
