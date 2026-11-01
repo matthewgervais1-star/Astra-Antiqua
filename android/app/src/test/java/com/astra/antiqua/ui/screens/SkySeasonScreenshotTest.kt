@@ -6,6 +6,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -97,11 +100,12 @@ class SkySeasonScreenshotTest {
     )
 
     private lateinit var state: ScrollState
+    private val routes = mutableListOf<String>()
     private lateinit var focus: androidx.compose.ui.focus.FocusManager
 
     private fun render(name: String, culture: AncientCulture, scroll: Int, withChart: Boolean = true, fontScale: Float = 1f) {
         val engine = AstronomyEngine()
-        val asc = if (withChart) CalculateNatalChartUseCase(engine).execute(SkyDayTest.smokeBirth).ascendant else null
+        val asc = if (withChart) SkySeasonComposer.natal(engine, CalculateNatalChartUseCase(engine).execute(SkyDayTest.smokeBirth), SkyDayTest.smokeBirth.latitude, SkyDayTest.smokeBirth.longitude) else null
         val season = SkySeasonComposer.compose(engine, culture, SkyDayTest.sampleNow, asc)
         compose.setContent {
             val base = LocalDensity.current
@@ -109,7 +113,7 @@ class SkySeasonScreenshotTest {
                 AstraAntiquaTheme(selectedCulture = culture) {
                     state = rememberScrollState(with(LocalDensity.current) { scroll.dp.roundToPx() })
                     focus = androidx.compose.ui.platform.LocalFocusManager.current
-                    SkySeasonFrame(culture = culture, season = season, scrollState = state)
+                    SkySeasonFrame(culture = culture, season = season, onNavigate = { routes += it }, scrollState = state)
                 }
             }
         }
@@ -246,6 +250,54 @@ class SkySeasonScreenshotTest {
         compose.onNodeWithText(
             "The season sits in your eleventh house, which this culture keeps under via. It works on your allies, your assembly, and the things you hope for.",
         ).assertExists()
+    }
+
+    @Test
+    fun skySeasonEnd() {
+        // The page's foot: web's three sections, the votive, the feedback row and the links.
+        render("sky-season-end", AncientCulture.EGYPT, 4000)
+        assertChrome("sky-season-end")
+        listOf("season-changing-label", "season-changing", "season-begins", "season-leaves", "season-votive", "season-feedback", "season-links").forEach { id ->
+            val b = compose.onNodeWithTag(id).getUnclippedBoundsInRoot()
+            note("sky-season-end %s (no board ID) got %.1f, %.1f · %.1fx%.1f".format(id, b.left.value, b.top.value, (b.right - b.left).value, (b.bottom - b.top).value))
+        }
+        val density = RuntimeEnvironment.getApplication().resources.displayMetrics.density
+        note("sky-season-end page scrolls to %.1f".format(state.maxValue / density))
+        val misses = gaps(
+            "sky-season-end",
+            listOf(
+                Triple("row-3", "season-changing-label", 40f), Triple("season-changing-label", "season-changing", 10f),
+                Triple("season-changing", "season-begins-label", 28f), Triple("season-leaves", "season-votive", 32f),
+                Triple("season-votive", "season-feedback", 24f), Triple("season-feedback", "season-links", 36f),
+            ),
+        )
+        assertTrue("foot gaps off web's by more than 1 dp:\n" + misses.joinToString("\n"), misses.isEmpty())
+        compose.onNodeWithText("It opened when the Scales received Ra, 29 days past. It closes soon.").assertExists()
+        compose.onNodeWithText("THE ORDINARY MONTH\nSTILL FEEDS THE GRANARY").assertExists()
+        compose.onNodeWithTag("season-cast").assertDoesNotExist()
+        listOf("The day", "The week", "The year", "The long transits").forEach {
+            compose.onNode(hasContentDescription(it) and androidx.compose.ui.test.hasClickAction()).assertExists()
+        }
+        // A tap 10 dp above THE YEAR lands (Compose widens the 18 dp line to a 48 dp touch).
+        routes.clear()
+        compose.onNode(hasContentDescription("The year") and androidx.compose.ui.test.hasClickAction())
+            .performTouchInput { click(androidx.compose.ui.geometry.Offset(centerX, -10.dp.toPx())) }
+        assertTrue("a tap 10 dp above the year missed: $routes", routes == listOf(com.astra.antiqua.ui.nav.Route.YEAR))
+        // A verdict is kept under web's reading id and cleared by a second tap.
+        compose.onNodeWithText("IT WAS SO").performClick()
+        compose.onNode(androidx.compose.ui.test.hasText("IT WAS SO") and androidx.compose.ui.test.isSelected()).assertExists()
+        compose.onNodeWithText("IT WAS SO").performClick()
+        compose.onNode(androidx.compose.ui.test.hasText("IT WAS SO") and androidx.compose.ui.test.isSelected()).assertDoesNotExist()
+    }
+
+    @Test
+    fun skySeasonWithoutAChartEnd() {
+        // No birth record: web's call to cast a chart, whose READING opens the cast screen.
+        render("sky-season-no-chart-end", AncientCulture.EGYPT, 4000, withChart = false)
+        compose.onNodeWithText("CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES → ").assertExists()
+        routes.clear()
+        compose.onNode(hasContentDescription("Cast a chart") and androidx.compose.ui.test.hasClickAction()).performClick()
+        assertTrue("$routes", routes == listOf(com.astra.antiqua.ui.nav.Route.READING))
     }
 
     @Test

@@ -2,6 +2,10 @@ package com.astra.antiqua.ui.screens
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.semantics.Role
+import com.astra.antiqua.ui.components.FeedbackRow
+import com.astra.antiqua.ui.theme.Rule
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.relocation.bringIntoViewRequester
@@ -126,7 +130,7 @@ fun SkySeasonFrame(
         // The culture sheet is step 10; until then the menu opens the Voices list.
         onMenu = { onNavigate(Route.VOICES) },
     ) {
-        if (season != null) SkySeasonContent(culture, season)
+        if (season != null) SkySeasonContent(culture, season, onNavigate)
     }
 }
 
@@ -153,7 +157,7 @@ private object SeasonBoard {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun SkySeasonContent(culture: AncientCulture, season: SkySeason) {
+private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavigate: (String) -> Unit) {
     val side = Modifier.fillMaxWidth().padding(horizontal = SeasonBoard.side)
     val window = season.window
 
@@ -267,17 +271,111 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason) {
         // The board draws two rows, P41 and P42; a season with more adds rows past them.
         SkyRow(row, if (i < 2) "P${41 + i}" else "row-${i + 1}")
     }
+
+    WebSeasonSections(culture, season, onNavigate)
+}
+
+/**
+ * The web season's own sections, not on the board, flat on the ground below
+ * the season's sky in the web's order (Matthew, 2026-10-31, "Below the board,
+ * as Week"): WHAT IS CHANGING, WHERE IT BEGINS and WHAT IT LEAVES BEHIND
+ * (WHAT IT TOUCHES is P37 to P39 above), the votive, the feedback row, the
+ * call to cast a chart when there is none, and the four links. Spacing is the
+ * web's (gap-7 between sections, gap-2.5 under each label, mt-8, mt-6, mt-9);
+ * the first section opens 40 under the rows, as Week's thesis does.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun WebSeasonSections(culture: AncientCulture, season: SkySeason, onNavigate: (String) -> Unit) {
+    val side = Modifier.fillMaxWidth().padding(horizontal = SeasonBoard.side)
+    listOf(
+        Triple("WHAT IS CHANGING", season.whatIsChanging, "season-changing"),
+        Triple("WHERE IT BEGINS", season.whereItBegins, "season-begins"),
+        Triple("WHAT IT LEAVES BEHIND", season.whatItLeavesBehind, "season-leaves"),
+    ).forEachIndexed { i, (label, body, id) ->
+        SeasonLabel(label, "$id-label", bottom = 10.dp, top = if (i == 0) 40.dp else 28.dp)
+        Text(
+            body,
+            style = TextStyle(fontFamily = Spectral, fontSize = 17.sp, lineHeight = 17.sp * 1.65f, lineHeightStyle = CssLeading),
+            color = Prose,
+            modifier = side.testTag(id).dpadStop(),
+        )
+    }
+    // web's Votive: a rule above and below, 16 inside them, centred, font-display at
+    // display-xs 18 with leading 1.6 and tracking .14em, in the accent, its line break kept.
+    Column(side.padding(top = 32.dp).testTag("season-votive").dpadStop()) {
+        Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
+        Text(
+            season.votive,
+            style = TextStyle(
+                fontFamily = if (LocalSmallCapsDisplay.current) SpectralSc else Cinzel,
+                fontSize = 18.sp,
+                lineHeight = 18.sp * 1.6f,
+                letterSpacing = 0.14.em,
+                lineHeightStyle = CssLeading,
+            ),
+            color = LocalAccent.current,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+        )
+        Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
+    }
+    val label = mono(11.sp, 1.6f, 0.14f)
+    FeedbackRow(
+        readingId = season.readingId,
+        noun = "SEASON",
+        style = label,
+        modifier = side.padding(top = 24.dp).testTag("season-feedback"),
+    )
+    if (season.house == null) {
+        // web: CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES → READING.
+        FlowRow(side.padding(top = 32.dp).testTag("season-cast"), horizontalArrangement = Arrangement.Center) {
+            Text("CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES → ", style = label, color = Dim, textAlign = TextAlign.Center)
+            FootLink("READING", "Cast a chart", Route.READING, LocalAccent.current, label, onNavigate)
+        }
+    }
+    val link = mono(11.sp, 1.6f, 0.18f)
+    FlowRow(
+        side.padding(top = 36.dp).testTag("season-links"),
+        horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally),
+    ) {
+        listOf(
+            Triple("← THE DAY", Route.DAY, Bone.copy(alpha = 0.65f)),
+            Triple("THE WEEK", Route.WEEK, Bone.copy(alpha = 0.65f)),
+            Triple("THE YEAR →", Route.YEAR, Bone.copy(alpha = 0.65f)),
+            Triple("THE LONG TRANSITS →", Route.TRANSITS, LocalAccent.current),
+        ).forEach { (text, route, ink) ->
+            // Spoken without the arrows.
+            val spoken = text.replace("←", "").replace("→", "").trim().lowercase().replaceFirstChar { it.uppercase() }
+            FootLink(text, spoken, route, ink, link, onNavigate)
+        }
+    }
+}
+
+/** A small link in the foot, as on Week: web's 18 dp line, widened to a 48 dp touch by Compose's hit test. */
+@Composable
+private fun FootLink(text: String, spoken: String, route: String, ink: Color, style: TextStyle, onNavigate: (String) -> Unit) {
+    val source = remember { MutableInteractionSource() }
+    Text(
+        text,
+        style = style,
+        color = ink,
+        modifier = Modifier
+            .focusOutline(source)
+            .semantics { contentDescription = spoken }
+            .clickable(source, indication = null, role = Role.Button, onClickLabel = "Open") { onNavigate(route) },
+    )
 }
 
 private val lessonProse = TextStyle(fontFamily = Spectral, fontWeight = FontWeight.Light, fontSize = 17.sp, lineHeight = 17.sp * 1.65f, lineHeightStyle = CssLeading)
 
 /** A section label between two rules, the board's section gap above it (P37, P40). */
 @Composable
-private fun SeasonLabel(text: String, id: String, bottom: Dp) {
+private fun SeasonLabel(text: String, id: String, bottom: Dp, top: Dp = SeasonBoard.sectionGap) {
     Row(
         // CSS line-height 1: the box is 11 tall and the glyphs overflow it, as on the board.
         modifier = Modifier.fillMaxWidth().padding(horizontal = SeasonBoard.side)
-            .padding(top = SeasonBoard.sectionGap, bottom = bottom).heightIn(min = 11.dp).testTag(id),
+            .padding(top = top, bottom = bottom).heightIn(min = 11.dp).testTag(id),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(14.dp),
     ) {

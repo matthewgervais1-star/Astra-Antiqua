@@ -28,7 +28,7 @@ class SkySeasonTest {
     private val chart by lazy { CalculateNatalChartUseCase(engine).execute(SkyDayTest.smokeBirth) }
 
     private fun season(culture: AncientCulture, withChart: Boolean = true) =
-        SkySeasonComposer.compose(engine, culture, SkyDayTest.sampleNow, if (withChart) chart.ascendant else null)
+        SkySeasonComposer.compose(engine, culture, SkyDayTest.sampleNow, if (withChart) SkySeasonComposer.natal(engine, chart, SkyDayTest.smokeBirth.latitude, SkyDayTest.smokeBirth.longitude) else null)
 
     @Test
     fun `the sample season is the Scales, day 29 of 31, closing`() {
@@ -144,6 +144,69 @@ class SkySeasonTest {
             "Sebegu enters the Goat on 25 DEC. Isis enters the Archer on 7 JAN. Sebegu enters the Water-Bearer on 13 JAN.",
             s.touchesSky,
         )
+    }
+
+    private val natal by lazy { SkySeasonComposer.natal(engine, chart, SkyDayTest.smokeBirth.latitude, SkyDayTest.smokeBirth.longitude) }
+
+    private fun atNatal(iso: String, culture: AncientCulture) =
+        SkySeasonComposer.compose(engine, culture, java.util.Date.from(java.time.Instant.parse(iso)), natal)
+
+    @Test
+    fun `the smoke birth's angles are web's`() {
+        // web computeAngularPoints for 1990-01-15 04:30 UTC, Rome: 262.398, 195.599.
+        assertEquals(262.398, natal.ascendant, 0.01)
+        assertEquals(195.599, natal.midheaven, 0.01)
+    }
+
+    @Test
+    fun `the web's sections for the sample, with and without the chart`() {
+        // node, TZ Europe/Rome, 2026-10-31: web's composeWhatIsChanging, composeWhereItBegins,
+        // composeWhatItLeavesBehind, SEASON_VOTIVE and seasonReadingId.
+        val egypt = season(AncientCulture.EGYPT)
+        assertEquals(
+            "Full Moon in Aries. The month's full light. What was building since the New Moon shows its results, ready or not. Behind it: amun rows in time with your Ascendant.",
+            egypt.whatIsChanging,
+        )
+        assertEquals("It opened when the Scales received Ra, 29 days past. It closes soon.", egypt.whereItBegins)
+        assertEquals("The scale does not carry Scales's excuses into Scorpion.", egypt.whatItLeavesBehind)
+        assertEquals("THE ORDINARY MONTH\nSTILL FEEDS THE GRANARY", egypt.votive)
+        assertEquals("season-libra-2026", egypt.readingId)
+        val rome = season(AncientCulture.ROME)
+        assertEquals(
+            "Full Moon in Aries. The month's full light. What was building since the New Moon shows its results, ready or not. Behind it: iuppiter clasps the right hand of your Ascendant.",
+            rome.whatIsChanging,
+        )
+        assertEquals("It opened when the Scales received Sol, 29 days past. It closes soon.", rome.whereItBegins)
+        assertEquals("The censor does not re-hear what this month already judged.", rome.whatItLeavesBehind)
+        assertEquals("AN ORDINARY MONTH\nIS STILL GOVERNED BY LAW", rome.votive)
+        assertEquals(
+            "Full Moon in Aries. The month's full light. What was building since the New Moon shows its results, ready or not. Behind it: new Moon in Libra.",
+            season(AncientCulture.EGYPT, withChart = false).whatIsChanging,
+        )
+    }
+
+    @Test
+    fun `a season of tension transits, a companion and the tension votive`() {
+        // node, TZ Europe/Rome: 2025-03-01 12:00 UTC with the smoke birth.
+        val egypt = atNatal("2025-03-01T12:00:00Z", AncientCulture.EGYPT)
+        assertEquals(
+            "Amun tips the scales against your Khonsu. The urge to expand and to trust is contested on this date. Decide what gives before the date decides it. Behind it: geb tips the scales against your Ascendant.",
+            egypt.whatIsChanging,
+        )
+        assertEquals(
+            "It opened when the Fishes received Ra, 12 days past. Its middle is now, past the crossing point. Geb stands with it this month.",
+            egypt.whereItBegins,
+        )
+        assertEquals("BRING WHAT IS HEAVY\nTO THE SCALE NOW", egypt.votive)
+        assertEquals("season-pisces-2025", egypt.readingId)
+        val rome = atNatal("2025-03-01T12:00:00Z", AncientCulture.ROME)
+        assertEquals(
+            "Iuppiter raises the spear against your Luna. The urge to expand and to trust is contested on this date. Decide what gives before the date decides it. Behind it: saturnus raises the spear against your Ascendant.",
+            rome.whatIsChanging,
+        )
+        // Capricorn 2026, no chart: the reading id keeps the year the season opened.
+        assertEquals("season-capricorn-2026", at("2026-12-30T12:00:00Z").readingId)
+        assertEquals("The scale does not carry Goat's excuses into Water-Bearer.", at("2026-12-30T12:00:00Z").whatItLeavesBehind)
     }
 
     @Test

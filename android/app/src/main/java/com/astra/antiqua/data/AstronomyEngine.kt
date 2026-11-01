@@ -89,6 +89,17 @@ class AstronomyEngine {
         return normDeg(asc)
     }
 
+    /**
+     * The Midheaven, web's computeAngularPoints (web/src/lib/ascendant.ts):
+     * tan(MC) = tan(RAMC) / cos(obliquity), with web's fixed mean obliquity.
+     */
+    fun getMidheaven(julianDay: Double, @Suppress("UNUSED_PARAMETER") lat: Double, lon: Double): Double {
+        val time = Time(julianDay - 2451545.0)
+        val ramc = Math.toRadians(((siderealTime(time) * 15.0 + lon) % 360.0 + 360.0) % 360.0)
+        val eps = Math.toRadians(MEAN_OBLIQUITY_DEG)
+        return normDeg(Math.toDegrees(atan2(sin(ramc), cos(ramc) * cos(eps))))
+    }
+
     // Whole-sign houses are the product's house system (docs/shared-content-model.md);
     // the Placidus quadrant-cusp routines below are retained for reference/future use
     // but are no longer called by CalculateNatalChartUseCase.

@@ -41,6 +41,14 @@ data class SkySeason(
     /** web composeWhatItTouchesSky, the section's sentence without a chart. */
     val touchesSky: String,
     val rows: List<SeasonSkyRow>,
+    /** web's WHAT IS CHANGING, WHERE IT BEGINS and WHAT IT LEAVES BEHIND, below the board. */
+    val whatIsChanging: String,
+    val whereItBegins: String,
+    val whatItLeavesBehind: String,
+    /** web's SEASON_VOTIVE for the season's tone, its line break kept. */
+    val votive: String,
+    /** web's seasonReadingId, "season-libra-2026", the feedback row's key. */
+    val readingId: String,
 )
 
 /**
@@ -90,7 +98,20 @@ object SkySeasonComposer {
     /** web's finder sampling pad: scan this far past the window, then trim to its end. */
     private const val SAMPLING_PAD_DAYS = 6
 
-    fun compose(engine: AstronomyEngine, culture: AncientCulture, now: Date, ascendant: Double?): SkySeason {
+    /**
+     * The natal points the season reads: the chart's Sun and Moon, its
+     * Ascendant, and the Midheaven at the birth's instant and place (web's
+     * computeAngularPoints).
+     */
+    fun natal(engine: AstronomyEngine, chart: NatalChartData, latitude: Double, longitude: Double): SeasonNatal = SeasonNatal(
+        sun = chart.planets.getValue(Planet.SUN).longitude,
+        moon = chart.planets.getValue(Planet.MOON).longitude,
+        ascendant = chart.ascendant,
+        midheaven = engine.getMidheaven(chart.julianDay, latitude, longitude),
+    )
+
+    fun compose(engine: AstronomyEngine, culture: AncientCulture, now: Date, natal: SeasonNatal?): SkySeason {
+        val ascendant = natal?.ascendant
         val window = SkyEvents.currentSeason(engine, now)
         val remaining = (window.totalDays - window.dayOfSeason).coerceAtLeast(0)
         val span = window.end.time - window.start.time
@@ -98,18 +119,26 @@ object SkySeasonComposer {
         val stations = SkyEvents.stations(engine, window.start, days).filter { it.date.time <= window.end.time }
         val ingresses = SkyEvents.ingresses(engine, window.start, days, INGRESS_BODIES).filter { it.date.time <= window.end.time }
         val sun = DayDecreeComposer.chartAt(engine, now).getValue(Planet.SUN)
+        val status = status(window.totalDays, window.dayOfSeason, remaining)
+        val standouts = SeasonStandouts.build(engine, culture, window, natal)
+        val startYear = Calendar.getInstance().apply { time = window.start }.get(Calendar.YEAR)
         return SkySeason(
             window = window,
             daysRemaining = remaining,
             sun = sun,
             headline = "THE SEASON OF THE ${SIGN_PHRASES.getValue(window.sign)}",
-            status = "DAY ${window.dayOfSeason} OF ${window.totalDays} · ${status(window.totalDays, window.dayOfSeason, remaining)}",
+            status = "DAY ${window.dayOfSeason} OF ${window.totalDays} · $status",
             barPercent = barPercent(remaining, window.totalDays),
             signProse = Learn.SIGNS.first { it.sign == window.sign.signName }.blurb,
             ascendant = ascendant,
             house = ascendant?.let { house(culture, window.sign, it) },
             touchesSky = touchesSky(culture, ingresses),
             rows = skyRows(engine, culture, window, stations),
+            whatIsChanging = SeasonStandouts.whatIsChanging(culture, standouts),
+            whereItBegins = SeasonStandouts.whereItBegins(culture, window, status, SeasonStandouts.companion(engine, window, now)),
+            whatItLeavesBehind = SeasonStandouts.whatItLeavesBehind(culture, window),
+            votive = SeasonStandouts.votive(culture, standouts),
+            readingId = "season-${window.sign.signName.lowercase()}-$startYear",
         )
     }
 
