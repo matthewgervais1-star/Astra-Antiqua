@@ -40,6 +40,7 @@ public final class DayBanks: @unchecked Sendable {
     private let quietLines: [Culture: String]
     private let domains: [Culture: [Planet: String]]
     private let institutions: [Culture: String]
+    private let weekTitles: [Culture: String]
     private let houseGroups: [Culture: [HouseGroup]]
     private let signImages: [ZodiacSign: String]
     private let aspectGlyphs: [AspectKind: String]
@@ -53,6 +54,9 @@ public final class DayBanks: @unchecked Sendable {
 
     /// "THE HALL OF MA’AT": the heading the day page's kicker carries.
     public func institution(_ culture: Culture) -> String { institutions[culture]! }
+
+    /// "SEVEN DAYS WEIGHED": the week page's title (web's cultureVoice weekTitle).
+    public func weekTitle(_ culture: Culture) -> String { weekTitles[culture]! }
 
     /// The culture's four house groups: work and substance, home and kin,
     /// words and errands, the inner court.
@@ -83,6 +87,7 @@ public final class DayBanks: @unchecked Sendable {
     private struct VoiceDTO: Decodable {
         struct Group: Decodable { let name, sub: String }
         let institution: String
+        let weekTitle: String
         let houseGroups: [Group]
     }
 
@@ -150,13 +155,16 @@ public final class DayBanks: @unchecked Sendable {
         self.domains = domains
 
         var institutions: [Culture: String] = [:]
+        var weekTitles: [Culture: String] = [:]
         var groups: [Culture: [HouseGroup]] = [:]
         for (c, voice) in d.cultureVoices {
             let culture = try Culture.fromId(c)
             institutions[culture] = voice.institution
+            weekTitles[culture] = voice.weekTitle
             groups[culture] = voice.houseGroups.map { HouseGroup(name: $0.name, sub: $0.sub) }
         }
         self.institutions = institutions
+        self.weekTitles = weekTitles
         houseGroups = groups
 
         var images: [ZodiacSign: String] = [:]
@@ -189,6 +197,7 @@ public final class DayBanks: @unchecked Sendable {
             if quietHeadlines[c] == nil { missing.append("quiet headline \(c.id)") }
             if quietLines[c] == nil { missing.append("quiet line \(c.id)") }
             if institutions[c] == nil { missing.append("institution \(c.id)") }
+            if weekTitles[c] == nil { missing.append("week title \(c.id)") }
             if groups[c]?.count != 4 { missing.append("house groups \(c.id)") }
             for p in Planet.allCases where domains[c]?[p] == nil { missing.append("domain \(c.id)/\(p.id)") }
         }
