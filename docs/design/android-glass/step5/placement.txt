@@ -2,16 +2,8 @@ sky-year 360 EGYPT rest lone word prose [year-opening] "are." in "Something pres
 sky-year 360 EGYPT end lone word prose [year-opening] "are." in "Something presses on who you are this" / "year, and it does not let up. An old voice" / "says you have to earn the right to take up" / "space, so you keep proving yourself to" / "people who never really watch. The job" / "that hollows you out, the parent you" / "cannot satisfy, the room where you go" / "quiet and small: the pressure is here to" / "show you the cost. It will feel like failure." / "It is not. It is the bill for a life spent" / "performing. The peak forces the question" / "you keep avoiding: who is this actually" / "for. Cut the dead weight and stand as you" / "are." (17.0.sp Unspecified in 936 px)
 sky-year 360 GREECE rest lone word prose [row-17] "Maiden." in "Zeus goes on to the shrine of the" / "Maiden." (17.0.sp Unspecified in 873 px)
 sky-year 360 GREECE rest lone word prose [year-opening] "are." in "Something presses on who you are this" / "year, and it does not let up. An old voice" / "says you have to earn the right to take up" / "space, so you keep proving yourself to" / "people who never really watch. The job" / "that hollows you out, the parent you" / "cannot satisfy, the room where you go" / "quiet and small: the pressure is here to" / "show you the cost. It will feel like failure." / "It is not. It is the bill for a life spent" / "performing. The peak forces the question" / "you keep avoiding: who is this actually" / "for. Cut the dead weight and stand as you" / "are." (17.0.sp Unspecified in 936 px)
-sky-year 360 GREECE rest lone word [spine-4] "KRONOS" in "KRONOS" / "CHALLENGES" / "YOUR NATAL" / "HELIOS" (18.0.sp 0.08.em in 544 px) EXCEPTION: KRONOS CHALLENGES YOUR NATAL HELIOS: KRONOS CHALLENGES does not fit 181 dp at 16sp; needs a string or layout change
-sky-year 360 GREECE rest lone word [spine-4] "CHALLENGES" in "KRONOS" / "CHALLENGES" / "YOUR NATAL" / "HELIOS" (18.0.sp 0.08.em in 544 px) EXCEPTION: as KRONOS, same row
-sky-year 360 GREECE rest lone word [spine-4] "HELIOS" in "KRONOS" / "CHALLENGES" / "YOUR NATAL" / "HELIOS" (18.0.sp 0.08.em in 544 px) EXCEPTION: as KRONOS, same row
-sky-year 360 GREECE rest lone word [spine-5] "SHOULDER" in "ZEUS STANDS" / "SHOULDER" / "TO SHOULDER" / "WITH YOUR" / "NATAL SELENE" (18.0.sp 0.08.em in 544 px) EXCEPTION: ZEUS STANDS SHOULDER TO SHOULDER WITH YOUR NATAL SELENE: nine words need five lines of two at 181 dp; needs a string or layout change
 sky-year 360 GREECE end lone word prose [row-17] "Maiden." in "Zeus goes on to the shrine of the" / "Maiden." (17.0.sp Unspecified in 873 px)
 sky-year 360 GREECE end lone word prose [year-opening] "are." in "Something presses on who you are this" / "year, and it does not let up. An old voice" / "says you have to earn the right to take up" / "space, so you keep proving yourself to" / "people who never really watch. The job" / "that hollows you out, the parent you" / "cannot satisfy, the room where you go" / "quiet and small: the pressure is here to" / "show you the cost. It will feel like failure." / "It is not. It is the bill for a life spent" / "performing. The peak forces the question" / "you keep avoiding: who is this actually" / "for. Cut the dead weight and stand as you" / "are." (17.0.sp Unspecified in 936 px)
-sky-year 360 GREECE end lone word [spine-4] "KRONOS" in "KRONOS" / "CHALLENGES" / "YOUR NATAL" / "HELIOS" (18.0.sp 0.08.em in 544 px) EXCEPTION: KRONOS CHALLENGES YOUR NATAL HELIOS: KRONOS CHALLENGES does not fit 181 dp at 16sp; needs a string or layout change
-sky-year 360 GREECE end lone word [spine-4] "CHALLENGES" in "KRONOS" / "CHALLENGES" / "YOUR NATAL" / "HELIOS" (18.0.sp 0.08.em in 544 px) EXCEPTION: as KRONOS, same row
-sky-year 360 GREECE end lone word [spine-4] "HELIOS" in "KRONOS" / "CHALLENGES" / "YOUR NATAL" / "HELIOS" (18.0.sp 0.08.em in 544 px) EXCEPTION: as KRONOS, same row
-sky-year 360 GREECE end lone word [spine-5] "SHOULDER" in "ZEUS STANDS" / "SHOULDER" / "TO SHOULDER" / "WITH YOUR" / "NATAL SELENE" (18.0.sp 0.08.em in 544 px) EXCEPTION: ZEUS STANDS SHOULDER TO SHOULDER WITH YOUR NATAL SELENE: nine words need five lines of two at 181 dp; needs a string or layout change
 sky-year 360 CANAAN rest lone word prose [year-opening] "are." in "Something presses on who you are this" / "year, and it does not let up. An old voice" / "says you have to earn the right to take up" / "space, so you keep proving yourself to" / "people who never really watch. The job" / "that hollows you out, the parent you" / "cannot satisfy, the room where you go" / "quiet and small: the pressure is here to" / "show you the cost. It will feel like failure." / "It is not. It is the bill for a life spent" / "performing. The peak forces the question" / "you keep avoiding: who is this actually" / "for. Cut the dead weight and stand as you" / "are." (17.0.sp Unspecified in 936 px)
 sky-year 360 CANAAN end lone word prose [year-opening] "are." in "Something presses on who you are this" / "year, and it does not let up. An old voice" / "says you have to earn the right to take up" / "space, so you keep proving yourself to" / "people who never really watch. The job" / "that hollows you out, the parent you" / "cannot satisfy, the room where you go" / "quiet and small: the pressure is here to" / "show you the cost. It will feel like failure." / "It is not. It is the bill for a life spent" / "performing. The peak forces the question" / "you keep avoiding: who is this actually" / "for. Cut the dead weight and stand as you" / "are." (17.0.sp Unspecified in 936 px)
 sky-year 360 CARTHAGE rest lone word prose [row-17] "Maiden." in "Baal Hammon makes port in the" / "Maiden." (17.0.sp Unspecified in 873 px)
@@ -61,7 +53,7 @@ sky-year note: with a chart web prints neither the count line (P45) nor the time
 sky-year month-2 (no board ID) got 24.0, 486.3 · 342.0x11.0
 sky-year month-3 (no board ID) got 24.0, 596.7 · 342.0x11.0
 sky-year row-6 (no board ID) got 45.0, 697.0 · 321.0x15.7
-sky-year page scrolls to 2899.3 (board 136)
+sky-year page scrolls to 2891.0 (board 136)
 sky-year gap P43 to P44 want 18.0 got 18.0
 sky-year gap P44 to P45 want 10.0 got 10.0
 sky-year gap P45 to P46 want 30.0 got 30.0
@@ -82,6 +74,11 @@ sky-year-360 gap P49 to P47 want 19.9 got 20.0
 sky-year-360 gap P47 to month-2 want 30.0 got 30.0
 sky-year-360 gap month-2 to P48 want 18.0 got 18.0
 sky-year-360 P47 got 45.0, 440.7 · 291.0x15.7
+sky-year-360 spine-1 82.3 tall (headline 60.0, end month 18.3)
+sky-year-360 spine-2 112.3 tall (headline 90.0, end month 18.3)
+sky-year-360 spine-3 82.3 tall (headline 60.0, end month 18.3)
+sky-year-360 spine-4 112.3 tall (headline 90.0, end month 18.3)
+sky-year-360 spine-5 112.3 tall (headline 90.0, end month 18.3)
 sky-year-no-chart P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 sky-year-no-chart P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
 sky-year-no-chart P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
@@ -112,21 +109,26 @@ sky-year-rome gap P49 to P47 want 19.9 got 20.0
 sky-year-rome gap P47 to month-2 want 30.0 got 30.0
 sky-year-greece-end gap year-segments to year-festivals want 12.0 got 12.0
 sky-year-greece-end gap year-festivals to year-spine want 32.0 got 32.0
+sky-year-end spine-1 82.3 tall (headline 60.0, end month 18.3)
+sky-year-end spine-2 112.3 tall (headline 90.0, end month 18.3)
+sky-year-end spine-3 82.3 tall (headline 60.0, end month 18.3)
+sky-year-end spine-4 82.3 tall (headline 60.0, end month 18.3)
+sky-year-end spine-5 82.3 tall (headline 60.0, end month 18.3)
 sky-year-end P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 sky-year-end P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
 sky-year-end P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
 sky-year-end P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
 sky-year-end P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
-sky-year-end year-opening (no board ID) got 24.0, -1190.7 · 342.0x340.0
-sky-year-end year-segments (no board ID) got 24.0, -818.7 · 342.0x693.0
-sky-year-end segment-1 (no board ID) got 24.0, -818.7 · 342.0x289.0
-sky-year-end segment-2 (no board ID) got 24.0, -529.7 · 342.0x239.0
-sky-year-end segment-3 (no board ID) got 24.0, -290.7 · 342.0x165.0
-sky-year-end year-spine (no board ID) got 24.0, -93.7 · 342.0x574.7
+sky-year-end year-opening (no board ID) got 24.0, -1182.3 · 342.0x340.0
+sky-year-end year-segments (no board ID) got 24.0, -810.3 · 342.0x693.0
+sky-year-end segment-1 (no board ID) got 24.0, -810.3 · 342.0x289.0
+sky-year-end segment-2 (no board ID) got 24.0, -521.3 · 342.0x239.0
+sky-year-end segment-3 (no board ID) got 24.0, -282.3 · 342.0x165.0
+sky-year-end year-spine (no board ID) got 24.0, -85.3 · 342.0x566.3
 sky-year-end year-votive (no board ID) got 24.0, 513.0 · 342.0x92.0
 sky-year-end year-feedback (no board ID) got 24.0, 629.0 · 342.0x41.3
 sky-year-end year-links (no board ID) got 24.0, 706.3 · 342.0x17.7
-sky-year-end page scrolls to 2899.3
+sky-year-end page scrolls to 2891.0
 sky-year-end gap row-21 to year-opening want 40.0 got 40.0
 sky-year-end gap year-opening to year-segments want 32.0 got 32.0
 sky-year-end gap year-segments to year-spine want 32.0 got 32.0
@@ -134,14 +136,10 @@ sky-year-end gap year-spine to year-votive want 32.0 got 32.0
 sky-year-end gap year-votive to year-feedback want 24.0 got 24.0
 sky-year-end gap year-feedback to year-links want 36.0 got 36.0
 sky-year-end year-votive height 92.0 (three lines 121.0)
-sky-year 390 1.3 EGYPT rest lone word [spine-1] "ASCENDANT" in "AMUN ROWS" / "IN TIME" / "WITH YOUR" / "ASCENDANT" (18.0.sp 0.08.em in 584 px) EXCEPTION: accepted at 1.3: YOUR ASCENDANT does not fit beside the end month at 1.3, even at 16sp .04em
-sky-year 390 1.3 EGYPT rest lone word [spine-2] "MIDHEAVEN" in "GEB BARS" / "THE DOOR" / "AGAINST YOUR" / "MIDHEAVEN" (18.0.sp 0.08.em in 584 px) EXCEPTION: accepted at 1.3: YOUR MIDHEAVEN does not fit beside the end month at 1.3, even at 16sp .04em
-sky-year 390 1.3 EGYPT rest lone word [spine-3] "ASCENDANT" in "GEB ROWS" / "IN TIME" / "WITH YOUR" / "ASCENDANT" (18.0.sp 0.08.em in 584 px) EXCEPTION: accepted at 1.3: as spine-1
-sky-year 390 1.3 EGYPT end lone word [spine-1] "ASCENDANT" in "AMUN ROWS" / "IN TIME" / "WITH YOUR" / "ASCENDANT" (18.0.sp 0.08.em in 584 px) EXCEPTION: accepted at 1.3: YOUR ASCENDANT does not fit beside the end month at 1.3, even at 16sp .04em
-sky-year 390 1.3 EGYPT end lone word [spine-2] "MIDHEAVEN" in "GEB BARS" / "THE DOOR" / "AGAINST YOUR" / "MIDHEAVEN" (18.0.sp 0.08.em in 584 px) EXCEPTION: accepted at 1.3: YOUR MIDHEAVEN does not fit beside the end month at 1.3, even at 16sp .04em
-sky-year 390 1.3 EGYPT end lone word [spine-3] "ASCENDANT" in "GEB ROWS" / "IN TIME" / "WITH YOUR" / "ASCENDANT" (18.0.sp 0.08.em in 584 px) EXCEPTION: accepted at 1.3: as spine-1
+sky-year 390 1.3 EGYPT rest lone words: none
+sky-year 390 1.3 EGYPT end lone words: none
 sky-year-focus scrolled to 39.3, row-7 top 732.3 bottom 748.0
-sky-year-spine-focus scrolled to 2214.3, spine-1 top 658.0 bottom 748.0
+sky-year-spine-focus scrolled to 2206.7, spine-1 top 665.7 bottom 748.0
 sky-year-no-chart-end P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 sky-year-no-chart-end P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
 sky-year-no-chart-end P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
@@ -183,3 +181,8 @@ sky-year-font-130 gap P49 to P47 want 19.9 got 20.0
 sky-year-font-130 gap P47 to month-2 want 30.0 got 30.0
 sky-year-font-130 gap month-2 to P48 want 18.0 got 18.0
 sky-year-font-130 P44 79.3 tall, P45 46.0, P47 20.3
+sky-year-font-130 spine-1 134.7 tall (headline 107.0, end month 23.7)
+sky-year-font-130 spine-2 134.7 tall (headline 107.0, end month 23.7)
+sky-year-font-130 spine-3 134.7 tall (headline 107.0, end month 23.7)
+sky-year-font-130 spine-4 134.7 tall (headline 107.0, end month 23.7)
+sky-year-font-130 spine-5 134.7 tall (headline 107.0, end month 23.7)

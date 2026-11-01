@@ -256,12 +256,38 @@ class SkyYearScreenshotTest {
         compose.onNodeWithTag("year-segments").assertDoesNotExist()
     }
 
+    /**
+     * The spine rows (Matthew's popup, 2026-11-01, "End month under headline", "One size for the list"): the
+     * headline across the row's full width, the end month 4 under it (web's gap-1) on the headline's left edge,
+     * every row 48 or taller. Notes each row's height.
+     */
+    private fun unmergedBox(id: String): Rect =
+        compose.onNodeWithTag(id, useUnmergedTree = true).getUnclippedBoundsInRoot().let { Rect(it.left.value, it.top.value, (it.right - it.left).value, (it.bottom - it.top).value) }
+
+    private fun assertSpine(name: String) {
+        var i = 1
+        while (compose.onAllNodes(androidx.compose.ui.test.hasTestTag("spine-$i"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) {
+            val row = box("spine-$i")
+            // Inside the row's cleared semantics: the unmerged tree.
+            val head = unmergedBox("spine-$i-headline")
+            val end = unmergedBox("spine-$i-end")
+            note("%s spine-%d %.1f tall (headline %.1f, end month %.1f)".format(name, i, row.h, head.h, end.h))
+            assertTrue("$name spine-$i headline spans the row: $head $row", abs(head.x - row.x) <= 0.5f && abs(head.w - row.w) <= 0.5f)
+            assertTrue("$name spine-$i end month 4 under the headline: $head $end", abs(end.y - (head.y + head.h) - 4f) <= 0.5f)
+            assertTrue("$name spine-$i end month on the headline's edge: $end", abs(end.x - head.x) <= 0.5f)
+            assertTrue("$name spine-$i under 48: $row", row.h >= 48f)
+            i++
+        }
+        assertTrue("$name: no spine rows", i > 1)
+    }
+
     @Test
     fun skyYearLargeFont() {
         // At 1.3 the title, the count line and the rows grow; the gaps between them hold.
         render("sky-year-font-130", AncientCulture.EGYPT, 0, fontScale = 1.3f)
         assertGaps("sky-year-font-130", boardGaps.take(7))
         note("sky-year-font-130 P44 %.1f tall, P45 %.1f, P47 %.1f".format(box("P44").h, box("P45").h, box("P47").h))
+        assertSpine("sky-year-font-130")
     }
 
     @Test
@@ -272,6 +298,7 @@ class SkyYearScreenshotTest {
         assertGaps("sky-year-360", boardGaps.take(7))
         val row = box("P47")
         note("sky-year-360 P47 got %.1f, %.1f · %.1fx%.1f".format(row.x, row.y, row.w, row.h))
+        assertSpine("sky-year-360")
         assertTrue("$row", abs(row.x - 45f) <= 1f && abs(row.w - 291f) <= 1f)
     }
 
@@ -296,6 +323,7 @@ class SkyYearScreenshotTest {
     fun skyYearEnd() {
         // The page's foot: web's opening, the segments, the spine, the votive, the feedback row and the links.
         render("sky-year-end", AncientCulture.EGYPT, 6000)
+        assertSpine("sky-year-end")
         assertChrome("sky-year-end")
         listOf("year-opening", "year-segments", "segment-1", "segment-2", "segment-3", "year-spine", "year-votive", "year-feedback", "year-links").forEach {
             noteBox("sky-year-end", it)
@@ -433,28 +461,8 @@ class SkyYearScreenshotTest {
 
     @Test
     @Config(qualifiers = "w360dp-h780dp-xxhdpi")
-    fun noLoneWordInAnyCultureAt360() = loneSweep("sky-year 360", allowed = narrowSpine)
-
-    /**
-     * The named exceptions at 360 (Greece's spine). A spine headline has 181 dp beside its end month; at the
-     * floor (16sp, .04em) KRONOS CHALLENGES and every two-word run holding SHOULDER WITH YOUR NATAL SELENE's
-     * last line are still wider, so no break gives each line two words. Only a string change (web's
-     * spanHeadline) or a different row layout clears them.
-     */
-    private val narrowSpine = mapOf(
-        "sky-year 360 GREECE [spine-4] KRONOS" to "KRONOS CHALLENGES YOUR NATAL HELIOS: KRONOS CHALLENGES does not fit 181 dp at 16sp; needs a string or layout change",
-        "sky-year 360 GREECE [spine-4] CHALLENGES" to "as KRONOS, same row",
-        "sky-year 360 GREECE [spine-4] HELIOS" to "as KRONOS, same row",
-        "sky-year 360 GREECE [spine-5] SHOULDER" to "ZEUS STANDS SHOULDER TO SHOULDER WITH YOUR NATAL SELENE: nine words need five lines of two at 181 dp; needs a string or layout change",
-    )
-
-    /** Accepted at 1.3 (Matthew's fix round, "record the rest"): the spine's 181 dp holds no two-word line of the longer words at 23.4sp. */
-    private val spineAt130 = mapOf(
-        "sky-year 390 1.3 EGYPT [spine-1] ASCENDANT" to "accepted at 1.3: YOUR ASCENDANT does not fit beside the end month at 1.3, even at 16sp .04em",
-        "sky-year 390 1.3 EGYPT [spine-2] MIDHEAVEN" to "accepted at 1.3: YOUR MIDHEAVEN does not fit beside the end month at 1.3, even at 16sp .04em",
-        "sky-year 390 1.3 EGYPT [spine-3] ASCENDANT" to "accepted at 1.3: as spine-1",
-    )
+    fun noLoneWordInAnyCultureAt360() = loneSweep("sky-year 360")
 
     @Test
-    fun noLoneWordAtFontScale130() = loneSweep("sky-year 390 1.3", listOf(AncientCulture.EGYPT), fontScale = 1.3f, allowed = spineAt130)
+    fun noLoneWordAtFontScale130() = loneSweep("sky-year 390 1.3", listOf(AncientCulture.EGYPT), fontScale = 1.3f)
 }

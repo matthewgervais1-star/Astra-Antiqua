@@ -240,3 +240,7 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   353 tests, 0 failures. Record: `docs/design/android-glass.md` (step 6, design round).
 - Pending: Matthew's popup on Greece's Year spine at 360, the mixed spine size at 360, and approval; push and PR on
   his word.
+- FACT (Matthew's popup, 2026-11-01): "End month under headline", "One size for the list", "Approved after the spine
+  fix". Built: Year spine rows set the headline full width at 18sp .08em with the end month 4 under it; no named
+  spine exceptions remain. Local: 353 tests, 0 failures. Step 6 approved. Next: step 7, Chart, in a fresh session;
+  push and PR (stacked on #15) on Matthew's word.

@@ -512,8 +512,11 @@ private fun SegmentRow(seg: YearSegment, last: Boolean, id: String) {
 }
 
 /**
- * One row of web's spine: spanHeadline in the display face at .08em, the end
- * month in mono, dim. web links each row to /transits/{id}; each opens the
+ * One row of web's spine: spanHeadline in the display face at 18/1.65 .08em
+ * across the spine's full width, balanced, one size for the list; the end
+ * month in mono, dim, on its own line 4 under it (web's gap-1, as Week's
+ * headline over its line). Matthew's popup, 2026-11-01: "End month under
+ * headline", "One size for the list". web links each row to /transits/{id}; each opens the
  * transit detail on top, Midheaven spans included (TransitsViewModel walks
  * the Midheaven as web's readerSpans does, step 6).
  */
@@ -521,7 +524,7 @@ private fun SegmentRow(seg: YearSegment, last: Boolean, id: String) {
 private fun SpineRow(row: YearSpineRow, display: androidx.compose.ui.text.font.FontFamily, id: String, onOpen: (String) -> Unit) {
     val spoken = "${row.headline.lowercase()}, until ${row.end.removePrefix("→ ").lowercase()}"
     val source = remember { MutableInteractionSource() }
-    Row(
+    Column(
         Modifier
             .fillMaxWidth()
             .testTag(id)
@@ -529,17 +532,19 @@ private fun SpineRow(row: YearSpineRow, display: androidx.compose.ui.text.font.F
             .focusOutline(source)
             .clickable(source, indication = null, role = Role.Button, onClickLabel = "Open") { onOpen(Route.transitDetail(row.id)) }
             .clearAndSetSemantics { contentDescription = spoken },
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        // Balanced; a headline whose last word cannot share a line tightens (LoneWordFit.kt).
+        // Balanced at one size: minSize 18 keeps the list's size; where the balanced breaker still leaves a word
+        // alone (ASCENDANT at 1.3), LoneWordFit.kt breaks the lines by hand.
         NoLoneWordText(
             row.headline,
             style = TextStyle(fontFamily = display, fontSize = 18.sp, lineHeight = 18.sp * 1.65f, letterSpacing = 0.08.em, lineHeightStyle = CssLeading, lineBreak = LineBreak.Heading),
             color = Prose,
-            minSize = 16.sp,
-            modifier = Modifier.weight(1f).alignByBaseline(),
+            minSize = 18.sp,
+            modifier = Modifier.fillMaxWidth(),
+            textModifier = Modifier.fillMaxWidth().testTag("$id-headline"),
         )
-        Text(row.end, style = mono(11.sp, 1.65f, 0f), color = Dim, softWrap = false, modifier = Modifier.alignByBaseline())
+        Text(row.end, style = mono(11.sp, 1.65f, 0f), color = Dim, softWrap = false, modifier = Modifier.testTag("$id-end"))
     }
 }
 
