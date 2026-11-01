@@ -113,3 +113,26 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   exported; one name per destination; the Swift branch's exporters land on master first (Task 0), MAUI out.
 - Pending: Matthew's word to start Task 0; Task 1 is his ruling on the conflict table. The Android glass port
   (steps 5 to 11) stays paused until Task 4.
+
+## Added 2026-11-01 (night): shared strings revamp, built
+
+- FACT (Matthew's popups, this session): "Full run, workflows on"; the table's 128 defaults stand; titles "Web
+  headlines"; sections "Board labels, web extras"; shorthand "TIGHT, no Season changes"
+  (`docs/design/shared-strings-table-2026-11.md`, foot).
+- FACT (git): `claude/shared-strings-revamp` (this branch, off the plan branch, PR #11): Task 0 exporters
+  (66f3536), the ruled table (82c6ef2), the web catalog `web/src/strings/` with 212 keys and formats F1 to F14,
+  `shared/strings/`, screen goldens `shared/goldens/screens/`, `pnpm check:shared`, `gen-android-strings.mjs`,
+  web screens printing the catalog (a828e50 to 7633cdd), the C# core loader (3cb2610).
+- FACT (git): `claude/shared-strings-android` (worktree `.claude/worktrees/shared-strings-android`, off
+  `claude/android-glass-7a8074` with this branch merged): Sky Day, Week, Season print the catalog, 30 golden cases
+  pass (2ea0cd4, e47e61f). `claude/shared-strings-ios` (worktree `.claude/worktrees/shared-strings-ios`, off
+  `claude/ios-glass-phase-b-week`, generated files only, no merge): AstraCore reads the catalog (9f8aacc, 0b9cb83).
+- FACT (local runs, 2026-11-01): web 156 tests, 139 pass, 0 fail, 17 skipped; check:shared, tsc pass; dotnet 118/0;
+  Android 279/0 (Gradle needs `-Dorg.gradle.jvmargs=-XX:MaxMetaspaceSize=1536m`, KSP ran out at 512m); Swift
+  AstraCore 57/0 through WSL.
+- CANNOT CONFIRM: the web pages in a browser after 7633cdd (longer Lintel names, DAY WEEK SEASON YEAR, Moon box);
+  SwiftUI views (CI disabled); Android on a device.
+- Deferred: Task 4a, the reading-banks and learn generators read the JSON; account copy into the catalog; the
+  decree banks exported for Swift and C#; Swift branch's `ReadingBanks.cs` and `ContentStore.cs` read banks
+  master dropped; eclipse labels and season lunation prose need a copy pass; Android `day.votive` not ported.
+- Pending: Matthew's word to push the three branches and open PRs; then the glass port resumes on the catalog.
