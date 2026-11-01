@@ -475,3 +475,32 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
   standardizes all the versions? this way there's no split or differentials other than layout and thats a
   screen issue that is solvable?" INFERENCE: the kicker stays as built until he settles that question; it
   asks for one set of strings shared by web, iPhone and Android, with only layout differing per screen.
+
+### The web's sections below Sky Season, built (2026-10-31)
+
+- FACT (Matthew, 2026-10-31, "Build sections now", after his popup answer "Below the board, as Week").
+- FACT (`domain/SeasonStandouts.kt`): ports web's `buildSeasonStandouts` (`lib/season.ts`) with the finders it
+  reads (`lib/yearForecast.ts`: `findMajorTransits` and its bisection, `findEclipses`, `findMoonPhases`; stations
+  and ingresses through `SkyEvents`), the eight dated story beats (`data/yearNarrative.ts`), `TRANSIT_PRINCIPLE`,
+  `transitPlanetWeight`, `toneOf`, and the page's prose (`seasonContent.ts`: `composeWhatIsChanging`,
+  `composeWhereItBegins` with `companionInSign`, `composeWhatItLeavesBehind`, `SEASON_VOTIVE` by
+  `seasonVotiveTone`). `AstronomyEngine.getMidheaven` ports web's Midheaven (`lib/ascendant.ts`); the season reads
+  transits to the Sun, Moon, Ascendant and Midheaven as web's does.
+- FACT (node run of `web/src`, TZ Europe/Rome, 2026-10-31): Android's sentences equal web's for the sample with
+  and without the chart (Egypt, Rome), for 2025-03-01 with the chart (Egypt, Rome, Greece, Carthage, Canaan) and
+  without it (the 14 March 2025 lunar eclipse ranks), and for 2026-12-30; `SkySeasonTest` pins them. The
+  smoke birth's angles: Ascendant 262.398, Midheaven 195.599 on both. Web's own wording is kept as written,
+  "Scales's excuses" and "under via" included.
+- FACT (`ui/screens/SkySeasonScreen.kt`, `WebSeasonSections`): below the season's sky in web SeasonNave's order:
+  WHAT IS CHANGING, WHERE IT BEGINS, WHAT IT LEAVES BEHIND (WHAT IT TOUCHES is P37 to P39), the votive, the
+  feedback row (`season-libra-2026`, kept on the device), the call "CAST A CHART TO SEE WHAT THE SEASON TOUCHES
+  IN YOUR OWN HOUSES → READING" when there is no birth record, and the links ← THE DAY, THE WEEK, THE YEAR →,
+  THE LONG TRANSITS →. Web's spacing (40 under the rows as on Week, gap-7, gap-2.5, mt-8, mt-6, mt-9) holds to
+  0.1 in `sky-season-end`. READING opens the cast screen on top of the season (`onOpen`), so saving a chart
+  comes back to it. Each prose block and the votive is a D-pad stop; the links take Compose's 48 dp touch
+  (tested on THE YEAR). The page scrolls to 954.0.
+- FACT (scoped review, same Opus reviewer, 2026-10-31): nothing Critical or Important; the beats, verbs, ranking,
+  votive tone, eclipse handling and Midheaven checked against web. Four Minors fixed in one round: READING
+  switched sections instead of opening on top; the transit search read each planet's longitude once per target
+  (now once per date); no test reached an eclipse or the other three voices (now both); TalkBack read the call's
+  arrow. Local: 275 tests, 0 failures. New renders `sky-season-end.png`, `sky-season-no-chart-end.png`.

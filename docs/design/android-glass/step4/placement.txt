@@ -31,6 +31,25 @@ sky-season-font-130 gap P33 to P34 want 16.0 got 16.0
 sky-season-font-130 gap P34 to P35 want 22.0 got 22.0
 sky-season-font-130 gap P35 to P36 want 26.0 got 26.0
 sky-season-font-130 P35 height 31.0, day line 19.0 tall
+sky-season-end P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+sky-season-end P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+sky-season-end P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
+sky-season-end P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+sky-season-end P20 want 0.0, 0.0 · 390.0x173.0 got 0.0, 0.0 · 390.0x173.0 off 0.0
+sky-season-end season-changing-label (no board ID) got 24.0, 117.7 · 342.0x11.0
+sky-season-end season-changing (no board ID) got 24.0, 138.7 · 342.0x113.3
+sky-season-end season-begins (no board ID) got 24.0, 301.0 · 342.0x56.7
+sky-season-end season-leaves (no board ID) got 24.0, 406.7 · 342.0x56.7
+sky-season-end season-votive (no board ID) got 24.0, 495.3 · 342.0x92.0
+sky-season-end season-feedback (no board ID) got 24.0, 611.3 · 342.0x41.3
+sky-season-end season-links (no board ID) got 24.0, 688.7 · 342.0x35.3
+sky-season-end page scrolls to 954.0
+sky-season-end gap row-3 to season-changing-label want 40.0 got 40.0
+sky-season-end gap season-changing-label to season-changing want 10.0 got 10.0
+sky-season-end gap season-changing to season-begins-label want 28.0 got 28.0
+sky-season-end gap season-leaves to season-votive want 32.0 got 32.0
+sky-season-end gap season-votive to season-feedback want 24.0 got 24.0
+sky-season-end gap season-feedback to season-links want 36.0 got 36.0
 sky-season P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
 sky-season P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
 sky-season P2 want 16.0, 113.0 · 358.0x44.0 got 16.0, 113.0 · 358.0x44.0 off 0.0
@@ -49,7 +68,7 @@ sky-season P40 want 24.0, 826.4 · 342.0x11.0 got 24.0, 870.7 · 342.0x11.0 off 
 sky-season P41 want 24.0, 841.4 · 342.0x79.9 got 24.0, 885.7 · 342.0x48.7 off 44.3
 sky-season P42 want 24.0, 921.3 · 342.0x156.4 got 24.0, 934.3 · 342.0x48.7 off 107.7
 sky-season row-3 (no board ID) got 24.0, 983.0 · 342.0x48.7
-sky-season page scrolls to 307.7 (board 352)
+sky-season page scrolls to 954.0 (board 352)
 sky-season gap P32 to P33 want 24.0 got 24.0
 sky-season gap P33 to P34 want 16.0 got 16.0
 sky-season gap P34 to P35 want 22.0 got 22.0

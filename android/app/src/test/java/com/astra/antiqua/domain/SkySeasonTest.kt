@@ -204,6 +204,27 @@ class SkySeasonTest {
             "Iuppiter raises the spear against your Luna. The urge to expand and to trust is contested on this date. Decide what gives before the date decides it. Behind it: saturnus raises the spear against your Ascendant.",
             rome.whatIsChanging,
         )
+        // Three more voices: web's verbs and names.
+        assertEquals(
+            "Zeus challenges your Selene. The urge to expand and to trust is contested on this date. Decide what gives before the date decides it. Behind it: kronos challenges your Ascendant.",
+            atNatal("2025-03-01T12:00:00Z", AncientCulture.GREECE).whatIsChanging,
+        )
+        assertEquals(
+            "Baal Hammon turns the prow against your Tanit. The urge to expand and to trust is contested on this date. Decide what gives before the date decides it. Behind it: baal Hammon turns the prow against your Ascendant.",
+            atNatal("2025-03-01T12:00:00Z", AncientCulture.CARTHAGE).whatIsChanging,
+        )
+        assertEquals(
+            "Baal Hadad draws the bow against your Yarikh. The urge to expand and to trust is contested on this date. Decide what gives before the date decides it. Behind it: el draws the bow against your Ascendant.",
+            atNatal("2025-03-01T12:00:00Z", AncientCulture.CANAAN).whatIsChanging,
+        )
+        // Without the chart the 14 March 2025 lunar eclipse (5 + its obscuration × 2) ranks first,
+        // and the Full Moon before it in date leads the sentence; web's votive reads that quiet first beat.
+        val sky = at("2025-03-01T12:00:00Z")
+        assertEquals(
+            "Full Moon in Virgo. The month's full light. What was building since the New Moon shows its results, ready or not. Behind it: what you buried comes up now.",
+            sky.whatIsChanging,
+        )
+        assertEquals("THE ORDINARY MONTH\nSTILL FEEDS THE GRANARY", sky.votive)
         // Capricorn 2026, no chart: the reading id keeps the year the season opened.
         assertEquals("season-capricorn-2026", at("2026-12-30T12:00:00Z").readingId)
         assertEquals("The scale does not carry Goat's excuses into Water-Bearer.", at("2026-12-30T12:00:00Z").whatItLeavesBehind)

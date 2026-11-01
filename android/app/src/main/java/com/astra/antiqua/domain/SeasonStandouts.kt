@@ -231,6 +231,9 @@ object SeasonStandouts {
         val out = mutableListOf<Peak>()
         for (planet in TRANSIT_BODIES) {
             val step = if (planet == Planet.URANUS || planet == Planet.NEPTUNE || planet == Planet.PLUTO) 8 else 2
+            // The planet's longitude at each sample date, read once for every point and target.
+            val dates = (0..days step step).map { Date(start.time + it * DAY_MS) }
+            val lons = dates.map { longitude(engine, planet, it) }
             for ((key, natalLon) in points) {
                 for ((aspect, angle) in ASPECTS) {
                     val targets = if (angle == 0.0 || angle == 180.0) {
@@ -239,21 +242,15 @@ object SeasonStandouts {
                         listOf(norm(natalLon + angle), norm(natalLon - angle))
                     }
                     for (target in targets) {
-                        var prevDate = start
-                        var prevDiff = signedDiff(longitude(engine, planet, prevDate), target)
-                        var d = step
-                        while (d <= days) {
-                            val date = Date(start.time + d * DAY_MS)
-                            val diff = signedDiff(longitude(engine, planet, date), target)
+                        for (i in 1 until dates.size) {
+                            val prevDiff = signedDiff(lons[i - 1], target)
+                            val diff = signedDiff(lons[i], target)
                             if (prevDiff * diff < 0 && abs(prevDiff - diff) < 30) {
-                                val exact = bisect(engine, planet, target, prevDate, date)
+                                val exact = bisect(engine, planet, target, dates[i - 1], dates[i])
                                 if (abs(separation(longitude(engine, planet, exact), natalLon) - angle) < 0.5) {
                                     out += Peak(planet, key, aspect, exact)
                                 }
                             }
-                            prevDate = date
-                            prevDiff = diff
-                            d += step
                         }
                     }
                 }

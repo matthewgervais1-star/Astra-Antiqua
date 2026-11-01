@@ -104,11 +104,12 @@ import kotlin.math.sin
 fun SkySeasonScreen(
     culture: AncientCulture,
     onNavigate: (String) -> Unit,
+    onOpen: (String) -> Unit,
 ) {
     val model: SkySeasonViewModel = viewModel(factory = AstraViewModelFactory)
     val season by model.season.collectAsState()
     LaunchedEffect(culture) { model.load(culture) }
-    SkySeasonFrame(culture = culture, season = season, onNavigate = onNavigate)
+    SkySeasonFrame(culture = culture, season = season, onNavigate = onNavigate, onOpen = onOpen)
 }
 
 /** Sky Season inside its chrome, from a composed [season]; the screenshot test draws this. */
@@ -117,6 +118,7 @@ fun SkySeasonFrame(
     culture: AncientCulture,
     season: SkySeason?,
     onNavigate: (String) -> Unit = {},
+    onOpen: (String) -> Unit = {},
     scrollState: ScrollState = rememberScrollState(),
 ) {
     GlassScreen(
@@ -130,7 +132,7 @@ fun SkySeasonFrame(
         // The culture sheet is step 10; until then the menu opens the Voices list.
         onMenu = { onNavigate(Route.VOICES) },
     ) {
-        if (season != null) SkySeasonContent(culture, season, onNavigate)
+        if (season != null) SkySeasonContent(culture, season, onNavigate, onOpen)
     }
 }
 
@@ -157,7 +159,7 @@ private object SeasonBoard {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavigate: (String) -> Unit) {
+private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavigate: (String) -> Unit, onOpen: (String) -> Unit) {
     val side = Modifier.fillMaxWidth().padding(horizontal = SeasonBoard.side)
     val window = season.window
 
@@ -272,7 +274,7 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavig
         SkyRow(row, if (i < 2) "P${41 + i}" else "row-${i + 1}")
     }
 
-    WebSeasonSections(culture, season, onNavigate)
+    WebSeasonSections(culture, season, onNavigate, onOpen)
 }
 
 /**
@@ -286,7 +288,7 @@ private fun SkySeasonContent(culture: AncientCulture, season: SkySeason, onNavig
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun WebSeasonSections(culture: AncientCulture, season: SkySeason, onNavigate: (String) -> Unit) {
+private fun WebSeasonSections(culture: AncientCulture, season: SkySeason, onNavigate: (String) -> Unit, onOpen: (String) -> Unit) {
     val side = Modifier.fillMaxWidth().padding(horizontal = SeasonBoard.side)
     listOf(
         Triple("WHAT IS CHANGING", season.whatIsChanging, "season-changing"),
@@ -330,8 +332,16 @@ private fun WebSeasonSections(culture: AncientCulture, season: SkySeason, onNavi
     if (season.house == null) {
         // web: CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES → READING.
         FlowRow(side.padding(top = 32.dp).testTag("season-cast"), horizontalArrangement = Arrangement.Center) {
-            Text("CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES → ", style = label, color = Dim, textAlign = TextAlign.Center)
-            FootLink("READING", "Cast a chart", Route.READING, LocalAccent.current, label, onNavigate)
+            Text(
+                "CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES → ",
+                style = label,
+                color = Dim,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.semantics { contentDescription = "Cast a chart to see what the season touches in your own houses" },
+            )
+            // Opened on top of the season, as the app's other ways to the cast screen are,
+            // so saving the chart comes back here.
+            FootLink("READING", "Cast a chart", Route.READING, LocalAccent.current, label, onOpen)
         }
     }
     val link = mono(11.sp, 1.6f, 0.18f)

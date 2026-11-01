@@ -101,6 +101,7 @@ class SkySeasonScreenshotTest {
 
     private lateinit var state: ScrollState
     private val routes = mutableListOf<String>()
+    private val opened = mutableListOf<String>()
     private lateinit var focus: androidx.compose.ui.focus.FocusManager
 
     private fun render(name: String, culture: AncientCulture, scroll: Int, withChart: Boolean = true, fontScale: Float = 1f) {
@@ -113,7 +114,7 @@ class SkySeasonScreenshotTest {
                 AstraAntiquaTheme(selectedCulture = culture) {
                     state = rememberScrollState(with(LocalDensity.current) { scroll.dp.roundToPx() })
                     focus = androidx.compose.ui.platform.LocalFocusManager.current
-                    SkySeasonFrame(culture = culture, season = season, onNavigate = { routes += it }, scrollState = state)
+                    SkySeasonFrame(culture = culture, season = season, onNavigate = { routes += it }, onOpen = { opened += it }, scrollState = state)
                 }
             }
         }
@@ -295,9 +296,9 @@ class SkySeasonScreenshotTest {
         // No birth record: web's call to cast a chart, whose READING opens the cast screen.
         render("sky-season-no-chart-end", AncientCulture.EGYPT, 4000, withChart = false)
         compose.onNodeWithText("CAST A CHART TO SEE WHAT THE SEASON TOUCHES IN YOUR OWN HOUSES → ").assertExists()
-        routes.clear()
         compose.onNode(hasContentDescription("Cast a chart") and androidx.compose.ui.test.hasClickAction()).performClick()
-        assertTrue("$routes", routes == listOf(com.astra.antiqua.ui.nav.Route.READING))
+        // Opened on top of the season, not switched to as a section.
+        assertTrue("$opened $routes", opened == listOf(com.astra.antiqua.ui.nav.Route.READING) && routes.isEmpty())
     }
 
     @Test

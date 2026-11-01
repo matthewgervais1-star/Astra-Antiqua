@@ -172,7 +172,7 @@ fun AstraNavHost(
         }
         // SKY · SEASON on the glass chrome (step 4); the flat SeasonScreen leaves the graph.
         composable(Route.SEASON) {
-            SkySeasonScreen(culture = culture, onNavigate = go)
+            SkySeasonScreen(culture = culture, onNavigate = go, onOpen = open)
         }
         flat(Route.YEAR) {
             YearScreen(culture = culture, onNavigate = go)

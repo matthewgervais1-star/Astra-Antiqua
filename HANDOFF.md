@@ -166,3 +166,7 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   On the kicker he asked whether a master design revamp could merge web, iPhone and Android into one set of
   strings, differing only in layout (quoted in `docs/design/android-glass.md`, step 4). Pending: his answer on
   that, then the web sections (with a port of web's season standouts) and the renders again.
+- FACT (Matthew, 2026-10-31, "Build sections now"): the web's season sections, votive, feedback, CAST A CHART and
+  links sit below Sky Season, with a port of web's season standouts and the Midheaven; text equals web's on four
+  dates (node). One scoped review, Minors fixed. 275 tests, 0 failures. Pending: his look at the renders, his
+  answer on a master revamp of shared strings; push and PR on his word.
