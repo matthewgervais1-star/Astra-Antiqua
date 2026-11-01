@@ -24,6 +24,7 @@ val AstraViewModelFactory: ViewModelProvider.Factory = viewModelFactory {
     initializer { SkyDayViewModel(container().astronomy, container().profiles) }
     initializer { SkyWeekViewModel(container().astronomy) }
     initializer { SkySeasonViewModel(container().astronomy, container().profiles) }
+    initializer { SkyYearViewModel(container().astronomy, container().profiles) }
     initializer { FigureViewModel(container().astronomy, container().profiles) }
     initializer { HorizonViewModel(container().astronomy, container().settings) }
     initializer { ForecastViewModel(container().astronomy, container().profiles, container().settings) }

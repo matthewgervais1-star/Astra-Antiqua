@@ -4,6 +4,7 @@ import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.model.Planet
+import io.github.cosinekitty.astronomy.EclipseKind
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.nextGlobalSolarEclipse
 import io.github.cosinekitty.astronomy.nextLunarEclipse
@@ -43,7 +44,7 @@ object SeasonStandouts {
     private const val DAY_MS = 86_400_000L
 
     /** web's TRANSIT_PRINCIPLE (`lib/personalReading.ts`). */
-    private val PRINCIPLE: Map<Planet, String> = mapOf(
+    internal val PRINCIPLE: Map<Planet, String> = mapOf(
         Planet.SUN to "the push to be seen and to lead",
         Planet.MOON to "the tide of feeling and need",
         Planet.MERCURY to "the traffic of words and ideas",
@@ -274,24 +275,39 @@ object SeasonStandouts {
     }
 
     /** web's findEclipses: lunar and global solar eclipses by peak, with the obscuration (0 where none is given). */
-    internal fun eclipses(start: Date, days: Int): List<Triple<Date, Boolean, Double>> {
+    internal fun eclipses(start: Date, days: Int): List<Triple<Date, Boolean, Double>> =
+        eclipseEvents(start, days).map { Triple(it.date, it.lunar, it.obscuration) }
+
+    /** One of web's EclipseEvent: the peak, lunar or solar, the obscuration and web's kind name ("annular"). */
+    internal data class Eclipse(val date: Date, val lunar: Boolean, val obscuration: Double, val kind: String)
+
+    /** web's kindToName: an unknown kind reads "partial", as there. */
+    private fun kindName(kind: EclipseKind): String = when (kind) {
+        EclipseKind.Penumbral -> "penumbral"
+        EclipseKind.Annular -> "annular"
+        EclipseKind.Total -> "total"
+        else -> "partial"
+    }
+
+    /** web's findEclipses with each eclipse's kind, which the year's quarters print. */
+    internal fun eclipseEvents(start: Date, days: Int): List<Eclipse> {
         val end = start.time + days * DAY_MS
-        val out = mutableListOf<Triple<Date, Boolean, Double>>()
+        val out = mutableListOf<Eclipse>()
         var lunar = searchLunarEclipse(timeOf(start))
         for (i in 0 until 12) {
             val peak = dateOf(lunar.peak)
             if (peak.time >= end) break
-            out += Triple(peak, true, lunar.obscuration.takeUnless { it.isNaN() } ?: 0.0)
+            out += Eclipse(peak, true, lunar.obscuration.takeUnless { it.isNaN() } ?: 0.0, kindName(lunar.kind))
             lunar = nextLunarEclipse(lunar.peak)
         }
         var solar = searchGlobalSolarEclipse(timeOf(start))
         for (i in 0 until 12) {
             val peak = dateOf(solar.peak)
             if (peak.time >= end) break
-            out += Triple(peak, false, solar.obscuration.takeUnless { it.isNaN() } ?: 0.0)
+            out += Eclipse(peak, false, solar.obscuration.takeUnless { it.isNaN() } ?: 0.0, kindName(solar.kind))
             solar = nextGlobalSolarEclipse(solar.peak)
         }
-        return out.sortedBy { it.first.time }
+        return out.sortedBy { it.date.time }
     }
 
     /** web's findMoonPhases: each quarter from the library's search, with the Moon's sign then. */

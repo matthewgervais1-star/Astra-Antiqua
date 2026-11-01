@@ -90,8 +90,14 @@ object TransitSpans {
         transitPlanets: List<Planet>,
         start: Date,
         days: Int,
-    ): List<TransitSpan> {
-        val peaks = findExactPasses(engine, natalPoints, transitPlanets, start, days)
+    ): List<TransitSpan> =
+        spansOf(engine, findExactPasses(engine, natalPoints, transitPlanets, start, days))
+
+    /**
+     * The spans of passes already found, so a screen that reads the passes
+     * themselves (Sky Year's annual report) walks the sky once for both.
+     */
+    internal fun spansOf(engine: AstronomyEngine, peaks: List<Peak>): List<TransitSpan> {
         val groups = LinkedHashMap<String, MutableList<Peak>>()
         for (peak in peaks) {
             val id = "${peak.planet.name.lowercase()}-${peak.aspect.name.lowercase()}-${peak.natalKey}"
@@ -117,7 +123,8 @@ object TransitSpans {
         }.sortedBy { it.start.time }
     }
 
-    private data class Peak(
+    /** One exact pass, web's NatalTransitPeak. */
+    internal data class Peak(
         val planet: Planet,
         val natalKey: String,
         val natalLongitude: Double,
@@ -174,7 +181,7 @@ object TransitSpans {
      * against the angle to half a degree, so a wraparound cannot be mistaken
      * for a hit.
      */
-    private fun findExactPasses(
+    internal fun findExactPasses(
         engine: AstronomyEngine,
         natalPoints: List<NatalPoint>,
         transitPlanets: List<Planet>,

@@ -248,3 +248,52 @@ object SkySeasonSlots {
         return row.prose?.let { lines(head, it) } ?: head
     }
 }
+
+/** Sky Year's slots (board Glass-Year; table section "Year"), from a composed year: web's buildYearScreen. */
+object SkyYearSlots {
+    val NOT_BUILT = emptySet<String>()
+
+    /**
+     * The rows' dates, the month labels, the kicker and the year in the title
+     * read in [zone], the reader's (F2). The count adds the window's lunations
+     * to the turnings; with a birth the votive prints, without one the cast lines.
+     */
+    fun build(year: SkyYear, culture: AncientCulture, zone: ZoneId = ZoneId.systemDefault()): SlotMap {
+        val m = linkedMapOf<String, Any>()
+        val rows = year.turnings
+        m["year.kicker"] = fill(SharedStrings.YEAR_KICKER, "date" to SharedFormat.dayMonthYear(year.now, zone), "institution" to institution(culture))
+        m["year.title"] = fill(SharedStrings.YEAR_TITLE.getValue(culture), "roman" to SharedFormat.roman(SharedFormat.year(year.now, zone).toInt()))
+        m["year.countLine"] = fill(SharedStrings.YEAR_COUNT_LINE, "n" to SharedFormat.countDigits(rows.size + year.lunations))
+        m["year.monthLabel"] = rows.mapIndexed { i, row ->
+            val month = SharedFormat.monthYear(row.date, zone)
+            val prev = rows.getOrNull(i - 1)
+            if (prev == null || SharedFormat.monthYear(prev.date, zone) != month) fill(SharedStrings.YEAR_MONTH_LABEL, "date" to month) else ""
+        }
+        m["year.row.head"] = rows.map { rowHead(it, zone) }
+        m["year.row.prose"] = rows.map { if (it.kind == SkyEventKind.INGRESS) SkySeasonComposer.ingressSentence(culture, it.planet, it.sign) else "" }
+        m["year.today"] = fill(SharedStrings.YEAR_TODAY, "date" to SharedFormat.dayMonth(year.now, zone))
+        if (year.report == null) m["year.noChart"] = listOf(SharedStrings.YEAR_NO_CHART_TITLE, SharedStrings.YEAR_NO_CHART_LINK)
+        year.report?.let { m["year.votive"] = SkyYearComposer.votive(culture, SkyYearComposer.votiveTone(it.dominant)) }
+        m["year.footer"] = listOf(SharedStrings.CHROME_FOOTER_BACK_SEASON, SharedStrings.CHROME_FOOTER_TO_FORECAST)
+        return SlotMap(m)
+    }
+
+    /**
+     * year.monthLabel for the instant's own month ("SEP 2026"): the label over
+     * TODAY when today's month holds no turning. Not a web slot; web prints
+     * TODAY as the heading of its no-chart box, above every month.
+     */
+    fun todayMonth(year: SkyYear, zone: ZoneId = ZoneId.systemDefault()): String =
+        fill(SharedStrings.YEAR_MONTH_LABEL, "date" to SharedFormat.monthYear(year.now, zone))
+
+    /** year.row.*: "24 OCT · MERCURY TURNS RETROGRADE", "26 JUL · JUPITER INTO VIRGO". */
+    fun rowHead(row: YearTurning, zone: ZoneId = ZoneId.systemDefault()): String {
+        val date = SharedFormat.dayMonth(row.date, zone)
+        val planet = SharedFormat.planetName(row.planet)
+        return when (row.kind) {
+            SkyEventKind.RETROGRADE -> fill(SharedStrings.YEAR_ROW_RETROGRADE, "date" to date, "planet" to planet)
+            SkyEventKind.DIRECT -> fill(SharedStrings.YEAR_ROW_DIRECT, "date" to date, "planet" to planet)
+            else -> fill(SharedStrings.YEAR_ROW_INGRESS, "date" to date, "planet" to planet, "sign" to SharedFormat.signFull(row.sign))
+        }
+    }
+}

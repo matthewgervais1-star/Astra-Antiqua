@@ -373,7 +373,7 @@ private fun WebSeasonSections(season: SkySeason, slots: SlotMap, onNavigate: (St
 
 /** A small link in the foot, as on Week: web's 18 dp line, widened to a 48 dp touch by Compose's hit test. */
 @Composable
-private fun FootLink(text: String, spoken: String, route: String, ink: Color, style: TextStyle, onNavigate: (String) -> Unit) {
+internal fun FootLink(text: String, spoken: String, route: String, ink: Color, style: TextStyle, onNavigate: (String) -> Unit) {
     val source = remember { MutableInteractionSource() }
     Text(
         text,
@@ -390,7 +390,7 @@ private val lessonProse = TextStyle(fontFamily = Spectral, fontWeight = FontWeig
 
 /** A section label between two rules, the board's section gap above it (P37, P40). */
 @Composable
-private fun SeasonLabel(text: String, id: String, bottom: Dp, top: Dp = SeasonBoard.sectionGap) {
+internal fun SeasonLabel(text: String, id: String, bottom: Dp, top: Dp = SeasonBoard.sectionGap) {
     Row(
         // CSS line-height 1: the box is 11 tall and the glyphs overflow it, as on the board.
         modifier = Modifier.fillMaxWidth().padding(horizontal = SeasonBoard.side)
@@ -470,8 +470,19 @@ private fun HouseWheel(ascendant: Double, sun: Double, house: com.astra.antiqua.
  */
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-private fun Modifier.dpadStop(): Modifier {
+internal fun Modifier.dpadStop(): Modifier {
     val source = remember { MutableInteractionSource() }
+    return glassClearFocus().focusOutline(source).focusable(interactionSource = source)
+}
+
+/**
+ * The bring-into-view half of [dpadStop] alone, for a block that takes focus
+ * some other way (Sky Year's spine rows are clickable): when it gains focus
+ * the scroll shows it with the glass's 173 above and 96 below.
+ */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+internal fun Modifier.glassClearFocus(): Modifier {
     val requester = remember { androidx.compose.foundation.relocation.BringIntoViewRequester() }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     val density = LocalDensity.current
@@ -488,8 +499,6 @@ private fun Modifier.dpadStop(): Modifier {
             }
         }
         .onSizeChanged { height[0] = it.height.toFloat() }
-        .focusOutline(source)
-        .focusable(interactionSource = source)
 }
 
 /** The season's house on the wheel: the outer arc's start and sweep, in Compose's degrees. */
