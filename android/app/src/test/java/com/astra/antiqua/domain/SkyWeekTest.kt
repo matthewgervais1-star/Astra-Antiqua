@@ -56,6 +56,18 @@ class SkyWeekTest {
         assertEquals(WeekShorthand.Ingress(com.astra.antiqua.model.Planet.SUN, ZodiacSign.SCORPIO), week.days[4].shorthand)
         assertEquals("SEVEN DAYS · SEVEN WEIGHED · NONE QUIET", SkyWeekComposer.countLine(week.days))
         assertEquals("26 OCT 2026", SkyWeekComposer.dayMonthYear(week.moon.nextDate!!))
+        // web WeekNave: the hardest day is Monday's tension, its reading id the ISO week.
+        assertEquals("WEIGH WHAT IS HEAVY BEFORE\nYOU CARRY IT INTO FRIDAY", WeekVoice.votive(AncientCulture.EGYPT, week.days))
+        assertEquals("week-2026-W43", WeekVoice.readingId(week.start))
+        assertEquals("week-2026-W53", WeekVoice.readingId(local(2026, 12, 28)))
+        // The fallbacks: no tension day takes the harmony line; a quiet week, and an empty one, the quiet line.
+        val quiet = WeekDay(Date(0), "MON 1", false, null, "", DayTone.QUIET, false, WeekShorthand.Quiet, null)
+        val easy = quiet.copy(tone = DayTone.HARMONY)
+        assertEquals("TAKE THE CURRENT WHILE\nIT RUNS WITH YOU", WeekVoice.votive(AncientCulture.EGYPT, listOf(quiet, easy)))
+        assertEquals("ORDINARY DAYS ARE NOT\nEMPTY DAYS", WeekVoice.votive(AncientCulture.EGYPT, listOf(quiet)))
+        assertEquals("ORDINARY DAYS ARE NOT\nEMPTY DAYS", WeekVoice.votive(AncientCulture.EGYPT, emptyList()))
+        // The headline is the day page's, as the web prints it above the line; none on an ingress day.
+        assertTrue(week.days[0].headline != null && week.days[4].headline == null)
     }
 
     @Test

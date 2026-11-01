@@ -13,6 +13,9 @@ import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isSelected
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.dp
 import com.astra.antiqua.data.AstronomyEngine
@@ -192,6 +195,29 @@ class SkyWeekScreenshotTest {
     }
 
     @Test
+    fun skyWeekEnd() {
+        // The page's foot: the web's thesis, note, votive, feedback row and links below Sunday.
+        render("sky-week-end", AncientCulture.EGYPT, 4000)
+        val chromeMisses = measure("sky-week-end", chrome)
+        assertTrue("chrome off by more than 1 dp:\n" + chromeMisses.joinToString("\n"), chromeMisses.isEmpty())
+        listOf("week-thesis", "week-note", "week-votive", "week-feedback", "week-links").forEach { id ->
+            val b = compose.onNodeWithTag(id).getUnclippedBoundsInRoot()
+            note("sky-week-end %s (no board ID) got %.1f, %.1f · %.1fx%.1f".format(id, b.left.value, b.top.value, (b.right - b.left).value, (b.bottom - b.top).value))
+        }
+        compose.onNodeWithText(com.astra.antiqua.domain.WeekVoice.thesis(AncientCulture.EGYPT)).assertExists()
+        compose.onNodeWithText("DAYS TALLIED AGAINST THE FEATHER").assertExists()
+        compose.onNodeWithText("WEIGH WHAT IS HEAVY BEFORE\nYOU CARRY IT INTO FRIDAY").assertExists()
+        listOf("The day", "The season", "The long transits").forEach {
+            compose.onNode(androidx.compose.ui.test.hasContentDescription(it) and hasClickAction()).assertExists()
+        }
+        // A verdict is kept on the device and cleared by a second tap.
+        compose.onNodeWithText("IT WAS SO").performClick()
+        compose.onNode(hasText("IT WAS SO") and isSelected()).assertExists()
+        compose.onNodeWithText("IT WAS SO").performClick()
+        compose.onNode(hasText("IT WAS SO") and isSelected()).assertDoesNotExist()
+    }
+
+    @Test
     fun skyWeekMidway() {
         // The proposal's middle frame: the lit part reaches Tuesday's line.
         render("sky-week-280", AncientCulture.EGYPT, 280)
@@ -222,6 +248,7 @@ class SkyWeekScreenshotTest {
             compose.onNodeWithText(it).assertExists()
         }
         compose.onNodeWithText("FASTUS AND NEFASTUS").assertExists()
+        compose.onNodeWithText("DAYS FLAGGED F · N · C IN THE LIST · F LAWFUL · N UNLAWFUL · C MIXED").assertExists()
     }
 
     @Test

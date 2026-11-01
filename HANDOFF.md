@@ -150,3 +150,5 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 - FACT (Matthew's popup, 2026-10-31): Moon scrolls with the text under Reduce Motion (as built); add the
   web's headline to each week row; put the web's thesis, note, votive, feedback and links below the rows;
   "Changes first" before Season. Pending: those two changes, then his look.
+- FACT (Matthew, 2026-10-31, "Yes, build them"): row headlines and the web's thesis, note, votive, feedback
+  (kept on the device) and links below the rows built; 253 tests, 0 failures. Pending: his look at the renders.

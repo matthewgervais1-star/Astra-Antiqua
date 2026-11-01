@@ -2,6 +2,12 @@ package com.astra.antiqua.ui.screens
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.ui.semantics.Role
+import com.astra.antiqua.ui.components.FeedbackRow
+import com.astra.antiqua.ui.theme.LocalAccent
+import com.astra.antiqua.ui.theme.glass.focusOutline
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -71,6 +77,7 @@ import com.astra.antiqua.ui.theme.Conflict
 import com.astra.antiqua.ui.theme.Dim
 import com.astra.antiqua.ui.theme.LocalSmallCapsDisplay
 import com.astra.antiqua.ui.theme.Prose
+import com.astra.antiqua.ui.theme.Rule
 import com.astra.antiqua.ui.theme.Spectral
 import com.astra.antiqua.ui.theme.SpectralSc
 import com.astra.antiqua.ui.theme.glass.GlassScreen
@@ -141,7 +148,7 @@ fun SkyWeekFrame(
         // The culture sheet is step 10; until then the menu opens the Voices list.
         onMenu = { onNavigate(Route.VOICES) },
     ) {
-        if (week != null) SkyWeekContent(culture, week, scrollState, anchor, onOpen)
+        if (week != null) SkyWeekContent(culture, week, scrollState, anchor, onNavigate, onOpen)
     }
 }
 
@@ -174,6 +181,7 @@ private fun SkyWeekContent(
     week: SkyWeek,
     scrollState: ScrollState,
     anchor: MutableState<Offset?>,
+    onNavigate: (String) -> Unit,
     onOpen: (String) -> Unit,
 ) {
     val side = Modifier.fillMaxWidth().padding(horizontal = WeekBoard.side)
@@ -236,6 +244,85 @@ private fun SkyWeekContent(
     // P25 to P31: the seven rows.
     week.days.forEachIndexed { i, day ->
         WeekRow(culture, day, "P${25 + i}", onOpen)
+    }
+
+    WebWeekSections(culture, week, onNavigate)
+}
+
+/**
+ * The web week's own sections, not on the board, flat on the ground below
+ * the seven rows in the web's order (Matthew, 2026-10-31, "Below the seven
+ * rows"): the thesis, the note (Rome's with its key to F, N and C), the
+ * votive for the week's hardest day, the feedback row and the three links.
+ * Spacing is the web's (mt-6, mt-8, mt-9); the thesis opens 40 under the
+ * rows, as the old Day sections do under Sky Day.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun WebWeekSections(culture: AncientCulture, week: SkyWeek, onNavigate: (String) -> Unit) {
+    val side = Modifier.fillMaxWidth().padding(horizontal = WeekBoard.side)
+    Text(
+        WeekVoice.thesis(culture),
+        style = TextStyle(fontFamily = Spectral, fontSize = 17.sp, lineHeight = 17.sp * 1.65f, lineHeightStyle = CssLeading),
+        color = Prose,
+        modifier = side.padding(top = 40.dp).testTag("week-thesis"),
+    )
+    val label = mono(11.sp, 1.6f, 0.14f)
+    Text(
+        WeekVoice.note(culture),
+        style = label,
+        color = Dim,
+        textAlign = TextAlign.Center,
+        modifier = side.padding(top = 24.dp).testTag("week-note"),
+    )
+    // web's Votive: a rule above and below, 16 inside them, centred, font-display at
+    // display-xs 18 with leading 1.6 and tracking .14em, in the accent, its line break kept.
+    Column(side.padding(top = 32.dp).testTag("week-votive")) {
+        Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
+        Text(
+            WeekVoice.votive(culture, week.days),
+            style = TextStyle(
+                fontFamily = if (LocalSmallCapsDisplay.current) SpectralSc else Cinzel,
+                fontSize = 18.sp,
+                lineHeight = 18.sp * 1.6f,
+                letterSpacing = 0.14.em,
+                lineHeightStyle = CssLeading,
+            ),
+            color = LocalAccent.current,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+        )
+        Box(Modifier.fillMaxWidth().height(1.dp).background(Rule))
+    }
+    FeedbackRow(
+        readingId = WeekVoice.readingId(week.start),
+        noun = "WEEK",
+        style = label,
+        modifier = side.padding(top = 24.dp).testTag("week-feedback"),
+    )
+    val link = mono(11.sp, 1.6f, 0.18f)
+    FlowRow(
+        side.padding(top = 36.dp).testTag("week-links"),
+        horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally),
+    ) {
+        listOf(
+            Triple("← THE DAY", Route.DAY, Bone.copy(alpha = 0.65f)),
+            Triple("THE SEASON →", Route.SEASON, Bone.copy(alpha = 0.65f)),
+            Triple("THE LONG TRANSITS →", Route.TRANSITS, LocalAccent.current),
+        ).forEach { (text, route, ink) ->
+            // Spoken without the arrows.
+            val spoken = text.replace("←", "").replace("→", "").trim().lowercase().replaceFirstChar { it.uppercase() }
+            val source = remember { MutableInteractionSource() }
+            Text(
+                text,
+                style = link,
+                color = ink,
+                modifier = Modifier
+                    .focusOutline(source)
+                    .semantics { contentDescription = spoken }
+                    .clickable(source, indication = null, role = Role.Button, onClickLabel = "Open") { onNavigate(route) },
+            )
+        }
     }
 }
 
@@ -374,11 +461,28 @@ private fun RowBody(culture: AncientCulture, day: WeekDay) {
                 }
                 if (day.isToday) Text("TODAY", style = mono(11.sp, 1.4f, 0.1f), color = Bone)
             }
-            Text(
-                day.line,
-                style = TextStyle(fontFamily = Spectral, fontWeight = FontWeight.Light, fontSize = 16.5.sp, lineHeight = 16.5.sp * 1.6f, lineHeightStyle = CssLeading),
-                color = Prose,
-            )
+            // The web's headline above the line (Matthew, 2026-10-31, "Add the web's headline"):
+            // font-display at display-xs 18 with leading 1.1, in its own case, 4 above the line
+            // as web's gap-1; none on an ingress day, as on web.
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                day.headline?.let { headline ->
+                    Text(
+                        headline,
+                        style = TextStyle(
+                            fontFamily = if (LocalSmallCapsDisplay.current) SpectralSc else Cinzel,
+                            fontSize = 18.sp,
+                            lineHeight = 18.sp * 1.1f,
+                            lineHeightStyle = CssLeading,
+                        ),
+                        color = Bone,
+                    )
+                }
+                Text(
+                    day.line,
+                    style = TextStyle(fontFamily = Spectral, fontWeight = FontWeight.Light, fontSize = 16.5.sp, lineHeight = 16.5.sp * 1.6f, lineHeightStyle = CssLeading),
+                    color = Prose,
+                )
+            }
         }
     }
 }

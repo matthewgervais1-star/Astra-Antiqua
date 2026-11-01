@@ -339,3 +339,33 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
 - FACT: Reduce Motion "Scroll with the text" (as built); rows "Add the web's headline" above each row's
   line; the web's thesis, note, votive, feedback and links "Below the seven rows"; step 3 "Changes first",
   with no notes. INFERENCE: the changes are the two above; step 4 waits for them.
+
+### Matthew's two changes, built (2026-10-31)
+
+- FACT (Matthew, 2026-10-31, "Yes, build them"): the web's headline in each row and the web's own sections
+  below the seven rows, as he answered in the popup.
+- FACT (`SkyWeekScreen.kt`, `RowBody`): each row prints the web's headline between the shorthand line and the
+  reading, in web WeekNave's form (font-display at display-xs 18, leading 1.1, own case, 4 above the line);
+  none on an ingress day, the culture's holds line on a repeated figure, as on web.
+- FACT (`SkyWeekScreen.kt`, `WebWeekSections`; `domain/SkyWeek.kt`, `WeekVoice`): below Sunday, in the web's
+  order and spacing: the thesis (web weekThesis, 40 under the rows), the note (web weekNote; Rome's carries
+  its key " · F LAWFUL · N UNLAWFUL · C MIXED"), the votive for the week's hardest day (web WEEK_VOTIVE and
+  pickHardestDay, drawn to web's Votive.tsx: rules, 16 inside, 18/1.6 at .14em in the accent), the feedback
+  row and the links ← THE DAY, THE SEASON →, THE LONG TRANSITS →. Strings ported by hand; the reviewer checked
+  each against `cultureVoice.ts` and `WeekNave.tsx` character for character.
+- FACT (`ui/components/FeedbackRow.kt`): new. "AGAINST THIS WEEK → IT WAS SO · IT WAS NOT SO · KEPT ON THIS
+  DEVICE"; the verdict sits in SharedPreferences `astra-antiqua.feedback.v1` under web's reading id
+  (`week-2026-W43`, ISO week); a second tap clears it, as on web. Nothing leaves the device. TalkBack reads
+  the pair as radio buttons with a "Clear" action on the chosen one.
+- FACT (`placement.txt`): the gaps between blocks still equal the board's; the Moon's lead holds in all four
+  frames. Rows with a headline grow by about 71 (P25 212.3, P26 219.0, P27 220.0, P28 212.3, P30 212.3,
+  P31 212.3; Friday's ingress row 167.7 has none); the headline's Spectral SC glyphs at 18 are taller than
+  CSS's 19.8 line box, so Android grows each headline as on P22. The page scrolls to 1722.7 with the
+  sections below. New render `sky-week-end.png` (the page's foot).
+- INFERENCE: the votive's first line, "WEIGH WHAT IS HEAVY BEFORE", wraps at 342 wide on the web at 390 too.
+- FACT (scoped review, same Opus reviewer, 2026-10-31): no Important findings. Minors fixed: verdicts as a
+  radio pair with a clear action, spoken labels on the links and the feedback lead, the foot's strings and
+  Rome's key asserted, the votive's fallbacks tested. Deferred: the feedback file's first read runs on the
+  main thread (small file); the links and verdicts keep the web's 18 dp tall targets, under Android's 48
+  dp minimum (asked in the popup).
+- FACT (local, 2026-10-31): `./gradlew compileDebugSources testDebugUnitTest` 253 tests, 0 failures.
