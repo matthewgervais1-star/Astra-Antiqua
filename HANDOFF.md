@@ -170,3 +170,5 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   links sit below Sky Season, with a port of web's season standouts and the Midheaven; text equals web's on four
   dates (node). One scoped review, Minors fixed. 275 tests, 0 failures. Pending: his look at the renders, his
   answer on a master revamp of shared strings; push and PR on his word.
+- FACT (Matthew's popup, 2026-11-01): Sky Season "Changes first" (none named yet); the Android port pauses until
+  the master revamp of shared strings lands. Pending: his changes for Season; a plan for the revamp.

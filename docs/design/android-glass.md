@@ -504,3 +504,10 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
   switched sections instead of opening on top; the transit search read each planet's longitude once per target
   (now once per date); no test reached an eclipse or the other three voices (now both); TalkBack read the call's
   arrow. Local: 275 tests, 0 failures. New renders `sky-season-end.png`, `sky-season-no-chart-end.png`.
+
+### Matthew's answers after the sections (popup, 2026-11-01)
+
+- FACT: step 4 "Changes first", with no change named; the popup went up before the three renders reached the
+  chat (a wrong path), and they were sent right after. CANNOT CONFIRM: which changes he wants.
+- FACT: the master revamp (one set of strings for web, iPhone and Android, layout the only difference): "Pause
+  the port until it lands". INFERENCE: steps 5 to 11 wait for the revamp; Sky Season stays as built until then.
