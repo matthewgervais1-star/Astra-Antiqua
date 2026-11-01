@@ -2,6 +2,7 @@ package com.astra.antiqua.domain
 
 import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.model.AncientCulture
+import com.astra.antiqua.ui.screens.houseSector
 import com.astra.antiqua.ui.screens.wheelAngle
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -93,6 +94,75 @@ class SkySeasonTest {
         assertEquals("CLOSING", SkySeasonComposer.status(30, 26, 4))
         assertEquals(6, SkySeasonComposer.barPercent(30, 31))
         assertEquals("Water-Bearer", SkySeasonComposer.properCase("WATER-BEARER"))
+        assertEquals("The Two Lands", SkySeasonComposer.properCase("THE TWO LANDS"))
+        // web's edge is max(3, round(31 * .15)) = 5: day 5 opens, 5 left closes.
+        assertEquals("OPENING", SkySeasonComposer.status(31, 5, 26))
+        assertEquals("MIDPOINT PASSED", SkySeasonComposer.status(31, 6, 25))
+        assertEquals("CLOSING", SkySeasonComposer.status(31, 26, 5))
+        assertEquals("No fast planet changes sign this month; the season holds its shape.", SkySeasonComposer.touchesSky(AncientCulture.EGYPT, emptyList()))
+    }
+
+    private fun at(iso: String) = SkySeasonComposer.compose(engine, AncientCulture.EGYPT, java.util.Date.from(java.time.Instant.parse(iso)), null)
+
+    private fun rows(s: SkySeason) = s.rows.map { "${SkySeasonComposer.dayMonth(it.date)} ${it.label} ${it.tone}" }
+
+    @Test
+    fun `a season with slow bodies in its sign prints web's conjunction rows`() {
+        // node, TZ Europe/Rome: web's buildSeasonSkyRows for 2025-03-01 12:00 UTC.
+        val s = at("2025-03-01T12:00:00Z")
+        assertEquals("DAY 12 OF 31 · MIDPOINT PASSED", s.status)
+        assertEquals(
+            listOf(
+                "18 FEB RA → THE FISHES · SEASON OPENS DIM",
+                "2 MAR ISIS STATIONED ℞ CONFLICT",
+                "12 MAR RA ☌ GEB EXACT HARMONY",
+                "15 MAR SEBEGU STATIONED ℞ CONFLICT",
+                "19 MAR RA ☌ NUN EXACT HARMONY",
+                "20 MAR RA → THE RAM · SEASON CLOSES DIM",
+            ),
+            rows(s),
+        )
+        assertEquals("Sebegu enters the Ram on 3 MAR.", s.touchesSky)
+    }
+
+    @Test
+    fun `a season across the year's end`() {
+        // node, TZ Europe/Rome: web's season for 2026-12-30 12:00 UTC.
+        val s = at("2026-12-30T12:00:00Z")
+        assertEquals("21 DEC 2026 → 20 JAN 2027", SkyWeekComposer.range(s.window.start, s.window.end))
+        assertEquals("THE SEASON OF THE GOAT", s.headline)
+        assertEquals("DAY 10 OF 31 · MIDPOINT PASSED", s.status)
+        assertEquals(
+            listOf(
+                "21 DEC RA → THE GOAT · SEASON OPENS DIM",
+                "10 JAN HORUS THE RED STATIONED ℞ CONFLICT",
+                "20 JAN RA → THE WATER-BEARER · SEASON CLOSES DIM",
+            ),
+            rows(s),
+        )
+        assertEquals(
+            "Sebegu enters the Goat on 25 DEC. Isis enters the Archer on 7 JAN. Sebegu enters the Water-Bearer on 13 JAN.",
+            s.touchesSky,
+        )
+    }
+
+    @Test
+    fun `the filled sector holds its house and the Sun`() {
+        // Compose angles run clockwise and the sweep is negative: the sector is [lo + sweep, lo].
+        fun inside(angle: Float, sector: Pair<Float, Float>): Boolean {
+            val (lo, sweep) = sector
+            val d = (((lo - angle) % 360f) + 360f) % 360f
+            return d <= -sweep
+        }
+        val asc = 240 + 22 + 23 / 60.0
+        // The sample: the Sun at 207.94 sits in the eleventh, not in the tenth or the twelfth.
+        assertTrue(inside(wheelAngle(207.94, asc), houseSector(asc, 11)))
+        assertTrue(!inside(wheelAngle(207.94, asc), houseSector(asc, 10)))
+        assertTrue(!inside(wheelAngle(207.94, asc), houseSector(asc, 12)))
+        // Aries 10 rising: the first house holds the Ascendant; the fourth holds 100.
+        assertTrue(inside(wheelAngle(10.0, 10.0), houseSector(10.0, 1)))
+        assertTrue(inside(wheelAngle(100.0, 10.0), houseSector(10.0, 4)))
+        assertTrue(!inside(wheelAngle(100.0, 10.0), houseSector(10.0, 3)))
     }
 
     @Test

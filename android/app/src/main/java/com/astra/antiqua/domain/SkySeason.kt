@@ -130,9 +130,17 @@ object SkySeasonComposer {
     }
 
     /** web's properCase: each word and each hyphenated part capitalised ("Water-Bearer"). */
-    fun properCase(s: String): String = s.lowercase().mapIndexed { i, ch ->
-        if (i == 0 || s[i - 1] == ' ' || s[i - 1] == '-') ch.uppercaseChar() else ch
-    }.joinToString("")
+    fun properCase(s: String): String {
+        val lower = s.lowercase()
+        val out = StringBuilder()
+        var last = 0
+        // Split on whitespace and hyphens and keep them, as web's split(/([\s-])/) does.
+        for (m in Regex("[\\s-]").findAll(lower)) {
+            out.append(lower.substring(last, m.range.first).replaceFirstChar { it.uppercase() }).append(m.value)
+            last = m.range.last + 1
+        }
+        return out.append(lower.substring(last).replaceFirstChar { it.uppercase() }).toString()
+    }
 
     /** web's getSeasonHouse with composeWhatItTouchesNatal; the title is the board's form. */
     fun house(culture: AncientCulture, sign: ZodiacSign, ascendant: Double): SeasonHouse {
@@ -173,14 +181,13 @@ object SkySeasonComposer {
         }
         val span = minOf(60, ((window.end.time - window.start.time).toDouble() / DAY_MS).roundToInt() + 1)
         for (body in SLOW_BODIES) {
-            val startSign = ZodiacSign.entries[signIndex(DayDecreeComposer.chartAt(engine, window.start).getValue(body))]
+            val startSign = ZodiacSign.entries[signIndex(longitude(engine, body, window.start))]
             if (startSign != window.sign) continue
             var best: Pair<Date, Double>? = null
             for (d in 0..span) {
                 val date = Date(window.start.time + d * DAY_MS)
                 if (date.time > window.end.time) break
-                val sky = DayDecreeComposer.chartAt(engine, date)
-                val raw = abs(sky.getValue(Planet.SUN) - sky.getValue(body)) % 360.0
+                val raw = abs(longitude(engine, Planet.SUN, date) - longitude(engine, body, date)) % 360.0
                 val sep = if (raw > 180) 360 - raw else raw
                 if (best == null || sep < best.second) best = date to sep
             }
@@ -193,6 +200,10 @@ object SkySeasonComposer {
         rows += SeasonSkyRow(window.end, "$sunDeity → THE ${SIGN_PHRASES.getValue(close)} · SEASON CLOSES", SeasonRowTone.DIM)
         return rows.sortedBy { it.date.time }
     }
+
+    /** One body's geocentric longitude, as DayDecreeComposer.chartAt reads each. */
+    private fun longitude(engine: AstronomyEngine, body: Planet, date: Date): Double =
+        engine.getPlanetPosition(date.time / 86_400_000.0 + 2440587.5, TransitSpans.bodyOf(body)).longitude
 
     private fun signIndex(longitude: Double): Int = ((((longitude % 360.0) + 360.0) % 360.0) / 30.0).toInt() % 12
 

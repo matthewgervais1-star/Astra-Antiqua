@@ -22,9 +22,8 @@ import java.util.Calendar
 import java.util.Date
 
 /**
- * Sky Season for the culture in force: the sky's season first, which needs no
- * birth record, then the same page with the reader's house and wheel once the
- * chart is computed.
+ * Sky Season for the culture in force, with the reader's house and wheel when
+ * there is a birth record and web's sentence for the sky alone when there is none.
  */
 class SkySeasonViewModel(
     private val astronomy: AstronomyEngine,
@@ -36,6 +35,7 @@ class SkySeasonViewModel(
 
     private var job: Job? = null
     private var loaded: Pair<AncientCulture, Int>? = null
+    private var shown: AncientCulture? = null
 
     /**
      * Composes the season for [culture] on the local day of [now]. The day
@@ -48,22 +48,22 @@ class SkySeasonViewModel(
         val key = culture to c.get(Calendar.YEAR) * 1000 + c.get(Calendar.DAY_OF_YEAR)
         if (key == loaded && (job?.isActive == true || _season.value != null)) return
         // Another culture's season is not drawn in this culture's chrome while the new one composes.
-        if (loaded?.first != culture) _season.value = null
+        // The culture is kept apart from the key, which a page with no birth record clears.
+        if (shown != culture) _season.value = null
+        shown = culture
         loaded = key
         job?.cancel()
         job = viewModelScope.launch {
             try {
-                _season.value = withContext(Dispatchers.Default) { SkySeasonComposer.compose(astronomy, culture, now, null) }
+                // The profile first, so a reader with a chart never sees the page without it.
                 val profile = profiles.profile.first()
-                if (profile == null) {
-                    // No birth record yet: the next return composes again.
-                    loaded = null
-                    return@launch
-                }
                 _season.value = withContext(Dispatchers.Default) {
-                    val chart = CalculateNatalChartUseCase(astronomy).execute(profile)
-                    SkySeasonComposer.compose(astronomy, culture, now, chart.ascendant)
+                    val ascendant = profile?.let { CalculateNatalChartUseCase(astronomy).execute(it).ascendant }
+                    SkySeasonComposer.compose(astronomy, culture, now, ascendant)
                 }
+                // No birth record yet: the next return composes again, so a record saved
+                // meanwhile brings the house and the wheel.
+                if (profile == null) loaded = null
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {

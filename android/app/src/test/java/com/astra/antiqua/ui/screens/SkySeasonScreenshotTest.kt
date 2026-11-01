@@ -3,7 +3,9 @@ package com.astra.antiqua.ui.screens
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -96,14 +98,17 @@ class SkySeasonScreenshotTest {
 
     private lateinit var state: ScrollState
 
-    private fun render(name: String, culture: AncientCulture, scroll: Int, withChart: Boolean = true) {
+    private fun render(name: String, culture: AncientCulture, scroll: Int, withChart: Boolean = true, fontScale: Float = 1f) {
         val engine = AstronomyEngine()
         val asc = if (withChart) CalculateNatalChartUseCase(engine).execute(SkyDayTest.smokeBirth).ascendant else null
         val season = SkySeasonComposer.compose(engine, culture, SkyDayTest.sampleNow, asc)
         compose.setContent {
-            AstraAntiquaTheme(selectedCulture = culture) {
-                state = rememberScrollState(with(LocalDensity.current) { scroll.dp.roundToPx() })
-                SkySeasonFrame(culture = culture, season = season, scrollState = state)
+            val base = LocalDensity.current
+            androidx.compose.runtime.CompositionLocalProvider(LocalDensity provides androidx.compose.ui.unit.Density(base.density, fontScale)) {
+                AstraAntiquaTheme(selectedCulture = culture) {
+                    state = rememberScrollState(with(LocalDensity.current) { scroll.dp.roundToPx() })
+                    SkySeasonFrame(culture = culture, season = season, scrollState = state)
+                }
             }
         }
         compose.waitForIdle()
@@ -155,7 +160,41 @@ class SkySeasonScreenshotTest {
         compose.onNodeWithText("THE SEASON OF THE SCALES").assertExists()
         compose.onNodeWithText("DAY 29 OF 31 · CLOSING").assertExists()
         compose.onNodeWithText("The eleventh house · The Assembly").assertExists()
-        compose.onNode(hasContentDescription("Your houses: the Sun in the eleventh")).assertExists()
+        compose.onNode(hasContentDescription("Your houses: the Sun in the eleventh house, The Assembly")).assertExists()
+        // The wheel keeps the board's box: centred, 120 across.
+        val wheel = compose.onNodeWithTag("P54").getUnclippedBoundsInRoot()
+        assertTrue(
+            "$wheel",
+            abs(wheel.left.value - 135f) <= 1f && abs((wheel.right - wheel.left).value - 120f) <= 1f && abs((wheel.bottom - wheel.top).value - 120f) <= 1f,
+        )
+        compose.onNode(hasContentDescription("3 oct isis stationed retrograde")).assertExists()
+    }
+
+    @Test
+    fun skySeasonLargeFont() {
+        // At 1.3 the day line wraps inside the width the dates leave and its row grows;
+        // the gaps around the bar still hold, so nothing draws over the bar or the blurb.
+        render("sky-season-font-130", AncientCulture.EGYPT, 0, fontScale = 1.3f)
+        val misses = gaps("sky-season-font-130", boardGaps.take(4))
+        assertTrue("gaps off the board's by more than 1 dp:\n" + misses.joinToString("\n"), misses.isEmpty())
+        val status = compose.onNodeWithTag("season-status").getUnclippedBoundsInRoot()
+        val bar = compose.onNodeWithTag("P35").getUnclippedBoundsInRoot()
+        note("sky-season-font-130 P35 height %.1f, day line %.1f tall".format((bar.bottom - bar.top).value, (status.bottom - status.top).value))
+        assertTrue("the day line overflows the bar's block", status.bottom <= bar.bottom)
+    }
+
+    @Test
+    fun aDpadReachesTheLastRow() {
+        // Nothing on the page is tappable; each block takes D-pad focus and the scroll
+        // brings the focused one into view, so the season's last row can be reached.
+        render("sky-season-focus", AncientCulture.EGYPT, 0)
+        compose.onNodeWithTag("row-3").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.RequestFocus)
+        compose.waitForIdle()
+        compose.onNodeWithTag("row-3").assertIsFocused()
+        val row = compose.onNodeWithTag("row-3").getUnclippedBoundsInRoot()
+        val density = RuntimeEnvironment.getApplication().resources.displayMetrics.density
+        note("sky-season-focus scrolled to %.1f, row-3 bottom %.1f".format(state.value / density, row.bottom.value))
+        assertTrue("the focused row is still under the tab bar: ${row.bottom}", state.value > 0 && row.bottom.value <= 748f)
     }
 
     @Test
@@ -172,7 +211,7 @@ class SkySeasonScreenshotTest {
         // Rome sets the title in Cinzel and keeps its house group, "via", in web's sentence.
         render("sky-season-rome", AncientCulture.ROME, 0)
         assertChrome("sky-season-rome")
-        compose.onNodeWithText("23 SEP SOL → THE SCALES · SEASON OPENS").assertExists()
+        compose.onNode(hasContentDescription("23 sep sol into the scales, season opens")).assertExists()
         compose.onNodeWithText(
             "The season sits in your eleventh house, which this culture keeps under via. It works on your allies, your assembly, and the things you hope for.",
         ).assertExists()
