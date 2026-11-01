@@ -160,7 +160,7 @@ export function TransitDetail({ id }: TransitDetailProps) {
   return (
     <>
       <TransitSubBar
-        context={`LONG TRANSIT · ${transitDeity.toUpperCase()} ${kindGlyph} NATAL ${natalLabel}`}
+        context={`LONG TRANSIT · ${transitDeity.toUpperCase()} ${kindGlyph} ${natalLabel.startsWith("YOUR ") ? natalLabel : `NATAL ${natalLabel}`}`}
         span={fmt("range.months", [span.start, span.end], "local")}
       />
       <main className="mx-auto max-w-[720px] px-5 py-12 md:py-16">
