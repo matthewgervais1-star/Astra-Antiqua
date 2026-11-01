@@ -140,3 +140,10 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   sections (lists, dive deeper, natal wheel, Sun and Moon readings) sit below Sky Day. 242 tests, 0 failures.
 - Pending: step 3, Sky Week with the Moon, in a fresh session (prompt
   `docs/design/prompts/android-glass-step3.md`); push and PR on Matthew's word.
+- FACT (prompt pasted by Matthew, 2026-10-31): step 3 built. Route.WEEK opens Sky Week on the glass chrome
+  (`ui/screens/SkyWeekScreen.kt`, `domain/SkyWeek.kt`) with the Moon P171 behind the text at 0.5 rate, moving
+  with the text when animations are off; rows equal the web's week (node check); chrome within 1 dp, every
+  gap the board's. One Opus review, two fix rounds. Local: 252 tests, 0 failures. Record:
+  `docs/design/android-glass.md` (step 3), renders `docs/design/android-glass/step3/`.
+- Pending: Matthew's popup on step 3 (Reduce Motion, row headlines, the web's sections off the board,
+  approval); push and PR on his word.

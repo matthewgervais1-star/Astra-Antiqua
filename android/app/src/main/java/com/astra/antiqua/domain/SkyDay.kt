@@ -21,6 +21,8 @@ data class MoonToday(
     val nextName: String,
     /** Null when the library's search finds no quarter within 40 days; the line is then left out. */
     val nextDate: Date?,
+    /** The phase angle under 180: the lit side is the right one (Sky Week's disc). */
+    val waxing: Boolean,
 )
 
 /**
@@ -109,6 +111,7 @@ object SkyDayComposer {
             percentLit = (lit * 100).roundToInt(),
             nextName = name,
             nextDate = next?.let { Date(((it.ut + 2451545.0 - 2440587.5) * DAY_MS).toLong()) },
+            waxing = angle < 180,
         )
     }
 

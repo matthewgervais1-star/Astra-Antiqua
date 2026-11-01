@@ -61,7 +61,7 @@ import com.astra.antiqua.ui.screens.TransitDetailScreen
 import com.astra.antiqua.ui.screens.TransitsScreen
 import com.astra.antiqua.ui.screens.VoiceScreen
 import com.astra.antiqua.ui.screens.VoicesScreen
-import com.astra.antiqua.ui.screens.WeekScreen
+import com.astra.antiqua.ui.screens.SkyWeekScreen
 import com.astra.antiqua.ui.theme.AstraAntiquaTheme
 import com.astra.antiqua.ui.theme.Bone
 import com.astra.antiqua.ui.theme.LocalAccent
@@ -166,8 +166,9 @@ fun AstraNavHost(
         composable(Route.DAY) {
             SkyDayScreen(culture = culture, onNavigate = go, onOpen = open)
         }
-        flat(Route.WEEK) {
-            WeekScreen(culture = culture, onNavigate = go, onOpenFigure = open)
+        // SKY · WEEK on the glass chrome (step 3); the flat WeekScreen leaves the graph.
+        composable(Route.WEEK) {
+            SkyWeekScreen(culture = culture, onNavigate = go, onOpen = open)
         }
         flat(Route.SEASON) {
             SeasonScreen(culture = culture, onNavigate = go)

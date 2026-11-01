@@ -4,6 +4,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -54,6 +55,8 @@ fun GlassScreen(
     /** Room under the content for the tab bar (the boards' padBottom). */
     contentBottom: Dp = 120.dp,
     accessory: (@Composable () -> Unit)? = null,
+    /** A layer on the ground under the scrolling content (Sky Week's Moon, P171); part of the backdrop. */
+    behind: (@Composable BoxScope.() -> Unit)? = null,
     onSection: (GlassSection) -> Unit = {},
     onHorizon: (Horizon) -> Unit = {},
     onBack: () -> Unit = {},
@@ -86,6 +89,7 @@ fun GlassScreen(
                 .then(if (tier != GlassTier.TINT) with(backdrop) { Modifier.source() } else Modifier)
                 .background(ground),
         ) {
+            behind?.invoke(this)
             Column(
                 Modifier
                     .fillMaxSize()

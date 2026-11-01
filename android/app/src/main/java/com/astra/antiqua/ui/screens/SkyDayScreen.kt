@@ -201,9 +201,9 @@ private object Board {
  * first and last included, so a box is its line-height times its lines as on
  * the board. Compose trims the outer half-leadings by default.
  */
-private val CssLeading = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
+internal val CssLeading = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
 
-private fun mono(size: TextUnit, lineHeight: Float, tracking: Float, weight: FontWeight = FontWeight.Normal) = TextStyle(
+internal fun mono(size: TextUnit, lineHeight: Float, tracking: Float, weight: FontWeight = FontWeight.Normal) = TextStyle(
     fontFamily = PlexMono,
     fontWeight = weight,
     fontSize = size,
@@ -413,7 +413,7 @@ private fun SkyBox(day: SkyDay, modifier: Modifier) {
  * canvas and takes none. Both draw web's focus outline for a D-pad.
  */
 @Composable
-private fun Modifier.rowPress(label: String, onClick: () -> Unit, pressFill: Boolean = true): Modifier {
+internal fun Modifier.rowPress(label: String, onClick: () -> Unit, pressFill: Boolean = true): Modifier {
     val source = remember { MutableInteractionSource() }
     val pressed by source.collectIsPressedAsState()
     return this

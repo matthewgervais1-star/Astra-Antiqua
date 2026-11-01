@@ -259,3 +259,77 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
   named neither.
 - FACT (`SkyDayFullPageTest`, `docs/design/android-glass/step2/sky-day-full-sheet.png`): the whole page
   on one 390x5200 frame, in four columns. Local suite: 242 tests, 0 failures.
+
+## Step 3, Sky Week with the Moon (2026-10-31)
+
+- FACT (prompt pasted by Matthew, 2026-10-31): build Sky Week on `GlassScreen` (WEEK, SKY) with P171 as
+  approved ("Behind, slower than text": the disc a layer under the scrolling content, at rest centre 60,
+  388.3, 170 of 220 shown, rising 0.5 dp per dp of scroll, lit part bone 10%; band P53 keeps 136 and the
+  five facts; scrolled frame 556; Tuesday's TENSION line at 3.57:1 accepted). Board: Glass-Week and
+  Glass-Week-scrolled (canvas version 1793480018-d41d, read 2026-10-31); table `report-r3b.md` in the design
+  worktree; P171 in its `docs/design/ios-layout-2026-10-21.md` (2026-10-31).
+- FACT (`domain/SkyWeek.kt`, `viewmodel/SkyWeekViewModel.kt`): `SkyWeekComposer` composes the week with the
+  existing port `WeekReading.build` (Monday of the local week, each row read at 00:00 UTC) and the Moon with
+  Sky Day's `moonToday` at the instant. `MoonToday` gained `waxing` (phase angle under 180).
+- FACT (node run of web's `buildWeekDays("egypt" and "rome", mondayOf(sample), null)` against `web/src`,
+  TZ Europe/Rome, 2026-10-31): Android's seven lines, tones, shorthand and Rome flags equal the web's for
+  the sample week; `SkyWeekTest` pins Egypt's lines and two shorthands.
+- FACT (`ui/screens/SkyWeekScreen.kt`): the board's sections in order. Web strings: the institution
+  (`ScriptName`, so the reveal runs), the voice's week title (web `cultureVoice.ts` weekTitle, ported by
+  hand in `WeekVoice`, set in its own case), each row's line and shorthand (deity glyphs, aspect glyph,
+  TIGHT; ingress arrow and sign), the tone ink (conflict on tension, dim otherwise), Rome's F, N, C beside
+  the weekday. Board forms where the web has no string: the kicker's range "19 → 25 OCT 2026" (across a
+  month "29 SEP → 5 OCT 2026"), the count line, the band's five facts, the TODAY frame and label.
+- INFERENCE: the count line counts a day with a figure or an ingress as weighed (the board counts its
+  Wednesday ingress so) and writes zero as NONE ("SEVEN WEIGHED · NONE QUIET" for the sample week); the
+  board shows no zero.
+- FACT (same file): left off, as the votive was on Sky Day: the web's thesis paragraph, week note, votive,
+  feedback row and links; each row's headline (the board has no slot). A row with a figure opens its
+  figure page, where the web's headline link went, with the pressed fill P170, web's focus outline and the
+  label "Read the figure for WED 21"; ingress and quiet rows take no tap. Asked in the popup.
+- FACT (`GlassScreen.kt`, `SkyWeekScreen.kt`): `GlassScreen` gained a `behind` slot, drawn on the ground
+  under the content and inside the glass backdrop. P171 sits on the band's measured centre (so it follows
+  the band if the copy above grows), 220x170 at the content's left edge, offset in the layout phase by 0.5
+  of the scroll; with the animator duration scale at 0 (`rememberAnimationsOff`, now internal) it moves
+  with the text. The lit part is a half circle closed by an ellipse of semi-axis R x |2k - 1|, lit side
+  right when waxing (`discPath`). P171 is hidden from TalkBack; the band reads as one sentence-case stop.
+- FACT (`MainActivity.kt`): Route.WEEK opens `SkyWeekScreen` (not `flat`); `WeekScreen.kt` stays on disk,
+  out of the graph. Its only exit of its own was the figure page, which the rows keep; `FigureScreen`'s
+  "The week" link opens Sky Week.
+
+## Step 3 checks (2026-10-31)
+
+- FACT (`SkyWeekScreenshotTest`, `docs/design/android-glass/step3/placement.txt`): renders at rest,
+  scrolled 556, scrolled 280, scrolled 280 with animations off, and Rome. Chrome in all: P1 off 0.9, P2,
+  P3, P17, P20 0.0.
+- FACT (same, at rest): every gap between blocks equals the board's to 0.1 (P21 to P31, P53). Boxes
+  against the table: P21 18.3 against 17.6 (the script face's line, as Day's P4); P22 40.0 against 35.1
+  (the web's title "SEVEN DAYS WEIGHED" on one line; Spectral SC's ascent and descent at 26 make 40.0 and
+  Android grows the line box where CSS lets the glyphs overflow, as on Day's P6); so P23 on sits 5.7 lower
+  (P53 at 326.0, P171 at 284.0). Rows follow the web's shorter copy: P25 141.0 against 192.3, P26 167.7
+  against 218.7, P27 (today) 168.7 against 167.0, P28 141.0 against 166.0, P29 167.7 against 192.3, P30
+  141.0 against 192.3, P31 141.0 against 166.0; each row is 0.6 taller than its lines because the
+  shorthand's 16 dp glyph exceeds the 15.4 line. The page scrolls to 826 against the board's 1046.
+- FACT (same): the Moon's top minus the band's top: at rest -42 (centre on centre), at 556 236, at 280 98,
+  at 280 with animations off -42. `theDiscLightsTheRightSide` checks the path at 0, 5, 26, 50, 74 and 100%
+  lit, waxing and waning. Rome: Cinzel title, flags C N N C F F F as the web.
+- CANNOT CONFIRM: where the lit part crosses a tension line in this week's copy (the 3.57:1 figure is the
+  board's, measured on the board's rows); not measured on Android. How the frames look on a phone:
+  Robolectric drew them.
+- FACT (review, one Opus reviewer, 2026-10-31): nothing Critical. Three Important, fixed in round 1: the
+  band grows with the font scale (`heightIn`); TalkBack read the Moon twice and focused a box drifting
+  under the chrome (P171 now decorative, the band one stop); the tests asserted too little (now gaps, the
+  Moon's lead in four frames, the disc path, Rome's flags). Minors fixed: the anchor in the ground's own
+  coordinates, reset on a culture change; counts past seven; per-day click labels; one month list. Round
+  2 (scoped, same reviewer): no Important left; three Minors fixed (interior-point checks on the disc,
+  the ground keyed on culture, the band's spoken text in sentence case).
+- Deferred (Minors, Sky Day has the same): the page does not reload on resume after midnight, and a
+  compose failure leaves blank chrome; one fix for both screens (reload on resume, an error line).
+- FACT (local, 2026-10-31): `./gradlew compileDebugSources testDebugUnitTest` 252 tests, 0 failures.
+
+## Open for Matthew (asked in one popup, 2026-10-31)
+
+1. Reduce Motion: the Moon scrolls with the text (built; INFERENCE in the design record).
+2. The web's row headlines: off (built, board form) or above each row's line.
+3. The web's thesis, week note (Rome's F, N, C key), votive, feedback and links: off (built) or below.
+4. Sky Week approved, go to step 4 (Season)?
