@@ -4,8 +4,8 @@
  *
  *   cd web && pnpm check:shared
  *
- * 1. Reruns export-content, export-strings (and export-screen-goldens when
- *    that script exists) into a temp folder and compares every file they
+ * 1. Reruns export-content, export-strings and export-screen-goldens
+ *    into a temp folder and compares every file they
  *    write with shared/, ignoring each manifest's sourceCommit. A file in
  *    shared/strings or shared/goldens that no exporter writes also fails.
  * 2. Fails on an ASCII apostrophe in a catalog value, or a hyphen used as a

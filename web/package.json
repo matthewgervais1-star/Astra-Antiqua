@@ -16,6 +16,7 @@
     "export:content": "node scripts/export-content.mjs",
     "export:goldens": "node scripts/export-goldens.mjs",
     "export:strings": "node scripts/export-strings.mjs",
+    "export:screen-goldens": "node scripts/export-screen-goldens.mjs",
     "check:shared": "node scripts/check-shared.mjs",
     "gen:android-strings": "node scripts/gen-android-strings.mjs",
     "export:glyphs": "node scripts/export-glyphs.mjs",

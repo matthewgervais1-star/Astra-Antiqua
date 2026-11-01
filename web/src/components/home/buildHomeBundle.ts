@@ -17,8 +17,9 @@ import {
   type Longitude,
   type ZodiacSign,
 } from "@/data/sampleChart";
-import { findRetrogradeStations, findYearIngresses, SLOW_BODIES } from "@/lib/yearForecast";
-import { computeTransitSpans, type TransitSpan } from "@/lib/transitSpans";
+import { findRetrogradeStations, findYearIngresses } from "@/lib/yearForecast";
+import type { TransitSpan } from "@/lib/transitSpans";
+import { readerSpans } from "@/lib/screens/transits";
 import { composeDayPage, utcDayNumber, type DayDecree } from "@/lib/decree";
 import { DECREE_BANKS } from "@/data/decreeBanks";
 import { toneOf, type Tone } from "@/lib/tone";
@@ -225,6 +226,24 @@ function buildAspectRows(
   });
 }
 
+/**
+ * The span the Day's long-transit card reads: of the spans open now, the one
+ * closest to exact today; with none open, the next to begin. Null when the
+ * window holds neither. The transit detail screen's goldens read this span.
+ */
+export function pickLongTransitSpan(
+  spans: readonly TransitSpan[],
+  now: Date,
+  todayChart: Readonly<Record<Planet, Longitude>> = computeChart(startOfUtcDay(now)),
+): { span: TransitSpan; open: boolean } | null {
+  const active = spans.filter((s) => s.start.getTime() <= now.getTime() && now.getTime() <= s.end.getTime());
+  if (active.length > 0) {
+    return { span: [...active].sort((a, b) => currentOrbForSpan(a, todayChart) - currentOrbForSpan(b, todayChart))[0]!, open: true };
+  }
+  const ahead = spans.filter((s) => s.start.getTime() > now.getTime()).sort((a, b) => a.start.getTime() - b.start.getTime());
+  return ahead[0] ? { span: ahead[0], open: false } : null;
+}
+
 function buildLongTransit(
   culture: Culture,
   now: Date,
@@ -233,24 +252,9 @@ function buildLongTransit(
 ): LongTransitData {
   if (!natal) return { status: "cta" };
 
-  const natalPoints = [
-    { key: "sun", longitude: natal.chart.sun },
-    { key: "moon", longitude: natal.chart.moon },
-    { key: "asc", longitude: natal.angles.ascendant },
-    { key: "mc", longitude: natal.angles.midheaven },
-  ];
-  const start = new Date(now.getTime() - 420 * DAY_MS);
-  const spans = computeTransitSpans(natalPoints, SLOW_BODIES, start, 1200);
-  if (spans.length === 0) return { status: "none" };
-
-  const active = spans.filter((s) => s.start.getTime() <= now.getTime() && now.getTime() <= s.end.getTime());
-  const pool = active.length > 0 ? active : spans.filter((s) => s.start.getTime() > now.getTime());
-  if (pool.length === 0) return { status: "none" };
-
-  const chosen =
-    active.length > 0
-      ? [...pool].sort((a, b) => currentOrbForSpan(a, todayChart) - currentOrbForSpan(b, todayChart))[0]!
-      : [...pool].sort((a, b) => a.start.getTime() - b.start.getTime())[0]!;
+  const picked = pickLongTransitSpan(readerSpans(natal, now), now, todayChart);
+  if (!picked) return { status: "none" };
+  const { span: chosen, open } = picked;
 
   const transitDeity = DEITY_MATRIX[culture][chosen.transitPlanet];
   const title1 = str("day.longTransit.title1", culture, {
@@ -272,7 +276,7 @@ function buildLongTransit(
     span > 0 ? Math.min(100, Math.max(0, ((now.getTime() - chosen.start.getTime()) / span) * 100)) : 0;
 
   return {
-    status: active.length > 0 ? "active" : "upcoming",
+    status: open ? "active" : "upcoming",
     span: chosen,
     title1,
     title2,

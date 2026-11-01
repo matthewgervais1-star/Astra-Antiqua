@@ -18,18 +18,13 @@ import { Skeleton } from "@/components/chrome/Skeleton";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { readChart } from "@/lib/savedCharts";
 import { resolveSavedChart, type SavedNatal } from "@/lib/savedNatal";
-import { computeWholeSignHouses, houseOfSign } from "@/lib/houses";
-import { getHouseMeaning } from "@/data/houses";
-import { longitudeToSign } from "@/data/sampleChart";
 import { DEITY_MATRIX } from "@/data/deities";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { PLANETS, isReceived, type Planet } from "@/data/cultures";
-import { SIGN_PHRASE, formatDegMin } from "@/components/charts/chartFormat";
-import { GLYPHS } from "@/glyphs";
-import { fmt, str } from "@/strings";
+import { str } from "@/strings";
+import { localZone } from "@/strings/formats";
 import { Fill } from "@/strings/Fill";
-import { buildGoverns, buildHowItShows, buildInSign, buildKeepInView } from "@/components/charts/placementCopy";
-import { PLACEMENT_VOTIVES } from "@/components/charts/placementVotives";
+import { buildPlacementModel } from "@/lib/screens/placement";
 
 export interface PlacementReadingProps {
   chartId: string;
@@ -107,12 +102,11 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
     );
   }
 
-  const longitude = natal.chart[body];
-  const { sign, degree } = longitudeToSign(longitude);
-  const { ascendantSignIndex } = computeWholeSignHouses(natal.angles.ascendant);
-  const house = houseOfSign(sign, ascendantSignIndex);
-  const houseMeaning = getHouseMeaning(house);
-  const deity = DEITY_MATRIX[culture][body];
+  const slots = buildPlacementModel({ culture, instant: new Date(), zone: localZone(), birth: natal, body });
+  const prose = slots["placement.prose"] as string[];
+  // The title's second line, and the house title under the house label (SlotMap stacks lines).
+  const titleSecond = String(slots["placement.title"]).split("\n")[1];
+  const [houseLabel, houseTitle] = String(slots["placement.section.house"]).split("\n");
   const voice = CULTURE_VOICES[culture];
   const index = PLANETS.indexOf(body);
   const prevPlanet = PLANETS[(index - 1 + PLANETS.length) % PLANETS.length]!;
@@ -125,58 +119,42 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
       <TopBar body={body} />
       <main className="mx-auto max-w-[560px] px-5 py-11 text-center md:py-[var(--space-6)]">
         <NaveHead
-          kicker={str("placement.kicker", culture, {
-            planet: fmt("planet.name", body),
-            sign: fmt("sign.full", sign),
-            angle: formatDegMin(degree),
-            roman: fmt("house.roman", house),
-          })}
+          kicker={slots["placement.kicker"]}
           sub={
             <div className="inline-flex items-center gap-[var(--space-1)] font-mono text-data-xs leading-data tracking-label text-dim">
               <DeityGlyph body={body} culture={culture} size={16} />
-              <span>
-                {str("placement.epithet", culture, {
-                  epithet: deity.epithet.toUpperCase(),
-                  glyphStatus: GLYPHS[culture][body].status.toUpperCase(),
-                })}
-              </span>
+              <span>{slots["placement.epithet"]}</span>
               {isReceived(body) ? <Badge tone="accent">RECEIVED</Badge> : null}
             </div>
           }
         >
           <Fill k="placement.title1" culture={culture} slots={{ deity: <ScriptName culture={culture} planet={body} upper /> }} />
           <br />
-          {str("placement.title2", culture, { signPhrase: SIGN_PHRASE[sign] })}
+          {titleSecond}
         </NaveHead>
 
         <div className="flex flex-col gap-[var(--space-4)] text-left">
           <section className="flex flex-col gap-[var(--space-2)]">
-            <SectionDivider label={str("placement.section.governs", culture)} />
-            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{buildGoverns(culture, body)}</p>
+            <SectionDivider label={slots["placement.section.governs"] as string} />
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{prose[0]}</p>
           </section>
           <section className="flex flex-col gap-[var(--space-2)]">
-            <SectionDivider label={str("placement.section.sign", culture, { sign: fmt("sign.full", sign) })} />
-            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{buildInSign(body, sign)}</p>
+            <SectionDivider label={slots["placement.section.sign"] as string} />
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{prose[1]}</p>
           </section>
           <section className="flex flex-col gap-[var(--space-2)]">
-            <SectionDivider
-              label={str("placement.section.house", culture, { ordinal: fmt("ordinal.wordUpper", house) })}
-            />
-            <div className="text-center font-display text-display-xs leading-display text-bone">{houseMeaning.title}</div>
-            <p className="text-pretty font-body text-prose-m leading-prose text-prose">
-              {buildHowItShows(culture, body, house)}
-            </p>
+            <SectionDivider label={houseLabel ?? ""} />
+            <div className="text-center font-display text-display-xs leading-display text-bone">{houseTitle}</div>
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{prose[2]}</p>
           </section>
           <section className="flex flex-col gap-[var(--space-2)]">
-            <SectionDivider label={str("placement.section.keep", culture)} />
-            <p className="text-pretty font-body text-prose-m leading-prose text-prose">
-              {buildKeepInView(body, sign)}
-            </p>
+            <SectionDivider label={slots["placement.section.keep"] as string} />
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{prose[3]}</p>
           </section>
         </div>
 
         <div className="mt-[var(--space-5)]">
-          <Votive>{PLACEMENT_VOTIVES[culture](deity.name)}</Votive>
+          <Votive>{slots["placement.votive"]}</Votive>
         </div>
 
         {isReceived(body) ? (

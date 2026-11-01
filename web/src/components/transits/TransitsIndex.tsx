@@ -1,33 +1,23 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
-import { isReceived, type Culture } from "@/data/cultures";
-import { ASPECT_VERBS } from "@/data/aspectVerbs";
+import { isReceived } from "@/data/cultures";
 import type { TransitSpan } from "@/lib/transitSpans";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { NaveHead } from "@/components/chrome/NaveHead";
-import { DEITY_MATRIX } from "@/data/deities";
 import { SectionDivider } from "@/components/chrome/SectionDivider";
 import { Skeleton } from "@/components/chrome/Skeleton";
 import { TransitEmptyState } from "@/components/transits/TransitEmptyState";
 import { useSpans } from "@/components/transits/useSpans";
-import { natalPointLabel, spanTone } from "@/components/transits/spanDisplay";
-import { fmt, str, text } from "@/strings";
-import { SPAN_TONE_WORDS } from "@/strings/formats";
+import { groupSpans, transitsModelFromSpans } from "@/lib/screens/transits";
+import type { SlotMap } from "@/lib/screens/types";
+import { text } from "@/strings";
+import { localZone } from "@/strings/formats";
 import { cn } from "@/lib/classNames";
 
-function SpanRow({ span, culture, now }: { span: TransitSpan; culture: Culture; now: Date }) {
-  const verb = ASPECT_VERBS[culture][span.aspectKind];
-  const natalLabel = natalPointLabel(culture, span.natalKey);
-  const received = isReceived(span.transitPlanet);
-  const ahead = span.passes.filter((p) => p.getTime() > now.getTime()).length;
-  const range = fmt("range.months", [span.start, span.end], "local");
-  const tone = SPAN_TONE_WORDS[spanTone(span)];
-  const data =
-    ahead > 0
-      ? str("transits.row.data", culture, { range, exact: span.passes.length, ahead, tone })
-      : str("transits.row.dataNoAhead", culture, { range, exact: span.passes.length, tone });
-
+/** One span's row: title and data line from the model's row slots, row `i`. */
+function SpanRow({ span, slots, i }: { span: TransitSpan; slots: SlotMap; i: number }) {
   return (
     <Link
       href={`/transits/${span.id}`}
@@ -37,44 +27,37 @@ function SpanRow({ span, culture, now }: { span: TransitSpan; culture: Culture; 
         <div
           className={cn(
             "font-display text-display-xs tracking-[0.06em]",
-            received ? "text-accent" : "text-bone",
+            isReceived(span.transitPlanet) ? "text-accent" : "text-bone",
           )}
         >
-          {str("transits.row.title", culture, {
-            deity: DEITY_MATRIX[culture][span.transitPlanet].name.toUpperCase(),
-            verb: verb.toUpperCase(),
-            natal: natalLabel,
-          })}
+          {(slots["transits.row.title"] as string[])[i]}
         </div>
-        <div className="mt-1.5 font-mono text-data-xs text-dim">
-          {data}
-        </div>
+        <div className="mt-1.5 font-mono text-data-xs text-dim">{(slots["transits.row.data"] as string[])[i]}</div>
       </div>
-      <span className="whitespace-nowrap font-mono text-data-xs text-accent">{str("transits.row.link", culture)}</span>
+      <span className="whitespace-nowrap font-mono text-data-xs text-accent">{slots["transits.row.link"]}</span>
     </Link>
   );
 }
 
+/** A group's rows, which start at row `offset` of the model's row slots; its empty line when it has none. */
 function SpanList({
   spans,
-  culture,
-  emptyLabel,
-  now,
+  slots,
+  offset,
+  empty,
 }: {
   spans: readonly TransitSpan[];
-  culture: Culture;
-  emptyLabel: string;
-  now: Date;
+  slots: SlotMap;
+  offset: number;
+  empty: string | string[] | undefined;
 }) {
   if (spans.length === 0) {
-    return (
-      <p className="border-t border-rule py-6 text-center font-mono text-data-xs text-dim">{emptyLabel}</p>
-    );
+    return <p className="border-t border-rule py-6 text-center font-mono text-data-xs text-dim">{empty}</p>;
   }
   return (
     <div className="flex flex-col">
-      {spans.map((span) => (
-        <SpanRow key={span.id} span={span} culture={culture} now={now} />
+      {spans.map((span, i) => (
+        <SpanRow key={span.id} span={span} slots={slots} i={offset + i} />
       ))}
     </div>
   );
@@ -83,44 +66,39 @@ function SpanList({
 export function TransitsIndex() {
   const culture = useActivePantheon();
   const { loading, natal, spans, now } = useSpans();
+  const slots = useMemo(
+    () => (culture && natal ? transitsModelFromSpans({ culture, instant: now, zone: localZone(), birth: natal }, spans) : null),
+    [culture, natal, now, spans],
+  );
 
   if (loading) return <Skeleton label={text("transits.loading")} />;
   if (!culture) return null;
-  if (!natal) return <TransitEmptyState />;
+  if (!natal || !slots) return <TransitEmptyState />;
 
-  const nowMs = now.getTime();
-  const active = spans.filter((s) => s.start.getTime() <= nowMs && nowMs <= s.end.getTime());
-  const ahead = spans.filter((s) => s.start.getTime() > nowMs);
-  const listed = [...active, ...ahead];
-  const first = listed.reduce<Date | null>((m, s) => (m === null || s.start < m ? s.start : m), null);
-  const last = listed.reduce<Date | null>((m, s) => (m === null || s.end > m ? s.end : m), null);
+  // The model lists the open spans first, then those ahead.
+  const { open, ahead } = groupSpans(spans, now);
 
   return (
     <>
       <NaveHead
         culture={culture}
-        kicker={str("transits.kicker", culture)}
+        kicker={slots["transits.kicker"]}
         sub={
-          first && last ? (
-            <div className="font-mono text-data-xs tracking-label text-dim">
-              {str("transits.countLine", culture, {
-                count: fmt("count.word", listed.length),
-                range: fmt("range.months", [first, last], "local"),
-              })}
-            </div>
+          slots["transits.countLine"] ? (
+            <div className="font-mono text-data-xs tracking-label text-dim">{slots["transits.countLine"]}</div>
           ) : undefined
         }
       >
-        {str("transits.title", culture)}
+        {slots["transits.title"]}
       </NaveHead>
       <div className="mt-10 flex flex-col gap-12">
         <section>
-          <SectionDivider label={str("transits.group.open", culture)} />
-          <SpanList spans={active} culture={culture} now={now} emptyLabel={str("transits.empty.open", culture)} />
+          <SectionDivider label={slots["transits.group.open"] as string} />
+          <SpanList spans={open} slots={slots} offset={0} empty={slots["transits.empty.open"]} />
         </section>
         <section>
-          <SectionDivider label={str("transits.group.ahead", culture)} />
-          <SpanList spans={ahead} culture={culture} now={now} emptyLabel={str("transits.empty.ahead", culture)} />
+          <SectionDivider label={slots["transits.group.ahead"] as string} />
+          <SpanList spans={ahead} slots={slots} offset={open.length} empty={slots["transits.empty.ahead"]} />
         </section>
       </div>
     </>

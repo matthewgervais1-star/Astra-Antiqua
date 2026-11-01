@@ -120,12 +120,17 @@ export const INGRESS_VERB: Readonly<Record<Culture, string>> = {
  * docs/superpowers/plans/2026-08-11-web-rebrand-phase2.md Task 7. `natal` is
  * accepted for signature parity with the season/year builders and reserved
  * for a future personal layer; the week's event selection is sky-only by
- * design, so it is intentionally not read here.
+ * design, so it is intentionally not read here. `today` marks the row the
+ * reader is on; the screen model passes its instant so the result is pure.
  */
-export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNatal | null): WeekDay[] {
+export function buildWeekDays(
+  culture: Culture,
+  weekStart: Date,
+  natal: SavedNatal | null,
+  today: Date = new Date(),
+): WeekDay[] {
   void natal;
 
-  const today = new Date();
   const isRome = culture === "rome";
 
   // One ingress scan for the whole week (buffered a couple of days past the

@@ -25,13 +25,9 @@ import { resolveSavedChart } from "@/lib/savedNatal";
 import { computeWholeSignHouses, houseOfSign } from "@/lib/houses";
 import { computeMotion } from "@/lib/motion";
 import { SIGN_ABBR3, cityShort, formatDegMin } from "@/components/charts/chartFormat";
-import { fmt, text } from "@/strings";
-
-/** The saved chart's birth date ("1990-01-15") as a UTC instant, so date.dayMonthYear prints it unshifted. */
-function birthDay(isoDate: string): Date {
-  const [y = 1970, m = 1, d = 1] = isoDate.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1, d, 12));
-}
+import { buildChartModel } from "@/lib/screens/chart";
+import { text } from "@/strings";
+import { localZone } from "@/strings/formats";
 
 const SIBLINGS: readonly InstrumentSibling[] = [
   { label: "SYNASTRY", href: "/synastry" },
@@ -83,13 +79,14 @@ function ChartsInstrumentInner() {
   }
 
   if (chart === null) {
+    const empty = buildChartModel({ culture, instant: new Date(), zone: localZone(), birth: null })["chart.empty"] as string[];
     return (
       <InstrumentShell context={`${text("nav.chart")} · NATAL INSTRUMENT`} siblings={SIBLINGS}>
         <div className="mx-auto flex max-w-[560px] flex-col items-center px-5 py-16 text-center instrument:col-span-3">
           <div className="font-mono text-data-xs tracking-microcopy text-dim">SAVED CHARTS</div>
           <div className="mx-auto my-5 h-px w-11 bg-accent" />
           <h1 className="font-display text-display-s leading-display tracking-display text-bone">
-            {text("chart.empty.title")
+            {(empty[0] ?? "")
               .split("\n")
               .map((line, i) => (
                 <span key={i} className="block">
@@ -102,10 +99,10 @@ function ChartsInstrumentInner() {
             of the five voices.
           </p>
           <Button href="/reading" variant="votive" className="mt-6">
-            {text("chart.empty.cta")}
+            {empty[1]}
           </Button>
           <div className="mt-4 font-mono text-data-xs tracking-data text-dim">
-            {text("chart.empty.note")}
+            {empty[2]}
           </div>
         </div>
       </InstrumentShell>
@@ -126,7 +123,8 @@ function ChartsInstrumentInner() {
     );
   }
 
-  const ascPoint = longitudeToSign(natal.angles.ascendant);
+  const slots = buildChartModel({ culture, instant: new Date(), zone: localZone(), birth: natal });
+  const legend = slots["chart.legend"] as string[];
   const { ascendantSignIndex } = computeWholeSignHouses(natal.angles.ascendant);
   const wheelAspects = computeAspects(natal.chart).map((a) => ({
     planetA: a.a,
@@ -137,16 +135,12 @@ function ChartsInstrumentInner() {
   return (
     <InstrumentShell context={`${text("nav.chart")} · NATAL INSTRUMENT`} siblings={SIBLINGS}>
       <aside className="border-rule border-b px-7 py-6 instrument:border-b-0 instrument:border-r">
-        <div className="font-mono text-data-xs tracking-label text-dim">{text("chart.kicker")}</div>
-        <h1 className="mt-2 font-display text-display-xs leading-display text-bone">{text("chart.title")}</h1>
+        <div className="font-mono text-data-xs tracking-label text-dim">{slots["chart.kicker"]}</div>
+        <h1 className="mt-2 font-display text-display-xs leading-display text-bone">{slots["chart.title"]}</h1>
         <div className="mt-1 font-mono text-data-xs tracking-label text-dim">
-          {text("chart.birthLine", {
-            city: cityShort(chart.cityLabel),
-            date: fmt("date.dayMonthYear", birthDay(chart.date), "UTC"),
-            time: chart.time,
-          })}
+          {slots["chart.birthLine"]}
         </div>
-        <div className="mt-4 font-mono text-data-xs tracking-label text-accent">{text("chart.section.bodies")}</div>
+        <div className="mt-4 font-mono text-data-xs tracking-label text-accent">{slots["chart.section.bodies"]}</div>
         <div className="mt-2 flex flex-col font-mono text-data-xs">
           <DataRowHead />
           {PLANETS.map((planet) => {
@@ -173,13 +167,9 @@ function ChartsInstrumentInner() {
           })}
         </div>
         <div className="mt-4 font-mono text-data-xs leading-data text-dim">
-          {text("chart.subline", {
-            name: chart.name.toUpperCase(),
-            sign: fmt("sign.full", ascPoint.sign),
-            angle: formatDegMin(ascPoint.degree),
-          })}
+          {slots["chart.subline"]}
           <br />
-          {text("chart.legend.method")}{" "}
+          {legend[4]}{" "}
           <Link href="/method" className="text-accent">
             {text("nav.method")}
           </Link>
@@ -188,7 +178,7 @@ function ChartsInstrumentInner() {
 
       <div className="flex flex-col items-center px-7 py-6">
         <div className="w-full font-mono text-data-xs tracking-label text-dim">
-          {text("chart.legend.wheel")}
+          {legend[2]}
         </div>
         <div className="mt-3">
           <WheelSvg
@@ -200,9 +190,9 @@ function ChartsInstrumentInner() {
           />
         </div>
         <div className="mt-4 flex w-full items-center gap-2 font-mono text-data-xs text-dim">
-          <span className="h-px w-[18px] bg-conflict" /> {text("chart.legend.conflict")}
-          <span className="ml-[var(--space-2)] h-px w-[18px] bg-bone/40" /> {text("chart.legend.harmony")}
-          <span className="ml-auto text-accent">{text("chart.legend.received")}</span>
+          <span className="h-px w-[18px] bg-conflict" /> {legend[0]}
+          <span className="ml-[var(--space-2)] h-px w-[18px] bg-bone/40" /> {legend[1]}
+          <span className="ml-auto text-accent">{legend[3]}</span>
         </div>
       </div>
 
@@ -254,7 +244,7 @@ function ChartsInstrumentInner() {
         </Button>
 
         <div className="mt-6 font-mono text-data-xs tracking-label text-dim">
-          {text("chart.section.received")}
+          {slots["chart.section.received"]}
         </div>
         <div className="mt-3 flex flex-col gap-[var(--space-2)]">
           {RECEIVED_BODIES.map((planet) => {

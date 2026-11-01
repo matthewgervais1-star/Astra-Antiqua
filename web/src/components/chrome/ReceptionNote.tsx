@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { RECEPTION_CLOSING, RECEPTION_LINK } from "@/lib/screens/common";
 
 export interface ReceptionNoteProps {
   body?: string;
@@ -16,9 +17,9 @@ export function ReceptionNote({ body, intro }: ReceptionNoteProps) {
   return (
     <div className="border border-rule px-[var(--space-3)] py-[var(--space-2)] font-mono text-data-xs uppercase leading-data tracking-data text-dim">
       {opening ? <>{opening} </> : null}
-      THE OUTER PLANETS ARE AN EXTENSION MADE IN THE ANCIENT WAY; THE METHOD PAGE STATES IT PLAINLY →{" "}
+      {RECEPTION_CLOSING}{" "}
       <Link href="/method" className="text-accent">
-        METHOD
+        {RECEPTION_LINK}
       </Link>
     </div>
   );

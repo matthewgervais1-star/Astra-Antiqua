@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { fmt, str } from "@/strings";
+import { localZone } from "@/strings/formats";
+import { buildTransitModel } from "@/lib/screens/transit";
 import { Fill } from "@/strings/Fill";
 import { isReceived } from "@/data/cultures";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { DEITY_MATRIX } from "@/data/deities";
-import { ASPECT_VERBS } from "@/data/aspectVerbs";
 import { getHouseMeaning } from "@/data/houses";
 import { longitudeToSign } from "@/data/sampleChart";
 import { TRANSIT_SPINE, type SlowBody } from "@/data/transitSpine";
@@ -39,8 +40,6 @@ import {
   natalPointLabel,
   ordinalWord,
   passNarrative,
-  passStatusLine,
-  seasonWord,
   spanTone,
   wholeSignHouse,
 } from "@/components/transits/spanDisplay";
@@ -51,6 +50,8 @@ import {
   TOUCHES_REGISTER_LINE,
   WHERE_BEGINS_CADENCE,
 } from "@/components/transits/spineTemplates";
+
+const FOOTER_HREFS = ["/year", "/forecast", "/transits"] as const;
 
 const FALLBACK_HOUSE_GROUP = { name: "", sub: "" } as const;
 
@@ -99,7 +100,6 @@ export function TransitDetail({ id }: TransitDetailProps) {
   const spine = TRANSIT_SPINE[culture][span.transitPlanet as SlowBody];
   const tone = spanTone(span);
   const transitDeity = DEITY_MATRIX[culture][span.transitPlanet].name;
-  const verb = ASPECT_VERBS[culture][span.aspectKind];
   const kindGlyph = ASPECT_KIND_GLYPH[span.aspectKind];
   const natalLabel = natalPointLabel(culture, span.natalKey);
   const pointKey = isPointPlanetKey(span.natalKey) ? span.natalKey : null;
@@ -124,8 +124,9 @@ export function TransitDetail({ id }: TransitDetailProps) {
     </span>
   );
 
-  const season = seasonWord(span.end);
-  const releaseYear = span.end.getFullYear();
+  const slots = buildTransitModel({ culture, instant: now, zone: localZone(), birth: natal, span });
+  const sectionLabels = slots["transit.section.labels"] as string[];
+  const footer = slots["transit.footer"] as string[];
 
   const changingClose = pointKey
     ? `It is set against your ${DEITY_MATRIX[culture][pointKey].name}, ${DEITY_MATRIX[culture][pointKey].epithet}.`
@@ -146,7 +147,6 @@ export function TransitDetail({ id }: TransitDetailProps) {
     touchesParagraph = span.natalKey === "asc" ? TOUCHES_ASC[culture] : TOUCHES_MC[culture];
   }
 
-  const statusLine = passStatusLine(span, now);
   const figure = composeSpanFigure(
     culture,
     span,
@@ -177,47 +177,41 @@ export function TransitDetail({ id }: TransitDetailProps) {
             }
             sub={
               <div className="font-mono text-data-xs leading-data tracking-label text-dim">
-                {str("transit.meta.title", culture, {
-                  deity: transitDeity.toUpperCase(),
-                  verb: verb.toUpperCase(),
-                  natal: natalLabel,
-                })}
+                {slots["transit.meta.title"]}
                 <br />
                 {degreesLine}
                 <br />
-                <span className="text-accent">
-                  {str("transit.meta.release", culture, { season, year: releaseYear })}
-                </span>
+                <span className="text-accent">{slots["transit.meta.release"]}</span>
               </div>
             }
           >
-            {figure.headline}
+            {slots["transit.headline"]}
           </NaveHead>
 
           <FigureAnatomy
             culture={culture}
             anatomy={figure}
             timeline={timeline}
-            timelineCaption={statusLine}
+            timelineCaption={slots["transit.statusLine"] as string}
             centerLabel={str("transit.figure.you", culture)}
             afterParagraph={
               <div className="flex flex-col gap-6 text-left">
                 <div>
-                  <SectionDivider label={str("transit.section.changing", culture)} />
+                  <SectionDivider label={sectionLabels[0] ?? ""} />
                   <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">
                     {spine.changing} {changingClose}
                   </p>
                 </div>
                 <div>
-                  <SectionDivider label={str("transit.section.begins", culture)} />
+                  <SectionDivider label={sectionLabels[1] ?? ""} />
                   <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{beginsParagraph}</p>
                 </div>
                 <div>
-                  <SectionDivider label={str("transit.section.touches", culture)} />
+                  <SectionDivider label={sectionLabels[2] ?? ""} />
                   <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{touchesParagraph}</p>
                 </div>
                 <div>
-                  <SectionDivider label={str("transit.section.leaves", culture)} />
+                  <SectionDivider label={sectionLabels[3] ?? ""} />
                   <p className="mt-3 text-pretty font-body text-prose-m leading-prose text-prose">{spine.leaves[tone]}</p>
                 </div>
               </div>
@@ -239,15 +233,15 @@ export function TransitDetail({ id }: TransitDetailProps) {
           ) : null}
 
           <div className="mt-9 flex justify-center gap-8 font-mono text-data-xs tracking-microcopy">
-            <Link href="/year" className="text-bone/65 hover:text-bone">
-              {str("chrome.footer.backYear", culture)}
-            </Link>
-            <Link href="/forecast" className="text-bone/65 hover:text-bone">
-              {str("chrome.footer.forecast", culture)}
-            </Link>
-            <Link href="/transits" className="text-accent">
-              {str("chrome.footer.toTransits", culture)}
-            </Link>
+            {footer.map((label, i) => (
+              <Link
+                key={label}
+                href={FOOTER_HREFS[i] ?? "/"}
+                className={i === footer.length - 1 ? "text-accent" : "text-bone/65 hover:text-bone"}
+              >
+                {label}
+              </Link>
+            ))}
           </div>
         </div>
       </main>

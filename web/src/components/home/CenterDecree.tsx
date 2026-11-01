@@ -10,20 +10,25 @@ import { isoDateUtc } from "@/components/home/format";
 import { cn } from "@/lib/classNames";
 import { str } from "@/strings";
 import { Fill } from "@/strings/Fill";
+import type { SlotMap } from "@/lib/screens/types";
 
 export interface CenterDecreeProps {
   className?: string;
   culture: Culture;
   /** "WED 21 OCT 2026" (F1, the UTC day). */
   dateLabel: string;
-  reading: Pick<DayDecree, "headline" | "evidence" | "paragraphs" | "tone" | "figures">;
-  votive: string;
+  /** The figures, for the evidence line's ScriptNames. */
+  reading: Pick<DayDecree, "figures">;
+  /** The Day's screen model (lib/screens/day.ts): headline, paragraph, votive and footer print from it. */
+  slots: SlotMap;
   now: Date;
   /** The figure page for the day's headline figure; the headline links to it. Null on a quiet day. */
   figureHref?: string | null;
   /** A dated view (/?date=): a link back to today closes the column. */
   dated?: boolean;
 }
+
+const FOOTER_HREFS = ["/week", "/season", "/year"] as const;
 
 /** The day's reading: institution kicker, the headline to the reader in
  * display type (a link to the figure page for the day's headline figure), the evidence line in mono beneath it, the paragraph, the
@@ -35,12 +40,14 @@ export function CenterDecree({
   culture,
   dateLabel,
   reading,
-  votive,
+  slots,
   now,
   figureHref = null,
   dated = false,
 }: CenterDecreeProps) {
   const readingId = `day-${isoDateUtc(now)}`;
+  const headline = slots["day.headline"];
+  const footer = slots["day.footer"] as string[];
   return (
     <main id="day-figure" className={cn("flex flex-col items-center px-6 py-11 text-center md:px-14 md:py-[var(--space-6)]", className)}>
       <NaveHead
@@ -62,15 +69,15 @@ export function CenterDecree({
       >
         {figureHref ? (
           <Link href={figureHref} className="hover:text-accent">
-            {reading.headline}
+            {headline}
           </Link>
         ) : (
-          reading.headline
+          headline
         )}
       </NaveHead>
 
       <div className="mx-auto max-w-[560px] text-left">
-        {reading.paragraphs.map((paragraph, i) => (
+        {(slots["day.paragraph"] as string[]).map((paragraph, i) => (
           <p
             key={i}
             className="font-body text-prose-m font-light leading-prose text-prose text-pretty [&:not(:last-child)]:mb-[var(--space-3)]"
@@ -81,7 +88,7 @@ export function CenterDecree({
       </div>
 
       <div className="mt-[var(--space-5)] w-full max-w-[560px]">
-        <Votive>{votive}</Votive>
+        <Votive>{slots["day.votive"]}</Votive>
       </div>
 
       <div className="mt-4">
@@ -89,15 +96,11 @@ export function CenterDecree({
       </div>
 
       <div className="mt-10 flex flex-wrap justify-center gap-x-[var(--space-2)] gap-y-[var(--space-2)] font-mono text-data-xs tracking-microcopy text-dim sm:gap-x-[var(--space-4)] [&>a]:whitespace-nowrap">
-        <Link href="/week" className="hover:text-bone">
-          {str("chrome.footer.toWeek", culture)}
-        </Link>
-        <Link href="/season" className="hover:text-bone">
-          {str("chrome.footer.toSeason", culture)}
-        </Link>
-        <Link href="/year" className="hover:text-bone">
-          {str("chrome.footer.toYear", culture)}
-        </Link>
+        {footer.map((label, i) => (
+          <Link key={label} href={FOOTER_HREFS[i] ?? "/"} className="hover:text-bone">
+            {label}
+          </Link>
+        ))}
       </div>
 
       {dated ? (
