@@ -8,12 +8,14 @@ import type { Culture } from "@/data/cultures";
 import type { DayDecree } from "@/lib/decree";
 import { isoDateUtc } from "@/components/home/format";
 import { cn } from "@/lib/classNames";
+import { str } from "@/strings";
+import { Fill } from "@/strings/Fill";
 
 export interface CenterDecreeProps {
   className?: string;
   culture: Culture;
-  weekday: string;
-  dateLong: string;
+  /** "WED 21 OCT 2026" (F1, the UTC day). */
+  dateLabel: string;
   reading: Pick<DayDecree, "headline" | "evidence" | "paragraphs" | "tone" | "figures">;
   votive: string;
   now: Date;
@@ -31,8 +33,7 @@ export interface CenterDecreeProps {
 export function CenterDecree({
   className,
   culture,
-  weekday,
-  dateLong,
+  dateLabel,
   reading,
   votive,
   now,
@@ -45,9 +46,11 @@ export function CenterDecree({
       <NaveHead
         culture={culture}
         kicker={
-          <>
-            {weekday} · {dateLong} · <ScriptName culture={culture} heading="institution" />
-          </>
+          <Fill
+            k="day.kicker"
+            culture={culture}
+            slots={{ date: dateLabel, institution: <ScriptName culture={culture} heading="institution" /> }}
+          />
         }
         sub={
           reading.figures[0] ? (
@@ -82,18 +85,18 @@ export function CenterDecree({
       </div>
 
       <div className="mt-4">
-        <FeedbackRow readingId={readingId} noun="DECREE" />
+        <FeedbackRow readingId={readingId} noun={str("day.feedback.noun", culture)} />
       </div>
 
       <div className="mt-10 flex flex-wrap justify-center gap-x-[var(--space-2)] gap-y-[var(--space-2)] font-mono text-data-xs tracking-microcopy text-dim sm:gap-x-[var(--space-4)] [&>a]:whitespace-nowrap">
         <Link href="/week" className="hover:text-bone">
-          THE WEEK →
+          {str("chrome.footer.toWeek", culture)}
         </Link>
         <Link href="/season" className="hover:text-bone">
-          THE SEASON →
+          {str("chrome.footer.toSeason", culture)}
         </Link>
         <Link href="/year" className="hover:text-bone">
-          THE YEAR →
+          {str("chrome.footer.toYear", culture)}
         </Link>
       </div>
 

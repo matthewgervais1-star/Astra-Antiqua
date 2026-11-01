@@ -4,72 +4,33 @@
  * lib/weekReading.ts can import from this file too.
  */
 
-const WEEKDAY_ABBR = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"] as const;
-const MONTH_ABBR = [
-  "JAN",
-  "FEB",
-  "MAR",
-  "APR",
-  "MAY",
-  "JUN",
-  "JUL",
-  "AUG",
-  "SEP",
-  "OCT",
-  "NOV",
-  "DEC",
-] as const;
+import { fmt, toRoman } from "@/strings/formats";
 
+/** Week and Season count local calendar days (format rule F2), so these read the runtime's zone. */
 export function weekdayAbbr(date: Date): string {
-  return WEEKDAY_ABBR[date.getDay()] ?? "MON";
+  return fmt("date.weekday", date, "local");
 }
 
 export function monthAbbr(date: Date): string {
-  return MONTH_ABBR[date.getMonth()] ?? "JAN";
+  return fmt("date.monthYear", date, "local").slice(0, 3);
 }
 
-/** "23 JUL" */
+/** "23 JUL" (F3, local). */
 export function formatDayMonth(date: Date): string {
-  return `${date.getDate()} ${monthAbbr(date)}`;
+  return fmt("date.dayMonth", date, "local");
 }
 
-/** "MAY 2027" */
+/** "MAY 2027" (F3, local). */
 export function formatMonthYear(date: Date): string {
-  return `${monthAbbr(date)} ${date.getFullYear()}`;
+  return fmt("date.monthYear", date, "local");
 }
 
-/** Joins two already-formatted strings with the house en dash (never an em dash). */
-export function enDashRange(a: string, b: string): string {
-  return `${a} – ${b}`;
+/** Joins two already-formatted dates with the spaced arrow (F13: no en dash in chrome). */
+export function arrowRange(a: string, b: string): string {
+  return `${a} → ${b}`;
 }
 
-const ROMAN: ReadonlyArray<readonly [number, string]> = [
-  [1000, "M"],
-  [900, "CM"],
-  [500, "D"],
-  [400, "CD"],
-  [100, "C"],
-  [90, "XC"],
-  [50, "L"],
-  [40, "XL"],
-  [10, "X"],
-  [9, "IX"],
-  [5, "V"],
-  [4, "IV"],
-  [1, "I"],
-];
-
-export function toRoman(value: number): string {
-  let n = Math.max(1, Math.round(value));
-  let out = "";
-  for (const [amount, symbol] of ROMAN) {
-    while (n >= amount) {
-      out += symbol;
-      n -= amount;
-    }
-  }
-  return out;
-}
+export { toRoman };
 
 /** ISO-8601 week number (Monday-start, week 1 contains the year's first Thursday). */
 export function isoWeek(date: Date): { year: number; week: number } {

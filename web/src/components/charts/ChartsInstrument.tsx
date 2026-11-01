@@ -14,7 +14,6 @@ import { WheelSvg } from "@/components/chrome/WheelSvg";
 import { useActivePantheon } from "@/components/pantheon/PantheonContext";
 import { mirrorDeleteToServer, useAuth } from "@/components/auth/AuthProvider";
 import {
-  CULTURE_LABELS,
   PLANETS,
   RECEIVED_BODIES,
   isReceived,
@@ -26,6 +25,13 @@ import { resolveSavedChart } from "@/lib/savedNatal";
 import { computeWholeSignHouses, houseOfSign } from "@/lib/houses";
 import { computeMotion } from "@/lib/motion";
 import { SIGN_ABBR3, cityShort, formatDegMin } from "@/components/charts/chartFormat";
+import { fmt, text } from "@/strings";
+
+/** The saved chart's birth date ("1990-01-15") as a UTC instant, so date.dayMonthYear prints it unshifted. */
+function birthDay(isoDate: string): Date {
+  const [y = 1970, m = 1, d = 1] = isoDate.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d, 12));
+}
 
 const SIBLINGS: readonly InstrumentSibling[] = [
   { label: "SYNASTRY", href: "/synastry" },
@@ -68,7 +74,7 @@ function ChartsInstrumentInner() {
 
   if (!hydrated) {
     return (
-      <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
+      <InstrumentShell context={`${text("nav.chart")} · NATAL INSTRUMENT`} siblings={SIBLINGS}>
         <div className="flex items-center justify-center px-7 py-24 instrument:col-span-3">
           <Skeleton />
         </div>
@@ -78,24 +84,28 @@ function ChartsInstrumentInner() {
 
   if (chart === null) {
     return (
-      <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
+      <InstrumentShell context={`${text("nav.chart")} · NATAL INSTRUMENT`} siblings={SIBLINGS}>
         <div className="mx-auto flex max-w-[560px] flex-col items-center px-5 py-16 text-center instrument:col-span-3">
           <div className="font-mono text-data-xs tracking-microcopy text-dim">SAVED CHARTS</div>
           <div className="mx-auto my-5 h-px w-11 bg-accent" />
           <h1 className="font-display text-display-s leading-display tracking-display text-bone">
-            NO CHART IS YET
-            <br />
-            ENTERED IN THE RECORD
+            {text("chart.empty.title")
+              .split("\n")
+              .map((line, i) => (
+                <span key={i} className="block">
+                  {line}
+                </span>
+              ))}
           </h1>
           <p className="mx-auto mt-4 max-w-[360px] font-body text-prose-s leading-prose text-prose">
             A chart is cast once and kept: your sky, fixed at the hour of your birth, read by any
             of the five voices.
           </p>
           <Button href="/reading" variant="votive" className="mt-6">
-            CAST THE FIRST CHART
+            {text("chart.empty.cta")}
           </Button>
-          <div className="mt-4 font-mono text-data-xs uppercase tracking-data text-dim">
-            KEPT ON THIS DEVICE · AN ACCOUNT ADDS SYNC
+          <div className="mt-4 font-mono text-data-xs tracking-data text-dim">
+            {text("chart.empty.note")}
           </div>
         </div>
       </InstrumentShell>
@@ -106,9 +116,9 @@ function ChartsInstrumentInner() {
 
   if (!natal) {
     return (
-      <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
+      <InstrumentShell context={`${text("nav.chart")} · NATAL INSTRUMENT`} siblings={SIBLINGS}>
         <div className="mx-auto flex max-w-[480px] flex-col items-center px-5 py-16 text-center instrument:col-span-3">
-          <p className="font-mono text-data-xs uppercase tracking-label text-dim">
+          <p className="font-mono text-data-xs tracking-label text-dim">
             THIS CHART COULD NOT BE COMPUTED
           </p>
         </div>
@@ -125,12 +135,19 @@ function ChartsInstrumentInner() {
   }));
 
   return (
-    <InstrumentShell context="CHARTS · NATAL INSTRUMENT" siblings={SIBLINGS}>
+    <InstrumentShell context={`${text("nav.chart")} · NATAL INSTRUMENT`} siblings={SIBLINGS}>
       <aside className="border-rule border-b px-7 py-6 instrument:border-b-0 instrument:border-r">
-        <div className="font-mono text-data-xs tracking-label text-dim">
-          PLACEMENTS · B. {chart.date} · {cityShort(chart.cityLabel)}
+        <div className="font-mono text-data-xs tracking-label text-dim">{text("chart.kicker")}</div>
+        <h1 className="mt-2 font-display text-display-xs leading-display text-bone">{text("chart.title")}</h1>
+        <div className="mt-1 font-mono text-data-xs tracking-label text-dim">
+          {text("chart.birthLine", {
+            city: cityShort(chart.cityLabel),
+            date: fmt("date.dayMonthYear", birthDay(chart.date), "UTC"),
+            time: chart.time,
+          })}
         </div>
-        <div className="mt-3 flex flex-col font-mono text-data-xs">
+        <div className="mt-4 font-mono text-data-xs tracking-label text-accent">{text("chart.section.bodies")}</div>
+        <div className="mt-2 flex flex-col font-mono text-data-xs">
           <DataRowHead />
           {PLANETS.map((planet) => {
             const { sign, degree } = longitudeToSign(natal.chart[planet]);
@@ -156,18 +173,22 @@ function ChartsInstrumentInner() {
           })}
         </div>
         <div className="mt-4 font-mono text-data-xs leading-data text-dim">
-          ASC {formatDegMin(ascPoint.degree)} {ascPoint.sign.toUpperCase()} · WHOLE-SIGN HOUSES
+          {text("chart.subline", {
+            name: chart.name.toUpperCase(),
+            sign: fmt("sign.full", ascPoint.sign),
+            angle: formatDegMin(ascPoint.degree),
+          })}
           <br />
-          ASTRONOMY-ENGINE · ORBS DOCUMENTED →{" "}
+          {text("chart.legend.method")}{" "}
           <Link href="/method" className="text-accent">
-            METHOD
+            {text("nav.method")}
           </Link>
         </div>
       </aside>
 
       <div className="flex flex-col items-center px-7 py-6">
         <div className="w-full font-mono text-data-xs tracking-label text-dim">
-          THE NATAL WHEEL
+          {text("chart.legend.wheel")}
         </div>
         <div className="mt-3">
           <WheelSvg
@@ -179,9 +200,9 @@ function ChartsInstrumentInner() {
           />
         </div>
         <div className="mt-4 flex w-full items-center gap-2 font-mono text-data-xs text-dim">
-          <span className="h-px w-[18px] bg-conflict" /> CONFLICT
-          <span className="ml-[var(--space-2)] h-px w-[18px] bg-bone/40" /> HARMONY
-          <span className="ml-auto text-accent">ACCENT GLYPHS: THE THREE RECEIVED</span>
+          <span className="h-px w-[18px] bg-conflict" /> {text("chart.legend.conflict")}
+          <span className="ml-[var(--space-2)] h-px w-[18px] bg-bone/40" /> {text("chart.legend.harmony")}
+          <span className="ml-auto text-accent">{text("chart.legend.received")}</span>
         </div>
       </div>
 
@@ -233,7 +254,7 @@ function ChartsInstrumentInner() {
         </Button>
 
         <div className="mt-6 font-mono text-data-xs tracking-label text-dim">
-          THE THREE, AS {CULTURE_LABELS[culture].toUpperCase()} RECEIVES THEM
+          {text("chart.section.received")}
         </div>
         <div className="mt-3 flex flex-col gap-[var(--space-2)]">
           {RECEIVED_BODIES.map((planet) => {

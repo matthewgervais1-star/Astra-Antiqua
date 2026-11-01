@@ -1,6 +1,6 @@
 import type { Culture, Planet } from "@/data/cultures";
-import { PLANETS } from "@/data/cultures";
-import { computeAspects, type AspectKind, type ZodiacSign } from "@/data/sampleChart";
+import { PLANETS, PLANET_SYMBOLS } from "@/data/cultures";
+import { computeAspects, longitudeToSign, type AspectKind, type ZodiacSign } from "@/data/sampleChart";
 import { computeChart } from "@/lib/ephemeris";
 import { findYearIngresses } from "@/lib/yearForecast";
 import { DEITY_MATRIX } from "@/data/deities";
@@ -16,8 +16,8 @@ import {
   composeMeaning,
   utcDayNumber,
 } from "@/lib/decree";
-import { SIGN_PHRASES } from "@/components/horizons/signPhrase";
-import { SIGN_ABBR3 } from "@/components/charts/chartFormat";
+import { SIGN_ABBR3, SIGN_PHRASES } from "@/strings/formats";
+import { fmt, str } from "@/strings";
 import { properCase, sameLocalDay, weekdayAbbr } from "@/components/horizons/format";
 import type { SavedNatal } from "@/lib/savedNatal";
 import { figureHref, isoDateUtc } from "@/lib/figureReading";
@@ -26,12 +26,40 @@ export type WeekTone = "harmony" | "tension" | "quiet";
 export type RomeDayFlag = "F" | "N" | "C";
 
 /**
+ * The printed shorthand (week.row.shorthand.*, board P25 to P31): planet
+ * symbols, the aspect glyph, TIGHT under the tight orb, the sign for a
+ * conjunction, and the tone word (F9); an ingress prints the full sign (F8).
+ */
+export function shorthandText(culture: Culture, shorthand: WeekShorthand): string {
+  if (shorthand.kind === "aspect") {
+    const slots = {
+      a: PLANET_SYMBOLS[shorthand.a],
+      b: PLANET_SYMBOLS[shorthand.b],
+      aspectGlyph: ASPECT_GLYPH[shorthand.aspect],
+      sign: fmt("sign.full", shorthand.sign),
+      tone: fmt("tone.word", shorthand.aspect),
+    };
+    if (shorthand.aspect === "conjunction") {
+      return str(shorthand.tight ? "week.row.shorthand.conjunctionTight" : "week.row.shorthand.conjunction", culture, slots);
+    }
+    return str(shorthand.tight ? "week.row.shorthand.aspectTight" : "week.row.shorthand.aspect", culture, slots);
+  }
+  if (shorthand.kind === "ingress") {
+    return str("week.row.shorthand.ingress", culture, {
+      symbol: PLANET_SYMBOLS[shorthand.planet],
+      sign: fmt("sign.full", shorthand.sign),
+    });
+  }
+  return str("week.row.shorthand.quiet", culture);
+}
+
+/**
  * The day's shorthand as data. WeekNave renders it: the renderer draws each
  * body as a DeityGlyph in the active culture and prints ASPECT_GLYPH,
  * SIGN_ABBR, the arrow and TIGHT around the glyphs.
  */
 export type WeekShorthand =
-  | { kind: "aspect"; a: Planet; aspect: AspectKind; b: Planet; tight: boolean }
+  | { kind: "aspect"; a: Planet; aspect: AspectKind; b: Planet; tight: boolean; sign: ZodiacSign }
   | { kind: "ingress"; planet: Planet; sign: ZodiacSign }
   | { kind: "quiet" };
 
@@ -146,7 +174,14 @@ export function buildWeekDays(culture: Culture, weekStart: Date, natal: SavedNat
       // does, and the day page carries the instruction.
       headline = holds ? DECREE_BANKS[culture].holds : composeHeadline(culture, tightest);
       line = `${composeMeaning(culture, tightest, utcDayNumber(instant))} ${composeConsequence(culture, tightest)}`;
-      shorthand = { kind: "aspect", a: tightest.a, aspect: tightest.kind, b: tightest.b, tight };
+      shorthand = {
+        kind: "aspect",
+        a: tightest.a,
+        aspect: tightest.kind,
+        b: tightest.b,
+        tight,
+        sign: longitudeToSign(chart[tightest.a]).sign,
+      };
       figurePage = figureHref(isoDateUtc(instant), tightest);
     } else if (dayIngress) {
       tone = "harmony";

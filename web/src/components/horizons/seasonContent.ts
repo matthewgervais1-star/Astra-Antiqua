@@ -8,6 +8,7 @@ import type { SeasonSkyEvents, SeasonStandout, SeasonWindow } from "@/lib/season
 import { SIGN_PHRASES } from "@/components/horizons/signPhrase";
 import { formatDayMonth, properCase } from "@/components/horizons/format";
 import { houseGroupName } from "@/components/horizons/houseGroups";
+import { fmt, str } from "@/strings";
 
 const DAY_MS = 86_400_000;
 
@@ -84,9 +85,16 @@ export function seasonVotiveTone(standouts: readonly SeasonStandout[]): SeasonTo
 }
 
 export function composeWhatItTouchesNatal(culture: Culture, house: HouseMeaning): string {
-  const group = houseGroupName(culture, house.house).toLowerCase();
-  const arena = house.arena.charAt(0).toLowerCase() + house.arena.slice(1);
-  return `The season sits in your ${house.ordinal.toLowerCase()} house, which this culture keeps under ${group}. It works on ${arena}.`;
+  return str("season.chart.prose", culture, {
+    ordinal: fmt("ordinal.word", house.house),
+    group: houseGroupName(culture, house.house).toLowerCase(),
+    arena: house.arena.charAt(0).toLowerCase() + house.arena.slice(1),
+  });
+}
+
+/** "The eleventh house · The Assembly" (season.chart.houseHeading, board P38). */
+export function seasonHouseHeading(culture: Culture, house: HouseMeaning): string {
+  return str("season.chart.houseHeading", culture, { ordinal: fmt("ordinal.word", house.house), title: house.title });
 }
 
 export function composeWhatItTouchesSky(culture: Culture, ingresses: readonly YearIngressEvent[]): string {
@@ -129,22 +137,20 @@ export interface SeasonSkyRow {
  *  approach of any slow body sharing the season's sign with the Sun. */
 export function buildSeasonSkyRows(culture: Culture, window: SeasonWindow, events: SeasonSkyEvents): SeasonSkyRow[] {
   const rows: SeasonSkyRow[] = [];
-  const sunDeity = DEITY_MATRIX[culture].sun.name;
 
   rows.push({
     key: "open",
     date: window.start,
-    label: `${sunDeity.toUpperCase()} → THE ${SIGN_PHRASES[window.sign]} · SEASON OPENS`,
+    label: str("season.sky.event.ingress", culture, { planet: fmt("planet.name", "sun"), sign: fmt("sign.full", window.sign) }),
     tone: "dim",
   });
 
   for (const r of events.retrogrades) {
     if (r.kind !== "retrograde") continue;
-    const deity = DEITY_MATRIX[culture][r.planet].name;
     rows.push({
       key: `station-${r.planet}-${r.date.toISOString()}`,
       date: r.date,
-      label: `${deity.toUpperCase()} STATIONED ℞`,
+      label: str("season.sky.event.retrograde", culture, { planet: fmt("planet.name", r.planet) }),
       tone: "conflict",
     });
   }
@@ -164,11 +170,13 @@ export function buildSeasonSkyRows(culture: Culture, window: SeasonWindow, event
       if (!best || sep < best.sep) best = { date, sep };
     }
     if (best && best.sep <= 3) {
-      const deity = DEITY_MATRIX[culture][body].name;
       rows.push({
         key: `conj-${body}`,
         date: best.date,
-        label: `${sunDeity.toUpperCase()} ☌ ${deity.toUpperCase()}${best.sep < 1 ? " EXACT" : ""}`,
+        label: str(best.sep < 1 ? "season.sky.event.conjunctionExact" : "season.sky.event.conjunction", culture, {
+          planet: fmt("planet.name", "sun"),
+          planetB: fmt("planet.name", body),
+        }),
         tone: "harmony",
       });
     }
@@ -179,7 +187,7 @@ export function buildSeasonSkyRows(culture: Culture, window: SeasonWindow, event
   rows.push({
     key: "close",
     date: window.end,
-    label: `${sunDeity.toUpperCase()} → THE ${SIGN_PHRASES[closeSign]} · SEASON CLOSES`,
+    label: str("season.sky.event.ingress", culture, { planet: fmt("planet.name", "sun"), sign: fmt("sign.full", closeSign) }),
     tone: "dim",
   });
 
@@ -187,31 +195,7 @@ export function buildSeasonSkyRows(culture: Culture, window: SeasonWindow, event
   return rows;
 }
 
-/** Two-line season votive, keyed by the dominant tone of the window's beats. */
-export const SEASON_VOTIVE: Readonly<Record<Culture, Readonly<Record<SeasonTone, string>>>> = {
-  egypt: {
-    tension: "BRING WHAT IS HEAVY\nTO THE SCALE NOW",
-    harmony: "LET THE RIVER CARRY IT;\nDO NOT ROW AGAINST THE MONTH",
-    quiet: "THE ORDINARY MONTH\nSTILL FEEDS THE GRANARY",
-  },
-  greece: {
-    tension: "ASK THE SEASON'S HARD QUESTION\nBEFORE IT ASKS YOU FIRST",
-    harmony: "TAKE WHAT THE MONTH\nOFFERS FREELY",
-    quiet: "A QUIET MONTH\nIS STILL AN ANSWER",
-  },
-  canaan: {
-    tension: "BRING THE CONTESTED MATTER\nBEFORE THE COUNCIL NOW",
-    harmony: "WORK THE FIELD WHILE\nTHE RAINS STILL FAVOR YOU",
-    quiet: "THE TENT STANDS\nTHROUGH ORDINARY MONTHS TOO",
-  },
-  carthage: {
-    tension: "SETTLE THE ACCOUNT\nBEFORE THE MONTH CLOSES IT FOR YOU",
-    harmony: "SAIL WHILE THE SEASON\nKEEPS THE LANE OPEN",
-    quiet: "A STEADY MONTH IS\nSTILL A PROFITABLE ONE",
-  },
-  rome: {
-    tension: "TAKE THE AUSPICES AGAIN\nBEFORE YOU ACT ON THIS MONTH",
-    harmony: "PROCEED; THE MONTH HOLDS\nTHE RIGHT HAND OUT",
-    quiet: "AN ORDINARY MONTH\nIS STILL GOVERNED BY LAW",
-  },
-};
+/** Two-line season votive, keyed by the dominant tone of the window's beats (season.votive.*). */
+export function seasonVotive(culture: Culture, tone: SeasonTone): string {
+  return str(`season.votive.${tone}` as const, culture);
+}

@@ -1,5 +1,6 @@
 import { OrbBar } from "@/components/chrome/OrbBar";
 import type { PressureGroup } from "@/lib/dayPressure";
+import { text } from "@/strings";
 
 export interface DayPressureModuleProps {
   groups: readonly PressureGroup[];
@@ -18,8 +19,7 @@ export function DayPressureModule({ groups }: DayPressureModuleProps) {
   return (
     <section className="mx-auto max-w-[720px] border-t border-rule px-5 py-10 md:px-14">
       <div className="flex items-baseline justify-between">
-        <span className="font-mono text-data-xs tracking-label text-accent">WHERE THE DAY FALLS</span>
-        <span className="font-mono text-data-xs text-dim">FROM YOUR CHART&rsquo;S HOUSES</span>
+        <span className="font-mono text-data-xs tracking-label text-accent">{text("day.chart.label")}</span>
       </div>
       <div className="my-4 h-px w-[34px] bg-accent" />
       <div className="flex flex-col gap-[var(--space-2)]">
@@ -35,6 +35,9 @@ export function DayPressureModule({ groups }: DayPressureModuleProps) {
             <div className="mt-[var(--space-1)] font-body text-prose-s font-light leading-prose text-prose">
               {group.sentence}
             </div>
+            {group.data ? (
+              <div className="mt-[var(--space-1)] font-mono text-data-xs leading-data text-dim">{group.data}</div>
+            ) : null}
           </div>
         ))}
       </div>

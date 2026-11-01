@@ -25,7 +25,10 @@ import { DEITY_MATRIX } from "@/data/deities";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { PLANETS, isReceived, type Planet } from "@/data/cultures";
 import { SIGN_PHRASE, formatDegMin } from "@/components/charts/chartFormat";
-import { buildHowItShows, buildKeepInView, buildWhatItIs } from "@/components/charts/placementCopy";
+import { GLYPHS } from "@/glyphs";
+import { fmt, str } from "@/strings";
+import { Fill } from "@/strings/Fill";
+import { buildGoverns, buildHowItShows, buildInSign, buildKeepInView } from "@/components/charts/placementCopy";
 import { PLACEMENT_VOTIVES } from "@/components/charts/placementVotives";
 
 export interface PlacementReadingProps {
@@ -122,42 +125,50 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
       <TopBar body={body} />
       <main className="mx-auto max-w-[560px] px-5 py-11 text-center md:py-[var(--space-6)]">
         <NaveHead
-          kicker={
-            <>
-              <ScriptName culture={culture} heading="institution" /> · YOUR STANDING PLACEMENT
-            </>
-          }
+          kicker={str("placement.kicker", culture, {
+            planet: fmt("planet.name", body),
+            sign: fmt("sign.full", sign),
+            angle: formatDegMin(degree),
+            roman: fmt("house.roman", house),
+          })}
           sub={
-            <div className="inline-flex items-center gap-[var(--space-1)] font-mono text-data-xs uppercase leading-data tracking-label text-dim">
+            <div className="inline-flex items-center gap-[var(--space-1)] font-mono text-data-xs leading-data tracking-label text-dim">
               <DeityGlyph body={body} culture={culture} size={16} />
               <span>
-                {formatDegMin(degree)} {sign.toUpperCase()} ·{" "}
-                {houseMeaning.ordinal.toUpperCase()} HOUSE · FIXED AT YOUR BIRTH
+                {str("placement.epithet", culture, {
+                  epithet: deity.epithet.toUpperCase(),
+                  glyphStatus: GLYPHS[culture][body].status.toUpperCase(),
+                })}
               </span>
               {isReceived(body) ? <Badge tone="accent">RECEIVED</Badge> : null}
             </div>
           }
         >
-          YOUR <ScriptName culture={culture} planet={body} upper />
+          <Fill k="placement.title1" culture={culture} slots={{ deity: <ScriptName culture={culture} planet={body} upper /> }} />
           <br />
-          IN THE {SIGN_PHRASE[sign]}
+          {str("placement.title2", culture, { signPhrase: SIGN_PHRASE[sign] })}
         </NaveHead>
 
         <div className="flex flex-col gap-[var(--space-4)] text-left">
           <section className="flex flex-col gap-[var(--space-2)]">
-            <SectionDivider label="WHAT IT IS" />
-            <p className="text-pretty font-body text-prose-m leading-prose text-prose">
-              {buildWhatItIs(culture, body, sign)}
-            </p>
+            <SectionDivider label={str("placement.section.governs", culture)} />
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{buildGoverns(culture, body)}</p>
           </section>
           <section className="flex flex-col gap-[var(--space-2)]">
-            <SectionDivider label="HOW IT SHOWS" />
+            <SectionDivider label={str("placement.section.sign", culture, { sign: fmt("sign.full", sign) })} />
+            <p className="text-pretty font-body text-prose-m leading-prose text-prose">{buildInSign(body, sign)}</p>
+          </section>
+          <section className="flex flex-col gap-[var(--space-2)]">
+            <SectionDivider
+              label={str("placement.section.house", culture, { ordinal: fmt("ordinal.wordUpper", house) })}
+            />
+            <div className="text-center font-display text-display-xs leading-display text-bone">{houseMeaning.title}</div>
             <p className="text-pretty font-body text-prose-m leading-prose text-prose">
               {buildHowItShows(culture, body, house)}
             </p>
           </section>
           <section className="flex flex-col gap-[var(--space-2)]">
-            <SectionDivider label="WHAT TO KEEP IN VIEW" />
+            <SectionDivider label={str("placement.section.keep", culture)} />
             <p className="text-pretty font-body text-prose-m leading-prose text-prose">
               {buildKeepInView(body, sign)}
             </p>
@@ -175,7 +186,7 @@ function PlacementReadingInner({ chartId, body }: PlacementReadingProps) {
         ) : null}
 
         <div className="mt-4">
-          <FeedbackRow readingId={`placement-${chartId}-${body}`} noun="PLACEMENT" />
+          <FeedbackRow readingId={`placement-${chartId}-${body}`} noun={str("placement.feedback.noun", culture)} />
         </div>
 
         <div className="mt-7 flex flex-wrap justify-center gap-x-[var(--space-4)] gap-y-[var(--space-2)] font-mono text-data-xs tracking-microcopy [&>a]:whitespace-nowrap">

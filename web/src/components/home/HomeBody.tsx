@@ -63,8 +63,7 @@ export function HomeBody() {
 
         <CenterDecree
           culture={bundle.culture}
-          weekday={bundle.weekday}
-          dateLong={bundle.dateLong}
+          dateLabel={bundle.dateLabel}
           reading={bundle.reading}
           votive={bundle.votive}
           dated={dated !== null}
@@ -76,6 +75,8 @@ export function HomeBody() {
           className="px-6 pb-8 min-[1100px]:hidden md:px-14"
           culture={bundle.culture}
           rows={bundle.compactSkyRows}
+          moon={bundle.moon}
+          season={bundle.season}
         />
 
         <AspectsRail

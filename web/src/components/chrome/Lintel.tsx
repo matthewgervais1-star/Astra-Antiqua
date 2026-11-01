@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LintelIndexMenu } from "@/components/chrome/LintelIndexMenu";
 import { Wordmark } from "@/components/chrome/Wordmark";
+import { text } from "@/strings";
 
 export type LintelSection = "today" | "voices" | "learn" | "charts" | "account";
 
@@ -14,15 +15,16 @@ interface NavItem {
   href: string;
 }
 
+/** One name per destination (rules N1 to N5); the bar itself stays layout. */
 const LEFT_NAV: readonly NavItem[] = [
-  { key: "today", label: "TODAY", href: "/" },
-  { key: "voices", label: "VOICES", href: "/voices" },
-  { key: "learn", label: "LEARN", href: "/learn" },
+  { key: "today", label: text("nav.sky"), href: "/" },
+  { key: "voices", label: text("nav.voices"), href: "/voices" },
+  { key: "learn", label: text("nav.learn"), href: "/learn" },
 ];
 
 const RIGHT_NAV: readonly NavItem[] = [
-  { key: "charts", label: "CHARTS", href: "/charts" },
-  { key: "account", label: "ACCOUNT", href: "/account" },
+  { key: "charts", label: text("nav.chart"), href: "/charts" },
+  { key: "account", label: text("nav.account"), href: "/account" },
 ];
 
 function navLink(item: NavItem, active: LintelSection | undefined) {

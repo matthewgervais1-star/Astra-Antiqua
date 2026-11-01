@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/classNames";
 import type { LintelSection } from "@/components/chrome/Lintel";
+import { text } from "@/strings";
 
 interface IndexItem {
   key: LintelSection;
@@ -13,11 +14,11 @@ interface IndexItem {
 }
 
 const INDEX_ITEMS: readonly IndexItem[] = [
-  { key: "today", label: "TODAY", href: "/" },
-  { key: "voices", label: "VOICES", href: "/voices" },
-  { key: "learn", label: "LEARN", href: "/learn" },
-  { key: "charts", label: "CHARTS", href: "/charts" },
-  { key: "account", label: "ACCOUNT", href: "/account" },
+  { key: "today", label: text("nav.sky"), href: "/" },
+  { key: "voices", label: text("nav.voices"), href: "/voices" },
+  { key: "learn", label: text("nav.learn"), href: "/learn" },
+  { key: "charts", label: text("nav.chart"), href: "/charts" },
+  { key: "account", label: text("nav.account"), href: "/account" },
 ];
 
 /**

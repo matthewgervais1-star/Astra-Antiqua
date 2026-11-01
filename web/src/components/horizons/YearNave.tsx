@@ -22,9 +22,10 @@ import { buildAnnualReport, type AnnualReport } from "@/lib/annualReport";
 import { computeTransitSpans, type TransitSpan } from "@/lib/transitSpans";
 import { CULTURE_VOICES } from "@/data/cultureVoice";
 import { formatMonthYear, toRoman } from "@/components/horizons/format";
+import { fmt, str } from "@/strings";
 import {
   SKY_ONLY_OPENING,
-  YEAR_VOTIVE,
+  yearVotive,
   buildSkyOnlyTimeline,
   buildYearSegments,
   spanHeadline,
@@ -130,11 +131,25 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
   const segments = report ? buildYearSegments(culture, report.quarters, now) : [];
   const isFestivals = voice.yearStructure === "festivals";
   const votiveTone = report ? yearVotiveTone(report.yearTheme.dominantTransit?.aspectKind) : null;
+  const timeline = skyOnly ? buildSkyOnlyTimeline(culture, skyOnly.stations, skyOnly.ingresses) : null;
 
   return (
     <div className="mx-auto max-w-[640px]">
-      <NaveHead culture={culture} kicker={`${voice.institution} · THE YEAR`}>
-        {roman} · {voice.yearTitle}
+      <NaveHead
+        culture={culture}
+        kicker={str("year.kicker", culture, {
+          date: fmt("date.dayMonthYear", now, "local"),
+          institution: str("common.institution", culture),
+        })}
+        sub={
+          timeline ? (
+            <div className="font-mono text-data-xs tracking-label text-dim">
+              {str("year.countLine", culture, { n: timeline.length })}
+            </div>
+          ) : undefined
+        }
+      >
+        {str("year.title", culture, { roman })}
       </NaveHead>
 
       <p className="mx-auto max-w-[560px] text-left font-body text-prose-m leading-prose text-prose">
@@ -157,7 +172,7 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
           {spans.length > 0 ? (
             <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-[var(--space-4)] py-[var(--space-3)] text-left">
               <div className="mb-3 font-mono text-data-xs tracking-label text-accent">
-                THE YEAR&apos;S LONG TRANSITS · ITS SPINE
+                {str("year.spine.label", culture)}
               </div>
               <div className="flex flex-col gap-2.5">
                 {spans.slice(0, 6).map((span) => (
@@ -180,51 +195,53 @@ function YearContent({ now, natal }: { now: Date | null; natal: SavedNatal | nul
 
           {votiveTone ? (
             <div className="mt-8">
-              <Votive>{YEAR_VOTIVE[culture][votiveTone]}</Votive>
+              <Votive>{yearVotive(culture, votiveTone)}</Votive>
             </div>
           ) : null}
         </>
       ) : skyOnly ? (
         <>
           <div className="mx-auto mt-8 max-w-[560px] border border-rule px-[var(--space-4)] py-[var(--space-3)] text-left">
-            <div className="mb-3 font-mono text-data-xs tracking-label text-dim">
-              STATIONS AND INGRESSES · THE YEAR AHEAD
-            </div>
             <div className="flex max-h-[420px] flex-col gap-2 overflow-y-auto font-mono text-data-xs leading-data text-prose">
-              {buildSkyOnlyTimeline(culture, skyOnly.stations, skyOnly.ingresses).map((row) => (
-                <div key={row.key}>
-                  <span className={row.tone === "conflict" ? "text-conflict" : "text-dim"}>
-                    {formatMonthYear(row.date)}
-                  </span>{" "}
-                  {row.label}
-                </div>
-              ))}
+              {(timeline ?? []).map((row, i, all) => {
+                const month = formatMonthYear(row.date);
+                const prev = i > 0 ? all[i - 1] : undefined;
+                const opensMonth = !prev || formatMonthYear(prev.date) !== month;
+                return (
+                  <div key={row.key}>
+                    {opensMonth ? (
+                      <div className="mt-2 text-dim">{str("year.monthLabel", culture, { date: month })}</div>
+                    ) : null}
+                    <span className={row.tone === "conflict" ? "text-conflict" : undefined}>{row.label}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="mx-auto mt-8 max-w-[560px] border border-[var(--accent-strong-border)] px-[var(--space-4)] py-[var(--space-3)] text-center">
             <div className="font-display text-display-xs tracking-[0.1em] text-bone">
-              CAST A CHART TO READ THE YEAR AGAINST YOUR OWN SKY
+              {str("year.noChart.title", culture)}
             </div>
             <Link
               href="/reading"
               className="mt-4 inline-block border border-[var(--accent-strong-border)] px-5 py-2.5 font-mono text-data-xs tracking-label text-accent"
             >
-              CAST A CHART →
+              {str("year.noChart.link", culture)}
             </Link>
           </div>
         </>
       ) : null}
 
       <div className="mt-6 flex justify-center">
-        <FeedbackRow readingId={yearReadingId(now)} noun="YEAR" />
+        <FeedbackRow readingId={yearReadingId(now)} noun={str("year.feedback.noun", culture)} />
       </div>
 
       <div className="mt-9 flex flex-wrap items-center justify-center gap-8 font-mono text-data-xs tracking-microcopy">
         <Link href="/season" className="text-bone/65 hover:text-bone">
-          ← THE SEASON
+          {str("chrome.footer.backSeason", culture)}
         </Link>
         <Link href="/forecast" className="text-bone/65 hover:text-bone">
-          THE FORECAST →
+          {str("chrome.footer.toForecast", culture)}
         </Link>
       </div>
     </div>

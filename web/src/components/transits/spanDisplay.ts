@@ -2,6 +2,8 @@ import type { Culture, Planet } from "@/data/cultures";
 import { DEITY_MATRIX } from "@/data/deities";
 import type { AspectKind, ZodiacSign } from "@/data/sampleChart";
 import type { TransitSpan } from "@/lib/transitSpans";
+import { MONTH_FULL, SIGN_PHRASES, fmt } from "@/strings/formats";
+import { text } from "@/strings";
 
 /**
  * Display helpers shared by the /transits index and /transits/[id] reading:
@@ -45,61 +47,19 @@ export function spanTone(span: Pick<TransitSpan, "aspectKind" | "transitPlanet">
   return span.transitPlanet === "jupiter" ? "ease" : "tension";
 }
 
-export const SIGN_PHRASES: Readonly<Record<ZodiacSign, string>> = {
-  Aries: "RAM",
-  Taurus: "BULL",
-  Gemini: "TWINS",
-  Cancer: "CRAB",
-  Leo: "LION",
-  Virgo: "MAIDEN",
-  Libra: "SCALES",
-  Scorpio: "SCORPION",
-  Sagittarius: "ARCHER",
-  Capricorn: "GOAT",
-  Aquarius: "WATER-BEARER",
-  Pisces: "FISHES",
-};
+export { SIGN_PHRASES };
 
-const MONTHS_SHORT = [
-  "JAN",
-  "FEB",
-  "MAR",
-  "APR",
-  "MAY",
-  "JUN",
-  "JUL",
-  "AUG",
-  "SEP",
-  "OCT",
-  "NOV",
-  "DEC",
-] as const;
-
+/** "OCT 2026" (F3), read in the runtime's zone as the span pages are. */
 export function monthYear(d: Date): string {
-  return `${MONTHS_SHORT[d.getMonth()] ?? "JAN"} ${d.getFullYear()}`;
+  return fmt("date.monthYear", d, "local");
 }
-
-const MONTHS_FULL = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-] as const;
 
 /**
  * Prose forms. The uppercase labels above are for mono chrome; inside a
  * Spectral sentence they read as shouting, so composed paragraphs use these.
  */
 export function monthYearProse(d: Date): string {
-  return `${MONTHS_FULL[d.getMonth()] ?? "January"} ${d.getFullYear()}`;
+  return `${MONTH_FULL[d.getMonth()] ?? "January"} ${d.getFullYear()}`;
 }
 
 export function signPhraseProse(sign: ZodiacSign): string {
@@ -111,8 +71,9 @@ export function signPhraseProse(sign: ZodiacSign): string {
     .join("-");
 }
 
+/** "21 OCT" (F3), local. */
 export function monthDay(d: Date): string {
-  return `${MONTHS_SHORT[d.getMonth()] ?? "JAN"} ${d.getDate()}`;
+  return fmt("date.dayMonth", d, "local");
 }
 
 /** DEC-FEB winter, MAR-MAY spring, JUN-AUG summer, SEP-NOV autumn. */
@@ -124,17 +85,9 @@ export function seasonWord(d: Date): string {
   return "AUTUMN";
 }
 
-/** "03°44′" from a fractional degree-within-sign. */
+/** "3°44′" from a fractional degree-within-sign (F5). */
 export function formatDegMin(degree: number): string {
-  let wholeDeg = Math.max(0, Math.floor(degree));
-  let minutes = Math.round((degree - Math.floor(degree)) * 60);
-  if (minutes >= 60) {
-    minutes = 0;
-    wholeDeg += 1;
-  }
-  const dd = String(wholeDeg).padStart(2, "0");
-  const mm = String(minutes).padStart(2, "0");
-  return `${dd}°${mm}′`;
+  return fmt("angle.degMin", degree);
 }
 
 const ORDINAL_WORDS = [
@@ -216,14 +169,19 @@ export function elapsedFraction(span: TransitSpan, now: Date): number {
   return Math.min(1, Math.max(0, elapsed / total));
 }
 
-/** "FIRST EXACT PASS DONE · TWO RETURNS REMAIN · RELEASES APR 2028" */
+/** "FIRST EXACT PASS DONE · 2 RETURNS REMAIN · RELEASES APR 2028" (transit.statusLine.*, P118). */
 export function passStatusLine(span: TransitSpan, now: Date): string {
   const first = span.passes[0] ?? span.start;
   const firstDone = first.getTime() <= now.getTime();
-  const left = firstDone ? "FIRST EXACT PASS DONE" : `FIRST PASS ${monthDay(first)}`;
   const remaining = span.passes.slice(1).filter((p) => p.getTime() > now.getTime()).length;
-  const returnWord = remaining === 1 ? "RETURN" : "RETURNS";
-  return `${left} · ${remaining} ${returnWord} REMAIN · RELEASES ${monthYear(span.end)}`;
+  const key = firstDone
+    ? remaining === 1
+      ? "transit.statusLine.doneOne"
+      : "transit.statusLine.done"
+    : remaining === 1
+      ? "transit.statusLine.aheadOne"
+      : "transit.statusLine.ahead";
+  return text(key, { remaining, from: monthDay(first), date: monthYear(span.end) });
 }
 
 /** The "first exact meeting has passed, two more come with the
@@ -252,7 +210,7 @@ export function passNarrative(span: TransitSpan, now: Date): string {
 export function natalDegreeSide(culture: Culture, span: Pick<TransitSpan, "natalKey">, sign: ZodiacSign, degree: number): string {
   if (isPointPlanetKey(span.natalKey)) {
     const planet: Planet = span.natalKey;
-    return `YOUR NATAL ${DEITY_MATRIX[culture][planet].name.toUpperCase()} ${formatDegMin(degree)} ${sign.toUpperCase()}`;
+    return `YOUR NATAL ${DEITY_MATRIX[culture][planet].name.toUpperCase()} ${formatDegMin(degree)} ${fmt("sign.full", sign)}`;
   }
-  return `${natalPointLabel(culture, span.natalKey)} ${formatDegMin(degree)} ${sign.toUpperCase()}`;
+  return `${natalPointLabel(culture, span.natalKey)} ${formatDegMin(degree)} ${fmt("sign.full", sign)}`;
 }
