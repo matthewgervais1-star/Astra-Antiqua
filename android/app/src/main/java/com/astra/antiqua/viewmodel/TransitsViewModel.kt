@@ -5,16 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.astra.antiqua.data.AstronomyEngine
 import com.astra.antiqua.data.ProfileRepository
+import com.astra.antiqua.data.local.room.UserProfile
 import com.astra.antiqua.domain.CalculateNatalChartUseCase
 import com.astra.antiqua.domain.DayDecreeComposer
-import com.astra.antiqua.domain.natalPointsOf
+import com.astra.antiqua.domain.LongTransitsComposer
 import com.astra.antiqua.domain.NatalPoints
-import com.astra.antiqua.domain.SLOW_BODIES
+import com.astra.antiqua.domain.SkySeasonComposer
 import com.astra.antiqua.domain.TransitSpan
-import com.astra.antiqua.domain.TransitSpans
 import com.astra.antiqua.model.Planet
 import java.util.Date
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,8 +44,9 @@ sealed class SpansState {
 }
 
 /**
- * Every long-transit span: the five slow bodies against the Sun, the Moon
- * and the ascendant, computed once and held.
+ * Every long-transit span: the five slow bodies against the Sun, the Moon,
+ * the Ascendant and the Midheaven (web's readerSpans), walked once per birth
+ * record and held until the record changes.
  *
  * The walk is expensive, so it runs on the default dispatcher and the screen
  * waits behind a loading state rather than recomputing per frame. The window
@@ -58,37 +61,59 @@ class TransitsViewModel(
     private val _state = MutableStateFlow<SpansState>(SpansState.Loading)
     val state: StateFlow<SpansState> = _state.asStateFlow()
 
-    private var computed = false
+    private var job: Job? = null
 
-    fun load() {
-        if (computed) return
-        computed = true
-        viewModelScope.launch {
+    /** The birth record the spans on show were walked against; null when none are on show. */
+    private var walked: UserProfile? = null
+
+    /**
+     * Reads the profile and walks the spans when they are not already on show
+     * for it. Each call reads the profile again: with no birth record the page
+     * shows NoChart and the next call looks again (a chart cast from the empty
+     * state); a profile that differs from the one walked (a recast chart)
+     * walks again; an error is retried on the next call. Once the spans are
+     * walked for a profile, a later [now] is ignored: the instant stays the
+     * one of the first walk until the profile changes or the ViewModel goes.
+     * A call while a walk runs does nothing; the walk reads the profile again
+     * when it ends and walks again if the record changed meanwhile, so it
+     * never publishes an older chart's spans.
+     */
+    fun load(now: Date = Date()) {
+        if (job?.isActive == true) return
+        job = viewModelScope.launch {
             try {
-                val profile = profiles.profile.first()
-                if (profile == null) {
-                    _state.value = SpansState.NoChart
+                var profile = profiles.profile.first()
+                if (profile == walked && _state.value is SpansState.Ready) return@launch
+                while (true) {
+                    val current = profile
+                    if (current == null) {
+                        walked = null
+                        _state.value = SpansState.NoChart
+                        return@launch
+                    }
+                    _state.value = SpansState.Loading
+                    var natal: NatalPoints? = null
+                    var skyNow: Map<Planet, Double> = emptyMap()
+                    val spans = withContext(Dispatchers.Default) {
+                        val chart = CalculateNatalChartUseCase(astronomy).execute(current)
+                        natal = NatalPoints.of(chart)
+                        skyNow = DayDecreeComposer.chartAt(astronomy, now)
+                        val points = SkySeasonComposer.natal(astronomy, chart, current.latitude, current.longitude)
+                        LongTransitsComposer.readerSpans(astronomy, points, now)
+                    }
+                    // A record saved while the walk ran (a recast) is walked instead of publishing these spans.
+                    profile = profiles.profile.first()
+                    if (profile != current) continue
+                    walked = current
+                    _state.value = SpansState.Ready(spans, now, natal, skyNow)
                     return@launch
                 }
-                val now = Date()
-                var natal: NatalPoints? = null
-                var skyNow: Map<Planet, Double> = emptyMap()
-                val spans = withContext(Dispatchers.Default) {
-                    val chart = CalculateNatalChartUseCase(astronomy).execute(profile)
-                    natal = NatalPoints.of(chart)
-                    skyNow = DayDecreeComposer.chartAt(astronomy, now)
-                    val points = natalPointsOf(chart)
-                    TransitSpans.compute(
-                        engine = astronomy,
-                        natalPoints = points,
-                        transitPlanets = SLOW_BODIES,
-                        start = Date(now.time - LOOKBACK_DAYS * DAY_MS),
-                        days = WINDOW_DAYS,
-                    )
-                }
-                _state.value = SpansState.Ready(spans, now, natal, skyNow)
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Log.e(TAG, "Could not compute the long transits", e)
+                // Nothing walked: the next load tries again.
+                walked = null
                 _state.value = SpansState.Error(
                     "The long transits could not be computed: ${e.localizedMessage ?: "unknown error"}"
                 )
@@ -98,8 +123,5 @@ class TransitsViewModel(
 
     private companion object {
         const val TAG = "TransitsViewModel"
-        const val DAY_MS = 86_400_000L
-        const val LOOKBACK_DAYS = 420L
-        const val WINDOW_DAYS = 1200
     }
 }

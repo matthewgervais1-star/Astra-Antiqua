@@ -58,7 +58,7 @@ import com.astra.antiqua.ui.screens.SkySeasonScreen
 import com.astra.antiqua.ui.screens.SkyYearScreen
 import com.astra.antiqua.ui.screens.FigureScreen
 import com.astra.antiqua.ui.screens.TransitDetailScreen
-import com.astra.antiqua.ui.screens.TransitsScreen
+import com.astra.antiqua.ui.screens.LongTransitsScreen
 import com.astra.antiqua.ui.screens.VoiceScreen
 import com.astra.antiqua.ui.screens.VoicesScreen
 import com.astra.antiqua.ui.screens.SkyWeekScreen
@@ -199,12 +199,10 @@ fun AstraNavHost(
                 )
             }
         }
-        flat(Route.TRANSITS) {
-            TransitsScreen(
-                culture = culture,
-                onNavigate = go,
-                onOpenSpan = { open(Route.transitDetail(it)) },
-            )
+        // TRANSITS on the glass chrome (step 6); the flat TransitsScreen leaves the graph.
+        // A row opens the flat transit detail on top until step 9 builds the glass one.
+        composable(Route.TRANSITS) {
+            LongTransitsScreen(culture = culture, onNavigate = go, onOpen = open)
         }
         flat(Route.TRANSIT_DETAIL) { entry ->
             TransitDetailScreen(

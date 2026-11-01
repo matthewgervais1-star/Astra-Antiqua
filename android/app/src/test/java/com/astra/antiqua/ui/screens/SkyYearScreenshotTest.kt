@@ -323,14 +323,14 @@ class SkyYearScreenshotTest {
         compose.onNode(hasContentDescription("The season") and hasClickAction())
             .performTouchInput { click(Offset(centerX, -10.dp.toPx())) }
         assertTrue("$opened $routes", opened == listOf(Route.FORECAST) && routes == listOf(Route.SEASON))
-        // web links each spine row to its transit. Jupiter trine the Ascendant opens its detail on
-        // top; Saturn opposite the Midheaven stays a D-pad stop, as Android's transit detail walks
-        // the Sun, Moon and Ascendant only.
+        // web links each spine row to its transit. Jupiter trine the Ascendant and Saturn opposite the
+        // Midheaven each open their detail on top (the detail walks the Midheaven since step 6).
         opened.clear()
         compose.onNodeWithTag("spine-1").assert(hasClickAction())
-        compose.onNodeWithTag("spine-2").assert(androidx.compose.ui.test.hasNoClickAction())
+        compose.onNodeWithTag("spine-2").assert(hasClickAction())
         compose.onNodeWithTag("spine-1").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
-        assertTrue("$opened", opened == listOf(Route.transitDetail("jupiter-trine-asc")))
+        compose.onNodeWithTag("spine-2").performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
+        assertTrue("$opened", opened == listOf(Route.transitDetail("jupiter-trine-asc"), Route.transitDetail("saturn-opposition-mc")))
         compose.onNode(hasContentDescription("The year's long transits, its spine")).assertExists()
         compose.onNode(hasContentDescription("akhet, the flood, 21 oct to 20 jan, day 1 of 92.", substring = true)).assertExists()
     }

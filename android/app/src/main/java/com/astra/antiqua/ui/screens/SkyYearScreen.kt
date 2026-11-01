@@ -508,31 +508,22 @@ private fun SegmentRow(seg: YearSegment, last: Boolean, id: String) {
 
 /**
  * One row of web's spine: spanHeadline in the display face at .08em, the end
- * month in mono, dim. web links each row to /transits/{id}. Android's
- * transit detail finds a span among TransitsViewModel's spans, walked against
- * the Sun, Moon and Ascendant (natalPointsOf), so a Midheaven span would open
- * on nothing: those rows stay D-pad stops; the rest open the detail on top.
+ * month in mono, dim. web links each row to /transits/{id}; each opens the
+ * transit detail on top, Midheaven spans included (TransitsViewModel walks
+ * the Midheaven as web's readerSpans does, step 6).
  */
 @Composable
 private fun SpineRow(row: YearSpineRow, display: androidx.compose.ui.text.font.FontFamily, id: String, onOpen: (String) -> Unit) {
     val spoken = "${row.headline.lowercase()}, until ${row.end.removePrefix("→ ").lowercase()}"
-    val opens = !row.id.endsWith("-mc")
     val source = remember { MutableInteractionSource() }
     Row(
         Modifier
             .fillMaxWidth()
             .testTag(id)
-            .then(
-                if (opens) {
-                    Modifier
-                        .glassClearFocus()
-                        .focusOutline(source)
-                        .clickable(source, indication = null, role = Role.Button, onClickLabel = "Open") { onOpen(Route.transitDetail(row.id)) }
-                        .clearAndSetSemantics { contentDescription = spoken }
-                } else {
-                    Modifier.dpadStop().clearAndSetSemantics { contentDescription = spoken }
-                },
-            ),
+            .glassClearFocus()
+            .focusOutline(source)
+            .clickable(source, indication = null, role = Role.Button, onClickLabel = "Open") { onOpen(Route.transitDetail(row.id)) }
+            .clearAndSetSemantics { contentDescription = spoken },
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text(

@@ -5,6 +5,7 @@ import com.astra.antiqua.model.AncientCulture
 import com.astra.antiqua.model.DeityRegistry
 import com.astra.antiqua.model.Planet
 import java.time.ZoneId
+import java.util.Date
 
 /**
  * One screen's printed text by slot key (`<screen>.<slot>`, as in
@@ -295,5 +296,50 @@ object SkyYearSlots {
             SkyEventKind.DIRECT -> fill(SharedStrings.YEAR_ROW_DIRECT, "date" to date, "planet" to planet)
             else -> fill(SharedStrings.YEAR_ROW_INGRESS, "date" to date, "planet" to planet, "sign" to SharedFormat.signFull(row.sign))
         }
+    }
+}
+
+/** The long transits index's slots (board Glass-Transits; table section "Transits"): web's transitsModelFromSpans. */
+object TransitsSlots {
+    val NOT_BUILT = emptySet<String>()
+
+    /**
+     * Without a birth record ([transits] null) only the loading line, as web's
+     * model (web prints its hard-coded cast prompt, which has no slot). Each
+     * group's rows sit in their own lists; the months read in [zone].
+     */
+    fun build(transits: LongTransits?, culture: AncientCulture, zone: ZoneId = ZoneId.systemDefault()): SlotMap {
+        val m = linkedMapOf<String, Any>()
+        if (transits != null) {
+            val now = transits.now
+            val open = transits.open
+            val ahead = transits.ahead
+            val listed = open + ahead
+            m["transits.kicker"] = SharedStrings.TRANSITS_KICKER
+            m["transits.title"] = SharedStrings.TRANSITS_TITLE
+            if (listed.isNotEmpty()) {
+                val first = listed.minOf { it.start.time }.let(::Date)
+                val last = listed.maxOf { it.end.time }.let(::Date)
+                m["transits.countLine"] = fill(
+                    SharedStrings.TRANSITS_COUNT_LINE,
+                    "count" to SharedFormat.countWord(listed.size),
+                    "range" to SharedFormat.rangeMonths(first, last, zone),
+                )
+                m["transits.axis"] = (SharedFormat.year(first, zone).toInt()..SharedFormat.year(last, zone).toInt())
+                    .map { fill(SharedStrings.TRANSITS_AXIS, "yyyy" to it) }
+            }
+            m["transits.group.open"] = SharedStrings.TRANSITS_GROUP_OPEN
+            m["transits.group.ahead"] = SharedStrings.TRANSITS_GROUP_AHEAD
+            for ((group, spans) in listOf("open" to open, "ahead" to ahead)) {
+                if (spans.isEmpty()) continue
+                m["transits.row.title.$group"] = spans.map { LongTransitsComposer.rowTitle(culture, it) }
+                m["transits.row.data.$group"] = spans.map { LongTransitsComposer.rowData(it, now, zone) }
+            }
+            if (listed.isNotEmpty()) m["transits.row.link"] = SharedStrings.TRANSITS_ROW_LINK
+            if (open.isEmpty()) m["transits.empty.open"] = SharedStrings.TRANSITS_EMPTY_OPEN
+            if (ahead.isEmpty()) m["transits.empty.ahead"] = SharedStrings.TRANSITS_EMPTY_AHEAD
+        }
+        m["transits.loading"] = SharedStrings.TRANSITS_LOADING
+        return SlotMap(m)
     }
 }

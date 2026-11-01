@@ -592,3 +592,59 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
   from web's .14em by .01 (floor .04em) until each of the catalog's lines fits; at 342 Egypt's votive takes two
   lines, 92.0 tall against 121.0 before. Local: 299 tests, 0 failures.
 - Next: step 6, Transits, in a fresh session; push and PR on Matthew's word.
+
+## Step 6, Transits (2026-11-01)
+
+- FACT (task from the session running the port, 2026-11-01): branch `claude/android-glass-step6-transits-30fec3`, cut
+  from step 5's. Board Glass-Transits (canvas version 1793493664-ced5, file `project/Glass-Transits.dc.html`); table
+  `report-r4.md` (chrome lines 7 to 17, content P57 to P68, page 979.6, scrolls to 134) and `report-r7.md` (Section
+  divider P62, P64; Span timeline P60, P61, P63; List row P170).
+- FACT (`domain/LongTransits.kt`, `domain/ScreenSlots.kt` `TransitsSlots`): web's `readerSpans` (Sun, Moon, Ascendant
+  and Midheaven), `groupSpans`, `spanRowText` (tone by `spanTone`, so a conjunction is ease only for Jupiter) and
+  `transitsModelFromSpans`. The board's bar geometry: months from the first listed span's start month to the last's
+  end month inclusive; a bar at its start month's index over the months, as wide as the months it covers; a year at
+  its January (the first at 0); NOW at (month index + day / days in month) over the months, drawn only inside 0..1.
+- FACT (`viewmodel/TransitsViewModel.kt`): the detail's spans now walk the Midheaven too, and a load after the empty
+  state reads the profile again. The flat `TransitDetailScreen` opens a Midheaven span ("Amun joins the barque of
+  your midheaven", render `step6/transit-detail-mc.png`); Sky Year's Midheaven spine rows now link as web's do.
+- FACT (`ScreenGoldenTest`): the ten cases of `shared/goldens/screens/transits.json` equal web's on every slot.
+- FACT (node run of `web/src`, `process.env.TZ = "Europe/Rome"` inside the script, 2026-11-01; scripts in that
+  session's scratchpad, not kept): group, id, title, data line, start, end and pass count equal Android's for Egypt
+  and Rome at the sample and Egypt at 2025-03-01 (`LongTransitsTest` literals). Smoke angles: Ascendant 262.398,
+  Midheaven 195.599.
+- FACT (`ui/screens/LongTransitsScreen.kt`, `MainActivity.kt`): Route.TRANSITS opens `LongTransitsScreen`; the flat
+  `TransitsScreen` stays on disk, out of the graph. The board's form: no READ → (web's `transits.row.link`), the
+  whole row opens the flat detail on top with P170 under the finger. Without a birth record web's TransitEmptyState
+  words (hard-coded in web), CAST THE FIRST CHART opening the cast screen on top. 2029's axis label sits left of
+  its rule (at 96.4% it would leave the page).
+- FACT (`LongTransitsScreenshotTest`, `docs/design/android-glass/step6/placement.txt`): chrome P1 off 0.9, P3, P17,
+  P20 0.0 in every frame; every gap equals the board's (16, 10, 30, 18, 0, 22, rows 12 or 16 / 12 / 10 / 18 + rule)
+  at rest, scrolled 134, Rome, 1.3 and 360 (all eleven block gaps and the inner gaps of P63, P65 and P66 in each).
+  Web's title takes two lines (P58 75.3 against 35.1). Rows: P63 and P65 131.3 (board 107.8, 92.4), P66 to P68 114.3
+  (board 96.4, 96.4, 117.4), row-6, row-8 and row-9 135.3, row-7 114.3; capitals wrap, and web's data line carries
+  the AHEAD count. The page scrolls to 791.7.
+- FACT (review, one Opus reviewer, 2026-11-01, fix round 1): Important, fixed: a year label could overlap the one
+  before it when the first listed month is NOV or DEC (or OCT at 1.3); `axisMarks` now drops the earlier year (label
+  and rule) when the later label would start within it plus 8, so the later January wins (tests: DEC at 390, NOV at
+  360, the sample at 1.3, where 2026 gives way). Minors fixed: `TransitsViewModel` walks again when the profile
+  differs from the one walked (a recast chart) and after an error; a later `now` is ignored once walked for the same
+  profile (KDoc); `LongTransits` groups once; the axis labels' widths are remembered; CAST THE FIRST CHART is at
+  least 48 tall with its words centred. Local: 328 tests, 0 failures (299 before step 6).
+- Deferred to step 9: the flat detail builds its own `TransitsViewModel`, so each row tap walks the spans again.
+- FACT (scoped re-review, same reviewer, 2026-11-01, fix round 2): a recast saved while a walk ran could publish the
+  old chart's spans; `TransitsViewModel` now reads the profile again when a walk ends and walks again if it changed
+  (test `a recast while the walk runs publishes the new chart's spans`); KDoc says spans are held per birth record.
+  Second and last round.
+- FACT (local, 2026-11-01): `./gradlew compileDebugSources testDebugUnitTest` 329 tests, 0 failures (299 before step 6).
+- CANNOT CONFIRM: how the frames look on a phone; Robolectric drew them.
+- Deferred (Minors): Day's long-transit card and the forecast still walk Sun, Moon and Ascendant through
+  `natalPointsOf` (the Day golden passes); Day's footer tone uses `SharedFormat.spanToneWord`, which reads every
+  conjunction as ease where web's `spanTone` reads ease only for Jupiter (not checked against web's Day); a row
+  focused at the foot sits flush at 748, so its 2 px outline meets the tab bar (as steps 4 and 5).
+
+## Open for Matthew (asked in one popup, 2026-11-01)
+
+1. READ → (web's `transits.row.link`) at each row's right, or the board's form without it (built).
+2. Row titles and the headline in the catalog's capitals (built, as steps 4 and 5), or small caps from lower case as
+   the board and web's CSS draw them; capitals take more lines.
+3. Sky Transits approved, go to step 7 (Chart)?

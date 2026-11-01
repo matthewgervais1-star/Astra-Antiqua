@@ -1,0 +1,181 @@
+transits-end P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+transits-end P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+transits-end P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+transits-end P20 want 0.0, 0.0 · 390.0x122.0 got 0.0, 0.0 · 390.0x122.0 off 0.0
+transits-end scrolled to 791.7; row-9 bottom 724.0 (page end 120 below: 120.0)
+transits-axis-dec axis 2027 at 48.0 to 78.3, 2028 at 253.3 to 283.7
+transits-axis-nov-360 axis 2027 at 62.3 to 92.7, 2028 at 249.3 to 279.7
+transits-scrolled P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+transits-scrolled P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+transits-scrolled P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+transits-scrolled P20 want 0.0, 0.0 · 390.0x122.0 got 0.0, 0.0 · 390.0x122.0 off 0.0
+transits-scrolled scrolled to 134.0
+transits-scrolled gap P57 to P58 want 16.0 got 16.0
+transits-scrolled gap P58 to P59 want 10.0 got 10.0
+transits-scrolled gap P59 to P60 want 30.0 got 30.0
+transits-scrolled gap P60 to P62 want 18.0 got 18.0
+transits-scrolled gap P62 to P63 want 0.0 got 0.0
+transits-scrolled gap P63 to P64 want 22.0 got 22.0
+transits-scrolled gap P64 to P65 want 0.0 got 0.0
+transits-scrolled gap P65 to P66 want 0.0 got 0.0
+transits-scrolled gap P66 to P67 want 0.0 got 0.0
+transits-scrolled gap P67 to P68 want 0.0 got 0.0
+transits-scrolled gap P68 to row-6 want 0.0 got 0.0
+transits-scrolled gap P63 top to P63-title want 12.0 got 12.0
+transits-scrolled gap P63-title to P63-bar want 12.0 got 12.0
+transits-scrolled gap P63-bar to P63-data want 10.0 got 10.0
+transits-scrolled gap P63-data to P63 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-scrolled gap P65 top to P65-title want 12.0 got 12.0
+transits-scrolled gap P65-title to P65-bar want 12.0 got 12.0
+transits-scrolled gap P65-bar to P65-data want 10.0 got 10.0
+transits-scrolled gap P65-data to P65 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-scrolled gap P66 top to P66-title want 16.0 got 16.0
+transits-scrolled gap P66-title to P66-bar want 12.0 got 12.0
+transits-scrolled gap P66-bar to P66-data want 10.0 got 10.0
+transits-scrolled gap P66-data to P66 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-360 gap P57 to P58 want 16.0 got 16.0
+transits-360 gap P58 to P59 want 10.0 got 10.0
+transits-360 gap P59 to P60 want 30.0 got 30.0
+transits-360 gap P60 to P62 want 18.0 got 18.0
+transits-360 gap P62 to P63 want 0.0 got 0.0
+transits-360 gap P63 to P64 want 22.0 got 22.0
+transits-360 gap P64 to P65 want 0.0 got 0.0
+transits-360 gap P65 to P66 want 0.0 got 0.0
+transits-360 gap P66 to P67 want 0.0 got 0.0
+transits-360 gap P67 to P68 want 0.0 got 0.0
+transits-360 gap P68 to row-6 want 0.0 got 0.0
+transits-360 gap P63 top to P63-title want 12.0 got 12.0
+transits-360 gap P63-title to P63-bar want 12.0 got 12.0
+transits-360 gap P63-bar to P63-data want 10.0 got 10.0
+transits-360 gap P63-data to P63 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-360 gap P65 top to P65-title want 12.0 got 12.0
+transits-360 gap P65-title to P65-bar want 12.0 got 12.0
+transits-360 gap P65-bar to P65-data want 10.0 got 10.0
+transits-360 gap P65-data to P65 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-360 gap P66 top to P66-title want 16.0 got 16.0
+transits-360 gap P66-title to P66-bar want 12.0 got 12.0
+transits-360 gap P66-bar to P66-data want 10.0 got 10.0
+transits-360 gap P66-data to P66 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-360 P60 got 24.0, 304.7 · 312.0x23.0
+transits-focus scrolled to 497.0, row-7 top 633.7 bottom 748.0
+transits-rome P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+transits-rome P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+transits-rome P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+transits-rome P20 want 0.0, 0.0 · 390.0x122.0 got 0.0, 0.0 · 390.0x122.0 off 0.0
+transits-rome gap P57 to P58 want 16.0 got 16.0
+transits-rome gap P58 to P59 want 10.0 got 10.0
+transits-rome gap P59 to P60 want 30.0 got 30.0
+transits-rome gap P60 to P62 want 18.0 got 18.0
+transits-rome gap P62 to P63 want 0.0 got 0.0
+transits-rome gap P63 to P64 want 22.0 got 22.0
+transits-rome gap P64 to P65 want 0.0 got 0.0
+transits-rome gap P65 to P66 want 0.0 got 0.0
+transits-rome gap P66 to P67 want 0.0 got 0.0
+transits-rome gap P67 to P68 want 0.0 got 0.0
+transits-rome gap P68 to row-6 want 0.0 got 0.0
+transits-rome gap P63 top to P63-title want 12.0 got 12.0
+transits-rome gap P63-title to P63-bar want 12.0 got 12.0
+transits-rome gap P63-bar to P63-data want 10.0 got 10.0
+transits-rome gap P63-data to P63 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-rome gap P65 top to P65-title want 12.0 got 12.0
+transits-rome gap P65-title to P65-bar want 12.0 got 12.0
+transits-rome gap P65-bar to P65-data want 10.0 got 10.0
+transits-rome gap P65-data to P65 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-rome gap P66 top to P66-title want 16.0 got 16.0
+transits-rome gap P66-title to P66-bar want 12.0 got 12.0
+transits-rome gap P66-bar to P66-data want 10.0 got 10.0
+transits-rome gap P66-data to P66 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-font-130 gap P57 to P58 want 16.0 got 16.0
+transits-font-130 gap P58 to P59 want 10.0 got 10.0
+transits-font-130 gap P59 to P60 want 30.0 got 30.0
+transits-font-130 gap P60 to P62 want 18.0 got 18.0
+transits-font-130 gap P62 to P63 want 0.0 got 0.0
+transits-font-130 gap P63 to P64 want 22.0 got 22.0
+transits-font-130 gap P64 to P65 want 0.0 got 0.0
+transits-font-130 gap P65 to P66 want 0.0 got 0.0
+transits-font-130 gap P66 to P67 want 0.0 got 0.0
+transits-font-130 gap P67 to P68 want 0.0 got 0.0
+transits-font-130 gap P68 to row-6 want 0.0 got 0.0
+transits-font-130 gap P63 top to P63-title want 12.0 got 12.0
+transits-font-130 gap P63-title to P63-bar want 12.0 got 12.0
+transits-font-130 gap P63-bar to P63-data want 10.0 got 10.0
+transits-font-130 gap P63-data to P63 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-font-130 gap P65 top to P65-title want 12.0 got 12.0
+transits-font-130 gap P65-title to P65-bar want 12.0 got 12.0
+transits-font-130 gap P65-bar to P65-data want 10.0 got 10.0
+transits-font-130 gap P65-data to P65 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-font-130 gap P66 top to P66-title want 16.0 got 16.0
+transits-font-130 gap P66-title to P66-bar want 12.0 got 12.0
+transits-font-130 gap P66-bar to P66-data want 10.0 got 10.0
+transits-font-130 gap P66-data to P66 end (18 and the 1 px rule) want 19.0 got 19.0
+transits-font-130 P58 79.3 tall, P59 23.0, P63 154.0, P65 154.0
+transits-no-chart P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+transits-no-chart P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+transits-no-chart P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+transits-no-chart P20 want 0.0, 0.0 · 390.0x122.0 got 0.0, 0.0 · 390.0x122.0 off 0.0
+transits-no-chart transits-cast (no board ID) got 24.0, 178.0 · 342.0x287.7
+transits-no-chart transits-cast-link (no board ID) got 75.0, 385.3 · 240.3x48.0
+transits-no-chart CAST THE FIRST CHART 48.0 tall
+transits P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+transits P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+transits P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+transits P20 want 0.0, 0.0 · 390.0x122.0 got 0.0, 0.0 · 390.0x122.0 off 0.0
+transits P57 want 24.0, 138.0 · 342.0x17.6 got 24.0, 138.0 · 342.0x17.7 off 0.1
+transits P58 want 24.0, 171.6 · 342.0x35.1 got 24.0, 171.7 · 342.0x75.3 off 40.2
+transits P59 want 24.0, 216.7 · 342.0x17.6 got 24.0, 257.0 · 342.0x17.7 off 40.3
+transits P60 want 24.0, 264.3 · 342.0x23.0 got 24.0, 304.7 · 342.0x23.0 off 40.4
+transits P61 want 33.9, 286.3 · 1.0x573.3 got 32.3, 326.7 · 1.0x1189.0 off 615.7
+transits P62 want 24.0, 305.3 · 342.0x11.0 got 24.0, 345.7 · 342.0x11.0 off 40.4
+transits P63 want 24.0, 316.3 · 342.0x107.8 got 24.0, 356.7 · 342.0x131.3 off 40.4
+transits P64 want 24.0, 446.1 · 342.0x11.0 got 24.0, 510.0 · 342.0x11.0 off 63.9
+transits P65 want 24.0, 457.1 · 342.0x92.4 got 24.0, 521.0 · 342.0x131.3 off 63.9
+transits P66 want 24.0, 549.5 · 342.0x96.4 got 24.0, 652.3 · 342.0x114.3 off 102.8
+transits P67 want 24.0, 645.8 · 342.0x96.4 got 24.0, 766.7 · 342.0x114.3 off 120.9
+transits P68 want 24.0, 742.2 · 342.0x117.4 got 24.0, 881.0 · 342.0x114.3 off 138.8
+transits P57 reason: web's kicker READ AGAINST YOUR OWN SKY, the board's words; no institution, so no script reveal on this page
+transits P58 reason: web's title "WHAT DOES NOT PASS IN A DAY" (catalog transits.title, Matthew's "Web headlines") in its own case on two lines, each 37.6 for Spectral SC's capitals; the board's "The long transits" takes one line of 35.1
+transits P59 reason: web's count "NINE SPANS · OCT 2026 → JAN 2029" (all nine spans, the Midheaven's two included) against the board's SIX SPANS · OCT 2026 → AUG 2028; sits lower by P58's second line
+transits P60 reason: web's axis 2026 to 2029 over 28 months (OCT 2026 to JAN 2029) against the board's 23; 2027 at 10.7%, 2028 at 53.6%, 2029 at 96.4% with its label set to the left of its rule so it stays on the page
+transits P61 reason: NOW at (21/31)/28 = 2.4% of 342 (x 32.3) against the board's 2.9% of 23 months (x 33.9); it runs to the end of nine rows, not five
+transits P62 reason: OPEN NOW, the board's label and words; lower by P58's second line
+transits P63 reason: web's AMUN ROWS IN TIME WITH YOUR RISING in capitals (web's case) takes two lines (RISING wraps), and its data line two (· EASE wraps at 328, as the board's own P63 data line wraps): 131.3 against 107.8
+transits P64 reason: AHEAD, the board's label
+transits P65 reason: web's first ahead span is GEB BARS THE DOOR AGAINST YOUR MIDHEAVEN (web walks the Midheaven; the board has no Midheaven row); title and data line each on two lines: 131.3 against 92.4
+transits P66 reason: web's GEB ROWS IN TIME WITH YOUR RISING (the board's P65) on one line; its data line "… · 3 EXACT · 3 AHEAD · EASE" (web's spanRowText counts passes ahead on ahead rows too, the board prints "3 EXACT · EASE") wraps to two: 114.3 against 96.4
+transits P67 reason: web's GEB TIPS THE SCALES AGAINST RA (the board's P66); the data line wraps for its AHEAD count: 114.3 against 96.4
+transits P68 reason: web's AMUN JOINS THE BARQUE OF KHONSU (the board's P67), title on one line, data on two: 114.3 against the board's P68 117.4; four more rows follow (row-6 to row-9), the board's P68 among them, then JUN 2028 NUT and OCT 2028 AMUN against YOUR MIDHEAVEN
+transits row-6 (no board ID) got 24.0, 995.3 · 342.0x135.3
+transits row-7 (no board ID) got 24.0, 1130.7 · 342.0x114.3
+transits row-8 (no board ID) got 24.0, 1245.0 · 342.0x135.3
+transits row-9 (no board ID) got 24.0, 1380.3 · 342.0x135.3
+transits page scrolls to 791.7 (board 134)
+transits gap P57 to P58 want 16.0 got 16.0
+transits gap P58 to P59 want 10.0 got 10.0
+transits gap P59 to P60 want 30.0 got 30.0
+transits gap P60 to P62 want 18.0 got 18.0
+transits gap P62 to P63 want 0.0 got 0.0
+transits gap P63 to P64 want 22.0 got 22.0
+transits gap P64 to P65 want 0.0 got 0.0
+transits gap P65 to P66 want 0.0 got 0.0
+transits gap P66 to P67 want 0.0 got 0.0
+transits gap P67 to P68 want 0.0 got 0.0
+transits gap P68 to row-6 want 0.0 got 0.0
+transits gap P63 top to P63-title want 12.0 got 12.0
+transits gap P63-title to P63-bar want 12.0 got 12.0
+transits gap P63-bar to P63-data want 10.0 got 10.0
+transits gap P63-data to P63 end (18 and the 1 px rule) want 19.0 got 19.0
+transits gap P65 top to P65-title want 12.0 got 12.0
+transits gap P65-title to P65-bar want 12.0 got 12.0
+transits gap P65-bar to P65-data want 10.0 got 10.0
+transits gap P65-data to P65 end (18 and the 1 px rule) want 19.0 got 19.0
+transits gap P66 top to P66-title want 16.0 got 16.0
+transits gap P66-title to P66-bar want 12.0 got 12.0
+transits gap P66-bar to P66-data want 10.0 got 10.0
+transits gap P66-data to P66 end (18 and the 1 px rule) want 19.0 got 19.0
+transits P65-bar track 342.0 wide at 24.0
+transits-loading P1 want 24.0, 75.0 · 153.8x18.0 got 24.0, 75.0 · 154.7x18.0 off 0.9
+transits-loading P3 want 270.0, 62.0 · 104.0x44.0 got 270.0, 62.0 · 104.0x44.0 off 0.0
+transits-loading P17 want 16.0, 748.0 · 358.0x56.0 got 16.0, 748.0 · 358.0x56.0 off 0.0
+transits-loading P20 want 0.0, 0.0 · 390.0x122.0 got 0.0, 0.0 · 390.0x122.0 off 0.0
+transits-loading transits-loading (no board ID) got 24.0, 138.0 · 342.0x17.7
+transits-axis-130 axis 2027 at 67.7 to 105.7, 2028 at 214.3 to 252.3, 2029 at 309.7 to 347.7

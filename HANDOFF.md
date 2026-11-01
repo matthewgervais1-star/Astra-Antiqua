@@ -219,3 +219,17 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
 - FACT (local, 2026-11-01): `./gradlew compileDebugSources testDebugUnitTest` 299 tests, 0 failures (279 before).
 - FACT (Matthew's popup, 2026-11-01): votive tracking tightened to fit two lines (built, 299/0); spine headlines
   and TODAY kept as built; Sky Year approved. Next: step 6, Transits, in a fresh session; push and PR on his word.
+
+## Added 2026-11-01 (late): Android glass port, step 6 Transits (built)
+
+- FACT (task from the session running the port, 2026-11-01): branch `claude/android-glass-step6-transits-30fec3`, cut
+  from step 5's branch (PR #15, open), so its PR stacks on #15. Committed, not pushed, no PR.
+- FACT (`ui/screens/LongTransitsScreen.kt`, `domain/LongTransits.kt`, `MainActivity.kt`): Route.TRANSITS opens the long
+  transits on the glass chrome: kicker, web's title, count line, year axis with NOW, OPEN NOW and AHEAD with web's nine
+  spans and the board's bars. Rows open the flat transit detail until step 9. The flat `TransitsScreen` stays on disk.
+- FACT (`TransitsViewModel.kt`, `ScreenGoldenTest`): spans now walk the Midheaven as web's do; the 10 transits goldens
+  equal web's; Sky Year's Midheaven spine rows link. Record: `docs/design/android-glass.md` (step 6), renders
+  `docs/design/android-glass/step6/`.
+- FACT (review, one Opus reviewer): nothing Critical; one Important (year labels overlapping) and the Minors fixed in
+  two rounds. Local: 329 tests, 0 failures (299 before).
+- Pending: Matthew's popup on step 6 (READ →, capitals or small caps, approval); push and PR on his word.
