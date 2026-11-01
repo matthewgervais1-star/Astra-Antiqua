@@ -49,7 +49,7 @@ test("catalog values keep the characters the table fixes (F10, F13)", () => {
   for (const [key, value] of entries) {
     for (const t of texts(value)) {
       assert.doesNotMatch(t, /'/, `${key}: ASCII apostrophe`);
-      assert.doesNotMatch(t, /[–—]/, `${key}: en or em dash`);
+      assert.doesNotMatch(t, /[\u2013\u2014]/, `${key}: en or em dash`);
       assert.doesNotMatch(t, /\d\s*-\s*\d|\s-\s/, `${key}: hyphen used as a range`);
       assert.doesNotMatch(t, /℞/, `${key}: ℞ in chrome (F11)`);
       assert.equal(t, t.normalize("NFC"), `${key}: not NFC`);

@@ -41,6 +41,6 @@ test("counts 0, 1, 2 and 7 print NONE, ONE, TWO, SEVEN (Review Focus 4)", () => 
 
 test("no format output carries an ASCII apostrophe, an en dash or an em dash", () => {
   for (const c of FORMAT_CASES) {
-    assert.doesNotMatch(c.out, /['–—]/, c.out);
+    assert.doesNotMatch(c.out, /['\u2013\u2014]/, c.out);
   }
 });
