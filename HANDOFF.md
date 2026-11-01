@@ -147,3 +147,6 @@ CANNOT CONFIRM: none recorded in this repo; the owner has named none.
   `docs/design/android-glass.md` (step 3), renders `docs/design/android-glass/step3/`.
 - Pending: Matthew's popup on step 3 (Reduce Motion, row headlines, the web's sections off the board,
   approval); push and PR on his word.
+- FACT (Matthew's popup, 2026-10-31): Moon scrolls with the text under Reduce Motion (as built); add the
+  web's headline to each week row; put the web's thesis, note, votive, feedback and links below the rows;
+  "Changes first" before Season. Pending: those two changes, then his look.

@@ -333,3 +333,9 @@ Tags: FACT names its source; INFERENCE is a judgment; CANNOT CONFIRM is open.
 2. The web's row headlines: off (built, board form) or above each row's line.
 3. The web's thesis, week note (Rome's F, N, C key), votive, feedback and links: off (built) or below.
 4. Sky Week approved, go to step 4 (Season)?
+
+### Matthew's answers on Sky Week (popup, 2026-10-31, after the five renders were shown in the chat)
+
+- FACT: Reduce Motion "Scroll with the text" (as built); rows "Add the web's headline" above each row's
+  line; the web's thesis, note, votive, feedback and links "Below the seven rows"; step 3 "Changes first",
+  with no notes. INFERENCE: the changes are the two above; step 4 waits for them.
